@@ -38,6 +38,7 @@ namespace coinium.Net.RPC
         /// <returns>The JSON RPC response deserialized as the given type.</returns>
         public T MakeRequest<T>(string method, params object[] parameters)
         {
+            Log.Verbose("rpc-call: {0}", method);
             var rpcResponse = MakeRpcRequest<T>(new JsonRpcRequest(1, method, parameters));
             return rpcResponse.Result;
         }

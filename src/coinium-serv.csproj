@@ -32,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Jayrock">
+      <HintPath>..\build\packages\jayrock.0.9.16530\lib\net40\Jayrock.dll</HintPath>
+    </Reference>
+    <Reference Include="Jayrock.Json">
+      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\build\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -51,7 +57,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Net\RPC\JSONFormatter.cs" />
+    <Compile Include="Net\RPC\Requests\CreateRawTransaction.cs" />
+    <Compile Include="Net\RPC\Requests\CreateRawTransactionInput.cs" />
+    <Compile Include="Net\RPC\Requests\SignRawTransaction.cs" />
+    <Compile Include="Net\RPC\Requests\SignRawTransactionInput.cs" />
+    <Compile Include="Net\RPC\Responses\AddedNodeInfo.cs" />
+    <Compile Include="Net\RPC\Responses\Block.cs" />
+    <Compile Include="Net\RPC\Responses\DecodedRawTransaction.cs" />
     <Compile Include="Net\RPC\Responses\Info.cs" />
+    <Compile Include="Net\RPC\Responses\ListReceivedByAccountTransaction.cs" />
+    <Compile Include="Net\RPC\Responses\ListReceivedByAddressTransaction.cs" />
+    <Compile Include="Net\RPC\Responses\ListTransaction.cs" />
+    <Compile Include="Net\RPC\Responses\MiningInfo.cs" />
+    <Compile Include="Net\RPC\Responses\MultisigAddress.cs" />
+    <Compile Include="Net\RPC\Responses\NodeAddress.cs" />
+    <Compile Include="Net\RPC\Responses\PeerInfo.cs" />
+    <Compile Include="Net\RPC\Responses\SignedRawTransaction.cs" />
+    <Compile Include="Net\RPC\Responses\Transaction.cs" />
+    <Compile Include="Net\RPC\Responses\TransactionDetail.cs" />
+    <Compile Include="Net\RPC\Responses\TransactionSinceBlock.cs" />
+    <Compile Include="Net\RPC\Responses\TransactionsSinceBlock.cs" />
+    <Compile Include="Net\RPC\Responses\TxOutSetInfo.cs" />
+    <Compile Include="Net\RPC\Responses\UnspentTransaction.cs" />
+    <Compile Include="Net\RPC\Responses\ValidateAddress.cs" />
     <Compile Include="Net\RPC\RPCClient.cs" />
     <Compile Include="Net\RPC\RPCClientBase.cs" />
     <Compile Include="Net\RPC\RPCRequest.cs" />
