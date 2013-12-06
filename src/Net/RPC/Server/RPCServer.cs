@@ -14,13 +14,14 @@ namespace coinium.Net.RPC.Server
         public class ExampleCalculatorService : JsonRpcService
         {
             [JsonRpcMethod]
-            private string hello()
+            private string getinfo()
             {
                 var info = new Info();
-                string json = JsonConvert.SerializeObject(this);
+                info.Version = "abc";
+                string json = JsonConvert.SerializeObject(info);
 
                 return json;
             }
-        }        
+        }
     }
 }
