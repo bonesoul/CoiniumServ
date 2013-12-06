@@ -16,6 +16,7 @@ using System.Threading;
 using AustinHarris.JsonRpc;
 using Serilog;
 using coinium.Net.RPC;
+//using coinium.Net.RPC.Server;
 using coinium.Net.RPC.Server;
 using coinium.Utility;
 
@@ -37,25 +38,70 @@ namespace coinium
             InitLogging();
             Log.Information("coinium-serv {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
 
-            var client = new RPCClient("http://127.0.0.1:9332", "devel", "develpass");
+            var client = new RPCClient("http://127.0.0.1:13000", "devel", "develpass");
 
-            //client.GetInfo();
-            //client.GetAccount("AeZmUGwAnZgn785oYTm7K9BqwhW52kVa6");
+            Thread thread = new Thread(new ThreadStart(serverthread));
+            thread.Start();
 
             client.GetInfo();
+            //client.GetAccount("AeZmUGwAnZgn785oYTm7K9BqwhW52kVa6");
 
-            var rpcResultHandler = new AsyncCallback(
-                _ => 
-                    Log.Verbose(((JsonRpcStateAsync)_).Result));
 
-            for (string line = Console.ReadLine(); !string.IsNullOrEmpty(line); line = Console.ReadLine())
-            {
-                var async = new JsonRpcStateAsync(rpcResultHandler, null);
-                async.JsonRpc = line;
-                JsonRpcProcessor.Process(async);
-            }
+            //client.GetInfo();
+
 
             Console.ReadLine();
+        }
+
+        private static void serverthread()
+        {
+            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 13000);
+            server.Start();
+
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine("Waiting for a connection... ");
+
+                    using (TcpClient client = server.AcceptTcpClient())
+                    {
+                        Console.WriteLine("Connected with " + client.Client.RemoteEndPoint);
+
+                        var rpcResultHandler = new AsyncCallback(
+                            _ =>
+                                {
+                                    var async = ((JsonRpcStateAsync) _);
+                                    var result = async.Result;
+                                    var writer = ((StreamWriter) async.AsyncState);
+                                    
+                                    writer.WriteLine(result);
+                                    writer.FlushAsync();
+                                    Log.Verbose(result);
+                                });
+
+
+                        using (NetworkStream stream = client.GetStream())
+                        {
+                            var reader = new StreamReader(stream, Encoding.UTF8);
+                            var writer = new StreamWriter(stream, Encoding.UTF8);
+
+                            for (string line = reader.ReadLine(); !string.IsNullOrEmpty(line); line = reader.ReadLine())
+                            {
+                                Log.Verbose(line);
+
+                                var async = new JsonRpcStateAsync(rpcResultHandler, writer);
+                                async.JsonRpc = line;
+                                JsonRpcProcessor.Process(async,writer);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, "test");
+                }
+            }
         }
 
         private static object[] services = new object[]
