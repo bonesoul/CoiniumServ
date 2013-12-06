@@ -32,11 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Jayrock">
-      <HintPath>..\build\packages\jayrock.0.9.16530\lib\net40\Jayrock.dll</HintPath>
-    </Reference>
-    <Reference Include="Jayrock.Json">
-      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
+    <Reference Include="AustinHarris.JsonRpc">
+      <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\build\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -84,6 +81,7 @@
     <Compile Include="Net\RPC\RPCClientBase.cs" />
     <Compile Include="Net\RPC\RPCRequest.cs" />
     <Compile Include="Net\RPC\RPCResponse.cs" />
+    <Compile Include="Net\RPC\Server\RPCServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\ConsoleWindow.cs" />
