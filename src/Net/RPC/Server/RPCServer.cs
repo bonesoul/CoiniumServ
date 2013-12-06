@@ -55,12 +55,14 @@ namespace coinium.Net.RPC.Server
                             var reader = new StreamReader(stream, Encoding.UTF8);
                             var writer = new StreamWriter(stream, new UTF8Encoding(false));
 
-                            for (string line = reader.ReadLine(); !string.IsNullOrEmpty(line); line = reader.ReadLine())
+                            while (!reader.EndOfStream)
                             {
-                                Log.Debug("REQUEST: {Request}", line);
-
+                                var line = reader.ReadLine();
+                                
                                 var async = new JsonRpcStateAsync(rpcResultHandler, writer) { JsonRpc = line };
                                 JsonRpcProcessor.Process(async, writer);
+
+                                Log.Debug("REQUEST: {Request}", line);
                             }
                         }
                     }
