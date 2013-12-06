@@ -1,2 +1,2 @@
 setx GPU_MAX_ALLOC_PERCENT 100
-F:\cryptocoin\miners\cgminer\cgminer.exe -o stratum+tcp://127.0.0.1:3333 -u devel.1 -p devel --scrypt --auto-fan -I 13 --shaders 2048 -g 2 -v 1 --gpu-engine 1030 --gpu-memclock 1700 --thread-concurrency 8192 --worksize 256 --lookup-gap 2 --no-submit-stale --gpu-powertune 20
+F:\cryptocoin\miners\cgminer\cgminer.exe -o stratum+tcp://127.0.0.1:3333 -u devel.1 -p devel --scrypt --auto-fan -I 13 --shaders 2048 -g 2 -v 1 --gpu-engine 1030 --gpu-memclock 1700 --thread-concurrency 8192 --worksize 256 --lookup-gap 2 --no-submit-stale --gpu-powertune 20 --debug 2>logfile.txt

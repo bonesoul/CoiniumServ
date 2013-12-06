@@ -56,12 +56,8 @@ namespace coinium
             {
                 try
                 {
-                    Console.WriteLine("Waiting for a connection... ");
-
                     using (TcpClient client = server.AcceptTcpClient())
                     {
-                        Console.WriteLine("Connected with " + client.Client.RemoteEndPoint);
-
                         var rpcResultHandler = new AsyncCallback(
                             _ =>
                             {
@@ -71,7 +67,7 @@ namespace coinium
 
                                 writer.WriteLine(result);
                                 writer.FlushAsync();
-                                Log.Verbose(result);
+                                Log.Verbose("Result " + result);
                             });
 
 
@@ -82,7 +78,7 @@ namespace coinium
 
                             for (string line = reader.ReadLine(); !string.IsNullOrEmpty(line); line = reader.ReadLine())
                             {
-                                Log.Verbose(line);
+                                Log.Verbose("Request:" + line);
 
                                 var async = new JsonRpcStateAsync(rpcResultHandler, writer);
                                 async.JsonRpc = line;

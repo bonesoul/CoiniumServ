@@ -1,0 +1,152 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BBFBBA8A-2F75-422C-ACCD-D05A6EF7244C}"
+	ProjectSection(SolutionItems) = preProject
+		AustinHarris.JsonRpc.vsmdi = AustinHarris.JsonRpc.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AustinHarris.JsonRpc", "Json-Rpc\AustinHarris.JsonRpc.csproj", "{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSever", "JsonRpcTest\TestSever.csproj", "{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{FA27C906-3591-48A5-B180-646EA6521E3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AustinHarris.JsonRpc.Client", "AustinHarris.JsonRpc.Client\AustinHarris.JsonRpc.Client.csproj", "{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AustinHarris.JsonRpc.Client.WP7", "AustinHarris.JsonRpc.Client.WP7\AustinHarris.JsonRpc.Client.WP7.csproj", "{BFF21670-9DEB-4E36-95F4-96FC9DC740A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AustinHarris.JsonRpc.Client.WP7Test", "AustinHarris.JsonRpc.Client.WP7Test\AustinHarris.JsonRpc.Client.WP7Test.csproj", "{0838766E-01BD-4B62-9F0B-2C1FB3B39DBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AustinHarris.JsonRpc.AspNet", "AustinHarris.JsonRpc.AspNet\AustinHarris.JsonRpc.AspNet.csproj", "{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer_Console", "TestServer_Console\TestServer_Console.csproj", "{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs34
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Json-Rpc\\AustinHarris.JsonRpc.csproj
+		SccProjectName1 = Json-Rpc
+		SccLocalPath1 = Json-Rpc
+		SccProjectUniqueName2 = TestClient\\TestClient.csproj
+		SccProjectName2 = TestClient
+		SccLocalPath2 = TestClient
+		SccProjectUniqueName3 = AustinHarris.JsonRpc.Client\\AustinHarris.JsonRpc.Client.csproj
+		SccProjectName3 = AustinHarris.JsonRpc.Client
+		SccLocalPath3 = AustinHarris.JsonRpc.Client
+		SccProjectUniqueName4 = JsonRpcTest\\TestSever.csproj
+		SccProjectName4 = JsonRpcTest
+		SccLocalPath4 = JsonRpcTest
+		SccProjectUniqueName5 = AustinHarris.JsonRpc.Client.WP7\\AustinHarris.JsonRpc.Client.WP7.csproj
+		SccProjectName5 = AustinHarris.JsonRpc.Client.WP7
+		SccLocalPath5 = AustinHarris.JsonRpc.Client.WP7
+		SccProjectUniqueName6 = AustinHarris.JsonRpc.Client.WP7Test\\AustinHarris.JsonRpc.Client.WP7Test.csproj
+		SccProjectName6 = AustinHarris.JsonRpc.Client.WP7Test
+		SccLocalPath6 = AustinHarris.JsonRpc.Client.WP7Test
+		SccProjectUniqueName7 = AustinHarris.JsonRpc.AspNet\\AustinHarris.JsonRpc.AspNet.csproj
+		SccProjectName7 = AustinHarris.JsonRpc.AspNet
+		SccLocalPath7 = AustinHarris.JsonRpc.AspNet
+		SccProjectUniqueName8 = TestServer_Console\\TestServer_Console.csproj
+		SccProjectName8 = TestServer_Console
+		SccLocalPath8 = TestServer_Console
+		SccProjectUniqueName9 = UnitTests\\UnitTests.csproj
+		SccProjectName9 = UnitTests
+		SccLocalPath9 = UnitTests
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = AustinHarris.JsonRpc.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|x86.ActiveCfg = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|x86.Build.0 = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|Any CPU.ActiveCfg = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|Mixed Platforms.Build.0 = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|x86.ActiveCfg = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|x86.Build.0 = Release|x86
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A1077F2C-62A2-4EF6-BDF3-FB6F539A90A9}.Release|x86.ActiveCfg = Release|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FA27C906-3591-48A5-B180-646EA6521E3E}.Release|x86.ActiveCfg = Release|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{03FF12D9-6027-4050-81AC-A90B0EA8F8EB}.Release|x86.ActiveCfg = Release|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FFFDEBBC-93F5-4A22-9EC5-D86A4A792DBB}.Release|x86.ActiveCfg = Release|Any CPU
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Debug|x86.ActiveCfg = Debug|x86
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Debug|x86.Build.0 = Debug|x86
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Release|Any CPU.ActiveCfg = Release|x86
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Release|Mixed Platforms.Build.0 = Release|x86
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Release|x86.ActiveCfg = Release|x86
+		{31AE59FC-B6F6-4AC7-A7B9-1E07630AE42B}.Release|x86.Build.0 = Release|x86
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AC1713D7-B3FD-4E9B-9245-E2C3249BFD54}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal
