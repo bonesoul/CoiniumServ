@@ -22,6 +22,16 @@ namespace coinium.Net.RPC.Server
 
                 return json;
             }
+
+            [JsonRpcMethod("mining.subscribe")]
+            private string miningsubscribe()
+            {
+                var info = new Info();
+                info.Version = "abc";
+                string json = JsonConvert.SerializeObject(info);
+
+                return json;
+            }
         }
     }
 }

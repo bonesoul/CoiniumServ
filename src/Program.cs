@@ -38,12 +38,12 @@ namespace coinium
             InitLogging();
             Log.Information("coinium-serv {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
 
-            var client = new RPCClient("http://127.0.0.1:13000", "devel", "develpass");
+            var client = new RPCClient("http://127.0.0.1:3333", "devel", "develpass");
 
             Thread thread = new Thread(new ThreadStart(serverthread));
             thread.Start();
 
-            client.GetInfo();
+            //client.GetInfo();
             //client.GetAccount("AeZmUGwAnZgn785oYTm7K9BqwhW52kVa6");
 
 
@@ -55,7 +55,7 @@ namespace coinium
 
         private static void serverthread()
         {
-            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 13000);
+            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 3333);
             server.Start();
 
             while (true)
