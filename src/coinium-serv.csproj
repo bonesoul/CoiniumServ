@@ -35,11 +35,8 @@
     <StartupObject>coinium.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Jayrock">
-      <HintPath>..\build\packages\jayrock.0.9.16530\lib\net40\Jayrock.dll</HintPath>
-    </Reference>
-    <Reference Include="Jayrock.Json">
-      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
+    <Reference Include="AustinHarris.JsonRpc">
+      <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -88,9 +85,8 @@
     <Compile Include="Net\RPC\RPCClientBase.cs" />
     <Compile Include="Net\RPC\RPCRequest.cs" />
     <Compile Include="Net\RPC\RPCResponse.cs" />
-    <Compile Include="Net\RPC\Server\RPCServer.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Net\RPC\Server\Alternate.cs" />
+    <Compile Include="Net\RPC\Server\RPCServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\ConsoleWindow.cs" />
@@ -99,7 +95,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

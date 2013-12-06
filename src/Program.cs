@@ -13,12 +13,10 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using Jayrock.JsonRpc;
 using Serilog;
 using coinium.Net.RPC;
-//using coinium.Net.RPC.Server;
-using coinium.Net.RPC.Server;
 using coinium.Utility;
+using AustinHarris.JsonRpc;
 
 namespace coinium
 {
@@ -46,23 +44,17 @@ namespace coinium
             //client.GetInfo();
             //client.GetAccount("AeZmUGwAnZgn785oYTm7K9BqwhW52kVa6");
 
-
-            //client.GetInfo();
-
-
-
             Console.ReadLine();
         }
 
         private static void serverthread()
         {
             TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 3333);
+            server.Start();
 
-            try
+            while (true)
             {
-                server.Start();
-
-                while (true)
+                try
                 {
                     Console.WriteLine("Waiting for a connection... ");
 
@@ -70,82 +62,46 @@ namespace coinium
                     {
                         Console.WriteLine("Connected with " + client.Client.RemoteEndPoint);
 
+                        var rpcResultHandler = new AsyncCallback(
+                            _ =>
+                            {
+                                var async = ((JsonRpcStateAsync)_);
+                                var result = async.Result;
+                                var writer = ((StreamWriter)async.AsyncState);
+
+                                writer.WriteLine(result);
+                                writer.FlushAsync();
+                                Log.Verbose(result);
+                            });
+
+
                         using (NetworkStream stream = client.GetStream())
                         {
-                            Service service = new Service();
-                            StreamReader reader = new StreamReader(stream, Encoding.UTF8);
-                            StreamWriter writer = new StreamWriter(stream, new UTF8Encoding(false));
-                            JsonRpcDispatcher dispatcher = new JsonRpcDispatcher(service);
-                            dispatcher.Process(reader, writer);
-                            writer.Flush();
+                            var reader = new StreamReader(stream, Encoding.UTF8);
+                            var writer = new StreamWriter(stream, Encoding.UTF8);
+
+                            for (string line = reader.ReadLine(); !string.IsNullOrEmpty(line); line = reader.ReadLine())
+                            {
+                                Log.Verbose(line);
+
+                                var async = new JsonRpcStateAsync(rpcResultHandler, writer);
+                                async.JsonRpc = line;
+                                JsonRpcProcessor.Process(async, writer);
+                            }
                         }
                     }
                 }
+                catch (Exception e)
+                {
+                    Log.Error(e, "test");
+                }
             }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine(e.GetBaseException().Message);
-                Trace.WriteLine(e.ToString());
-            }
-            finally
-            {
-                server.Stop();
-            }
-
-
-            //TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 3333);
-            //server.Start();
-
-            //while (true)
-            //{
-            //    try
-            //    {
-            //        Console.WriteLine("Waiting for a connection... ");
-
-            //        using (TcpClient client = server.AcceptTcpClient())
-            //        {
-            //            Console.WriteLine("Connected with " + client.Client.RemoteEndPoint);
-
-            //            var rpcResultHandler = new AsyncCallback(
-            //                _ =>
-            //                    {
-            //                        var async = ((JsonRpcStateAsync) _);
-            //                        var result = async.Result;
-            //                        var writer = ((StreamWriter) async.AsyncState);
-                                    
-            //                        writer.WriteLine(result);
-            //                        writer.FlushAsync();
-            //                        Log.Verbose(result);
-            //                    });
-
-
-            //            using (NetworkStream stream = client.GetStream())
-            //            {
-            //                var reader = new StreamReader(stream, Encoding.UTF8);
-            //                var writer = new StreamWriter(stream, Encoding.UTF8);
-
-            //                for (string line = reader.ReadLine(); !string.IsNullOrEmpty(line); line = reader.ReadLine())
-            //                {
-            //                    Log.Verbose(line);
-
-            //                    var async = new JsonRpcStateAsync(rpcResultHandler, writer);
-            //                    async.JsonRpc = line;
-            //                    JsonRpcProcessor.Process(async,writer);
-            //                }
-            //            }
-            //        }
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Log.Error(e, "test");
-            //    }
-            //}
         }
 
-        //private static object[] services = new object[]
-        //    {
-        //        new RPCServer.ExampleCalculatorService()
-        //    };
+        private static object[] services = new object[]
+        {
+                new RPCServer.ExampleCalculatorService()
+        };
 
         #region logging facility
 
