@@ -3,13 +3,13 @@
  *
  */
 
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
 using System.Collections.Generic;
 using System.Linq;
 using coinium.Net.RPC.Client.Requests;
 using coinium.Net.RPC.Client.Responses;
 using Serilog;
-
-// contains code from: https://github.com/BitKoot/BitcoinRpcSharp
 
 namespace coinium.Net.RPC.Client
 {

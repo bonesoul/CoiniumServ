@@ -3,6 +3,8 @@
  *
  */
 
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
 using Newtonsoft.Json;
 
 namespace coinium.Net.RPC.Client

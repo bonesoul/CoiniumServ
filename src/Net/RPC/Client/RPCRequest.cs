@@ -3,6 +3,8 @@
  *
  */
 
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

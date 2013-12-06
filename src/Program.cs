@@ -4,21 +4,11 @@
  */
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
 using System.Reflection;
-using System.Text;
-using System.Threading;
 using coinium.Net.RPC.Client;
 using coinium.Net.RPC.Server;
 using Serilog;
-using coinium.Net.RPC;
 using coinium.Utility;
-using AustinHarris.JsonRpc;
 
 namespace coinium
 {

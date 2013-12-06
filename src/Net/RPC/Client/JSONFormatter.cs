@@ -1,4 +1,11 @@
-﻿using System.Text;
+﻿/*
+ * Coinium project, Copyright (C) 2013, Int6 Studios - All Rights Reserved. - http://www.coinium.org
+ *
+ */
+
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+using System.Text;
 
 namespace coinium.Net.RPC.Client
 {

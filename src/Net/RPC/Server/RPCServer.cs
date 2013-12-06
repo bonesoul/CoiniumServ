@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Coinium project, Copyright (C) 2013, Int6 Studios - All Rights Reserved. - http://www.coinium.org
+ *
+ */
+
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -6,7 +11,6 @@ using System.Text;
 using System.Threading;
 using AustinHarris.JsonRpc;
 using coinium.Net.RPC.Server.Responses;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace coinium.Net.RPC.Server
