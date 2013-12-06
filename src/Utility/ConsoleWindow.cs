@@ -4,12 +4,8 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace coinium_serv.Utility
+namespace coinium.Utility
 {
     /// <summary>
     /// Utility class to handle console window stuff.

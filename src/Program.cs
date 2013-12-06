@@ -4,15 +4,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Serilog;
-using coinium_serv.Utility;
+using coinium.Net.RPC;
+using coinium.Utility;
 
-namespace coinium_serv
+namespace coinium
 {
     class Program
     {
@@ -29,6 +26,10 @@ namespace coinium_serv
 
             InitLogging();
             Log.Information("coinium-serv {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+
+            var client = new RPCClient("http://127.0.0.1:9332", "devel", "develpass");
+            client.GetInfo();
+
 
             Console.ReadLine();
         }
