@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5FCA1E48-0751-4625-9532-CB804DF55DB5}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>coinium</RootNamespace>
+    <AssemblyName>coinium-serv</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>coinium.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AustinHarris.JsonRpc, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog">
+      <HintPath>..\build\packages\Serilog.1.2.3\lib\net45\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.FullNetFx">
+      <HintPath>..\build\packages\Serilog.1.2.3\lib\net45\Serilog.FullNetFx.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Net\RPC\Client\JSONFormatter.cs" />
+    <Compile Include="Net\RPC\Client\Requests\CreateRawTransaction.cs" />
+    <Compile Include="Net\RPC\Client\Requests\CreateRawTransactionInput.cs" />
+    <Compile Include="Net\RPC\Client\Requests\SignRawTransaction.cs" />
+    <Compile Include="Net\RPC\Client\Requests\SignRawTransactionInput.cs" />
+    <Compile Include="Net\RPC\Client\Responses\AddedNodeInfo.cs" />
+    <Compile Include="Net\RPC\Client\Responses\Block.cs" />
+    <Compile Include="Net\RPC\Client\Responses\DecodedRawTransaction.cs" />
+    <Compile Include="Net\RPC\Client\Responses\Info.cs" />
+    <Compile Include="Net\RPC\Client\Responses\ListReceivedByAccountTransaction.cs" />
+    <Compile Include="Net\RPC\Client\Responses\ListReceivedByAddressTransaction.cs" />
+    <Compile Include="Net\RPC\Client\Responses\ListTransaction.cs" />
+    <Compile Include="Net\RPC\Client\Responses\MiningInfo.cs" />
+    <Compile Include="Net\RPC\Client\Responses\MultisigAddress.cs" />
+    <Compile Include="Net\RPC\Client\Responses\NodeAddress.cs" />
+    <Compile Include="Net\RPC\Client\Responses\PeerInfo.cs" />
+    <Compile Include="Net\RPC\Client\Responses\SignedRawTransaction.cs" />
+    <Compile Include="Net\RPC\Client\Responses\Transaction.cs" />
+    <Compile Include="Net\RPC\Client\Responses\TransactionDetail.cs" />
+    <Compile Include="Net\RPC\Client\Responses\TransactionSinceBlock.cs" />
+    <Compile Include="Net\RPC\Client\Responses\TransactionsSinceBlock.cs" />
+    <Compile Include="Net\RPC\Client\Responses\TxOutSetInfo.cs" />
+    <Compile Include="Net\RPC\Client\Responses\UnspentTransaction.cs" />
+    <Compile Include="Net\RPC\Client\Responses\ValidateAddress.cs" />
+    <Compile Include="Net\RPC\Client\RPCClient.cs" />
+    <Compile Include="Net\RPC\Client\RPCClientBase.cs" />
+    <Compile Include="Net\RPC\Client\RPCRequest.cs" />
+    <Compile Include="Net\RPC\Client\RPCResponse.cs" />
+    <Compile Include="Net\RPC\Server\Responses\SubscribeResponse.cs" />
+    <Compile Include="Net\RPC\Server\RPCServer.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\ConsoleWindow.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
