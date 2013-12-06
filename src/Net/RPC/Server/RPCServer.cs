@@ -1,31 +1,97 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using AustinHarris.JsonRpc;
+using coinium.Net.RPC.Server.Responses;
 using Newtonsoft.Json;
-using coinium.Net.RPC.Responses;
-using Newtonsoft.Json.Linq;
+using Serilog;
 
-public class RPCServer
+namespace coinium.Net.RPC.Server
 {
-    public class ExampleCalculatorService : JsonRpcService
+    public class RPCServer
     {
-        [JsonRpcMethod("mining.subscribe")]
-        private string MiningSubscribe(string miner)
-        {
-            //var info = new Info();
-            //info.Version = "abc";
-            //string json = JsonConvert.SerializeObject(info);
+        public RPCServer()
+        { }
 
-            return @"[[[""mining.set_difficulty"",""b4b6693b72a50c7116db18d6497cac52""],[""mining.notify"",""ae6812eb4cd7735a302a8a9dd95cf71f""]],""08000002"",4]\n";
+        private static object[] _services =
+        {
+            new MiningService()
+        };
+
+        public void Start()
+        {
+            var thread = new Thread(new ThreadStart(ServerThread));
+            thread.Start();
         }
 
-        //[JsonRpcMethod("mining.subscribe")]
-        //private string MiningSubscribe()
-        //{
-        //    return @"[[[""mining.set_difficulty"",""b4b6693b72a50c7116db18d6497cac52""],[""mining.notify"",""ae6812eb4cd7735a302a8a9dd95cf71f""]],""08000002"",4]";
-        //}
+        private static void ServerThread()
+        {
+            var server = new TcpListener(IPAddress.Parse("127.0.0.1"), 3333);
+            server.Start();
+
+            while (true)
+            {
+                try
+                {
+                    using (var client = server.AcceptTcpClient())
+                    {
+                        var rpcResultHandler = new AsyncCallback(
+                            callback =>
+                            {
+                                var async = ((JsonRpcStateAsync)callback);
+                                var result = async.Result;
+                                var writer = ((StreamWriter)async.AsyncState);
+
+                                writer.WriteLine(result);
+                                writer.FlushAsync();
+                                Log.Debug("RESPONSE: {Response}", result);
+                            });
+
+                        using (var stream = client.GetStream())
+                        {
+                            var reader = new StreamReader(stream, Encoding.UTF8);
+                            var writer = new StreamWriter(stream, new UTF8Encoding(false));
+
+                            for (string line = reader.ReadLine(); !string.IsNullOrEmpty(line); line = reader.ReadLine())
+                            {
+                                Log.Debug("REQUEST: {Request}", line);
+
+                                var async = new JsonRpcStateAsync(rpcResultHandler, writer) { JsonRpc = line };
+                                JsonRpcProcessor.Process(async, writer);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, "RPCServer exception");
+                }
+            }
+        }
+    }
+
+    public class MiningService : JsonRpcService
+    {
+        [JsonRpcMethod("mining.subscribe")]
+        public SubscribeResponse SubscribeMiner(string miner)
+        {
+            var response = new SubscribeResponse
+            {
+                UniqueId = "ae6812eb4cd7735a302a8a9dd95cf71f",
+                ExtraNonce1 = "08000002",
+                ExtraNonce2 = 4
+            };
+
+            return response;
+        }
+
+        [JsonRpcMethod("mining.authorize")]
+        public bool AuthorizeMiner(string user, string password)
+        {
+            return true;
+        }
     }
 }

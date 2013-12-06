@@ -13,6 +13,8 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using coinium.Net.RPC.Client;
+using coinium.Net.RPC.Server;
 using Serilog;
 using coinium.Net.RPC;
 using coinium.Utility;
@@ -36,68 +38,15 @@ namespace coinium
             InitLogging();
             Log.Information("coinium-serv {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
 
-            var client = new RPCClient("http://127.0.0.1:3333", "devel", "develpass");
+            var server = new RPCServer();
+            server.Start();
 
-            Thread thread = new Thread(new ThreadStart(serverthread));
-            thread.Start();
-
+            var client = new RPCClient("http://127.0.0.1:9332", "devel", "develpass");
             //client.GetInfo();
             //client.GetAccount("AeZmUGwAnZgn785oYTm7K9BqwhW52kVa6");
 
             Console.ReadLine();
         }
-
-        private static void serverthread()
-        {
-            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 3333);
-            server.Start();
-
-            while (true)
-            {
-                try
-                {
-                    using (TcpClient client = server.AcceptTcpClient())
-                    {
-                        var rpcResultHandler = new AsyncCallback(
-                            _ =>
-                            {
-                                var async = ((JsonRpcStateAsync)_);
-                                var result = async.Result;
-                                var writer = ((StreamWriter)async.AsyncState);
-
-                                writer.WriteLine(result);
-                                writer.FlushAsync();
-                                Log.Verbose("Result " + result);
-                            });
-
-
-                        using (NetworkStream stream = client.GetStream())
-                        {
-                            var reader = new StreamReader(stream, Encoding.UTF8);
-                            var writer = new StreamWriter(stream, Encoding.UTF8);
-
-                            for (string line = reader.ReadLine(); !string.IsNullOrEmpty(line); line = reader.ReadLine())
-                            {
-                                Log.Verbose("Request:" + line);
-
-                                var async = new JsonRpcStateAsync(rpcResultHandler, writer);
-                                async.JsonRpc = line;
-                                JsonRpcProcessor.Process(async, writer);
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e, "test");
-                }
-            }
-        }
-
-        private static object[] services = new object[]
-        {
-                new RPCServer.ExampleCalculatorService()
-        };
 
         #region logging facility
 
