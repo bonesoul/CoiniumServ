@@ -16,7 +16,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 using System;
 using System.Reflection;
 using coinium.Net.RPC.Client;
@@ -40,7 +39,7 @@ namespace coinium
             Console.ResetColor();
 
             InitLogging();
-            Log.Information("coinium-serv {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+            Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
 
             var server = new RPCServer();
             server.Start();
