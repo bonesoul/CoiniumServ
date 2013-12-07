@@ -1,0 +1,10 @@
+== Coinium Runtime/Framework Compatibility File ==
+
+Currently supported:
+
+* Language: C# 4.0
+* .NET Framework Version: .NET FX 4.0
+* Microsoft Runtime: .NET 4.0
+* Mono Runtime: 2.10.5
+
+Requirements:
