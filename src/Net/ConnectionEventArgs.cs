@@ -16,16 +16,26 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
+
 namespace coinium.Net
 {
-    /// <summary>
-    /// Client interface.
-    /// </summary>
-    public interface IClient
+    public class ConnectionEventArgs : EventArgs
     {
-        /// <summary>
-        /// Gets or sets the TCP connection bound to client.
-        /// </summary>
-        IConnection Connection { get; set; }
+        public IConnection Connection { get; private set; }
+
+        public ConnectionEventArgs(IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException("connection");
+            this.Connection = connection;
+        }
+
+        public override string ToString()
+        {
+            return Connection.RemoteEndPoint != null
+                ? Connection.RemoteEndPoint.ToString()
+                : "Not Connected";
+        }
     }
 }
