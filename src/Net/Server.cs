@@ -16,16 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
+
 namespace coinium.Net
 {
-    /// <summary>
-    /// Client interface.
-    /// </summary>
-    public interface IClient
+    public class Server : IDisposable
     {
-        /// <summary>
-        /// Gets or sets the TCP connection bound to client.
-        /// </summary>
-        IConnection Connection { get; set; }
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

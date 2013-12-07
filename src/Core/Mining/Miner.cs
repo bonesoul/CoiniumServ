@@ -16,16 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace coinium.Net
+using coinium.Net;
+
+namespace coinium.Core.Mining
 {
-    /// <summary>
-    /// Client interface.
-    /// </summary>
-    public interface IClient
+    class Miner : IClient
     {
-        /// <summary>
-        /// Gets or sets the TCP connection bound to client.
-        /// </summary>
-        IConnection Connection { get; set; }
+        public IConnection Connection { get; set; }
     }
 }

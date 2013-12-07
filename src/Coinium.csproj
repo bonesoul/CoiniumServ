@@ -61,7 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Mining\Miner.cs" />
+    <Compile Include="Net\ConnectionEventArgs.cs" />
+    <Compile Include="Net\Connection.cs" />
+    <Compile Include="Net\ConnectionDataEventArgs.cs" />
     <Compile Include="Net\IClient.cs" />
+    <Compile Include="Net\IConnection.cs" />
     <Compile Include="Net\RPC\Client\JSONFormatter.cs" />
     <Compile Include="Net\RPC\Client\Requests\CreateRawTransaction.cs" />
     <Compile Include="Net\RPC\Client\Requests\CreateRawTransactionInput.cs" />
@@ -92,6 +97,7 @@
     <Compile Include="Net\RPC\Client\RPCResponse.cs" />
     <Compile Include="Net\RPC\Server\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\RPC\Server\RPCServer.cs" />
+    <Compile Include="Net\Server.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\ConsoleWindow.cs" />
@@ -100,6 +106,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
