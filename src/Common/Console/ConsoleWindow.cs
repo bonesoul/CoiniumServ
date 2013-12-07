@@ -16,9 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-
-namespace coinium.Utility
+namespace coinium.Common.Console
 {
     /// <summary>
     /// Utility class to handle console window stuff.
@@ -30,14 +28,13 @@ namespace coinium.Utility
         /// </summary>
         public static void PrintBanner()
         {            
-            Console.WriteLine(@"             .__       .__               ");
-            Console.WriteLine(@"  ____  ____ |__| ____ |__|__ __  _____  ");
-            Console.WriteLine(@"_/ ___\/  _ \|  |/    \|  |  |  \/     \ ");
-            Console.WriteLine(@"\  \__(  <_> )  |   |  \  |  |  /  Y Y  \");
-            Console.WriteLine(@" \___  >____/|__|___|  /__|____/|__|_|  /");
-            Console.WriteLine(@"     \/              \/               \/ ");
-
-            Console.WriteLine();
+            System.Console.WriteLine(@"             .__       .__               ");
+            System.Console.WriteLine(@"  ____  ____ |__| ____ |__|__ __  _____  ");
+            System.Console.WriteLine(@"_/ ___\/  _ \|  |/    \|  |  |  \/     \ ");
+            System.Console.WriteLine(@"\  \__(  <_> )  |   |  \  |  |  /  Y Y  \");
+            System.Console.WriteLine(@" \___  >____/|__|___|  /__|____/|__|_|  /");
+            System.Console.WriteLine(@"     \/              \/               \/ ");
+            System.Console.WriteLine();
         }
 
         /// <summary>
@@ -45,10 +42,10 @@ namespace coinium.Utility
         /// </summary>
         public static void PrintLicense()
         {
-            Console.WriteLine("Copyright (C) 2013, Coinium project");
-            Console.WriteLine("Coinium comes with ABSOLUTELY NO WARRANTY.");
-            Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
-            Console.WriteLine();
+            System.Console.WriteLine("Copyright (C) 2013, Coinium project - http://www.coinium.org");
+            System.Console.WriteLine("Coinium comes with ABSOLUTELY NO WARRANTY.");
+            System.Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
+            System.Console.WriteLine();
         }
     }
 }

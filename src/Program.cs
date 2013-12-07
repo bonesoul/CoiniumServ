@@ -17,11 +17,14 @@
 */
 
 using System;
+using System.Globalization;
 using System.Reflection;
+using System.Threading;
+using coinium.Common.Console;
+using coinium.Common.Platform;
 using coinium.Net.RPC.Client;
 using coinium.Net.RPC.Server;
 using Serilog;
-using coinium.Utility;
 
 namespace coinium
 {
@@ -33,6 +36,8 @@ namespace coinium
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions.
             #endif
 
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
@@ -40,6 +45,7 @@ namespace coinium
 
             InitLogging();
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+            Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
             var server = new RPCServer();
             server.Start();
