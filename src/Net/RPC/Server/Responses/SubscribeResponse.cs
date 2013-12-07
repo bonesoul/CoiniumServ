@@ -27,13 +27,10 @@ namespace coinium.Net.RPC.Server.Responses
     public class SubscribeResponse:IEnumerable<object>
     {
         [JsonIgnore]   
-        public string UniqueId { get; set; }
-
-        [JsonIgnore]   
         public string ExtraNonce1 { get; set; }
 
         [JsonIgnore]   
-        public int ExtraNonce2 { get; set; }
+        public int ExtraNonce2Size { get; set; }
 
         public IEnumerator<object> GetEnumerator()
         {
@@ -42,10 +39,10 @@ namespace coinium.Net.RPC.Server.Responses
                 new List<string>
                 {
                     "mining.notify",
-                    this.UniqueId
+                    "ae6812eb4cd7735a302a8a9dd95cf71f" // Unique string used for the subscription.
                 },
                 this.ExtraNonce1,
-                this.ExtraNonce2
+                this.ExtraNonce2Size
             };
 
             return data.GetEnumerator();

@@ -100,9 +100,8 @@ namespace coinium.Net.RPC.Server
         {
             var response = new SubscribeResponse
             {
-                UniqueId = "ae6812eb4cd7735a302a8a9dd95cf71f",
                 ExtraNonce1 = "08000002",
-                ExtraNonce2 = 4
+                ExtraNonce2Size = 4
             };
 
             return response;

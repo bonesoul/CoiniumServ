@@ -50,9 +50,8 @@ namespace coinium
             var server = new RPCServer();
             server.Start();
 
-            var client = new RPCClient("http://127.0.0.1:9332", "devel", "develpass");
-            //client.GetInfo();
-            //client.GetAccount("AeZmUGwAnZgn785oYTm7K9BqwhW52kVa6");
+            var client = new RPCClient("http://127.0.0.1:9335", "devel", "develpass");
+            client.GetInfo();
 
             Console.ReadLine();
         }
