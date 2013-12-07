@@ -16,13 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace coinium.Net.RPC.Client.Responses
+namespace coinium.Net
 {
-    public class MultisigAddress
+    public class IClient
     {
-        public string Address { get; set; }
-        public string RedeemScript { get; set; }
     }
 }
