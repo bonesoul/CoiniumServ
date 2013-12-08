@@ -24,6 +24,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using AustinHarris.JsonRpc;
+using coinium.Core.Mining.Service;
 using coinium.Net.RPC.Server.Responses;
 using Serilog;
 
@@ -90,27 +91,6 @@ namespace coinium.Net.RPC.Server
                     Log.Error(e, "RPCServer exception");
                 }
             }
-        }
-    }
-
-    public class MiningService : JsonRpcService
-    {
-        [JsonRpcMethod("mining.subscribe")]
-        public SubscribeResponse SubscribeMiner(string miner)
-        {
-            var response = new SubscribeResponse
-            {
-                ExtraNonce1 = "08000002",
-                ExtraNonce2Size = 4
-            };
-
-            return response;
-        }
-
-        [JsonRpcMethod("mining.authorize")]
-        public bool AuthorizeMiner(string user, string password)
-        {
-            return true;
         }
     }
 }

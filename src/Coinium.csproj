@@ -67,6 +67,7 @@
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\Mining\Miner.cs" />
+    <Compile Include="Core\Mining\Service\MiningService.cs" />
     <Compile Include="Net\ConnectionEventArgs.cs" />
     <Compile Include="Net\Connection.cs" />
     <Compile Include="Net\ConnectionDataEventArgs.cs" />

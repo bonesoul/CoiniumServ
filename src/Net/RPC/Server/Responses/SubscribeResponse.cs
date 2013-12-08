@@ -16,7 +16,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -36,10 +35,10 @@ namespace coinium.Net.RPC.Server.Responses
         {
             var data = new List<object>
             {
-                new List<string>
+                new List<string> // 2-tuple with name of subscribed notification and subscription ID. Teoretically it may be used for unsubscribing, but obviously miners won't use it. (http://mining.bitcoin.cz/stratum-mining)
                 {
-                    "mining.notify",
-                    "ae6812eb4cd7735a302a8a9dd95cf71f" // Unique string used for the subscription.
+                    "mining.notify", // name of subscribed notification.
+                    "ae6812eb4cd7735a302a8a9dd95cf71f" // unique string used for the subscription.
                 },
                 this.ExtraNonce1,
                 this.ExtraNonce2Size
