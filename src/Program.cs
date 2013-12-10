@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Threading;
 using coinium.Common.Console;
 using coinium.Common.Platform;
+using coinium.Net;
 using coinium.Net.RPC.Client;
 using coinium.Net.RPC.Server;
 using Serilog;
@@ -50,8 +51,11 @@ namespace coinium
             var server = new RPCServer();
             server.Start();
 
-            var client = new RPCClient("http://127.0.0.1:9335", "devel", "develpass");
-            client.GetInfo();
+            var new_server = new Server();
+            new_server.Listen("0.0.0.0", 7777);
+
+            //var client = new RPCClient("http://127.0.0.1:9335", "devel", "develpass");
+            //client.GetInfo();
 
             Console.ReadLine();
         }
