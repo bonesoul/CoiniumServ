@@ -38,6 +38,11 @@ namespace coinium.Common.Extensions
             return sb.ToString();
         }
 
+        public static string ToEncodedString(this IEnumerable<byte> collection)
+        {
+            return ToEncodedString(collection, Encoding.UTF8);
+        }
+
         public static string ToEncodedString(this IEnumerable<byte> collection, Encoding encoding)
         {
             return encoding.GetString(collection.ToArray());
