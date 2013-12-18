@@ -25,11 +25,39 @@ namespace coinium.Net
 {
     public class Connection : IConnection
     {
-        public bool IsConnected { get; private set; }
-        public IPEndPoint RemoteEndPoint { get; private set; }
-        public IPEndPoint LocalEndPoint { get; private set; }
+        /// <summary>
+        /// Gets or sets bound client.
+        /// </summary>
         public IClient Client { get; set; }
+
+        /// <summary>
+        /// Gets underlying socket.
+        /// </summary>
         public Socket Socket { get; private set; }
+
+        /// <summary>
+        /// Returns true if there exists an active connection.
+        /// </summary>
+        public bool IsConnected
+        {
+            get { return (Socket != null) && Socket.Connected; }
+        }
+
+        /// <summary>
+        /// Returns remote endpoint.
+        /// </summary>
+        public IPEndPoint RemoteEndPoint
+        {
+            get { return (Socket == null) ? null : Socket.RemoteEndPoint as IPEndPoint; }
+        }
+
+        /// <summary>
+        /// Returns local endpoint.
+        /// </summary>
+        public IPEndPoint LocalEndPoint
+        {
+            get { return Socket.LocalEndPoint as IPEndPoint; }
+        }
 
         /// <summary>
         /// The server instance that connection is bound to.
@@ -68,9 +96,12 @@ namespace coinium.Net
 
         #region recieve methods
 
+        // Read bytes from the Socket into the buffer in a non-blocking call.
+        // This allows us to read no more than the specified count number of bytes.\
+        // Note that this method should only be called prior to encryption!
         public int Receive(int start, int count)
         {
-            throw new NotImplementedException();
+            return this.Socket.Receive(_recvBuffer, start, count, SocketFlags.None);
         }
 
         /// <summary>
@@ -193,5 +224,17 @@ namespace coinium.Net
         }
 
         #endregion
+
+        /// <summary>
+        /// Returns a connection state string.
+        /// </summary>
+        /// <returns>Connection state string.</returns>
+        public override string ToString()
+        {
+            if (Socket == null)
+                return "No Socket!";
+            else
+                return Socket.RemoteEndPoint != null ? Socket.RemoteEndPoint.ToString() : "Not Connected!";
+        }
     }
 }

@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
+    <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
@@ -74,6 +75,8 @@
     <Compile Include="Net\ConnectionDataEventArgs.cs" />
     <Compile Include="Net\IClient.cs" />
     <Compile Include="Net\IConnection.cs" />
+    <Compile Include="Net\RPCServerClient.cs" />
+    <Compile Include="Net\RPCServerNew.cs" />
     <Compile Include="Net\RPC\Client\JSONFormatter.cs" />
     <Compile Include="Net\RPC\Client\Requests\CreateRawTransaction.cs" />
     <Compile Include="Net\RPC\Client\Requests\CreateRawTransactionInput.cs" />
