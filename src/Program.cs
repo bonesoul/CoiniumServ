@@ -22,9 +22,10 @@ using System.Reflection;
 using System.Threading;
 using coinium.Common.Console;
 using coinium.Common.Platform;
-using coinium.Net.RPC.Client;
+using coinium.Net;
 using coinium.Net.RPC.Server;
 using Serilog;
+using coinium.Net.RPC.Wallet;
 
 namespace coinium
 {
@@ -48,10 +49,10 @@ namespace coinium
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
             var server = new RPCServer();
-            server.Start();
+            server.Listen("0.0.0.0", 3333);
 
-            var client = new RPCClient("http://127.0.0.1:9335", "devel", "develpass");
-            client.GetInfo();
+            //var client = new WalletClient("http://127.0.0.1:9335", "devel", "develpass");
+            //client.GetInfo();
 
             Console.ReadLine();
         }
