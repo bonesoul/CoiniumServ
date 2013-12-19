@@ -16,102 +16,42 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-using System;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using AustinHarris.JsonRpc;
-using coinium.Net.RPC.Server.Responses;
 using Serilog;
+using coinium.Core.Mining.Service;
 
 namespace coinium.Net.RPC.Server
 {
-    public class RPCServer
+    public class RPCServer:Net.Server
     {
-        public RPCServer()
-        { }
-
         private static object[] _services =
         {
             new MiningService()
         };
 
-        public void Start()
+        public RPCServer()
         {
-            var thread = new Thread(new ThreadStart(ServerThread));
-            thread.Start();
+            this.OnConnect += RPCServerNew_OnConnect;
+            this.OnDisconnect += RPCServerNew_OnDisconnect;
+            this.DataReceived += RPCServerNew_DataReceived;
         }
 
-        private static void ServerThread()
+        void RPCServerNew_OnConnect(object sender, ConnectionEventArgs e)
         {
-            var server = new TcpListener(IPAddress.Parse("127.0.0.1"), 3333);
-            server.Start();
-
-            while (true)
-            {
-                try
-                {
-                    using (var client = server.AcceptTcpClient())
-                    {
-                        var rpcResultHandler = new AsyncCallback(
-                            callback =>
-                            {
-                                var async = ((JsonRpcStateAsync)callback);
-                                var result = async.Result;
-                                var writer = ((StreamWriter)async.AsyncState);
-
-                                writer.WriteLine(result);
-                                writer.Flush();
-                                Log.Debug("RESPONSE: {Response}", result);
-                            });
-
-                        using (var stream = client.GetStream())
-                        {
-                            var reader = new StreamReader(stream, Encoding.UTF8);
-                            var writer = new StreamWriter(stream, new UTF8Encoding(false));
-
-                            while (!reader.EndOfStream)
-                            {
-                                var line = reader.ReadLine();
-                                
-                                var async = new JsonRpcStateAsync(rpcResultHandler, writer) { JsonRpc = line };
-                                JsonRpcProcessor.Process(async, writer);
-
-                                Log.Debug("REQUEST: {Request}", line);
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e, "RPCServer exception");
-                }
-            }
-        }
-    }
-
-    public class MiningService : JsonRpcService
-    {
-        [JsonRpcMethod("mining.subscribe")]
-        public SubscribeResponse SubscribeMiner(string miner)
-        {
-            var response = new SubscribeResponse
-            {
-                UniqueId = "ae6812eb4cd7735a302a8a9dd95cf71f",
-                ExtraNonce1 = "08000002",
-                ExtraNonce2 = 4
-            };
-
-            return response;
+            Log.Verbose("RPC-client connected: {0}", e.Connection.ToString());
+            
+            var client = new RPCClient(e.Connection);
+            e.Connection.Client = client;
         }
 
-        [JsonRpcMethod("mining.authorize")]
-        public bool AuthorizeMiner(string user, string password)
+        void RPCServerNew_OnDisconnect(object sender, ConnectionEventArgs e)
         {
-            return true;
+            Log.Verbose("RPC-client disconnected: {0}", e.Connection.ToString());
+        }
+
+        void RPCServerNew_DataReceived(object sender, ConnectionDataEventArgs e)
+        {
+            var connection = (Connection)e.Connection;
+            ((RPCClient)connection.Client).Parse(e);
         }
     }
 }

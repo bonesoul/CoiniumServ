@@ -17,11 +17,15 @@
 */
 
 using System;
+using System.Globalization;
 using System.Reflection;
-using coinium.Net.RPC.Client;
+using System.Threading;
+using coinium.Common.Console;
+using coinium.Common.Platform;
+using coinium.Net;
 using coinium.Net.RPC.Server;
 using Serilog;
-using coinium.Utility;
+using coinium.Net.RPC.Wallet;
 
 namespace coinium
 {
@@ -33,6 +37,8 @@ namespace coinium
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions.
             #endif
 
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
@@ -40,13 +46,13 @@ namespace coinium
 
             InitLogging();
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+            Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
             var server = new RPCServer();
-            server.Start();
+            server.Listen("0.0.0.0", 3333);
 
-            var client = new RPCClient("http://127.0.0.1:9332", "devel", "develpass");
+            //var client = new WalletClient("http://127.0.0.1:9335", "devel", "develpass");
             //client.GetInfo();
-            //client.GetAccount("AeZmUGwAnZgn785oYTm7K9BqwhW52kVa6");
 
             Console.ReadLine();
         }
