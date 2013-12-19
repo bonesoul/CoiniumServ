@@ -35,8 +35,10 @@ namespace coinium.Core.Mining.Service
         }
 
         [JsonRpcMethod("mining.subscribe")]
-        public SubscribeResponse SubscribeMiner(string miner)
+        public SubscribeResponse SubscribeMiner(string signature)
         {
+            var miner = (Miner)(JsonRpcContext.Current().Value);
+
             this._counter++;
 
             var response = new SubscribeResponse
@@ -45,13 +47,16 @@ namespace coinium.Core.Mining.Service
                 ExtraNonce2Size = 0x4
             };
 
+            miner.Subscribe();
+
             return response;
         }
 
         [JsonRpcMethod("mining.authorize")]
         public bool AuthorizeMiner(string user, string password)
         {
-            return true;
+            var miner = (Miner)(JsonRpcContext.Current().Value);
+            return miner.Authenticate(user, password);
         }
     }
 }
