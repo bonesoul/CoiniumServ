@@ -3,7 +3,8 @@
 * http://www.coinium.org (Under construction)
 * Read the [FAQ](https://github.com/raistlinthewiz/coinium/wiki/FAQ) and check the [wiki](https://github.com/raistlinthewiz/coinium/wiki/) before asking!
 * IRC (**irc.freenode.net**):
-  - **#coinium** (dev talk)
+  - **#coinium-dev** (dev talk)
+  - **#coinium** (coinium.org - official pools)
 * [Twitter](http://twitter.com/coinium)
    
 # Coinium
