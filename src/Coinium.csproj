@@ -68,6 +68,7 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
+    <Compile Include="Core\Mining\IMiner.cs" />
     <Compile Include="Core\Mining\Miner.cs" />
     <Compile Include="Core\Mining\Service\MiningService.cs" />
     <Compile Include="Net\ConnectionEventArgs.cs" />
@@ -75,8 +76,7 @@
     <Compile Include="Net\ConnectionDataEventArgs.cs" />
     <Compile Include="Net\IClient.cs" />
     <Compile Include="Net\IConnection.cs" />
-    <Compile Include="Mining\IMiner.cs" />
-    <Compile Include="Net\RPC\Server\RPCClient.cs" />
+    <Compile Include="Net\RPC\Server\Notifications\JobNotification.cs" />
     <Compile Include="Net\RPC\Server\RPCServer.cs" />
     <Compile Include="Common\Extensions\JSONFormatter.cs" />
     <Compile Include="Net\RPC\Wallet\Requests\CreateRawTransaction.cs" />

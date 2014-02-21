@@ -39,8 +39,10 @@ namespace coinium.Core.Mining.Service
         /// </summary>
         /// <param name="miner">Miner Connection</param>
         [JsonRpcMethod("mining.subscribe")]
-        public SubscribeResponse SubscribeMiner(string miner)
+        public SubscribeResponse SubscribeMiner(string signature)
         {
+            var miner = (Miner)(JsonRpcContext.Current().Value);
+
             this._counter++;
 
             var response = new SubscribeResponse
@@ -48,6 +50,8 @@ namespace coinium.Core.Mining.Service
                 ExtraNonce1 = this._counter.ToString("x8"), // Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
                 ExtraNonce2Size = 0x4
             };
+
+            miner.Subscribe();
 
             return response;
         }
@@ -60,7 +64,8 @@ namespace coinium.Core.Mining.Service
         [JsonRpcMethod("mining.authorize")]
         public bool AuthorizeMiner(string user, string password)
         {
-            return true;
+            var miner = (Miner)(JsonRpcContext.Current().Value);
+            return miner.Authenticate(user, password);
         }
 
         /// <summary>

@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using coinium.Core.Mining;
 using Serilog;
 using coinium.Core.Mining.Service;
 
@@ -39,8 +40,8 @@ namespace coinium.Net.RPC.Server
         {
             Log.Verbose("RPC-client connected: {0}", e.Connection.ToString());
             
-            var client = new RPCClient(e.Connection);
-            e.Connection.Client = client;
+            var miner = new Miner(e.Connection);
+            e.Connection.Client = miner;
         }
 
         void RPCServerNew_OnDisconnect(object sender, ConnectionEventArgs e)
@@ -51,7 +52,7 @@ namespace coinium.Net.RPC.Server
         void RPCServerNew_DataReceived(object sender, ConnectionDataEventArgs e)
         {
             var connection = (Connection)e.Connection;
-            ((RPCClient)connection.Client).Parse(e);
+            ((Miner)connection.Client).Parse(e);
         }
     }
 }

@@ -16,16 +16,16 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace coinium.Net
+namespace coinium.Core.Mining
 {
-    /// <summary>
-    /// Client interface.
-    /// </summary>
-    public interface IClient
+    public interface IMiner
     {
-        /// <summary>
-        /// Gets or sets the TCP connection bound to client.
-        /// </summary>
-        IConnection Connection { get; }
+        bool Subscribed { get; }
+
+        bool Authenticated { get; }
+
+        bool Authenticate(string user, string password);
+
+        void Subscribe();
     }
 }
