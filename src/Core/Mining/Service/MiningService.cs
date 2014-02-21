@@ -1,4 +1,4 @@
-﻿/*
+/*
  *   Coinium project - crypto currency pool software - https://github.com/raistlinthewiz/coinium
  *   Copyright (C) 2013 Hüseyin Uslu, Int6 Studios - http://www.coinium.org
  *
@@ -34,6 +34,10 @@ namespace coinium.Core.Mining.Service
             this._counter = InstanceId << 27;  // basically allows to run two pool-nodes within the same database. (https://github.com/moopless/stratum-mining-litecoin/issues/23#issuecomment-22728564)
         }
 
+        /// <summary>
+        /// Subscribes a Miner to allow it to recieve work to begin hashing and submitting shares.
+        /// </summary>
+        /// <param name="miner">Miner Connection</param>
         [JsonRpcMethod("mining.subscribe")]
         public SubscribeResponse SubscribeMiner(string signature)
         {
@@ -52,11 +56,30 @@ namespace coinium.Core.Mining.Service
             return response;
         }
 
+        /// <summary>
+        /// Authorise a miner based on their username and password
+        /// </summary>
+        /// <param name="user">Worker Username (e.g. "coinium.1").</param>
+        /// <param name="password">Worker Password (e.g. "x").</param>
         [JsonRpcMethod("mining.authorize")]
         public bool AuthorizeMiner(string user, string password)
         {
             var miner = (Miner)(JsonRpcContext.Current().Value);
             return miner.Authenticate(user, password);
+        }
+
+        /// <summary>
+        /// Allows a miner to submit the work theyve done 
+        /// </summary>
+        /// <param name="user">Worker Username.</param>
+        /// <param name="job_id">Job ID(Should be unique per Job to ensure that share diff is recorded properly) </param>
+        /// <param name="extronance2">Hex-encoded big-endian extranonce2, length depends on extranonce2_size from mining.notify</param>
+        /// <param name="ntime"> UNIX timestamp (32bit integer, big-endian, hex-encoded), must be >= ntime provided by mining,notify and <= current time'</param>
+        /// <param name="nonce"> 32bit integer hex-encoded, big-endian </param>
+        [JsonRpcMethod("mining.submit")]
+        public bool SubmitMiner(string user, string job_id, string extronance2, string ntime, string nonce)
+        {
+            return true;
         }
     }
 }
