@@ -63,6 +63,7 @@ namespace coinium
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.ColoredConsole()
+                .WriteTo.RollingFile("Debug.log")
                 .MinimumLevel.Verbose()
                 .CreateLogger();
         }
