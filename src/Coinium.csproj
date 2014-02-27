@@ -42,6 +42,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
+    <Reference Include="Nancy">
+      <HintPath>..\build\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Hosting.Self">
+      <HintPath>..\build\packages\Nancy.Hosting.Self.0.22.2\lib\net40\Nancy.Hosting.Self.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -108,6 +114,8 @@
     <Compile Include="Net\RPC\Wallet\WalletResponse.cs" />
     <Compile Include="Net\RPC\Server\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\Server.cs" />
+    <Compile Include="Net\Web\Modules\TestModule.cs" />
+    <Compile Include="Net\Web\WebServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Console\ConsoleWindow.cs" />
