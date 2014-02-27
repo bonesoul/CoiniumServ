@@ -18,6 +18,15 @@
 
 /* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
+/* Possible alternative implementations:
+ *      https://en.bitcoin.it/wiki/API_reference_(JSON-RPC)#.NET_.28C.23.29 
+        https://sourceforge.net/projects/bitnet 
+ */
+
+// Original bitcoin api call list: https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_Calls_list
+// rpc error codes: https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Serilog;
@@ -57,6 +66,17 @@ namespace coinium.Net.RPC.Wallet
         }
 
         /// <summary>
+        /// Safely copies wallet.dat to destination, which can be a directory or a path with a filename. 
+        /// </summary>
+        /// <param name="walletPath">
+        /// The location to copy the wallet.dat to. Can be a directory or a path with a filename.
+        /// </param>
+        public void BackupWallet(string walletPath)
+        {
+            MakeRequest<string>("backupwallet", walletPath);
+        }
+
+        /// <summary>
         /// Creates a multi-signature address.
         /// </summary>
         /// <param name="nRquired">Number of required signatures to sign a transaction.</param>
@@ -65,6 +85,26 @@ namespace coinium.Net.RPC.Wallet
         public MultisigAddress CreateMultiSig(int nRquired, List<string> publicKeys)
         {
             return MakeRequest<MultisigAddress>("createmultisig", nRquired, publicKeys);
+        }
+
+        /// <summary>
+        /// Version 0.7: Creates a raw transaction spending given inputs.
+        /// </summary>
+        /// <param name="rawTransaction">The raw transaction details.</param>
+        /// <returns>The raw transaction hex. The transaction is not signed yet.</returns>
+        public string CreateRawTransaction(CreateRawTransaction rawTransaction)
+        {
+            return MakeRequest<string>("createrawtransaction", rawTransaction.Inputs, rawTransaction.Outputs);
+        }
+
+        /// <summary>
+        /// Version 0.7: Produces a human-readable JSON object for a raw transaction.
+        /// </summary>
+        /// <param name="rawTransactionHex">The hex of the raw transaction.</param>
+        /// <returns>The decoded raw transaction details.</returns>
+        public DecodedRawTransaction DecodeRawTransaction(string rawTransactionHex)
+        {
+            return MakeRequest<DecodedRawTransaction>("decoderawtransaction", rawTransactionHex);
         }
 
         /// <summary>
@@ -135,55 +175,6 @@ namespace coinium.Net.RPC.Wallet
         }
 
         /// <summary>
-        /// Safely copies wallet.dat to destination, which can be a directory or a path with a filename. 
-        /// </summary>
-        /// <param name="walletPath">
-        /// The location to copy the wallet.dat to. Can be a directory or a path with a filename.
-        /// </param>
-        public void BackupWallet(string walletPath)
-        {
-            MakeRequest<string>("backupwallet", walletPath);
-        }
-
-        /// <summary>
-        /// Version 0.7: Creates a raw transaction spending given inputs.
-        /// </summary>
-        /// <param name="rawTransaction">The raw transaction details.</param>
-        /// <returns>The raw transaction hex. The transaction is not signed yet.</returns>
-        public string CreateRawTransaction(CreateRawTransaction rawTransaction)
-        {
-            return MakeRequest<string>("createrawtransaction", rawTransaction.Inputs, rawTransaction.Outputs);
-        }
-
-        /// <summary>
-        /// Version 0.7: Produces a human-readable JSON object for a raw transaction.
-        /// </summary>
-        /// <param name="rawTransactionHex">The hex of the raw transaction.</param>
-        /// <returns>The decoded raw transaction details.</returns>
-        public DecodedRawTransaction DecodeRawTransaction(string rawTransactionHex)
-        {
-            return MakeRequest<DecodedRawTransaction>("decoderawtransaction", rawTransactionHex);
-        }
-
-        /// <summary>
-        /// Returns an object containing various state info.
-        /// </summary>
-        /// <returns>An object containing some general information.</returns>
-        public Info GetInfo()
-        {
-            return MakeRequest<Info>("getinfo", null);
-        }
-
-        /// <summary>
-        /// Version 0.7: Returns data about each connected node. 
-        /// </summary>
-        /// <returns>A list of objects containing information about connected nodes.</returns>
-        public IList<PeerInfo> GetPeerInfo()
-        {
-            return MakeRequest<IList<PeerInfo>>("getpeerinfo", null);
-        }
-
-        /// <summary>
         /// If [account] is not specified, returns the server's total available balance.
         /// If [account] is specified, returns the balance in the account. 
         /// </summary>
@@ -192,6 +183,15 @@ namespace coinium.Net.RPC.Wallet
         public decimal GetBalance(string account = "")
         {
             return MakeRequest<decimal>("getbalance", account);
+        }
+
+        /// <summary>
+        /// Returns the hash of the best (tip) block in the longest block chain.
+        /// </summary>
+        /// <returns></returns>
+        public string GetBestBlockHash()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -221,6 +221,20 @@ namespace coinium.Net.RPC.Wallet
         public string GetBlockHash(long index)
         {
             return MakeRequest<string>("getblockhash", index);
+        }
+
+        [Obsolete("Deprecated. Removed in version 0.7. Use getblockcount.")]
+        public long GetBlockNumber()
+        {
+            return this.GetBlockCount();
+        }
+
+        /// <summary>
+        /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
+        /// </summary>
+        public void GetBlockTemplate()
+        {
+            throw  new NotImplementedException();
         }
 
         /// <summary>
@@ -260,17 +274,22 @@ namespace coinium.Net.RPC.Wallet
         }
 
         /// <summary>
-        /// Returns an object containing mining-related information: 
-        /// blocks 
-        /// currentblocksize 
-        /// currentblocktx 
-        /// difficulty 
-        /// errors 
-        /// generate 
-        /// genproclimit 
-        /// hashespersec 
-        /// pooledtx 
-        /// testnet 
+        /// Returns an object containing various state info.
+        /// </summary>
+        /// <returns>An object containing some general information.</returns>
+        public Info GetInfo()
+        {
+            return MakeRequest<Info>("getinfo", null);
+        }
+
+        [Obsolete("Replaced in v0.7.0 with getblocktemplate, submitblock, getrawmempool")]
+        public void GetMemoryPool()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns an object containing mining-related information: blocks, currentblocksize, currentblocktx, difficulty, errors, generate, genproclimit, hashespersec, pooledtx, testnet 
         /// </summary>
         /// <returns>An object containing mining information.</returns>
         public MiningInfo GetMiningInfo()
@@ -289,21 +308,29 @@ namespace coinium.Net.RPC.Wallet
         }
 
         /// <summary>
+        /// Version 0.7: Returns data about each connected node. 
+        /// </summary>
+        /// <returns>A list of objects containing information about connected nodes.</returns>
+        public IList<PeerInfo> GetPeerInfo()
+        {
+            return MakeRequest<IList<PeerInfo>>("getpeerinfo", null);
+        }
+
+        /// <summary>
+        /// recent git checkouts only Returns a new Bitcoin address, for receiving change. This is for use with raw transactions, NOT normal use.
+        /// </summary>
+        public void GetRawChangeAddress()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Version 0.7: Returns all transaction ids in memory pool.
         /// </summary>
         /// <returns>A list of transaction ids in the memory pool.</returns>
         public List<string> GetRawMemPool()
         {
             return MakeRequest<List<string>>("getrawmempool", null);
-        }
-
-        /// <summary>
-        /// Returns statistics about the unspent transaction output (UTXO) set. 
-        /// </summary>
-        /// <returns>An object containing information about the unspent tx set.</returns>
-        public TxOutSetInfo GetTxOutSetInfo()
-        {
-            return MakeRequest<TxOutSetInfo>("gettxoutsetinfo ", null);
         }
 
         /// <summary>
@@ -387,6 +414,28 @@ namespace coinium.Net.RPC.Wallet
         public Transaction GetTxOut(string txId, long n, bool includeMemPool = true)
         {
             return MakeRequest<Transaction>("gettxout", txId, n, includeMemPool);
+        }
+
+        /// <summary>
+        /// Returns statistics about the unspent transaction output (UTXO) set. 
+        /// </summary>
+        /// <returns>An object containing information about the unspent tx set.</returns>
+        public TxOutSetInfo GetTxOutSetInfo()
+        {
+            return MakeRequest<TxOutSetInfo>("gettxoutsetinfo ", null);
+        }
+
+        /// <summary>
+        /// If [data] is not specified, returns formatted hash data to work on:
+        /// "midstate" : precomputed hash state after hashing the first half of the data
+        /// "data" : block data
+        /// "hash1" : formatted hash buffer for second hash
+        /// "target" : little endian hash target
+        /// If [data] is specified, tries to solve the block and returns true if it was successful.
+        /// </summary>
+        public void GetWork()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -492,6 +541,22 @@ namespace coinium.Net.RPC.Wallet
         public List<UnspentTransaction> ListUnspent(int minConf = 1, int maxConf = 999999)
         {
             return MakeRequest<List<UnspentTransaction>>("listunspent", minConf, maxConf);
+        }
+
+        /// <summary>
+        /// version 0.8 Returns list of temporarily unspendable outputs
+        /// </summary>
+        public void ListLockUnspent()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// version 0.8 Updates list of temporarily unspendable outputs
+        /// </summary>
+        public void LockUnspent()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -628,16 +693,13 @@ namespace coinium.Net.RPC.Wallet
             return MakeRequest<string>("stop", null);
         }
 
+        
         /// <summary>
-        /// Verify a signed message.
+        /// Attempts to submit new block to network.
         /// </summary>
-        /// <param name="bitcoinAddress">The bitcoin address who's public key is used to verify the message.</param>
-        /// <param name="signature">The provided signature.</param>
-        /// <param name="message">The signed message.</param>
-        /// <returns>True if the message has been signed by the bitcoinaddress.</returns>
-        public bool VerifyMessage(string bitcoinAddress, string signature, string message)
+        public void SubmitBlock()
         {
-            return MakeRequest<bool>("verifymessage", bitcoinAddress, signature, message);
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -648,6 +710,18 @@ namespace coinium.Net.RPC.Wallet
         public ValidateAddress ValidateAddress(string bitcoinAddress)
         {
             return MakeRequest<ValidateAddress>("validateaddress", bitcoinAddress);
+        }
+
+        /// <summary>
+        /// Verify a signed message.
+        /// </summary>
+        /// <param name="bitcoinAddress">The bitcoin address who's public key is used to verify the message.</param>
+        /// <param name="signature">The provided signature.</param>
+        /// <param name="message">The signed message.</param>
+        /// <returns>True if the message has been signed by the bitcoinaddress.</returns>
+        public bool VerifyMessage(string bitcoinAddress, string signature, string message)
+        {
+            return MakeRequest<bool>("verifymessage", bitcoinAddress, signature, message);
         }
 
         /// <summary>
