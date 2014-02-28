@@ -16,7 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace coinium.Common.Console
+namespace Coinium.Common.Console
 {
     /// <summary>
     /// Utility class to handle console window stuff.

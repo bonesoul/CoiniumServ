@@ -20,15 +20,14 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using coinium.Common.Console;
-using coinium.Common.Platform;
-using coinium.Net;
-using coinium.Net.RPC.Server;
-using coinium.Net.Web;
+using Coinium.Clients.Wallet;
+using Coinium.Common.Console;
+using Coinium.Common.Platform;
+using Coinium.Servers.RPC;
+using Coinium.Servers.Web;
 using Serilog;
-using coinium.Net.RPC.Wallet;
 
-namespace coinium
+namespace Coinium
 {
     class Program
     {

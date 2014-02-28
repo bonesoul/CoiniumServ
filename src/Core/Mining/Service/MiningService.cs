@@ -1,4 +1,4 @@
-/*
+﻿/*
  *   Coinium project - crypto currency pool software - https://github.com/raistlinthewiz/coinium
  *   Copyright (C) 2013 Hüseyin Uslu, Int6 Studios - http://www.coinium.org
  *
@@ -16,11 +16,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
 using AustinHarris.JsonRpc;
-using coinium.Net.RPC.Server.Responses;
+using Coinium.Servers.Stratum.Responses;
 
-namespace coinium.Core.Mining.Service
+namespace Coinium.Core.Mining.Service
 {
     public class MiningService : JsonRpcService
     {

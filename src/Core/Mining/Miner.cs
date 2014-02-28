@@ -20,13 +20,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using AustinHarris.JsonRpc;
-using coinium.Common.Extensions;
-using coinium.Net;
-using coinium.Net.RPC.Server.Notifications;
+using Coinium.Common.Extensions;
+using Coinium.Net;
+using Coinium.Servers.Stratum.Notifications;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace coinium.Core.Mining
+namespace Coinium.Core.Mining
 {
     class Miner : IClient, IMiner
     {

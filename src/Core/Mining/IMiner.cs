@@ -16,7 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace coinium.Core.Mining
+namespace Coinium.Core.Mining
 {
     public interface IMiner
     {

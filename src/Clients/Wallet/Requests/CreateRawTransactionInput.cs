@@ -16,16 +16,18 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Net
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+using Newtonsoft.Json;
+
+namespace Coinium.Clients.Wallet.Requests
 {
-    /// <summary>
-    /// Client interface.
-    /// </summary>
-    public interface IClient
+    public class CreateRawTransactionInput
     {
-        /// <summary>
-        /// Gets or sets the TCP connection bound to client.
-        /// </summary>
-        IConnection Connection { get; }
+        [JsonProperty("txid")]
+        public string TransactionId { get; set; }
+
+        [JsonProperty("vout")]
+        public int Output { get; set; }
     }
 }

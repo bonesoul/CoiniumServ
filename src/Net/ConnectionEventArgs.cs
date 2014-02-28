@@ -18,7 +18,7 @@
 
 using System;
 
-namespace coinium.Net
+namespace Coinium.Net
 {
     public class ConnectionEventArgs : EventArgs
     {

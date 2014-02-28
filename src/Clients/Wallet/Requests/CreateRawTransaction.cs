@@ -16,16 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Net
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+using System.Collections.Generic;
+
+namespace Coinium.Clients.Wallet.Requests
 {
-    /// <summary>
-    /// Client interface.
-    /// </summary>
-    public interface IClient
+    public class CreateRawTransaction
     {
+        public List<CreateRawTransactionInput> Inputs { get; set; }
+
         /// <summary>
-        /// Gets or sets the TCP connection bound to client.
+        /// A dictionary with the output address and amount per addres.
         /// </summary>
-        IConnection Connection { get; }
+        public Dictionary<string, decimal> Outputs { get; set; }
+
+        public CreateRawTransaction()
+        {
+            Inputs = new List<CreateRawTransactionInput>();
+            Outputs = new Dictionary<string, decimal>();
+        }
+
+        public void AddInput(string transactionId, int output)
+        {
+            Inputs.Add(new CreateRawTransactionInput { TransactionId = transactionId, Output = output });
+        }
+
+        public void AddOutput(string address, decimal amount)
+        {
+            Outputs.Add(address, amount);
+        }
     }
 }

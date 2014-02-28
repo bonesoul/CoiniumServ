@@ -7,7 +7,7 @@
     <ProjectGuid>{5FCA1E48-0751-4625-9532-CB804DF55DB5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>coinium</RootNamespace>
+    <RootNamespace>Coinium</RootNamespace>
     <AssemblyName>coinium-serv</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>coinium.Program</StartupObject>
+    <StartupObject>Coinium.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AustinHarris.JsonRpc, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -82,41 +82,42 @@
     <Compile Include="Net\ConnectionDataEventArgs.cs" />
     <Compile Include="Net\IClient.cs" />
     <Compile Include="Net\IConnection.cs" />
-    <Compile Include="Net\RPC\Server\Notifications\JobNotification.cs" />
-    <Compile Include="Net\RPC\Server\RPCServer.cs" />
+    <Compile Include="Servers\Stratum\Notifications\JobNotification.cs" />
+    <Compile Include="Servers\Stratum\RPCServer.cs" />
     <Compile Include="Common\Extensions\JSONFormatter.cs" />
-    <Compile Include="Net\RPC\Wallet\Requests\CreateRawTransaction.cs" />
-    <Compile Include="Net\RPC\Wallet\Requests\CreateRawTransactionInput.cs" />
-    <Compile Include="Net\RPC\Wallet\Requests\SignRawTransaction.cs" />
-    <Compile Include="Net\RPC\Wallet\Requests\SignRawTransactionInput.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\AddedNodeInfo.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\Block.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\BlockTemplate.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\DecodedRawTransaction.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\Info.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\ListReceivedByAccountTransaction.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\ListReceivedByAddressTransaction.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\ListTransaction.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\MiningInfo.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\MultisigAddress.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\NodeAddress.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\PeerInfo.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\SignedRawTransaction.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\Transaction.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\TransactionDetail.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\TransactionSinceBlock.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\TransactionsSinceBlock.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\TxOutSetInfo.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\UnspentTransaction.cs" />
-    <Compile Include="Net\RPC\Wallet\Responses\ValidateAddress.cs" />
-    <Compile Include="Net\RPC\Wallet\WalletClient.cs" />
-    <Compile Include="Net\RPC\Wallet\WalletClientBase.cs" />
-    <Compile Include="Net\RPC\Wallet\WalletRequest.cs" />
-    <Compile Include="Net\RPC\Wallet\WalletResponse.cs" />
-    <Compile Include="Net\RPC\Server\Responses\SubscribeResponse.cs" />
+    <Compile Include="Clients\Wallet\Requests\CreateRawTransaction.cs" />
+    <Compile Include="Clients\Wallet\Requests\CreateRawTransactionInput.cs" />
+    <Compile Include="Clients\Wallet\Requests\SignRawTransaction.cs" />
+    <Compile Include="Clients\Wallet\Requests\SignRawTransactionInput.cs" />
+    <Compile Include="Clients\Wallet\Responses\AddedNodeInfo.cs" />
+    <Compile Include="Clients\Wallet\Responses\Block.cs" />
+    <Compile Include="Clients\Wallet\Responses\BlockTemplate.cs" />
+    <Compile Include="Clients\Wallet\Responses\DecodedRawTransaction.cs" />
+    <Compile Include="Clients\Wallet\Responses\Info.cs" />
+    <Compile Include="Clients\Wallet\Responses\ListReceivedByAccountTransaction.cs" />
+    <Compile Include="Clients\Wallet\Responses\ListReceivedByAddressTransaction.cs" />
+    <Compile Include="Clients\Wallet\Responses\ListTransaction.cs" />
+    <Compile Include="Clients\Wallet\Responses\MiningInfo.cs" />
+    <Compile Include="Clients\Wallet\Responses\MultisigAddress.cs" />
+    <Compile Include="Clients\Wallet\Responses\NodeAddress.cs" />
+    <Compile Include="Clients\Wallet\Responses\PeerInfo.cs" />
+    <Compile Include="Clients\Wallet\Responses\SignedRawTransaction.cs" />
+    <Compile Include="Clients\Wallet\Responses\Transaction.cs" />
+    <Compile Include="Clients\Wallet\Responses\TransactionDetail.cs" />
+    <Compile Include="Clients\Wallet\Responses\TransactionSinceBlock.cs" />
+    <Compile Include="Clients\Wallet\Responses\TransactionsSinceBlock.cs" />
+    <Compile Include="Clients\Wallet\Responses\TxOutSetInfo.cs" />
+    <Compile Include="Clients\Wallet\Responses\UnspentTransaction.cs" />
+    <Compile Include="Clients\Wallet\Responses\ValidateAddress.cs" />
+    <Compile Include="Clients\Wallet\WalletClient.cs" />
+    <Compile Include="Clients\Wallet\WalletClientBase.cs" />
+    <Compile Include="Clients\Wallet\WalletRequest.cs" />
+    <Compile Include="Clients\Wallet\WalletResponse.cs" />
+    <Compile Include="Servers\Stratum\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\Server.cs" />
-    <Compile Include="Net\Web\Modules\TestModule.cs" />
-    <Compile Include="Net\Web\WebServer.cs" />
+    <Compile Include="Servers\Web\Modules\Index.cs" />
+    <Compile Include="Servers\Web\Modules\Version.cs" />
+    <Compile Include="Servers\Web\WebServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Console\ConsoleWindow.cs" />
