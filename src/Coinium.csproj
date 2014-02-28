@@ -115,8 +115,7 @@
     <Compile Include="Clients\Wallet\WalletResponse.cs" />
     <Compile Include="Servers\Stratum\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\Server.cs" />
-    <Compile Include="Servers\Web\Modules\Index.cs" />
-    <Compile Include="Servers\Web\Modules\Version.cs" />
+    <Compile Include="Servers\Web\Protocols\Stats.cs" />
     <Compile Include="Servers\Web\WebServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
