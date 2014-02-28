@@ -115,7 +115,6 @@
     <Compile Include="Core\Clients\Wallet\WalletResponse.cs" />
     <Compile Include="Core\Services\Stratum\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\Server.cs" />
-    <Compile Include="Web\Modules\Getwork.cs" />
     <Compile Include="Web\Modules\Stats.cs" />
     <Compile Include="Core\Servers\WebServer.cs" />
     <Compile Include="Program.cs" />

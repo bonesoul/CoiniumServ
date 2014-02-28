@@ -26,6 +26,8 @@ namespace Coinium.Web.Modules
         public Stats()
         {
             var banner = string.Format("v{0}", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+
+            Get["/"] = x => "coinium";
             Get["/version"] = x => banner;
         }
     }
