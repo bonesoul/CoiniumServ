@@ -229,6 +229,9 @@ namespace coinium.Net.RPC.Wallet
             return this.GetBlockCount();
         }
 
+        /// <summary>
+        /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
+        /// </summary>
         public void GetBlockTemplate()
         {
             throw  new NotImplementedException();
