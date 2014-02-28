@@ -20,11 +20,10 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using Coinium.Clients.Wallet;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Servers.Stratum;
-using Coinium.Servers.Web;
+using Coinium.Core.Clients.Wallet;
+using Coinium.Core.Servers;
 using Serilog;
 
 namespace Coinium
@@ -49,7 +48,7 @@ namespace Coinium
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
             // stratum rpc-server.
-            var server = new RPCServer();
+            var server = new StratumServer();
             server.Listen("0.0.0.0", 3333);
 
             // coind rpc client.
