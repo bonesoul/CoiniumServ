@@ -21,6 +21,9 @@ using Coinium.Core.Services.Stratum.Responses;
 
 namespace Coinium.Core.Services.Stratum
 {
+    /// <summary>
+    /// Stratum protocol implementation.
+    /// </summary>
     public class StratumService : JsonRpcService
     {
         // nonce counter 

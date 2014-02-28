@@ -16,13 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Mining;
 using Coinium.Core.Services.Stratum;
 using Coinium.Net;
 using Serilog;
 
 namespace Coinium.Core.Servers
 {
+    /// <summary>
+    /// Stratum protocol server implementation.
+    /// </summary>
     public class StratumServer:Server
     {
         private static object[] _services =
@@ -32,25 +34,25 @@ namespace Coinium.Core.Servers
 
         public StratumServer()
         {
-            this.OnConnect += RPCServerNew_OnConnect;
-            this.OnDisconnect += RPCServerNew_OnDisconnect;
-            this.DataReceived += RPCServerNew_DataReceived;
+            this.OnConnect += Stratum_OnConnect;
+            this.OnDisconnect += Stratum_OnDisconnect;
+            this.DataReceived += Stratum_DataReceived;
         }
 
-        void RPCServerNew_OnConnect(object sender, ConnectionEventArgs e)
+        private void Stratum_OnConnect(object sender, ConnectionEventArgs e)
         {
-            Log.Verbose("RPC-client connected: {0}", e.Connection.ToString());
+            Log.Verbose("Stratum client connected: {0}", e.Connection.ToString());
             
             var miner = new Miner(e.Connection);
             e.Connection.Client = miner;
         }
 
-        void RPCServerNew_OnDisconnect(object sender, ConnectionEventArgs e)
+        private void Stratum_OnDisconnect(object sender, ConnectionEventArgs e)
         {
-            Log.Verbose("RPC-client disconnected: {0}", e.Connection.ToString());
+            Log.Verbose("Stratum client disconnected: {0}", e.Connection.ToString());
         }
 
-        void RPCServerNew_DataReceived(object sender, ConnectionDataEventArgs e)
+        private void Stratum_DataReceived(object sender, ConnectionDataEventArgs e)
         {
             var connection = (Connection)e.Connection;
             ((Miner)connection.Client).Parse(e);

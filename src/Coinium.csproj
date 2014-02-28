@@ -75,6 +75,8 @@
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\Mining\IMiner.cs" />
+    <Compile Include="Core\Servers\Getwork.cs" />
+    <Compile Include="Core\Services\Getwork\GetworkService.cs" />
     <Compile Include="Core\Services\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Services\Stratum\StratumService.cs" />
     <Compile Include="Net\ConnectionEventArgs.cs" />
