@@ -20,6 +20,7 @@
 
 /* Possible alternative implementations:
  *      https://en.bitcoin.it/wiki/API_reference_(JSON-RPC)#.NET_.28C.23.29 
+ *      https://github.com/GeorgeKimionis/BitcoinLib
  *      https://code.google.com/p/bitcoinsharp/     
  *      https://sourceforge.net/projects/bitnet 
  */
