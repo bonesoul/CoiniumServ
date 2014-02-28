@@ -16,21 +16,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
-{
-    public interface IMiner
-    {
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Coinium.Core.Mining;
+using Coinium.Net;
 
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+namespace Coinium.Core.Services.Getwork
+{
+    public class GetworkMiner : IClient, IMiner
+    {
+        public IConnection Connection { get; private set; }
+        public bool Authenticated { get; private set; }
+        public bool Authenticate(string user, string password)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

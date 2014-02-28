@@ -31,6 +31,9 @@ namespace Coinium.Core.Services.Stratum
 {
     class Miner : IClient, IMiner
     {
+        /// <summary>
+        /// Miner's connection.
+        /// </summary>
         public IConnection Connection { get; private set; }
 
         /// <summary>
