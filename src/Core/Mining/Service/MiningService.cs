@@ -37,7 +37,7 @@ namespace coinium.Core.Mining.Service
         /// <summary>
         /// Subscribes a Miner to allow it to recieve work to begin hashing and submitting shares.
         /// </summary>
-        /// <param name="miner">Miner Connection</param>
+        /// <param name="signature">Miner Connection</param>
         [JsonRpcMethod("mining.subscribe")]
         public SubscribeResponse SubscribeMiner(string signature)
         {
@@ -69,15 +69,15 @@ namespace coinium.Core.Mining.Service
         }
 
         /// <summary>
-        /// Allows a miner to submit the work theyve done 
+        /// Allows a miner to submit the work they have done 
         /// </summary>
         /// <param name="user">Worker Username.</param>
-        /// <param name="job_id">Job ID(Should be unique per Job to ensure that share diff is recorded properly) </param>
+        /// <param name="jobId">Job ID(Should be unique per Job to ensure that share diff is recorded properly) </param>
         /// <param name="extronance2">Hex-encoded big-endian extranonce2, length depends on extranonce2_size from mining.notify</param>
         /// <param name="ntime"> UNIX timestamp (32bit integer, big-endian, hex-encoded), must be >= ntime provided by mining,notify and <= current time'</param>
         /// <param name="nonce"> 32bit integer hex-encoded, big-endian </param>
         [JsonRpcMethod("mining.submit")]
-        public bool SubmitMiner(string user, string job_id, string extronance2, string ntime, string nonce)
+        public bool SubmitMiner(string user, string jobId, string extronance2, string ntime, string nonce)
         {
             return true;
         }

@@ -37,8 +37,15 @@ namespace coinium.Core.Mining
         /// </summary>
         public bool Subscribed { get; private set; }
 
+        /// <summary>
+        /// Is the miner authenticated.
+        /// </summary>
         public bool Authenticated { get; private set; }
 
+        /// <summary>
+        /// Creates a new miner instance.
+        /// </summary>
+        /// <param name="connection"></param>
         public Miner(IConnection connection)
         {
             this.Connection = connection;
@@ -46,6 +53,10 @@ namespace coinium.Core.Mining
             this.Authenticated = false;
         }
 
+        /// <summary>
+        /// Parses the incoming data.
+        /// </summary>
+        /// <param name="e"></param>
         public void Parse(ConnectionDataEventArgs e)
         {
             Log.Verbose("RPC-client recv:\n{0}", e.Data.Dump());
@@ -86,11 +97,17 @@ namespace coinium.Core.Mining
             return this.Authenticated;
         }
 
+        /// <summary>
+        /// Subscribes the miner to mining service.
+        /// </summary>
         public void Subscribe()
         {
             this.Subscribed = true;
         }
 
+        /// <summary>
+        /// Sends a mining-job to miner.
+        /// </summary>
         private void SendJob()
         {
             var notification = new JsonRequest

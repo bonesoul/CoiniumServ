@@ -20,12 +20,27 @@ namespace coinium.Core.Mining
 {
     public interface IMiner
     {
+        /// <summary>
+        /// Is the miner subscribed?
+        /// </summary>
         bool Subscribed { get; }
 
+        /// <summary>
+        /// Is the miner authenticated.
+        /// </summary>
         bool Authenticated { get; }
 
+        /// <summary>
+        /// Authenticates the miner.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         bool Authenticate(string user, string password);
 
+        /// <summary>
+        /// Subscribes the miner to the service.
+        /// </summary>
         void Subscribe();
     }
 }

@@ -51,8 +51,8 @@ namespace coinium
             var server = new RPCServer();
             server.Listen("0.0.0.0", 3333);
 
-            //var client = new WalletClient("http://127.0.0.1:9335", "devel", "develpass");
-            //client.GetInfo();
+            var client = new WalletClient("http://127.0.0.1:9333", "devel", "develpass");
+            client.GetInfo();
 
             Console.ReadLine();
         }
