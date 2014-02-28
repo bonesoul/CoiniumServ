@@ -35,6 +35,9 @@ using coinium.Net.RPC.Wallet.Responses;
 
 namespace coinium.Net.RPC.Wallet
 {
+    /// <summary>
+    /// RPC client for coind's.
+    /// </summary>
     public class WalletClient:WalletClientBase
     {
         public WalletClient(string url, string user, string password)
