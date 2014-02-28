@@ -1,7 +1,9 @@
 ﻿using System;
 using Nancy;
+using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
 using Nancy.Hosting.Self;
+using Nancy.TinyIoc;
 using Serilog;
 
 namespace Coinium.Servers.Web
@@ -47,6 +49,11 @@ namespace Coinium.Servers.Web
         protected override DiagnosticsConfiguration DiagnosticsConfiguration
         {
             get { return new DiagnosticsConfiguration { Password = @"coinium" }; }
+        }
+
+        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+        {
+            StaticConfiguration.EnableRequestTracing = true;
         }
     }
 }
