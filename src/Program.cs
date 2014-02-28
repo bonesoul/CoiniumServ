@@ -47,17 +47,16 @@ namespace Coinium
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
-            // stratum rpc-server.
-            var server = new StratumServer();
-            server.Listen("0.0.0.0", 3333);
-
             // coind rpc client.
             var client = new WalletClient("http://127.0.0.1:9333", "devel", "develpass");
             client.GetInfo();
-            //client.GetBlockTemplate();
+
+            // stratum server.
+            var server = new StratumServer();
+            server.Listen("0.0.0.0", 3333);
 
             // web-server.
-            var webServer = new WebServer(8333);
+            var webServer = new WebServer(81);
 
             Console.ReadLine();
         }
