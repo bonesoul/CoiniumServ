@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Nancy.Hosting.Self;
@@ -15,19 +16,31 @@ namespace coinium.Net.Web
         /// Inits a new instance of embedded web-server.
         /// </summary>
         public WebServer(int port)
-        {
-            Log.Verbose("Init WebServer()");
-            
+        {            
             this.Port = port;
             var uri = new Uri(string.Format("http://127.0.0.1:{0}", this.Port));
 
+            Log.Verbose("Init WebServer() - {0}", uri);
+
             var hostConfiguration = new HostConfiguration();
+            hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
+            hostConfiguration.UrlReservations.CreateAutomatically = true;
 
             using (var host = new NancyHost(hostConfiguration, uri))
-            {
-                
+            {                
                 host.Start();
+                Console.ReadLine();
+                host.Stop();
             }
+        }
+
+        /// <summary>
+        /// Unhandled exception callback for nancy based web-server.
+        /// </summary>
+        /// <param name="exception"></param>
+        private void UnhandledExceptionHandler(Exception exception)
+        {
+            Log.Error("Web-server: {0}",exception);
         }
     }
 }

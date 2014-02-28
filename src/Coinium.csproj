@@ -114,6 +114,7 @@
     <Compile Include="Net\RPC\Wallet\WalletResponse.cs" />
     <Compile Include="Net\RPC\Server\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\Server.cs" />
+    <Compile Include="Net\Web\Modules\TestModule.cs" />
     <Compile Include="Net\Web\WebServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
