@@ -20,11 +20,12 @@
 
 /* Possible alternative implementations:
  *      https://en.bitcoin.it/wiki/API_reference_(JSON-RPC)#.NET_.28C.23.29 
-        https://sourceforge.net/projects/bitnet 
+ *      https://code.google.com/p/bitcoinsharp/     
+ *      https://sourceforge.net/projects/bitnet 
  */
 
 // Original bitcoin api call list: https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_Calls_list
-// rpc error codes: https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
+// Rpc error codes: https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
 
 using System;
 using System.Collections.Generic;
@@ -234,10 +235,21 @@ namespace coinium.Net.RPC.Wallet
 
         /// <summary>
         /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
+        /// https://en.bitcoin.it/wiki/Getblocktemplate
         /// </summary>
-        public void GetBlockTemplate()
+        public String GetBlockTemplate(params object[] @params)
         {
-            throw  new NotImplementedException();
+            try
+            {
+                return @params == null
+                    ? MakeRequest<String>("getblocktemplate")
+                    : MakeRequest<String>("getblocktemplate", @params);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "GetBlockTemplate exception");
+                return null;
+            }
         }
 
         /// <summary>

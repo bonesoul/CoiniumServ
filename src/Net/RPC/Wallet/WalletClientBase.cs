@@ -17,6 +17,11 @@
 */
 
 /* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+/* 
+ * Alternative codes: 
+ * https://github.com/GeorgeKimionis/BitcoinLib
+ * http://sourceforge.net/p/bitnet/ 
+ */
 
 using System;
 using System.IO;
@@ -158,27 +163,26 @@ namespace coinium.Net.RPC.Wallet
                     return result;
                 }
             }
-            catch (ProtocolViolationException protoEx)
+            catch (ProtocolViolationException protocolException)
             {
-                throw new Exception("Unable to connect to the Bitcoin server.", protoEx);
+                throw new Exception("Unable to connect to the Bitcoin server.", protocolException);
             }
-            catch (WebException webEx)
+            catch (WebException webException)
             {
-                HttpWebResponse webResponse = webEx.Response as HttpWebResponse;
-                if (webResponse != null)
-                {
-                    switch (webResponse.StatusCode)
-                    {
-                        case HttpStatusCode.InternalServerError:
-                            throw new Exception("The RPC request was either not understood by the Bitcoin server or there was a problem executing the request.", webEx);
-                    }
-                }
+                var response = webException.Response as HttpWebResponse;
 
-                throw new Exception("An unknown web exception occured while trying to read the JSON response.", webEx);
+                if(response == null)
+                    throw new Exception("An unknown web exception occured while trying to read the JSON response.", webException);
+
+                using (var stream = response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    throw new Exception(string.Format("{0} - {1}", response.StatusCode, reader.ReadToEnd()));
+                }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw new Exception("An unknown exception occured while trying to read the JSON response.", ex);
+                throw new Exception("An unknown exception occured while trying to read the JSON response.", exception);
             }
         }
     }
