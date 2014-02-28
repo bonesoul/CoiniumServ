@@ -1,4 +1,6 @@
 ﻿using System;
+using Nancy;
+using Nancy.Diagnostics;
 using Nancy.Hosting.Self;
 using Serilog;
 
@@ -37,6 +39,14 @@ namespace Coinium.Servers.Web
         private void UnhandledExceptionHandler(Exception exception)
         {
             Log.Error("Web-server: {0}",exception);
+        }
+    }
+
+    public class CustomBootstrapper : DefaultNancyBootstrapper
+    {
+        protected override DiagnosticsConfiguration DiagnosticsConfiguration
+        {
+            get { return new DiagnosticsConfiguration { Password = @"coinium" }; }
         }
     }
 }
