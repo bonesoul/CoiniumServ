@@ -16,15 +16,18 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+using Nancy;
 
-namespace Coinium.Clients.Wallet.Responses
+namespace Coinium.Servers.Web.Protocols
 {
-    public class ListReceivedByAddressTransaction
+    public class Getwork : NancyModule 
     {
-        public string Address { get; set; }
-        public string Account { get; set; }
-        public double Amount { get; set; }
-        public int Confirmations { get; set; }
+        public Getwork()
+        {
+            Post["/"] = @params =>
+            {
+                return "test";
+            };
+        }
     }
 }
