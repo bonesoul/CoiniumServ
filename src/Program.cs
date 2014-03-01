@@ -23,7 +23,7 @@ using System.Threading;
 using Coinium.Clients.Wallet;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Servers.RPC;
+using Coinium.Servers.Stratum;
 using Coinium.Servers.Web;
 using Serilog;
 
