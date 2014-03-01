@@ -235,9 +235,19 @@ namespace coinium.Net.RPC.Wallet
         /// <summary>
         /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
         /// </summary>
-        public void GetBlockTemplate()
+        public String GetBlockTemplate(params object[] @params)
         {
-            throw  new NotImplementedException();
+            try
+            {
+                return @params == null
+                    ? MakeRequest<String>("getblocktemplate")
+                    : MakeRequest<String>("getblocktemplate", @params);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "GetBlockTemplate exception");
+                return null;
+            }
         }
 
         /// <summary>

@@ -91,6 +91,7 @@
     <Compile Include="Net\RPC\Wallet\Requests\SignRawTransactionInput.cs" />
     <Compile Include="Net\RPC\Wallet\Responses\AddedNodeInfo.cs" />
     <Compile Include="Net\RPC\Wallet\Responses\Block.cs" />
+    <Compile Include="Net\RPC\Wallet\Responses\BlockTemplate.cs" />
     <Compile Include="Net\RPC\Wallet\Responses\DecodedRawTransaction.cs" />
     <Compile Include="Net\RPC\Wallet\Responses\Info.cs" />
     <Compile Include="Net\RPC\Wallet\Responses\ListReceivedByAccountTransaction.cs" />
