@@ -20,7 +20,7 @@
 
 using System.Text;
 
-namespace coinium.Common.Extensions
+namespace Coinium.Common.Extensions
 {
     /// <summary>
     /// Utility class to format a given JSON string so it is more readable and nicely indented.

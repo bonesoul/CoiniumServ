@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace coinium.Net
+namespace Coinium.Net
 {
     public sealed class ConnectionDataEventArgs : ConnectionEventArgs
     {

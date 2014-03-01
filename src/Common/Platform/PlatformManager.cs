@@ -18,7 +18,7 @@
 
 using System;
 
-namespace coinium.Common.Platform
+namespace Coinium.Common.Platform
 {
     /// <summary>
     /// Platform Manager that identifies platforms & manages them.

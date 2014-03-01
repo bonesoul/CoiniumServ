@@ -16,16 +16,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Net
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+namespace Coinium.Clients.Wallet.Responses
 {
-    /// <summary>
-    /// Client interface.
-    /// </summary>
-    public interface IClient
+    public class PeerInfo
     {
-        /// <summary>
-        /// Gets or sets the TCP connection bound to client.
-        /// </summary>
-        IConnection Connection { get; }
+        public string Addr { get; set; }
+        public string Services { get; set; }
+        public int LastSend { get; set; }
+        public int LastRecv { get; set; }
+        public int BytesSent { get; set; }
+        public int BytesRecv { get; set; }
+        public int ConnTime { get; set; }
+        public int Version { get; set; }
+        public string SubVer { get; set; }
+        public bool Inbound { get; set; }
+        public int StartingHeight { get; set; }
+        public int BanScore { get; set; }
+        public bool SyncNode { get; set; }
     }
 }

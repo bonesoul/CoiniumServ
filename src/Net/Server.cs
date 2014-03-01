@@ -21,10 +21,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using coinium.Common.Extensions;
+using Coinium.Common.Extensions;
 using Serilog;
 
-namespace coinium.Net
+namespace Coinium.Net
 {
     public class Server : IDisposable
     {
