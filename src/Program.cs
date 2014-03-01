@@ -55,7 +55,7 @@ namespace Coinium
             // coind rpc client.
             var client = new WalletClient("http://127.0.0.1:9333", "devel", "develpass");
             client.GetInfo();
-            client.GetBlockTemplate();
+            //client.GetBlockTemplate();
 
             // web-server.
             var webServer = new WebServer(8333);
