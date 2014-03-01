@@ -22,7 +22,7 @@ using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Net;
-using Coinium.Servers.RPC.Notifications;
+using Coinium.Servers.Stratum.Notifications;
 using Newtonsoft.Json;
 using Serilog;
 

@@ -21,7 +21,7 @@ using Coinium.Core.Mining.Service;
 using Coinium.Net;
 using Serilog;
 
-namespace Coinium.Servers.RPC
+namespace Coinium.Servers.Stratum
 {
     public class RPCServer:Net.Server
     {

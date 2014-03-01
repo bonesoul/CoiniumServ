@@ -20,7 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Coinium.Servers.RPC.Responses
+namespace Coinium.Servers.Stratum.Responses
 {
     [JsonArray]
     public class SubscribeResponse:IEnumerable<object>

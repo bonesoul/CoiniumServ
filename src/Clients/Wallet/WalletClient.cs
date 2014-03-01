@@ -240,17 +240,7 @@ namespace Coinium.Clients.Wallet
         /// </summary>
         public String GetBlockTemplate(params object[] @params)
         {
-            try
-            {
-                return @params == null
-                    ? MakeRequest<String>("getblocktemplate")
-                    : MakeRequest<String>("getblocktemplate", @params);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "GetBlockTemplate exception");
-                return null;
-            }
+            return MakeRequest<String>("getblocktemplate", @params);
         }
 
         /// <summary>

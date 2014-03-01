@@ -82,8 +82,8 @@
     <Compile Include="Net\ConnectionDataEventArgs.cs" />
     <Compile Include="Net\IClient.cs" />
     <Compile Include="Net\IConnection.cs" />
-    <Compile Include="Servers\RPC\Notifications\JobNotification.cs" />
-    <Compile Include="Servers\RPC\RPCServer.cs" />
+    <Compile Include="Servers\Stratum\Notifications\JobNotification.cs" />
+    <Compile Include="Servers\Stratum\RPCServer.cs" />
     <Compile Include="Common\Extensions\JSONFormatter.cs" />
     <Compile Include="Clients\Wallet\Requests\CreateRawTransaction.cs" />
     <Compile Include="Clients\Wallet\Requests\CreateRawTransactionInput.cs" />
@@ -113,7 +113,7 @@
     <Compile Include="Clients\Wallet\WalletClientBase.cs" />
     <Compile Include="Clients\Wallet\WalletRequest.cs" />
     <Compile Include="Clients\Wallet\WalletResponse.cs" />
-    <Compile Include="Servers\RPC\Responses\SubscribeResponse.cs" />
+    <Compile Include="Servers\Stratum\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\Server.cs" />
     <Compile Include="Servers\Web\Modules\Index.cs" />
     <Compile Include="Servers\Web\Modules\Version.cs" />

@@ -20,7 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Coinium.Servers.RPC.Notifications
+namespace Coinium.Servers.Stratum.Notifications
 {
     [JsonArray]
     public class JobNotification : IEnumerable<object>

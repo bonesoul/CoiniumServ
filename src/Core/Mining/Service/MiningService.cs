@@ -17,7 +17,7 @@
 */
 
 using AustinHarris.JsonRpc;
-using Coinium.Servers.RPC.Responses;
+using Coinium.Servers.Stratum.Responses;
 
 namespace Coinium.Core.Mining.Service
 {
