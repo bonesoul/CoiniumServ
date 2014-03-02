@@ -43,7 +43,7 @@ namespace Coinium.Core.Services.Stratum
         [JsonRpcMethod("mining.subscribe")]
         public SubscribeResponse SubscribeMiner(string signature)
         {
-            var miner = (Miner)(JsonRpcContext.Current().Value);
+            var miner = (StratumMiner)(JsonRpcContext.Current().Value);
 
             this._counter++;
 
@@ -66,7 +66,7 @@ namespace Coinium.Core.Services.Stratum
         [JsonRpcMethod("mining.authorize")]
         public bool AuthorizeMiner(string user, string password)
         {
-            var miner = (Miner)(JsonRpcContext.Current().Value);
+            var miner = (StratumMiner)(JsonRpcContext.Current().Value);
             return miner.Authenticate(user, password);
         }
 

@@ -17,18 +17,55 @@
 */
 
 using System;
+using System.Text;
+using AustinHarris.JsonRpc;
+using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
 using Coinium.Net;
+using Serilog;
 
 namespace Coinium.Core.Services.Getwork
 {
     public class GetworkMiner : IClient, IMiner
     {
         public IConnection Connection { get; private set; }
+
         public bool Authenticated { get; private set; }
+
+        public GetworkMiner(IConnection connection)
+        {
+            this.Connection = connection;
+            this.Authenticated = false;
+        }
+
+        public void Parse(ConnectionDataEventArgs e)
+        {
+            Log.Verbose("RPC-client recv:\n{0}", e.Data.Dump());
+
+            var rpcResultHandler = new AsyncCallback(
+                callback =>
+                {
+                    var asyncData = ((JsonRpcStateAsync)callback);
+                    var result = asyncData.Result + "\n"; // quick hack.
+                    var client = ((GetworkMiner)asyncData.AsyncState);
+
+                    var data = Encoding.UTF8.GetBytes(result);
+                    client.Connection.Send(data);
+
+                    Log.Verbose("RPC-client send:\n{0}", data.Dump());
+                });
+
+            var line = e.Data.ToEncodedString();
+            line = line.Replace("\n", ""); // quick hack!
+
+            var async = new JsonRpcStateAsync(rpcResultHandler, this) { JsonRpc = line };
+            JsonRpcProcessor.Process(async, this);
+        }
+
         public bool Authenticate(string user, string password)
         {
-            throw new NotImplementedException();
+            this.Authenticated = true;
+            return this.Authenticated;
         }
     }
 }

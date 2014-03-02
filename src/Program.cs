@@ -52,8 +52,14 @@ namespace Coinium
             client.GetInfo();
 
             // stratum server.
-            var server = new StratumServer();
-            server.Listen("0.0.0.0", 3333);
+            var stratumServer = new StratumServer();
+            stratumServer.Listen("0.0.0.0", 3333);
+
+            // getwork server.
+            var getworkServer = new GetworkServer();
+            getworkServer.Listen("0.0.0.0", 8332);
+
+
 
             // web-server.
             var webServer = new WebServer(81);

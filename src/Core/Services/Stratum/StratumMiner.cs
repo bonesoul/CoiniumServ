@@ -29,7 +29,7 @@ using Serilog;
 
 namespace Coinium.Core.Services.Stratum
 {
-    class Miner : IClient, IMiner
+    class StratumMiner : IClient, IMiner
     {
         /// <summary>
         /// Miner's connection.
@@ -50,7 +50,7 @@ namespace Coinium.Core.Services.Stratum
         /// Creates a new miner instance.
         /// </summary>
         /// <param name="connection"></param>
-        public Miner(IConnection connection)
+        public StratumMiner(IConnection connection)
         {
             this.Connection = connection;
             this.Subscribed = false;
@@ -70,7 +70,7 @@ namespace Coinium.Core.Services.Stratum
                 {
                     var asyncData = ((JsonRpcStateAsync)callback);
                     var result = asyncData.Result + "\n"; // quick hack.
-                    var client = ((Miner)asyncData.AsyncState);
+                    var client = ((StratumMiner)asyncData.AsyncState);
 
                     var data = Encoding.UTF8.GetBytes(result);
                         client.Connection.Send(data);

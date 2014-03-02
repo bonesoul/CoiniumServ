@@ -16,46 +16,46 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Services.Stratum;
+using Coinium.Core.Services.Getwork;
 using Coinium.Net;
 using Serilog;
 
 namespace Coinium.Core.Servers
 {
     /// <summary>
-    /// Stratum protocol server implementation.
+    /// Getwork protocol server implementation.
     /// </summary>
-    public class StratumServer:Server
+    public class GetworkServer : Server
     {
         private static object[] _services =
         {
-            new StratumService()
+            new GetworkService()
         };
 
-        public StratumServer()
+        public GetworkServer()
         {
-            this.OnConnect += Stratum_OnConnect;
-            this.OnDisconnect += Stratum_OnDisconnect;
-            this.DataReceived += Stratum_DataReceived;
+            this.OnConnect += Getwork_OnConnect;
+            this.OnDisconnect += Getwork_OnDisconnect;
+            this.DataReceived += Getwork_DataReceived;
         }
 
-        private void Stratum_OnConnect(object sender, ConnectionEventArgs e)
+        private void Getwork_OnConnect(object sender, ConnectionEventArgs e)
         {
             Log.Verbose("Stratum client connected: {0}", e.Connection.ToString());
             
-            var miner = new StratumMiner(e.Connection);
+            var miner = new GetworkMiner(e.Connection);
             e.Connection.Client = miner;
         }
 
-        private void Stratum_OnDisconnect(object sender, ConnectionEventArgs e)
+        private void Getwork_OnDisconnect(object sender, ConnectionEventArgs e)
         {
             Log.Verbose("Stratum client disconnected: {0}", e.Connection.ToString());
         }
 
-        private void Stratum_DataReceived(object sender, ConnectionDataEventArgs e)
+        private void Getwork_DataReceived(object sender, ConnectionDataEventArgs e)
         {
             var connection = (Connection)e.Connection;
-            ((StratumMiner)connection.Client).Parse(e);
+            ((GetworkMiner)connection.Client).Parse(e);
         }
     }
 }
