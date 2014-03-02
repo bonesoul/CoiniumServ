@@ -16,21 +16,36 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
-{
-    public interface IMiner
-    {
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
+using System;
+using System.IO;
+using System.Text;
+using AustinHarris.JsonRpc;
+using Coinium.Common.Extensions;
+using Coinium.Net.Http;
+using Serilog;
 
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+namespace Coinium.Core.Getwork
+{
+    /// <summary>
+    /// Getwork protocol server implementation.
+    /// </summary>
+    public class GetworkServer : HttpServer
+    {
+        private static object[] _services =
+        {
+            new GetworkService()
+        };
+
+        public GetworkServer(int port) 
+            : base(port)
+        {
+            this.OnHttpRequest += Getwork_DataReceived;
+        }
+
+        private void Getwork_DataReceived(object sender, HttpRequestEventArgs e)
+        {
+            var miner = new GetworkMiner();
+            miner.Parse(e);            
+        }
     }
 }

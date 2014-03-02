@@ -16,21 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+namespace Coinium.Core.Wallet.Responses
 {
-    public interface IMiner
+    /// <summary>
+    /// Reference: https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
+    /// </summary>
+    public class BlockTemplate
     {
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
     }
 }

@@ -16,21 +16,26 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
-{
-    public interface IMiner
-    {
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
+using System;
 
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+namespace Coinium.Net.Sockets
+{
+    public class ConnectionEventArgs : EventArgs
+    {
+        public IConnection Connection { get; private set; }
+
+        public ConnectionEventArgs(IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException("connection");
+            this.Connection = connection;
+        }
+
+        public override string ToString()
+        {
+            return Connection.RemoteEndPoint != null
+                ? Connection.RemoteEndPoint.ToString()
+                : "Not Connected";
+        }
     }
 }

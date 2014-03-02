@@ -22,8 +22,10 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Core.Clients.Wallet;
-using Coinium.Core.Servers;
+using Coinium.Core.Getwork;
+using Coinium.Core.Stratum;
+using Coinium.Core.Wallet;
+using Coinium.Net.Http;
 using Serilog;
 
 namespace Coinium
@@ -47,17 +49,21 @@ namespace Coinium
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
-            // stratum rpc-server.
-            var server = new StratumServer();
-            server.Listen("0.0.0.0", 3333);
-
             // coind rpc client.
             var client = new WalletClient("http://127.0.0.1:9333", "devel", "develpass");
             client.GetInfo();
-            //client.GetBlockTemplate();
+
+            // stratum server.
+            var stratumServer = new StratumServer();
+            stratumServer.Listen("0.0.0.0", 3333);
+
+            // getwork server.
+            var getworkServer = new GetworkServer(82);
+            getworkServer.Listen();
+
 
             // web-server.
-            var webServer = new WebServer(8333);
+            //var webServer = new WebServer(81);
 
             Console.ReadLine();
         }

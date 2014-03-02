@@ -16,21 +16,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
-{
-    public interface IMiner
-    {
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+using Newtonsoft.Json;
+
+namespace Coinium.Core.Wallet.Requests
+{
+    public class SignRawTransactionInput
+    {
+        [JsonProperty("txid")]
+        public string TransactionId { get; set; }
+
+        [JsonProperty("vout")]
+        public int Output { get; set; }
+
+        [JsonProperty("scriptPubKey")]
+        public string ScriptPubKey { get; set; }
     }
 }
