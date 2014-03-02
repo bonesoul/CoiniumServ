@@ -24,6 +24,7 @@ using Coinium.Common.Console;
 using Coinium.Common.Platform;
 using Coinium.Core.Clients.Wallet;
 using Coinium.Core.Servers;
+using Coinium.Net.Http;
 using Serilog;
 
 namespace Coinium
@@ -56,13 +57,12 @@ namespace Coinium
             stratumServer.Listen("0.0.0.0", 3333);
 
             // getwork server.
-            var getworkServer = new GetworkServer();
-            getworkServer.Listen("0.0.0.0", 8332);
-
+            var getworkServer = new GetworkServer(82);
+            getworkServer.Listen();
 
 
             // web-server.
-            var webServer = new WebServer(81);
+            //var webServer = new WebServer(81);
 
             Console.ReadLine();
         }

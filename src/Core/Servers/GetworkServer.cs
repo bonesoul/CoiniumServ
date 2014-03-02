@@ -18,6 +18,7 @@
 
 using Coinium.Core.Services.Getwork;
 using Coinium.Net;
+using Coinium.Net.Http;
 using Coinium.Net.Sockets;
 using Serilog;
 
@@ -26,37 +27,23 @@ namespace Coinium.Core.Servers
     /// <summary>
     /// Getwork protocol server implementation.
     /// </summary>
-    public class GetworkServer : SocketServer
+    public class GetworkServer : HttpServer
     {
         private static object[] _services =
         {
             new GetworkService()
         };
 
-        public GetworkServer()
+        public GetworkServer(int port) 
+            : base(port)
         {
-            this.OnConnect += Getwork_OnConnect;
-            this.OnDisconnect += Getwork_OnDisconnect;
-            this.DataReceived += Getwork_DataReceived;
+            this.OnHttpRequest += Getwork_DataReceived;
         }
 
-        private void Getwork_OnConnect(object sender, ConnectionEventArgs e)
+        private void Getwork_DataReceived(object sender, HttpRequestEventArgs e)
         {
-            Log.Verbose("Stratum client connected: {0}", e.Connection.ToString());
-            
-            var miner = new GetworkMiner(e.Connection);
-            e.Connection.Client = miner;
-        }
-
-        private void Getwork_OnDisconnect(object sender, ConnectionEventArgs e)
-        {
-            Log.Verbose("Stratum client disconnected: {0}", e.Connection.ToString());
-        }
-
-        private void Getwork_DataReceived(object sender, ConnectionDataEventArgs e)
-        {
-            var connection = (Connection)e.Connection;
-            ((GetworkMiner)connection.Client).Parse(e);
+            //var connection = (Connection)e.Connection;
+            //((StratumMiner)connection.Client).Parse(e);
         }
     }
 }

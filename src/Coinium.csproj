@@ -42,6 +42,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Net.HttpListener">
+      <HintPath>..\build\packages\Mono.Net.HttpListener.1.0.0.0\lib\net40\Mono.Net.HttpListener.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\build\packages\Mono.Net.HttpListener.1.0.0.0\lib\net40\Mono.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\build\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -80,6 +86,8 @@
     <Compile Include="Core\Services\Getwork\GetworkService.cs" />
     <Compile Include="Core\Services\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Services\Stratum\StratumService.cs" />
+    <Compile Include="Net\Http\HttpServer.cs" />
+    <Compile Include="Net\Http\HttpRequestEventArgs.cs" />
     <Compile Include="Net\Sockets\ConnectionEventArgs.cs" />
     <Compile Include="Net\Sockets\Connection.cs" />
     <Compile Include="Net\Sockets\ConnectionDataEventArgs.cs" />
