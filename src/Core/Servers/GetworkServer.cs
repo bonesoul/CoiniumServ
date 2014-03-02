@@ -18,6 +18,7 @@
 
 using Coinium.Core.Services.Getwork;
 using Coinium.Net;
+using Coinium.Net.Sockets;
 using Serilog;
 
 namespace Coinium.Core.Servers
@@ -25,7 +26,7 @@ namespace Coinium.Core.Servers
     /// <summary>
     /// Getwork protocol server implementation.
     /// </summary>
-    public class GetworkServer : Server
+    public class GetworkServer : SocketServer
     {
         private static object[] _services =
         {

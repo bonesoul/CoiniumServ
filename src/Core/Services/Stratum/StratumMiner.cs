@@ -24,6 +24,7 @@ using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
 using Coinium.Core.Services.Stratum.Notifications;
 using Coinium.Net;
+using Coinium.Net.Sockets;
 using Newtonsoft.Json;
 using Serilog;
 

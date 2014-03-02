@@ -18,6 +18,7 @@
 
 using Coinium.Core.Services.Stratum;
 using Coinium.Net;
+using Coinium.Net.Sockets;
 using Serilog;
 
 namespace Coinium.Core.Servers
@@ -25,7 +26,7 @@ namespace Coinium.Core.Servers
     /// <summary>
     /// Stratum protocol server implementation.
     /// </summary>
-    public class StratumServer:Server
+    public class StratumServer:SocketServer
     {
         private static object[] _services =
         {

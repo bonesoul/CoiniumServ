@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Coinium.Net
+namespace Coinium.Net.Sockets
 {
     public class Connection : IConnection
     {
@@ -62,7 +62,7 @@ namespace Coinium.Net
         /// <summary>
         /// The server instance that connection is bound to.
         /// </summary>
-        private Server _server;
+        private SocketServer _server;
 
         /// <summary>
         /// Default buffer size.
@@ -82,7 +82,7 @@ namespace Coinium.Net
             get { return _recvBuffer; }
         }
 
-        public Connection(Server server, Socket socket)
+        public Connection(SocketServer server, Socket socket)
         {
             if (server == null)
                 throw new ArgumentNullException("server");

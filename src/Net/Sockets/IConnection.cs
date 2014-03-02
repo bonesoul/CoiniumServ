@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Coinium.Net
+namespace Coinium.Net.Sockets
 {
     /// <summary>
     /// Connection interface.

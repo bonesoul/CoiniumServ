@@ -22,6 +22,7 @@ using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
 using Coinium.Net;
+using Coinium.Net.Sockets;
 using Serilog;
 
 namespace Coinium.Core.Services.Getwork

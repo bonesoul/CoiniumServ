@@ -24,9 +24,9 @@ using System.Net.Sockets;
 using Coinium.Common.Extensions;
 using Serilog;
 
-namespace Coinium.Net
+namespace Coinium.Net.Sockets
 {
-    public class Server : IDisposable
+    public class SocketServer : IDisposable
     {
         /// <summary>
         /// Is server currently listening for connections?

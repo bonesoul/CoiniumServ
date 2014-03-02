@@ -80,11 +80,11 @@
     <Compile Include="Core\Services\Getwork\GetworkService.cs" />
     <Compile Include="Core\Services\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Services\Stratum\StratumService.cs" />
-    <Compile Include="Net\ConnectionEventArgs.cs" />
-    <Compile Include="Net\Connection.cs" />
-    <Compile Include="Net\ConnectionDataEventArgs.cs" />
-    <Compile Include="Net\IClient.cs" />
-    <Compile Include="Net\IConnection.cs" />
+    <Compile Include="Net\Sockets\ConnectionEventArgs.cs" />
+    <Compile Include="Net\Sockets\Connection.cs" />
+    <Compile Include="Net\Sockets\ConnectionDataEventArgs.cs" />
+    <Compile Include="Net\Sockets\IClient.cs" />
+    <Compile Include="Net\Sockets\IConnection.cs" />
     <Compile Include="Core\Services\Stratum\Notifications\JobNotification.cs" />
     <Compile Include="Core\Servers\StratumServer.cs" />
     <Compile Include="Common\Extensions\JSONFormatter.cs" />
@@ -117,7 +117,7 @@
     <Compile Include="Core\Clients\Wallet\WalletRequest.cs" />
     <Compile Include="Core\Clients\Wallet\WalletResponse.cs" />
     <Compile Include="Core\Services\Stratum\Responses\SubscribeResponse.cs" />
-    <Compile Include="Net\Server.cs" />
+    <Compile Include="Net\Sockets\SocketServer.cs" />
     <Compile Include="Web\Modules\Stats.cs" />
     <Compile Include="Core\Servers\WebServer.cs" />
     <Compile Include="Program.cs" />
