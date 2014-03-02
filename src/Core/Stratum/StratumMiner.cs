@@ -70,12 +70,12 @@ namespace Coinium.Core.Stratum
                 {
                     var asyncData = ((JsonRpcStateAsync)callback);
                     var result = asyncData.Result + "\n"; // quick hack.
-                    var client = ((StratumMiner)asyncData.AsyncState);
+                    var data = Encoding.UTF8.GetBytes(result);        
+                    var client = ((StratumMiner)asyncData.AsyncState);                    
+            
+                    client.Connection.Send(data);
 
-                    var data = Encoding.UTF8.GetBytes(result);
-                        client.Connection.Send(data);
-
-                    Log.Verbose("RPC-client send:\n{0}", data.Dump());
+                    Log.Verbose("RPC-client send:\n{0}", result);
 
                     // send an initial job after miner subsribes.
                     if(client.Authenticated && client.Subscribed)

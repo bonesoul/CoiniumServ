@@ -63,36 +63,22 @@ namespace Coinium.Net.Http
 
         private void ProcessHttpRequest(IAsyncResult result)
         {
-            HttpListenerContext context = null;
-            HttpListenerRequest request = null;
-            HttpListenerResponse response = null;
+            var listener = (HttpListener) result.AsyncState;
 
-            try
+            // Call EndGetContext to complete the asynchronous operation.
+            var context = listener.EndGetContext(result);
+            var request = context.Request;
+
+            var encoding = Encoding.UTF8;
+
+            using (var reader = new StreamReader(request.InputStream, encoding))
             {
-                var listener = (HttpListener)result.AsyncState;
+                var data = reader.ReadToEnd();
+                var response = context.Response;
+                response.ContentType = "application/json-rpc";
+                response.ContentEncoding = encoding;
 
-                // Call EndGetContext to complete the asynchronous operation.
-				context = listener.EndGetContext( result );
-				request = context.Request;
-
-                var encoding = Encoding.UTF8; 
-
-                using (var reader = new StreamReader(request.InputStream, encoding))
-                using (var writer = new StringWriter())
-                {
-                    var data = reader.ReadToEnd();
-                    this.HttpRequestRecieved(new HttpRequestEventArgs(data, writer));
-                }
-
-
-            }
-            catch (Exception e)
-            {
-            }
-            finally
-            {
-                if (response != null)
-                    response.OutputStream.Close();
+                this.HttpRequestRecieved(new HttpRequestEventArgs(data, response));
             }
         }
 

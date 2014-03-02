@@ -16,7 +16,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.IO;
+using System.Text;
+using AustinHarris.JsonRpc;
+using Coinium.Common.Extensions;
 using Coinium.Net.Http;
+using Serilog;
 
 namespace Coinium.Core.Getwork
 {
@@ -38,8 +44,8 @@ namespace Coinium.Core.Getwork
 
         private void Getwork_DataReceived(object sender, HttpRequestEventArgs e)
         {
-            //var connection = (Connection)e.Connection;
-            //((StratumMiner)connection.Client).Parse(e);
+            var miner = new GetworkMiner();
+            miner.Parse(e);            
         }
     }
 }

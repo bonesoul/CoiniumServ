@@ -17,48 +17,48 @@
 */
 
 using System;
+using System.IO;
 using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
+using Coinium.Net.Http;
 using Coinium.Net.Sockets;
+using Mono.Net;
 using Serilog;
 
 namespace Coinium.Core.Getwork
 {
-    public class GetworkMiner : IClient, IMiner
+    public class GetworkMiner : IMiner
     {
-        public IConnection Connection { get; private set; }
-
         public bool Authenticated { get; private set; }
 
-        public GetworkMiner(IConnection connection)
+        public GetworkMiner()
         {
-            this.Connection = connection;
             this.Authenticated = false;
         }
 
-        public void Parse(ConnectionDataEventArgs e)
+        public void Parse(HttpRequestEventArgs e)
         {
-            Log.Verbose("RPC-client recv:\n{0}", e.Data.Dump());
+            Log.Verbose("RPC-client recv:\n{0}", e.Data);
 
             var rpcResultHandler = new AsyncCallback(
                 callback =>
                 {
                     var asyncData = ((JsonRpcStateAsync)callback);
                     var result = asyncData.Result + "\n"; // quick hack.
-                    var client = ((GetworkMiner)asyncData.AsyncState);
+                    var data = Encoding.UTF8.GetBytes(result);        
+                    var response = ((HttpListenerResponse)asyncData.AsyncState);
 
-                    var data = Encoding.UTF8.GetBytes(result);
-                    client.Connection.Send(data);
-
-                    Log.Verbose("RPC-client send:\n{0}", data.Dump());
+                    response.ContentLength64 = result.Length;
+                    response.OutputStream.Write(data, 0, data.Length);
+                    response.OutputStream.Flush();
                 });
 
-            var line = e.Data.ToEncodedString();
+            var line = e.Data;
             line = line.Replace("\n", ""); // quick hack!
 
-            var async = new JsonRpcStateAsync(rpcResultHandler, this) { JsonRpc = line };
+            var async = new JsonRpcStateAsync(rpcResultHandler, e.Response) { JsonRpc = line };
             JsonRpcProcessor.Process(async, this);
         }
 

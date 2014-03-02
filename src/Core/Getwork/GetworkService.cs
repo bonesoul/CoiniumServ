@@ -29,7 +29,7 @@ namespace Coinium.Core.Getwork
         { }
     
         [JsonRpcMethod("getwork")]
-        public void Getwork(params object[] @params)
+        public void Getwork()
         {
             var miner = (GetworkMiner)(JsonRpcContext.Current().Value);
         }
