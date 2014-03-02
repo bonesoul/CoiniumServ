@@ -22,8 +22,9 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Core.Clients.Wallet;
-using Coinium.Core.Servers;
+using Coinium.Core.Getwork;
+using Coinium.Core.Stratum;
+using Coinium.Core.Wallet;
 using Coinium.Net.Http;
 using Serilog;
 
