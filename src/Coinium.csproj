@@ -8,8 +8,8 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Coinium</RootNamespace>
-    <AssemblyName>coinium-serv</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AssemblyName>coinium</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\build\</SolutionDir>
@@ -94,7 +94,6 @@
     <Compile Include="Core\Stratum\StratumService.cs" />
     <Compile Include="Core\Wallet\Responses\Getwork.cs" />
     <Compile Include="Core\Wallet\WalletManager.cs" />
-    <Compile Include="Net\Http\HttpRequestEventArgs.cs" />
     <Compile Include="Net\Http\HttpServer.cs" />
     <Compile Include="Net\Sockets\ConnectionEventArgs.cs" />
     <Compile Include="Net\Sockets\Connection.cs" />

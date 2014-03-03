@@ -18,12 +18,11 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Core.Mining;
-using Coinium.Core.RPC;
 using Coinium.Core.RPC.Http;
-using Coinium.Net.Http;
 using Serilog;
 
 namespace Coinium.Core.Getwork
@@ -37,9 +36,8 @@ namespace Coinium.Core.Getwork
             this.Authenticated = false;
         }
 
-        public void Parse(HttpRequestEventArgs e)
+        public void Parse(HttpListenerContext httpContext)
         {
-            var httpContext = e.Context;
             var httpRequest = httpContext.Request;
 
             var encoding = Encoding.UTF8;
@@ -58,13 +56,12 @@ namespace Coinium.Core.Getwork
 
                     request.Response.ContentLength64 = data.Length;
                     request.Response.OutputStream.Write(data,0,data.Length);                    
-
-                    Log.Verbose("RPC-client send:\n{0}", result);
                 });
 
             using (var reader = new StreamReader(httpRequest.InputStream, encoding))
             {
                 var line = reader.ReadToEnd();
+                Log.Verbose(line);
                 var response = httpContext.Response;
 
                 var rpcRequest = new HttpRpcRequest(line, response);

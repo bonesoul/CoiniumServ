@@ -18,6 +18,7 @@
 
 // stratum server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 
+using System.Net;
 using Coinium.Net.Http;
 
 namespace Coinium.Core.Getwork
@@ -32,13 +33,13 @@ namespace Coinium.Core.Getwork
         public GetworkServer(int port)
             : base(port)
         {
-            this.OnHttpRequest += Getwork_DataReceived;
+            this.ProcessRequest += ProcessHttpRequest;
         }
 
-        private void Getwork_DataReceived(object sender, HttpRequestEventArgs e)
+        private void ProcessHttpRequest(HttpListenerContext context)
         {
             var miner = new GetworkMiner();
-            miner.Parse(e);
+            miner.Parse(context);
         }
     }
 }
