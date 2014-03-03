@@ -17,21 +17,25 @@
 */
 
 using System.Net;
+using Newtonsoft.Json;
 
-namespace Coinium.Core.RPC
+namespace Coinium.Core.RPC.Http
 {
     /// <summary>
     /// JsonRpc 1.0 request.
     /// </summary>
-    public class RpcRequest
+    public class HttpRpcRequest
     {
         public string Text { get; private set; }
 
+        public dynamic Data { get; private set; }
+
         public HttpListenerResponse Response { get; private set; }
 
-        public RpcRequest(string text, HttpListenerResponse response)
+        public HttpRpcRequest(string text, HttpListenerResponse response)
         {
             this.Text = text;
+            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
             this.Response = response;
         }
     }

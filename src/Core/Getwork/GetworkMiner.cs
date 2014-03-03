@@ -22,6 +22,7 @@ using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Core.Mining;
 using Coinium.Core.RPC;
+using Coinium.Core.RPC.Http;
 using Coinium.Net.Http;
 using Serilog;
 
@@ -50,7 +51,7 @@ namespace Coinium.Core.Getwork
 
                     var result = asyncData.Result;
                     var data = Encoding.UTF8.GetBytes(result);
-                    var rpcRequest = ((RpcRequest) asyncData.AsyncState);
+                    var rpcRequest = ((HttpRpcRequest) asyncData.AsyncState);
 
                     rpcRequest.Response.ContentType = "application/json";
                     rpcRequest.Response.ContentEncoding = encoding;
@@ -66,10 +67,11 @@ namespace Coinium.Core.Getwork
                 var line = reader.ReadToEnd();
                 var response = context.Response;
 
-                var rpcRequest = new RpcRequest(line, response);
+                var rpcRequest = new HttpRpcRequest(line, response);
+                var rpcContext = new HttpRpcContext(this, rpcRequest);
 
                 var async = new JsonRpcStateAsync(rpcResultHandler, rpcRequest) { JsonRpc = line };
-                JsonRpcProcessor.Process(async, this);
+                JsonRpcProcessor.Process(async, rpcContext);
             }        
         }
 
