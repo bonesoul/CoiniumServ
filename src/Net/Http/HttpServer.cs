@@ -73,12 +73,18 @@ namespace Coinium.Net.Http
 
             using (var reader = new StreamReader(request.InputStream, encoding))
             {
-                var data = reader.ReadToEnd();
-                var response = context.Response;
-                response.ContentType = "application/json-rpc";
-                response.ContentEncoding = encoding;
+                while (true)
+                {
+                    if (reader.EndOfStream)
+                        continue;
 
-                this.HttpRequestRecieved(new HttpRequestEventArgs(data, response));
+                    var data = reader.ReadToEnd();
+                    var response = context.Response;
+                    response.ContentType = "application/json-rpc";
+                    response.ContentEncoding = encoding;
+
+                    this.HttpRequestRecieved(new HttpRequestEventArgs(data, response));
+                }
             }
         }
 

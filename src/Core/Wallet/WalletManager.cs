@@ -16,24 +16,38 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using AustinHarris.JsonRpc;
-using Coinium.Core.Wallet;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Serilog;
 
-namespace Coinium.Core.Getwork
+namespace Coinium.Core.Wallet
 {
     /// <summary>
-    /// Getwork protocol implementation.
+    /// Allows communication with wallets.
     /// </summary>
-    public class GetworkService : JsonRpcService
+    public class WalletManager
     {
-        public GetworkService()
-        { }
-    
-        [JsonRpcMethod("getwork")]
-        public Core.Wallet.Responses.Getwork Getwork()
+        public WalletClient Client { get; private set; }
+
+        public WalletManager()
         {
-            var work = WalletManager.Instance.Client.GetWork();
-            return work;
+            Log.Verbose("WalletManager() init..");
         }
+
+        public void Run()
+        {
+            Log.Verbose("Starting wallet-clients..");
+            this.Client = new WalletClient("http://127.0.0.1:9333", "devel", "develpass");
+        }
+
+
+        private static readonly WalletManager _instance = new WalletManager();
+
+        /// <summary>
+        /// Singleton instance of WalletManager.
+        /// </summary>
+        public static WalletManager Instance { get { return _instance; } }
     }
 }

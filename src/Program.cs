@@ -49,9 +49,8 @@ namespace Coinium
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
-            // coind rpc client.
-            var client = new WalletClient("http://127.0.0.1:9333", "devel", "develpass");
-            client.GetInfo();
+            // start wallet manager.
+            WalletManager.Instance.Run();
 
             // stratum server.
             var stratumServer = new StratumServer();
