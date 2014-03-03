@@ -44,12 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
-    <Reference Include="Jayrock">
-      <HintPath>..\build\packages\jayrock.0.9.16530\lib\net40\Jayrock.dll</HintPath>
-    </Reference>
-    <Reference Include="Jayrock.Json">
-      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Net.HttpListener">
       <HintPath>..\build\packages\Mono.Net.HttpListener.1.0.0.0\lib\net40\Mono.Net.HttpListener.dll</HintPath>
     </Reference>
@@ -89,10 +83,9 @@
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\Getwork\GetworkMiner.cs" />
+    <Compile Include="Core\RPC\RPCRequest.cs" />
     <Compile Include="Core\Getwork\GetworkServer.cs" />
-    <Compile Include="Core\Getwork\GetworkService.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Core\Getwork\GetworkService.cs" />
     <Compile Include="Core\Mining\IMiner.cs" />
     <Compile Include="Core\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Stratum\StratumService.cs" />

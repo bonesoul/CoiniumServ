@@ -17,14 +17,8 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using Coinium.Core.Getwork;
-using Jayrock.JsonRpc;
 
 namespace Coinium.Net.Http
 {
