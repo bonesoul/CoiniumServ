@@ -4,23 +4,22 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Mono.Net;
+using HttpListenerContext = System.Net.HttpListenerContext;
 
 namespace Coinium.Net.Http
 {
     public sealed class HttpRequestEventArgs : EventArgs
     {
-        public string Data { get; private set; }
-        public HttpListenerResponse Response { get; private set; }
+        public System.Net.HttpListenerContext Context { get; private set; }
 
-        public HttpRequestEventArgs(string data, HttpListenerResponse response)
+        public HttpRequestEventArgs(HttpListenerContext context)
         {
-            this.Data = data;
-            this.Response = response;
+            this.Context = context;
         }
 
         public override string ToString()
         {
-            return this.Data.ToString();
+            return string.Empty;
         }
     }
 }

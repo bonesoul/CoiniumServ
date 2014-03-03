@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Coinium</RootNamespace>
     <AssemblyName>coinium-serv</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\build\</SolutionDir>
@@ -43,6 +43,12 @@
     <Reference Include="AustinHarris.JsonRpc, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
+    </Reference>
+    <Reference Include="Jayrock">
+      <HintPath>..\build\packages\jayrock.0.9.16530\lib\net40\Jayrock.dll</HintPath>
+    </Reference>
+    <Reference Include="Jayrock.Json">
+      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Net.HttpListener">
       <HintPath>..\build\packages\Mono.Net.HttpListener.1.0.0.0\lib\net40\Mono.Net.HttpListener.dll</HintPath>
@@ -82,16 +88,18 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
-    <Compile Include="Core\Mining\IMiner.cs" />
-    <Compile Include="Core\Getwork\GetworkServer.cs" />
     <Compile Include="Core\Getwork\GetworkMiner.cs" />
-    <Compile Include="Core\Getwork\GetworkService.cs" />
+    <Compile Include="Core\Getwork\GetworkServer.cs" />
+    <Compile Include="Core\Getwork\GetworkService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\Mining\IMiner.cs" />
     <Compile Include="Core\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Stratum\StratumService.cs" />
     <Compile Include="Core\Wallet\Responses\Getwork.cs" />
     <Compile Include="Core\Wallet\WalletManager.cs" />
-    <Compile Include="Net\Http\HttpServer.cs" />
     <Compile Include="Net\Http\HttpRequestEventArgs.cs" />
+    <Compile Include="Net\Http\HttpServer.cs" />
     <Compile Include="Net\Sockets\ConnectionEventArgs.cs" />
     <Compile Include="Net\Sockets\Connection.cs" />
     <Compile Include="Net\Sockets\ConnectionDataEventArgs.cs" />

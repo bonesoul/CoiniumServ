@@ -20,12 +20,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
-using Mono.Net;
-using Serilog;
+using System.Threading.Tasks;
+using Coinium.Core.Getwork;
+using Jayrock.JsonRpc;
 
 namespace Coinium.Net.Http
 {
+    // based on sample code from: https://gist.github.com/atifaziz/5940164
+
     public class HttpServer
     {
         public int Port { get; private set; }
@@ -42,58 +46,38 @@ namespace Coinium.Net.Http
         {
             var listener = new HttpListener();
 
-            Log.Verbose("Http-Server starting to listen on port {0}", this.Port);
+            if (!HttpListener.IsSupported)
+                throw new NotSupportedException("HttpListener not supported. Switch to mono provided one.");
 
-            listener.Prefixes.Add(string.Format("http://+:{0}/",this.Port));
+            listener.Prefixes.Add(string.Format("http://localhost:{0}/", this.Port));
+
             listener.Start();
 
-            try
+            var tcs = new TaskCompletionSource<object>();
+
+            listener.GetContextAsync().ContinueWith(async t =>
             {
-                while (true)
+                try
                 {
-                    IAsyncResult result = listener.BeginGetContext(new AsyncCallback(ProcessHttpRequest), listener);
-                    result.AsyncWaitHandle.WaitOne();
+                    while (true)
+                    {
+                        var context = await t;
+                        this.HttpRequestRecieved(new HttpRequestEventArgs(context));
+                        t = listener.GetContextAsync();
+                    }
                 }
-            }
-            catch (Exception)
-            {
-                listener.Stop();
-            }
-        }
-
-        private void ProcessHttpRequest(IAsyncResult result)
-        {
-            var listener = (HttpListener) result.AsyncState;
-
-            // Call EndGetContext to complete the asynchronous operation.
-            var context = listener.EndGetContext(result);
-            var request = context.Request;
-
-            var encoding = Encoding.UTF8;
-
-            using (var reader = new StreamReader(request.InputStream, encoding))
-            {
-                while (true)
+                catch (Exception e)
                 {
-                    if (reader.EndOfStream)
-                        continue;
-
-                    var data = reader.ReadToEnd();
-                    var response = context.Response;
-                    response.ContentType = "application/json-rpc";
-                    response.ContentEncoding = encoding;
-
-                    this.HttpRequestRecieved(new HttpRequestEventArgs(data, response));
+                    listener.Close();
+                    tcs.TrySetException(e);
                 }
-            }
+            });
         }
-
         protected virtual void HttpRequestRecieved(HttpRequestEventArgs e)
         {
             var handler = OnHttpRequest;
             if (handler != null)
                 handler(this, e);
         }
-
     }
 }

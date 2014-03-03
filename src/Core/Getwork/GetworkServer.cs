@@ -16,27 +16,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.IO;
-using System.Text;
-using AustinHarris.JsonRpc;
-using Coinium.Common.Extensions;
 using Coinium.Net.Http;
-using Serilog;
 
 namespace Coinium.Core.Getwork
 {
-    /// <summary>
-    /// Getwork protocol server implementation.
-    /// </summary>
     public class GetworkServer : HttpServer
     {
-        private static object[] _services =
-        {
-            new GetworkService()
-        };
-
-        public GetworkServer(int port) 
+        public GetworkServer(int port)
             : base(port)
         {
             this.OnHttpRequest += Getwork_DataReceived;
@@ -45,7 +31,7 @@ namespace Coinium.Core.Getwork
         private void Getwork_DataReceived(object sender, HttpRequestEventArgs e)
         {
             var miner = new GetworkMiner();
-            miner.Parse(e);            
+            miner.Parse(e);
         }
     }
 }

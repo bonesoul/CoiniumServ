@@ -16,16 +16,11 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.IO;
 using System.Text;
-using AustinHarris.JsonRpc;
-using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
 using Coinium.Net.Http;
-using Coinium.Net.Sockets;
-using Mono.Net;
-using Serilog;
+using Jayrock.JsonRpc;
 
 namespace Coinium.Core.Getwork
 {
@@ -40,26 +35,25 @@ namespace Coinium.Core.Getwork
 
         public void Parse(HttpRequestEventArgs e)
         {
-            Log.Verbose("RPC-client recv:\n{0}", e.Data);
+            var context = e.Context;
+            var request = context.Request;
 
-            var rpcResultHandler = new AsyncCallback(
-                callback =>
-                {
-                    var asyncData = ((JsonRpcStateAsync)callback);
-                    var result = asyncData.Result + "\n"; // quick hack.
-                    var data = Encoding.UTF8.GetBytes(result);        
-                    var response = ((HttpListenerResponse)asyncData.AsyncState);
+            var dispatcher = JsonRpcDispatcherFactory.CreateDispatcher(new GetworkService());
+            var encoding = Encoding.UTF8;
 
-                    response.ContentLength64 = result.Length;
-                    response.OutputStream.Write(data, 0, data.Length);
-                    response.OutputStream.Flush();
-                });
+            using (var reader = new StreamReader(request.InputStream, encoding))
+            using (var writer = new StringWriter())
+            {
+                dispatcher.Process(reader, writer);
+                writer.Flush();
+                var response = context.Response;
+                response.ContentType = "application/json";
+                response.ContentEncoding = encoding;
+                var buffer = encoding.GetBytes(writer.GetStringBuilder().ToString());
+                response.ContentLength64 = buffer.Length;
+                response.OutputStream.Write(buffer, 0, buffer.Length);
+            }
 
-            var line = e.Data;
-            line = line.Replace("\n", ""); // quick hack!
-
-            var async = new JsonRpcStateAsync(rpcResultHandler, e.Response) { JsonRpc = line };
-            JsonRpcProcessor.Process(async, this);
         }
 
         public bool Authenticate(string user, string password)

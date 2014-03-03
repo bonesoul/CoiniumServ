@@ -16,21 +16,16 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using AustinHarris.JsonRpc;
 using Coinium.Core.Wallet;
+using Jayrock.JsonRpc;
 
 namespace Coinium.Core.Getwork
 {
-    /// <summary>
-    /// Getwork protocol implementation.
-    /// </summary>
     public class GetworkService : JsonRpcService
     {
-        public GetworkService()
-        { }
-    
         [JsonRpcMethod("getwork")]
-        public Core.Wallet.Responses.Getwork Getwork()
+        [JsonRpcHelp("getwork")]
+        public Wallet.Responses.Getwork Getwork()
         {
             var work = WalletManager.Instance.Client.GetWork();
             return work;
