@@ -220,7 +220,8 @@ namespace Coinium.Net.Sockets
 
         public void Disconnect()
         {
-            throw new NotImplementedException();
+            this.Socket.Disconnect(true);
+            this.Client = null;            
         }
 
         #endregion

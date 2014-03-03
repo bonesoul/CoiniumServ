@@ -16,29 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using AustinHarris.JsonRpc;
-using Coinium.Core.RPC.Http;
-using Coinium.Core.Wallet;
+using System.Net;
+using Newtonsoft.Json;
 
-namespace Coinium.Core.Getwork
+namespace Coinium.Core.RPC.Http
 {
     /// <summary>
-    /// Stratum protocol implementation.
+    /// JsonRpc 1.0 over http request.
     /// </summary>
-    public class GetworkService : JsonRpcService
+    public class HttpRpcRequest
     {
-        public GetworkService()
-        { }
+        public string Text { get; private set; }
 
-        [JsonRpcMethod("getwork")]
-        public Wallet.Responses.Getwork Getwork()
+        public dynamic Data { get; private set; }
+
+        public HttpListenerResponse Response { get; private set; }
+
+        public HttpRpcRequest(string text, HttpListenerResponse response)
         {
-            // var context = (HttpRpcContext)JsonRpcContext.Current().Value;
-            // var request = context.Request;
-            // var miner = (GetworkMiner)(context.Miner);
-
-            var work = WalletManager.Instance.Client.GetWork();
-            return work;
-        }     
+            this.Text = text;
+            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
+            this.Response = response;
+        }
     }
 }

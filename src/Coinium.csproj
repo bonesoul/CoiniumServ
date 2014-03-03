@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Coinium</RootNamespace>
     <AssemblyName>coinium-serv</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\build\</SolutionDir>
@@ -82,16 +82,20 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
-    <Compile Include="Core\Mining\IMiner.cs" />
-    <Compile Include="Core\Getwork\GetworkServer.cs" />
     <Compile Include="Core\Getwork\GetworkMiner.cs" />
+    <Compile Include="Core\RPC\Http\HttpRPCContext.cs" />
+    <Compile Include="Core\RPC\Http\HttpRPCRequest.cs" />
+    <Compile Include="Core\Getwork\GetworkServer.cs" />
     <Compile Include="Core\Getwork\GetworkService.cs" />
+    <Compile Include="Core\Mining\IMiner.cs" />
+    <Compile Include="Core\RPC\Sockets\SocketsRPCContext.cs" />
+    <Compile Include="Core\RPC\Sockets\SocketsRpcRequest.cs" />
     <Compile Include="Core\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Stratum\StratumService.cs" />
     <Compile Include="Core\Wallet\Responses\Getwork.cs" />
     <Compile Include="Core\Wallet\WalletManager.cs" />
-    <Compile Include="Net\Http\HttpServer.cs" />
     <Compile Include="Net\Http\HttpRequestEventArgs.cs" />
+    <Compile Include="Net\Http\HttpServer.cs" />
     <Compile Include="Net\Sockets\ConnectionEventArgs.cs" />
     <Compile Include="Net\Sockets\Connection.cs" />
     <Compile Include="Net\Sockets\ConnectionDataEventArgs.cs" />
