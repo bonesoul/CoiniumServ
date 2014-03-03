@@ -88,6 +88,8 @@
     <Compile Include="Core\Getwork\GetworkServer.cs" />
     <Compile Include="Core\Getwork\GetworkService.cs" />
     <Compile Include="Core\Mining\IMiner.cs" />
+    <Compile Include="Core\RPC\Sockets\SocketsRPCContext.cs" />
+    <Compile Include="Core\RPC\Sockets\SocketsRpcRequest.cs" />
     <Compile Include="Core\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Stratum\StratumService.cs" />
     <Compile Include="Core\Wallet\Responses\Getwork.cs" />

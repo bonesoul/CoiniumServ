@@ -39,8 +39,8 @@ namespace Coinium.Core.Getwork
 
         public void Parse(HttpRequestEventArgs e)
         {
-            var context = e.Context;
-            var httpRequest = context.Request;
+            var httpContext = e.Context;
+            var httpRequest = httpContext.Request;
 
             var encoding = Encoding.UTF8;
 
@@ -51,13 +51,13 @@ namespace Coinium.Core.Getwork
 
                     var result = asyncData.Result;
                     var data = Encoding.UTF8.GetBytes(result);
-                    var rpcRequest = ((HttpRpcRequest) asyncData.AsyncState);
+                    var request = ((HttpRpcRequest) asyncData.AsyncState);
 
-                    rpcRequest.Response.ContentType = "application/json";
-                    rpcRequest.Response.ContentEncoding = encoding;
+                    request.Response.ContentType = "application/json";
+                    request.Response.ContentEncoding = encoding;
 
-                    rpcRequest.Response.ContentLength64 = data.Length;
-                    rpcRequest.Response.OutputStream.Write(data,0,data.Length);                    
+                    request.Response.ContentLength64 = data.Length;
+                    request.Response.OutputStream.Write(data,0,data.Length);                    
 
                     Log.Verbose("RPC-client send:\n{0}", result);
                 });
@@ -65,7 +65,7 @@ namespace Coinium.Core.Getwork
             using (var reader = new StreamReader(httpRequest.InputStream, encoding))
             {
                 var line = reader.ReadToEnd();
-                var response = context.Response;
+                var response = httpContext.Response;
 
                 var rpcRequest = new HttpRpcRequest(line, response);
                 var rpcContext = new HttpRpcContext(this, rpcRequest);

@@ -16,27 +16,26 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System.Net;
-using Newtonsoft.Json;
 
-namespace Coinium.Core.RPC.Http
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Coinium.Core.Mining;
+
+namespace Coinium.Core.RPC.Sockets
 {
-    /// <summary>
-    /// JsonRpc 1.0 over http request.
-    /// </summary>
-    public class HttpRpcRequest
+    public class SocketsRpcContext
     {
-        public string Text { get; private set; }
+        public IMiner Miner { get; private set; }
 
-        public dynamic Data { get; private set; }
+        public SocketsRpcRequest Request { get; private set; }
 
-        public HttpListenerResponse Response { get; private set; }
-
-        public HttpRpcRequest(string text, HttpListenerResponse response)
+        public SocketsRpcContext(IMiner miner, SocketsRpcRequest request)
         {
-            this.Text = text;
-            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
-            this.Response = response;
+            this.Miner = miner;
+            this.Request = request;
         }
     }
 }

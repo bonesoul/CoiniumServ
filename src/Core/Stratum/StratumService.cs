@@ -17,6 +17,7 @@
 */
 
 using AustinHarris.JsonRpc;
+using Coinium.Core.RPC.Sockets;
 using Coinium.Core.Stratum.Responses;
 
 namespace Coinium.Core.Stratum
@@ -43,7 +44,8 @@ namespace Coinium.Core.Stratum
         [JsonRpcMethod("mining.subscribe")]
         public SubscribeResponse SubscribeMiner(string signature)
         {
-            var miner = (StratumMiner)(JsonRpcContext.Current().Value);
+            var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
+            var miner = (StratumMiner)(context.Miner);
 
             this._counter++;
 
@@ -66,7 +68,9 @@ namespace Coinium.Core.Stratum
         [JsonRpcMethod("mining.authorize")]
         public bool AuthorizeMiner(string user, string password)
         {
-            var miner = (StratumMiner)(JsonRpcContext.Current().Value);
+            var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
+            var miner = (StratumMiner)(context.Miner);
+
             return miner.Authenticate(user, password);
         }
 

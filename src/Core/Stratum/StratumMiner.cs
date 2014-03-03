@@ -22,6 +22,7 @@ using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
+using Coinium.Core.RPC.Sockets;
 using Coinium.Core.Stratum.Notifications;
 using Coinium.Net.Sockets;
 using Newtonsoft.Json;
@@ -63,30 +64,36 @@ namespace Coinium.Core.Stratum
         /// <param name="e"></param>
         public void Parse(ConnectionDataEventArgs e)
         {
-            Log.Verbose("RPC-client recv:\n{0}", e.Data.Dump());
+            Log.Verbose("RPC-client recv:\n{0}", e.Data.ToEncodedString());
 
             var rpcResultHandler = new AsyncCallback(
                 callback =>
                 {
                     var asyncData = ((JsonRpcStateAsync)callback);
                     var result = asyncData.Result + "\n"; // quick hack.
-                    var data = Encoding.UTF8.GetBytes(result);        
-                    var client = ((StratumMiner)asyncData.AsyncState);                    
-            
-                    client.Connection.Send(data);
+                    var data = Encoding.UTF8.GetBytes(result);
+
+                    var context = (SocketsRpcContext) asyncData.AsyncState;
+
+                    var miner = (StratumMiner)context.Miner;                                         
+                                
+                    miner.Connection.Send(data);
 
                     Log.Verbose("RPC-client send:\n{0}", result);
 
                     // send an initial job after miner subsribes.
-                    if(client.Authenticated && client.Subscribed)
+                    if (miner.Authenticated && miner.Subscribed)
                         this.SendJob();
                 });
 
             var line = e.Data.ToEncodedString();
             line = line.Replace("\n", ""); // quick hack!
 
-            var async = new JsonRpcStateAsync(rpcResultHandler, this) { JsonRpc = line };
-            JsonRpcProcessor.Process(async, this);
+            var rpcRequest = new SocketsRpcRequest(line);
+            var rpcContext = new SocketsRpcContext(this, rpcRequest);
+
+            var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
+            JsonRpcProcessor.Process(async, rpcContext);
         }
 
         /// <summary>
@@ -143,7 +150,7 @@ namespace Coinium.Core.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             this.Connection.Send(data);
 
-            Log.Verbose("RPC-client send:\n{0}", data.Dump());
+            Log.Verbose("RPC-client send:\n{0}", data.ToEncodedString());
         }
     }
 }

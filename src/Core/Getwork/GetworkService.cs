@@ -33,8 +33,9 @@ namespace Coinium.Core.Getwork
         [JsonRpcMethod("getwork")]
         public Wallet.Responses.Getwork Getwork()
         {
-            var context = (HttpRpcContext)JsonRpcContext.Current().Value;
-            var request = context.Request;
+            // var context = (HttpRpcContext)JsonRpcContext.Current().Value;
+            // var request = context.Request;
+            // var miner = (GetworkMiner)(context.Miner);
 
             var work = WalletManager.Instance.Client.GetWork();
             return work;
