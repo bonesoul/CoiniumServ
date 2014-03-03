@@ -1,0 +1,3 @@
+[submodule "dep/jsonconfig"]
+	path = dep/jsonconfig
+	url = https://github.com/Dynalon/JsonConfig/
