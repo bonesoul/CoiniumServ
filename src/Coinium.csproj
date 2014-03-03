@@ -88,6 +88,8 @@
     <Compile Include="Core\Getwork\GetworkService.cs" />
     <Compile Include="Core\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Stratum\StratumService.cs" />
+    <Compile Include="Core\Wallet\Responses\Getwork.cs" />
+    <Compile Include="Core\Wallet\WalletManager.cs" />
     <Compile Include="Net\Http\HttpServer.cs" />
     <Compile Include="Net\Http\HttpRequestEventArgs.cs" />
     <Compile Include="Net\Sockets\ConnectionEventArgs.cs" />
