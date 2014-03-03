@@ -16,14 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+namespace Coinium.Core.Wallet.Responses
 {
     /// <summary>
-    /// .Net frameworks.
+    /// Reference: https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
     /// </summary>
-    public enum NetFrameworks
+    public class BlockTemplate
     {
-        DotNet,
-        Mono
     }
 }

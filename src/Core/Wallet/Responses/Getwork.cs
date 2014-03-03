@@ -17,46 +17,36 @@
 */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Common.Platform
+namespace Coinium.Core.Wallet.Responses
 {
-    /// <summary>
-    /// Platform Manager that identifies platforms & manages them.
-    /// </summary>
-    public class PlatformManager
+    // Documentation: https://en.bitcoin.it/wiki/Getwork
+
+    public class Getwork
     {
         /// <summary>
-        /// Current .Net framework.
+        /// This should be advertised iff the miner supports generating its own midstates. In this case, the pool may decide to omit the now-deprecated "midstate" and "hash1" fields in the work response.
         /// </summary>
-        public static NetFrameworks Framework { get; private set; }
+        public string midstate { get; set; }
 
         /// <summary>
-        /// Current .Net framework's version.
+        /// Pre-processed SHA-2 input chunks, in little-endian order, as a hexadecimal-encoded string
         /// </summary>
-        public static Version FrameworkVersion { get; private set; }
+        public string data { get; set; }
 
-        static PlatformManager()
-        {
-            IdentifyPlatform();
-        }
+        public string hash1 { get; set; }
 
         /// <summary>
-        /// Identifies the current platform and used frameworks.
+        /// Proof-of-work hash target as a hexadecimal-encoded string
         /// </summary>
-        private static void IdentifyPlatform()
-        {
-            // find dot.net framework.
-            Framework = IsRunningOnMono() ? NetFrameworks.Mono : NetFrameworks.DotNet;
-            FrameworkVersion = Environment.Version;
-        }
+        public string target { get; set; }
 
         /// <summary>
-        /// Returns true if code runs over Mono framework.
+        /// Brief specification of proof-of-work algorithm. Not provided by bitcoind or most poolservers.
         /// </summary>
-        /// <returns>true if running over Mono, false otherwise.</returns>
-        public static bool IsRunningOnMono()
-        {
-            return Type.GetType("Mono.Runtime") != null;
-        }
+        public string algorithm { get; set; }
     }
 }

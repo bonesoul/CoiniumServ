@@ -16,14 +16,28 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+namespace Coinium.Core.RPC.Sockets
 {
     /// <summary>
-    /// .Net frameworks.
+    /// JsonRpc 2.0 over sockets request.
     /// </summary>
-    public enum NetFrameworks
+    public class SocketsRpcRequest
     {
-        DotNet,
-        Mono
+        public string Text { get; private set; }
+
+        public dynamic Data { get; private set; }
+
+        public SocketsRpcRequest(string text)
+        {
+            this.Text = text;
+            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
+        }
     }
 }

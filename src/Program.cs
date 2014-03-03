@@ -1,6 +1,6 @@
 ﻿/*
- *   Coinium project - crypto currency pool software - https://github.com/raistlinthewiz/coinium
- *   Copyright (C) 2013 Hüseyin Uslu, Int6 Studios - http://www.coinium.org
+ *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/coinium
+ *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,14 +20,15 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using coinium.Common.Console;
-using coinium.Common.Platform;
-using coinium.Net;
-using coinium.Net.RPC.Server;
+using Coinium.Common.Console;
+using Coinium.Common.Platform;
+using Coinium.Core.Getwork;
+using Coinium.Core.Stratum;
+using Coinium.Core.Wallet;
+using Coinium.Net.Http;
 using Serilog;
-using coinium.Net.RPC.Wallet;
 
-namespace coinium
+namespace Coinium
 {
     class Program
     {
@@ -48,11 +49,20 @@ namespace coinium
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
-            var server = new RPCServer();
-            server.Listen("0.0.0.0", 3333);
+            // start wallet manager.
+            WalletManager.Instance.Run();
 
-            //var client = new WalletClient("http://127.0.0.1:9335", "devel", "develpass");
-            //client.GetInfo();
+            // stratum server.
+            var stratumServer = new StratumServer();
+            stratumServer.Listen("0.0.0.0", 3333);
+
+            // getwork server.
+            var getworkServer = new GetworkServer(8332);
+            getworkServer.Listen();
+
+
+            // web-server.
+            //var webServer = new WebServer(81);
 
             Console.ReadLine();
         }
@@ -63,6 +73,7 @@ namespace coinium
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.ColoredConsole()
+                .WriteTo.RollingFile("Debug.log")
                 .MinimumLevel.Verbose()
                 .CreateLogger();
         }

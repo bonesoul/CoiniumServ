@@ -16,14 +16,16 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+namespace Coinium.Net.Sockets
 {
     /// <summary>
-    /// .Net frameworks.
+    /// Client interface.
     /// </summary>
-    public enum NetFrameworks
+    public interface IClient
     {
-        DotNet,
-        Mono
+        /// <summary>
+        /// Gets or sets the TCP connection bound to client.
+        /// </summary>
+        IConnection Connection { get; }
     }
 }

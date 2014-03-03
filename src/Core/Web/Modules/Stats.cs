@@ -16,14 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+using System.Reflection;
+using Nancy;
+
+namespace Coinium.Core.Web.Modules
 {
-    /// <summary>
-    /// .Net frameworks.
-    /// </summary>
-    public enum NetFrameworks
+    public class Stats : NancyModule
     {
-        DotNet,
-        Mono
+        public Stats()
+        {
+            var banner = string.Format("v{0}", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+
+            Get["/"] = x => "coinium";
+            Get["/version"] = x => banner;
+        }
     }
 }

@@ -16,14 +16,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+namespace Coinium.Core.Mining
 {
-    /// <summary>
-    /// .Net frameworks.
-    /// </summary>
-    public enum NetFrameworks
+    public interface IMiner
     {
-        DotNet,
-        Mono
+        /// <summary>
+        /// Is the miner authenticated.
+        /// </summary>
+        bool Authenticated { get; }
+
+        /// <summary>
+        /// Authenticates the miner.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        bool Authenticate(string user, string password);
     }
 }

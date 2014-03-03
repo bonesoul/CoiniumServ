@@ -16,14 +16,20 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+using Coinium.Core.Mining;
+
+namespace Coinium.Core.RPC.Http
 {
-    /// <summary>
-    /// .Net frameworks.
-    /// </summary>
-    public enum NetFrameworks
+    public class HttpRpcContext
     {
-        DotNet,
-        Mono
+        public IMiner Miner { get; private set; }
+
+        public HttpRpcRequest Request { get; private set; }
+
+        public HttpRpcContext(IMiner miner, HttpRpcRequest request)
+        {
+            this.Miner = miner;
+            this.Request = request;
+        }
     }
 }

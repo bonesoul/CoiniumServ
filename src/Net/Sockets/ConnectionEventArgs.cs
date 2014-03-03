@@ -16,14 +16,26 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+using System;
+
+namespace Coinium.Net.Sockets
 {
-    /// <summary>
-    /// .Net frameworks.
-    /// </summary>
-    public enum NetFrameworks
+    public class ConnectionEventArgs : EventArgs
     {
-        DotNet,
-        Mono
+        public IConnection Connection { get; private set; }
+
+        public ConnectionEventArgs(IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException("connection");
+            this.Connection = connection;
+        }
+
+        public override string ToString()
+        {
+            return Connection.RemoteEndPoint != null
+                ? Connection.RemoteEndPoint.ToString()
+                : "Not Connected";
+        }
     }
 }

@@ -16,23 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Versions
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+using System.Collections.Generic;
+
+namespace Coinium.Core.Wallet.Requests
 {
-    /// <summary>
-    /// Supported Versions Info.
-    /// </summary>
-    /// <remarks>Put anything related to versions here.</remarks>
-    public static class VersionInfo
+    public class CreateRawTransaction
     {
+        public List<CreateRawTransactionInput> Inputs { get; set; }
+
         /// <summary>
-        /// Main assembly versions info.
+        /// A dictionary with the output address and amount per addres.
         /// </summary>
-        public static class Assembly
+        public Dictionary<string, decimal> Outputs { get; set; }
+
+        public CreateRawTransaction()
         {
-            /// <summary>
-            /// Main assemblies version.
-            /// </summary>
-            public const string Version = "0.1.*";
+            Inputs = new List<CreateRawTransactionInput>();
+            Outputs = new Dictionary<string, decimal>();
+        }
+
+        public void AddInput(string transactionId, int output)
+        {
+            Inputs.Add(new CreateRawTransactionInput { TransactionId = transactionId, Output = output });
+        }
+
+        public void AddOutput(string address, decimal amount)
+        {
+            Outputs.Add(address, amount);
         }
     }
 }

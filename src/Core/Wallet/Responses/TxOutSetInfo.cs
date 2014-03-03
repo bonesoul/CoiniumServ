@@ -16,14 +16,18 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+namespace Coinium.Core.Wallet.Responses
 {
-    /// <summary>
-    /// .Net frameworks.
-    /// </summary>
-    public enum NetFrameworks
+    public class TxOutSetInfo
     {
-        DotNet,
-        Mono
+        public int Height { get; set; }
+        public string BestBlock { get; set; }
+        public int Transactions { get; set; }
+        public int TxOuts { get; set; }
+        public int BytesSerialized { get; set; }
+        public string HashSerialized { get; set; }
+        public double TotalAmount { get; set; }
     }
 }

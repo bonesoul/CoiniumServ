@@ -1,9 +1,10 @@
 # Stay awhile and listen [![Build status](https://ci.appveyor.com/api/projects/status?id=98wrjchcbg5aaf97)](https://ci.appveyor.com/project/coinium)
 
 * http://www.coinium.org (Under construction)
-* Read the [FAQ](https://github.com/raistlinthewiz/coinium/wiki/FAQ) and check the [wiki](https://github.com/raistlinthewiz/coinium/wiki/) before asking!
+* Read the [FAQ](https://github.com/CoiniumServ/coinium/wiki/FAQ) and check the [wiki](https://github.com/CoiniumServ/coinium/wiki/) before asking!
 * IRC (**irc.freenode.net**):
-  - **#coinium** (dev talk)
+  - **#coinium-dev** (dev talk)
+  - **#coinium** (coinium.org - official pools)
 * [Twitter](http://twitter.com/coinium)
    
 # Coinium

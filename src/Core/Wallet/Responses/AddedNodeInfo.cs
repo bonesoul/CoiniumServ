@@ -16,14 +16,16 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+using System.Collections.Generic;
+
+namespace Coinium.Core.Wallet.Responses
 {
-    /// <summary>
-    /// .Net frameworks.
-    /// </summary>
-    public enum NetFrameworks
+    public class AddedNodeInfo
     {
-        DotNet,
-        Mono
+        public string AddedNode { get; set; }
+        public bool Connected { get; set; }
+        public List<NodeAddress> Addresses { get; set; }
     }
 }

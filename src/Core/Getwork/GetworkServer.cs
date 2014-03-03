@@ -16,14 +16,29 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+// stratum server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
+
+using Coinium.Net.Http;
+
+namespace Coinium.Core.Getwork
 {
-    /// <summary>
-    /// .Net frameworks.
-    /// </summary>
-    public enum NetFrameworks
+    public class GetworkServer : HttpServer
     {
-        DotNet,
-        Mono
+        private static object[] _services =
+        {
+            new GetworkService()
+        };
+
+        public GetworkServer(int port)
+            : base(port)
+        {
+            this.OnHttpRequest += Getwork_DataReceived;
+        }
+
+        private void Getwork_DataReceived(object sender, HttpRequestEventArgs e)
+        {
+            var miner = new GetworkMiner();
+            miner.Parse(e);
+        }
     }
 }

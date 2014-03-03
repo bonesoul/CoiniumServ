@@ -16,14 +16,26 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Coinium.Core.Mining;
+
+namespace Coinium.Core.RPC.Sockets
 {
-    /// <summary>
-    /// .Net frameworks.
-    /// </summary>
-    public enum NetFrameworks
+    public class SocketsRpcContext
     {
-        DotNet,
-        Mono
+        public IMiner Miner { get; private set; }
+
+        public SocketsRpcRequest Request { get; private set; }
+
+        public SocketsRpcContext(IMiner miner, SocketsRpcRequest request)
+        {
+            this.Miner = miner;
+            this.Request = request;
+        }
     }
 }

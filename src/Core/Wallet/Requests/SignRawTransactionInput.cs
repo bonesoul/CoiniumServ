@@ -16,14 +16,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Platform
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+using Newtonsoft.Json;
+
+namespace Coinium.Core.Wallet.Requests
 {
-    /// <summary>
-    /// .Net frameworks.
-    /// </summary>
-    public enum NetFrameworks
+    public class SignRawTransactionInput
     {
-        DotNet,
-        Mono
+        [JsonProperty("txid")]
+        public string TransactionId { get; set; }
+
+        [JsonProperty("vout")]
+        public int Output { get; set; }
+
+        [JsonProperty("scriptPubKey")]
+        public string ScriptPubKey { get; set; }
     }
 }
