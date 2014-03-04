@@ -50,7 +50,7 @@ namespace Coinium.Common.Console
             System.Console.WriteLine("Coinium comes with ABSOLUTELY NO WARRANTY.");
             System.Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
             System.Console.ForegroundColor = ConsoleColor.Yellow;
-            System.Console.WriteLine("Donation: 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D.");
+            System.Console.WriteLine("Donation: (BTC) 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D.");
             System.Console.WriteLine();
             System.Console.ResetColor();
         }
