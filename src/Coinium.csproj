@@ -11,12 +11,13 @@
     <AssemblyName>coinium</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\build\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -44,8 +45,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
-    <Reference Include="JsonConfig">
-      <HintPath>..\dep\jsonconfig\JsonConfig\bin\Release\JsonConfig.dll</HintPath>
+    <Reference Include="ConfigManager">
+      <HintPath>..\build\packages\ConfigManager.2.0.1\lib\Net40\ConfigManager.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Net.HttpListener">
       <HintPath>..\build\packages\Mono.Net.HttpListener.1.0.0.0\lib\net40\Mono.Net.HttpListener.dll</HintPath>
@@ -71,6 +72,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\Serilog.1.2.3\lib\net40\Serilog.FullNetFx.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\build\packages\ServiceStack.Text.3.9.11\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -85,6 +89,7 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
+    <Compile Include="Core\Config\ConfManager.cs" />
     <Compile Include="Core\Getwork\GetworkMiner.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCContext.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCRequest.cs" />
@@ -144,13 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EmbeddedResource Include="default.conf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <None Include="Config\default.conf" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="settings.conf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

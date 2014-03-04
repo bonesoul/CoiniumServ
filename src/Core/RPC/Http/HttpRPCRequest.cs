@@ -16,7 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System.Net;
+using Mono.Net;
 using Newtonsoft.Json;
 
 namespace Coinium.Core.RPC.Http

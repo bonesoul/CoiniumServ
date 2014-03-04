@@ -17,13 +17,13 @@
 */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using AustinHarris.JsonRpc;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
+using Coinium.Core.Config;
 using Coinium.Core.Getwork;
 using Coinium.Core.Stratum;
 using Coinium.Core.Wallet;
@@ -62,15 +62,11 @@ namespace Coinium
             // web-server.
             //var webServer = new WebServer(81);
 
-            PrintInfo();
+            ConfManager.Test();
 
             Console.ReadLine();
         }
-        public static void PrintInfo()
-        {
-            foreach (dynamic log in JsonConfig.Config.Default.Logs)
-                Console.WriteLine(log.Target);
-        }
+
 
         #region logging facility
 
