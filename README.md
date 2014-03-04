@@ -13,4 +13,6 @@ Coinium is an effort to bring crypto-coins to C# space and create a reference po
 
 # Donation
 
-You can contribute the development of the project by donating; BTC - 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D
+You can contribute the development of the project by donating; 
+
+* BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
