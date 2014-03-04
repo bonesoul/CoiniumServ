@@ -18,8 +18,8 @@
 
 // stratum server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 
-using System.Net;
 using Coinium.Net.Http;
+using Mono.Net;
 
 namespace Coinium.Core.Getwork
 {

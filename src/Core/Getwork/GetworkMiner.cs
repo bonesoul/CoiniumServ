@@ -18,11 +18,11 @@
 
 using System;
 using System.IO;
-using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Core.Mining;
 using Coinium.Core.RPC.Http;
+using Mono.Net;
 using Serilog;
 
 namespace Coinium.Core.Getwork

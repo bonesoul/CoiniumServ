@@ -17,11 +17,10 @@
 */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using AustinHarris.JsonRpc;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
 using Coinium.Core.Getwork;
@@ -68,8 +67,11 @@ namespace Coinium
         }
         public static void PrintInfo()
         {
-            foreach (dynamic log in JsonConfig.Config.Default.Logs)
-                Console.WriteLine(log.Target);
+
+            //var test = ConfigManager.GetConfig<List<string>>("default");
+
+            //foreach (dynamic log in JsonConfig.Config.Default.Logs)
+            //Console.WriteLine(log.Target);
         }
 
         #region logging facility

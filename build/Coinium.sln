@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coinium", "..\src\Coinium.csproj", "{5FCA1E48-0751-4625-9532-CB804DF55DB5}"
 EndProject
@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{02E410
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonConfig", "..\dep\jsonconfig\JsonConfig\JsonConfig.csproj", "{10095092-E1E5-441F-9380-B6329F3CFEB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,24 +40,6 @@ Global
 		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Testing|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Testing|Mixed Platforms.Build.0 = Release|Any CPU
 		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Testing|x86.ActiveCfg = Release|Any CPU
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Debug|x86.ActiveCfg = Debug|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Debug|x86.Build.0 = Debug|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Release|Mixed Platforms.Build.0 = Release|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Release|x86.ActiveCfg = Release|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Release|x86.Build.0 = Release|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Testing|Any CPU.Build.0 = Testing|Any CPU
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Testing|Mixed Platforms.ActiveCfg = Testing|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Testing|Mixed Platforms.Build.0 = Testing|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Testing|x86.ActiveCfg = Testing|x86
-		{10095092-E1E5-441F-9380-B6329F3CFEB4}.Testing|x86.Build.0 = Testing|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
