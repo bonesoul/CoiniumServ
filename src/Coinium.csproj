@@ -8,15 +8,15 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Coinium</RootNamespace>
-    <AssemblyName>coinium-serv</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AssemblyName>coinium</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\build\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -43,6 +43,9 @@
     <Reference Include="AustinHarris.JsonRpc, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
+    </Reference>
+    <Reference Include="JsonConfig">
+      <HintPath>..\dep\jsonconfig\JsonConfig\bin\Release\JsonConfig.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Net.HttpListener">
       <HintPath>..\build\packages\Mono.Net.HttpListener.1.0.0.0\lib\net40\Mono.Net.HttpListener.dll</HintPath>
@@ -94,7 +97,6 @@
     <Compile Include="Core\Stratum\StratumService.cs" />
     <Compile Include="Core\Wallet\Responses\Getwork.cs" />
     <Compile Include="Core\Wallet\WalletManager.cs" />
-    <Compile Include="Net\Http\HttpRequestEventArgs.cs" />
     <Compile Include="Net\Http\HttpServer.cs" />
     <Compile Include="Net\Sockets\ConnectionEventArgs.cs" />
     <Compile Include="Net\Sockets\Connection.cs" />
@@ -142,7 +144,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="default.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
+    <EmbeddedResource Include="settings.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

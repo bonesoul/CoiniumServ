@@ -17,15 +17,16 @@
 */
 
 using System;
+using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using AustinHarris.JsonRpc;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
 using Coinium.Core.Getwork;
 using Coinium.Core.Stratum;
 using Coinium.Core.Wallet;
-using Coinium.Net.Http;
 using Serilog;
 
 namespace Coinium
@@ -40,10 +41,8 @@ namespace Coinium
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
-            Console.ResetColor();
 
             InitLogging();
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
@@ -58,13 +57,19 @@ namespace Coinium
 
             // getwork server.
             var getworkServer = new GetworkServer(8332);
-            getworkServer.Listen();
-
+            getworkServer.Start();
 
             // web-server.
             //var webServer = new WebServer(81);
 
+            PrintInfo();
+
             Console.ReadLine();
+        }
+        public static void PrintInfo()
+        {
+            foreach (dynamic log in JsonConfig.Config.Default.Logs)
+                Console.WriteLine(log.Target);
         }
 
         #region logging facility

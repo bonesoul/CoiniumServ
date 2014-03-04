@@ -57,7 +57,6 @@ namespace Coinium.Core.Wallet
         /// <returns>The JSON RPC response deserialized as the given type.</returns>
         public T MakeRequest<T>(string method, params object[] parameters)
         {
-            Log.Verbose("rpc-call: {0}", method);
             var rpcResponse = MakeRpcRequest<T>(new WalletRequest(1, method, parameters));
             return rpcResponse.Result;
         }
@@ -157,8 +156,6 @@ namespace Coinium.Core.Wallet
                 {
                     string result = reader.ReadToEnd();
                     reader.Close();
-
-                    Log.Verbose(JsonFormatter.PrettyPrint(result));
 
                     return result;
                 }
