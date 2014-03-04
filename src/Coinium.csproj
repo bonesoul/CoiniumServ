@@ -16,7 +16,7 @@
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -43,6 +43,9 @@
     <Reference Include="AustinHarris.JsonRpc, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
+    </Reference>
+    <Reference Include="JsonConfig">
+      <HintPath>..\dep\jsonconfig\JsonConfig\bin\Release\JsonConfig.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Net.HttpListener">
       <HintPath>..\build\packages\Mono.Net.HttpListener.1.0.0.0\lib\net40\Mono.Net.HttpListener.dll</HintPath>
@@ -141,7 +144,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="default.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
+    <EmbeddedResource Include="settings.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
