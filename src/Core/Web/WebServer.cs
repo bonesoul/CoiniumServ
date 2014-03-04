@@ -30,25 +30,36 @@ namespace Coinium.Core.Web
     {
         public int Port { get; private set; }
 
+        public string Interface { get; private set; }
+
         /// <summary>
         /// Inits a new instance of embedded web-server.
         /// </summary>
-        public WebServer(int port)
-        {            
-            this.Port = port;
-            var uri = new Uri(string.Format("http://127.0.0.1:{0}", this.Port));
+        public WebServer()
+        {
+            this.Interface = Config.Instance.Interface;
+            this.Port = Config.Instance.Port;
+        }
 
-            Log.Verbose("Init WebServer() - {0}", uri);
+        public void Start()
+        {
+            var uri = new Uri(string.Format("http://{0}:{1}", this.Interface, this.Port));
+            Log.Verbose("Web-server listening on: {0}", uri);
 
             var hostConfiguration = new HostConfiguration();
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
             hostConfiguration.UrlReservations.CreateAutomatically = true;
 
-            using (var host = new NancyHost(hostConfiguration, uri))
-            {                
+            var host = new NancyHost(hostConfiguration, uri);
+
+            try
+            {
                 host.Start();
-                Console.ReadLine();
-                host.Stop();
+            }
+            catch (InvalidOperationException e) // nancy requires elevated privileges to run on port 80.
+            {
+                Log.Error("Need elevated privileges to listen on port {0}. [Error: {1}].", this.Port, e);
+                Environment.Exit(-1);
             }
         }
 

@@ -17,13 +17,13 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
 using Coinium.Core.Getwork;
+using Coinium.Core.Servers;
 using Coinium.Core.Stratum;
 using Coinium.Core.Wallet;
 using Serilog;
@@ -58,10 +58,14 @@ namespace Coinium
             var getworkServer = new GetworkServer(8332);
             getworkServer.Start();
 
-            // web-server.
-            //var webServer = new WebServer(81);
+            // Start the server manager.
+            ServerManager.Instance.Start();
 
-            Console.ReadLine();
+            while (true) // idle loop & command parser
+            {
+                var line = Console.ReadLine();
+                // CommandManager.Parse(line);
+            }
         }
 
 

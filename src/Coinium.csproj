@@ -83,9 +83,12 @@
   <ItemGroup>
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
+    <Compile Include="Core\Config\ConfigSection.cs" />
+    <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Getwork\GetworkMiner.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCContext.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCRequest.cs" />
@@ -94,11 +97,14 @@
     <Compile Include="Core\Mining\IMiner.cs" />
     <Compile Include="Core\RPC\Sockets\SocketsRPCContext.cs" />
     <Compile Include="Core\RPC\Sockets\SocketsRpcRequest.cs" />
+    <Compile Include="Core\Servers\ServerManager.cs" />
     <Compile Include="Core\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Stratum\StratumService.cs" />
     <Compile Include="Core\Wallet\Responses\Getwork.cs" />
     <Compile Include="Core\Wallet\WalletManager.cs" />
+    <Compile Include="Core\Web\Config.cs" />
     <Compile Include="Net\Http\HttpServer.cs" />
+    <Compile Include="Net\Config.cs" />
     <Compile Include="Net\Sockets\ConnectionEventArgs.cs" />
     <Compile Include="Net\Sockets\Connection.cs" />
     <Compile Include="Net\Sockets\ConnectionDataEventArgs.cs" />
