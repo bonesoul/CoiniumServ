@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
+using Coinium.Core.Config;
 using Coinium.Core.Getwork;
 using Coinium.Core.Stratum;
 using Coinium.Core.Wallet;
@@ -61,18 +62,11 @@ namespace Coinium
             // web-server.
             //var webServer = new WebServer(81);
 
-            PrintInfo();
+            ConfManager.Test();
 
             Console.ReadLine();
         }
-        public static void PrintInfo()
-        {
 
-            //var test = ConfigManager.GetConfig<List<string>>("default");
-
-            //foreach (dynamic log in JsonConfig.Config.Default.Logs)
-            //Console.WriteLine(log.Target);
-        }
 
         #region logging facility
 
