@@ -23,7 +23,6 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Core.Config;
 using Coinium.Core.Getwork;
 using Coinium.Core.Stratum;
 using Coinium.Core.Wallet;
@@ -61,8 +60,6 @@ namespace Coinium
 
             // web-server.
             //var webServer = new WebServer(81);
-
-            ConfManager.Test();
 
             Console.ReadLine();
         }
