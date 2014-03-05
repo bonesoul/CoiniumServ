@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Project ToolsVersion="4.0" DefaultTargets="CI" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="CI" DependsOnTargets="Build" />
+
+  <Target Name="Build">
+    <MSBuild Projects="build/Coinium.sln" Properties="Configuration=Debug;Platform=AnyCPU" />
+  </Target>
+
+</Project>
