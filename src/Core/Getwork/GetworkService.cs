@@ -16,8 +16,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using AustinHarris.JsonRpc;
-using Coinium.Core.RPC.Http;
 using Coinium.Core.Wallet;
 
 namespace Coinium.Core.Getwork
@@ -33,6 +33,8 @@ namespace Coinium.Core.Getwork
         [JsonRpcMethod("getwork")]
         public Wallet.Responses.Getwork Getwork()
         {
+            // TODO: need to add optional data parameter support.
+
             // var context = (HttpRpcContext)JsonRpcContext.Current().Value;
             // var request = context.Request;
             // var miner = (GetworkMiner)(context.Miner);

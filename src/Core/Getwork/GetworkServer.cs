@@ -18,8 +18,9 @@
 
 // stratum server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 
+using System.Net;
 using Coinium.Net.Http;
-using Mono.Net;
+using Serilog;
 
 namespace Coinium.Core.Getwork
 {
@@ -33,6 +34,7 @@ namespace Coinium.Core.Getwork
         public GetworkServer(int port)
             : base(port)
         {
+            Log.Verbose("Classic server listening on port {0}.", this.Port);
             this.ProcessRequest += ProcessHttpRequest;
         }
 

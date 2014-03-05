@@ -18,10 +18,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 
 // source from: http://stackoverflow.com/a/4673210/170181
-using Mono.Net;
 
 namespace Coinium.Net.Http
 {
@@ -52,7 +52,7 @@ namespace Coinium.Net.Http
 
         public void Start()
         {
-            _listener.Prefixes.Add(String.Format(@"http://127.0.0.1:{0}/", this.Port));
+            _listener.Prefixes.Add(String.Format(@"http://localhost:{0}/", this.Port));
             _listener.Start();
             _listenerThread.Start();
 
