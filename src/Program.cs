@@ -22,7 +22,7 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Core.Getwork;
+using Coinium.Core.Classic;
 using Coinium.Core.Servers;
 using Coinium.Core.Stratum;
 using Coinium.Core.Wallet;
@@ -55,7 +55,7 @@ namespace Coinium
             stratumServer.Listen("0.0.0.0", 3333);
 
             // getwork server.
-            var getworkServer = new GetworkServer(8332);
+            var getworkServer = new ClassicServer(8332);
             getworkServer.Start();
 
             // Start the server manager.

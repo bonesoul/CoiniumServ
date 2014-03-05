@@ -16,20 +16,32 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Mining;
 
-namespace Coinium.Core.RPC.Http
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using Jayrock.Json;
+
+namespace Coinium.Common.Extensions
 {
-    public class HttpRpcContext
+    public static class StringExtensions
     {
-        public IMiner Miner { get; private set; }
-
-        public HttpRpcResponse Response { get; private set; }
-
-        public HttpRpcContext(IMiner miner, HttpRpcResponse response)
+        public static string PretifyJson(this string text)
         {
-            this.Miner = miner;
-            this.Response = response;
+            var input = new StringReader(text);
+            var output = new StringWriter();
+
+            using (var reader = new JsonTextReader(input))
+            using (var writer = new JsonTextWriter(output))
+            {
+
+                writer.PrettyPrint = true;
+                writer.WriteFromReader(reader);
+            }
+
+            return output.ToString();
         }
     }
 }

@@ -16,32 +16,30 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// stratum server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
+using AustinHarris.JsonRpc;
+using Coinium.Core.Wallet;
 
-using System.Net;
-using Coinium.Net.Http;
-using Serilog;
-
-namespace Coinium.Core.Getwork
+namespace Coinium.Core.Classic
 {
-    public class GetworkServer : HttpServer
+    /// <summary>
+    /// Stratum protocol implementation.
+    /// </summary>
+    public class ClassicService : JsonRpcService
     {
-        private static object[] _services =
-        {
-            new GetworkService()
-        };
+        public ClassicService()
+        { }
 
-        public GetworkServer(int port)
-            : base(port)
+        [JsonRpcMethod("getwork")]
+        public Wallet.Responses.Getwork Getwork()
         {
-            Log.Verbose("Classic server listening on port {0}.", this.Port);
-            this.ProcessRequest += ProcessHttpRequest;
-        }
+            // TODO: need to add optional data parameter support.
 
-        private void ProcessHttpRequest(HttpListenerContext context)
-        {
-            var miner = new GetworkMiner();
-            miner.Parse(context);
-        }
+            // var context = (HttpRpcContext)JsonRpcContext.Current().Value;
+            // var request = context.Request;
+            // var miner = (GetworkMiner)(context.Miner);
+
+            var work = WalletManager.Instance.Client.GetWork();
+            return work;
+        }     
     }
 }

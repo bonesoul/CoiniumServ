@@ -24,7 +24,7 @@ namespace Coinium.Core.RPC.Http
     /// <summary>
     /// JsonRpc 1.0 over http request.
     /// </summary>
-    public class HttpRpcRequest
+    public class HttpRpcResponse
     {
         public string Text { get; private set; }
 
@@ -32,7 +32,7 @@ namespace Coinium.Core.RPC.Http
 
         public HttpListenerResponse Response { get; private set; }
 
-        public HttpRpcRequest(string text, HttpListenerResponse response)
+        public HttpRpcResponse(string text, HttpListenerResponse response)
         {
             this.Text = text;
             this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
