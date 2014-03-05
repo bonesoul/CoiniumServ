@@ -16,31 +16,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using AustinHarris.JsonRpc;
 using Coinium.Core.Wallet;
+using Jayrock.JsonRpc;
 
-namespace Coinium.Core.Getwork
+namespace Coinium.Core.ClassicJayrock
 {
     /// <summary>
-    /// Stratum protocol implementation.
+    /// Classic protocol service.
     /// </summary>
-    public class GetworkService : JsonRpcService
+    public class ClassicJayrockService :JsonRpcService
     {
-        public GetworkService()
-        { }
 
-        [JsonRpcMethod("getwork")]
+        [JsonRpcMethod("getwork", Idempotent = true)]
         public Wallet.Responses.Getwork Getwork()
         {
-            // TODO: need to add optional data parameter support.
-
-            // var context = (HttpRpcContext)JsonRpcContext.Current().Value;
-            // var request = context.Request;
-            // var miner = (GetworkMiner)(context.Miner);
-
             var work = WalletManager.Instance.Client.GetWork();
             return work;
-        }     
+        }
     }
 }

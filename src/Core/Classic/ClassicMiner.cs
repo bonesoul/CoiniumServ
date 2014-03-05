@@ -26,13 +26,13 @@ using Coinium.Core.Mining;
 using Coinium.Core.RPC.Http;
 using Serilog;
 
-namespace Coinium.Core.Getwork
+namespace Coinium.Core.Classic
 {
-    public class GetworkMiner : IMiner
+    public class ClassicMiner : IMiner
     {
         public bool Authenticated { get; private set; }
 
-        public GetworkMiner()
+        public ClassicMiner()
         {
             this.Authenticated = false;
         }
@@ -50,7 +50,7 @@ namespace Coinium.Core.Getwork
 
                     var result = asyncData.Result;
                     var data = Encoding.UTF8.GetBytes(result);
-                    var request = ((HttpRpcRequest) asyncData.AsyncState);
+                    var request = ((HttpRpcResponse) asyncData.AsyncState);
 
                     request.Response.ContentType = "application/json";
                     request.Response.ContentEncoding = encoding;
@@ -65,10 +65,10 @@ namespace Coinium.Core.Getwork
                 Log.Verbose(line.PretifyJson());
                 var response = httpContext.Response;
 
-                var rpcRequest = new HttpRpcRequest(line, response);
-                var rpcContext = new HttpRpcContext(this, rpcRequest);
+                var rpcResponse = new HttpRpcResponse(line, response);
+                var rpcContext = new HttpRpcContext(this, rpcResponse);
 
-                var async = new JsonRpcStateAsync(rpcResultHandler, rpcRequest) { JsonRpc = line };
+                var async = new JsonRpcStateAsync(rpcResultHandler, rpcResponse) { JsonRpc = line };
                 JsonRpcProcessor.Process(async, rpcContext);
             }        
         }
