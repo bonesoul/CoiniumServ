@@ -14,3 +14,9 @@ before_install:
 
 script:
  - xbuild build/Coinium.sln
+
+notifications:
+  email: false
+  
+notifications:
+  irc: "chat.freenode.net#coinium-dev"
