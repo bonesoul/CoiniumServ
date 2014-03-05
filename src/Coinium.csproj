@@ -45,6 +45,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\AustinHarris.JsonRpc.1.0.3.0\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
+    <Reference Include="Jayrock">
+      <HintPath>..\build\packages\jayrock.0.9.16530\lib\net40\Jayrock.dll</HintPath>
+    </Reference>
+    <Reference Include="Jayrock.Json">
+      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\build\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -77,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Common\Extensions\StringExtensions.cs" />
     <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
@@ -153,7 +160,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

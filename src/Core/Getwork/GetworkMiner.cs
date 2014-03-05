@@ -21,6 +21,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
+using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
 using Coinium.Core.RPC.Http;
 using Serilog;
@@ -60,8 +61,8 @@ namespace Coinium.Core.Getwork
 
             using (var reader = new StreamReader(httpRequest.InputStream, encoding))
             {
-                var line = reader.ReadToEnd();
-                Log.Verbose(line);
+                var line = reader.ReadToEnd();            
+                Log.Verbose(line.PretifyJson());
                 var response = httpContext.Response;
 
                 var rpcRequest = new HttpRpcRequest(line, response);
