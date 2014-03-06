@@ -98,7 +98,7 @@ namespace Coinium.Core.Wallet
             // Important, otherwise the service can't deserialse your request properly
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
-            webRequest.Timeout = 2000; // 2 seconds
+            webRequest.Timeout = 5000; // 5 seconds
 
             byte[] byteArray = walletRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;

@@ -23,7 +23,10 @@ using System.Text;
 
 namespace Coinium.Core.Wallet.Responses
 {
-    // Documentation: https://en.bitcoin.it/wiki/Getwork
+    // Documentation: 
+    // https://en.bitcoin.it/wiki/Getwork
+    // https://github.com/sinisterchipmunk/bitpool/wiki/Bitcoin-Mining-Pool-Developer's-Reference
+    // https://bitcointalk.org/index.php?topic=51281.0
 
     public class Getwork
     {

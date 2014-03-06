@@ -29,6 +29,17 @@ namespace Coinium.Core.Classic
         public ClassicService()
         { }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <remarks>Documentation:
+        /// https://en.bitcoin.it/wiki/Getwork
+        /// https://github.com/sinisterchipmunk/bitpool/wiki/Bitcoin-Mining-Pool-Developer's-Reference
+        /// https://bitcointalk.org/index.php?topic=51281.0
+        /// </remarks>
         [JsonRpcMethod("getwork")]
         public Wallet.Responses.Getwork Getwork(string data = null)
         {
@@ -36,8 +47,13 @@ namespace Coinium.Core.Classic
             // var request = context.Request;
             // var miner = (GetworkMiner)(context.Miner);
 
-            var work = WalletManager.Instance.Client.GetWork(data);
-            return work;
+            if (data == null)
+                return WalletManager.Instance.Client.Getwork();
+            else
+            {                
+                var work = WalletManager.Instance.Client.Getwork(data);
+                return null;
+            }                
         }     
     }
 }

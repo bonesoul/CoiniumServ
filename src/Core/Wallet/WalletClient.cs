@@ -439,12 +439,19 @@ namespace Coinium.Core.Wallet
         /// "target" : little endian hash target
         /// If [data] is specified, tries to solve the block and returns true if it was successful.
         /// </summary>
-        public Responses.Getwork GetWork(string data = null)
+        public Responses.Getwork Getwork()
         {
-            if(data != null)
-                return MakeRequest<Responses.Getwork>("getwork", data);
-            else
-                return MakeRequest<Responses.Getwork>("getwork", null);   
+            return MakeRequest<Responses.Getwork>("getwork", null);   
+        }
+
+        /// <summary>
+        /// The Getwork Completion response from the Bitcoin daemon is very simply a true or false value. If the value is true, then the hash was accepted and a new block has been created! If the value is false then the hash was rejected. 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool Getwork(string data)
+        {
+            return MakeRequest<bool>("getwork", data);
         }
 
         /// <summary>

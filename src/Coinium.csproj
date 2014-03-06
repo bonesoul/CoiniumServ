@@ -41,6 +41,10 @@
     <StartupObject>Coinium.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Jayrock.Json, Version=0.9.16530.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\build\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
