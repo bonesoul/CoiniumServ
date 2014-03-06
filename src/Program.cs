@@ -68,7 +68,6 @@ namespace Coinium
             }
         }
 
-
         #region logging facility
 
         private static void InitLogging()
