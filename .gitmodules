@@ -1,0 +1,3 @@
+[submodule "deps/json-rpc.net"]
+	path = deps/json-rpc.net
+	url = git@github.com:raistlinthewiz/JSON-RPC.NET.git
