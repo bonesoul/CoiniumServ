@@ -41,12 +41,6 @@
     <StartupObject>Coinium.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Jayrock">
-      <HintPath>..\build\packages\jayrock.0.9.16530\lib\net40\Jayrock.dll</HintPath>
-    </Reference>
-    <Reference Include="Jayrock.Json">
-      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\build\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -84,11 +78,6 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
-    <Compile Include="Core\ClassicJayrock\ClassicJayrockMiner.cs" />
-    <Compile Include="Core\ClassicJayrock\ClassicJayrockServer.cs" />
-    <Compile Include="Core\ClassicJayrock\ClassicJayrockService.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Core\Config\ConfigSection.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Classic\ClassicMiner.cs" />

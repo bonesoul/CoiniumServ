@@ -30,15 +30,13 @@ namespace Coinium.Core.Classic
         { }
 
         [JsonRpcMethod("getwork")]
-        public Wallet.Responses.Getwork Getwork()
+        public Wallet.Responses.Getwork Getwork(string data = null)
         {
-            // TODO: need to add optional data parameter support.
-
             // var context = (HttpRpcContext)JsonRpcContext.Current().Value;
             // var request = context.Request;
             // var miner = (GetworkMiner)(context.Miner);
 
-            var work = WalletManager.Instance.Client.GetWork();
+            var work = WalletManager.Instance.Client.GetWork(data);
             return work;
         }     
     }

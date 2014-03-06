@@ -439,9 +439,12 @@ namespace Coinium.Core.Wallet
         /// "target" : little endian hash target
         /// If [data] is specified, tries to solve the block and returns true if it was successful.
         /// </summary>
-        public Responses.Getwork GetWork()
+        public Responses.Getwork GetWork(string data = null)
         {
-            return MakeRequest<Responses.Getwork>("getwork", null);
+            if(data != null)
+                return MakeRequest<Responses.Getwork>("getwork", data);
+            else
+                return MakeRequest<Responses.Getwork>("getwork", null);   
         }
 
         /// <summary>
