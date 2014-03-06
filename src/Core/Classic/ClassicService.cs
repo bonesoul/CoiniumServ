@@ -18,6 +18,7 @@
 
 using AustinHarris.JsonRpc;
 using Coinium.Core.Wallet;
+using Serilog;
 
 namespace Coinium.Core.Classic
 {
@@ -51,7 +52,9 @@ namespace Coinium.Core.Classic
                 return WalletManager.Instance.Client.Getwork();
             else
             {                
-                var work = WalletManager.Instance.Client.Getwork(data);
+                var result = WalletManager.Instance.Client.Getwork(data);
+                if(result)
+                    Log.Verbose("Found block!: {0}", data);
                 return null;
             }                
         }     
