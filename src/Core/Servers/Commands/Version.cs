@@ -16,37 +16,18 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Web;
-using Serilog;
+using System.Reflection;
+using Coinium.Core.Commands;
 
-namespace Coinium.Core.Servers
+namespace Coinium.Core.Servers.Commands
 {
-    public class ServerManager
+    [CommandGroup("version", "Renders software version.")]
+    public class VersionCommand : CommandGroup
     {
-        public ServerManager()
-        { }
-
-        public void Start()
+        [DefaultCommand]
+        public string Version(string[] @params)
         {
-            Log.Information("ServerManager starting..");
-
-            if (Core.Web.Config.Instance.Enabled)
-                this.StartWebServer();
+            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
-
-        private bool StartWebServer()
-        {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
-        }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
     }
 }

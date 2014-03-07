@@ -82,6 +82,9 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
+    <Compile Include="Core\Commands\CommandAttributes.cs" />
+    <Compile Include="Core\Commands\CommandGroup.cs" />
+    <Compile Include="Core\Commands\CommandManager.cs" />
     <Compile Include="Core\Config\ConfigSection.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Classic\ClassicMiner.cs" />
@@ -92,6 +95,10 @@
     <Compile Include="Core\Mining\IMiner.cs" />
     <Compile Include="Core\RPC\Sockets\SocketsRPCContext.cs" />
     <Compile Include="Core\RPC\Sockets\SocketsRpcRequest.cs" />
+    <Compile Include="Core\Servers\Commands\Server.cs" />
+    <Compile Include="Core\Servers\Commands\Stats.cs" />
+    <Compile Include="Core\Servers\Commands\Uptime.cs" />
+    <Compile Include="Core\Servers\Commands\Version.cs" />
     <Compile Include="Core\Servers\ServerManager.cs" />
     <Compile Include="Core\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Stratum\StratumService.cs" />
