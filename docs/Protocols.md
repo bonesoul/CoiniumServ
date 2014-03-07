@@ -7,6 +7,7 @@
 * https://bitcointalk.org/index.php?topic=51281.0
 
 ## GetBlockTemplate
+* https://en.bitcoin.it/wiki/Getblocktemplate
 
 ## Stratum
 * Slush's stratum doc: http://mining.bitcoin.cz/stratum-mining
