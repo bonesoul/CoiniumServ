@@ -33,8 +33,8 @@ using Coinium.Common.Versions;
 #endif
 [assembly: AssemblyCompany("coinium.org")]
 [assembly: AssemblyProduct("coinium")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
-[assembly: AssemblyTrademark("Copyright (C) 2013, coinium project")]
+[assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, coinium project, http://www.coinium.org")]
+[assembly: AssemblyTrademark("coinium")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
