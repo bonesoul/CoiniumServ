@@ -7,6 +7,7 @@
   - **#coinium** (official pools)
   - more: #stratum, #legitpools
 * [@coinium](http://twitter.com/coinium)
+* [Bitcointalk.org](https://bitcointalk.org/index.php?topic=504659)
    
 ## About
 
