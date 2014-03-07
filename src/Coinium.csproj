@@ -58,6 +58,9 @@
     <Reference Include="Nini">
       <HintPath>..\build\packages\Trove.Nini.1.1.0.0\lib\net20\Nini.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\build\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="Serilog, Version=1.2.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\Serilog.1.2.3\lib\net40\Serilog.dll</HintPath>
@@ -88,6 +91,8 @@
     <Compile Include="Core\Config\ConfigSection.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Classic\ClassicMiner.cs" />
+    <Compile Include="Core\Pools\PoolConfig.cs" />
+    <Compile Include="Core\Pools\PoolManager.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCContext.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCResponse.cs" />
     <Compile Include="Core\Classic\ClassicServer.cs" />

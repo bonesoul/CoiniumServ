@@ -16,35 +16,47 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Coinium.Common.Helpers.IO;
 using Serilog;
 
-namespace Coinium.Core.Wallet
+namespace Coinium.Core.Pools
 {
-    /// <summary>
-    /// Allows communication with wallets.
-    /// </summary>
-    public class WalletManager
+    public class PoolManager
     {
-        public WalletClient Client { get; private set; }
+        private Dictionary<string, PoolConfig> _configs; 
 
-        public WalletManager()
+        public PoolManager()
         {
-            Log.Verbose("WalletManager() init..");
+            Log.Verbose("PoolManager() init..");
         }
 
         public void Run()
         {
-            Log.Verbose("Starting wallet-clients..");
-            this.Client = new WalletClient("http://127.0.0.1:9333", "devel", "develpass");
-            //Log.Verbose("Difficulty: " + this.Client.GetInfo().Difficulty);
+            this.LoadPoolsConfig();
         }
 
+        private void LoadPoolsConfig()
+        {
+            this._configs=new Dictionary<string, PoolConfig>();
 
-        private static readonly WalletManager _instance = new WalletManager();
+            var poolsConfigFolder = string.Format("{0}/Conf/Pools", FileHelpers.AssemblyRoot);
+            var files = FileHelpers.GetFilesByExtensionRecursive(poolsConfigFolder, ".conf");
+
+            foreach (var file in files)
+            {
+                this._configs.Add(file, new PoolConfig(file));
+            }
+        }
+
+        private static readonly PoolManager _instance = new PoolManager();
 
         /// <summary>
         /// Singleton instance of WalletManager.
         /// </summary>
-        public static WalletManager Instance { get { return _instance; } }
+        public static PoolManager Instance { get { return _instance; } }
     }
 }
