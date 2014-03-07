@@ -23,6 +23,7 @@ using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
 using Coinium.Core.Classic;
+using Coinium.Core.Commands;
 using Coinium.Core.Servers;
 using Coinium.Core.Stratum;
 using Coinium.Core.Wallet;
@@ -32,6 +33,11 @@ namespace Coinium
 {
     class Program
     {
+        /// <summary>
+        /// Used for uptime calculations.
+        /// </summary>
+        public static readonly DateTime StartupTime = DateTime.Now; // used for uptime calculations.
+
         static void Main(string[] args)
         {
             #if !DEBUG
@@ -64,7 +70,7 @@ namespace Coinium
             while (true) // idle loop & command parser
             {
                 var line = Console.ReadLine();
-                // CommandManager.Parse(line);
+                CommandManager.Parse(line);
             }
         }
 

@@ -16,37 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Web;
-using Serilog;
+using System;
+using Coinium.Core.Commands;
 
-namespace Coinium.Core.Servers
+namespace Coinium.Core.Servers.Commands
 {
-    public class ServerManager
+    [CommandGroup("uptime", "Renders uptime statistics.")]
+    public class UptimeCommand : CommandGroup
     {
-        public ServerManager()
-        { }
-
-        public void Start()
+        [DefaultCommand]
+        public string Uptime(string[] @params)
         {
-            Log.Information("ServerManager starting..");
-
-            if (Core.Web.Config.Instance.Enabled)
-                this.StartWebServer();
+            var uptime = DateTime.Now - Program.StartupTime;
+            return string.Format("Uptime: {0} days, {1} hours, {2} minutes, {3} seconds.", uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds);
         }
-
-        private bool StartWebServer()
-        {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
-        }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
     }
 }
