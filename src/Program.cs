@@ -24,6 +24,7 @@ using Coinium.Common.Console;
 using Coinium.Common.Platform;
 using Coinium.Core.Classic;
 using Coinium.Core.Commands;
+using Coinium.Core.Pools;
 using Coinium.Core.Servers;
 using Coinium.Core.Stratum;
 using Coinium.Core.Wallet;
@@ -55,6 +56,9 @@ namespace Coinium
 
             // start wallet manager.
             WalletManager.Instance.Run();
+
+            // start pool manager.
+            PoolManager.Instance.Run();
 
             // stratum server.
             var stratumServer = new StratumServer();
