@@ -14,3 +14,8 @@
 ## Stratum
 * Slush's stratum doc: http://mining.bitcoin.cz/stratum-mining
 * Stratum summary: https://www.btcguild.com/new_protocol.php
+
+## Technical Documentation
+* http://www.righto.com/2014/02/bitcoin-mining-hard-way-algorithms.html
+* https://www.youtube.com/watch?v=gUwXCt1qkBU
+* https://www.youtube.com/channel/UCgo7FCCPuylVk4luP3JAgVw
