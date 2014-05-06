@@ -1,5 +1,8 @@
 We need to be supporting multiple Database Types:
 
+## Redis
+* http://redis.io/clients
+
 ## MySQL
 * http://dev.mysql.com/downloads/connector/net/
 * Would Require us to implement pooling
