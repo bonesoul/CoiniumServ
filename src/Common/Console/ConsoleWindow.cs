@@ -1,6 +1,6 @@
 ﻿/*
- *   Coinium project - crypto currency pool software - https://github.com/raistlinthewiz/coinium
- *   Copyright (C) 2013 Hüseyin Uslu, Int6 Studios - http://www.coinium.org
+ *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/coinium
+ *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,7 +16,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace coinium.Common.Console
+using System;
+
+namespace Coinium.Common.Console
 {
     /// <summary>
     /// Utility class to handle console window stuff.
@@ -27,7 +29,8 @@ namespace coinium.Common.Console
         /// Prints an info banner.
         /// </summary>
         public static void PrintBanner()
-        {            
+        {
+            System.Console.ForegroundColor = ConsoleColor.Yellow;
             System.Console.WriteLine(@"             .__       .__               ");
             System.Console.WriteLine(@"  ____  ____ |__| ____ |__|__ __  _____  ");
             System.Console.WriteLine(@"_/ ___\/  _ \|  |/    \|  |  |  \/     \ ");
@@ -42,10 +45,14 @@ namespace coinium.Common.Console
         /// </summary>
         public static void PrintLicense()
         {
-            System.Console.WriteLine("Copyright (C) 2013, Coinium project - http://www.coinium.org");
+            System.Console.ForegroundColor = ConsoleColor.DarkYellow;
+            System.Console.WriteLine("Copyright (C) 2013 - 2014, Coinium project - http://www.coinium.org");
             System.Console.WriteLine("Coinium comes with ABSOLUTELY NO WARRANTY.");
             System.Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
+            System.Console.ForegroundColor = ConsoleColor.Yellow;
+            System.Console.WriteLine("Donation: (BTC) 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D.");
             System.Console.WriteLine();
+            System.Console.ResetColor();
         }
     }
 }

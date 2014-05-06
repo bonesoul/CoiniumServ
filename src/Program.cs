@@ -1,6 +1,6 @@
 ﻿/*
- *   Coinium project - crypto currency pool software - https://github.com/raistlinthewiz/coinium
- *   Copyright (C) 2013 Hüseyin Uslu, Int6 Studios - http://www.coinium.org
+ *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/coinium
+ *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,17 +20,25 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using coinium.Common.Console;
-using coinium.Common.Platform;
-using coinium.Net;
-using coinium.Net.RPC.Server;
+using Coinium.Common.Console;
+using Coinium.Common.Platform;
+using Coinium.Core.Classic;
+using Coinium.Core.Commands;
+using Coinium.Core.Pools;
+using Coinium.Core.Servers;
+using Coinium.Core.Stratum;
+using Coinium.Core.Wallet;
 using Serilog;
-using coinium.Net.RPC.Wallet;
 
-namespace coinium
+namespace Coinium
 {
     class Program
     {
+        /// <summary>
+        /// Used for uptime calculations.
+        /// </summary>
+        public static readonly DateTime StartupTime = DateTime.Now; // used for uptime calculations.
+
         static void Main(string[] args)
         {
             #if !DEBUG
@@ -39,22 +47,35 @@ namespace coinium
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
-            Console.ResetColor();
 
             InitLogging();
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
-            var server = new RPCServer();
-            server.Listen("0.0.0.0", 3333);
+            // start wallet manager.
+            WalletManager.Instance.Run();
 
-            //var client = new WalletClient("http://127.0.0.1:9335", "devel", "develpass");
-            //client.GetInfo();
+            // start pool manager.
+            PoolManager.Instance.Run();
 
-            Console.ReadLine();
+            // stratum server.
+            var stratumServer = new StratumServer();
+            stratumServer.Listen("0.0.0.0", 3333);
+
+            // getwork server.
+            var getworkServer = new ClassicServer(8332);
+            getworkServer.Start();
+
+            // Start the server manager.
+            ServerManager.Instance.Start();
+
+            while (true) // idle loop & command parser
+            {
+                var line = Console.ReadLine();
+                CommandManager.Parse(line);
+            }
         }
 
         #region logging facility
@@ -63,6 +84,7 @@ namespace coinium
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.ColoredConsole()
+                .WriteTo.RollingFile("Debug.log")
                 .MinimumLevel.Verbose()
                 .CreateLogger();
         }

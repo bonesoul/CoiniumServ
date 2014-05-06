@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{02E410
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AustinHarris.JsonRpc", "..\deps\json-rpc.net\Json-Rpc\AustinHarris.JsonRpc.csproj", "{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x86 = Release|x86
+		Testing|Any CPU = Testing|Any CPU
+		Testing|Mixed Platforms = Testing|Mixed Platforms
+		Testing|x86 = Testing|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -32,6 +37,26 @@ Global
 		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Release|x86.ActiveCfg = Release|Any CPU
+		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Testing|Any CPU.ActiveCfg = Release|Any CPU
+		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Testing|Any CPU.Build.0 = Release|Any CPU
+		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Testing|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Testing|Mixed Platforms.Build.0 = Release|Any CPU
+		{5FCA1E48-0751-4625-9532-CB804DF55DB5}.Testing|x86.ActiveCfg = Release|Any CPU
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|x86.ActiveCfg = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Debug|x86.Build.0 = Debug|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|Any CPU.ActiveCfg = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|Mixed Platforms.Build.0 = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|x86.ActiveCfg = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Release|x86.Build.0 = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Testing|Any CPU.ActiveCfg = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Testing|Mixed Platforms.ActiveCfg = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Testing|Mixed Platforms.Build.0 = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Testing|x86.ActiveCfg = Release|x86
+		{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}.Testing|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

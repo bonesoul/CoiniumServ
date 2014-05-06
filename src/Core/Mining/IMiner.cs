@@ -1,6 +1,6 @@
 ﻿/*
- *   Coinium project - crypto currency pool software - https://github.com/raistlinthewiz/coinium
- *   Copyright (C) 2013 Hüseyin Uslu, Int6 Studios - http://www.coinium.org
+ *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/coinium
+ *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,16 +16,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace coinium.Core.Mining
+namespace Coinium.Core.Mining
 {
     public interface IMiner
     {
-        bool Subscribed { get; }
-
+        /// <summary>
+        /// Is the miner authenticated.
+        /// </summary>
         bool Authenticated { get; }
 
+        /// <summary>
+        /// Authenticates the miner.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         bool Authenticate(string user, string password);
-
-        void Subscribe();
     }
 }

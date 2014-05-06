@@ -18,11 +18,12 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
-using coinium.Common.Versions;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+using Coinium.Common.Versions;
+
 [assembly: AssemblyTitle("Coinium")]
 [assembly: AssemblyDescription("Crypto currency pool software")]
 #if DEBUG
@@ -32,8 +33,8 @@ using coinium.Common.Versions;
 #endif
 [assembly: AssemblyCompany("coinium.org")]
 [assembly: AssemblyProduct("coinium")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
-[assembly: AssemblyTrademark("Copyright (C) 2013, coinium project")]
+[assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, coinium project, http://www.coinium.org")]
+[assembly: AssemblyTrademark("coinium")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
