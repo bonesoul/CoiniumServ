@@ -15,6 +15,11 @@
 * Slush's stratum doc: http://mining.bitcoin.cz/stratum-mining
 * Stratum summary: https://www.btcguild.com/new_protocol.php
 
+## XPT Protocol
+* In use By PrimeCoin/MemmoryCoin/BitShares Based Coins
+* No official Docs
+* Reference Implementation: https://github.com/jh000/xptProxy/blob/master/src/xptProxy/xptClient.cpp
+
 ## Technical Documentation
 * http://www.righto.com/2014/02/bitcoin-mining-hard-way-algorithms.html
 * https://www.youtube.com/watch?v=gUwXCt1qkBU
