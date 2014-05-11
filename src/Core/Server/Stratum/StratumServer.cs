@@ -36,6 +36,11 @@ namespace Coinium.Core.Server.Stratum
             new StratumService()
         };
 
+        /// <summary>
+        /// Creates a new StratumServer instance.
+        /// </summary>
+        /// <param name="bindIp"></param>
+        /// <param name="port"></param>
         public StratumServer(string bindIp, int port)
         {
             this.BindIP = bindIp;
@@ -46,6 +51,10 @@ namespace Coinium.Core.Server.Stratum
             this.DataReceived += Stratum_DataReceived;
         }
 
+        /// <summary>
+        /// Starts the server.
+        /// </summary>
+        /// <returns></returns>
         public override bool Start()
         {
             var success = this.Listen(this.BindIP, this.Port);
@@ -56,11 +65,20 @@ namespace Coinium.Core.Server.Stratum
             return true;
         }
 
+        /// <summary>
+        /// Stops the server.
+        /// </summary>
+        /// <returns></returns>
         public override bool Stop()
         {
             return true;
         }
 
+        /// <summary>
+        /// Client on connectin handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Stratum_OnConnect(object sender, ConnectionEventArgs e)
         {
             Log.Verbose("Stratum client connected: {0}", e.Connection.ToString());
@@ -69,11 +87,21 @@ namespace Coinium.Core.Server.Stratum
             e.Connection.Client = miner;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Stratum_OnDisconnect(object sender, ConnectionEventArgs e)
         {
             Log.Verbose("Stratum client disconnected: {0}", e.Connection.ToString());
         }
 
+        /// <summary>
+        /// Client data recieve handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Stratum_DataReceived(object sender, ConnectionDataEventArgs e)
         {
             var connection = (Connection)e.Connection;

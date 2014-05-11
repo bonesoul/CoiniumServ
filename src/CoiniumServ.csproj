@@ -46,6 +46,9 @@
     <ApplicationIcon>..\assets\Coinium.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CryptSharp">
+      <HintPath>..\build\packages\CryptSharpOfficial.2.0.0.0\lib\CryptSharp.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\build\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
       <Package>nunit</Package>
