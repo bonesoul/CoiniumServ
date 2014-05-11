@@ -27,7 +27,6 @@ using Coinium.Core.Mining.Pools;
 using Coinium.Core.Mining.Wallet;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
-using Coinium.Core.Server.Vanilla;
 using Serilog;
 
 namespace Coinium

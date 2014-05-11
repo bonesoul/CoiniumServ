@@ -16,47 +16,36 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using Coinium.Core.Server.Stratum.Notifications;
-
 namespace Coinium.Core.Mining
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public class JobCounter
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
+        private static ulong Current { get; set; }
+
+        static JobCounter()
+        {
+            Current = 1;
+        }
 
         /// <summary>
-        /// Is the miner authenticated.
+        /// Gets a new job id.
         /// </summary>
-        bool Authenticated { get; }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
         /// <returns></returns>
-        bool Authenticate(string user, string password);
+        public ulong Next()
+        {
+            Current++;
+
+            if (Current%0xffff == 0)
+                Current = 1;
+
+            return Current;
+        }
+
+        private static readonly JobCounter _instance = new JobCounter(); // memory instance of the JobCounter.
 
         /// <summary>
-        /// Event that fires when a miner authenticates.
+        /// Singleton instance of WalletManager.
         /// </summary>
-        event EventHandler OnAuthenticate;
-
-        /// <summary>
-        /// Can we send new mining job's to miner?
-        /// </summary>
-        bool SupportsJobNotifications { get; }
-
-        /// <summary>
-        /// Sends a new mining job to the miner.
-        /// </summary>
-        void SendJob(JobNotification job);
+        public static JobCounter Instance { get { return _instance; } }
     }
 }

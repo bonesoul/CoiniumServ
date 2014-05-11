@@ -99,6 +99,7 @@
     <Compile Include="Core\Config\ConfigSection.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Mining\Events\MinerAuthenticationEventArgs.cs" />
+    <Compile Include="Core\Mining\JobCounter.cs" />
     <Compile Include="Core\Server\Vanilla\VanillaMiner.cs" />
     <Compile Include="Core\Mining\MinerManager.cs" />
     <Compile Include="Core\Mining\Pools\PoolConfig.cs" />
@@ -117,7 +118,7 @@
     <Compile Include="Core\Server\ServerManager.cs" />
     <Compile Include="Core\Server\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Server\Stratum\StratumService.cs" />
-    <Compile Include="Core\Mining\Wallet\Responses\Getwork.cs" />
+    <Compile Include="Core\Mining\Wallet\Responses\Work.cs" />
     <Compile Include="Core\Mining\Wallet\WalletManager.cs" />
     <Compile Include="Core\Server\Web\Config.cs" />
     <Compile Include="Net\Http\HttpServer.cs" />

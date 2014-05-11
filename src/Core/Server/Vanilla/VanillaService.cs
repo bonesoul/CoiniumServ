@@ -43,7 +43,7 @@ namespace Coinium.Core.Server.Vanilla
         /// https://bitcointalk.org/index.php?topic=51281.0
         /// </remarks>
         [JsonRpcMethod("getwork")]
-        public Getwork Getwork(string data = null)
+        public Work Getwork(string data = null)
         {
             // var context = (HttpRpcContext)JsonRpcContext.Current().Value;
             // var request = context.Request;

@@ -238,9 +238,14 @@ namespace Coinium.Core.Mining.Wallet
         /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
         /// https://en.bitcoin.it/wiki/Getblocktemplate
         /// </summary>
-        public String GetBlockTemplate(params object[] @params)
+        public BlockTemplate GetBlockTemplate(params object[] @params)
         {
-            return MakeRequest<String>("getblocktemplate", @params);
+            var capabilities = new Dictionary<string, object>
+            {
+                {"capabilities", new List<string> {"coinbasetxn", "workid", "coinbase/append"}}
+            };
+
+            return MakeRequest<BlockTemplate>("getblocktemplate", capabilities);
         }
 
         /// <summary>
@@ -439,9 +444,9 @@ namespace Coinium.Core.Mining.Wallet
         /// "target" : little endian hash target
         /// If [data] is specified, tries to solve the block and returns true if it was successful.
         /// </summary>
-        public Responses.Getwork Getwork()
+        public Work Getwork()
         {
-            return MakeRequest<Responses.Getwork>("getwork", null);   
+            return MakeRequest<Work>("getwork", null);   
         }
 
         /// <summary>
