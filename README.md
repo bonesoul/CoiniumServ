@@ -12,6 +12,10 @@
 
 Coinium is an effort to bring crypto-coins to C# space and create a reference pool software implementation. It can be compiled with Microsoft .NET or Mono, which means you can run it on Windows, MacOS, and Linux. Please see the file LICENSE for license details.
 
+## Screenshots
+
+![Screenshot](http://i.imgur.com/Pql7h0y.png)
+
 ## Donation
 
 You can contribute the development of the project by donating; 
