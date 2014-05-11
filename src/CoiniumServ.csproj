@@ -41,6 +41,9 @@
     <StartupObject>Coinium.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HashLib">
+      <HintPath>..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
+    </Reference>
     <Reference Include="Jayrock.Json, Version=0.9.16530.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
