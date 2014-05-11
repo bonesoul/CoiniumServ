@@ -47,10 +47,14 @@ namespace Coinium.Common.Console
         {
             System.Console.ForegroundColor = ConsoleColor.DarkYellow;
             System.Console.WriteLine("Copyright (C) 2013 - 2014, Coinium project - http://www.coinium.org");
+            System.Console.WriteLine();
             System.Console.WriteLine("Coinium comes with ABSOLUTELY NO WARRANTY.");
             System.Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
-            System.Console.ForegroundColor = ConsoleColor.Yellow;
-            System.Console.WriteLine("Donation: (BTC) 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D.");
+            System.Console.WriteLine();
+            System.Console.WriteLine("You can contribute the development of the project by donating;");
+            System.Console.WriteLine("BTC : 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D.");
+            System.Console.WriteLine("LTC : LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa.");
+            System.Console.WriteLine("DOGE: D7mzHQtkWD9B1Xwnmjfg9x2DofbaZBg6Lc.");
             System.Console.WriteLine();
             System.Console.ResetColor();
         }
