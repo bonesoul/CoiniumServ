@@ -16,6 +16,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
+
 namespace Coinium.Core.Mining
 {
     /// <summary>
@@ -40,5 +42,20 @@ namespace Coinium.Core.Mining
         /// <param name="password"></param>
         /// <returns></returns>
         bool Authenticate(string user, string password);
+
+        /// <summary>
+        /// Event that fires when a miner authenticates.
+        /// </summary>
+        event EventHandler OnAuthenticate;
+
+        /// <summary>
+        /// Can we send new mining job's to miner?
+        /// </summary>
+        bool SupportsJobNotifications { get; }
+
+        /// <summary>
+        /// Sends a new mining job to the miner.
+        /// </summary>
+        void SendJob();
     }
 }

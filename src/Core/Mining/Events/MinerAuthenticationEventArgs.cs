@@ -18,25 +18,18 @@
 
 using System;
 
-namespace Coinium.Net.Sockets
+namespace Coinium.Core.Mining.Events
 {
-    public class ConnectionEventArgs : EventArgs
+    public class MinerAuthenticationEventArgs : EventArgs
     {
-        public IConnection Connection { get; private set; }
+        public IMiner Miner { get; private set; }
 
-        public ConnectionEventArgs(IConnection connection)
+        public MinerAuthenticationEventArgs(IMiner miner)
         {
-            if (connection == null)
-                throw new ArgumentNullException("connection");
+            if (miner == null)
+                throw new ArgumentNullException("miner");
 
-            this.Connection = connection;
-        }
-
-        public override string ToString()
-        {
-            return Connection.RemoteEndPoint != null
-                ? Connection.RemoteEndPoint.ToString()
-                : "Not Connected";
+            this.Miner = miner;
         }
     }
 }

@@ -98,6 +98,7 @@
     <Compile Include="Core\Commands\CommandManager.cs" />
     <Compile Include="Core\Config\ConfigSection.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
+    <Compile Include="Core\Mining\Events\MinerAuthenticationEventArgs.cs" />
     <Compile Include="Core\Server\Vanilla\VanillaMiner.cs" />
     <Compile Include="Core\Mining\MinerManager.cs" />
     <Compile Include="Core\Mining\Pools\PoolConfig.cs" />

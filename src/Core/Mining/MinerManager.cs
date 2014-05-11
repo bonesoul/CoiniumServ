@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Coinium.Net.Sockets;
 using Serilog;
 
@@ -32,8 +33,12 @@ namespace Coinium.Core.Mining
 
         private readonly Dictionary<int, IMiner> _miners = new Dictionary<int, IMiner>(); // Dictionary that holds id <-> miner pairs. 
 
+        private Timer _timer;
+
         public MinerManager()
         {
+            this._timer = new Timer(BroadcastTimer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
+
             Log.Verbose("MinerManager() init..");
         }
 
@@ -44,9 +49,9 @@ namespace Coinium.Core.Mining
         /// <returns></returns>
         public T Create<T>(IConnection connection) where T : IMiner
         {
-            var instance = Activator.CreateInstance(typeof (T), new object[] {this._counter++, connection});
+            var instance = Activator.CreateInstance(typeof(T), new object[] { this._counter++, connection });  // create an instance of the miner.
             var miner = (IMiner) instance;
-            this._miners.Add(miner.Id, miner);
+            this._miners.Add(miner.Id, miner); // add it to our collection.           
 
             return (T)miner;
         }
@@ -57,12 +62,24 @@ namespace Coinium.Core.Mining
         /// <returns></returns>
         public T Create<T>() where T : IMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { this._counter++ });
+            var instance = Activator.CreateInstance(typeof(T), new object[] { this._counter++ }); // create an instance of the miner.
             var miner = (IMiner)instance;
-            this._miners.Add(miner.Id, miner);
+            this._miners.Add(miner.Id, miner); // add it to our collection.
 
             return (T)miner;
         }
+
+        private void BroadcastTimer(object state)
+        {
+            foreach (var pair in this._miners)
+            {
+                var miner = pair.Value;
+
+                if (miner.SupportsJobNotifications)
+                    miner.SendJob();
+            }
+        }
+
 
         private static readonly MinerManager _instance = new MinerManager(); // memory instance of the MinerManager.
 

@@ -22,6 +22,7 @@ using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
+using Coinium.Core.Mining.Events;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.RPC.Sockets;
 using Coinium.Net.Sockets;
@@ -48,9 +49,14 @@ namespace Coinium.Core.Server.Stratum
         public bool Subscribed { get; private set; }
 
         /// <summary>
-        /// Is the miner authenticated.
+        /// Is the miner authenticated?
         /// </summary>
         public bool Authenticated { get; private set; }
+
+        /// <summary>
+        /// Event that fires when a miner authenticates.
+        /// </summary>
+        public event EventHandler OnAuthenticate;
 
         /// <summary>
         /// Creates a new miner instance.
@@ -61,6 +67,7 @@ namespace Coinium.Core.Server.Stratum
         {
             this.Id = id; // the id of the miner.
             this.Connection = connection; // the underlying connection.
+            this.SupportsJobNotifications = true; // stratum miner'ssupports new mining job notifications.
 
             this.Subscribed = false;
             this.Authenticated = false;
@@ -79,19 +86,14 @@ namespace Coinium.Core.Server.Stratum
                 {
                     var asyncData = ((JsonRpcStateAsync)callback);
                     var result = asyncData.Result + "\n"; // quick hack.
-                    var data = Encoding.UTF8.GetBytes(result);
+                    var response = Encoding.UTF8.GetBytes(result);
 
                     var context = (SocketsRpcContext) asyncData.AsyncState;
-
                     var miner = (StratumMiner)context.Miner;                                         
                                 
-                    miner.Connection.Send(data);
+                    miner.Connection.Send(response);
 
                     Log.Verbose("RPC-client send:\n{0}", result);
-
-                    // send an initial job after miner subsribes.
-                    if (miner.Authenticated && miner.Subscribed)
-                        this.SendJob();
                 });
 
             var line = e.Data.ToEncodedString();
@@ -120,14 +122,25 @@ namespace Coinium.Core.Server.Stratum
         /// <returns></returns>
         public bool Authenticate(string user, string password)
         {
-            this.Authenticated = true;
+            this.Authenticated = true;            
+
+            // notify any listeners about the miner's authentication.
+            var handler = OnAuthenticate;
+            if (handler != null)
+                handler(this, new MinerAuthenticationEventArgs(this));
+
             return this.Authenticated;
         }
 
         /// <summary>
+        /// Sends a new mining job to the miner.
+        /// </summary>
+        public bool SupportsJobNotifications { get; private set; }
+
+        /// <summary>
         /// Sends a mining-job to miner.
         /// </summary>
-        private void SendJob()
+        public void SendJob()
         {
             var notification = new JsonRequest
             {

@@ -56,6 +56,7 @@ namespace Coinium.Core.Server.Vanilla
                 var result = WalletManager.Instance.Client.Getwork(data);
                 if(result)
                     Log.Verbose("Found block!: {0}", data);
+
                 return null;
             }                
         }     
