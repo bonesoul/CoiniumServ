@@ -65,8 +65,8 @@ namespace Coinium
             stratumServer.Listen("0.0.0.0", 3333);
 
             // getwork server.
-            var getworkServer = new ClassicServer(8332);
-            getworkServer.Start();
+            //var getworkServer = new ClassicServer(8332);
+            //getworkServer.Start();
 
             // Start the server manager.
             ServerManager.Instance.Start();

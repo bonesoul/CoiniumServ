@@ -35,7 +35,7 @@ namespace Coinium.Core.Wallet
         public void Run()
         {
             Log.Verbose("Starting wallet-clients..");
-            this.Client = new WalletClient("http://127.0.0.1:9333", "devel", "develpass");
+            this.Client = new WalletClient("http://127.0.0.1:9334", "devel", "develpass");
             //Log.Verbose("Difficulty: " + this.Client.GetInfo().Difficulty);
         }
 

@@ -21,6 +21,11 @@ namespace Coinium.Core.Mining
     public interface IMiner
     {
         /// <summary>
+        /// Unique subscription id for identifying the miner.
+        /// </summary>
+        int Id { get; }
+
+        /// <summary>
         /// Is the miner authenticated.
         /// </summary>
         bool Authenticated { get; }

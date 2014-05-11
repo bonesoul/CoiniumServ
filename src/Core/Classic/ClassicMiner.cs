@@ -30,10 +30,16 @@ namespace Coinium.Core.Classic
 {
     public class ClassicMiner : IMiner
     {
+        /// <summary>
+        /// Unique subscription id for identifying the miner.
+        /// </summary>
+        public int Id { get; private set; }
+
         public bool Authenticated { get; private set; }
 
-        public ClassicMiner()
+        public ClassicMiner(int id)
         {
+            this.Id = id; // the id of the miner.
             this.Authenticated = false;
         }
 

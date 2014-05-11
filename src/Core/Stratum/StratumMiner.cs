@@ -30,12 +30,17 @@ using Serilog;
 
 namespace Coinium.Core.Stratum
 {
-    class StratumMiner : IClient, IMiner
+    public class StratumMiner : IClient, IMiner
     {
         /// <summary>
         /// Miner's connection.
         /// </summary>
         public IConnection Connection { get; private set; }
+
+        /// <summary>
+        /// Unique subscription id for identifying the miner.
+        /// </summary>
+        public int Id { get; private set; }
 
         /// <summary>
         /// Is the miner subscribed?
@@ -50,10 +55,13 @@ namespace Coinium.Core.Stratum
         /// <summary>
         /// Creates a new miner instance.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="connection"></param>
-        public StratumMiner(IConnection connection)
+        public StratumMiner(int id, IConnection connection)
         {
-            this.Connection = connection;
+            this.Id = id; // the id of the miner.
+            this.Connection = connection; // the underlying connection.
+
             this.Subscribed = false;
             this.Authenticated = false;
         }
@@ -97,6 +105,14 @@ namespace Coinium.Core.Stratum
         }
 
         /// <summary>
+        /// Subscribes the miner to mining service.
+        /// </summary>
+        public void Subscribe()
+        {
+            this.Subscribed = true;
+        }
+
+        /// <summary>
         /// Authenticates the miner.
         /// </summary>
         /// <param name="user"></param>
@@ -106,14 +122,6 @@ namespace Coinium.Core.Stratum
         {
             this.Authenticated = true;
             return this.Authenticated;
-        }
-
-        /// <summary>
-        /// Subscribes the miner to mining service.
-        /// </summary>
-        public void Subscribe()
-        {
-            this.Subscribed = true;
         }
 
         /// <summary>

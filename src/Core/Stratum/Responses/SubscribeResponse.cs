@@ -18,6 +18,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Newtonsoft.Json;
 
 namespace Coinium.Core.Stratum.Responses
@@ -39,14 +40,22 @@ namespace Coinium.Core.Stratum.Responses
         [JsonIgnore]   
         public int ExtraNonce2Size { get; set; }
 
+        /// <summary>
+        /// The miner's subscription id.
+        /// </summary>
+        [JsonIgnore]
+        public int SubscriptionId { get; set; }
+
         public IEnumerator<object> GetEnumerator()
         {
             var data = new List<object>
             {
                 new List<string> // 2-tuple with name of subscribed notification and subscription ID. Teoretically it may be used for unsubscribing, but obviously miners won't use it. (http://mining.bitcoin.cz/stratum-mining)
                 {
-                    "mining.notify", // name of subscribed notification.
-                    "ae6812eb4cd7735a302a8a9dd95cf71f" // unique string used for the subscription.
+                    "mining.set_difficulty",
+                    this.SubscriptionId.ToString(CultureInfo.InvariantCulture), // miner's id.
+                    "mining.notify", 
+                    this.SubscriptionId.ToString(CultureInfo.InvariantCulture) // miner's id.
                 },
                 this.ExtraNonce1,
                 this.ExtraNonce2Size
