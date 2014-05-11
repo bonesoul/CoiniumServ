@@ -16,37 +16,44 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
+using System.Collections.Generic;
+using Coinium.Common.Helpers.IO;
 using Serilog;
 
-namespace Coinium.Core.Servers
+namespace Coinium.Core.Mining.Pools
 {
-    public class ServerManager
+    public class PoolManager
     {
-        public ServerManager()
-        { }
+        private Dictionary<string, PoolConfig> _configs; 
 
-        public void Start()
+        public PoolManager()
         {
-            Log.Information("ServerManager starting..");
-
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
+            Log.Verbose("PoolManager() init..");
         }
 
-        private bool StartWebServer()
+        public void Run()
         {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
+            this.LoadPoolsConfig();
         }
 
-        private static readonly ServerManager _instance = new ServerManager();
+        private void LoadPoolsConfig()
+        {
+            this._configs=new Dictionary<string, PoolConfig>();
+
+            var poolsConfigFolder = string.Format("{0}/Conf/Pools", FileHelpers.AssemblyRoot);
+            var files = FileHelpers.GetFilesByExtensionRecursive(poolsConfigFolder, ".conf");
+
+            foreach (var file in files)
+            {
+                this._configs.Add(file, new PoolConfig(file));
+            }
+        }
+
+        private static readonly PoolManager _instance = new PoolManager();
 
         /// <summary>
         /// Singleton instance of WalletManager.
         /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
+        public static PoolManager Instance { get { return _instance; } }
     }
 }

@@ -16,37 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
-using Serilog;
-
-namespace Coinium.Core.Servers
+namespace Coinium.Core.Mining.Wallet.Responses
 {
-    public class ServerManager
+    /// <summary>
+    /// Reference: https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
+    /// </summary>
+    public class BlockTemplate
     {
-        public ServerManager()
-        { }
-
-        public void Start()
-        {
-            Log.Information("ServerManager starting..");
-
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
-        }
-
-        private bool StartWebServer()
-        {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
-        }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
     }
 }

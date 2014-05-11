@@ -16,37 +16,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
-using Serilog;
+using Newtonsoft.Json;
 
-namespace Coinium.Core.Servers
+namespace Coinium.Net.RPC.Sockets
 {
-    public class ServerManager
+    /// <summary>
+    /// JsonRpc 2.0 over sockets request.
+    /// </summary>
+    public class SocketsRpcRequest
     {
-        public ServerManager()
-        { }
+        public string Text { get; private set; }
 
-        public void Start()
+        public dynamic Data { get; private set; }
+
+        public SocketsRpcRequest(string text)
         {
-            Log.Information("ServerManager starting..");
-
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
+            this.Text = text;
+            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
         }
-
-        private bool StartWebServer()
-        {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
-        }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
     }
 }

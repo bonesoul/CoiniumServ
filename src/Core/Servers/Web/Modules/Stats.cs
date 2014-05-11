@@ -16,37 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
-using Serilog;
+using System.Reflection;
+using Nancy;
 
-namespace Coinium.Core.Servers
+namespace Coinium.Core.Servers.Web.Modules
 {
-    public class ServerManager
+    public class Stats : NancyModule
     {
-        public ServerManager()
-        { }
-
-        public void Start()
+        public Stats()
         {
-            Log.Information("ServerManager starting..");
+            var banner = string.Format("v{0}", Assembly.GetAssembly(typeof(Program)).GetName().Version);
 
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
+            Get["/"] = x => "coinium";
+            Get["/version"] = x => banner;
         }
-
-        private bool StartWebServer()
-        {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
-        }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
     }
 }

@@ -16,37 +16,33 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
+// classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
+
+using System.Net;
+using Coinium.Core.Mining;
+using Coinium.Net.Http;
 using Serilog;
 
-namespace Coinium.Core.Servers
+namespace Coinium.Core.Servers.Vanilla
 {
-    public class ServerManager
+    public class VanillaServer : HttpServer
     {
-        public ServerManager()
-        { }
-
-        public void Start()
+        private static object[] _services =
         {
-            Log.Information("ServerManager starting..");
+            new VanillaService()
+        };
 
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
+        public VanillaServer(int port)
+            : base(port)
+        {
+            Log.Verbose("Classic server listening on port {0}.", this.Port);
+            this.ProcessRequest += ProcessHttpRequest;
         }
 
-        private bool StartWebServer()
+        private void ProcessHttpRequest(HttpListenerContext context)
         {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
+            var miner = MinerManager.Instance.Create<VanillaMiner>();
+            miner.Parse(context);
         }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
     }
 }

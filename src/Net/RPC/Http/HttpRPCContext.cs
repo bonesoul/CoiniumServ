@@ -16,37 +16,20 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
-using Serilog;
+using Coinium.Core.Mining;
 
-namespace Coinium.Core.Servers
+namespace Coinium.Net.RPC.Http
 {
-    public class ServerManager
+    public class HttpRpcContext
     {
-        public ServerManager()
-        { }
+        public IMiner Miner { get; private set; }
 
-        public void Start()
+        public HttpRpcResponse Response { get; private set; }
+
+        public HttpRpcContext(IMiner miner, HttpRpcResponse response)
         {
-            Log.Information("ServerManager starting..");
-
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
+            this.Miner = miner;
+            this.Response = response;
         }
-
-        private bool StartWebServer()
-        {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
-        }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
     }
 }

@@ -93,7 +93,7 @@ namespace Coinium.Net.Sockets
 
             try
             {
-                Log.Verbose("RPC-Server starting to listen on {0}:{1}", bindIP, port);
+                Log.Information("RPC-Server starting to listen on {0}:{1}", bindIP, port);
 
                 // Create new TCP socket and set socket options.
                 Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);

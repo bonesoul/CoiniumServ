@@ -16,37 +16,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
-using Serilog;
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
-namespace Coinium.Core.Servers
+using System.Collections.Generic;
+
+namespace Coinium.Core.Mining.Wallet.Responses
 {
-    public class ServerManager
+    public class Block
     {
-        public ServerManager()
-        { }
-
-        public void Start()
-        {
-            Log.Information("ServerManager starting..");
-
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
-        }
-
-        private bool StartWebServer()
-        {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
-        }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
+        public string Hash { get; set; }
+        public int Confirmations { get; set; }
+        public int Size { get; set; }
+        public int Height { get; set; }
+        public int Version { get; set; }
+        public string MerkleRoot { get; set; }
+        public List<string> Tx { get; set; }
+        public int Time { get; set; }
+        public int Nonce { get; set; }
+        public string Bits { get; set; }
+        public double Difficulty { get; set; }
+        public string NextBlockHash { get; set; }
     }
 }

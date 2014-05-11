@@ -16,37 +16,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
-using Serilog;
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
-namespace Coinium.Core.Servers
+using Newtonsoft.Json;
+
+namespace Coinium.Core.Mining.Wallet.Requests
 {
-    public class ServerManager
+    public class SignRawTransactionInput
     {
-        public ServerManager()
-        { }
+        [JsonProperty("txid")]
+        public string TransactionId { get; set; }
 
-        public void Start()
-        {
-            Log.Information("ServerManager starting..");
+        [JsonProperty("vout")]
+        public int Output { get; set; }
 
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
-        }
-
-        private bool StartWebServer()
-        {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
-        }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
+        [JsonProperty("scriptPubKey")]
+        public string ScriptPubKey { get; set; }
     }
 }

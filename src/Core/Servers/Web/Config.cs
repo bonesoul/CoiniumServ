@@ -16,37 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
-using Serilog;
+using Coinium.Core.Config;
 
-namespace Coinium.Core.Servers
+namespace Coinium.Core.Servers.Web
 {
-    public class ServerManager
+    public sealed class Config : ConfigSection
     {
-        public ServerManager()
+        private Config()
+            : base("WebServer")
         { }
 
-        public void Start()
+        public bool Enabled
         {
-            Log.Information("ServerManager starting..");
-
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
+            get { return this.GetBoolean("Enabled", true); }
+            set { this.Set("Enabled", value); }
         }
 
-        private bool StartWebServer()
+        public int Port
         {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
+            get { return this.GetInt("Port", 80); }
+            set { this.Set("Port", value); }
         }
 
-        private static readonly ServerManager _instance = new ServerManager();
+        public string Interface
+        {
+            get { return this.GetString("Interface", "localhost"); }
+            set { this.Set("Interface", value); }
+        }
 
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
     }
 }

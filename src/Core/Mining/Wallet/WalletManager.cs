@@ -16,37 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Servers.Web;
 using Serilog;
 
-namespace Coinium.Core.Servers
+namespace Coinium.Core.Mining.Wallet
 {
-    public class ServerManager
+    /// <summary>
+    /// Allows communication with wallets.
+    /// </summary>
+    public class WalletManager
     {
-        public ServerManager()
-        { }
+        public WalletClient Client { get; private set; }
 
-        public void Start()
+        public WalletManager()
         {
-            Log.Information("ServerManager starting..");
-
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
+            Log.Verbose("WalletManager() init..");
         }
 
-        private bool StartWebServer()
+        public void Run()
         {
-            var webServer = new WebServer();
-            webServer.Start();
-
-            return true;
+            Log.Verbose("Starting wallet-clients..");
+            this.Client = new WalletClient("http://127.0.0.1:9334", "devel", "develpass");
+            //Log.Verbose("Difficulty: " + this.Client.GetInfo().Difficulty);
         }
 
-        private static readonly ServerManager _instance = new ServerManager();
+
+        private static readonly WalletManager _instance = new WalletManager();
 
         /// <summary>
         /// Singleton instance of WalletManager.
         /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
+        public static WalletManager Instance { get { return _instance; } }
     }
 }
