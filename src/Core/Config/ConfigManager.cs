@@ -17,9 +17,7 @@
 */
 
 using System;
-using System.Dynamic;
 using Coinium.Common.Helpers.IO;
-using Coinium.Core.Pools;
 using Nini.Config;
 using Serilog;
 
