@@ -20,3 +20,4 @@ notifications:
   
 notifications:
   irc: "chat.freenode.net#coinium-dev"
+  email: false
