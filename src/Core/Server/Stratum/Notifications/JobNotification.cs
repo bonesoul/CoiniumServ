@@ -18,6 +18,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Coinium.Core.Mining;
+using Coinium.Core.Mining.Wallet.Responses;
 using Newtonsoft.Json;
 
 namespace Coinium.Core.Server.Stratum.Notifications
@@ -26,30 +28,36 @@ namespace Coinium.Core.Server.Stratum.Notifications
     public class JobNotification : IEnumerable<object>
     {
         /// <summary>
+        /// BlockTemplate originated the job-notification.
+        /// </summary>
+        [JsonIgnore]
+        public BlockTemplate BlockTemplate { get; private set; }
+
+        /// <summary>
         /// ID of the job. Use this ID while submitting share generated from this job.
         /// </summary>
-        [JsonIgnore]   
-        public string Id;
+        [JsonIgnore]
+        public string Id { get; private set; }
 
         /// <summary>
         /// Hash of previous block.
         /// </summary>
-        [JsonIgnore]   
-        public string PreviousBlockHash;
+        [JsonIgnore]
+        public string PreviousBlockHash { get; private set; }
 
         /// <summary>
         /// Initial part of coinbase transaction.
         /// <remarks>The miner inserts ExtraNonce1 and ExtraNonce2 after this section of the coinbase. (https://www.btcguild.com/new_protocol.php)</remarks>
         /// </summary>
         [JsonIgnore]
-        public string CoinbaseInitial;
+        public string CoinbaseInitial { get; private set; }
 
         /// <summary>
         /// Final part of coinbase transaction.
         /// <remarks>The miner appends this after the first part of the coinbase and the two ExtraNonce values. (https://www.btcguild.com/new_protocol.php)</remarks>
         /// </summary>
         [JsonIgnore]
-        public string CoinbaseFinal;
+        public string CoinbaseFinal { get; private set; }
 
         /// <summary>
         /// List of hashes, will be used for calculation of merkle root. 
@@ -57,13 +65,13 @@ namespace Coinium.Core.Server.Stratum.Notifications
         /// <remarks>The coinbase transaction is hashed against the merkle branches to build the final merkle root.</remarks>
         /// </summary>
         [JsonIgnore]
-        public List<object> MerkleBranches;
+        public List<object> MerkleBranches { get; private set; }
 
         /// <summary>
         /// Coin's block version.
         /// </summary>
         [JsonIgnore]
-        public string BlockVersion;
+        public string BlockVersion { get; private set; }
 
         /// <summary>
         /// Encoded current network difficulty.
@@ -75,14 +83,30 @@ namespace Coinium.Core.Server.Stratum.Notifications
         /// The current time. nTime rolling should be supported, but should not increase faster than actual time.
         /// </summary>
         [JsonIgnore]
-        public string nTime;
+        public string nTime { get; private set; }
 
         /// <summary>
         /// When true, server indicates that submitting shares from previous jobs don't have a sense and such shares will be rejected. When this flag is set, miner should also drop all previous jobs, so job_ids can be eventually rotated. (http://mining.bitcoin.cz/stratum-mining)
         /// <remarks>f true, miners should abort their current work and immediately use the new job. If false, they can still use the current job, but should move to the new one after exhausting the current nonce range. (https://www.btcguild.com/new_protocol.php)</remarks>
         /// </summary>
         [JsonIgnore]
-        public bool CleanJobs;
+        public bool CleanJobs { get; set; }
+
+        /// <summary>
+        /// Creates a new instance of JobNotification.
+        /// </summary>
+        /// <param name="blockTemplate"></param>
+        public JobNotification(BlockTemplate blockTemplate)
+        {
+            this.BlockTemplate = blockTemplate;
+
+            // init the values.
+            this.Id = JobCounter.Instance.Next().ToString("x4");
+            this.PreviousBlockHash = this.BlockTemplate.PreviousBlockHash;
+            this.BlockVersion = this.BlockTemplate.Version.ToString("x8");
+            this.NetworkDifficulty = this.BlockTemplate.Bits;
+            this.nTime = this.BlockTemplate.CurTime.ToString();
+        }
 
         public IEnumerator<object> GetEnumerator()
         {

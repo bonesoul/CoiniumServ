@@ -54,8 +54,7 @@ namespace Coinium
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
             // start wallet manager.
-            WalletManager.Instance.Run();            
-            var test = WalletManager.Instance.Client.GetBlockTemplate();
+            WalletManager.Instance.Run();
 
             // start pool manager.
             PoolManager.Instance.Run();
