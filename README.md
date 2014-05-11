@@ -1,13 +1,12 @@
 # Coinium [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
  
 * http://www.coinium.org
-* Read the [FAQ](https://github.com/CoiniumServ/coinium/wiki/FAQ) and check the [wiki](https://github.com/CoiniumServ/coinium/wiki/) before asking!
+* Read the [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and check the [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/) before asking!
 * IRC (**irc.freenode.net**):
   - **#coinium-dev** (dev talk)
   - **#coinium** (official pools)
-  - more: #stratum, #legitpools
 * [@coinium](http://twitter.com/coinium)
-* [Bitcointalk.org](https://bitcointalk.org/index.php?topic=504659)
+* [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
    
 ## About
 
