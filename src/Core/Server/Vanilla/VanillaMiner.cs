@@ -1,5 +1,5 @@
 ﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/coinium
+ *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@ using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
+using Coinium.Core.Mining.Events;
 using Coinium.Net.RPC.Http;
 using Serilog;
 
@@ -35,11 +36,33 @@ namespace Coinium.Core.Server.Vanilla
         /// </summary>
         public int Id { get; private set; }
 
+        /// <summary>
+        /// Is the miner authenticated?
+        /// </summary>
         public bool Authenticated { get; private set; }
+
+        /// <summary>
+        /// Event that fires when a miner authenticates.
+        /// </summary>
+        public event EventHandler OnAuthenticate;
+
+        /// <summary>
+        /// Can we send new mining job's to miner?
+        /// </summary>
+        public bool SupportsJobNotifications { get; private set; }
+
+        /// <summary>
+        /// Sends a new mining job to the miner.
+        /// </summary>
+        public void SendJob()
+        {
+            throw new NotSupportedException();
+        }
 
         public VanillaMiner(int id)
         {
             this.Id = id; // the id of the miner.
+            this.SupportsJobNotifications = false; // vanilla miner's doesn't support new mining job notifications.
             this.Authenticated = false;
         }
 
@@ -82,6 +105,13 @@ namespace Coinium.Core.Server.Vanilla
         public bool Authenticate(string user, string password)
         {
             this.Authenticated = true;
+
+            // notify any listeners about the miner's authentication.
+            var handler = OnAuthenticate;
+            if (handler != null)
+                handler(this, new MinerAuthenticationEventArgs(this));
+
+
             return this.Authenticated;
         }
     }
