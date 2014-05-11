@@ -91,6 +91,7 @@
     <Compile Include="Core\Config\ConfigSection.cs" />
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Classic\ClassicMiner.cs" />
+    <Compile Include="Core\Miner\MinerManager.cs" />
     <Compile Include="Core\Pools\PoolConfig.cs" />
     <Compile Include="Core\Pools\PoolManager.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCContext.cs" />

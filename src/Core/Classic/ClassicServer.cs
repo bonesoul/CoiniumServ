@@ -19,6 +19,7 @@
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 
 using System.Net;
+using Coinium.Core.Miner;
 using Coinium.Net.Http;
 using Serilog;
 
@@ -40,7 +41,7 @@ namespace Coinium.Core.Classic
 
         private void ProcessHttpRequest(HttpListenerContext context)
         {
-            var miner = new ClassicMiner();
+            var miner = MinerManager.Instance.Create<ClassicMiner>();
             miner.Parse(context);
         }
     }
