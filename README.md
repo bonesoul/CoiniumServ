@@ -23,3 +23,9 @@ You can contribute the development of the project by donating;
 * BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
 * LTC: `LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa`
 * DOGE: `D7mzHQtkWD9B1Xwnmjfg9x2DofbaZBg6Lc`
+
+## Developers
+
+* [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
+* [Developers Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developers)
+* [Building with Mono](https://github.com/CoiniumServ/CoiniumServ/wiki/Building-with-Mono)
