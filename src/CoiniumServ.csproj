@@ -117,7 +117,7 @@
     <Compile Include="Core\Server\ServerManager.cs" />
     <Compile Include="Core\Server\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Server\Stratum\StratumService.cs" />
-    <Compile Include="Core\Mining\Wallet\Responses\Getwork.cs" />
+    <Compile Include="Core\Mining\Wallet\Responses\Work.cs" />
     <Compile Include="Core\Mining\Wallet\WalletManager.cs" />
     <Compile Include="Core\Server\Web\Config.cs" />
     <Compile Include="Net\Http\HttpServer.cs" />
