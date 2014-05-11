@@ -238,9 +238,14 @@ namespace Coinium.Core.Mining.Wallet
         /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
         /// https://en.bitcoin.it/wiki/Getblocktemplate
         /// </summary>
-        public String GetBlockTemplate(params object[] @params)
+        public BlockTemplate GetBlockTemplate(params object[] @params)
         {
-            return MakeRequest<String>("getblocktemplate", @params);
+            var capabilities = new Dictionary<string, object>
+            {
+                {"capabilities", new List<string> {"coinbasetxn", "workid", "coinbase/append"}}
+            };
+
+            return MakeRequest<BlockTemplate>("getblocktemplate", capabilities);
         }
 
         /// <summary>

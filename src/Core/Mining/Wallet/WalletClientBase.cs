@@ -27,6 +27,7 @@ using System;
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace Coinium.Core.Mining.Wallet
 {
@@ -97,6 +98,9 @@ namespace Coinium.Core.Mining.Wallet
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
             webRequest.Timeout = 5000; // 5 seconds
+
+            Console.WriteLine(System.Text.Encoding.UTF8.GetString(walletRequest.GetBytes()));
+            Log.Verbose("WalletClient: {0}", System.Text.Encoding.UTF8.GetString(walletRequest.GetBytes()));
 
             byte[] byteArray = walletRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;

@@ -37,7 +37,7 @@ namespace Coinium.Core.Mining
 
         public MinerManager()
         {
-            this._timer = new Timer(BroadcastTimer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
+            this._timer = new Timer(BroadcastMiningJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
 
             Log.Verbose("MinerManager() init..");
         }
@@ -69,7 +69,7 @@ namespace Coinium.Core.Mining
             return (T)miner;
         }
 
-        private void BroadcastTimer(object state)
+        private void BroadcastMiningJobs(object state)
         {
             foreach (var pair in this._miners)
             {
