@@ -30,8 +30,8 @@ namespace Coinium.Core.Servers
         {
             Log.Information("ServerManager starting..");
 
-            if (Core.Web.Config.Instance.Enabled)
-                this.StartWebServer();
+            //if (Core.Web.Config.Instance.Enabled)
+                //this.StartWebServer();
         }
 
         private bool StartWebServer()

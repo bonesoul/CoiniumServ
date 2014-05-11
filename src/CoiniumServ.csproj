@@ -15,6 +15,8 @@
     </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\build\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,36 +43,9 @@
     <StartupObject>Coinium.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HashLib">
-      <HintPath>..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Jayrock.Json, Version=0.9.16530.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy">
-      <HintPath>..\build\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Hosting.Self">
-      <HintPath>..\build\packages\Nancy.Hosting.Self.0.22.2\lib\net40\Nancy.Hosting.Self.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\build\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Nini">
-      <HintPath>..\build\packages\Trove.Nini.1.1.0.0\lib\net20\Nini.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\build\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog, Version=1.2.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\build\packages\Serilog.1.2.3\lib\net40\Serilog.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.FullNetFx, Version=1.2.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\build\packages\Serilog.1.2.3\lib\net40\Serilog.FullNetFx.dll</HintPath>
+      <Package>nunit</Package>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -79,6 +54,30 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Jayrock.Json">
+      <HintPath>..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="HashLib">
+      <HintPath>..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Nini">
+      <HintPath>..\build\packages\Trove.Nini.1.1.0.0\lib\net20\Nini.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog">
+      <HintPath>..\build\packages\Serilog.1.3.7\lib\net40\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.FullNetFx">
+      <HintPath>..\build\packages\Serilog.1.3.7\lib\net40\Serilog.FullNetFx.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\build\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy">
+      <HintPath>..\build\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Hosting.Self">
+      <HintPath>..\build\packages\Nancy.Hosting.Self.0.22.2\lib\net40\Nancy.Hosting.Self.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
@@ -172,7 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\deps\json-rpc.net\Json-Rpc\AustinHarris.JsonRpc.csproj">
-      <Project>{24fc1a2a-0bc3-43a7-9bfe-b628c2c4a307}</Project>
+      <Project>{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}</Project>
       <Name>AustinHarris.JsonRpc</Name>
     </ProjectReference>
   </ItemGroup>
