@@ -1,4 +1,4 @@
-# Coinium [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
+# CoiniumServ [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
  
 * http://www.coinium.org
 * Read the [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and check the [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/) before asking!
