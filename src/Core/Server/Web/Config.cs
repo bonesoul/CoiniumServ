@@ -16,29 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using Coinium.Core.Config;
+
+namespace Coinium.Core.Server.Web
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public sealed class Config : ConfigSection
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
+        private Config()
+            : base("WebServer")
+        { }
 
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
+        public bool Enabled
+        {
+            get { return this.GetBoolean("Enabled", true); }
+            set { this.Set("Enabled", value); }
+        }
 
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+        public int Port
+        {
+            get { return this.GetInt("Port", 80); }
+            set { this.Set("Port", value); }
+        }
+
+        public string Interface
+        {
+            get { return this.GetString("Interface", "localhost"); }
+            set { this.Set("Interface", value); }
+        }
+
+        private static readonly Config _instance = new Config();
+        public static Config Instance { get { return _instance; } }
     }
 }

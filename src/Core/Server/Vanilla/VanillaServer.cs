@@ -16,29 +16,33 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+// classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
+
+using System.Net;
+using Coinium.Core.Mining;
+using Coinium.Net.Http;
+using Serilog;
+
+namespace Coinium.Core.Server.Vanilla
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public class VanillaServer : HttpServer
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
+        private static object[] _services =
+        {
+            new VanillaService()
+        };
 
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
+        public VanillaServer(int port)
+            : base(port)
+        {
+            Log.Verbose("Classic server listening on port {0}.", this.Port);
+            this.ProcessRequest += ProcessHttpRequest;
+        }
 
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+        private void ProcessHttpRequest(HttpListenerContext context)
+        {
+            var miner = MinerManager.Instance.Create<VanillaMiner>();
+            miner.Parse(context);
+        }
     }
 }

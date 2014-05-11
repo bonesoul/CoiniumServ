@@ -22,12 +22,12 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Core.Classic;
 using Coinium.Core.Commands;
-using Coinium.Core.Pools;
-using Coinium.Core.Servers;
-using Coinium.Core.Stratum;
-using Coinium.Core.Wallet;
+using Coinium.Core.Mining.Pools;
+using Coinium.Core.Mining.Wallet;
+using Coinium.Core.Server;
+using Coinium.Core.Server.Stratum;
+using Coinium.Core.Server.Vanilla;
 using Serilog;
 
 namespace Coinium
@@ -61,11 +61,11 @@ namespace Coinium
             PoolManager.Instance.Run();
 
             // stratum server.
-            var stratumServer = new StratumServer();
-            stratumServer.Listen("0.0.0.0", 3333);
+            var stratumServer = new StratumServer("0.0.0.0", 3333);
+            stratumServer.Start();
 
             // getwork server.
-            //var getworkServer = new ClassicServer(8332);
+            //var getworkServer = new VanillaServer(8332);
             //getworkServer.Start();
 
             // Start the server manager.

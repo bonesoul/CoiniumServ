@@ -16,29 +16,37 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using Coinium.Core.Server.Web;
+using Serilog;
+
+namespace Coinium.Core.Server
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public class ServerManager
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
+        public ServerManager()
+        { }
+
+        public void Start()
+        {
+            Log.Information("ServerManager starting..");
+
+            //if (Core.Web.Config.Instance.Enabled)
+                //this.StartWebServer();
+        }
+
+        private bool StartWebServer()
+        {
+            var webServer = new WebServer();
+            webServer.Start();
+
+            return true;
+        }
+
+        private static readonly ServerManager _instance = new ServerManager();
 
         /// <summary>
-        /// Is the miner authenticated.
+        /// Singleton instance of WalletManager.
         /// </summary>
-        bool Authenticated { get; }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+        public static ServerManager Instance { get { return _instance; } }
     }
 }

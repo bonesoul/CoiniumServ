@@ -16,29 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+namespace Coinium.Core.Mining.Wallet.Responses
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public class TransactionSinceBlock
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
-
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+        public string Account { get; set; }
+        public string Address { get; set; }
+        public string Category { get; set; }
+        public double Amount { get; set; }
+        public int Confirmations { get; set; }
+        public string TxId { get; set; }
+        public int Time { get; set; }
+        public int TimeReceived { get; set; }
     }
 }

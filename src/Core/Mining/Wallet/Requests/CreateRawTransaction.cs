@@ -16,29 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
+
+using System.Collections.Generic;
+
+namespace Coinium.Core.Mining.Wallet.Requests
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public class CreateRawTransaction
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
+        public List<CreateRawTransactionInput> Inputs { get; set; }
 
         /// <summary>
-        /// Is the miner authenticated.
+        /// A dictionary with the output address and amount per addres.
         /// </summary>
-        bool Authenticated { get; }
+        public Dictionary<string, decimal> Outputs { get; set; }
 
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+        public CreateRawTransaction()
+        {
+            Inputs = new List<CreateRawTransactionInput>();
+            Outputs = new Dictionary<string, decimal>();
+        }
+
+        public void AddInput(string transactionId, int output)
+        {
+            Inputs.Add(new CreateRawTransactionInput { TransactionId = transactionId, Output = output });
+        }
+
+        public void AddOutput(string address, decimal amount)
+        {
+            Outputs.Add(address, amount);
+        }
     }
 }

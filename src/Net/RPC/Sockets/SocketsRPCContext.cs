@@ -16,29 +16,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+
+using Coinium.Core.Mining;
+
+namespace Coinium.Net.RPC.Sockets
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public class SocketsRpcContext
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
+        public IMiner Miner { get; private set; }
 
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
+        public SocketsRpcRequest Request { get; private set; }
 
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+        public SocketsRpcContext(IMiner miner, SocketsRpcRequest request)
+        {
+            this.Miner = miner;
+            this.Request = request;
+        }
     }
 }

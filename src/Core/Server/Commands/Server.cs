@@ -16,29 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using System;
+using Coinium.Core.Commands;
+
+namespace Coinium.Core.Server.Commands
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    [CommandGroup("server", "Allows you to control servers and start/stop them.")]
+    public class ServerCommand : CommandGroup
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
-
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+        [Command("shutdown", "usage: server shutdown")]
+        public string Shutdown(string[] @params)
+        {
+            Environment.Exit(0);
+            return string.Empty;
+        }
     }
 }

@@ -16,29 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using System.Reflection;
+using Nancy;
+
+namespace Coinium.Core.Server.Web.Modules
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public class Stats : NancyModule
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
+        public Stats()
+        {
+            var banner = string.Format("v{0}", Assembly.GetAssembly(typeof(Program)).GetName().Version);
 
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+            Get["/"] = x => "coinium";
+            Get["/version"] = x => banner;
+        }
     }
 }

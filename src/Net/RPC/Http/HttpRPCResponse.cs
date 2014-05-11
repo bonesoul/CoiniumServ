@@ -16,29 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using System.Net;
+using Newtonsoft.Json;
+
+namespace Coinium.Net.RPC.Http
 {
     /// <summary>
-    /// Miner interface that any implementations should extend.
+    /// JsonRpc 1.0 over http request.
     /// </summary>
-    public interface IMiner
+    public class HttpRpcResponse
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
+        public string Text { get; private set; }
 
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; }
+        public dynamic Data { get; private set; }
 
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+        public HttpListenerResponse Response { get; private set; }
+
+        public HttpRpcResponse(string text, HttpListenerResponse response)
+        {
+            this.Text = text;
+            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
+            this.Response = response;
+        }
     }
 }

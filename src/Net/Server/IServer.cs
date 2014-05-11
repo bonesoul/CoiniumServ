@@ -16,29 +16,43 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Coinium.Net.Server
 {
     /// <summary>
-    /// Miner interface that any implementations should extend.
+    /// Server interface that any implementations should extend.
     /// </summary>
-    public interface IMiner
+    interface IServer
     {
         /// <summary>
-        /// Unique subscription id for identifying the miner.
+        /// The IP address of the interface the server binded.
         /// </summary>
-        int Id { get; }
+        string BindIP { get; }
 
         /// <summary>
-        /// Is the miner authenticated.
+        /// The listening port for the server.
         /// </summary>
-        bool Authenticated { get; }
+        int Port { get; }
 
         /// <summary>
-        /// Authenticates the miner.
+        /// Is server currently listening for connections?
         /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
+        bool IsListening { get; }
+
+        /// <summary>
+        /// Starts a server instance.
+        /// </summary>
         /// <returns></returns>
-        bool Authenticate(string user, string password);
+        bool Start();
+
+        /// <summary>
+        /// Stops the server instance.
+        /// </summary>
+        /// <returns></returns>
+        bool Stop();
     }
 }

@@ -16,29 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using Serilog;
+
+namespace Coinium.Core.Mining.Wallet
 {
     /// <summary>
-    /// Miner interface that any implementations should extend.
+    /// Allows communication with wallets.
     /// </summary>
-    public interface IMiner
+    public class WalletManager
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
+        public WalletClient Client { get; private set; }
+
+        public WalletManager()
+        {
+            Log.Verbose("WalletManager() init..");
+        }
+
+        public void Run()
+        {
+            Log.Verbose("Starting wallet-clients..");
+            this.Client = new WalletClient("http://127.0.0.1:9334", "devel", "develpass");
+            //Log.Verbose("Difficulty: " + this.Client.GetInfo().Difficulty);
+        }
+
+
+        private static readonly WalletManager _instance = new WalletManager();
 
         /// <summary>
-        /// Is the miner authenticated.
+        /// Singleton instance of WalletManager.
         /// </summary>
-        bool Authenticated { get; }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+        public static WalletManager Instance { get { return _instance; } }
     }
 }
