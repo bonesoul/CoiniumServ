@@ -20,14 +20,29 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using Coinium.Net.Server;
 
 // source from: http://stackoverflow.com/a/4673210/170181
+using Serilog;
 
 namespace Coinium.Net.Http
 {
-    public class HttpServer : IDisposable
+    public class HttpServer : IServer, IDisposable
     {
+        /// <summary>
+        /// The IP address of the interface the server binded.
+        /// </summary>
+        public string BindIP { get; private set; }
+
+        /// <summary>
+        /// The listening port for the server.
+        /// </summary>
         public int Port { get; private set; }
+
+        /// <summary>
+        /// Is server currently listening for connections?
+        /// </summary>
+        public bool IsListening { get; private set; }
 
         private readonly HttpListener _listener;
         private readonly Thread _listenerThread;
@@ -50,7 +65,7 @@ namespace Coinium.Net.Http
             _listenerThread = new Thread(HandleRequests);
         }
 
-        public void Start()
+        public bool Start()
         {
             _listener.Prefixes.Add(String.Format(@"http://localhost:{0}/", this.Port));
             _listener.Start();
@@ -61,9 +76,15 @@ namespace Coinium.Net.Http
                 _workers[i] = new Thread(Worker);
                 _workers[i].Start();
             }
+
+            this.IsListening = true;
+
+            Log.Information("Vanilla server listening on http://localhost::{0}", this.Port);      
+
+            return true;
         }
 
-        public void Stop()
+        public bool Stop()
         {
             _stop.Set();
             _listenerThread.Join();
@@ -71,6 +92,8 @@ namespace Coinium.Net.Http
                 worker.Join();
 
             _listener.Stop();
+
+            return true;
         }
 
         private void HandleRequests()

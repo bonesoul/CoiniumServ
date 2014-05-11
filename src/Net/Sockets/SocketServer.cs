@@ -23,20 +23,26 @@ using System.Net;
 using System.Net.Sockets;
 using Coinium.Common.Extensions;
 using Serilog;
+using Coinium.Net.Server;
 
 namespace Coinium.Net.Sockets
 {
-    public class SocketServer : IDisposable
+    public class SocketServer : IServer, IDisposable
     {
+        /// <summary>
+        /// The IP address of the interface the server binded.
+        /// </summary>
+        public string BindIP { get; protected set; }
+
+        /// <summary>
+        /// The listening port for the server.
+        /// </summary>
+        public int Port { get; protected set; }
+
         /// <summary>
         /// Is server currently listening for connections?
         /// </summary>
         public bool IsListening { get; private set; }
-
-        /// <summary>
-        /// The port we are listening on.
-        /// </summary>
-        public int Port { get; private set; }
 
         /// <summary>
         /// Listener socket.
@@ -68,10 +74,18 @@ namespace Coinium.Net.Sockets
         /// </summary>
         private bool _disposed;
 
-        /// <summary>
-        /// Override to implement main server logic.
-        /// </summary>
-        public virtual void Run() {}
+        #region server control
+        public virtual bool Start()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool Stop()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
         #region listener & accept callbacks.
 
@@ -81,7 +95,7 @@ namespace Coinium.Net.Sockets
         /// <param name="bindIP">The interface IP to listen for connections.</param>
         /// <param name="port">The port to listen for connections.</param>
         /// <returns></returns>
-        public virtual bool Listen(string bindIP, int port)
+        protected virtual bool Listen(string bindIP, int port)
         {
             // Check if the server instance has been already disposed.
             if (_disposed) 
@@ -93,8 +107,6 @@ namespace Coinium.Net.Sockets
 
             try
             {
-                Log.Information("RPC-Server starting to listen on {0}:{1}", bindIP, port);
-
                 // Create new TCP socket and set socket options.
                 Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 

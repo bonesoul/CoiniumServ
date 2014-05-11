@@ -18,6 +18,9 @@
 
 namespace Coinium.Core.Mining
 {
+    /// <summary>
+    /// Miner interface that any implementations should extend.
+    /// </summary>
     public interface IMiner
     {
         /// <summary>

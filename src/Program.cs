@@ -25,8 +25,9 @@ using Coinium.Common.Platform;
 using Coinium.Core.Commands;
 using Coinium.Core.Mining.Pools;
 using Coinium.Core.Mining.Wallet;
-using Coinium.Core.Servers;
-using Coinium.Core.Servers.Stratum;
+using Coinium.Core.Server;
+using Coinium.Core.Server.Stratum;
+using Coinium.Core.Server.Vanilla;
 using Serilog;
 
 namespace Coinium
@@ -60,8 +61,8 @@ namespace Coinium
             PoolManager.Instance.Run();
 
             // stratum server.
-            var stratumServer = new StratumServer();
-            stratumServer.Listen("0.0.0.0", 3333);
+            var stratumServer = new StratumServer("0.0.0.0", 3333);
+            stratumServer.Start();
 
             // getwork server.
             //var getworkServer = new VanillaServer(8332);
