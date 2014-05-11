@@ -18,8 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Coinium.Core.Mining;
 using Coinium.Net.Sockets;
 using Serilog;
@@ -31,9 +29,9 @@ namespace Coinium.Core.Miner
     /// </summary>
     public class MinerManager
     {
-        private int _counter; // Counter for miner id's.
+        private int _counter; // counter for assigining unique id's to miners.
 
-        private Dictionary<int, IMiner> _miners = new Dictionary<int, IMiner>(); // Dictionary that holds id <-> miner pairs. 
+        private readonly Dictionary<int, IMiner> _miners = new Dictionary<int, IMiner>(); // Dictionary that holds id <-> miner pairs. 
 
         public MinerManager()
         {
