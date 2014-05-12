@@ -11,6 +11,7 @@ env:
   
 before_install:
  - wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.${Package}"
+ - chmod +x ./build/travis-build.sh
  - ./build/travis-build.sh
  - mozroots --import --sync
  
