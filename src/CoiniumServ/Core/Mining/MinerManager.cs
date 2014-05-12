@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Coinium.Core.Mining.Merkle;
 using Coinium.Core.Mining.Wallet;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Sockets;
@@ -74,6 +75,11 @@ namespace Coinium.Core.Mining
         private void BroadcastMiningJobs(object state)
         {
             var blockTemplate = WalletManager.Instance.Client.GetBlockTemplate();
+
+            // need to build a coinbase transaction right here and include it in the root calculation!.
+
+            var merkleRoot = MerkleTree.CalculateRoot(blockTemplate.Transactions);
+
             var jobNotification = new JobNotification(blockTemplate)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.

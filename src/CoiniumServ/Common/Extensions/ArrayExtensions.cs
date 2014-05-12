@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Coinium.Common.Extensions
 {
@@ -66,12 +68,57 @@ namespace Coinium.Common.Extensions
 
         public static string ToHexString(this byte[] byteArray)
         {
-            return byteArray.Aggregate("", (current, b) => current + b.ToString("X2"));
+            return byteArray.Aggregate("", (current, b) => current + b.ToString("x2"));
         }
 
         public static string ToFormatedHexString(this byte[] byteArray)
         {
-            return byteArray.Aggregate("", (current, b) => current + " " + b.ToString("X2"));
+            return byteArray.Aggregate("", (current, b) => current + " " + b.ToString("x2"));
+        }
+
+        /// <summary>
+        /// Returns a copy of the given byte array in reverse order.
+        /// </summary>
+        public static byte[] ReverseBytes(this byte[] bytes)
+        {
+            // We could use the XOR trick here but it's easier to understand if we don't. If we find this is really a
+            // performance issue the matter can be revisited.
+            var buf = new byte[bytes.Length];
+            for (var i = 0; i < bytes.Length; i++)
+                buf[i] = bytes[bytes.Length - 1 - i];
+            return buf;
+        }
+
+        /// <summary>
+        /// See <see cref="DoubleDigest(byte[], int, int)"/>.
+        /// </summary>
+        public static byte[] DoubleDigest(this byte[] input)
+        {
+            return DoubleDigest(input, 0, input.Length);
+        }
+
+        /// <summary>
+        /// Calculates the SHA-256 hash of the given byte range, and then hashes the resulting hash again. This is
+        /// standard procedure in BitCoin. The resulting hash is in big endian form.
+        /// </summary>
+        public static byte[] DoubleDigest(this byte[] input, int offset, int length)
+        {
+            var algorithm = new SHA256Managed();
+            var first = algorithm.ComputeHash(input, offset, length);
+            return algorithm.ComputeHash(first);
+        }
+
+        /// <summary>
+        /// Calculates SHA256(SHA256(byte range 1 + byte range 2)).
+        /// </summary>
+        public static byte[] DoubleDigestTwoBuffers(this byte[] input1, int offset1, int length1, byte[] input2, int offset2, int length2)
+        {
+            var algorithm = new SHA256Managed();
+            var buffer = new byte[length1 + length2];
+            Array.Copy(input1, offset1, buffer, 0, length1);
+            Array.Copy(input2, offset2, buffer, length1, length2);
+            var first = algorithm.ComputeHash(buffer, 0, buffer.Length);
+            return algorithm.ComputeHash(first);
         }
 
         public static byte[] ToByteArray(this string str)
