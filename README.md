@@ -31,7 +31,7 @@ Coinium is an effort to bring crypto-coins to C# space and create a reference po
 
 ![Screenshot](http://i.imgur.com/Pql7h0y.png)
 
-## Donation
+### Donation
 
 You can contribute the development of the project by donating; 
 
@@ -44,6 +44,13 @@ You can contribute the development of the project by donating;
 * [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
 * [Developers Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developers)
 * [Building with Mono](https://github.com/CoiniumServ/CoiniumServ/wiki/Building-with-Mono)
+ 
+### Continious Integration
+
+Every build of CoiniumServ is built & tested over mono & dotnet.
+* Mono: using mono 2.x and 3.x: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
+* Dotnet: using dotnet 4.x: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
+
 
 ### License
 Check the [License](https://github.com/CoiniumServ/CoiniumServ/blob/develop/LICENSE) file.
