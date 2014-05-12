@@ -16,15 +16,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// code orignally from: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
 using System;
 using System.Collections.Generic;
-
-// code orignally from: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
 using Coinium.Common.Extensions;
-using Coinium.Core.Coin;
 using Coinium.Core.Mining.Wallet.Responses;
 
-namespace Coinium.Core.Mining.Merkle
+namespace Coinium.Core.Crypto
 {
     /// <summary>
     /// Merkle tree builder.
