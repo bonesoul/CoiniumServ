@@ -1,0 +1,6 @@
+box: floydpink/mono@0.0.3
+build:
+  steps:
+  - script:
+        name: Build code
+        code: xbuild build/CoiniumServ.sln
