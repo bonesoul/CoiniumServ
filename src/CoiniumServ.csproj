@@ -100,6 +100,7 @@
     <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Mining\Events\MinerAuthenticationEventArgs.cs" />
     <Compile Include="Core\Mining\JobCounter.cs" />
+    <Compile Include="Core\Mining\Wallet\Responses\BlockTemplateTransaction.cs" />
     <Compile Include="Core\Server\Vanilla\VanillaMiner.cs" />
     <Compile Include="Core\Mining\MinerManager.cs" />
     <Compile Include="Core\Mining\Pools\PoolConfig.cs" />
@@ -183,9 +184,6 @@
       <Project>{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}</Project>
       <Name>AustinHarris.JsonRpc</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Coinium.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
