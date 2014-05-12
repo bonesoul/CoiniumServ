@@ -99,8 +99,7 @@ namespace Coinium.Core.Mining.Wallet
             webRequest.Method = "POST";
             webRequest.Timeout = 5000; // 5 seconds
 
-            Console.WriteLine(System.Text.Encoding.UTF8.GetString(walletRequest.GetBytes()));
-            Log.Verbose("WalletClient: {0}", System.Text.Encoding.UTF8.GetString(walletRequest.GetBytes()));
+            Log.Verbose("WalletClient TX: {0}", System.Text.Encoding.UTF8.GetString(walletRequest.GetBytes()));
 
             byte[] byteArray = walletRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;
@@ -130,6 +129,8 @@ namespace Coinium.Core.Mining.Wallet
         private WalletResponse<T> GetRpcResponse<T>(HttpWebRequest httpWebRequest)
         {
             string json = GetJsonResponse(httpWebRequest);
+
+            Log.Verbose("WalletClient RX: {0}", json);
 
             try
             {
