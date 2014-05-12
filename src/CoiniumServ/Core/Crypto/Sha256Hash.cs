@@ -16,18 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// originally from: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Sha256Hash.cs
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-
-// originally from: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Sha256Hash.cs
 using Coinium.Common.Extensions;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Utilities.Encoders;
 
-namespace Coinium.Core.Coin
+namespace Coinium.Core.Crypto
 {
     /// <summary>
     /// A Sha256Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a

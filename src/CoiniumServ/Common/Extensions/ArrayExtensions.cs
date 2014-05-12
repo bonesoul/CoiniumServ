@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Coinium.Common.Extensions
 {
@@ -105,19 +104,6 @@ namespace Coinium.Common.Extensions
         {
             var algorithm = new SHA256Managed();
             var first = algorithm.ComputeHash(input, offset, length);
-            return algorithm.ComputeHash(first);
-        }
-
-        /// <summary>
-        /// Calculates SHA256(SHA256(byte range 1 + byte range 2)).
-        /// </summary>
-        public static byte[] DoubleDigestTwoBuffers(this byte[] input1, int offset1, int length1, byte[] input2, int offset2, int length2)
-        {
-            var algorithm = new SHA256Managed();
-            var buffer = new byte[length1 + length2];
-            Array.Copy(input1, offset1, buffer, 0, length1);
-            Array.Copy(input2, offset2, buffer, length1, length2);
-            var first = algorithm.ComputeHash(buffer, 0, buffer.Length);
             return algorithm.ComputeHash(first);
         }
 

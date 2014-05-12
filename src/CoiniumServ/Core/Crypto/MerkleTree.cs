@@ -16,15 +16,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// code orignally from: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
+
 using System;
 using System.Collections.Generic;
-
-// code orignally from: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
 using Coinium.Common.Extensions;
-using Coinium.Core.Coin;
-using Coinium.Core.Mining.Wallet.Responses;
 
-namespace Coinium.Core.Mining.Merkle
+namespace Coinium.Core.Crypto
 {
     /// <summary>
     /// Merkle tree builder.
@@ -36,18 +34,27 @@ namespace Coinium.Core.Mining.Merkle
         /// </summary>
         /// <param name="transactions"></param>
         /// <returns></returns>
-        public static Sha256Hash CalculateRoot(BlockTemplateTransaction[] transactions)
+        public static Sha256Hash CalculateRoot(List<byte[]> transactions)
         {
             var tree = Build(transactions);
             return new Sha256Hash(tree[tree.Count - 1]);
         }
 
+        public static Sha256Hash GetRoot(IList<byte[]> merkleTree)
+        {
+            if(merkleTree.Count == 0)
+                throw new ArgumentOutOfRangeException();
+
+            return new Sha256Hash(merkleTree[merkleTree.Count - 1]);
+        }
+
         /// <summary>
         /// Builds merkle tree.
         /// </summary>
-        /// <param name="transactions"></param>
+        /// <remarks>To get a better understanding of merkle trees check: http://www.youtube.com/watch?v=gUwXCt1qkBU#t=09m09s </remarks>
+        /// <param name="hashList"></param>
         /// <returns></returns>
-        public static IList<byte[]> Build(BlockTemplateTransaction[] transactions)
+        public static IList<byte[]> Build(List<byte[]> hashList)
         {
             // The Merkle root is based on a tree of hashes calculated from the transactions:
             //
@@ -83,27 +90,26 @@ namespace Coinium.Core.Mining.Merkle
             var tree = new List<byte[]>();
 
             // Start by adding all the hashes of the transactions as leaves of the tree.
-            foreach (var t in transactions)
+            foreach (var item in hashList)
             {
-                var hash = new Sha256Hash(t.Data.ToByteArray().DoubleDigest().ReverseBytes());                                       
+                var hash = new Sha256Hash(item.DoubleDigest().ReverseBytes());                                       
                 tree.Add(hash.Bytes);
             }
 
             var levelOffset = 0; // Offset in the list where the currently processed level starts.
 
             // Step through each level, stopping when we reach the root (levelSize == 1).
-            for (var levelSize = transactions.Length; levelSize > 1; levelSize = (levelSize + 1) / 2)
+            for (var levelSize = hashList.Count; levelSize > 1; levelSize = (levelSize + 1) / 2)
             {
                 // For each pair of nodes on that level:
                 for (var left = 0; left < levelSize; left += 2)
                 {   
-                    // The right hand node can be the same as the left hand, in the case where we don't have enough
-                    // transactions.
+                    // The right hand node can be the same as the left hand, in the case where we don't have enough transactions.
                     var right = Math.Min(left + 1, levelSize - 1);
                     var leftBytes = tree[levelOffset + left].ReverseBytes();
                     var rightBytes = tree[levelOffset + right].ReverseBytes();
 
-                    tree.Add(leftBytes.DoubleDigestTwoBuffers(0, 32, rightBytes, 0, 32).ReverseBytes());
+                    tree.Add(Utils.DoubleDigestTwoBuffers(leftBytes, 0, 32, rightBytes, 0, 32).ReverseBytes());
                 }
                 // Move to the next level.
                 levelOffset += levelSize;
