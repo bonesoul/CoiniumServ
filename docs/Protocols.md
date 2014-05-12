@@ -1,7 +1,5 @@
 # Mining Protocols
 * https://en.bitcoin.it/wiki/Poolservers
-* https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
-* https://github.com/bitcoin/bips/blob/master/bip-0023.mediawiki
 
 ## Getwork
 * https://en.bitcoin.it/wiki/Getwork
@@ -10,7 +8,9 @@
 
 ## GetBlockTemplate
 * https://en.bitcoin.it/wiki/Getblocktemplate
-
+* https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
+* https://github.com/bitcoin/bips/blob/master/bip-0023.mediawiki
+* 
 ## Stratum
 * Slush's stratum doc: http://mining.bitcoin.cz/stratum-mining
 * Stratum summary: https://www.btcguild.com/new_protocol.php
