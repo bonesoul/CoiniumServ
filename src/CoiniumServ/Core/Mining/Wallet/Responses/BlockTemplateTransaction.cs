@@ -16,8 +16,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Coin;
-
 namespace Coinium.Core.Mining.Wallet.Responses
 {
     /// <summary>

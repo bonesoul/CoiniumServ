@@ -19,7 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Coinium.Core.Mining.Merkle;
+using Coinium.Core.Coin;
+using Coinium.Core.Crypto;
 using Coinium.Core.Mining.Wallet;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Sockets;
@@ -78,7 +79,7 @@ namespace Coinium.Core.Mining
 
             // need to build a coinbase transaction right here and include it in the root calculation!.
 
-            var merkleRoot = MerkleTree.CalculateRoot(blockTemplate.Transactions);
+            Mining.CalculateMerkleTree(blockTemplate);
 
             var jobNotification = new JobNotification(blockTemplate)
             {
