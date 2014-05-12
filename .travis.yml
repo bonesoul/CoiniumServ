@@ -4,15 +4,14 @@ env:
  global:
   - EnableNuGetPackageRestore=true 
  matrix:
-  - MONO_VER="2.10.12" Package="dmg" VolumeCmd="hdid 'MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.dmg'" InstallCMD="sudo installer -pkg '/Volumes/Mono Framework MDK ${MONO_VER}/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg' -target /"
-  - MONO_VER="3.0.12" Package="dmg" VolumeCmd="hdid 'MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.dmg'" InstallCMD="sudo installer -pkg '/Volumes/Mono Framework MDK ${MONO_VER}/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg' -target /"
+  - MONO_VER="2.10.12" Package="dmg"
+  - MONO_VER="3.0.12" Package="dmg"
   - MONO_VER="3.2.7" Package="pkg"
   - MONO_VER="3.4.0" Package="pkg"
   
 before_install:
  - wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.${Package}"
- - ${VolumeCmd}
- - ${InstallCMD}
+ - ./build/travis-build.sh
  - mozroots --import --sync
  
 script:
