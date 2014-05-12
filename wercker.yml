@@ -1,6 +1,8 @@
 box: floydpink/mono@0.0.3
 build:
   steps:
+  - wercker-labs/nuget:
+        packages-configs: src/CoiniumServ/packages.config src/Tests/packages.config  deps/json-rpc.net/Json-Rpc/packages.config
   - script:
         name: Build code
         code: xbuild build/CoiniumServ.sln
