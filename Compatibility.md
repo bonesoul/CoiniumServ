@@ -13,8 +13,8 @@ CoiniumServ can run on dotnet framework 4.0+.
 
 CoiniumServ can run on mono 2.x or 3.x series.
 
-* List of available mono packages; http://download.mono-project.com/archive/
-* List of ubuntu mono packages; http://packages.ubuntu.com/search?suite=default&section=all&arch=any&keywords=mono-complete&searchon=names
+* List of available [mono packages](http://download.mono-project.com/archive/).
+* List of ubuntu [mono packages](http://packages.ubuntu.com/search?suite=default&section=all&arch=any&keywords=mono-complete&searchon=names).
 
 ### Mono versions
 For a list of mono versions descriptions see [here](http://en.wikipedia.org/wiki/Mono_(software)). Here's a quick summary;
