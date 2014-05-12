@@ -10,8 +10,8 @@ env:
   - MONO_VER="3.4.0" Package="pkg"
   
 before_install:
- - wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.{$Package}"
- - {$Cmd}
+ - wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.${Package}"
+ - ${Cmd}
  - mozroots --import --sync
  
 script:
