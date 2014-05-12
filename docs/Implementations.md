@@ -5,3 +5,4 @@
 * https://github.com/jkoberg/FCoin
 * https://github.com/mb300sd/Bitcoin-Tool
 * https://github.com/GeorgeKimionis/BitcoinLib
+* https://github.com/bypassfuture/poolserverj
