@@ -42,7 +42,9 @@ namespace Coinium.Core.Crypto
         /// </summary>
         public Sha256Hash(byte[] bytes)
         {
-            Debug.Assert(bytes.Length == 32);
+            if(bytes.Length != 32)
+                throw new ArgumentOutOfRangeException();
+
             _bytes = bytes;
         }
 

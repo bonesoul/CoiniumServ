@@ -25,6 +25,7 @@ namespace Coinium.Core.Crypto
     /// <summary>
     /// Merkle tree builder.
     /// <remarks>
+    /// Specification: https://en.bitcoin.it/wiki/Protocol_specification#Merkle_Trees
     /// To get a better understanding of merkle trees check: http://www.youtube.com/watch?v=gUwXCt1qkBU#t=09m09s 
     /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-286819-for-python
     /// Original implementation: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330

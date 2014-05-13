@@ -20,59 +20,174 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
+using Coinium.Common.Extensions;
+using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Crypto;
 
 namespace Coinium.Core.Coin
 {
+    /// <summary>
+    /// A generation transaction.
+    /// It has exactly one txin.
+    /// <remarks>
+    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
+    /// More info:  http://bitcoin.stackexchange.com/questions/20721/what-is-the-format-of-coinbase-transaction
+    ///             http://bitcoin.stackexchange.com/questions/21557/how-to-fully-decode-a-coinbase-transaction
+    ///             http://bitcoin.stackexchange.com/questions/4990/what-is-the-format-of-coinbase-input-scripts
+    /// 
+    /// Txin's prevout hash is always 0000000000000000000000000000000000000000000000000000000000000000.
+    /// Txin's prevout index is 0xFFFFFFFF.
+    /// </remarks>
+    /// </summary>
     public class GenerationTransaction
     {
         /// <summary>
         /// Transaction data format version
         /// </summary>
-        public UInt32 txVersion { get; private set; }
+        public UInt32 Version { get; private set; }
 
         /// <summary>
         /// Number of Transaction inputs
         /// </summary>
-        public UInt32 txInputsCount { get; private set; }
+        public UInt32 InputsCount
+        {
+            get { return (UInt32)this.Inputs.Count; } 
+        }
+
+        /// <summary>
+        /// A list of 1 or more transaction inputs or sources for coins
+        /// </summary>
+        public List<TxIn> Inputs { get; private set; } 
 
         // Number of Transaction outputs
-        public UInt32 txOutputsCount { get; private set; }
+        public UInt32 OutputsCount
+        {
+            get { return (UInt32)this.Inputs.Count; }
+        }
 
         /// <summary>
-        /// The hash of the referenced transaction - as we creating a generation transaction - none.
+        /// A list of 1 or more transaction outputs or destinations for coins
         /// </summary>
-        public Sha256Hash txInPrevOutHash { get; private set; }
-
-        /// <summary>
-        /// The index of the specific output in the transaction. The first output is 0, etc.
-        /// </summary>
-        public UInt32 txInPrevOutIndex { get; private set; }
+        public List<TxOut> Outputs;
 
         /// <summary>
         ///  For coins that support/require transaction comments
         /// </summary>
-        public string txMessage { get; private set; }
+        public string Message { get; private set; }
 
         /// <summary>
         /// The block number or timestamp at which this transaction is locked:
-        /// 0 	Always locked
-        /// < 500000000 	Block number at which this transaction is locked
-        /// >= 500000000 	UNIX timestamp at which this transaction is locked
+        ///     0 	Always locked
+        ///  <  500000000 	Block number at which this transaction is locked
+        ///  >= 500000000 	UNIX timestamp at which this transaction is locked
         /// </summary>
-        public UInt32 txLockTime { get; private set; }
+        public UInt32 LockTime { get; private set; }
 
-
-        public GenerationTransaction(bool supportTxMessages = false)
+        /// <summary>
+        /// Creates a new instance of generation transaction.
+        /// </summary>
+        /// <param name="blockTemplate"></param>
+        /// <param name="supportTxMessages"></param>
+        public GenerationTransaction(BlockTemplate blockTemplate, bool supportTxMessages = false)
         {
-            this.txInputsCount = 1;
-            this.txOutputsCount = 1;
-            this.txVersion = (UInt32)(supportTxMessages ? 2 : 1);
-            this.txInPrevOutHash = new Sha256Hash(new byte[] {0x0});
-            this.txInPrevOutIndex = ((UInt32) Math.Pow(2, 32) - 1);
+            this.Version = (UInt32)(supportTxMessages ? 2 : 1);
+            this.LockTime = 0;
+            // this.Message = "https://github.com/CoiniumServ/CoiniumServ"; // TODO: need to serialize string.            
 
-            this.txMessage = "https://github.com/CoiniumServ/CoiniumServ";
+            var input = new TxIn();
+            input.PreviousOutput = new OutPoint();
+            input.PreviousOutput.Hash = Sha256Hash.ZeroHash;
+            input.PreviousOutput.Index = (UInt32) Math.Pow(2, 32) - 1;
+            input.Sequence = 0x0;
+
+            input.SignatureScriptPart1 = new byte[0];
+
+            var serializedBlockHeight = CoinbaseUtils.SerializeNumber(blockTemplate.Height);
+
+            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedBlockHeight).ToArray();
+
+            this.Inputs = new List<TxIn>();
+            this.Inputs.Add(input);
+
+
+
         }
+    }
+
+    /// <summary>
+    /// Inputs for transaction.
+    /// <remarks>
+    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
+    /// </remarks>
+    /// </summary>
+    public class TxIn
+    {
+        /// <summary>
+        /// The previous output transaction reference, as an OutPoint structure
+        /// </summary>
+        public OutPoint PreviousOutput { get; set; }
+
+        /// <summary>
+        /// The length of the signature script
+        /// </summary>
+        public int SignatureScriptLenght { get; set; }
+
+        /// <summary>
+        /// Computational Script for confirming transaction authorization - part 1
+        /// </summary>
+        public byte[] SignatureScriptPart1 { get; set; }
+
+        /// <summary>
+        /// Computational Script for confirming transaction authorization - part 2
+        /// </summary>
+        public byte[] SignatureScriptPart2 { get; set; }
+
+        /// <summary>
+        /// Transaction version as defined by the sender. Intended for "replacement" of transactions when information is updated before inclusion into a block.
+        /// </summary>
+        public UInt32 Sequence { get; set; }
+    }
+
+    /// <summary>
+    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
+    /// </summary>
+    public class OutPoint
+    {
+        /// <summary>
+        /// The hash of the referenced transaction - as we creating a generation transaction - none.
+        /// </summary>
+        public Sha256Hash Hash { get; set; }
+
+        /// <summary>
+        /// The index of the specific output in the transaction. The first output is 0, etc.
+        /// </summary>
+        public UInt32 Index { get; set; }
+    }
+
+    /// <summary>
+    /// Outpus for transaction.
+    /// <remarks>
+    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
+    /// </remarks>
+    /// </summary>
+    public class TxOut
+    {
+        /// <summary>
+        /// Transaction Value
+        /// </summary>
+        public UInt64 Value { get; set; }
+
+        /// <summary>
+        /// Length of the pk_script
+        /// </summary>
+        public int PublicKeyScriptLenght { get; set; }
+
+        /// <summary>
+        /// Usually contains the public key as a Bitcoin script setting up conditions to claim this output.
+        /// </summary>
+        public string PublicKeyScript { get; set; }
+
     }
 }

@@ -22,8 +22,10 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
+using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
+using Coinium.Core.Mining;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
@@ -53,22 +55,32 @@ namespace Coinium
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
-            // start wallet manager.
-            DaemonManager.Instance.Run();
+            try
+            {
 
-            // start pool manager.
-            PoolManager.Instance.Run();
+                // start wallet manager.
+                DaemonManager.Instance.Run();
 
-            // stratum server.
-            var stratumServer = new StratumServer("0.0.0.0", 3333);
-            stratumServer.Start();
+                // start pool manager.
+                PoolManager.Instance.Run();
 
-            // getwork server.
-            //var getworkServer = new VanillaServer(8332);
-            //getworkServer.Start();
+                // stratum server.
+                var stratumServer = new StratumServer("0.0.0.0", 3333);
+                stratumServer.Start();
 
-            // Start the server manager.
-            ServerManager.Instance.Start();
+                var instance = MiningManager.Instance;
+
+                // getwork server.
+                //var getworkServer = new VanillaServer(8332);
+                //getworkServer.Start();
+
+                // Start the server manager.
+                ServerManager.Instance.Start();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Exception");
+            }
 
             while (true) // idle loop & command parser
             {

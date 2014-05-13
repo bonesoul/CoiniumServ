@@ -41,7 +41,7 @@ namespace Coinium.Core.Server.Vanilla
 
         private void ProcessHttpRequest(HttpListenerContext context)
         {
-            var miner = MinerManager.Instance.Create<VanillaMiner>();
+            var miner = MiningManager.Instance.Create<VanillaMiner>();
             miner.Parse(context);
         }
     }

@@ -82,7 +82,7 @@ namespace Coinium.Core.Server.Stratum
         {
             Log.Verbose("Stratum client connected: {0}", e.Connection.ToString());
 
-            var miner = MinerManager.Instance.Create<StratumMiner>(e.Connection);
+            var miner = MiningManager.Instance.Create<StratumMiner>(e.Connection);
             e.Connection.Client = miner;
         }
 

@@ -31,7 +31,7 @@ namespace Coinium.Core.Mining
     /// <summary>
     /// Miner manager that manages all connected miners over different ports.
     /// </summary>
-    public class MinerManager
+    public class MiningManager
     {
         private int _counter; // counter for assigining unique id's to miners.
 
@@ -39,9 +39,10 @@ namespace Coinium.Core.Mining
 
         private Timer _timer;
 
-        public MinerManager()
+        public MiningManager()
         {
-            this._timer = new Timer(BroadcastMiningJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
+            //this._timer = new Timer(BroadcastMiningJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 60)); // setup a timer to broadcast jobs.
+            this.BroadcastMiningJobs(null);
 
             Log.Verbose("MinerManager() init..");
         }
@@ -79,7 +80,9 @@ namespace Coinium.Core.Mining
 
             // need to build a coinbase transaction right here and include it in the root calculation!.
 
-            Mining.CalculateMerkleTree(blockTemplate);
+            //Mining.CalculateMerkleTree(blockTemplate);
+
+            var generationTransaction = new GenerationTransaction(blockTemplate, false);
 
             var jobNotification = new JobNotification(blockTemplate)
             {
@@ -96,11 +99,11 @@ namespace Coinium.Core.Mining
         }
 
 
-        private static readonly MinerManager _instance = new MinerManager(); // memory instance of the MinerManager.
+        private static readonly MiningManager _instance = new MiningManager(); // memory instance of the MinerManager.
 
         /// <summary>
         /// Singleton instance of WalletManager.
         /// </summary>
-        public static MinerManager Instance { get { return _instance; } }
+        public static MiningManager Instance { get { return _instance; } }
     }
 }
