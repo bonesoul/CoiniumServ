@@ -16,33 +16,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
-using System.Net;
-using Coinium.Core.Mining;
-using Coinium.Net.Server.Http;
-using Serilog;
+using Newtonsoft.Json;
 
-namespace Coinium.Core.Server.Vanilla
+namespace Coinium.Core.Coin.Daemon.Requests
 {
-    public class VanillaServer : HttpServer
+    public class SignRawTransactionInput
     {
-        private static object[] _services =
-        {
-            new VanillaService()
-        };
+        [JsonProperty("txid")]
+        public string TransactionId { get; set; }
 
-        public VanillaServer(int port)
-            : base(port)
-        {
-            Log.Verbose("Classic server listening on port {0}.", this.Port);
-            this.ProcessRequest += ProcessHttpRequest;
-        }
+        [JsonProperty("vout")]
+        public int Output { get; set; }
 
-        private void ProcessHttpRequest(HttpListenerContext context)
-        {
-            var miner = MinerManager.Instance.Create<VanillaMiner>();
-            miner.Parse(context);
-        }
+        [JsonProperty("scriptPubKey")]
+        public string ScriptPubKey { get; set; }
     }
 }

@@ -18,8 +18,8 @@
 
 using System.Linq;
 using Coinium.Common.Extensions;
+using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Crypto;
-using Coinium.Core.Mining.Wallet.Responses;
 
 namespace Coinium.Core.Mining
 {

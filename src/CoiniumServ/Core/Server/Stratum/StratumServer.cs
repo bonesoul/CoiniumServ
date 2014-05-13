@@ -19,9 +19,8 @@
 // stratum server uses json-rpc 2.0 (over raw sockets) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 // classic server handles getwork & getblocktemplate miners over http.
 
-using System.Diagnostics;
 using Coinium.Core.Mining;
-using Coinium.Net.Sockets;
+using Coinium.Net.Server.Sockets;
 using Serilog;
 
 namespace Coinium.Core.Server.Stratum

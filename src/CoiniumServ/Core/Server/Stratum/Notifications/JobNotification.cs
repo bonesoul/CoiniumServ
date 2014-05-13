@@ -18,8 +18,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Mining;
-using Coinium.Core.Mining.Wallet.Responses;
 using Newtonsoft.Json;
 
 namespace Coinium.Core.Server.Stratum.Notifications

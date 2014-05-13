@@ -16,33 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
+/* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
-using System.Net;
-using Coinium.Core.Mining;
-using Coinium.Net.Server.Http;
-using Serilog;
+using System.Collections.Generic;
 
-namespace Coinium.Core.Server.Vanilla
+namespace Coinium.Core.Coin.Daemon.Requests
 {
-    public class VanillaServer : HttpServer
+    public class CreateRawTransaction
     {
-        private static object[] _services =
-        {
-            new VanillaService()
-        };
+        public List<CreateRawTransactionInput> Inputs { get; set; }
 
-        public VanillaServer(int port)
-            : base(port)
+        /// <summary>
+        /// A dictionary with the output address and amount per addres.
+        /// </summary>
+        public Dictionary<string, decimal> Outputs { get; set; }
+
+        public CreateRawTransaction()
         {
-            Log.Verbose("Classic server listening on port {0}.", this.Port);
-            this.ProcessRequest += ProcessHttpRequest;
+            Inputs = new List<CreateRawTransactionInput>();
+            Outputs = new Dictionary<string, decimal>();
         }
 
-        private void ProcessHttpRequest(HttpListenerContext context)
+        public void AddInput(string transactionId, int output)
         {
-            var miner = MinerManager.Instance.Create<VanillaMiner>();
-            miner.Parse(context);
+            Inputs.Add(new CreateRawTransactionInput { TransactionId = transactionId, Output = output });
+        }
+
+        public void AddOutput(string address, decimal amount)
+        {
+            Outputs.Add(address, amount);
         }
     }
 }

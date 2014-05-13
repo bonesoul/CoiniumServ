@@ -24,8 +24,8 @@ using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
 using Coinium.Core.Mining.Events;
+using Coinium.Core.RPC.Http;
 using Coinium.Core.Server.Stratum.Notifications;
-using Coinium.Net.RPC.Http;
 using Serilog;
 
 namespace Coinium.Core.Server.Vanilla

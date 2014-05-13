@@ -22,9 +22,9 @@ using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
 using Coinium.Core.Mining.Events;
+using Coinium.Core.RPC.Sockets;
 using Coinium.Core.Server.Stratum.Notifications;
-using Coinium.Net.RPC.Sockets;
-using Coinium.Net.Sockets;
+using Coinium.Net.Server.Sockets;
 using Newtonsoft.Json;
 using Serilog;
 
