@@ -22,8 +22,10 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
+using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
+using Coinium.Core.Mining;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
@@ -63,6 +65,8 @@ namespace Coinium
             var stratumServer = new StratumServer("0.0.0.0", 3333);
             stratumServer.Start();
 
+            var instance = MiningManager.Instance;
+
             // getwork server.
             //var getworkServer = new VanillaServer(8332);
             //getworkServer.Start();
@@ -83,7 +87,7 @@ namespace Coinium
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.ColoredConsole()
-                .WriteTo.RollingFile("Debug.log")
+                .WriteTo.RollingFile(@"logs\Debug.log")
                 .MinimumLevel.Verbose()
                 .CreateLogger();
         }

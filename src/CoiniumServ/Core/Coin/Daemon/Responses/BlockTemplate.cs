@@ -68,9 +68,9 @@ namespace Coinium.Core.Coin.Daemon.Responses
         public int Version { get; set; }
 
         /// <summary>
-        /// data that SHOULD be included in the coinbase's scriptSig content. Only the values (hexadecimal byte-for-byte) in this Object should be included, not the keys. This does not include the block height, which is required to be included in the scriptSig by BIP 0034. It is advisable to encode values inside "PUSH" opcodes, so as to not inadvertantly expend SIGOPs (which are counted toward limits, despite not being executed).
+        /// <see cref="CoinBaseAux"/>
         /// </summary>
-        public object CoinBaseAux { get; set; }
+        public CoinBaseAux CoinBaseAux { get; set; }
 
         /// <summary>
         /// information for coinbase transaction
@@ -86,5 +86,15 @@ namespace Coinium.Core.Coin.Daemon.Responses
         /// if provided, this value must be returned with results (see Block Submission)
         /// </summary>
         public int WorkId { get; set; }
+    }
+
+    /// <summary>
+    /// data that SHOULD be included in the coinbase's scriptSig content. Only the values (hexadecimal byte-for-byte) in this Object should be included, not the keys. 
+    /// This does not include the block height, which is required to be included in the scriptSig by BIP 0034. It is advisable to encode values inside "PUSH" opcodes, 
+    /// so as to not inadvertantly expend SIGOPs (which are counted toward limits, despite not being executed).
+    /// </summary>
+    public class CoinBaseAux
+    {
+        public string Flags { get; set; }
     }
 }

@@ -158,10 +158,10 @@ namespace Coinium.Net.Server.Sockets
                 Listener.BeginAccept(AcceptCallback, null); // Continue receiving other incoming connection asynchronously.
             }
             catch (NullReferenceException) { } // we recive this after issuing server-shutdown, just ignore it.
-            catch (Exception exception)
-            {
-                Log.Error("Can not accept connection: {0}", exception);
-            }
+            //catch (Exception exception)
+            //{
+            //    Log.Error("Can not accept connection: {0}", exception);
+            //}
         }
 
         #endregion
