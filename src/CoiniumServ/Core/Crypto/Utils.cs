@@ -24,6 +24,25 @@ namespace Coinium.Core.Crypto
     public static class Utils
     {
         /// <summary>
+        /// See <see cref="DoubleDigest(byte[], int, int)"/>.
+        /// </summary>
+        public static byte[] DoubleDigest(this byte[] input)
+        {
+            return DoubleDigest(input, 0, input.Length);
+        }
+
+        /// <summary>
+        /// Calculates the SHA-256 hash of the given byte range, and then hashes the resulting hash again. This is
+        /// standard procedure in BitCoin. The resulting hash is in big endian form.
+        /// </summary>
+        public static byte[] DoubleDigest(this byte[] input, int offset, int length)
+        {
+            var algorithm = new SHA256Managed();
+            var first = algorithm.ComputeHash(input, offset, length);
+            return algorithm.ComputeHash(first);
+        }
+
+        /// <summary>
         /// Calculates SHA256(SHA256(byte range 1 + byte range 2)).
         /// </summary>
         public static byte[] DoubleDigestTwoBuffers(byte[] input1, int offset1, int length1, byte[] input2, int offset2, int length2)

@@ -88,25 +88,6 @@ namespace Coinium.Common.Extensions
             return buf;
         }
 
-        /// <summary>
-        /// See <see cref="DoubleDigest(byte[], int, int)"/>.
-        /// </summary>
-        public static byte[] DoubleDigest(this byte[] input)
-        {
-            return DoubleDigest(input, 0, input.Length);
-        }
-
-        /// <summary>
-        /// Calculates the SHA-256 hash of the given byte range, and then hashes the resulting hash again. This is
-        /// standard procedure in BitCoin. The resulting hash is in big endian form.
-        /// </summary>
-        public static byte[] DoubleDigest(this byte[] input, int offset, int length)
-        {
-            var algorithm = new SHA256Managed();
-            var first = algorithm.ComputeHash(input, offset, length);
-            return algorithm.ComputeHash(first);
-        }
-
         public static byte[] ToByteArray(this string str)
         {
             str = str.Replace(" ", String.Empty);
@@ -116,6 +97,28 @@ namespace Coinium.Common.Extensions
             {
                 string temp = String.Concat(str[i * 2], str[i * 2 + 1]);
                 res[i] = Convert.ToByte(temp, 16);
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// Get the array slice between the two indexes.
+        /// ... Inclusive for start index, exclusive for end index.
+        /// </summary>
+        public static T[] Slice<T>(this T[] source, int start, int end)
+        {
+            // Handles negative ends.
+            if (end < 0)
+            {
+                end = source.Length + end;
+            }
+            int len = end - start;
+
+            // Return new array.
+            T[] res = new T[len];
+            for (int i = 0; i < len; i++)
+            {
+                res[i] = source[i + start];
             }
             return res;
         }
