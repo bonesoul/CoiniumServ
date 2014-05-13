@@ -1,1 +1,0 @@
-slush's stratum doc: http://mining.bitcoin.cz/stratum-mining

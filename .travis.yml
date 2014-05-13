@@ -1,0 +1,24 @@
+language: objective-c
+
+env:
+ global:
+  - EnableNuGetPackageRestore=true 
+ matrix:
+  - MONO_VER="2.10.12" Package="dmg"
+  - MONO_VER="3.2.7" Package="pkg"
+  - MONO_VER="3.4.0" Package="pkg"
+  
+before_install:
+ - wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.${Package}"
+ - chmod +x ./build/extra/travis-build.sh
+ - ./build/extra/travis-build.sh
+
+script:
+ - xbuild build/CoiniumServ.sln
+
+notifications:
+  email: false
+  
+notifications:
+  irc: "chat.freenode.net#coinium-dev"
+  email: false
