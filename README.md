@@ -27,6 +27,10 @@ Coinium is an effort to bring crypto-coins to C# space and create a reference po
 * C# runtime (mono or dotnet)
 * Coin daemon
 
+### Building
+
+* Check [Building & Running](https://github.com/CoiniumServ/CoiniumServ/wiki/Building-&-Running).
+
 ### Screenshots
 
 ![Screenshot](http://i.imgur.com/Pql7h0y.png)
@@ -41,9 +45,8 @@ You can contribute the development of the project by donating;
 
 ### Developers
 
-* [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
-* [Developers Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developers)
-* [Building with Mono](https://github.com/CoiniumServ/CoiniumServ/wiki/Building-with-Mono)
+* [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
+
  
 ### Continious Integration
 
