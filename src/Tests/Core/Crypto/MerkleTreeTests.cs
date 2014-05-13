@@ -26,7 +26,8 @@ namespace Tests.Core.Crypto
     public class MerkleTreeTests
     {
         /// <summary>
-        /// Block with only a single (generation) transaction.
+        /// Tests bitcoin block 300384 with only a single (generation) transaction.
+        /// Block: http://blockexplorer.com/block/0000000000000000646aeda800ee605632799ead6257976b3805c66682b4d34e
         /// </summary>
         [Fact]
         public void TestBlockWithSingleTransaction()
@@ -43,7 +44,7 @@ namespace Tests.Core.Crypto
         }
 
         /// <summary>
-        /// Block with only a single (generation) transaction.
+        /// TEsts a block with 3 fake transactions.
         /// </summary>
         [Fact]
         public void TestBlockWithThreeTransactions()
@@ -65,7 +66,7 @@ namespace Tests.Core.Crypto
         /// Test bitcoin block 286819 merkle root against our merkle functions.
         /// Why this block? Because it's quite popular for so.
         /// Block:  http://blockexplorer.com/block/0000000000000000e067a478024addfecdc93628978aa52d91fabd4292982a50
-        /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-286819-for-python
+        /// Python implementation for the block: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-286819-for-python
         /// </summary>
         [Fact]
         public void TestBlockWithManyTransactions()

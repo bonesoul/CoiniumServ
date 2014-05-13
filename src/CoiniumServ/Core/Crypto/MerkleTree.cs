@@ -26,7 +26,10 @@ namespace Coinium.Core.Crypto
 {
     /// <summary>
     /// Merkle tree builder.
+    /// <remarks>
+    /// To get a better understanding of merkle trees check: http://www.youtube.com/watch?v=gUwXCt1qkBU#t=09m09s 
     /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-286819-for-python
+    /// </remarks>
     /// </summary>
     public static class MerkleTree
     {
@@ -52,7 +55,6 @@ namespace Coinium.Core.Crypto
         /// <summary>
         /// Builds merkle tree.
         /// </summary>
-        /// <remarks>To get a better understanding of merkle trees check: http://www.youtube.com/watch?v=gUwXCt1qkBU#t=09m09s </remarks>
         /// <param name="hashList"></param>
         /// <returns></returns>
         public static IList<byte[]> Build(List<byte[]> hashList)
