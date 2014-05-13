@@ -23,8 +23,10 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using Coinium.Common.Extensions;
+using Coinium.Common.Helpers.Time;
 using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Crypto;
+using Coinium.Core.Server.Stratum;
 
 namespace Coinium.Core.Coin
 {
@@ -88,6 +90,11 @@ namespace Coinium.Core.Coin
         /// <summary>
         /// Creates a new instance of generation transaction.
         /// </summary>
+        /// <remarks>
+        /// Reference implementations:
+        ///     https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
+        ///     https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
+        /// </remarks>
         /// <param name="blockTemplate"></param>
         /// <param name="supportTxMessages"></param>
         public GenerationTransaction(BlockTemplate blockTemplate, bool supportTxMessages = false)
@@ -102,11 +109,20 @@ namespace Coinium.Core.Coin
             input.PreviousOutput.Index = (UInt32) Math.Pow(2, 32) - 1;
             input.Sequence = 0x0;
 
-            input.SignatureScriptPart1 = new byte[0];
+            // cook input signature script.
+            // The txin's prevout script is an arbitrary byte array (it doesn't have to be a valid script, though this is commonly 
+            // done anyway) of 2 to 100 bytes. It has to start with a correct push of the block height (see BIP34).
+
+            input.SignatureScriptPart1 = new byte[0]; 
 
             var serializedBlockHeight = CoinbaseUtils.SerializeNumber(blockTemplate.Height);
+            var coinBaseAuxFlags = blockTemplate.CoinBaseAux.Flags.ToByteArray();
+            var serializedUnixTime = CoinbaseUtils.SerializeNumber(TimeHelpers.NowInUnixTime()/1000 | 0);
 
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedBlockHeight).ToArray();
+            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(coinBaseAuxFlags).ToArray();
+            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedUnixTime).ToArray();
+            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(new byte[StratumService.ExtraNoncePlaceholder.Length]).ToArray();
 
             this.Inputs = new List<TxIn>();
             this.Inputs.Add(input);
@@ -120,6 +136,7 @@ namespace Coinium.Core.Coin
     /// Inputs for transaction.
     /// <remarks>
     /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
+    /// Information: http://bitcoin.stackexchange.com/a/20725/8899
     /// </remarks>
     /// </summary>
     public class TxIn

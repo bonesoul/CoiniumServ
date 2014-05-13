@@ -55,32 +55,24 @@ namespace Coinium
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
-            try
-            {
+            // start wallet manager.
+            DaemonManager.Instance.Run();
 
-                // start wallet manager.
-                DaemonManager.Instance.Run();
+            // start pool manager.
+            PoolManager.Instance.Run();
 
-                // start pool manager.
-                PoolManager.Instance.Run();
+            // stratum server.
+            var stratumServer = new StratumServer("0.0.0.0", 3333);
+            stratumServer.Start();
 
-                // stratum server.
-                var stratumServer = new StratumServer("0.0.0.0", 3333);
-                stratumServer.Start();
+            var instance = MiningManager.Instance;
 
-                var instance = MiningManager.Instance;
+            // getwork server.
+            //var getworkServer = new VanillaServer(8332);
+            //getworkServer.Start();
 
-                // getwork server.
-                //var getworkServer = new VanillaServer(8332);
-                //getworkServer.Start();
-
-                // Start the server manager.
-                ServerManager.Instance.Start();
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Exception");
-            }
+            // Start the server manager.
+            ServerManager.Instance.Start();
 
             while (true) // idle loop & command parser
             {
@@ -95,7 +87,7 @@ namespace Coinium
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.ColoredConsole()
-                .WriteTo.RollingFile("Debug.log")
+                .WriteTo.RollingFile(@"logs\Debug.log")
                 .MinimumLevel.Verbose()
                 .CreateLogger();
         }

@@ -16,21 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System.Linq;
-using Coinium.Common.Extensions;
-using Coinium.Core.Coin.Daemon.Responses;
-using Coinium.Core.Crypto;
+using System;
 
-namespace Coinium.Core.Mining
+namespace Coinium.Common.Helpers.Time
 {
-    public static class Mining
+    public static class TimeHelpers
     {
-        public static void CalculateMerkleTree(BlockTemplate blockTemplate)
+        public static Int32 NowInUnixTime()
         {
-            var hashList = blockTemplate.Transactions.Select(transaction => transaction.Hash.ToByteArray()).ToList();
-
-            var merkleTree = new MerkleTree(hashList);
-            var root = merkleTree.Root;
+            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
     }
 }

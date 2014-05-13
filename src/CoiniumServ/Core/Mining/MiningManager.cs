@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Threading;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
 using Serilog;
