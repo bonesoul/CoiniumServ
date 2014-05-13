@@ -46,9 +46,13 @@ You can contribute the development of the project by donating;
 ### Developers
 
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
+ 
+#### BountySource
+
+BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
 
  
-### Continious Integration
+#### Continious Integration
 
 Every build of CoiniumServ is built & tested over mono & dotnet.
 * Mono: using mono 2.x and 3.x: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
