@@ -21,17 +21,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Coinium.Core.Coin;
 using Xunit;
 
-namespace Tests.Core.Mining.Merkle
+namespace Tests.Core.Coin
 {
-    public class MerkleTreeTests
+    public class CoinbaseUtilsTests
     {
         [Fact]
-        public void Test()
+        public void SerializeNumberTests()
         {
-            var test = true;
-            Assert.Equal(test, true);
+            // =< 16 test
+            var buffer = CoinbaseUtils.SerializeNumber(16);
+            var expected = new byte[] { 0x01, 0x10 };
+
+            // > 16 test
+            buffer = CoinbaseUtils.SerializeNumber(10000);
+            expected = new byte[] {0x02, 0x10, 0x27};
+            Assert.True(buffer.SequenceEqual(expected));
+
         }
     }
 }

@@ -97,6 +97,8 @@
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Core\Coin\Coinbase.cs" />
+    <Compile Include="Core\Coin\CoinbaseUtils.cs" />
+    <Compile Include="Core\Coin\GenerationTransaction.cs" />
     <Compile Include="Core\Crypto\Sha256Hash.cs" />
     <Compile Include="Core\Commands\CommandAttributes.cs" />
     <Compile Include="Core\Commands\CommandGroup.cs" />
@@ -188,6 +190,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\deps\gibbed.io\Gibbed.IO.csproj">
+      <Project>{047857ba-daa3-4ca7-afb8-a1b082b28c6a}</Project>
+      <Name>Gibbed.IO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\deps\json-rpc.net\Json-Rpc\AustinHarris.JsonRpc.csproj">
       <Project>{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}</Project>
       <Name>AustinHarris.JsonRpc</Name>

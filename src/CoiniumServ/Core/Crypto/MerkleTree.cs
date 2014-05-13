@@ -26,17 +26,18 @@ namespace Coinium.Core.Crypto
 {
     /// <summary>
     /// Merkle tree builder.
+    /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-286819-for-python
     /// </summary>
     public static class MerkleTree
     {
         /// <summary>
         /// Calculates merkle root.
         /// </summary>
-        /// <param name="transactions"></param>
+        /// <param name="hashes"></param>
         /// <returns></returns>
-        public static Sha256Hash CalculateRoot(List<byte[]> transactions)
+        public static Sha256Hash CalculateRoot(List<byte[]> hashes)
         {
-            var tree = Build(transactions);
+            var tree = Build(hashes);
             return new Sha256Hash(tree[tree.Count - 1]);
         }
 
