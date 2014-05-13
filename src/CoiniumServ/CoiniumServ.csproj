@@ -89,6 +89,7 @@
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Common\Extensions\StringExtensions.cs" />
+    <Compile Include="Common\Helpers\Arrays\ArrayHelpers.cs" />
     <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />

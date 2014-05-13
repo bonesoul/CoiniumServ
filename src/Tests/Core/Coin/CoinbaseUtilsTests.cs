@@ -16,11 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Coinium.Common.Helpers.Arrays;
 using Coinium.Core.Coin;
 using Xunit;
 
@@ -34,12 +30,12 @@ namespace Tests.Core.Coin
             // =< 16 test
             var buffer = CoinbaseUtils.SerializeNumber(16);
             var expected = new byte[] { 0x01, 0x10 };
-
+            ArrayHelpers.CompareByteArrays(buffer, expected);
+            
             // > 16 test
             buffer = CoinbaseUtils.SerializeNumber(10000);
             expected = new byte[] {0x02, 0x10, 0x27};
-            Assert.True(buffer.SequenceEqual(expected));
-
+            ArrayHelpers.CompareByteArrays(buffer, expected);
         }
     }
 }
