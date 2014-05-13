@@ -37,7 +37,7 @@ namespace Tests.Core.Crypto
                 "d43d6fbe5e46ee82847421c1609fe1203c0f3db0992ac98a06684b10676b8428".ToByteArray()
             };
 
-            var merkleRoot = MerkleTree.CalculateRoot(hashList);
+            var merkleRoot = new MerkleTree(hashList).Root;
             var expected = "d43d6fbe5e46ee82847421c1609fe1203c0f3db0992ac98a06684b10676b8428".ToByteArray();
 
             Assert.Equal(merkleRoot.Bytes, expected);
@@ -56,7 +56,7 @@ namespace Tests.Core.Crypto
                 "c13a822f47072f9b2236cea9c22ab7e5d92c0ac4fd2a63af2c4ed1f2e306efd5".ToByteArray(),
             };
 
-            var merkleRoot = MerkleTree.CalculateRoot(hashList);
+            var merkleRoot = new MerkleTree(hashList).Root;
             var expected = "a907cc5d1de726136e50b1899672db2728c47897902718fbcfd133ed11331a66".ToByteArray();
 
             Assert.Equal(merkleRoot.Bytes, expected);
@@ -174,7 +174,7 @@ namespace Tests.Core.Crypto
                 "27a0797cc5b042ba4c11e72a9555d13a67f00161550b32ede0511718b22dbc2c".ToByteArray()
             };
 
-            var merkleRoot = MerkleTree.CalculateRoot(hashList);
+            var merkleRoot = new MerkleTree(hashList).Root;
             var expected = "871714dcbae6c8193a2bb9b2a69fe1c0440399f38d94b3a0f1b447275a29978a".ToByteArray();
 
             Assert.Equal(merkleRoot.Bytes, expected);

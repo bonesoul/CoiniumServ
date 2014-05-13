@@ -29,8 +29,8 @@ namespace Coinium.Core.Mining
         {
             var hashList = blockTemplate.Transactions.Select(transaction => transaction.Hash.ToByteArray()).ToList();
 
-            var merkleTree = MerkleTree.Build(hashList);
-            var merkleRoot = MerkleTree.GetRoot(merkleTree);
+            var merkleTree = new MerkleTree(hashList);
+            var root = merkleTree.Root;
         }
     }
 }

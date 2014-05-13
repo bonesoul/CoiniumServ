@@ -16,8 +16,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// code orignally from: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
-
 using System;
 using System.Collections.Generic;
 using Coinium.Common.Extensions;
@@ -29,27 +27,32 @@ namespace Coinium.Core.Crypto
     /// <remarks>
     /// To get a better understanding of merkle trees check: http://www.youtube.com/watch?v=gUwXCt1qkBU#t=09m09s 
     /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-286819-for-python
+    /// Original implementation: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
     /// </remarks>
     /// </summary>
-    public static class MerkleTree
+    public class MerkleTree
     {
         /// <summary>
-        /// Calculates merkle root.
+        /// Leaves of the merkle tree.
         /// </summary>
-        /// <param name="hashes"></param>
-        /// <returns></returns>
-        public static Sha256Hash CalculateRoot(List<byte[]> hashes)
-        {
-            var tree = Build(hashes);
-            return new Sha256Hash(tree[tree.Count - 1]);
-        }
+        public IList<byte[]> Tree { get; private set; }
 
-        public static Sha256Hash GetRoot(IList<byte[]> merkleTree)
+        /// <summary>
+        /// The root of the merkle tree.
+        /// </summary>
+        public Sha256Hash Root { get; private set; }
+
+        /// <summary>
+        /// Creates a new merkle-tree instance.
+        /// </summary>
+        /// <param name="hashList"></param>
+        public MerkleTree(List<byte[]> hashList)
         {
-            if(merkleTree.Count == 0)
+            if (hashList.Count == 0)
                 throw new ArgumentOutOfRangeException();
 
-            return new Sha256Hash(merkleTree[merkleTree.Count - 1]);
+            this.Tree = this.Build(hashList);
+            this.Root = new Sha256Hash(this.Tree[this.Tree.Count - 1]);
         }
 
         /// <summary>
@@ -57,7 +60,7 @@ namespace Coinium.Core.Crypto
         /// </summary>
         /// <param name="hashList"></param>
         /// <returns></returns>
-        public static IList<byte[]> Build(List<byte[]> hashList)
+        private IList<byte[]> Build(List<byte[]> hashList)
         {
             // The Merkle root is based on a tree of hashes calculated from the transactions:
             //
