@@ -71,9 +71,6 @@
     <Reference Include="Nini">
       <HintPath>..\..\build\packages\Trove.Nini.1.1.0.0\lib\net20\Nini.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\build\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="Serilog">
       <HintPath>..\..\build\packages\Serilog.1.3.7\lib\net40\Serilog.dll</HintPath>
     </Reference>
