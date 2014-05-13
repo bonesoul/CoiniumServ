@@ -93,8 +93,7 @@ namespace Coinium.Core.Crypto
             // Start by adding all the hashes of the transactions as leaves of the tree.
             foreach (var item in hashList)
             {
-                var hash = new Sha256Hash(item.DoubleDigest().ReverseBytes());                                       
-                tree.Add(hash.Bytes);
+                tree.Add(item);
             }
 
             var levelOffset = 0; // Offset in the list where the currently processed level starts.

@@ -26,16 +26,50 @@ namespace Tests.Core.Crypto
     public class MerkleTreeTests
     {
         /// <summary>
+        /// Block with only a single (generation) transaction.
+        /// </summary>
+        [Fact]
+        public void TestBlockWithSingleTransaction()
+        {
+            var hashList = new List<byte[]>
+            {
+                "d43d6fbe5e46ee82847421c1609fe1203c0f3db0992ac98a06684b10676b8428".ToByteArray()
+            };
+
+            var merkleRoot = MerkleTree.CalculateRoot(hashList);
+            var expected = "d43d6fbe5e46ee82847421c1609fe1203c0f3db0992ac98a06684b10676b8428".ToByteArray();
+
+            Assert.Equal(merkleRoot.Bytes, expected);
+        }
+
+        /// <summary>
+        /// Block with only a single (generation) transaction.
+        /// </summary>
+        [Fact]
+        public void TestBlockWithThreeTransactions()
+        {
+            var hashList = new List<byte[]>
+            {
+                "b9e8f1d2cea2b609faae19049546c8d3826d4d5268e3b1843d24234e6cc65c91".ToByteArray(),
+                "26d0d04050d9d036f6677c49b558a492a6bcfb75e1de6b5c9335d26e729e5cd4".ToByteArray(),
+                "c13a822f47072f9b2236cea9c22ab7e5d92c0ac4fd2a63af2c4ed1f2e306efd5".ToByteArray(),
+            };
+
+            var merkleRoot = MerkleTree.CalculateRoot(hashList);
+            var expected = "a907cc5d1de726136e50b1899672db2728c47897902718fbcfd133ed11331a66".ToByteArray();
+
+            Assert.Equal(merkleRoot.Bytes, expected);
+        }
+
+        /// <summary>
         /// Test bitcoin block 286819 merkle root against our merkle functions.
         /// Why this block? Because it's quite popular for so.
         /// Block:  http://blockexplorer.com/block/0000000000000000e067a478024addfecdc93628978aa52d91fabd4292982a50
         /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-286819-for-python
         /// </summary>
         [Fact]
-        public void TestBlock286819()
+        public void TestBlockWithManyTransactions()
         {
-
-
             var hashList = new List<byte[]>
             {
                 "00baf6626abc2df808da36a518c69f09b0d2ed0a79421ccfde4f559d2e42128b".ToByteArray(),
@@ -139,9 +173,7 @@ namespace Tests.Core.Crypto
                 "27a0797cc5b042ba4c11e72a9555d13a67f00161550b32ede0511718b22dbc2c".ToByteArray()
             };
 
-            var merkleTree = MerkleTree.Build(hashList);
-            var merkleRoot = MerkleTree.GetRoot(merkleTree);
-
+            var merkleRoot = MerkleTree.CalculateRoot(hashList);
             var expected = "871714dcbae6c8193a2bb9b2a69fe1c0440399f38d94b3a0f1b447275a29978a".ToByteArray();
 
             Assert.Equal(merkleRoot.Bytes, expected);
