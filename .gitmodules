@@ -3,4 +3,4 @@
 	url = https://github.com/CoiniumServ/JSON-RPC.NET.git
 [submodule "deps/gibbed.io"]
 	path = deps/gibbed.io
-	url = https://github.com/CoiniumServ/CoiniumServ.git
+	url = https://github.com/CoiniumServ/Gibbed.IO.git
