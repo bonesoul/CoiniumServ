@@ -20,10 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Coinium.Core.Coin;
+using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Crypto;
-using Coinium.Core.Mining.Wallet;
 using Coinium.Core.Server.Stratum.Notifications;
-using Coinium.Net.Sockets;
+using Coinium.Net.Server.Sockets;
 using Serilog;
 
 namespace Coinium.Core.Mining
@@ -75,7 +75,7 @@ namespace Coinium.Core.Mining
 
         private void BroadcastMiningJobs(object state)
         {
-            var blockTemplate = WalletManager.Instance.Client.GetBlockTemplate();
+            var blockTemplate = DaemonManager.Instance.Client.GetBlockTemplate();
 
             // need to build a coinbase transaction right here and include it in the root calculation!.
 

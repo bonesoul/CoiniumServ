@@ -18,8 +18,8 @@
 
 using System;
 using AustinHarris.JsonRpc;
+using Coinium.Core.RPC.Sockets;
 using Coinium.Core.Server.Stratum.Responses;
-using Coinium.Net.RPC.Sockets;
 using Serilog;
 
 namespace Coinium.Core.Server.Stratum

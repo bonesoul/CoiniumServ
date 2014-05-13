@@ -16,33 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
+using System;
 
-using System.Net;
-using Coinium.Core.Mining;
-using Coinium.Net.Server.Http;
-using Serilog;
-
-namespace Coinium.Core.Server.Vanilla
+namespace Coinium.Net.Server.Sockets
 {
-    public class VanillaServer : HttpServer
+    public class ConnectionEventArgs : EventArgs
     {
-        private static object[] _services =
-        {
-            new VanillaService()
-        };
+        public IConnection Connection { get; private set; }
 
-        public VanillaServer(int port)
-            : base(port)
+        public ConnectionEventArgs(IConnection connection)
         {
-            Log.Verbose("Classic server listening on port {0}.", this.Port);
-            this.ProcessRequest += ProcessHttpRequest;
+            if (connection == null)
+                throw new ArgumentNullException("connection");
+
+            this.Connection = connection;
         }
 
-        private void ProcessHttpRequest(HttpListenerContext context)
+        public override string ToString()
         {
-            var miner = MinerManager.Instance.Create<VanillaMiner>();
-            miner.Parse(context);
+            return Connection.RemoteEndPoint != null
+                ? Connection.RemoteEndPoint.ToString()
+                : "Not Connected";
         }
     }
 }

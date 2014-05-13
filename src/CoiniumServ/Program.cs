@@ -22,9 +22,9 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
+using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
-using Coinium.Core.Mining.Pools;
-using Coinium.Core.Mining.Wallet;
+using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
 using Serilog;
@@ -54,7 +54,7 @@ namespace Coinium
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
             // start wallet manager.
-            WalletManager.Instance.Run();
+            DaemonManager.Instance.Run();
 
             // start pool manager.
             PoolManager.Instance.Run();

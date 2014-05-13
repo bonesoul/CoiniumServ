@@ -16,33 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
-
-using System.Net;
-using Coinium.Core.Mining;
-using Coinium.Net.Server.Http;
 using Serilog;
 
-namespace Coinium.Core.Server.Vanilla
+namespace Coinium.Core.Coin.Daemon
 {
-    public class VanillaServer : HttpServer
+    /// <summary>
+    /// Allows communication with wallets.
+    /// </summary>
+    public class DaemonManager
     {
-        private static object[] _services =
-        {
-            new VanillaService()
-        };
+        public DaemonClient Client { get; private set; }
 
-        public VanillaServer(int port)
-            : base(port)
+        public DaemonManager()
         {
-            Log.Verbose("Classic server listening on port {0}.", this.Port);
-            this.ProcessRequest += ProcessHttpRequest;
+            Log.Verbose("DaemonManager() init..");
         }
 
-        private void ProcessHttpRequest(HttpListenerContext context)
+        public void Run()
         {
-            var miner = MinerManager.Instance.Create<VanillaMiner>();
-            miner.Parse(context);
+            Log.Verbose("Starting daemon-clients..");
+            this.Client = new DaemonClient("http://127.0.0.1:9334", "devel", "develpass");
+            //Log.Verbose("Difficulty: " + this.Client.GetInfo().Difficulty);
         }
+
+
+        private static readonly DaemonManager _instance = new DaemonManager();
+
+        /// <summary>
+        /// Singleton instance of WalletManager.
+        /// </summary>
+        public static DaemonManager Instance { get { return _instance; } }
     }
 }
