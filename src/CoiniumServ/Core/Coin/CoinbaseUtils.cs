@@ -30,20 +30,66 @@ namespace Coinium.Core.Coin
     public static class CoinbaseUtils
     {
         /// <summary>
-        /// first byte is number of bytes in the number (will be 0x03 on main net for the next 300 or so years), following bytes 
-        /// are little-endian representation of the number.
+        /// Encoded an integer to save space.
         /// </summary>
         /// <remarks>
-        /// Specification: 
-        ///         https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification
-        /// python: https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L204
-        ///         http://runnable.com/U3Hb26U1918Zx0NR/bitcoin-coinbase-serialize-number-python
-        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/a06ba67ab327e09f74cb7d14291ea1ece541104c/lib/util.js#L135
-        ///         http://runnable.com/U3HgCVY2RIAjrw9I/bitcoin-coinbase-serialize-number-nodejs-for-node-js
+        /// Integer can be encoded depending on the represented value to save space. Variable length integers always precede 
+        /// an array/vector of a type of data that may vary in length. Longer numbers are encoded in little endian. 
+        /// </remarks>
+        /// <specification>https://en.bitcoin.it/wiki/Protocol_specification#Variable_length_integer</specification>
+        /// <example>
+        /// nodejs:
+        /// https://github.com/zone117x/node-stratum-pool/blob/master/lib/util.js#L75
+        /// https://c9.io/raistlinthewiz/bitcoin-coinbase-varint-nodejs
+        /// </example>
+        /// <returns></returns>
+        public static byte[] VarInt(UInt32 value)
+        {
+            if (value < 0xfd)
+                return new[] {(byte) value};
+
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                if (value < 0xffff)
+                {
+                    stream.WriteValueU8(0xfd);
+                    stream.WriteValueU16(((UInt16)value).LittleEndian());
+                }
+                else if (value < 0xffffffff)
+                {
+                    stream.WriteValueU8(0xfe);
+                    stream.WriteValueU32(((UInt32)value).LittleEndian());
+                }
+                else
+                {
+                    stream.WriteValueU8(0xff);
+                    stream.WriteValueU16(((UInt16)value).LittleEndian());
+                }
+                result = stream.ToArray();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Used to format height and date when putting into script signature:
+        /// </summary>
+        /// <remarks>
         /// Used to format height and date when putting into script signature: https://en.bitcoin.it/wiki/Script
         /// </remarks>
+        /// <specification>https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification</specification>
         /// <param name="value"></param>
         /// <returns>Serialized CScript</returns>
+        /// <example>
+        /// python:
+        /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L204
+        /// http://runnable.com/U3Hb26U1918Zx0NR/bitcoin-coinbase-serialize-number-python
+        /// nodejs:
+        /// https://github.com/zone117x/node-stratum-pool/blob/master/lib/util.js#L109
+        /// http://runnable.com/U3HgCVY2RIAjrw9I/bitcoin-coinbase-serialize-number-nodejs-for-node-js
+        /// </example>
         public static byte[] SerializeNumber(int value)
         {
 
@@ -55,7 +101,7 @@ namespace Coinium.Core.Coin
 
             while (value > 127)
             {
-                buffer[lenght++] = (byte)(value & 0xff); // n % 256
+                buffer[lenght++] = (byte)(value & 0xff);
                 value >>= 8;
             }
 
@@ -66,14 +112,17 @@ namespace Coinium.Core.Coin
         }
 
         /// <summary>
-        /// Creates a serialized string.
+        /// Creates a serialized string used in script signature.
         /// </summary>
         /// <remarks>
-        /// Specification:
-        /// python: https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L20
-        ///         http://runnable.com/U3Mya-5oZntF5Ira/bitcoin-coinbase-serialize-string-python
-        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/util.js#L153
         /// </remarks>
+        /// <example>
+        /// python: 
+        /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L20
+        /// http://runnable.com/U3Mya-5oZntF5Ira/bitcoin-coinbase-serialize-string-python
+        /// nodejs:
+        /// https://github.com/zone117x/node-stratum-pool/blob/master/lib/util.js#L153
+        /// </example>
         /// <param name="input"></param>
         /// <returns></returns>
         public static byte[] SerializeString(string input)
@@ -89,21 +138,18 @@ namespace Coinium.Core.Coin
             {
                 if (input.Length < 0x10000)
                 {
-                    var packedLenght = ((UInt16) input.Length).LittleEndian();
-                    stream.WriteByte(253);
-                    stream.WriteValueU16(packedLenght);
+                    stream.WriteValueU8(253);
+                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed lenght.
                 }
                 else if (input.Length < 0x100000000)
                 {
-                    var packedLenght = ((UInt32) input.Length).LittleEndian();
-                    stream.WriteByte(254);
-                    stream.WriteValueU32(packedLenght);
+                    stream.WriteValueU8(254);
+                    stream.WriteValueU32(((UInt32)input.Length).LittleEndian()); // write packed lenght.
                 }
                 else
                 {
-                    var packedLenght = ((UInt16)input.Length).LittleEndian();
-                    stream.WriteByte(255);
-                    stream.WriteValueU16(packedLenght);
+                    stream.WriteValueU8(255);
+                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed lenght.
                 }
 
                 stream.WriteString(input);

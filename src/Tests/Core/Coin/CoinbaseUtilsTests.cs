@@ -16,9 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
 using Coinium.Common.Extensions;
-using Coinium.Common.Helpers.Arrays;
 using Coinium.Core.Coin;
 using Xunit;
 
@@ -27,10 +25,30 @@ namespace Tests.Core.Coin
     public class CoinbaseUtilsTests
     {
         /// <summary>
-        /// Tests CoinbaseUtils.SerializeNumber()
-        /// <remarks>
-        /// Expected values can be validated over: http://runnable.com/U3Hb26U1918Zx0NR/bitcoin-coinbase-serialize-number-python
-        /// </remarks>
+        /// Tests <see cref="CoinbaseUtils.VarInt"/>.
+        /// </summary>
+        [Fact]
+        public void VarIntegerTest()
+        {
+            // < 0xfd test
+            var varInt = CoinbaseUtils.VarInt(0xfc);
+            var expected = new byte[] {0xfc};
+            Assert.Equal(varInt, expected);
+
+            // < 0xffff
+            varInt = CoinbaseUtils.VarInt(0xfffe);
+            expected = new byte[] {0xfd, 0xfe, 0xff};
+            Assert.Equal(varInt, expected);
+
+            // 0xffffffff
+            varInt = CoinbaseUtils.VarInt(0xfffffffe);
+            expected = new byte[] {0xfe, 0xfe, 0xff, 0xff, 0xff};
+            Assert.Equal(varInt, expected);
+        }
+
+
+        /// <summary>
+        /// Tests <see cref="CoinbaseUtils.SerializeNumber"/>.
         /// </summary>
         [Fact]
         public void SerializeNumberTest()
@@ -47,10 +65,7 @@ namespace Tests.Core.Coin
         }
 
         /// <summary>
-        /// Tests CoinbaseUtils.SerializeString()
-        /// <remarks>
-        /// Expected values can be validated over: http://runnable.com/U3Mya-5oZntF5Ira/bitcoin-coinbase-serialize-string-python
-        /// </remarks>
+        /// Tests <see cref="CoinbaseUtils.SerializeString"/>.
         /// </summary>
         [Fact]
         public void SerializeStringTest()

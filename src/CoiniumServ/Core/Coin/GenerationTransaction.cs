@@ -33,20 +33,17 @@ namespace Coinium.Core.Coin
     /// A generation transaction.
     /// </summary>
     /// <remarks>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
-    ///             https://en.bitcoin.it/wiki/Transactions#Generation
-    /// More info:  http://bitcoin.stackexchange.com/questions/20721/what-is-the-format-of-coinbase-transaction
-    ///             http://bitcoin.stackexchange.com/questions/21557/how-to-fully-decode-a-coinbase-transaction
-    ///             http://bitcoin.stackexchange.com/questions/4990/what-is-the-format-of-coinbase-input-scripts
-    /// Generations have a single input, and this input has a "coinbase" parameter instead of a scriptSig. The data in "coinbase" can be anything; 
-    /// it isn't used. Bitcoin puts the current compact-format target and the arbitrary-precision "extraNonce" number there, which increments every 
-    /// time the Nonce field in the block header overflows. Outputs can be anything, but Bitcoin creates one exactly like an IP address transaction. 
-    /// The extranonce contributes to enlarge the domain for the proof of work function. Miners can easily modify nonce (4byte), timestamp and extranonce
-    ///  (2 to 100bytes). (https://en.bitcoin.it/wiki/Transactions#Generation)
     /// * It has exactly one txin.
     /// * Txin's prevout hash is always 0000000000000000000000000000000000000000000000000000000000000000.
     /// * Txin's prevout index is 0xFFFFFFFF.
+    /// More info:  http://bitcoin.stackexchange.com/questions/20721/what-is-the-format-of-coinbase-transaction
+    ///             http://bitcoin.stackexchange.com/questions/21557/how-to-fully-decode-a-coinbase-transaction
+    ///             http://bitcoin.stackexchange.com/questions/4990/what-is-the-format-of-coinbase-input-scripts
     /// </remarks>
+    /// <specification>
+    /// https://en.bitcoin.it/wiki/Protocol_specification#tx
+    /// https://en.bitcoin.it/wiki/Transactions#Generation
+    /// </specification>
     public class GenerationTransaction
     {
         /// <summary>
@@ -138,6 +135,7 @@ namespace Coinium.Core.Coin
             {
                 stream.WriteValueU32(this.Version.LittleEndian()); // writer version
                 // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
+                stream.WriteBytes(CoinbaseUtils.VarInt(this.InputsCount));
             }
         }
     }
