@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tests</RootNamespace>
-    <AssemblyName>Tests</AssemblyName>
+    <AssemblyName>CoiniumServ.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\build\</SolutionDir>
@@ -34,6 +34,9 @@
   <ItemGroup>
     <Reference Include="Moq">
       <HintPath>..\..\build\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Should.Fluent">
+      <HintPath>..\..\build\packages\ShouldFluent.1.1.19\lib\Should.Fluent.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
