@@ -17,17 +17,18 @@
 */
 
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Jayrock.Json;
 
 namespace Coinium.Common.Extensions
 {
     public static class StringExtensions
     {
+        /// <summary>
+        /// Prettifies a json string.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string PretifyJson(this string text)
         {
             var input = new StringReader(text);

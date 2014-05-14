@@ -17,12 +17,11 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Coinium.Common.Extensions;
+using Coinium.Common.Helpers.Arrays;
 using Gibbed.IO;
+using Serilog;
 
 namespace Coinium.Core.Coin
 {
@@ -40,6 +39,7 @@ namespace Coinium.Core.Coin
         /// python: https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L204
         ///         http://runnable.com/U3Hb26U1918Zx0NR/bitcoin-coinbase-serialize-number-python
         /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/a06ba67ab327e09f74cb7d14291ea1ece541104c/lib/util.js#L135
+        ///         http://runnable.com/U3HgCVY2RIAjrw9I/bitcoin-coinbase-serialize-number-nodejs-for-node-js
         /// Used to format height and date when putting into script signature: https://en.bitcoin.it/wiki/Script
         /// </remarks>
         /// <param name="value"></param>
@@ -63,6 +63,53 @@ namespace Coinium.Core.Coin
             buffer[lenght++] = (byte)value;
 
             return buffer.Slice(0, lenght);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// python: https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L20
+        ///         http://runnable.com/U3Mya-5oZntF5Ira/bitcoin-coinbase-serialize-string-python
+        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/util.js#L153
+        /// </remarks>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static byte[] SerializeString(string input)
+        {
+            if (input.Length < 253)
+                return ArrayHelpers.Combine(new[] { (byte)input.Length }, System.Text.Encoding.UTF8.GetBytes(input));
+
+            // if input string is >=253, we need need a special format.
+
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                if (input.Length < 0x10000)
+                {
+                    var packedLenght = ((UInt16) input.Length).LittleEndian();
+                    stream.WriteByte(253);
+                    stream.WriteValueU16(packedLenght);
+                }
+                else if (input.Length < 0x100000000)
+                {
+                    var packedLenght = ((UInt32) input.Length).LittleEndian();
+                    stream.WriteByte(254);
+                    stream.WriteValueU32(packedLenght);
+                }
+                else
+                {
+                    var packedLenght = ((UInt16)input.Length).LittleEndian();
+                    stream.WriteByte(255);
+                    stream.WriteValueU16(packedLenght);
+                }
+
+                stream.WriteString(input);
+                result = stream.ToArray();
+            }
+
+            return result;
         }
     }
 }

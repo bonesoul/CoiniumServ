@@ -27,6 +27,7 @@ using Coinium.Common.Helpers.Time;
 using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
+using Serilog;
 
 namespace Coinium.Core.Coin
 {
@@ -77,7 +78,7 @@ namespace Coinium.Core.Coin
         /// <summary>
         ///  For coins that support/require transaction comments
         /// </summary>
-        public string Message { get; private set; }
+        public byte[] Message { get; private set; }
 
         /// <summary>
         /// The block number or timestamp at which this transaction is locked:
@@ -100,8 +101,8 @@ namespace Coinium.Core.Coin
         public GenerationTransaction(BlockTemplate blockTemplate, bool supportTxMessages = false)
         {
             this.Version = (UInt32)(supportTxMessages ? 2 : 1);
+            this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             this.LockTime = 0;
-            // this.Message = "https://github.com/CoiniumServ/CoiniumServ"; // TODO: need to serialize string.            
 
             var input = new TxIn();
             input.PreviousOutput = new OutPoint();
@@ -116,13 +117,15 @@ namespace Coinium.Core.Coin
             input.SignatureScriptPart1 = new byte[0]; 
 
             var serializedBlockHeight = CoinbaseUtils.SerializeNumber(blockTemplate.Height);
-            var coinBaseAuxFlags = blockTemplate.CoinBaseAux.Flags.ToByteArray();
+            var coinBaseAuxFlags = blockTemplate.CoinBaseAux.Flags.HexToByteArray();
             var serializedUnixTime = CoinbaseUtils.SerializeNumber(TimeHelpers.NowInUnixTime()/1000 | 0);
 
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedBlockHeight).ToArray();
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(coinBaseAuxFlags).ToArray();
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedUnixTime).ToArray();
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(new byte[StratumService.ExtraNoncePlaceholder.Length]).ToArray();
+
+            input.SignatureScriptPart2 = CoinbaseUtils.SerializeString("/CoiniumServ/");
 
             this.Inputs = new List<TxIn>();
             this.Inputs.Add(input);

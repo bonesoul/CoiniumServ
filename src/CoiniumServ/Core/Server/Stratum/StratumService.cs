@@ -57,7 +57,7 @@ namespace Coinium.Core.Server.Stratum
 
         public StratumService()
         {
-            ExtraNoncePlaceholder = "f000000ff111111f".ToByteArray();
+            ExtraNoncePlaceholder = "f000000ff111111f".HexToByteArray();
             this.GenerateInstanceId(); // generate instance id for the service.
             this.InitExtraNonceCounter(); // init. the extra nonce counter.
         }
