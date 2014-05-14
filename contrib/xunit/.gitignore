@@ -1,4 +1,2 @@
-!xunit.console.clr4.exe
-!xunit.console.clr4.x86.exe
-!xunit.console.exe
-!xunit.console.x86.exe
+!*.exe
+!*.dll
