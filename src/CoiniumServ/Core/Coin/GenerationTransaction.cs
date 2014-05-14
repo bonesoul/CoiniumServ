@@ -18,32 +18,35 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Time;
 using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
-using Serilog;
+using Gibbed.IO;
 
 namespace Coinium.Core.Coin
 {
     /// <summary>
     /// A generation transaction.
-    /// It has exactly one txin.
+    /// </summary>
     /// <remarks>
     /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
+    ///             https://en.bitcoin.it/wiki/Transactions#Generation
     /// More info:  http://bitcoin.stackexchange.com/questions/20721/what-is-the-format-of-coinbase-transaction
     ///             http://bitcoin.stackexchange.com/questions/21557/how-to-fully-decode-a-coinbase-transaction
     ///             http://bitcoin.stackexchange.com/questions/4990/what-is-the-format-of-coinbase-input-scripts
-    /// 
-    /// Txin's prevout hash is always 0000000000000000000000000000000000000000000000000000000000000000.
-    /// Txin's prevout index is 0xFFFFFFFF.
+    /// Generations have a single input, and this input has a "coinbase" parameter instead of a scriptSig. The data in "coinbase" can be anything; 
+    /// it isn't used. Bitcoin puts the current compact-format target and the arbitrary-precision "extraNonce" number there, which increments every 
+    /// time the Nonce field in the block header overflows. Outputs can be anything, but Bitcoin creates one exactly like an IP address transaction. 
+    /// The extranonce contributes to enlarge the domain for the proof of work function. Miners can easily modify nonce (4byte), timestamp and extranonce
+    ///  (2 to 100bytes). (https://en.bitcoin.it/wiki/Transactions#Generation)
+    /// * It has exactly one txin.
+    /// * Txin's prevout hash is always 0000000000000000000000000000000000000000000000000000000000000000.
+    /// * Txin's prevout index is 0xFFFFFFFF.
     /// </remarks>
-    /// </summary>
     public class GenerationTransaction
     {
         /// <summary>
@@ -88,6 +91,8 @@ namespace Coinium.Core.Coin
         /// </summary>
         public UInt32 LockTime { get; private set; }
 
+        public byte[] Part1 { get; private set; }
+
         /// <summary>
         /// Creates a new instance of generation transaction.
         /// </summary>
@@ -127,21 +132,26 @@ namespace Coinium.Core.Coin
 
             input.SignatureScriptPart2 = CoinbaseUtils.SerializeString("/CoiniumServ/");
 
-            this.Inputs = new List<TxIn>();
-            this.Inputs.Add(input);
+            this.Inputs = new List<TxIn> {input};
 
-
-
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteValueU32(this.Version.LittleEndian()); // writer version
+                // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
+            }
         }
     }
 
     /// <summary>
     /// Inputs for transaction.
+    /// </summary>
     /// <remarks>
     /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
     /// Information: http://bitcoin.stackexchange.com/a/20725/8899
+    /// The input sufficiently describes where and how to get the bitcoin amout to be redeemed. If it is the (only) input of the first transaction 
+    /// of a block, it is called the generation transaction input and its content completely ignored. (Historically the Previous Transaction hash is 0 
+    /// and the Previous Txout-index is -1.)
     /// </remarks>
-    /// </summary>
     public class TxIn
     {
         /// <summary>
@@ -188,10 +198,13 @@ namespace Coinium.Core.Coin
 
     /// <summary>
     /// Outpus for transaction.
+    /// </summary>
     /// <remarks>
     /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
+    /// The output sets the conditions to release this bitcoin amount later. The sum of the output values of the 
+    /// first transaction is the value of the mined bitcoins for the block plus possible transactions fees of the 
+    /// other transactions in the block.
     /// </remarks>
-    /// </summary>
     public class TxOut
     {
         /// <summary>
@@ -208,6 +221,5 @@ namespace Coinium.Core.Coin
         /// Usually contains the public key as a Bitcoin script setting up conditions to claim this output.
         /// </summary>
         public string PublicKeyScript { get; set; }
-
     }
 }

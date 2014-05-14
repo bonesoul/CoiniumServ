@@ -21,7 +21,6 @@ using System.IO;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Arrays;
 using Gibbed.IO;
-using Serilog;
 
 namespace Coinium.Core.Coin
 {
@@ -35,7 +34,8 @@ namespace Coinium.Core.Coin
         /// are little-endian representation of the number.
         /// </summary>
         /// <remarks>
-        /// Specification: https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification
+        /// Specification: 
+        ///         https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification
         /// python: https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L204
         ///         http://runnable.com/U3Hb26U1918Zx0NR/bitcoin-coinbase-serialize-number-python
         /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/a06ba67ab327e09f74cb7d14291ea1ece541104c/lib/util.js#L135
@@ -66,9 +66,10 @@ namespace Coinium.Core.Coin
         }
 
         /// <summary>
-        /// 
+        /// Creates a serialized string.
         /// </summary>
         /// <remarks>
+        /// Specification:
         /// python: https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L20
         ///         http://runnable.com/U3Mya-5oZntF5Ira/bitcoin-coinbase-serialize-string-python
         /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/util.js#L153
