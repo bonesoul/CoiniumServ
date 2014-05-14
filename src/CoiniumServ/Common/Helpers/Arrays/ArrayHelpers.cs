@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections;
 
 namespace Coinium.Common.Helpers.Arrays
@@ -43,6 +44,42 @@ namespace Coinium.Common.Helpers.Arrays
                     return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Combines given two byte arrays.
+        /// <remarks>
+        /// Originally from: http://stackoverflow.com/a/415839/170181
+        /// </remarks>
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static byte[] Combine(byte[] first, byte[] second)
+        {
+            var ret = new byte[first.Length + second.Length];
+            Buffer.BlockCopy(first, 0, ret, 0, first.Length);
+            Buffer.BlockCopy(second, 0, ret, first.Length, second.Length);
+            return ret;
+        }
+
+        /// <summary>
+        /// Combines given three byte arrays.
+        /// <remarks>
+        /// Originally from: http://stackoverflow.com/a/415839/170181
+        /// </remarks>
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <param name="third"></param>
+        /// <returns></returns>
+        public static byte[] Combine(byte[] first, byte[] second, byte[] third)
+        {
+            var ret = new byte[first.Length + second.Length + third.Length];
+            Buffer.BlockCopy(first, 0, ret, 0, first.Length);
+            Buffer.BlockCopy(second, 0, ret, first.Length, second.Length);
+            Buffer.BlockCopy(third, 0, ret, first.Length + second.Length, third.Length);
+            return ret;
         }
     }
 }

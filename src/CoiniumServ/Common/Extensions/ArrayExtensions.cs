@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace Coinium.Common.Extensions
 {
@@ -72,7 +71,7 @@ namespace Coinium.Common.Extensions
 
         public static string ToFormatedHexString(this byte[] byteArray)
         {
-            return byteArray.Aggregate("", (current, b) => current + " " + b.ToString("x2"));
+            return byteArray.Aggregate("", (current, b) => current + " 0x" + b.ToString("x2"));
         }
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace Coinium.Common.Extensions
             return buf;
         }
 
-        public static byte[] ToByteArray(this string str)
+        public static byte[] HexToByteArray(this string str)
         {
             str = str.Replace(" ", String.Empty);
 
