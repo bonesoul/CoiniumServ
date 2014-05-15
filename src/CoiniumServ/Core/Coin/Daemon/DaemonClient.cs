@@ -726,11 +726,11 @@ namespace Coinium.Core.Coin.Daemon
         /// <summary>
         /// Return information about the bitcoin address. 
         /// </summary>
-        /// <param name="bitcoinAddress">The bitcoin address.</param>
+        /// <param name="walletAddress">The bitcoin address.</param>
         /// <returns></returns>
-        public ValidateAddress ValidateAddress(string bitcoinAddress)
+        public ValidateAddress ValidateAddress(string walletAddress)
         {
-            return MakeRequest<ValidateAddress>("validateaddress", bitcoinAddress);
+            return MakeRequest<ValidateAddress>("validateaddress", walletAddress);
         }
 
         /// <summary>
