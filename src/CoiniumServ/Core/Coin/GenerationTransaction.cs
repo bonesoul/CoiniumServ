@@ -20,9 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Time;
+using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Coin.Daemon.Responses;
+using Coinium.Core.Coin.Exceptions;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
 using Gibbed.IO;
@@ -131,11 +134,58 @@ namespace Coinium.Core.Coin
 
             this.Inputs = new List<TxIn> {input};
 
+            // create the first part.
             using (var stream = new MemoryStream())
             {
-                stream.WriteValueU32(this.Version.LittleEndian()); // writer version
+                stream.WriteValueU32(this.Version.LittleEndian()); // write version
+
                 // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
+                
+                // write transaction input.
                 stream.WriteBytes(CoinbaseUtils.VarInt(this.InputsCount));
+                stream.WriteBytes(this.Inputs[0].PreviousOutput.Hash.Bytes);
+                stream.WriteValueU32(this.Inputs[0].PreviousOutput.Index.LittleEndian());
+
+                // write signnature script lenght
+                var signatureScriptLenght = (UInt32)(input.SignatureScriptPart1.Length + StratumService.ExtraNoncePlaceholder.Length + input.SignatureScriptPart2.Length);
+                stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
+
+                stream.WriteBytes(input.SignatureScriptPart1);
+
+                this.Part1 = stream.ToArray();
+            }
+
+            /*  The generation transaction must be split at the extranonce (which located in the transaction input
+                scriptSig). Miners send us unique extranonces that we use to join the two parts in attempt to create
+                a valid share and/or block. */
+
+            this.GenerateOutputTransactions(blockTemplate);
+        }
+
+        private void GenerateOutputTransactions(BlockTemplate blockTemplate)
+        {
+            const string baseAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's base address.
+            const string feeAddress = "myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t"; // pool fee collecting address.
+
+            var rewardRecipients = new Dictionary<string, double>() // miner addresses.
+            {
+                {"mw9kV256mHogfv6LScD1XcpXscoNR2YmFk", 100} // 100% shares.
+
+            };
+
+            // validate our pool wallet address.
+            if (!DaemonManager.Instance.Client.ValidateAddress(baseAddress).IsValid)
+                throw new InvalidWalletAddressException(baseAddress);
+
+            // validate our pool wallet address.
+            if (!DaemonManager.Instance.Client.ValidateAddress(feeAddress).IsValid)
+                throw new InvalidWalletAddressException(feeAddress);
+
+            // validate reward recipients addresses too.
+            foreach (var pair in rewardRecipients)
+            {
+                if (!DaemonManager.Instance.Client.ValidateAddress(pair.Key).IsValid)
+                    throw new InvalidWalletAddressException(pair.Key);
             }
         }
     }
