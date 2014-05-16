@@ -39,9 +39,7 @@ namespace Coinium.Core.Coin
         /// </remarks>
         /// <specification>https://en.bitcoin.it/wiki/Protocol_specification#Variable_length_integer</specification>
         /// <example>
-        /// nodejs:
-        /// https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L75
-        /// https://c9.io/raistlinthewiz/bitcoin-coinbase-varint-nodejs
+        /// nodejs: https://c9.io/raistlinthewiz/bitcoin-coinbase-varint-nodejs
         /// </example>
         /// <returns></returns>
         public static byte[] VarInt(UInt32 value)
@@ -61,7 +59,7 @@ namespace Coinium.Core.Coin
                 else if (value < 0xffffffff)
                 {
                     stream.WriteValueU8(0xfe);
-                    stream.WriteValueU32(((UInt32)value).LittleEndian());
+                    stream.WriteValueU32(value.LittleEndian());
                 }
                 else
                 {
@@ -84,12 +82,8 @@ namespace Coinium.Core.Coin
         /// <param name="value"></param>
         /// <returns>Serialized CScript</returns>
         /// <example>
-        /// python:
-        /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L204
-        /// http://runnable.com/U3Hb26U1918Zx0NR/bitcoin-coinbase-serialize-number-python
-        /// nodejs:
-        /// https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L109
-        /// http://runnable.com/U3HgCVY2RIAjrw9I/bitcoin-coinbase-serialize-number-nodejs-for-node-js
+        /// python: http://runnable.com/U3Hb26U1918Zx0NR/bitcoin-coinbase-serialize-number-python
+        /// nodejs: http://runnable.com/U3HgCVY2RIAjrw9I/bitcoin-coinbase-serialize-number-nodejs-for-node-js
         /// </example>
         public static byte[] SerializeNumber(int value)
         {
@@ -118,11 +112,8 @@ namespace Coinium.Core.Coin
         /// <remarks>
         /// </remarks>
         /// <example>
-        /// python: 
-        /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L20
-        /// http://runnable.com/U3Mya-5oZntF5Ira/bitcoin-coinbase-serialize-string-python
-        /// nodejs:
-        /// https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L153
+        /// python: http://runnable.com/U3Mya-5oZntF5Ira/bitcoin-coinbase-serialize-string-python
+        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L153
         /// </example>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -165,7 +156,7 @@ namespace Coinium.Core.Coin
         /// </summary>
         /// <param name="address"></param>
         /// <example>
-        /// node js implementation: https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L264
+        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L264
         /// </example>
         /// <returns></returns>
         // TODO: implement test for the method
