@@ -90,7 +90,15 @@ namespace Coinium.Core.Coin
         /// </summary>
         public UInt32 LockTime { get; private set; }
 
+        /// <summary>
+        /// Part 1 of the generation transaction.
+        /// </summary>
         public byte[] Part1 { get; private set; }
+
+        /// <summary>
+        /// Part 2 of the generation transaction.
+        /// </summary>
+        public byte[] Part2 { get; private set; }
 
         /// <summary>
         /// Creates a new instance of generation transaction.
@@ -159,8 +167,47 @@ namespace Coinium.Core.Coin
                 a valid share and/or block. */
 
             this.Outputs = this.GenerateOutputTransactions(blockTemplate);
+            var outputBuffers = this.GetOutputBuffer();
 
             // create the second part.
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteBytes(input.SignatureScriptPart2);
+                stream.WriteValueU32(this.Inputs[0].Sequence); // transaction inputs end here.
+
+                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32) outputBuffers.Length).ToArray()); // transaction output start here.
+                stream.WriteBytes(outputBuffers); // transaction output ends here.
+
+                stream.WriteValueU32(this.LockTime.LittleEndian());
+
+                if (supportTxMessages)
+                    stream.WriteBytes(this.Message);
+
+                this.Part2 = stream.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Returns the buffer that contains output transactions.
+        /// </summary>
+        /// <returns></returns>
+        private byte[] GetOutputBuffer()
+        {
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                foreach (var transaction in this.Outputs)
+                {
+                    stream.WriteValueU64(transaction.Value);
+                    stream.WriteBytes(transaction.PublicKeyScriptLenght);
+                    stream.WriteBytes(transaction.PublicKeyScript);
+                }
+
+                result = stream.ToArray();
+            }
+
+            return result;
         }
 
         private List<TxOut> GenerateOutputTransactions(BlockTemplate blockTemplate)
@@ -243,11 +290,6 @@ namespace Coinium.Core.Coin
         /// The previous output transaction reference, as an OutPoint structure
         /// </summary>
         public OutPoint PreviousOutput { get; set; }
-
-        /// <summary>
-        /// The length of the signature script
-        /// </summary>
-        public int SignatureScriptLenght { get; set; }
 
         /// <summary>
         /// Computational Script for confirming transaction authorization - part 1
