@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Time;
 using Coinium.Core.Coin.Daemon;
@@ -159,13 +158,17 @@ namespace Coinium.Core.Coin
                 scriptSig). Miners send us unique extranonces that we use to join the two parts in attempt to create
                 a valid share and/or block. */
 
-            this.GenerateOutputTransactions(blockTemplate);
+            this.Outputs = this.GenerateOutputTransactions(blockTemplate);
+
+            // create the second part.
         }
 
-        private void GenerateOutputTransactions(BlockTemplate blockTemplate)
+        private List<TxOut> GenerateOutputTransactions(BlockTemplate blockTemplate)
         {
-            const string baseAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's base address.
-            const string feeAddress = "myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t"; // pool fee collecting address.
+            const string poolBaseAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's base address.
+            const string poolFeeAddress = "myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t"; // pool fee collecting address.
+
+            var transactions = new List<TxOut>();
 
             var rewardRecipients = new Dictionary<string, double>() // miner addresses.
             {
@@ -174,12 +177,12 @@ namespace Coinium.Core.Coin
             };
 
             // validate our pool wallet address.
-            if (!DaemonManager.Instance.Client.ValidateAddress(baseAddress).IsValid)
-                throw new InvalidWalletAddressException(baseAddress);
+            if (!DaemonManager.Instance.Client.ValidateAddress(poolBaseAddress).IsValid)
+                throw new InvalidWalletAddressException(poolBaseAddress);
 
             // validate our pool wallet address.
-            if (!DaemonManager.Instance.Client.ValidateAddress(feeAddress).IsValid)
-                throw new InvalidWalletAddressException(feeAddress);
+            if (!DaemonManager.Instance.Client.ValidateAddress(poolFeeAddress).IsValid)
+                throw new InvalidWalletAddressException(poolFeeAddress);
 
             // validate reward recipients addresses too.
             foreach (var pair in rewardRecipients)
@@ -187,6 +190,40 @@ namespace Coinium.Core.Coin
                 if (!DaemonManager.Instance.Client.ValidateAddress(pair.Key).IsValid)
                     throw new InvalidWalletAddressException(pair.Key);
             }
+
+            double blockReward = blockTemplate.Coinbasevalue;
+
+            // generate ouput transaction for pool-fee.
+            var poolFeeAmount = blockReward*0.01; // the amount.
+            var poolFeeScript = CoinbaseUtils.CoinAddressToScript(poolFeeAddress); // script to claim the output for pool-fee.
+            blockReward -= poolFeeAmount; // deduct the payment.  
+          
+            var poolFeeTxOut = new TxOut
+            {
+                Value = ((UInt64) poolFeeAmount).LittleEndian(),
+                PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32) poolFeeScript.Length),
+                PublicKeyScript = poolFeeScript
+            };
+
+            transactions.Add(poolFeeTxOut);
+
+            // generate output transactions for recipients (miners).
+            foreach (var pair in rewardRecipients)
+            {
+                var recipientScript = CoinbaseUtils.CoinAddressToScript(pair.Key); // generate the script to claim the output for recipient.
+                var amount = blockReward*pair.Value/100; // calculate the amount he recieves based on the percent of his shares.
+                blockReward -= amount;
+
+                var recipientTxOut = new TxOut()
+                {
+                    Value = ((UInt64) amount).LittleEndian(),
+                    PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32) recipientScript.Length),
+                    PublicKeyScript = recipientScript
+                };
+                transactions.Add(recipientTxOut);
+            }
+
+            return transactions;
         }
     }
 
@@ -263,11 +300,11 @@ namespace Coinium.Core.Coin
         /// <summary>
         /// Length of the pk_script
         /// </summary>
-        public int PublicKeyScriptLenght { get; set; }
+        public byte[] PublicKeyScriptLenght { get; set; }
 
         /// <summary>
         /// Usually contains the public key as a Bitcoin script setting up conditions to claim this output.
         /// </summary>
-        public string PublicKeyScript { get; set; }
+        public byte[] PublicKeyScript { get; set; }
     }
 }
