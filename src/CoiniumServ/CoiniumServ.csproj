@@ -95,7 +95,9 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
+    <Compile Include="Core\Coin\Base58.cs" />
     <Compile Include="Core\Coin\CoinbaseUtils.cs" />
+    <Compile Include="Core\Coin\Exceptions\AddressFormatException.cs" />
     <Compile Include="Core\Coin\Exceptions\InvalidWalletAddressException.cs" />
     <Compile Include="Core\Coin\GenerationTransaction.cs" />
     <Compile Include="Core\Coin\Amount.cs" />

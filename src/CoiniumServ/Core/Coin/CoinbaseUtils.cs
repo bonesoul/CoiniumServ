@@ -21,6 +21,7 @@ using System.IO;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Arrays;
 using Gibbed.IO;
+using Serilog;
 
 namespace Coinium.Core.Coin
 {
@@ -39,7 +40,7 @@ namespace Coinium.Core.Coin
         /// <specification>https://en.bitcoin.it/wiki/Protocol_specification#Variable_length_integer</specification>
         /// <example>
         /// nodejs:
-        /// https://github.com/zone117x/node-stratum-pool/blob/master/lib/util.js#L75
+        /// https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L75
         /// https://c9.io/raistlinthewiz/bitcoin-coinbase-varint-nodejs
         /// </example>
         /// <returns></returns>
@@ -87,7 +88,7 @@ namespace Coinium.Core.Coin
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L204
         /// http://runnable.com/U3Hb26U1918Zx0NR/bitcoin-coinbase-serialize-number-python
         /// nodejs:
-        /// https://github.com/zone117x/node-stratum-pool/blob/master/lib/util.js#L109
+        /// https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L109
         /// http://runnable.com/U3HgCVY2RIAjrw9I/bitcoin-coinbase-serialize-number-nodejs-for-node-js
         /// </example>
         public static byte[] SerializeNumber(int value)
@@ -121,7 +122,7 @@ namespace Coinium.Core.Coin
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/util.py#L20
         /// http://runnable.com/U3Mya-5oZntF5Ira/bitcoin-coinbase-serialize-string-python
         /// nodejs:
-        /// https://github.com/zone117x/node-stratum-pool/blob/master/lib/util.js#L153
+        /// https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L153
         /// </example>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -153,6 +154,41 @@ namespace Coinium.Core.Coin
                 }
 
                 stream.WriteString(input);
+                result = stream.ToArray();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// For POW coins - used to format wallet address for use in generation transaction's output
+        /// </summary>
+        /// <param name="address"></param>
+        /// <example>
+        /// node js implementation: https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L264
+        /// </example>
+        /// <returns></returns>
+        // TODO: implement test for the method
+        public static byte[] CoinAddressToScript(string address)
+        {
+            var decoded = Base58.Decode(address);
+
+            if (decoded.Length != 25)
+                Log.Error("invalid address length for: " + address);
+
+            var pubkey = decoded.Slice(1, -4);
+
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteValueU8(0x76);
+                stream.WriteValueU8(0xa9);
+                stream.WriteValueU8(0x14);
+                stream.WriteBytes(pubkey);
+                stream.WriteValueU8(0x88);
+                stream.WriteValueU8(0xac);
+
                 result = stream.ToArray();
             }
 
