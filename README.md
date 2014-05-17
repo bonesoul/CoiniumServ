@@ -46,6 +46,7 @@ You can contribute the development of the project by donating;
 ### Developers
 
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
+* [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
  
 #### BountySource
 
