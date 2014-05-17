@@ -4,6 +4,7 @@
 CoiniumServ is a high-performance pool-server implementation developed with C# that can host multiple pools together with their own wallet-daemon connections and ports. 
 
 * http://www.coinium.org
+* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
 * Read the [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and check the [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/) before asking!
 * IRC (**irc.freenode.net**):
   - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
@@ -22,6 +23,8 @@ CoiniumServ is a high-performance pool-server implementation developed with C# t
 
 Coinium is an effort to bring crypto-coins to C# space and create a reference pool software implementation. It can be compiled with Microsoft .NET or Mono, which means you can run it on Windows, MacOS, and Linux. Please see the file LICENSE for license details.
 
+For more information about the motivation behind CoiniumServ, check [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan).
+
 ### Requirements
 
 * C# runtime (mono or dotnet)
@@ -35,6 +38,21 @@ Coinium is an effort to bring crypto-coins to C# space and create a reference po
 
 ![Screenshot](http://i.imgur.com/Pql7h0y.png)
 
+### Developers
+
+* [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
+* [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
+
+#### Continious Integration
+
+Every build of CoiniumServ is built & tested over mono & dotnet.
+* Mono: using mono 2.x and 3.x: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
+* Dotnet: using dotnet 4.x: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
+ 
+#### BountySource
+
+BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
+
 ### Donation
 
 You can contribute the development of the project by donating; 
@@ -42,23 +60,6 @@ You can contribute the development of the project by donating;
 * BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
 * LTC: `LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa`
 * DOGE: `D7mzHQtkWD9B1Xwnmjfg9x2DofbaZBg6Lc`
-
-### Developers
-
-* [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
-* [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
- 
-#### BountySource
-
-BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
-
- 
-#### Continious Integration
-
-Every build of CoiniumServ is built & tested over mono & dotnet.
-* Mono: using mono 2.x and 3.x: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
-* Dotnet: using dotnet 4.x: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
-
 
 ### License
 Check the [License](https://github.com/CoiniumServ/CoiniumServ/blob/develop/LICENSE) file.
