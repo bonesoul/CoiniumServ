@@ -18,6 +18,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Coinium.Common.Extensions;
+using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Mining;
 using Newtonsoft.Json;
@@ -27,12 +29,6 @@ namespace Coinium.Core.Server.Stratum.Notifications
     [JsonArray]
     public class JobNotification : IEnumerable<object>
     {
-        /// <summary>
-        /// BlockTemplate originated the job-notification.
-        /// </summary>
-        [JsonIgnore]
-        public BlockTemplate BlockTemplate { get; private set; }
-
         /// <summary>
         /// ID of the job. Use this ID while submitting share generated from this job.
         /// </summary>
@@ -96,16 +92,17 @@ namespace Coinium.Core.Server.Stratum.Notifications
         /// Creates a new instance of JobNotification.
         /// </summary>
         /// <param name="blockTemplate"></param>
-        public JobNotification(BlockTemplate blockTemplate)
+        public JobNotification(BlockTemplate blockTemplate, GenerationTransaction generationTransaction)
         {
-            this.BlockTemplate = blockTemplate;
-
             // init the values.
             this.Id = JobCounter.Instance.Next().ToString("x4");
-            this.PreviousBlockHash = this.BlockTemplate.PreviousBlockHash;
-            this.BlockVersion = this.BlockTemplate.Version.ToString("x8");
-            this.NetworkDifficulty = this.BlockTemplate.Bits;
-            this.nTime = this.BlockTemplate.CurTime.ToString();
+            this.PreviousBlockHash = blockTemplate.PreviousBlockHash;
+            this.CoinbaseInitial = generationTransaction.Part1.ToHexString();
+            this.CoinbaseFinal = generationTransaction.Part2.ToHexString();
+            // set merkle branches. 
+            this.BlockVersion = blockTemplate.Version.ToString("x8");
+            this.NetworkDifficulty = blockTemplate.Bits;
+            this.nTime = blockTemplate.CurTime.ToString();
         }
 
         public IEnumerator<object> GetEnumerator()
