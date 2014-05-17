@@ -212,24 +212,19 @@ namespace Coinium.Core.Coin
 
         private List<TxOut> GenerateOutputTransactions(BlockTemplate blockTemplate)
         {
-            const string poolBaseAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's base address.
-            const string poolFeeAddress = "myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t"; // pool fee collecting address.
+            const string poolCentralWalletAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
 
             var transactions = new List<TxOut>();
 
-            var rewardRecipients = new Dictionary<string, double>() // miner addresses.
+            var rewardRecipients = new Dictionary<string, double>() // reward recipients addresses.
             {
-                {"mw9kV256mHogfv6LScD1XcpXscoNR2YmFk", 100} // 100% shares.
+                {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t", 1} // pool fee
 
             };
 
             // validate our pool wallet address.
-            if (!DaemonManager.Instance.Client.ValidateAddress(poolBaseAddress).IsValid)
-                throw new InvalidWalletAddressException(poolBaseAddress);
-
-            // validate our pool wallet address.
-            if (!DaemonManager.Instance.Client.ValidateAddress(poolFeeAddress).IsValid)
-                throw new InvalidWalletAddressException(poolFeeAddress);
+            if (!DaemonManager.Instance.Client.ValidateAddress(poolCentralWalletAddress).IsValid)
+                throw new InvalidWalletAddressException(poolCentralWalletAddress);
 
             // validate reward recipients addresses too.
             foreach (var pair in rewardRecipients)
@@ -240,35 +235,33 @@ namespace Coinium.Core.Coin
 
             double blockReward = blockTemplate.Coinbasevalue;
 
-            // generate ouput transaction for pool-fee.
-            var poolFeeAmount = blockReward*0.01; // the amount.
-            var poolFeeScript = CoinbaseUtils.CoinAddressToScript(poolFeeAddress); // script to claim the output for pool-fee.
-            blockReward -= poolFeeAmount; // deduct the payment.  
-          
-            var poolFeeTxOut = new TxOut
-            {
-                Value = ((UInt64) poolFeeAmount).LittleEndian(),
-                PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32) poolFeeScript.Length),
-                PublicKeyScript = poolFeeScript
-            };
-
-            transactions.Add(poolFeeTxOut);
-
-            // generate output transactions for recipients (miners).
+            // generate output transactions for recipients (set in config).
             foreach (var pair in rewardRecipients)
             {
                 var recipientScript = CoinbaseUtils.CoinAddressToScript(pair.Key); // generate the script to claim the output for recipient.
-                var amount = blockReward*pair.Value/100; // calculate the amount he recieves based on the percent of his shares.
+                var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
                 blockReward -= amount;
 
                 var recipientTxOut = new TxOut()
                 {
-                    Value = ((UInt64) amount).LittleEndian(),
-                    PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32) recipientScript.Length),
+                    Value = ((UInt64)amount).LittleEndian(),
+                    PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32)recipientScript.Length),
                     PublicKeyScript = recipientScript
                 };
                 transactions.Add(recipientTxOut);
             }
+
+            // send the remaining coins to pool's central wallet.
+            var centralWalletScript = CoinbaseUtils.CoinAddressToScript(poolCentralWalletAddress); // script to claim the output for pool-fee.
+          
+            var poolFeeTxOut = new TxOut
+            {
+                Value = ((UInt64) blockReward).LittleEndian(),
+                PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32) centralWalletScript.Length),
+                PublicKeyScript = centralWalletScript
+            };
+
+            transactions.Add(poolFeeTxOut);
 
             return transactions;
         }
