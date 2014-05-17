@@ -19,8 +19,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
 using Serilog;
@@ -40,8 +42,8 @@ namespace Coinium.Core.Mining
 
         public MiningManager()
         {
-            //this._timer = new Timer(BroadcastMiningJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 60)); // setup a timer to broadcast jobs.
-            this.BroadcastMiningJobs(null);
+            //this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 60)); // setup a timer to broadcast jobs.
+            this.BroadcastJobs(null);
 
             Log.Verbose("MinerManager() init..");
         }
@@ -73,17 +75,32 @@ namespace Coinium.Core.Mining
             return (T)miner;
         }
 
-        private void BroadcastMiningJobs(object state)
+        /// <summary>
+        /// Broadcasts to miners.
+        /// </summary>
+        /// <example>
+        /// sample communication: http://bitcoin.stackexchange.com/a/23112/8899
+        /// </example>
+        /// <param name="state"></param>
+        private void BroadcastJobs(object state)
         {
+
             var blockTemplate = DaemonManager.Instance.Client.GetBlockTemplate();
-
-            // need to build a coinbase transaction right here and include it in the root calculation!.
-
-            //Mining.CalculateMerkleTree(blockTemplate);
-
             var generationTransaction = new GenerationTransaction(blockTemplate, false);
 
-            var jobNotification = new JobNotification(blockTemplate)
+            var transactionBuffers = new List<byte[]>();
+            foreach (var transaction in blockTemplate.Transactions)
+            {
+                transactionBuffers.Add(transaction.Data.HexToByteArray());
+            }
+
+            //var merkleTree = new MerkleTree(transactionBuffers);
+
+            // send difficulty
+
+            // send job notification.
+
+            var jobNotification = new JobNotification(blockTemplate, generationTransaction)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };
