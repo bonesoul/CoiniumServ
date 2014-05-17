@@ -148,25 +148,6 @@ namespace Coinium.Core.Server.Stratum
                 Params = jobNotification
             };
 
-            //Params = new JobNotification()
-            //{
-            //    Id = "2b50",
-            //    PreviousBlockHash = "8f0472e229d7f803642efac67a3daeabbe9bda7ac7872ea19e3978cf3e65261d",
-            //    CoinbaseInitial = "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703c33a07062f503253482f047028a25208",
-            //    CoinbaseFinal = "0d2f7374726174756d506f6f6c2f0000000001fe7aaa2a010000001976a9145b771921a9b47ee8104da7e4710b5f633d95fa7388ac00000000",
-            //    MerkleBranches = new List<object>
-            //    {
-            //        "795ec58b7ebf9522ad15b76207c8f40e569cfd478c2e2c30bfa06c8a6d24609d",
-            //        "e76544a1b9d7550280c49bf965d5882c65f8cd4b9711202cc9bd311f76b438ac",
-            //        "01acd5a2a3142d735e4847a5b512aef35f22f67eb2d7be1f4dcdfca3c4031a43",
-            //        "4c561433d42406ca777fb1aa730a6b96317ca68c2341b5f0f52afc2ae1b6235d"
-            //    },
-            //    BlockVersion = "00000002",
-            //    NetworkDifficulty = "1b1d88f6",
-            //    nTime = "52a22871",
-            //    CleanJobs = false
-            //}
-
             var json = JsonConvert.SerializeObject(notification) + "\n";
 
             var data = Encoding.UTF8.GetBytes(json);

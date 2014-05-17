@@ -18,7 +18,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Gibbed.IO;
 
 namespace Coinium.Common.Extensions
 {
@@ -85,6 +87,30 @@ namespace Coinium.Common.Extensions
             for (var i = 0; i < bytes.Length; i++)
                 buf[i] = bytes[bytes.Length - 1 - i];
             return buf;
+        }
+
+        /// <summary>
+        /// Reverses the byte order.
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public static byte[] ReverseByteOrder(this byte[] bytes)
+        {
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                for (var i = 0; i < 8; i++)
+                {
+                    var value = BitConverter.ToUInt32(bytes, i*4).LittleEndian();
+                    stream.WriteValueU32(value);
+                }
+
+                result = stream.ToArray();
+                
+            }
+
+            return result.ReverseBytes();
         }
 
         public static byte[] HexToByteArray(this string str)

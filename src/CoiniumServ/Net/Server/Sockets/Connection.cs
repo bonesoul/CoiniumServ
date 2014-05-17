@@ -220,7 +220,9 @@ namespace Coinium.Net.Server.Sockets
 
         public void Disconnect()
         {
-            this.Socket.Disconnect(true);
+            if(Socket.Connected)
+                this.Socket.Disconnect(true);
+
             this.Client = null;            
         }
 

@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Coinium.Common.Extensions;
@@ -23,6 +24,7 @@ using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Mining;
 using Newtonsoft.Json;
+using Gibbed.IO;
 
 namespace Coinium.Core.Server.Stratum.Notifications
 {
@@ -61,13 +63,13 @@ namespace Coinium.Core.Server.Stratum.Notifications
         /// <remarks>The coinbase transaction is hashed against the merkle branches to build the final merkle root.</remarks>
         /// </summary>
         [JsonIgnore]
-        public List<object> MerkleBranches { get; private set; }
+        public List<byte[]> MerkleBranches { get; private set; }
 
         /// <summary>
         /// Coin's block version.
         /// </summary>
         [JsonIgnore]
-        public string BlockVersion { get; private set; }
+        public string Version { get; private set; }
 
         /// <summary>
         /// Encoded current network difficulty.
@@ -96,13 +98,19 @@ namespace Coinium.Core.Server.Stratum.Notifications
         {
             // init the values.
             this.Id = JobCounter.Instance.Next().ToString("x4");
-            this.PreviousBlockHash = blockTemplate.PreviousBlockHash;
+            this.PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             this.CoinbaseInitial = generationTransaction.Part1.ToHexString();
             this.CoinbaseFinal = generationTransaction.Part2.ToHexString();
-            // set merkle branches. 
-            this.BlockVersion = blockTemplate.Version.ToString("x8");
+
+            this.MerkleBranches = new List<byte[]>();
+            foreach (var transaction in blockTemplate.Transactions)
+            {
+                this.MerkleBranches.Add(transaction.Data.HexToByteArray());
+            }
+        
+            this.Version = BitConverter.GetBytes(blockTemplate.Version.BigEndian()).ToHexString();
             this.NetworkDifficulty = blockTemplate.Bits;
-            this.nTime = blockTemplate.CurTime.ToString();
+            this.nTime = BitConverter.GetBytes(blockTemplate.CurTime.BigEndian()).ToHexString();
         }
 
         public IEnumerator<object> GetEnumerator()
@@ -114,7 +122,7 @@ namespace Coinium.Core.Server.Stratum.Notifications
                 this.CoinbaseInitial,
                 this.CoinbaseFinal,
                 this.MerkleBranches,
-                this.BlockVersion,
+                this.Version,
                 this.NetworkDifficulty,
                 this.nTime,
                 this.CleanJobs

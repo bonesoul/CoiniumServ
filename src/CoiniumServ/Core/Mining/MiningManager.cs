@@ -19,10 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
 using Serilog;
@@ -42,7 +40,7 @@ namespace Coinium.Core.Mining
 
         public MiningManager()
         {
-            //this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 60)); // setup a timer to broadcast jobs.
+            this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
             this.BroadcastJobs(null);
 
             Log.Verbose("MinerManager() init..");
@@ -88,18 +86,9 @@ namespace Coinium.Core.Mining
             var blockTemplate = DaemonManager.Instance.Client.GetBlockTemplate();
             var generationTransaction = new GenerationTransaction(blockTemplate, false);
 
-            var transactionBuffers = new List<byte[]>();
-            foreach (var transaction in blockTemplate.Transactions)
-            {
-                transactionBuffers.Add(transaction.Data.HexToByteArray());
-            }
-
-            //var merkleTree = new MerkleTree(transactionBuffers);
-
             // send difficulty
 
             // send job notification.
-
             var jobNotification = new JobNotification(blockTemplate, generationTransaction)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
