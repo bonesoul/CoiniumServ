@@ -16,6 +16,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
+
 namespace Coinium.Core.Coin.Daemon.Responses
 {
     /// <summary>
@@ -35,7 +37,7 @@ namespace Coinium.Core.Coin.Daemon.Responses
         /// <summary>
         /// the current time as seen by the server (recommended for block time) - note this is not necessarily the system clock, and must fall within the mintime/maxtime rules
         /// </summary>
-        public int CurTime { get; set; }
+        public UInt32 CurTime { get; set; }
 
         /// <summary>
         /// the height of the block we are looking for
@@ -65,7 +67,7 @@ namespace Coinium.Core.Coin.Daemon.Responses
         /// <summary>
         /// always 1 or 2 (at least for bitcoin) - clients MUST understand the implications of the version they use (eg, comply with BIP 0034 for version 2)
         /// </summary>
-        public int Version { get; set; }
+        public Int32 Version { get; set; }
 
         /// <summary>
         /// <see cref="CoinBaseAux"/>
@@ -80,7 +82,7 @@ namespace Coinium.Core.Coin.Daemon.Responses
         /// <summary>
         /// total funds available for the coinbase (in Satoshis)
         /// </summary>
-        public int Coinbasevalue { get; set; }
+        public Int64 Coinbasevalue { get; set; }
 
         /// <summary>
         /// if provided, this value must be returned with results (see Block Submission)
