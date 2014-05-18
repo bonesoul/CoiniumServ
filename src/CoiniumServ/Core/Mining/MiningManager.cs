@@ -18,11 +18,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
+using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Crypto;
+using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
+using Gibbed.IO;
 using Serilog;
 
 namespace Coinium.Core.Mining
@@ -39,6 +45,8 @@ namespace Coinium.Core.Mining
         private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
 
         private Timer _timer;
+
+        private SHA256Managed _sha256Managed = new SHA256Managed();
 
         public MiningManager()
         {
@@ -89,7 +97,7 @@ namespace Coinium.Core.Mining
             var generationTransaction = new GenerationTransaction(blockTemplate, false);
 
             // create the difficulty notification.
-            var difficulty = new Difficulty(32);
+            var difficulty = new Difficulty(16);
 
             // create the job notification.
             var job = new Job(blockTemplate, generationTransaction)
@@ -109,6 +117,54 @@ namespace Coinium.Core.Mining
                 miner.SendDifficulty(difficulty);
                 miner.SendJob(job);
             }
+        }
+
+        public Job GetJob(UInt64 id)
+        {
+            return this._jobs.ContainsKey(id) ? this._jobs[id] : null;
+        }
+
+        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTime, string nonce)
+        {
+            // check if the job exists
+            var id = Convert.ToUInt64(jobId, 16);
+            var job = MiningManager.Instance.GetJob(id);
+
+            if (job == null)
+            {
+                Log.Warning("Job doesn't exist: {0}", id);
+                return false;
+            }
+
+            var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2));
+            var coinbaseHash = this.HashCoinbase(coinbaseBuffer);
+
+            return true;
+        }
+
+        private byte[] SerializeCoinbase(Job job, UInt64 extraNonce1, UInt32 extraNonce2)
+        {
+            var extraNonce1Buffer = BitConverter.GetBytes(extraNonce1);
+            var extraNonce2Buffer = BitConverter.GetBytes(extraNonce2);
+
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteBytes(job.CoinbaseInitial.HexToByteArray());
+                stream.WriteBytes(extraNonce1Buffer);
+                stream.WriteBytes(extraNonce2Buffer);
+                stream.WriteBytes(job.CoinbaseFinal.HexToByteArray());
+
+                result = stream.ToArray();
+            }
+
+            return result;
+        }
+
+        private Sha256Hash HashCoinbase(byte[] coinbase)
+        {
+            return new Sha256Hash(coinbase.DoubleDigest());
         }
 
 

@@ -18,6 +18,9 @@
 
 namespace Coinium.Core.Mining
 {
+    /// <summary>
+    /// Counter for job id's.
+    /// </summary>
     public class JobCounter
     {
         private static ulong Current { get; set; }
@@ -44,7 +47,7 @@ namespace Coinium.Core.Mining
         private static readonly JobCounter _instance = new JobCounter(); // memory instance of the JobCounter.
 
         /// <summary>
-        /// Singleton instance of WalletManager.
+        /// Singleton instance of JobCounter.
         /// </summary>
         public static JobCounter Instance { get { return _instance; } }
     }

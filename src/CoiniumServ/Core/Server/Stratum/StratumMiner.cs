@@ -52,6 +52,11 @@ namespace Coinium.Core.Server.Stratum
         /// </summary>
         public bool Authenticated { get; private set; }
 
+                /// <summary>
+        /// Sends a new mining job to the miner.
+        /// </summary>
+        public bool SupportsJobNotifications { get; private set; }
+
         /// <summary>
         /// Event that fires when a miner authenticates.
         /// </summary>
@@ -130,11 +135,6 @@ namespace Coinium.Core.Server.Stratum
 
             return this.Authenticated;
         }
-
-        /// <summary>
-        /// Sends a new mining job to the miner.
-        /// </summary>
-        public bool SupportsJobNotifications { get; private set; }
 
         /// <summary>
         /// Sends difficulty to the miner.
