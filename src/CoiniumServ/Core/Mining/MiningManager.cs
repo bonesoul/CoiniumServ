@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
 using Serilog;
@@ -89,7 +90,7 @@ namespace Coinium.Core.Mining
             var generationTransaction = new GenerationTransaction(blockTemplate, false);
 
             // create the difficulty notification.
-            var difficulty = new Difficulty(32);
+            var difficulty = new Difficulty(16);
 
             // create the job notification.
             var job = new Job(blockTemplate, generationTransaction)
@@ -109,6 +110,26 @@ namespace Coinium.Core.Mining
                 miner.SendDifficulty(difficulty);
                 miner.SendJob(job);
             }
+        }
+
+        public Job GetJob(UInt64 id)
+        {
+            return this._jobs.ContainsKey(id) ? this._jobs[id] : null;
+        }
+
+        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTime, string nonce)
+        {
+            // check if the job exists
+            var id = Convert.ToUInt64(jobId, 16);
+            var job = MiningManager.Instance.GetJob(id);
+
+            if (job == null)
+            {
+                Log.Warning("Job doesn't exist: {0}", id);
+                return false;
+            }
+
+            return true;
         }
 
 

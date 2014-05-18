@@ -19,6 +19,7 @@
 using System;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
+using Coinium.Core.Mining;
 using Coinium.Core.RPC.Sockets;
 using Coinium.Core.Server.Stratum.Responses;
 using Serilog;
@@ -124,13 +125,16 @@ namespace Coinium.Core.Server.Stratum
         /// </summary>
         /// <param name="user">Worker Username.</param>
         /// <param name="jobId">Job ID(Should be unique per Job to ensure that share diff is recorded properly) </param>
-        /// <param name="extronance2">Hex-encoded big-endian extranonce2, length depends on extranonce2_size from mining.notify</param>
-        /// <param name="ntime"> UNIX timestamp (32bit integer, big-endian, hex-encoded), must be >= ntime provided by mining,notify and <= current time'</param>
+        /// <param name="extranNonce2">Hex-encoded big-endian extranonce2, length depends on extranonce2_size from mining.notify</param>
+        /// <param name="nTime"> UNIX timestamp (32bit integer, big-endian, hex-encoded), must be >= ntime provided by mining,notify and <= current time'</param>
         /// <param name="nonce"> 32bit integer hex-encoded, big-endian </param>
         [JsonRpcMethod("mining.submit")]
-        public bool SubmitMiner(string user, string jobId, string extronance2, string ntime, string nonce)
+        public bool SubmitMiner(string user, string jobId, string extranNonce2, string nTime, string nonce)
         {
-            return true;
+            var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
+            var miner = (StratumMiner)(context.Miner);
+
+            return MiningManager.Instance.ProcessShare(miner, jobId, extranNonce2, nTime, nonce);             
         }
     }
 }
