@@ -18,12 +18,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
+using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
+using Gibbed.IO;
 using Serilog;
 
 namespace Coinium.Core.Mining
@@ -40,6 +45,8 @@ namespace Coinium.Core.Mining
         private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
 
         private Timer _timer;
+
+        private SHA256Managed _sha256Managed = new SHA256Managed();
 
         public MiningManager()
         {
@@ -129,7 +136,35 @@ namespace Coinium.Core.Mining
                 return false;
             }
 
+            var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2));
+            var coinbaseHash = this.HashCoinbase(coinbaseBuffer);
+
             return true;
+        }
+
+        private byte[] SerializeCoinbase(Job job, UInt64 extraNonce1, UInt32 extraNonce2)
+        {
+            var extraNonce1Buffer = BitConverter.GetBytes(extraNonce1);
+            var extraNonce2Buffer = BitConverter.GetBytes(extraNonce2);
+
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteBytes(job.CoinbaseInitial.HexToByteArray());
+                stream.WriteBytes(extraNonce1Buffer);
+                stream.WriteBytes(extraNonce2Buffer);
+                stream.WriteBytes(job.CoinbaseFinal.HexToByteArray());
+
+                result = stream.ToArray();
+            }
+
+            return result;
+        }
+
+        private Sha256Hash HashCoinbase(byte[] coinbase)
+        {
+            return new Sha256Hash(coinbase.DoubleDigest());
         }
 
 

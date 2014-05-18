@@ -119,7 +119,7 @@ namespace Coinium.Core.Coin
             Array.Copy(tmp, tmp.Length - 4, checksum, 0, 4);
             var bytes = new byte[tmp.Length - 4];
             Array.Copy(tmp, 0, bytes, 0, tmp.Length - 4);
-            tmp = Utils.DoubleDigest(bytes);
+            tmp = bytes.DoubleDigest();
             var hash = new byte[4];
             Array.Copy(tmp, 0, hash, 0, 4);
             if (!hash.SequenceEqual(checksum))
