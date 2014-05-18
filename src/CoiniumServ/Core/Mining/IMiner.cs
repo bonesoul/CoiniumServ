@@ -55,8 +55,14 @@ namespace Coinium.Core.Mining
         bool SupportsJobNotifications { get; }
 
         /// <summary>
+        /// Sends difficulty to the miner.
+        /// </summary>
+        /// <param name="difficulty"></param>
+        void SendDifficulty(Difficulty difficulty);
+
+        /// <summary>
         /// Sends a new mining job to the miner.
         /// </summary>
-        void SendJob(JobNotification job);
+        void SendJob(Job job);
     }
 }

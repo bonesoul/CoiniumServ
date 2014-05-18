@@ -29,13 +29,13 @@ using Gibbed.IO;
 namespace Coinium.Core.Server.Stratum.Notifications
 {
     [JsonArray]
-    public class JobNotification : IEnumerable<object>
+    public class Job : IEnumerable<object>
     {
         /// <summary>
         /// ID of the job. Use this ID while submitting share generated from this job.
         /// </summary>
         [JsonIgnore]
-        public string Id { get; private set; }
+        public UInt64 Id { get; private set; }
 
         /// <summary>
         /// Hash of previous block.
@@ -94,10 +94,10 @@ namespace Coinium.Core.Server.Stratum.Notifications
         /// Creates a new instance of JobNotification.
         /// </summary>
         /// <param name="blockTemplate"></param>
-        public JobNotification(BlockTemplate blockTemplate, GenerationTransaction generationTransaction)
+        public Job(BlockTemplate blockTemplate, GenerationTransaction generationTransaction)
         {
             // init the values.
-            this.Id = JobCounter.Instance.Next().ToString("x4");
+            this.Id = JobCounter.Instance.Next();
             this.PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             this.CoinbaseInitial = generationTransaction.Part1.ToHexString();
             this.CoinbaseFinal = generationTransaction.Part2.ToHexString();
@@ -117,7 +117,7 @@ namespace Coinium.Core.Server.Stratum.Notifications
         {
             var data = new List<object>
             {
-                this.Id,
+                this.Id.ToString("x4"),
                 this.PreviousBlockHash,
                 this.CoinbaseInitial,
                 this.CoinbaseFinal,

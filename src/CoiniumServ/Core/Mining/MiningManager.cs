@@ -36,6 +36,8 @@ namespace Coinium.Core.Mining
 
         private readonly Dictionary<int, IMiner> _miners = new Dictionary<int, IMiner>(); // Dictionary that holds id <-> miner pairs. 
 
+        private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
+
         private Timer _timer;
 
         public MiningManager()
@@ -86,20 +88,26 @@ namespace Coinium.Core.Mining
             var blockTemplate = DaemonManager.Instance.Client.GetBlockTemplate();
             var generationTransaction = new GenerationTransaction(blockTemplate, false);
 
-            // send difficulty
+            // create the difficulty notification.
+            var difficulty = new Difficulty(32);
 
-            // send job notification.
-            var jobNotification = new JobNotification(blockTemplate, generationTransaction)
+            // create the job notification.
+            var job = new Job(blockTemplate, generationTransaction)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };
+
+            this._jobs.Add(job.Id,job);
 
             foreach (var pair in this._miners)
             {
                 var miner = pair.Value;
 
-                if (miner.SupportsJobNotifications)
-                    miner.SendJob(jobNotification);
+                if (!miner.SupportsJobNotifications)
+                    continue;
+
+                miner.SendDifficulty(difficulty);
+                miner.SendJob(job);
             }
         }
 

@@ -78,7 +78,7 @@ namespace Coinium.Core.Server.Stratum
         /// <param name="e"></param>
         public void Parse(ConnectionDataEventArgs e)
         {
-            Log.Verbose("RPC-client recv:\n{0}", e.Data.ToEncodedString());
+            Log.Verbose("Stratum recv:\n{0}", e.Data.ToEncodedString());
 
             var rpcResultHandler = new AsyncCallback(
                 callback =>
@@ -92,7 +92,7 @@ namespace Coinium.Core.Server.Stratum
                                 
                     miner.Connection.Send(response);
 
-                    Log.Verbose("RPC-client send:\n{0}", result);
+                    Log.Verbose("Stratum send:\n{0}", result);
                 });
 
             var line = e.Data.ToEncodedString();
@@ -137,15 +137,16 @@ namespace Coinium.Core.Server.Stratum
         public bool SupportsJobNotifications { get; private set; }
 
         /// <summary>
-        /// Sends a mining-job to miner.
+        /// Sends difficulty to the miner.
         /// </summary>
-        public void SendJob(JobNotification jobNotification)
+        /// <param name="difficulty"></param>
+        public void SendDifficulty(Difficulty difficulty)
         {
             var notification = new JsonRequest
             {
                 Id = null,
-                Method = "mining.notify",
-                Params = jobNotification
+                Method = "mining.set_difficulty",
+                Params = difficulty
             };
 
             var json = JsonConvert.SerializeObject(notification) + "\n";
@@ -153,7 +154,27 @@ namespace Coinium.Core.Server.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             this.Connection.Send(data);
 
-            Log.Verbose("RPC-client send:\n{0}", data.ToEncodedString());
+            Log.Verbose("Stratum send:\n{0}", data.ToEncodedString());
+        }
+
+        /// <summary>
+        /// Sends a mining-job to miner.
+        /// </summary>
+        public void SendJob(Job job)
+        {
+            var notification = new JsonRequest
+            {
+                Id = null,
+                Method = "mining.notify",
+                Params = job
+            };
+
+            var json = JsonConvert.SerializeObject(notification) + "\n";
+
+            var data = Encoding.UTF8.GetBytes(json);
+            this.Connection.Send(data);
+
+            Log.Verbose("Stratum send:\n{0}", data.ToEncodedString());
         }
     }
 }
