@@ -52,14 +52,6 @@ namespace Coinium.Core.Server.Vanilla
         /// </summary>
         public bool SupportsJobNotifications { get; private set; }
 
-        /// <summary>
-        /// Sends a new mining job to the miner.
-        /// </summary>
-        public void SendJob(JobNotification job)
-        {
-            throw new NotSupportedException();
-        }
-
         public VanillaMiner(int id)
         {
             this.Id = id; // the id of the miner.
@@ -114,6 +106,23 @@ namespace Coinium.Core.Server.Vanilla
 
 
             return this.Authenticated;
+        }
+
+        /// <summary>
+        /// Sends difficulty to the miner.
+        /// </summary>
+        /// <param name="difficulty"></param>
+        public void SendDifficulty(Difficulty difficulty)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Sends a new mining job to the miner.
+        /// </summary>
+        public void SendJob(Job job)
+        {
+            throw new NotSupportedException();
         }
     }
 }
