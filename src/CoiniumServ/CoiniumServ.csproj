@@ -91,6 +91,7 @@
     <Compile Include="Common\Extensions\StringExtensions.cs" />
     <Compile Include="Common\Helpers\Arrays\ArrayHelpers.cs" />
     <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
+    <Compile Include="Common\Helpers\Misc\Range.cs" />
     <Compile Include="Common\Helpers\Time\TimeHelpers.cs" />
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />

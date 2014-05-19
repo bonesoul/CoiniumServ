@@ -81,12 +81,10 @@ namespace Coinium.Common.Extensions
         /// </summary>
         public static byte[] ReverseBytes(this byte[] bytes)
         {
-            // We could use the XOR trick here but it's easier to understand if we don't. If we find this is really a
-            // performance issue the matter can be revisited.
-            var buf = new byte[bytes.Length];
-            for (var i = 0; i < bytes.Length; i++)
-                buf[i] = bytes[bytes.Length - 1 - i];
-            return buf;
+            var reversed = new byte[bytes.Length];
+            for (var i = bytes.Length - 1; i >= 0; i--)
+                reversed[bytes.Length - i - 1] = bytes[i];
+            return reversed;
         }
 
         /// <summary>
