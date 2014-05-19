@@ -23,21 +23,22 @@ using System.Collections.Generic;
 namespace Coinium.Common.Helpers.Misc
 {
     /// <summary>
-    /// 
+    /// Port of python's range from
     /// </summary>
     /// <remarks>
-    /// Original implementation: http://www.davesquared.net/2008/01/python-like-range-implementation-in-c.html
+    /// Ported from: http://stackoverflow.com/a/8273091
     /// </remarks>
     public class Range : IEnumerable<int>
     {
-        private readonly int start;
-        private int stop;
-        private int step;
+        private int start = 0;
+        private int stop = 0;
+        private int step = 1;
 
         public Range(int start)
         {
             this.start = stop = start;
         }
+
         public static Range From(int startRange)
         {
             return new Range(startRange);
@@ -55,27 +56,11 @@ namespace Coinium.Common.Helpers.Misc
             return this;
         }
 
-        public void Do(Action<int> f)
-        {
-            foreach (int i in this)
-            {
-                f(i);
-            }
-        }
-
         public IEnumerator<int> GetEnumerator()
         {
-            int max = Math.Max(start, stop);
-            int min = Math.Min(start, stop);
-            if (step == default(int))
+            for (var i = start; step > 0 ? i < stop : i > stop; i += step)
             {
-                step = (start == min) ? 1 : -1;
-            }
-            int current = start;
-            while ((current >= min && current <= max) && (min != max))
-            {
-                yield return current;
-                current += step;
+                yield return i;
             }
         }
 
