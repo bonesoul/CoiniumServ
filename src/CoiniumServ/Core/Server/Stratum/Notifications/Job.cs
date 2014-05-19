@@ -92,9 +92,19 @@ namespace Coinium.Core.Server.Stratum.Notifications
         public bool CleanJobs { get; set; }
 
         /// <summary>
+        /// Associated block template.
+        /// </summary>
+        public BlockTemplate BlockTemplate { get; private set; }
+
+        /// <summary>
+        /// Associated generation transaction.
+        /// </summary>
+        public GenerationTransaction GenerationTransaction { get; private set; }
+
+        /// <summary>
         /// Merkle tree associated to blockTemplate transactions.
         /// </summary>
-        public MerkleTree MerkleTree { get; private set; }
+        public MerkleTree MerkleTree { get; private set; }      
 
         /// <summary>
         /// Creates a new instance of JobNotification.
@@ -103,6 +113,8 @@ namespace Coinium.Core.Server.Stratum.Notifications
         /// <param name="generationTransaction"></param>
         public Job(BlockTemplate blockTemplate, GenerationTransaction generationTransaction, MerkleTree merkeTree)
         {
+            this.BlockTemplate = blockTemplate;
+            this.GenerationTransaction = generationTransaction;
             this.MerkleTree = merkeTree;
 
             // init the values.

@@ -96,6 +96,8 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
+    <Compile Include="Core\Coin\Algorithms\IHashAlgorithm.cs" />
+    <Compile Include="Core\Coin\Algorithms\Scrypt.cs" />
     <Compile Include="Core\Coin\Base58.cs" />
     <Compile Include="Core\Coin\CoinbaseUtils.cs" />
     <Compile Include="Core\Coin\Exceptions\AddressFormatException.cs" />

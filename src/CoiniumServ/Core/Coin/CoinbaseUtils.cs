@@ -159,7 +159,6 @@ namespace Coinium.Core.Coin
         /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L264
         /// </example>
         /// <returns></returns>
-        // TODO: implement test for the method
         public static byte[] CoinAddressToScript(string address)
         {
             var decoded = Base58.Decode(address);

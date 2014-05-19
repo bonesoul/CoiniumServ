@@ -23,12 +23,14 @@ using System.Security.Cryptography;
 using System.Threading;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
+using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
 using Gibbed.IO;
+using Org.BouncyCastle.Math;
 using Serilog;
 
 namespace Coinium.Core.Mining
@@ -46,13 +48,13 @@ namespace Coinium.Core.Mining
 
         private Timer _timer;
 
-        private UInt64 diff1;
+        private BigInteger diff1;
 
         
 
         public MiningManager()
         {
-            this.diff1 = BitConverter.ToUInt64("00000000ffff0000000000000000000000000000000000000000000000000000".HexToByteArray(), 0);
+            this.diff1 = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
             this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
             this.BroadcastJobs(null);
 
@@ -137,7 +139,7 @@ namespace Coinium.Core.Mining
             return this._jobs.ContainsKey(id) ? this._jobs[id] : null;
         }
 
-        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTime, string nonce)
+        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
@@ -149,14 +151,66 @@ namespace Coinium.Core.Mining
                 return false;
             }
 
-            var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2));
+            if (nTimeString.Length != 8)
+            {
+                Log.Warning("Incorrect size of nTime");
+                return false;
+            }
+
+            if (nonceString.Length != 8)
+            {
+                Log.Warning("incorrect size of nonce");
+                return false;
+            }
+
+            var nTime = Convert.ToUInt32(nTimeString, 16);
+            var nonce = Convert.ToUInt32(nonceString, 16);
+
+            var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2, 16));
             var coinbaseHash = this.HashCoinbase(coinbaseBuffer);
 
-            var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes().ToHexString();
+            var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();
 
+            var header = this.SerializeHeader(job, merkleRoot, nTime, nonce);
 
+            var scrypt = new Scrypt();
+            var headerHash = scrypt.Hash(header);
 
             return true;
+        }
+
+        /// <summary>
+        /// Block headers are sent in a headers packet in response to a getheaders message.
+        /// </summary>
+        /// <remarks>
+        /// https://en.bitcoin.it/wiki/Protocol_specification#Block_Headers
+        /// </remarks>
+        /// <example>
+        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/master/lib/blockTemplate.js#L85
+        /// </example>
+        /// <param name="job"></param>
+        /// <param name="merkleRoot"></param>
+        /// <param name="nTime"></param>
+        /// <param name="nonce"></param>
+        /// <returns></returns>
+        private byte[] SerializeHeader(Job job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
+        {
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteValueU32(nonce);
+                stream.WriteValueU32(Convert.ToUInt32(job.NetworkDifficulty, 16));
+                stream.WriteValueU32(nTime);
+                stream.WriteBytes(merkleRoot);
+                stream.WriteBytes(job.PreviousBlockHash.HexToByteArray());
+                stream.WriteValueU32(job.BlockTemplate.Version.BigEndian());
+
+                result = stream.ToArray();
+                result = result.ReverseBytes();
+            }
+
+            return result;
         }
 
         private byte[] SerializeCoinbase(Job job, UInt64 extraNonce1, UInt32 extraNonce2)
