@@ -52,7 +52,6 @@ namespace Coinium.Core.Mining
 
         public MiningManager()
         {
-            var abc = "00000000ffff0000000000000000000000000000000000000000000000000000".HexToByteArray();
             this.diff1 = BitConverter.ToUInt64("00000000ffff0000000000000000000000000000000000000000000000000000".HexToByteArray(), 0);
             this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
             this.BroadcastJobs(null);
