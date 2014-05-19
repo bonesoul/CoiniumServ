@@ -23,6 +23,7 @@ using System.Security.Cryptography;
 using System.Threading;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
+using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
@@ -138,7 +139,7 @@ namespace Coinium.Core.Mining
             return this._jobs.ContainsKey(id) ? this._jobs[id] : null;
         }
 
-        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTime, string nonce)
+        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
@@ -150,25 +151,30 @@ namespace Coinium.Core.Mining
                 return false;
             }
 
-            if (nTime.Length != 8)
+            if (nTimeString.Length != 8)
             {
                 Log.Warning("Incorrect size of nTime");
                 return false;
             }
 
-            if (nonce.Length != 8)
+            if (nonceString.Length != 8)
             {
                 Log.Warning("incorrect size of nonce");
                 return false;
             }
 
-            var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2));
+            var nTime = Convert.ToUInt32(nTimeString, 16);
+            var nonce = Convert.ToUInt32(nonceString, 16);
+
+            var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2, 16));
             var coinbaseHash = this.HashCoinbase(coinbaseBuffer);
 
             var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();
 
-            var header = this.SerializeHeader(merkleRoot, Convert.ToUInt32(nTime, 16), Convert.ToUInt32(nonce, 16));
-            
+            var header = this.SerializeHeader(job, merkleRoot, nTime, nonce);
+
+            var scrypt = new Scrypt();
+            var headerHash = scrypt.Hash(header);
 
             return true;
         }
@@ -179,19 +185,29 @@ namespace Coinium.Core.Mining
         /// <remarks>
         /// https://en.bitcoin.it/wiki/Protocol_specification#Block_Headers
         /// </remarks>
+        /// <example>
+        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/master/lib/blockTemplate.js#L85
+        /// </example>
+        /// <param name="job"></param>
         /// <param name="merkleRoot"></param>
         /// <param name="nTime"></param>
         /// <param name="nonce"></param>
         /// <returns></returns>
-        private byte[] SerializeHeader(byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
+        private byte[] SerializeHeader(Job job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
         {
             byte[] result;
 
             using (var stream = new MemoryStream())
             {
                 stream.WriteValueU32(nonce);
+                stream.WriteValueU32(Convert.ToUInt32(job.NetworkDifficulty, 16));
+                stream.WriteValueU32(nTime);
+                stream.WriteBytes(merkleRoot);
+                stream.WriteBytes(job.PreviousBlockHash.HexToByteArray());
+                stream.WriteValueU32(job.BlockTemplate.Version.BigEndian());
 
                 result = stream.ToArray();
+                result = result.ReverseBytes();
             }
 
             return result;

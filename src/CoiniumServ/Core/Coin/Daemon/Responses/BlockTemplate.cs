@@ -67,7 +67,7 @@ namespace Coinium.Core.Coin.Daemon.Responses
         /// <summary>
         /// always 1 or 2 (at least for bitcoin) - clients MUST understand the implications of the version they use (eg, comply with BIP 0034 for version 2)
         /// </summary>
-        public Int32 Version { get; set; }
+        public UInt32 Version { get; set; }
 
         /// <summary>
         /// <see cref="CoinBaseAux"/>
