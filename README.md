@@ -24,9 +24,7 @@ CoiniumServ is a high-performance pool-server implementation developed with C# t
 * getblocktemplate & job-manager support.
 * Coin wallet daemon rpc connection support.
    
-### About
-
-Coinium is an effort to bring crypto-coins to C# space and create a reference pool software implementation. It can be compiled with Microsoft .NET or Mono, which means you can run it on Windows, MacOS, and Linux. Please see the file LICENSE for license details.
+### Motivation
 
 For more information about the motivation behind CoiniumServ, check [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan).
 
@@ -52,7 +50,7 @@ For more information about the motivation behind CoiniumServ, check [Master Plan
 
 Every build of CoiniumServ is built & tested over mono & dotnet.
 * Mono: using mono 2.x and 3.x: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
-* Dotnet: using dotnet 4.x: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
+* dotNet: using dotnet 4.x: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
  
 #### BountySource
 
