@@ -3,14 +3,19 @@
  
 CoiniumServ is a high-performance pool-server implementation developed with C# that can host multiple pools together with their own wallet-daemon connections and ports. 
 
-* http://www.coinium.org
+#### Info
+
+* Website: http://www.coinium.org
 * [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
-* Read the [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and check the [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/) before asking!
+* [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
+* [Documentation & Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
+
+#### More
 * IRC (**irc.freenode.net**):
   - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
   - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
   - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
-* [@coinium](http://twitter.com/coinium)
+* [Twitter](http://twitter.com/coinium)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
 ### Features
