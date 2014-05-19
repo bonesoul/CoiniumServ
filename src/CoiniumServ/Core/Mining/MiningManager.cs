@@ -24,7 +24,6 @@ using System.Threading;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
@@ -47,10 +46,14 @@ namespace Coinium.Core.Mining
 
         private Timer _timer;
 
-        private SHA256Managed _sha256Managed = new SHA256Managed();
+        private UInt64 diff1;
+
+        
 
         public MiningManager()
         {
+            var abc = "00000000ffff0000000000000000000000000000000000000000000000000000".HexToByteArray();
+            this.diff1 = BitConverter.ToUInt64("00000000ffff0000000000000000000000000000000000000000000000000000".HexToByteArray(), 0);
             this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
             this.BroadcastJobs(null);
 
@@ -150,7 +153,9 @@ namespace Coinium.Core.Mining
             var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2));
             var coinbaseHash = this.HashCoinbase(coinbaseBuffer);
 
-            var merkleTree = job.MerkleTree;
+            var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes().ToHexString();
+
+
 
             return true;
         }
@@ -175,9 +180,9 @@ namespace Coinium.Core.Mining
             return result;
         }
 
-        private Sha256Hash HashCoinbase(byte[] coinbase)
+        private byte[] HashCoinbase(byte[] coinbase)
         {
-            return new Sha256Hash(coinbase.DoubleDigest());
+            return coinbase.DoubleDigest();
         }
 
 
