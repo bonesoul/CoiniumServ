@@ -17,12 +17,7 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CryptSharp;
 using CryptSharp.Utility;
-using HashLib;
 
 namespace Coinium.Core.Coin.Algorithms
 {
@@ -30,13 +25,34 @@ namespace Coinium.Core.Coin.Algorithms
     {
         public Double Multiplier { get; private set; }
 
+        /// <summary>
+        /// N parameter - CPU/memory cost parameter.
+        /// </summary>
+        public int N { get; private set; }
+
+        /// <summary>
+        /// R parameter - block size.
+        /// </summary>
+        public int R { get; private set; }
+
+        /// <summary>
+        /// P - parallelization parameter -  a large value of p can increase computational 
+        /// cost of scrypt without increasing the memory usage.
+        /// </summary>
+        public int P { get; private set; }
+
         public Scrypt()
         {
+            this.N = 1024;
+            this.R = 1;
+            this.P = 1;
             this.Multiplier = Math.Pow(2, 16);
         }
 
         public byte[] Hash(byte[] input)
         {
+            var result = SCrypt.ComputeDerivedKey(input, input, this.N, this.R, this.P, null, 32);
+            return result;
         }
     }
 }
