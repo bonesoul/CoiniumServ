@@ -173,8 +173,7 @@ namespace Coinium.Core.Mining
 
             var header = this.SerializeHeader(job, merkleRoot, nTime, nonce);
 
-            var scrypt = new Scrypt();
-            var headerHash = scrypt.Hash(header);
+            var headerHash = HashAlgorithmFactory.Get("scrypt").Hash(header);                
 
             return true;
         }
