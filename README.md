@@ -3,14 +3,19 @@
  
 CoiniumServ is a high-performance pool-server implementation developed with C# that can host multiple pools together with their own wallet-daemon connections and ports. 
 
-* http://www.coinium.org
+#### Info
+
+* Website: http://www.coinium.org
 * [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
-* Read the [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and check the [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/) before asking!
+* [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
+* [Documentation & Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
+
+#### More
 * IRC (**irc.freenode.net**):
   - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
   - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
   - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
-* [@coinium](http://twitter.com/coinium)
+* [Twitter](http://twitter.com/coinium)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
 ### Features
@@ -19,9 +24,7 @@ CoiniumServ is a high-performance pool-server implementation developed with C# t
 * getblocktemplate & job-manager support.
 * Coin wallet daemon rpc connection support.
    
-### About
-
-Coinium is an effort to bring crypto-coins to C# space and create a reference pool software implementation. It can be compiled with Microsoft .NET or Mono, which means you can run it on Windows, MacOS, and Linux. Please see the file LICENSE for license details.
+### Motivation
 
 For more information about the motivation behind CoiniumServ, check [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan).
 
@@ -47,7 +50,7 @@ For more information about the motivation behind CoiniumServ, check [Master Plan
 
 Every build of CoiniumServ is built & tested over mono & dotnet.
 * Mono: using mono 2.x and 3.x: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
-* Dotnet: using dotnet 4.x: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
+* dotNet: using dotnet 4.x: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
  
 #### BountySource
 
