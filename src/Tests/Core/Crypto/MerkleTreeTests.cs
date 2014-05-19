@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using Coinium.Common.Extensions;
 using Coinium.Core.Crypto;
+using Should.Fluent;
 using Xunit;
 
 namespace Tests.Core.Crypto
@@ -37,14 +38,14 @@ namespace Tests.Core.Crypto
                 "d43d6fbe5e46ee82847421c1609fe1203c0f3db0992ac98a06684b10676b8428".HexToByteArray()
             };
 
-            var merkleRoot = new MerkleTree(hashList).Root;
+            var merkleTree = new MerkleTree(hashList);
             var expected = "d43d6fbe5e46ee82847421c1609fe1203c0f3db0992ac98a06684b10676b8428".HexToByteArray();
 
-            Assert.Equal(merkleRoot.Bytes, expected);
+            merkleTree.Root.Bytes.Should().Equal(expected);
         }
 
         /// <summary>
-        /// TEsts a block with 3 fake transactions.
+        /// Tests a block with 3 fake transactions.
         /// </summary>
         [Fact]
         public void TestBlockWithThreeTransactions()
@@ -56,10 +57,31 @@ namespace Tests.Core.Crypto
                 "c13a822f47072f9b2236cea9c22ab7e5d92c0ac4fd2a63af2c4ed1f2e306efd5".HexToByteArray(),
             };
 
-            var merkleRoot = new MerkleTree(hashList).Root;
+            var merkleTree = new MerkleTree(hashList);
             var expected = "a907cc5d1de726136e50b1899672db2728c47897902718fbcfd133ed11331a66".HexToByteArray();
 
-            Assert.Equal(merkleRoot.Bytes, expected);
+            merkleTree.Root.Bytes.Should().Equal(expected);
+        }
+
+        /// <summary>
+        /// Tests steps of a merkle tree.
+        /// </summary>
+        [Fact]
+        public void TestSteps()
+        {
+            var hashList = new List<byte[]>
+            {
+                "999d2c8bb6bda0bf784d9ebeb631d711dbbbfe1bc006ea13d6ad0d6a2649a971".HexToByteArray(),
+                "3f92594d5a3d7b4df29d7dd7c46a0dac39a96e751ba0fc9bab5435ea5e22a19d".HexToByteArray(),
+                "a5633f03855f541d8e60a6340fc491d49709dc821f3acb571956a856637adcb6".HexToByteArray(),
+                "28d97c850eaf917a4c76c02474b05b70a197eaefb468d21c22ed110afe8ec9e0".HexToByteArray(),
+            };
+
+            var merkleTree = new MerkleTree(hashList);
+            var result = merkleTree.WithFirst("d43b669fb42cfa84695b844c0402d410213faa4f3e66cb7248f688ff19d5e5f7".HexToByteArray());
+            var expected = "82293f182d5db07d08acf334a5a907012bbb9990851557ac0ec028116081bd5a".HexToByteArray();
+
+            result.Should().Equal(expected);
         }
 
         /// <summary>
@@ -174,10 +196,10 @@ namespace Tests.Core.Crypto
                 "27a0797cc5b042ba4c11e72a9555d13a67f00161550b32ede0511718b22dbc2c".HexToByteArray()
             };
 
-            var merkleRoot = new MerkleTree(hashList).Root;
+            var merkleTree = new MerkleTree(hashList);
             var expected = "871714dcbae6c8193a2bb9b2a69fe1c0440399f38d94b3a0f1b447275a29978a".HexToByteArray();
 
-            Assert.Equal(merkleRoot.Bytes, expected);
+            merkleTree.Root.Bytes.Should().Equal(expected);
         }
     }
 }

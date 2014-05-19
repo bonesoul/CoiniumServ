@@ -24,6 +24,7 @@ using System.Threading;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
@@ -96,11 +97,21 @@ namespace Coinium.Core.Mining
             var blockTemplate = DaemonManager.Instance.Client.GetBlockTemplate();
             var generationTransaction = new GenerationTransaction(blockTemplate, false);
 
+            var hashList = new List<byte[]>();
+            
+            foreach (var transaction in blockTemplate.Transactions)
+            {
+                hashList.Add(transaction.Hash.HexToByteArray());
+            }            
+            
+            var merkleTree = new MerkleTree(hashList);
+
+            
             // create the difficulty notification.
             var difficulty = new Difficulty(16);
 
             // create the job notification.
-            var job = new Job(blockTemplate, generationTransaction)
+            var job = new Job(blockTemplate, generationTransaction, merkleTree)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };
@@ -138,6 +149,8 @@ namespace Coinium.Core.Mining
 
             var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2));
             var coinbaseHash = this.HashCoinbase(coinbaseBuffer);
+
+            var merkleTree = job.MerkleTree;
 
             return true;
         }
