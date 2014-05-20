@@ -25,7 +25,7 @@ namespace Coinium.Core.Coin.Algorithms
 {
     public interface IHashAlgorithm
     {
-        Double Multiplier { get; }
+        UInt32 Multiplier { get; }
 
         byte[] Hash(byte[] input);
     }

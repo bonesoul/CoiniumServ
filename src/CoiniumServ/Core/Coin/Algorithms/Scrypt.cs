@@ -23,7 +23,7 @@ namespace Coinium.Core.Coin.Algorithms
 {
     public class Scrypt : IHashAlgorithm
     {
-        public Double Multiplier { get; private set; }
+        public UInt32 Multiplier { get; private set; }
 
         /// <summary>
         /// N parameter - CPU/memory cost parameter.
@@ -46,7 +46,7 @@ namespace Coinium.Core.Coin.Algorithms
             this.N = 1024;
             this.R = 1;
             this.P = 1;
-            this.Multiplier = Math.Pow(2, 16);
+            this.Multiplier = (UInt32) Math.Pow(2, 16);
         }
 
         public byte[] Hash(byte[] input)

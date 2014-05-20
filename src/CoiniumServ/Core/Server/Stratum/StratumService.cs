@@ -72,7 +72,7 @@ namespace Coinium.Core.Server.Stratum
         /// <param name="nTime"> UNIX timestamp (32bit integer, big-endian, hex-encoded), must be >= ntime provided by mining,notify and <= current time'</param>
         /// <param name="nonce"> 32bit integer hex-encoded, big-endian </param>
         [JsonRpcMethod("mining.submit")]
-        public bool SubmitMiner(string user, string jobId, string extranNonce2, string nTime, string nonce)
+        public bool SubmitWork(string user, string jobId, string extranNonce2, string nTime, string nonce)
         {
             var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
             var miner = (StratumMiner)(context.Miner);
