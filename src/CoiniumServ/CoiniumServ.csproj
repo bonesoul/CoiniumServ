@@ -71,6 +71,9 @@
     <Reference Include="Nini">
       <HintPath>..\..\build\packages\Trove.Nini.1.1.0.0\lib\net20\Nini.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\build\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="Serilog">
       <HintPath>..\..\build\packages\Serilog.1.3.7\lib\net40\Serilog.dll</HintPath>
     </Reference>
@@ -101,7 +104,7 @@
     <Compile Include="Core\Coin\Exceptions\InvalidWalletAddressException.cs" />
     <Compile Include="Core\Coin\GenerationTransaction.cs" />
     <Compile Include="Core\Coin\Amount.cs" />
-    <Compile Include="Core\Crypto\Sha256Hash.cs" />
+    <Compile Include="Core\Crypto\TransactionHash.cs" />
     <Compile Include="Core\Commands\CommandAttributes.cs" />
     <Compile Include="Core\Commands\CommandGroup.cs" />
     <Compile Include="Core\Commands\CommandManager.cs" />

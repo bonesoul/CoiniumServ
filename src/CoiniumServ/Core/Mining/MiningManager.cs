@@ -162,9 +162,9 @@ namespace Coinium.Core.Mining
             return result;
         }
 
-        private Sha256Hash HashCoinbase(byte[] coinbase)
+        private TransactionHash HashCoinbase(byte[] coinbase)
         {
-            return new Sha256Hash(coinbase.DoubleDigest());
+            return new TransactionHash(coinbase.DoubleDigest());
         }
 
 

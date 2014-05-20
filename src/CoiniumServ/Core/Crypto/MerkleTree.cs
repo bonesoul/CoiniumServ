@@ -43,7 +43,7 @@ namespace Coinium.Core.Crypto
         /// <summary>
         /// The root of the merkle tree.
         /// </summary>
-        public Sha256Hash Root { get; private set; }
+        public TransactionHash Root { get; private set; }
 
         /// <summary>
         /// Creates a new merkle-tree instance.
@@ -55,7 +55,7 @@ namespace Coinium.Core.Crypto
                 throw new ArgumentOutOfRangeException();
 
             this.Tree = this.Build(hashList);
-            this.Root = new Sha256Hash(this.Tree[this.Tree.Count - 1]);
+            this.Root = new TransactionHash(this.Tree[this.Tree.Count - 1]);
         }
 
         /// <summary>
