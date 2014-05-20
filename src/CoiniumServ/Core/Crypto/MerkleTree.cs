@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Coinium.Common.Extensions;
+using Coinium.Common.Helpers.Misc;
 
 namespace Coinium.Core.Crypto
 {
@@ -30,7 +31,7 @@ namespace Coinium.Core.Crypto
     /// </remarks>
     /// <specification>https://en.bitcoin.it/wiki/Protocol_specification#Merkle_Trees</specification>
     /// <example>
-    /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-286819-for-python
+    /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-2-for-python
     /// Original implementation: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
     /// </example>
     public class MerkleTree
@@ -39,6 +40,11 @@ namespace Coinium.Core.Crypto
         /// Leaves of the merkle tree.
         /// </summary>
         public IList<byte[]> Tree { get; private set; }
+
+        /// <summary>
+        /// The steps in tree.
+        /// </summary>
+        public IList<byte[]> Steps { get; private set; } 
 
         /// <summary>
         /// The root of the merkle tree.
@@ -51,11 +57,9 @@ namespace Coinium.Core.Crypto
         /// <param name="hashList"></param>
         public MerkleTree(List<byte[]> hashList)
         {
-            if (hashList.Count == 0)
-                throw new ArgumentOutOfRangeException();
-
             this.Tree = this.Build(hashList);
-            this.Root = new TransactionHash(this.Tree[this.Tree.Count - 1]);
+            this.Steps = this.CalculateSteps(hashList);
+            this.Root = this.Tree.Count > 0 ? new TransactionHash(this.Tree[this.Tree.Count - 1]) : TransactionHash.ZeroHash;
         }
 
         /// <summary>
@@ -123,6 +127,78 @@ namespace Coinium.Core.Crypto
                 levelOffset += levelSize;
             }
             return tree;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <example>
+        /// python: http://runnable.com/U3jqtyYUmAUxtsSS/bitcoin-block-merkle-root-python
+        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/master/lib/merkleTree.js#L9
+        /// </example>
+        /// <param name="hashList"></param>
+        /// <returns></returns>
+        private IList<byte[]> CalculateSteps(List<byte[]> hashList)
+        {
+            var steps = new List<byte[]>();
+
+            var L = new List<byte[]> {null};
+            L.AddRange(hashList);
+
+            var startL = 2;
+            var Ll = L.Count;
+
+            if (Ll > 1)
+            {
+                while (true)
+                {
+                    if (Ll == 1)
+                        break;
+
+                    steps.Add(L[1]);
+
+                    if (Ll%2 == 1)
+                        L.Add(L[L.Count - 1]);
+
+                    var Ld = new List<byte[]>();
+
+                    foreach (int i in Range.From(startL).To(Ll).WithStepSize(2))
+                    {
+                        Ld.Add(this.MerkleJoin(L[i], L[i + 1]));
+                    }
+
+                    L = new List<byte[]> {null};
+                    L.AddRange(Ld);
+                    Ll = L.Count;
+                }
+            }
+            return steps;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <example>
+        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/master/lib/merkleTree.js#L11
+        /// </example>
+        /// <param name="hash1"></param>
+        /// <param name="hash2"></param>
+        /// <returns></returns>
+        private byte[] MerkleJoin(byte[] hash1, byte[] hash2)
+        {
+            var joined = hash1.Append(hash2);
+            var dHashed = joined.DoubleDigest();
+            return dHashed;
+        }
+
+        public byte[] WithFirst(byte[] first)
+        {
+            foreach (var step in this.Steps)
+            {
+                first = first.Append(step).DoubleDigest();
+            }
+
+            return first;
         }
     }
 }

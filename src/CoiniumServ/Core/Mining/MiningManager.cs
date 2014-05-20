@@ -19,16 +19,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using System.Threading;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
+using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
 using Gibbed.IO;
+using Org.BouncyCastle.Math;
 using Serilog;
 
 namespace Coinium.Core.Mining
@@ -46,10 +47,13 @@ namespace Coinium.Core.Mining
 
         private Timer _timer;
 
-        private SHA256Managed _sha256Managed = new SHA256Managed();
+        private BigInteger diff1;
+
+        
 
         public MiningManager()
         {
+            this.diff1 = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
             this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
             this.BroadcastJobs(null);
 
@@ -96,11 +100,21 @@ namespace Coinium.Core.Mining
             var blockTemplate = DaemonManager.Instance.Client.GetBlockTemplate();
             var generationTransaction = new GenerationTransaction(blockTemplate, false);
 
+            var hashList = new List<byte[]>();
+            
+            foreach (var transaction in blockTemplate.Transactions)
+            {
+                hashList.Add(transaction.Hash.HexToByteArray());
+            }            
+            
+            var merkleTree = new MerkleTree(hashList);
+
+            
             // create the difficulty notification.
             var difficulty = new Difficulty(16);
 
             // create the job notification.
-            var job = new Job(blockTemplate, generationTransaction)
+            var job = new Job(blockTemplate, generationTransaction, merkleTree)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };
@@ -124,7 +138,7 @@ namespace Coinium.Core.Mining
             return this._jobs.ContainsKey(id) ? this._jobs[id] : null;
         }
 
-        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTime, string nonce)
+        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
@@ -136,10 +150,112 @@ namespace Coinium.Core.Mining
                 return false;
             }
 
-            var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2));
-            var coinbaseHash = this.HashCoinbase(coinbaseBuffer);
+            if (nTimeString.Length != 8)
+            {
+                Log.Warning("Incorrect size of nTime");
+                return false;
+            }
+
+            if (nonceString.Length != 8)
+            {
+                Log.Warning("incorrect size of nonce");
+                return false;
+            }
+
+            var nTime = Convert.ToUInt32(nTimeString, 16);
+            var nonce = Convert.ToUInt32(nonceString, 16);
+
+            var coinbase = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2, 16));
+            var coinbaseHash = this.HashCoinbase(coinbase);
+
+            var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();
+
+            var algorithm = HashAlgorithmFactory.Get("scrypt");
+
+            var header = this.SerializeHeader(job, merkleRoot, nTime, nonce);
+            var headerHash = algorithm.Hash(header);
+            var headerValue = new BigInteger(headerHash.ToHexString(), 16);
+
+            var shareDiff = diff1.Divide(headerValue).Multiply(BigInteger.ValueOf(algorithm.Multiplier));
+            var blockDiffAdjusted = 16 * algorithm.Multiplier;
+
+            var target = new BigInteger(job.NetworkDifficulty, 16);
+            if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
+            {
+                var block = this.SerializeBlock(job, header, coinbase).ToHexString();
+            }
+            else // invalid share.
+            {
+               
+            }
 
             return true;
+        }
+
+        /// <summary>
+        /// Block data structure.
+        /// </summary>
+        /// <remarks>
+        /// https://en.bitcoin.it/wiki/Protocol_specification#block
+        /// </remarks>
+        /// <param name="header"></param>
+        /// <param name="coinbase"></param>
+        /// <returns></returns>
+        private byte[] SerializeBlock(Job job, byte[] header, byte[] coinbase)
+        {
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteBytes(header);
+                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32) job.BlockTemplate.Transactions.Length));
+                stream.WriteBytes(coinbase);
+
+                foreach (var transaction in job.BlockTemplate.Transactions)
+                {
+                    stream.WriteBytes(transaction.Data.HexToByteArray());
+                }
+
+                // need to implement POS support too.
+
+                result = stream.ToArray();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Block headers are sent in a headers packet in response to a getheaders message.
+        /// </summary>
+        /// <remarks>
+        /// https://en.bitcoin.it/wiki/Protocol_specification#Block_Headers
+        /// </remarks>
+        /// <example>
+        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/master/lib/blockTemplate.js#L85
+        /// </example>
+        /// <param name="job"></param>
+        /// <param name="merkleRoot"></param>
+        /// <param name="nTime"></param>
+        /// <param name="nonce"></param>
+        /// <returns></returns>
+        private byte[] SerializeHeader(Job job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
+        {
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteValueU32(nonce);
+                stream.WriteValueU32(Convert.ToUInt32(job.NetworkDifficulty, 16));
+                stream.WriteValueU32(nTime);
+                stream.WriteBytes(merkleRoot);
+                stream.WriteBytes(job.PreviousBlockHash.HexToByteArray());
+                stream.WriteValueU32(job.BlockTemplate.Version.BigEndian());
+
+                result = stream.ToArray();
+                result = result.ReverseBytes();
+            }
+
+            return result;
         }
 
         private byte[] SerializeCoinbase(Job job, UInt64 extraNonce1, UInt32 extraNonce2)
@@ -164,7 +280,7 @@ namespace Coinium.Core.Mining
 
         private TransactionHash HashCoinbase(byte[] coinbase)
         {
-            return new TransactionHash(coinbase.DoubleDigest());
+            return coinbase.DoubleDigest();
         }
 
 

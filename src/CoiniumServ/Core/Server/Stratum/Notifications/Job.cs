@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon.Responses;
+using Coinium.Core.Crypto;
 using Coinium.Core.Mining;
 using Newtonsoft.Json;
 using Gibbed.IO;
@@ -91,12 +92,31 @@ namespace Coinium.Core.Server.Stratum.Notifications
         public bool CleanJobs { get; set; }
 
         /// <summary>
+        /// Associated block template.
+        /// </summary>
+        public BlockTemplate BlockTemplate { get; private set; }
+
+        /// <summary>
+        /// Associated generation transaction.
+        /// </summary>
+        public GenerationTransaction GenerationTransaction { get; private set; }
+
+        /// <summary>
+        /// Merkle tree associated to blockTemplate transactions.
+        /// </summary>
+        public MerkleTree MerkleTree { get; private set; }      
+
+        /// <summary>
         /// Creates a new instance of JobNotification.
         /// </summary>
         /// <param name="blockTemplate"></param>
         /// <param name="generationTransaction"></param>
-        public Job(BlockTemplate blockTemplate, GenerationTransaction generationTransaction)
+        public Job(BlockTemplate blockTemplate, GenerationTransaction generationTransaction, MerkleTree merkeTree)
         {
+            this.BlockTemplate = blockTemplate;
+            this.GenerationTransaction = generationTransaction;
+            this.MerkleTree = merkeTree;
+
             // init the values.
             this.Id = JobCounter.Instance.Next();
             this.PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
