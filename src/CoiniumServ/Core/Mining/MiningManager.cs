@@ -166,16 +166,63 @@ namespace Coinium.Core.Mining
             var nTime = Convert.ToUInt32(nTimeString, 16);
             var nonce = Convert.ToUInt32(nonceString, 16);
 
-            var coinbaseBuffer = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2, 16));
-            var coinbaseHash = this.HashCoinbase(coinbaseBuffer);
+            var coinbase = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2, 16));
+            var coinbaseHash = this.HashCoinbase(coinbase);
 
             var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();
 
-            var header = this.SerializeHeader(job, merkleRoot, nTime, nonce);
+            var algorithm = HashAlgorithmFactory.Get("scrypt");
 
-            var headerHash = HashAlgorithmFactory.Get("scrypt").Hash(header);                
+            var header = this.SerializeHeader(job, merkleRoot, nTime, nonce);
+            var headerHash = algorithm.Hash(header);
+            var headerValue = new BigInteger(headerHash.ToHexString(), 16);
+
+            var shareDiff = diff1.Divide(headerValue).Multiply(BigInteger.ValueOf(algorithm.Multiplier));
+            var blockDiffAdjusted = 16 * algorithm.Multiplier;
+
+            var target = new BigInteger(job.NetworkDifficulty, 16);
+            if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
+            {
+                var block = this.SerializeBlock(job, header, coinbase).ToHexString();
+            }
+            else // invalid share.
+            {
+               
+            }
 
             return true;
+        }
+
+        /// <summary>
+        /// Block data structure.
+        /// </summary>
+        /// <remarks>
+        /// https://en.bitcoin.it/wiki/Protocol_specification#block
+        /// </remarks>
+        /// <param name="header"></param>
+        /// <param name="coinbase"></param>
+        /// <returns></returns>
+        private byte[] SerializeBlock(Job job, byte[] header, byte[] coinbase)
+        {
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteBytes(header);
+                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32) job.BlockTemplate.Transactions.Length));
+                stream.WriteBytes(coinbase);
+
+                foreach (var transaction in job.BlockTemplate.Transactions)
+                {
+                    stream.WriteBytes(transaction.Data.HexToByteArray());
+                }
+
+                // need to implement POS support too.
+
+                result = stream.ToArray();
+            }
+
+            return result;
         }
 
         /// <summary>
