@@ -1,8 +1,8 @@
 language: objective-c
 env:
   global:
+  - secure: "jan4aHikK+XOsBfJrhbFnrFlhAJ7p31z2KiXxoviFmO+5gIsZuhaEIniA5Kx/27rakj0CphoXxGL77WAYiEuVGJKl5j2j55zCYxSrs3ux7OuDut7A3NmwFXD65XcU75Pj12O3YMN96FKSY1ESdf0SBnti+hvgGDgIM47MOFWxME="
   - EnableNuGetPackageRestore=true
-  - secure "Wys5hqo88kp43Vuef16ZpEKrBoWpJmqexp719T8pNLf8th+ObclsGaFIgyO7zKxXTawEhU6mhqkZpMQpnrMR5GwVp9iukQuD2HPMwlVoiFEJB2xjUlebHB6jsPwBoYiYZZRCLI6mGeUh5mdISpR0ny8HNG3ZmisvDM3NrjrZzuI="
   matrix:
   - MONO_VER="2.10.12" Package="dmg"
   - MONO_VER="3.2.7" Package="pkg"
