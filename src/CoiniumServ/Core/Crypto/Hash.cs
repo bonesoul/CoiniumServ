@@ -27,20 +27,20 @@ using Org.BouncyCastle.Utilities.Encoders;
 namespace Coinium.Core.Crypto
 {
     /// <summary>
-    /// A TransactionHash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a
+    /// A Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a
     /// map. It also checks that the length is correct and provides a bit more type safety.
     /// </summary>
     [Serializable]
-    public class TransactionHash
+    public class Hash
     {
         private readonly byte[] _bytes;
 
-        public static readonly TransactionHash ZeroHash = new TransactionHash(new byte[32]);
+        public static readonly Hash ZeroHash = new Hash(new byte[32]);
 
         /// <summary>
-        /// Creates a TransactionHash by wrapping the given byte array. It must be 32 bytes long.
+        /// Creates a Hash by wrapping the given byte array. It must be 32 bytes long.
         /// </summary>
-        public TransactionHash(byte[] bytes)
+        public Hash(byte[] bytes)
         {
             if(bytes.Length != 32)
                 throw new ArgumentOutOfRangeException();
@@ -49,9 +49,9 @@ namespace Coinium.Core.Crypto
         }
 
         /// <summary>
-        /// Creates a TransactionHash by decoding the given hex string. It must be 64 characters long.
+        /// Creates a Hash by decoding the given hex string. It must be 64 characters long.
         /// </summary>
-        public TransactionHash(string @string)
+        public Hash(string @string)
         {
             Debug.Assert(@string.Length == 64);
             _bytes = Hex.Decode(@string);
@@ -62,12 +62,12 @@ namespace Coinium.Core.Crypto
         /// </summary>
         public override bool Equals(object other)
         {
-            if (!(other is TransactionHash)) return false;
-            return _bytes.SequenceEqual(((TransactionHash)other)._bytes);
+            if (!(other is Hash)) return false;
+            return _bytes.SequenceEqual(((Hash)other)._bytes);
         }
 
         /// <summary>
-        /// Hash code of the byte array as calculated by <see cref="object.GetHashCode"/>. Note the difference between a TransactionHash
+        /// Hash code of the byte array as calculated by <see cref="object.GetHashCode"/>. Note the difference between a Hash
         /// secure bytes and the type of quick/dirty bytes used by the Java hashCode method which is designed for use in
         /// bytes tables.
         /// </summary>
@@ -94,9 +94,19 @@ namespace Coinium.Core.Crypto
             get { return _bytes; }
         }
 
-        public TransactionHash Duplicate()
+        public Hash Duplicate()
         {
-            return new TransactionHash(_bytes);
+            return new Hash(_bytes);
+        }
+
+        public static implicit operator byte[](Hash hash)
+        {
+            return hash.Bytes;
+        }
+
+        public static implicit operator Hash(byte[] bytes)
+        {
+            return new Hash(bytes);
         }
     }
 }

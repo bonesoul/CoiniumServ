@@ -118,7 +118,7 @@ namespace Coinium.Core.Coin
 
             var input = new TxIn();
             input.PreviousOutput = new OutPoint();
-            input.PreviousOutput.Hash = TransactionHash.ZeroHash;
+            input.PreviousOutput.Hash = Hash.ZeroHash;
             input.PreviousOutput.Index = (UInt32) Math.Pow(2, 32) - 1;
             input.Sequence = 0x0;
 
@@ -308,7 +308,7 @@ namespace Coinium.Core.Coin
         /// <summary>
         /// The hash of the referenced transaction - as we creating a generation transaction - none.
         /// </summary>
-        public TransactionHash Hash { get; set; }
+        public Hash Hash { get; set; }
 
         /// <summary>
         /// The index of the specific output in the transaction. The first output is 0, etc.
