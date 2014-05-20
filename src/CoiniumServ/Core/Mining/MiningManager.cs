@@ -278,7 +278,7 @@ namespace Coinium.Core.Mining
             return result;
         }
 
-        private byte[] HashCoinbase(byte[] coinbase)
+        private Hash HashCoinbase(byte[] coinbase)
         {
             return coinbase.DoubleDigest();
         }

@@ -27,20 +27,20 @@ using Org.BouncyCastle.Utilities.Encoders;
 namespace Coinium.Core.Crypto
 {
     /// <summary>
-    /// A Sha256Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a
+    /// A Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a
     /// map. It also checks that the length is correct and provides a bit more type safety.
     /// </summary>
     [Serializable]
-    public class Sha256Hash
+    public class Hash
     {
         private readonly byte[] _bytes;
 
-        public static readonly Sha256Hash ZeroHash = new Sha256Hash(new byte[32]);
+        public static readonly Hash ZeroHash = new Hash(new byte[32]);
 
         /// <summary>
-        /// Creates a Sha256Hash by wrapping the given byte array. It must be 32 bytes long.
+        /// Creates a Hash by wrapping the given byte array. It must be 32 bytes long.
         /// </summary>
-        public Sha256Hash(byte[] bytes)
+        public Hash(byte[] bytes)
         {
             if(bytes.Length != 32)
                 throw new ArgumentOutOfRangeException();
@@ -49,9 +49,9 @@ namespace Coinium.Core.Crypto
         }
 
         /// <summary>
-        /// Creates a Sha256Hash by decoding the given hex string. It must be 64 characters long.
+        /// Creates a Hash by decoding the given hex string. It must be 64 characters long.
         /// </summary>
-        public Sha256Hash(string @string)
+        public Hash(string @string)
         {
             Debug.Assert(@string.Length == 64);
             _bytes = Hex.Decode(@string);
@@ -62,12 +62,12 @@ namespace Coinium.Core.Crypto
         /// </summary>
         public override bool Equals(object other)
         {
-            if (!(other is Sha256Hash)) return false;
-            return _bytes.SequenceEqual(((Sha256Hash)other)._bytes);
+            if (!(other is Hash)) return false;
+            return _bytes.SequenceEqual(((Hash)other)._bytes);
         }
 
         /// <summary>
-        /// Hash code of the byte array as calculated by <see cref="object.GetHashCode"/>. Note the difference between a SHA256
+        /// Hash code of the byte array as calculated by <see cref="object.GetHashCode"/>. Note the difference between a Hash
         /// secure bytes and the type of quick/dirty bytes used by the Java hashCode method which is designed for use in
         /// bytes tables.
         /// </summary>
@@ -94,9 +94,19 @@ namespace Coinium.Core.Crypto
             get { return _bytes; }
         }
 
-        public Sha256Hash Duplicate()
+        public Hash Duplicate()
         {
-            return new Sha256Hash(_bytes);
+            return new Hash(_bytes);
+        }
+
+        public static implicit operator byte[](Hash hash)
+        {
+            return hash.Bytes;
+        }
+
+        public static implicit operator Hash(byte[] bytes)
+        {
+            return new Hash(bytes);
         }
     }
 }
