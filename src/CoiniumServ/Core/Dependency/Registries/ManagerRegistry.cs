@@ -16,15 +16,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Coinium.Core.Mining.Jobs;
+using Ninject;
 
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.Dependency.Registries
 {
-    public interface IRegistry
+    class ManagerRegistry : IRegistry
     {
-        void RegisterInstances();
+        private readonly IKernel _kernel;
+
+        public ManagerRegistry(IKernel kernel)
+        {
+            _kernel = kernel;
+        }
+
+        public void RegisterInstances()
+        {
+            _kernel.Bind<IJobManager>().To<JobManager>();
+        }
     }
 }

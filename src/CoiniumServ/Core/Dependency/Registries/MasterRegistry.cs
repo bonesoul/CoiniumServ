@@ -16,38 +16,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Net.Server
+using Ninject;
+
+namespace Coinium.Core.Dependency.Registries
 {
-    /// <summary>
-    /// Server interface that any implementations should extend.
-    /// </summary>
-    public interface IServer
+    public class MasterRegistry : IRegistry
     {
-        /// <summary>
-        /// The IP address of the interface the server binded.
-        /// </summary>
-        string BindIP { get; }
+        private readonly IKernel _kernel;
 
-        /// <summary>
-        /// The listening port for the server.
-        /// </summary>
-        int Port { get; }
+        public MasterRegistry(IKernel kernel)
+        {
+            _kernel = kernel;
+        }
 
-        /// <summary>
-        /// Is server currently listening for connections?
-        /// </summary>
-        bool IsListening { get; }
-
-        /// <summary>
-        /// Starts a server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Start();
-
-        /// <summary>
-        /// Stops the server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Stop();
+        public void RegisterInstances()
+        {
+            _kernel.Bind<IRegistry>().To<ManagerRegistry>();
+            _kernel.Bind<IRegistry>().To<ServerRegistry>();
+            _kernel.Bind<IRegistry>().To<PoolRegistry>();
+        }
     }
 }

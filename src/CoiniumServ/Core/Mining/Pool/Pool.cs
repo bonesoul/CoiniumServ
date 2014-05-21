@@ -16,38 +16,44 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Net.Server
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Coinium.Core.Mining.Jobs;
+using Coinium.Net.Server;
+
+namespace Coinium.Core.Mining.Pool
 {
     /// <summary>
-    /// Server interface that any implementations should extend.
+    /// Contains pool services and server.
     /// </summary>
-    public interface IServer
+    public class Pool:IPool
     {
-        /// <summary>
-        /// The IP address of the interface the server binded.
-        /// </summary>
-        string BindIP { get; }
+        // dependencies.
+        private readonly IJobManager _jobManager;
+        private readonly IServer _server;
 
-        /// <summary>
-        /// The listening port for the server.
-        /// </summary>
-        int Port { get; }
+        public IJobManager JobManager { get { return this._jobManager; } }
 
-        /// <summary>
-        /// Is server currently listening for connections?
-        /// </summary>
-        bool IsListening { get; }
+        public IServer Server { get { return this._server; } }
 
-        /// <summary>
-        /// Starts a server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Start();
+        public Pool(IServer server, IJobManager jobManager)
+        {
+            // setup our dependencies.
+            this._server = server;
+            this._jobManager = jobManager;
+        }
 
-        /// <summary>
-        /// Stops the server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Stop();
+
+        public void Start()
+        {
+            this._server.Start();
+        }
+
+        public void Stop()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

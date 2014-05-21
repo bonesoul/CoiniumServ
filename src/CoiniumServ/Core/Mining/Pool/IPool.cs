@@ -17,23 +17,16 @@
 */
 
 using System;
-using Coinium.Core.Mining.Jobs;
-using Ninject;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.Mining.Pool
 {
-    class ManagerRegistry : IRegistry
+    public interface IPool
     {
-        private readonly IKernel _kernel;
+        void Start();
 
-        public ManagerRegistry(IKernel kernel)
-        {
-            _kernel = kernel;
-        }
-
-        public void RegisterInstances()
-        {
-            _kernel.Bind<IJobManager>().To<JobManager>().InSingletonScope();
-        }
+        void Stop();
     }
 }

@@ -16,33 +16,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Coinium.Core.Config.Registries;
+using Coinium.Core.Server.Stratum;
 using Ninject;
 
-namespace Coinium.Core.Config
+namespace Coinium.Core.Dependency.Registries
 {
-    public class Bootstrapper
+    public class ServerRegistry : IRegistry
     {
         private readonly IKernel _kernel;
 
-        public Bootstrapper(IKernel kernel)
+        public ServerRegistry(IKernel kernel)
         {
             _kernel = kernel;
         }
 
-        public void Run()
+        public void RegisterInstances()
         {
-            var masterRegistry = new MasterRegistry(_kernel);
-            masterRegistry.RegisterInstances();
-
-            foreach (var registry in _kernel.GetAll<IRegistry>())
-            {
-                registry.RegisterInstances();
-            }
+            _kernel.Bind<IStratumServer>().To<StratumServer>();
         }
     }
 }

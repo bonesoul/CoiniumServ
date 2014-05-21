@@ -28,7 +28,7 @@ namespace Coinium.Core.Server.Stratum
     /// <summary>
     /// Stratum protocol server implementation.
     /// </summary>
-    public class StratumServer:SocketServer
+    public class StratumServer:SocketServer, IStratumServer
     {
         private static object[] _services =
         {
