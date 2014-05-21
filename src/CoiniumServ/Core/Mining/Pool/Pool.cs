@@ -85,12 +85,18 @@ namespace Coinium.Core.Mining.Pool
             {
                 this._stratumServer = new StratumServer(config.StratumServerConfig);
                 this._stratumRpcService = new StratumService();
+
+                this.StratumServer.Pool = this;
+                this.StratumRpcService.Pool = this;
             }
 
             if (config.VanillaServerConfig != null)
             {
                 this._vanillaServer = new VanillaServer(config.VanillaServerConfig);
                 this._vanillaRpcService = new VanillaService();
+
+                this.VanillaServer.Pool = this;
+                this.VanillaRpcService.Pool = this;
             }
 
 
@@ -100,8 +106,6 @@ namespace Coinium.Core.Mining.Pool
             this._shareManager = new ShareManager();
 
             // set back references.
-            this.StratumServer.Pool = this;
-            this.StratumRpcService.Pool = this;
             this.MinerManager.Pool = this;
             this.JobManager.Pool = this;
             this.ShareManager.Pool = this;
