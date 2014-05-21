@@ -20,9 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Coinium.Common.Constants;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
-using Coinium.Core.Coin.Algorithms;
+using Coinium.Core.Coin.Processors;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
@@ -37,7 +38,7 @@ namespace Coinium.Core.Mining
     /// <summary>
     /// Miner manager that manages all connected miners over different ports.
     /// </summary>
-    public class MiningManager
+    public class MiningManager : IMiningManager
     {
         private int _counter; // counter for assigining unique id's to miners.
 
@@ -49,10 +50,12 @@ namespace Coinium.Core.Mining
 
         private BigInteger diff1;
 
-        
+        private readonly ICoinProcessorFactory _coinProcessorFactory;
 
-        public MiningManager()
+        public MiningManager(ICoinProcessorFactory coinProcessorFactory)
         {
+            _coinProcessorFactory = coinProcessorFactory;
+
             this.diff1 = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
             this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
             this.BroadcastJobs(null);
@@ -138,11 +141,11 @@ namespace Coinium.Core.Mining
             return this._jobs.ContainsKey(id) ? this._jobs[id] : null;
         }
 
-        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
+        public bool ProcessShare(IMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
-            var job = MiningManager.Instance.GetJob(id);
+            var job = this.GetJob(id);
 
             if (job == null)
             {
@@ -170,14 +173,15 @@ namespace Coinium.Core.Mining
 
             var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();
 
-            var algorithm = HashAlgorithmFactory.Get("scrypt");
+            // TODO: The name should be pulled from the config
+            var coinProcessor = _coinProcessorFactory.Get(CoinProcessorNames.Scrypt);
 
             var header = this.SerializeHeader(job, merkleRoot, nTime, nonce);
-            var headerHash = algorithm.Hash(header);
+            var headerHash = coinProcessor.Hash(header);
             var headerValue = new BigInteger(headerHash.ToHexString(), 16);
 
-            var shareDiff = diff1.Divide(headerValue).Multiply(BigInteger.ValueOf(algorithm.Multiplier));
-            var blockDiffAdjusted = 16 * algorithm.Multiplier;
+            var shareDiff = diff1.Divide(headerValue).Multiply(BigInteger.ValueOf(coinProcessor.Multiplier));
+            var blockDiffAdjusted = 16 * coinProcessor.Multiplier;
 
             var target = new BigInteger(job.NetworkDifficulty, 16);
             if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
@@ -282,13 +286,5 @@ namespace Coinium.Core.Mining
         {
             return coinbase.DoubleDigest();
         }
-
-
-        private static readonly MiningManager _instance = new MiningManager(); // memory instance of the MinerManager.
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static MiningManager Instance { get { return _instance; } }
     }
 }

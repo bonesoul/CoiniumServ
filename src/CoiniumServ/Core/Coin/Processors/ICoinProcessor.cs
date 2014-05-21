@@ -16,32 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
-using Serilog;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Core.Coin.Algorithms
+namespace Coinium.Core.Coin.Processors
 {
-    public static class HashAlgorithmFactory
+    public interface ICoinProcessor
     {
-        private static readonly Dictionary<string, IHashAlgorithm> Algorithms;
-        static HashAlgorithmFactory()
-        {
-            Algorithms = new Dictionary<string, IHashAlgorithm>
-            {
-                {"scrypt", new Scrypt()}
-            };
-        }
+        uint Multiplier { get; }
 
-        public static IHashAlgorithm Get(string algorithm)
-        {
-            switch (algorithm.ToLower())
-            {
-                case "scrypt":
-                    return Algorithms["scrypt"];
-                default:
-                    Log.Warning("Unknown algorithm: {0}", algorithm);
-                    return null;
-            }
-        }
+        byte[] Hash(byte[] input);
+
+        byte[] BlockHash(byte[] input);
+
+        string GenerateBlock(int version, uint prevBlockHash, uint merkleRootHash, uint time, uint bits, uint nonce);
+
+        string GenerateHeader(byte[] blockHash);
+
+        uint GenerateProofHash(string block);
+
+        string PadHex(string hexString);
     }
 }
