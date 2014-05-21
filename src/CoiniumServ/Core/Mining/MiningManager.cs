@@ -18,17 +18,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using Coinium.Common.Extensions;
-using Coinium.Core.Coin;
 using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Coin.Helpers;
+using Coinium.Core.Coin.Transactions;
 using Coinium.Core.Crypto;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
-using Gibbed.IO;
 using Org.BouncyCastle.Math;
 using Serilog;
 
@@ -165,14 +164,14 @@ namespace Coinium.Core.Mining
             var nTime = Convert.ToUInt32(nTimeString, 16);
             var nonce = Convert.ToUInt32(nonceString, 16);
 
-            var coinbase = this.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2, 16));
+            var coinbase = Serializers.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2, 16));
             var coinbaseHash = this.HashCoinbase(coinbase);
 
             var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();
 
             var algorithm = HashAlgorithmFactory.Get("scrypt");
 
-            var header = this.SerializeHeader(job, merkleRoot, nTime, nonce);
+            var header = Serializers.SerializeHeader(job, merkleRoot, nTime, nonce);
             var headerHash = algorithm.Hash(header);
             var headerValue = new BigInteger(headerHash.ToHexString(), 16);
 
@@ -182,7 +181,7 @@ namespace Coinium.Core.Mining
             var target = new BigInteger(job.NetworkDifficulty, 16);
             if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
             {
-                var block = this.SerializeBlock(job, header, coinbase).ToHexString();
+                var block = Serializers.SerializeBlock(job, header, coinbase).ToHexString();
             }
             else // invalid share.
             {
@@ -190,93 +189,7 @@ namespace Coinium.Core.Mining
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Block data structure.
-        /// </summary>
-        /// <remarks>
-        /// https://en.bitcoin.it/wiki/Protocol_specification#block
-        /// </remarks>
-        /// <param name="header"></param>
-        /// <param name="coinbase"></param>
-        /// <returns></returns>
-        private byte[] SerializeBlock(Job job, byte[] header, byte[] coinbase)
-        {
-            byte[] result;
-
-            using (var stream = new MemoryStream())
-            {
-                stream.WriteBytes(header);
-                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32) job.BlockTemplate.Transactions.Length));
-                stream.WriteBytes(coinbase);
-
-                foreach (var transaction in job.BlockTemplate.Transactions)
-                {
-                    stream.WriteBytes(transaction.Data.HexToByteArray());
-                }
-
-                // need to implement POS support too.
-
-                result = stream.ToArray();
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Block headers are sent in a headers packet in response to a getheaders message.
-        /// </summary>
-        /// <remarks>
-        /// https://en.bitcoin.it/wiki/Protocol_specification#Block_Headers
-        /// </remarks>
-        /// <example>
-        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/master/lib/blockTemplate.js#L85
-        /// </example>
-        /// <param name="job"></param>
-        /// <param name="merkleRoot"></param>
-        /// <param name="nTime"></param>
-        /// <param name="nonce"></param>
-        /// <returns></returns>
-        private byte[] SerializeHeader(Job job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
-        {
-            byte[] result;
-
-            using (var stream = new MemoryStream())
-            {
-                stream.WriteValueU32(nonce);
-                stream.WriteValueU32(Convert.ToUInt32(job.NetworkDifficulty, 16));
-                stream.WriteValueU32(nTime);
-                stream.WriteBytes(merkleRoot);
-                stream.WriteBytes(job.PreviousBlockHash.HexToByteArray());
-                stream.WriteValueU32(job.BlockTemplate.Version.BigEndian());
-
-                result = stream.ToArray();
-                result = result.ReverseBytes();
-            }
-
-            return result;
-        }
-
-        private byte[] SerializeCoinbase(Job job, UInt64 extraNonce1, UInt32 extraNonce2)
-        {
-            var extraNonce1Buffer = BitConverter.GetBytes(extraNonce1);
-            var extraNonce2Buffer = BitConverter.GetBytes(extraNonce2);
-
-            byte[] result;
-
-            using (var stream = new MemoryStream())
-            {
-                stream.WriteBytes(job.CoinbaseInitial.HexToByteArray());
-                stream.WriteBytes(extraNonce1Buffer);
-                stream.WriteBytes(extraNonce2Buffer);
-                stream.WriteBytes(job.CoinbaseFinal.HexToByteArray());
-
-                result = stream.ToArray();
-            }
-
-            return result;
-        }
+        }        
 
         private Hash HashCoinbase(byte[] coinbase)
         {

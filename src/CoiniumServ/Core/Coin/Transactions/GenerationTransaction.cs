@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Time;
+using Coinium.Core.Coin.Coinbase;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Coin.Exceptions;
@@ -29,7 +30,7 @@ using Coinium.Core.Crypto;
 using Coinium.Core.Mining;
 using Gibbed.IO;
 
-namespace Coinium.Core.Coin
+namespace Coinium.Core.Coin.Transactions
 {
     /// <summary>
     /// A generation transaction.

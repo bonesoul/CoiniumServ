@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon.Responses;
+using Coinium.Core.Coin.Transactions;
 using Coinium.Core.Crypto;
 using Coinium.Core.Mining;
 using Newtonsoft.Json;
