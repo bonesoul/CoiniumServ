@@ -20,10 +20,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Coinium.Core.Server.Stratum;
 
 namespace Coinium.Core.Mining.Share
 {
     public class ShareManager : IShareManager
     {
+        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
+        {
+            return true;
+        }
     }
 }

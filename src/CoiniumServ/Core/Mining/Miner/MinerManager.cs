@@ -34,6 +34,11 @@ namespace Coinium.Core.Mining.Miner
             
         }
 
+        public IList<IMiner> GetAll()
+        {
+            return this._miners.Values.ToList();
+        }
+
         public IMiner GetMiner(Int32 id)
         {
             return this._miners.ContainsKey(id) ? this._miners[id] : null;

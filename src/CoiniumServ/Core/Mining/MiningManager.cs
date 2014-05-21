@@ -45,9 +45,6 @@ namespace Coinium.Core.Mining
 
         private int _counter; // counter for assigining unique id's to miners.
 
-        private readonly Dictionary<int, IMiner> _miners = new Dictionary<int, IMiner>(); // Dictionary that holds id <-> miner pairs. 
-
-        private Timer _timer;
 
         private BigInteger diff1;
        
@@ -57,57 +54,10 @@ namespace Coinium.Core.Mining
             this._jobManager = jobManager;
 
             this.diff1 = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
-            this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
-            this.BroadcastJobs(null);
 
             Log.Verbose("MinerManager() init..");
         }
 
-        /// <summary>
-        /// Broadcasts to miners.
-        /// </summary>
-        /// <example>
-        /// sample communication: http://bitcoin.stackexchange.com/a/23112/8899
-        /// </example>
-        /// <param name="state"></param>
-        private void BroadcastJobs(object state)
-        {
-
-            var blockTemplate = DaemonManager.Instance.Client.GetBlockTemplate();
-            var generationTransaction = new GenerationTransaction(blockTemplate, false);
-
-            var hashList = new List<byte[]>();
-            
-            foreach (var transaction in blockTemplate.Transactions)
-            {
-                hashList.Add(transaction.Hash.HexToByteArray());
-            }            
-            
-            var merkleTree = new MerkleTree(hashList);
-
-            
-            // create the difficulty notification.
-            var difficulty = new Difficulty(16);
-
-            // create the job notification.
-            var job = new Job(blockTemplate, generationTransaction, merkleTree)
-            {
-                CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
-            };
-
-            //this._jobs.Add(job.Id,job);
-
-            foreach (var pair in this._miners)
-            {
-                var miner = pair.Value;
-
-                if (!miner.SupportsJobNotifications)
-                    continue;
-
-                miner.SendDifficulty(difficulty);
-                miner.SendJob(job);
-            }
-        }
 
         public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {

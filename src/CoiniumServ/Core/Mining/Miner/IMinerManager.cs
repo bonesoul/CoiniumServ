@@ -17,12 +17,16 @@
 */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Coinium.Net.Server.Sockets;
 
 namespace Coinium.Core.Mining.Miner
 {
     public interface IMinerManager
     {
+        IList<IMiner> GetAll();
+
         IMiner GetMiner(Int32 id);
 
         T Create<T>() where T : IMiner;

@@ -18,6 +18,11 @@
 
 using System;
 using System.Collections.Generic;
+using Coinium.Common.Extensions;
+using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Coin.Transactions;
+using Coinium.Core.Crypto;
+using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server.Stratum.Notifications;
 
 namespace Coinium.Core.Mining.Jobs
@@ -25,6 +30,8 @@ namespace Coinium.Core.Mining.Jobs
     public class JobManager : IJobManager
     {
         private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
+
+        public IPool Pool { get; set; }
 
         public Job GetJob(UInt64 id)
         {
@@ -34,6 +41,49 @@ namespace Coinium.Core.Mining.Jobs
         public void AddJob(Job job)
         {
             this._jobs.Add(job.Id, job);
+        }
+
+        /// <summary>
+        /// Broadcasts to miners.
+        /// </summary>
+        /// <example>
+        /// sample communication: http://bitcoin.stackexchange.com/a/23112/8899
+        /// </example>
+        /// <param name="state"></param>
+        public void Broadcast()
+        {
+            var blockTemplate = this.Pool.DaemonClient.GetBlockTemplate();
+            var generationTransaction = new GenerationTransaction(this.Pool, blockTemplate, false);
+
+            var hashList = new List<byte[]>();
+
+            foreach (var transaction in blockTemplate.Transactions)
+            {
+                hashList.Add(transaction.Hash.HexToByteArray());
+            }
+
+            var merkleTree = new MerkleTree(hashList);
+
+
+            // create the difficulty notification.
+            var difficulty = new Difficulty(16);
+
+            // create the job notification.
+            var job = new Job(blockTemplate, generationTransaction, merkleTree)
+            {
+                CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
+            };
+
+            //this._jobs.Add(job.Id,job);
+
+            foreach (var miner in this.Pool.MinerManager.GetAll())
+            {
+                if (!miner.SupportsJobNotifications)
+                    continue;
+
+                miner.SendDifficulty(difficulty);
+                miner.SendJob(job);
+            }
         }
     }
 }

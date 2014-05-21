@@ -44,7 +44,7 @@ namespace Coinium.Core.Server.Stratum
         /// </summary>
         /// <param name="bindIp"></param>
         /// <param name="port"></param>
-        public StratumServer(string bindIp, int port, IMinerManager minerManager)
+        public StratumServer(string bindIp, int port)
         {
             this.BindIP = bindIp;
             this.Port = port;

@@ -20,8 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
+using Coinium.Core.Mining.Share;
 using Coinium.Core.Server;
 using Coinium.Net.Server;
 
@@ -31,9 +33,13 @@ namespace Coinium.Core.Mining.Pool
     {
         IMiningServer Server { get; }
 
+        IDaemonClient DaemonClient { get; }
+
         IMinerManager MinerManager { get; }
 
         IJobManager JobManager { get; }
+
+        IShareManager ShareManager { get; }
 
         void Start();
 

@@ -28,6 +28,7 @@ using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Coin.Exceptions;
 using Coinium.Core.Crypto;
 using Coinium.Core.Mining;
+using Coinium.Core.Mining.Pool;
 using Gibbed.IO;
 
 namespace Coinium.Core.Coin.Transactions
@@ -102,6 +103,11 @@ namespace Coinium.Core.Coin.Transactions
         public byte[] Part2 { get; private set; }
 
         /// <summary>
+        /// Associated pool.
+        /// </summary>
+        public IPool Pool { get; private set; }
+
+        /// <summary>
         /// Creates a new instance of generation transaction.
         /// </summary>
         /// <remarks>
@@ -111,8 +117,9 @@ namespace Coinium.Core.Coin.Transactions
         /// </remarks>
         /// <param name="blockTemplate"></param>
         /// <param name="supportTxMessages"></param>
-        public GenerationTransaction(BlockTemplate blockTemplate, bool supportTxMessages = false)
+        public GenerationTransaction(IPool pool, BlockTemplate blockTemplate, bool supportTxMessages = false)
         {
+            this.Pool = pool;
             this.Version = (UInt32)(supportTxMessages ? 2 : 1);
             this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             this.LockTime = 0;
@@ -167,7 +174,7 @@ namespace Coinium.Core.Coin.Transactions
                 scriptSig). Miners send us unique extranonces that we use to join the two parts in attempt to create
                 a valid share and/or block. */
 
-            this.Outputs = this.GenerateOutputTransactions(blockTemplate);
+            this.Outputs = this.GenerateOutputTransactions(this.Pool, blockTemplate);
             var outputBuffers = this.GetOutputBuffer();
 
             // create the second part.
@@ -211,7 +218,7 @@ namespace Coinium.Core.Coin.Transactions
             return result;
         }
 
-        private List<TxOut> GenerateOutputTransactions(BlockTemplate blockTemplate)
+        private List<TxOut> GenerateOutputTransactions(IPool pool, BlockTemplate blockTemplate)
         {
             const string poolCentralWalletAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
 
@@ -224,13 +231,13 @@ namespace Coinium.Core.Coin.Transactions
             };
 
             // validate our pool wallet address.
-            if (!DaemonManager.Instance.Client.ValidateAddress(poolCentralWalletAddress).IsValid)
+            if (!pool.DaemonClient.ValidateAddress(poolCentralWalletAddress).IsValid)
                 throw new InvalidWalletAddressException(poolCentralWalletAddress);
 
             // validate reward recipients addresses too.
             foreach (var pair in rewardRecipients)
             {
-                if (!DaemonManager.Instance.Client.ValidateAddress(pair.Key).IsValid)
+                if (!pool.DaemonClient.ValidateAddress(pair.Key).IsValid)
                     throw new InvalidWalletAddressException(pair.Key);
             }
 

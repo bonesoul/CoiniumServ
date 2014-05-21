@@ -17,14 +17,19 @@
 */
 
 using System;
+using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server.Stratum.Notifications;
 
 namespace Coinium.Core.Mining.Jobs
 {
     public interface IJobManager
     {
+        IPool Pool { get; set; }
+
         Job GetJob(UInt64 id);
 
         void AddJob(Job job);
+
+        void Broadcast();
     }
 }

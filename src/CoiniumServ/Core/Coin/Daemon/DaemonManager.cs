@@ -16,7 +16,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System.Collections.Generic;
 using Serilog;
+using Serilog.Events;
 
 namespace Coinium.Core.Coin.Daemon
 {
@@ -25,19 +27,20 @@ namespace Coinium.Core.Coin.Daemon
     /// </summary>
     public class DaemonManager
     {
-        public DaemonClient Client { get; private set; }
+        private List<DaemonClient> _clients = new List<DaemonClient>(); 
 
         public DaemonManager()
         {
             Log.Verbose("DaemonManager() init..");
         }
 
-        public void Run()
+        public DaemonClient Add(string url, string username, string password)
         {
-            Log.Verbose("Starting daemon-clients..");
-            this.Client = new DaemonClient("http://127.0.0.1:9334", "devel", "develpass");
-        }
+            var client = new DaemonClient(url, username, password);
+            this._clients.Add(client);
 
+            return client;
+        }
 
         private static readonly DaemonManager _instance = new DaemonManager();
 

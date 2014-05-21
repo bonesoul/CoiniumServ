@@ -104,6 +104,7 @@
     <Compile Include="Core\Coin\Algorithms\IHashAlgorithm.cs" />
     <Compile Include="Core\Coin\Algorithms\Scrypt.cs" />
     <Compile Include="Core\Coin\Address\Base58.cs" />
+    <Compile Include="Core\Coin\Daemon\IDaemonClient.cs" />
     <Compile Include="Core\Coin\Helpers\Serializers.cs" />
     <Compile Include="Core\Coin\Coinbase\CoinbaseUtils.cs" />
     <Compile Include="Core\Coin\Exceptions\AddressFormatException.cs" />

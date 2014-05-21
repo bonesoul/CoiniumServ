@@ -61,19 +61,17 @@ namespace Coinium
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
-            // start wallet manager.
-            DaemonManager.Instance.Run();
-
             // start pool manager.
             PoolManager.Instance.Run();
 
+            // run pools.
             foreach (var pool in PoolManager.Instance.GetPools())
             {
                 pool.Start();
             }
 
             // Start the server manager.
-            ServerManager.Instance.Start();
+            //ServerManager.Instance.Start();
 
             while (true) // idle loop & command parser
             {

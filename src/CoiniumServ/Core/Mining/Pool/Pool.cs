@@ -17,6 +17,8 @@
 */
 
 using System;
+using System.Threading;
+using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Share;
@@ -32,26 +34,44 @@ namespace Coinium.Core.Mining.Pool
     {
         // dependencies.        
         private readonly IMiningServer _server;
+        private readonly IDaemonClient _daemonClient;
         private readonly IMinerManager _minerManager;
         private readonly IJobManager _jobManager;
         private readonly IShareManager _shareManager;
 
         public IMiningServer Server { get { return this._server; } }
 
+        public IDaemonClient DaemonClient { get { return this._daemonClient; } }
+
         public IMinerManager MinerManager {get {return this._minerManager;}}
 
         public IJobManager JobManager { get { return this._jobManager; } }
 
-        public Pool(IMiningServer server, IMinerManager minerManager, IJobManager jobManager)
+        public IShareManager ShareManager { get { return this._shareManager; } }
+
+        private Timer _timer;
+
+        public Pool(IMiningServer server, IDaemonClient daemonClient, IMinerManager minerManager, IJobManager jobManager, IShareManager shareManager)
         {
             // setup our dependencies.
             this._server = server;
+            this._daemonClient = daemonClient;
             this._minerManager = minerManager;
             this._jobManager = jobManager;
+            this._shareManager = shareManager;
 
+            // set back references.
             this.Server.Pool = this;
+            this.JobManager.Pool = this;
+
+            // other stuff
+            this._timer = new Timer(Timer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
         }
 
+        private void Timer(object state)
+        {
+            this.JobManager.Broadcast();
+        }
 
         public void Start()
         {

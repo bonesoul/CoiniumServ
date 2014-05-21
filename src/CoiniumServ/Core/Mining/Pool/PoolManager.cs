@@ -19,8 +19,10 @@
 using System;
 using System.Collections.Generic;
 using Coinium.Common.Helpers.IO;
+using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
+using Coinium.Core.Mining.Share;
 using Coinium.Core.Server.Stratum;
 using Serilog;
 
@@ -49,11 +51,13 @@ namespace Coinium.Core.Mining.Pool
 
         public IPool AddPool()
         {
+            var stratumServer = new StratumServer("0.0.0.0", 3333);
+            var daemonClient = DaemonManager.Instance.Add("http://127.0.0.1:9334", "devel", "develpass");
             var minerManager = new MinerManager();
             var jobManager = new JobManager();
-            var stratumServer = new StratumServer("0.0.0.0", 3333, minerManager);
+            var shareManager = new ShareManager();
 
-            var pool = new Pool(stratumServer, minerManager, jobManager);
+            var pool = new Pool(stratumServer, daemonClient, minerManager, jobManager, shareManager);
 
             this._pools.Add(pool);
 
