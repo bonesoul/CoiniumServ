@@ -17,37 +17,16 @@
 */
 
 using System;
-using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Mining.Jobs;
-using Coinium.Core.Mining.Miner;
-using Coinium.Core.Mining.Share;
-using Coinium.Core.RPC;
-using Coinium.Core.Server;
 
-namespace Coinium.Core.Mining.Pool
+namespace Coinium.Core.Server.Vanilla.Config
 {
-    public interface IPool
+    public class VanillaServerConfig : IVanillaServerConfig
     {
-        IMiningServer StratumServer { get; }
+        public Int32 Port { get; private set; }
 
-        IRPCService StratumRpcService { get; }
-
-        IMiningServer VanillaServer { get; }
-
-        IRPCService VanillaRpcService { get; }
-
-        IDaemonClient DaemonClient { get; }
-
-        IMinerManager MinerManager { get; }
-
-        IJobManager JobManager { get; }
-
-        IShareManager ShareManager { get; }
-
-        UInt64 InstanceId { get; }
-
-        void Start();
-
-        void Stop();
+        public VanillaServerConfig(Int32 port)
+        {
+            this.Port = port;
+        }
     }
 }

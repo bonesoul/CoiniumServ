@@ -16,38 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Mining.Jobs;
-using Coinium.Core.Mining.Miner;
-using Coinium.Core.Mining.Share;
-using Coinium.Core.RPC;
-using Coinium.Core.Server;
-
-namespace Coinium.Core.Mining.Pool
+namespace Coinium.Core.Coin.Daemon
 {
-    public interface IPool
+    public class DaemonConfig:IDaemonConfig
     {
-        IMiningServer StratumServer { get; }
+        public string Url { get; private set; }
+        public string Username { get; private set; }
+        public string Password { get; private set; }
 
-        IRPCService StratumRpcService { get; }
-
-        IMiningServer VanillaServer { get; }
-
-        IRPCService VanillaRpcService { get; }
-
-        IDaemonClient DaemonClient { get; }
-
-        IMinerManager MinerManager { get; }
-
-        IJobManager JobManager { get; }
-
-        IShareManager ShareManager { get; }
-
-        UInt64 InstanceId { get; }
-
-        void Start();
-
-        void Stop();
+        public DaemonConfig(string url, string username, string password)
+        {
+            this.Url = url;
+            this.Username = username;
+            this.Password = password;
+        }
     }
 }

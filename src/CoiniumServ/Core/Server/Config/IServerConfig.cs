@@ -16,9 +16,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Server.Stratum
+namespace Coinium.Core.Server.Config
 {
-    public interface IStratumServer : IMiningServer
+    public interface IServerConfig
     {
     }
 }

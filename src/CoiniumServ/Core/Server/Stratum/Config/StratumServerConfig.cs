@@ -17,37 +17,18 @@
 */
 
 using System;
-using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Mining.Jobs;
-using Coinium.Core.Mining.Miner;
-using Coinium.Core.Mining.Share;
-using Coinium.Core.RPC;
-using Coinium.Core.Server;
 
-namespace Coinium.Core.Mining.Pool
+namespace Coinium.Core.Server.Stratum.Config
 {
-    public interface IPool
+    public class StratumServerConfig:IStratumServerConfig
     {
-        IMiningServer StratumServer { get; }
+        public string BindIp { get; private set; }
+        public Int32 Port { get; private set; }
 
-        IRPCService StratumRpcService { get; }
-
-        IMiningServer VanillaServer { get; }
-
-        IRPCService VanillaRpcService { get; }
-
-        IDaemonClient DaemonClient { get; }
-
-        IMinerManager MinerManager { get; }
-
-        IJobManager JobManager { get; }
-
-        IShareManager ShareManager { get; }
-
-        UInt64 InstanceId { get; }
-
-        void Start();
-
-        void Stop();
+        public StratumServerConfig(string bindIp, Int32 port)
+        {
+            this.BindIp = bindIp;
+            this.Port = port;
+        }
     }
 }

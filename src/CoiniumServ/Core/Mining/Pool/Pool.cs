@@ -21,10 +21,14 @@ using System.Threading;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
+using Coinium.Core.Mining.Pool.Config;
 using Coinium.Core.Mining.Share;
 using Coinium.Core.RPC;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
+using Coinium.Core.Server.Stratum.Config;
+using Coinium.Core.Server.Vanilla;
+using Coinium.Core.Server.Vanilla.Config;
 using Serilog;
 
 namespace Coinium.Core.Mining.Pool
@@ -34,24 +38,21 @@ namespace Coinium.Core.Mining.Pool
     /// </summary>
     public class Pool:IPool
     {
-        // dependencies.        
-        private readonly IMiningServer _server;
-        private readonly IDaemonClient _daemonClient;
-        private readonly IMinerManager _minerManager;
-        private readonly IJobManager _jobManager;
-        private readonly IShareManager _shareManager;
-        private readonly IRPCService _rpcService;
+        public IMiningServer StratumServer { get; private set; }
 
-        public IMiningServer Server { get { return this._server; } }
+        public IRPCService StratumRpcService { get; private set; }        
 
-        public IDaemonClient DaemonClient { get { return this._daemonClient; } }
+        public IMiningServer VanillaServer { get; private set; }
 
-        public IRPCService RpcService { get { return this._rpcService; } }
-        public IMinerManager MinerManager {get {return this._minerManager;}}
+        public IRPCService VanillaRpcService { get; private set; }
 
-        public IJobManager JobManager { get { return this._jobManager; } }
+        public IDaemonClient DaemonClient { get; private set; }
 
-        public IShareManager ShareManager { get { return this._shareManager; } }
+        public IMinerManager MinerManager { get; private set; }
+
+        public IJobManager JobManager { get; private set; }
+
+        public IShareManager ShareManager { get; private set; }
 
         /// <summary>
         /// Instance id of the pool.
@@ -60,21 +61,43 @@ namespace Coinium.Core.Mining.Pool
 
         private Timer _timer;
 
-        public Pool(string bindIp, Int32 port, string daemonUrl, string daemonUsername, string daemonPassword)
+        public Pool(IPoolConfig config)
         {
             this.GenerateInstanceId();
 
-            // setup our dependencies.
-            this._server = new StratumServer(bindIp, port);
-            this._daemonClient = new DaemonClient(daemonUrl, daemonUsername, daemonPassword);
-            this._rpcService = new StratumService();
-            this._minerManager = new MinerManager();
-            this._jobManager = new JobManager(this.InstanceId);
-            this._shareManager = new ShareManager();
+            if (config.DaemonConfig == null)
+                throw new ArgumentNullException("config", "config.DaemonConfig can not be null!");
+
+            this.DaemonClient = new DaemonClient(config.DaemonConfig);
+
+            if(config.StratumServerConfig == null && config.VanillaServerConfig == null)
+                throw new ArgumentNullException("config","At least one server configuration should be provided.");
+
+            if (config.StratumServerConfig != null)
+            {
+                this.StratumServer = new StratumServer(config.StratumServerConfig);
+                this.StratumRpcService = new StratumService();
+
+                this.StratumServer.Pool = this;
+                this.StratumRpcService.Pool = this;
+            }
+
+            if (config.VanillaServerConfig != null)
+            {
+                this.VanillaServer = new VanillaServer(config.VanillaServerConfig);
+                this.VanillaRpcService = new VanillaService();
+
+                this.VanillaServer.Pool = this;
+                this.VanillaRpcService.Pool = this;
+            }
+
+
+            // setup managers.
+            this.MinerManager = new MinerManager();
+            this.JobManager = new JobManager(this.InstanceId);
+            this.ShareManager = new ShareManager();
 
             // set back references.
-            this.Server.Pool = this;
-            this.RpcService.Pool = this;
             this.MinerManager.Pool = this;
             this.JobManager.Pool = this;
             this.ShareManager.Pool = this;
@@ -85,7 +108,11 @@ namespace Coinium.Core.Mining.Pool
 
         public void Start()
         {
-            this._server.Start();
+            if (this.StratumServer != null)
+                this.StratumServer.Start();
+
+            if (this.VanillaServer != null)
+                this.VanillaServer.Start();
         }
 
         public void Stop()
