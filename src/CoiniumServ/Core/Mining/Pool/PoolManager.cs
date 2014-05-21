@@ -49,11 +49,12 @@ namespace Coinium.Core.Mining.Pool
 
         public IPool AddPool()
         {
-            var stratumServer = new StratumServer("0.0.0.0", 3333);
             var minerManager = new MinerManager();
             var jobManager = new JobManager();
+            var stratumServer = new StratumServer("0.0.0.0", 3333, minerManager);
 
             var pool = new Pool(stratumServer, minerManager, jobManager);
+
             this._pools.Add(pool);
 
             return pool;

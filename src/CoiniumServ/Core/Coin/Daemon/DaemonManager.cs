@@ -36,7 +36,6 @@ namespace Coinium.Core.Coin.Daemon
         {
             Log.Verbose("Starting daemon-clients..");
             this.Client = new DaemonClient("http://127.0.0.1:9334", "devel", "develpass");
-            //Log.Verbose("Difficulty: " + this.Client.GetInfo().Difficulty);
         }
 
 

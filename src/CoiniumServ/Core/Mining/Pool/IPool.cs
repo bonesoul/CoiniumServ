@@ -20,11 +20,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Miner;
+using Coinium.Core.Server;
+using Coinium.Net.Server;
 
 namespace Coinium.Core.Mining.Pool
 {
     public interface IPool
     {
+        IMiningServer Server { get; }
+
+        IMinerManager MinerManager { get; }
+
+        IJobManager JobManager { get; }
+
         void Start();
 
         void Stop();

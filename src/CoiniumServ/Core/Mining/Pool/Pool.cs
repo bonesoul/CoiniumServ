@@ -17,11 +17,10 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
+using Coinium.Core.Mining.Share;
+using Coinium.Core.Server;
 using Coinium.Net.Server;
 
 namespace Coinium.Core.Mining.Pool
@@ -32,21 +31,25 @@ namespace Coinium.Core.Mining.Pool
     public class Pool:IPool
     {
         // dependencies.        
-        private readonly IServer _server;
+        private readonly IMiningServer _server;
         private readonly IMinerManager _minerManager;
         private readonly IJobManager _jobManager;
-        public IServer Server { get { return this._server; } }
+        private readonly IShareManager _shareManager;
+
+        public IMiningServer Server { get { return this._server; } }
 
         public IMinerManager MinerManager {get {return this._minerManager;}}
 
         public IJobManager JobManager { get { return this._jobManager; } }
 
-        public Pool(IServer server, IMinerManager minerManager, IJobManager jobManager)
+        public Pool(IMiningServer server, IMinerManager minerManager, IJobManager jobManager)
         {
             // setup our dependencies.
             this._server = server;
             this._minerManager = minerManager;
             this._jobManager = jobManager;
+
+            this.Server.Pool = this;
         }
 
 

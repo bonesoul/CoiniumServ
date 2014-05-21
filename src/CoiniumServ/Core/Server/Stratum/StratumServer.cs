@@ -20,6 +20,8 @@
 // classic server handles getwork & getblocktemplate miners over http.
 
 using Coinium.Core.Mining;
+using Coinium.Core.Mining.Miner;
+using Coinium.Core.Mining.Pool;
 using Coinium.Net.Server.Sockets;
 using Serilog;
 
@@ -30,6 +32,8 @@ namespace Coinium.Core.Server.Stratum
     /// </summary>
     public class StratumServer:SocketServer, IStratumServer
     {
+        public IPool Pool { get; set; }
+
         private static object[] _services =
         {
             new StratumService()
@@ -40,7 +44,7 @@ namespace Coinium.Core.Server.Stratum
         /// </summary>
         /// <param name="bindIp"></param>
         /// <param name="port"></param>
-        public StratumServer(string bindIp, int port)
+        public StratumServer(string bindIp, int port, IMinerManager minerManager)
         {
             this.BindIP = bindIp;
             this.Port = port;
@@ -82,8 +86,8 @@ namespace Coinium.Core.Server.Stratum
         {
             Log.Verbose("Stratum client connected: {0}", e.Connection.ToString());
 
-            //var miner = MiningManager.Instance.Create<StratumMiner>(e.Connection);
-            //e.Connection.Client = miner;
+            var miner = this.Pool.MinerManager.Create<StratumMiner>(e.Connection);
+            e.Connection.Client = miner;           
         }
 
         /// <summary>
@@ -105,6 +109,6 @@ namespace Coinium.Core.Server.Stratum
         {
             var connection = (Connection)e.Connection;
             ((StratumMiner)connection.Client).Parse(e);
-        }
+        }        
     }
 }

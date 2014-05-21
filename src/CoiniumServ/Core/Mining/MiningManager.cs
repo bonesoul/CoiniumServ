@@ -26,6 +26,7 @@ using Coinium.Core.Coin.Helpers;
 using Coinium.Core.Coin.Transactions;
 using Coinium.Core.Crypto;
 using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Miner;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
@@ -60,33 +61,6 @@ namespace Coinium.Core.Mining
             this.BroadcastJobs(null);
 
             Log.Verbose("MinerManager() init..");
-        }
-
-        /// <summary>
-        /// Creates a new instance of IMiner type.
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <returns></returns>
-        public T Create<T>(IConnection connection) where T : IMiner
-        {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { this._counter++, connection });  // create an instance of the miner.
-            var miner = (IMiner) instance;
-            this._miners.Add(miner.Id, miner); // add it to our collection.           
-
-            return (T)miner;
-        }
-
-        /// <summary>
-        /// Creates a new instance of IMiner type.
-        /// </summary>
-        /// <returns></returns>
-        public T Create<T>() where T : IMiner
-        {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { this._counter++ }); // create an instance of the miner.
-            var miner = (IMiner)instance;
-            this._miners.Add(miner.Id, miner); // add it to our collection.
-
-            return (T)miner;
         }
 
         /// <summary>

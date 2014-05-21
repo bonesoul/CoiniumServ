@@ -20,21 +20,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Coinium.Net.Server.Sockets;
 
 namespace Coinium.Core.Mining.Miner
 {
     public class MinerManager:IMinerManager
     {
         private readonly Dictionary<Int32, IMiner> _miners = new Dictionary<Int32, IMiner>();
+        private int _counter = 0; // counter for assigining unique id's to miners.
+
+        public MinerManager()
+        {
+            
+        }
 
         public IMiner GetMiner(Int32 id)
         {
             return this._miners.ContainsKey(id) ? this._miners[id] : null;
         }
 
-        public void AddMiner(IMiner miner)
+        public T Create<T>() where T : IMiner
         {
-            this._miners.Add(miner.Id, miner);
+            var instance = Activator.CreateInstance(typeof(T), new object[] { this._counter++ }); // create an instance of the miner.
+            var miner = (IMiner)instance;
+            this._miners.Add(miner.Id, miner); // add it to our collection.
+
+            return (T)miner;
+        }
+
+        public T Create<T>(IConnection connection) where T : IMiner
+        {
+            var instance = Activator.CreateInstance(typeof(T), new object[] { this._counter++, connection });  // create an instance of the miner.
+            var miner = (IMiner)instance;
+            this._miners.Add(miner.Id, miner); // add it to our collection.           
+
+            return (T)miner;
         }
     }
 }
