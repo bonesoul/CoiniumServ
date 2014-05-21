@@ -1,5 +1,5 @@
 ﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
+ *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,6 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
 using Coinium.Core.Mining;
