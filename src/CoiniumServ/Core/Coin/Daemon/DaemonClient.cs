@@ -1,5 +1,5 @@
 ﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
+ *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ namespace Coinium.Core.Coin.Daemon
     /// <summary>
     /// RPC client for coind's.
     /// </summary>
-    public class DaemonClient:DaemonBase
+    public class DaemonClient:DaemonBase, IDaemonClient
     {
         public DaemonClient(string url, string user, string password)
             : base(url, user, password)

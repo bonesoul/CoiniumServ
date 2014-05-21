@@ -1,5 +1,5 @@
 ﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
+ *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -20,10 +20,12 @@ using System;
 using System.IO;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Arrays;
+using Coinium.Core.Coin.Address;
+using Coinium.Core.Crypto;
 using Gibbed.IO;
 using Serilog;
 
-namespace Coinium.Core.Coin
+namespace Coinium.Core.Coin.Coinbase
 {
     /// <summary>
     /// Provides helper functions for "serialized CSscript formatting" as defined here: https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification
@@ -183,6 +185,11 @@ namespace Coinium.Core.Coin
             }
 
             return result;
+        }
+
+        public static Hash HashCoinbase(byte[] coinbase)
+        {
+            return coinbase.DoubleDigest();
         }
     }
 }

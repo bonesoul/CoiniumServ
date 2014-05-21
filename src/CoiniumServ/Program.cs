@@ -1,5 +1,5 @@
 ﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
+ *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -22,13 +22,15 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
-using Coinium.Core.Mining;
+using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
+using Ninject;
+using Ninject.Parameters;
 using Serilog;
 
 namespace Coinium
@@ -48,31 +50,28 @@ namespace Coinium
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
 
+            // print intro texts.
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
+            // init logging facilities.
             InitLogging();
+
+            // print a version banner.
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
-
-            // start wallet manager.
-            DaemonManager.Instance.Run();
 
             // start pool manager.
             PoolManager.Instance.Run();
 
-            // stratum server.
-            var stratumServer = new StratumServer("0.0.0.0", 3333);
-            stratumServer.Start();
-
-            var instance = MiningManager.Instance;
-
-            // getwork server.
-            //var getworkServer = new VanillaServer(8332);
-            //getworkServer.Start();
+            // run pools.
+            foreach (var pool in PoolManager.Instance.GetPools())
+            {
+                pool.Start();
+            }
 
             // Start the server manager.
-            ServerManager.Instance.Start();
+            //ServerManager.Instance.Start();
 
             while (true) // idle loop & command parser
             {

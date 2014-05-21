@@ -1,5 +1,5 @@
 ﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
+ *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -49,16 +49,18 @@ namespace Coinium.Core.Server.Vanilla
             // var request = context.Request;
             // var miner = (GetworkMiner)(context.Miner);
 
-            if (data == null)
-                return DaemonManager.Instance.Client.Getwork();
-            else
-            {                
-                var result = DaemonManager.Instance.Client.Getwork(data);
-                if(result)
-                    Log.Verbose("Found block!: {0}", data);
+            //if (data == null)
+            //    return DaemonManager.Instance.Client.Getwork();
+            //else
+            //{                
+            //    var result = DaemonManager.Instance.Client.Getwork(data);
+            //    if(result)
+            //        Log.Verbose("Found block!: {0}", data);
 
-                return null;
-            }                
+            //    return null;
+            //}    
+
+            return null;
         }     
     }
 }

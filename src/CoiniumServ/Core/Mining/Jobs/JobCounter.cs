@@ -1,5 +1,5 @@
 ﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
+ *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -16,39 +16,34 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using System;
+
+namespace Coinium.Core.Mining.Jobs
 {
     /// <summary>
     /// Counter for job id's.
     /// </summary>
     public class JobCounter
     {
-        private static ulong Current { get; set; }
+        private UInt64 Current { get; set; }
 
-        static JobCounter()
+        public JobCounter()
         {
-            Current = 1;
+            this.Current = 1;
         }
 
         /// <summary>
         /// Gets a new job id.
         /// </summary>
         /// <returns></returns>
-        public ulong Next()
+        public UInt64 Next()
         {
             Current++;
 
-            if (Current%0xffff == 0)
+            if (Current % 0xffff == 0)
                 Current = 1;
 
             return Current;
         }
-
-        private static readonly JobCounter _instance = new JobCounter(); // memory instance of the JobCounter.
-
-        /// <summary>
-        /// Singleton instance of JobCounter.
-        /// </summary>
-        public static JobCounter Instance { get { return _instance; } }
     }
 }
