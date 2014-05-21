@@ -16,39 +16,16 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using System;
+
+namespace Coinium.Core.Mining.Jobs
 {
-    /// <summary>
-    /// Counter for job id's.
-    /// </summary>
-    public class JobCounter
+    public interface IExtraNonce
     {
-        private static ulong Current { get; set; }
+        UInt64 Current { get; }
 
-        static JobCounter()
-        {
-            Current = 1;
-        }
+        byte[] ExtraNoncePlaceholder { get; }
 
-        /// <summary>
-        /// Gets a new job id.
-        /// </summary>
-        /// <returns></returns>
-        public ulong Next()
-        {
-            Current++;
-
-            if (Current%0xffff == 0)
-                Current = 1;
-
-            return Current;
-        }
-
-        private static readonly JobCounter _instance = new JobCounter(); // memory instance of the JobCounter.
-
-        /// <summary>
-        /// Singleton instance of JobCounter.
-        /// </summary>
-        public static JobCounter Instance { get { return _instance; } }
+        UInt64 NextExtraNonce();
     }
 }

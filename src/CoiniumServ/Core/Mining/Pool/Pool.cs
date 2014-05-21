@@ -24,6 +24,8 @@ using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Share;
 using Coinium.Core.RPC;
 using Coinium.Core.Server;
+using Coinium.Core.Server.Stratum;
+using Serilog;
 
 namespace Coinium.Core.Mining.Pool
 {
@@ -45,25 +47,30 @@ namespace Coinium.Core.Mining.Pool
         public IDaemonClient DaemonClient { get { return this._daemonClient; } }
 
         public IRPCService RpcService { get { return this._rpcService; } }
-
         public IMinerManager MinerManager {get {return this._minerManager;}}
 
         public IJobManager JobManager { get { return this._jobManager; } }
 
         public IShareManager ShareManager { get { return this._shareManager; } }
-        
+
+        /// <summary>
+        /// Instance id of the pool.
+        /// </summary>
+        public ulong InstanceId { get; private set; }
 
         private Timer _timer;
 
-        public Pool(IMiningServer server, IDaemonClient daemonClient, IRPCService rpcService, IMinerManager minerManager, IJobManager jobManager, IShareManager shareManager)
+        public Pool(string bindIp, Int32 port, string daemonUrl, string daemonUsername, string daemonPassword)
         {
+            this.GenerateInstanceId();
+
             // setup our dependencies.
-            this._server = server;
-            this._daemonClient = daemonClient;
-            this._rpcService = rpcService;
-            this._minerManager = minerManager;
-            this._jobManager = jobManager;
-            this._shareManager = shareManager;
+            this._server = new StratumServer(bindIp, port);
+            this._daemonClient = new DaemonClient(daemonUrl, daemonUsername, daemonPassword);
+            this._rpcService = new StratumService();
+            this._minerManager = new MinerManager();
+            this._jobManager = new JobManager(this.InstanceId);
+            this._shareManager = new ShareManager();
 
             // set back references.
             this.Server.Pool = this;
@@ -76,11 +83,6 @@ namespace Coinium.Core.Mining.Pool
             this._timer = new Timer(Timer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
         }
 
-        private void Timer(object state)
-        {
-            this.JobManager.Broadcast();
-        }
-
         public void Start()
         {
             this._server.Start();
@@ -89,6 +91,22 @@ namespace Coinium.Core.Mining.Pool
         public void Stop()
         {
             throw new NotImplementedException();
+        }
+        private void Timer(object state)
+        {
+            this.JobManager.Broadcast();
+        }
+
+        /// <summary>
+        /// Generates an instance Id for the pool that is cryptographically random. 
+        /// </summary>
+        private void GenerateInstanceId()
+        {
+            var rndGenerator = System.Security.Cryptography.RandomNumberGenerator.Create(); // cryptographically random generator.
+            var randomBytes = new byte[4];
+            rndGenerator.GetNonZeroBytes(randomBytes); // create cryptographically random array of bytes.
+            this.InstanceId = BitConverter.ToUInt32(randomBytes, 0); // convert them to instance Id.
+            Log.Debug("Generated cryptographically random instance Id: {0}", this.InstanceId);
         }
     }
 }

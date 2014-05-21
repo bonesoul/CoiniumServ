@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using Coinium.Common.Extensions;
-using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Coin.Transactions;
 using Coinium.Core.Crypto;
 using Coinium.Core.Mining.Pool;
@@ -30,10 +29,18 @@ namespace Coinium.Core.Mining.Jobs
     public class JobManager : IJobManager
     {
         private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
-
-        public Job LastJob { get; private set; }
+        private readonly JobCounter _jobCounter = new JobCounter();
+        private readonly IExtraNonce _extraNonce;
 
         public IPool Pool { get; set; }
+
+        public IExtraNonce ExtraNonce { get { return this._extraNonce; } }
+        public Job LastJob { get; private set; }
+
+        public JobManager(UInt64 instanceId)
+        {
+            this._extraNonce = new ExtraNonce(instanceId);
+        }
 
         public Job GetJob(UInt64 id)
         {
@@ -71,7 +78,7 @@ namespace Coinium.Core.Mining.Jobs
             var difficulty = new Difficulty(16);
 
             // create the job notification.
-            var job = new Job(blockTemplate, generationTransaction, merkleTree)
+            var job = new Job(this._jobCounter.Next(), blockTemplate, generationTransaction, merkleTree)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };

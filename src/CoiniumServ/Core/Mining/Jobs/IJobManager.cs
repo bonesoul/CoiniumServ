@@ -26,6 +26,8 @@ namespace Coinium.Core.Mining.Jobs
     {
         IPool Pool { get; set; }
 
+        IExtraNonce ExtraNonce { get; }
+
         Job GetJob(UInt64 id);
 
         void AddJob(Job job);

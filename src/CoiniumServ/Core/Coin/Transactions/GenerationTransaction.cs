@@ -28,6 +28,7 @@ using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Coin.Exceptions;
 using Coinium.Core.Crypto;
 using Coinium.Core.Mining;
+using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Pool;
 using Gibbed.IO;
 
@@ -143,7 +144,7 @@ namespace Coinium.Core.Coin.Transactions
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedBlockHeight).ToArray();
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(coinBaseAuxFlags).ToArray();
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedUnixTime).ToArray();
-            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(new byte[ExtraNonce.Instance.ExtraNoncePlaceholder.Length]).ToArray();
+            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(new byte[this.Pool.JobManager.ExtraNonce.ExtraNoncePlaceholder.Length]).ToArray();
 
             input.SignatureScriptPart2 = CoinbaseUtils.SerializeString("/CoiniumServ/");
 
@@ -162,7 +163,7 @@ namespace Coinium.Core.Coin.Transactions
                 stream.WriteValueU32(this.Inputs[0].PreviousOutput.Index.LittleEndian());
 
                 // write signnature script lenght
-                var signatureScriptLenght = (UInt32)(input.SignatureScriptPart1.Length + ExtraNonce.Instance.ExtraNoncePlaceholder.Length + input.SignatureScriptPart2.Length);
+                var signatureScriptLenght = (UInt32)(input.SignatureScriptPart1.Length + this.Pool.JobManager.ExtraNonce.ExtraNoncePlaceholder.Length + input.SignatureScriptPart2.Length);
                 stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
 
                 stream.WriteBytes(input.SignatureScriptPart1);

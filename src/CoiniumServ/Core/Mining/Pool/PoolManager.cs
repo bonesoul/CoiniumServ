@@ -16,14 +16,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Collections.Generic;
 using Coinium.Common.Helpers.IO;
-using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Mining.Jobs;
-using Coinium.Core.Mining.Miner;
-using Coinium.Core.Mining.Share;
-using Coinium.Core.Server.Stratum;
 using Serilog;
 
 namespace Coinium.Core.Mining.Pool
@@ -51,15 +45,8 @@ namespace Coinium.Core.Mining.Pool
 
         public IPool AddPool()
         {
-            var stratumServer = new StratumServer("0.0.0.0", 3333);
-            var daemonClient = DaemonManager.Instance.Add("http://127.0.0.1:9334", "devel", "develpass");
-            var stratumRpcService = new StratumService();
-            var minerManager = new MinerManager();
-            var jobManager = new JobManager();
-            var shareManager = new ShareManager();
-
-            var pool = new Pool(stratumServer, daemonClient, stratumRpcService, minerManager, jobManager, shareManager);
-
+            // we should be reading the config here for parameter values.
+            var pool = new Pool("0.0.0.0", 3333, "http://127.0.0.1:9334", "devel", "develpass");
             this._pools.Add(pool);
 
             return pool;

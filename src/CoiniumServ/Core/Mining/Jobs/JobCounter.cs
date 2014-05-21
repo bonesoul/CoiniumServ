@@ -16,37 +16,34 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System.Collections.Generic;
-using Serilog;
-using Serilog.Events;
+using System;
 
-namespace Coinium.Core.Coin.Daemon
+namespace Coinium.Core.Mining.Jobs
 {
     /// <summary>
-    /// Allows communication with wallets.
+    /// Counter for job id's.
     /// </summary>
-    public class DaemonManager
+    public class JobCounter
     {
-        private List<DaemonClient> _clients = new List<DaemonClient>(); 
+        private UInt64 Current { get; set; }
 
-        public DaemonManager()
+        public JobCounter()
         {
-            Log.Verbose("DaemonManager() init..");
+            this.Current = 1;
         }
-
-        public DaemonClient Add(string url, string username, string password)
-        {
-            var client = new DaemonClient(url, username, password);
-            this._clients.Add(client);
-
-            return client;
-        }
-
-        private static readonly DaemonManager _instance = new DaemonManager();
 
         /// <summary>
-        /// Singleton instance of WalletManager.
+        /// Gets a new job id.
         /// </summary>
-        public static DaemonManager Instance { get { return _instance; } }
+        /// <returns></returns>
+        public UInt64 Next()
+        {
+            Current++;
+
+            if (Current % 0xffff == 0)
+                Current = 1;
+
+            return Current;
+        }
     }
 }

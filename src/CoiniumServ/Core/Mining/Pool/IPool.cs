@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
@@ -38,6 +39,8 @@ namespace Coinium.Core.Mining.Pool
         IShareManager ShareManager { get; }
 
         IRPCService RpcService { get; }
+
+        UInt64 InstanceId { get; }
 
         void Start();
 

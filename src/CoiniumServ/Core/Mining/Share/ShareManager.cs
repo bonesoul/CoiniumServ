@@ -17,9 +17,6 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Coinbase;
@@ -70,7 +67,7 @@ namespace Coinium.Core.Mining.Share
             var nTime = Convert.ToUInt32(nTimeString, 16);
             var nonce = Convert.ToUInt32(nonceString, 16);
 
-            var coinbase = Serializers.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2, 16));
+            var coinbase = Serializers.SerializeCoinbase(job, this.Pool.JobManager.ExtraNonce.Current, Convert.ToUInt32(extraNonce2, 16));
             var coinbaseHash = CoinbaseUtils.HashCoinbase(coinbase);
 
             var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();

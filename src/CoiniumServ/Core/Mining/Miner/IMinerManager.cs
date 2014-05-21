@@ -17,7 +17,6 @@
 */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Coinium.Core.Mining.Pool;
 using Coinium.Net.Server.Sockets;
