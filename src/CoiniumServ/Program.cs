@@ -69,14 +69,15 @@ namespace Coinium
             // start pool manager.
             PoolManager.Instance.Run();
 
+            var miningManager = kernel.Get<IMiningManager>();
+
             // stratum server.
-            var ip = new ConstructorArgument("bindIp", "0.0.0.0");
-            var port = new ConstructorArgument("port", 3333);
-            var stratumServer = kernel.Get<IServer>(ip, port);
+            var miningManagerParam = new ConstructorArgument("miningManager", miningManager);
+            var ipParam = new ConstructorArgument("bindIp", "0.0.0.0");
+            var portParam = new ConstructorArgument("port", 3333);
+            var stratumServer = kernel.Get<IServer>(miningManagerParam, ipParam, portParam);
 
             stratumServer.Start();
-
-            var miningManager = kernel.Get<IMiningManager>();
 
             // getwork server.
             //var getworkServer = new VanillaServer(8332);

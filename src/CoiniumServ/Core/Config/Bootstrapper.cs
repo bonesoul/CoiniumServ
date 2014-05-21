@@ -18,8 +18,6 @@ namespace Coinium.Core.Config
 
         public void Run()
         {
-            _kernel.Bind<IKernel>().To<StandardKernel>().InSingletonScope();
-
             var masterRegistry = new Registry(_kernel);
             masterRegistry.RegisterInstances();
 
