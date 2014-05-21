@@ -16,11 +16,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Server.Config;
-using Coinium.Core.Server.Stratum.Config;
-using Coinium.Core.Server.Vanilla.Config;
 
 namespace Coinium.Core.Mining.Pool.Config
 {
@@ -35,15 +34,17 @@ namespace Coinium.Core.Mining.Pool.Config
 
         public PoolConfig(IServerConfig stratumServerConfig, IServerConfig vanillaServerConfig, IDaemonConfig daemonConfig)
         {
-            ServerConfigs = new List<IServerConfig>();
+            this.ServerConfigs = new List<IServerConfig>();
+
+            if(stratumServerConfig == null && vanillaServerConfig == null)
+                throw new ArgumentException("At least one server configuration needs to be supplied.");
+
             if (stratumServerConfig != null)
-            {
                 ServerConfigs.Add(stratumServerConfig);
-            }
+
             if (vanillaServerConfig != null)
-            {
                 ServerConfigs.Add(vanillaServerConfig);
-            }
+
             this.DaemonConfig = daemonConfig;
         }
 

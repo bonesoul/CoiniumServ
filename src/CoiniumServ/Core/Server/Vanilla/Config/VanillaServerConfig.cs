@@ -17,19 +17,19 @@
 */
 
 using System;
-using Coinium.Core.Server.Config;
+using Coinium.Common.Constants;
 
 namespace Coinium.Core.Server.Vanilla.Config
 {
-    public class VanillaServerConfig : IServerConfig
+    public class VanillaServerConfig : IVanillaServerConfig 
     {
         public string Name { get; private set; }
 
         public Int32 Port { get; private set; }
-        public string BindIp { get; private set; }
 
         public VanillaServerConfig(Int32 port)
         {
+            this.Name = RPCServiceNames.Vanilla;
             this.Port = port;
         }
     }

@@ -22,7 +22,7 @@ using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Core.Mining.Events;
 using Coinium.Core.Mining.Miner;
-using Coinium.Core.RPC.Sockets;
+using Coinium.Core.RPC.Service.Socket;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
 using Newtonsoft.Json;
@@ -92,9 +92,9 @@ namespace Coinium.Core.Server.Stratum
                     var result = asyncData.Result + "\n"; // quick hack.
                     var response = Encoding.UTF8.GetBytes(result);
 
-                    var context = (SocketsRpcContext) asyncData.AsyncState;
-                    var miner = (StratumMiner)context.Miner;                                         
-                                
+                    var context = (SocketServiceContext) asyncData.AsyncState;
+
+                    var miner = (StratumMiner)context.Miner;
                     miner.Connection.Send(response);
 
                     Log.Verbose("Stratum send:\n{0}", result);
@@ -103,8 +103,8 @@ namespace Coinium.Core.Server.Stratum
             var line = e.Data.ToEncodedString();
             line = line.Replace("\n", ""); // quick hack!
 
-            var rpcRequest = new SocketsRpcRequest(line);
-            var rpcContext = new SocketsRpcContext(this, rpcRequest);
+            var rpcRequest = new SocketServiceRequest(line);
+            var rpcContext = new SocketServiceContext(this, rpcRequest);
 
             var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
             JsonRpcProcessor.Process(async, rpcContext);

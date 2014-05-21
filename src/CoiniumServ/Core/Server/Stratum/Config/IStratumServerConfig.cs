@@ -16,21 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Mining;
-using Coinium.Core.Mining.Miner;
+using Coinium.Core.Server.Config;
 
-namespace Coinium.Core.RPC.Http
+namespace Coinium.Core.Server.Stratum.Config
 {
-    public class HttpRpcContext
+    public interface IStratumServerConfig : IServerConfig
     {
-        public IMiner Miner { get; private set; }
-
-        public HttpRpcResponse Response { get; private set; }
-
-        public HttpRpcContext(IMiner miner, HttpRpcResponse response)
-        {
-            this.Miner = miner;
-            this.Response = response;
-        }
+        string BindIp { get; }
     }
 }

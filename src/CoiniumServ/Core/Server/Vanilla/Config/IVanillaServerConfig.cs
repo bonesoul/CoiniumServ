@@ -16,29 +16,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Coin.Algorithms;
-using Coinium.Core.Mining.Pool;
-using Coinium.Core.RPC.Service;
-using Coinium.Core.Server;
-using Ninject;
+using System;
+using Coinium.Core.Server.Config;
 
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.Server.Vanilla.Config
 {
-    public class FactoryRegistry : IRegistry
+    public interface IVanillaServerConfig : IServerConfig
     {
-        private readonly IKernel _kernel;
 
-        public FactoryRegistry(IKernel kernel)
-        {
-            _kernel = kernel;
-        }
-
-        public void RegisterInstances()
-        {
-            _kernel.Bind<IHashAlgorithmFactory>().To<HashAlgorithmFactory>().InSingletonScope();
-            _kernel.Bind<IPoolFactory>().To<PoolFactory>().InSingletonScope();
-            _kernel.Bind<IServerFactory>().To<ServerFactory>().InSingletonScope();
-            _kernel.Bind<IServiceFactory>().To<ServiceFactory>().InSingletonScope();
-        }
     }
 }

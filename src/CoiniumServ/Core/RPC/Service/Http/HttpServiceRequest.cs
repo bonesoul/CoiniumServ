@@ -16,29 +16,30 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Coin.Algorithms;
-using Coinium.Core.Mining.Pool;
-using Coinium.Core.RPC.Service;
-using Coinium.Core.Server;
-using Ninject;
+using System.Net;
+using Newtonsoft.Json;
 
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.RPC.Service.Http
 {
-    public class FactoryRegistry : IRegistry
+    /// <summary>
+    /// JsonRpc 1.0 over http request.
+    /// </summary>
+    public class HttpServiceRequest
     {
-        private readonly IKernel _kernel;
+        public string Text { get; private set; }
 
-        public FactoryRegistry(IKernel kernel)
-        {
-            _kernel = kernel;
-        }
+        public dynamic Data { get; private set; }
 
-        public void RegisterInstances()
+        public HttpListenerContext Context { get; private set; }
+
+        public HttpListenerResponse Response { get; private set; }
+
+        public HttpServiceRequest(string text, HttpListenerContext context)
         {
-            _kernel.Bind<IHashAlgorithmFactory>().To<HashAlgorithmFactory>().InSingletonScope();
-            _kernel.Bind<IPoolFactory>().To<PoolFactory>().InSingletonScope();
-            _kernel.Bind<IServerFactory>().To<ServerFactory>().InSingletonScope();
-            _kernel.Bind<IServiceFactory>().To<ServiceFactory>().InSingletonScope();
+            this.Text = text;
+            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
+            this.Context = context;
+            this.Response = this.Context.Response;
         }
     }
 }

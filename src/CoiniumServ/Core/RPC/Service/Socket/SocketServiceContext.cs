@@ -16,29 +16,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Coin.Algorithms;
-using Coinium.Core.Mining.Pool;
-using Coinium.Core.RPC.Service;
-using Coinium.Core.Server;
-using Ninject;
 
-namespace Coinium.Core.Config.Registries
+using Coinium.Core.Mining.Miner;
+
+namespace Coinium.Core.RPC.Service.Socket
 {
-    public class FactoryRegistry : IRegistry
+    public class SocketServiceContext
     {
-        private readonly IKernel _kernel;
+        public IMiner Miner { get; private set; }
 
-        public FactoryRegistry(IKernel kernel)
-        {
-            _kernel = kernel;
-        }
+        public SocketServiceRequest Request { get; private set; }
 
-        public void RegisterInstances()
+        public SocketServiceContext(IMiner miner, SocketServiceRequest request)
         {
-            _kernel.Bind<IHashAlgorithmFactory>().To<HashAlgorithmFactory>().InSingletonScope();
-            _kernel.Bind<IPoolFactory>().To<PoolFactory>().InSingletonScope();
-            _kernel.Bind<IServerFactory>().To<ServerFactory>().InSingletonScope();
-            _kernel.Bind<IServiceFactory>().To<ServiceFactory>().InSingletonScope();
+            this.Miner = miner;
+            this.Request = request;
         }
     }
 }

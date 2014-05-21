@@ -16,23 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Newtonsoft.Json;
+using Coinium.Common.Constants;
+using Coinium.Core.RPC.Service;
+using Coinium.Core.Server.Stratum;
+using Coinium.Core.Server.Vanilla;
+using Ninject;
 
-namespace Coinium.Core.RPC.Sockets
+namespace Coinium.Core.Config.Registries
 {
-    /// <summary>
-    /// JsonRpc 2.0 over sockets request.
-    /// </summary>
-    public class SocketsRpcRequest
+    public class ServiceRegistry:IRegistry
     {
-        public string Text { get; private set; }
+        private readonly IKernel _kernel;
 
-        public dynamic Data { get; private set; }
-
-        public SocketsRpcRequest(string text)
+        public ServiceRegistry(IKernel kernel)
         {
-            this.Text = text;
-            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
+            _kernel = kernel;
+        }
+
+        public void RegisterInstances()
+        {
+            _kernel.Bind<IRPCService>().To<VanillaService>().Named(RPCServiceNames.Vanilla);
+            _kernel.Bind<IRPCService>().To<StratumService>().Named(RPCServiceNames.Stratum);
         }
     }
 }

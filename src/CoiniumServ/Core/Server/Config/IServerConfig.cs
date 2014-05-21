@@ -22,11 +22,8 @@ namespace Coinium.Core.Server.Config
 {
     public interface IServerConfig
     {
-        // TODO: The Name needs to be "Stratum" or "Vanilla" pulled from the config
         string Name { get; }
 
         Int32 Port { get; }
-
-        string BindIp { get; }
     }
 }

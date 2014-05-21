@@ -20,7 +20,8 @@ using AustinHarris.JsonRpc;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.RPC;
-using Coinium.Core.RPC.Sockets;
+using Coinium.Core.RPC.Service;
+using Coinium.Core.RPC.Service.Socket;
 using Coinium.Core.Server.Stratum.Responses;
 
 namespace Coinium.Core.Server.Stratum
@@ -48,7 +49,7 @@ namespace Coinium.Core.Server.Stratum
         [JsonRpcMethod("mining.subscribe")]
         public SubscribeResponse SubscribeMiner(string signature)
         {
-            var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
+            var context = (SocketServiceContext)JsonRpcContext.Current().Value;
             var miner = (StratumMiner)(context.Miner);            
 
             var response = new SubscribeResponse
@@ -70,7 +71,7 @@ namespace Coinium.Core.Server.Stratum
         [JsonRpcMethod("mining.authorize")]
         public bool AuthorizeMiner(string user, string password)
         {
-            var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
+            var context = (SocketServiceContext)JsonRpcContext.Current().Value;
             var miner = (StratumMiner)(context.Miner);
 
             return miner.Authenticate(user, password);
@@ -87,7 +88,7 @@ namespace Coinium.Core.Server.Stratum
         [JsonRpcMethod("mining.submit")]
         public bool SubmitWork(string user, string jobId, string extranNonce2, string nTime, string nonce)
         {
-            var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
+            var context = (SocketServiceContext)JsonRpcContext.Current().Value;
             var miner = (StratumMiner)(context.Miner);
 
             return this.Pool.ShareManager.ProcessShare(miner, jobId, extranNonce2, nTime, nonce);
