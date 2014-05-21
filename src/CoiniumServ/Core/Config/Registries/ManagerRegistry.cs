@@ -20,7 +20,7 @@ namespace Coinium.Core.Config.Registries
             _kernel.Bind<IShareManager>().To<ShareManager>();
             _kernel.Bind<IMinerManager>().To<MinerManager>();
             _kernel.Bind<IJobManager>().To<JobManager>();
-            _kernel.Bind<IPoolManager>().To<PoolManager>();
+            _kernel.Bind<IPoolManager>().To<PoolManager>().InSingletonScope();
         }
     }
 }
