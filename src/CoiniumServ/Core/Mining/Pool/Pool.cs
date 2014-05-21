@@ -21,10 +21,12 @@ using System.Threading;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
+using Coinium.Core.Mining.Pool.Config;
 using Coinium.Core.Mining.Share;
 using Coinium.Core.RPC;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
+using Coinium.Core.Server.Vanilla;
 using Serilog;
 
 namespace Coinium.Core.Mining.Pool
@@ -35,18 +37,25 @@ namespace Coinium.Core.Mining.Pool
     public class Pool:IPool
     {
         // dependencies.        
-        private readonly IMiningServer _server;
+        private readonly IMiningServer _stratumServer;
+        private readonly IRPCService _stratumRpcService;
+        private readonly IMiningServer _vanillaServer;
+        private readonly IRPCService _vanillaRpcService;
         private readonly IDaemonClient _daemonClient;
         private readonly IMinerManager _minerManager;
         private readonly IJobManager _jobManager;
         private readonly IShareManager _shareManager;
-        private readonly IRPCService _rpcService;
 
-        public IMiningServer Server { get { return this._server; } }
+        public IMiningServer StratumServer { get { return this._stratumServer; } }
+
+        public IRPCService StratumRpcService { get { return this._stratumRpcService; } }
+
+        public IMiningServer VanillaServer { get { return this._vanillaServer; } }
+
+        public IRPCService VanillaRpcService { get { return this._vanillaRpcService; } }
 
         public IDaemonClient DaemonClient { get { return this._daemonClient; } }
-
-        public IRPCService RpcService { get { return this._rpcService; } }
+        
         public IMinerManager MinerManager {get {return this._minerManager;}}
 
         public IJobManager JobManager { get { return this._jobManager; } }
@@ -60,21 +69,39 @@ namespace Coinium.Core.Mining.Pool
 
         private Timer _timer;
 
-        public Pool(string bindIp, Int32 port, string daemonUrl, string daemonUsername, string daemonPassword)
+        public Pool(IPoolConfig config)
         {
             this.GenerateInstanceId();
 
-            // setup our dependencies.
-            this._server = new StratumServer(bindIp, port);
-            this._daemonClient = new DaemonClient(daemonUrl, daemonUsername, daemonPassword);
-            this._rpcService = new StratumService();
+            if (config.DaemonConfig == null)
+                throw new ArgumentNullException("config", "config.DaemonConfig can not be null!");
+
+            this._daemonClient = new DaemonClient(config.DaemonConfig);
+
+            if(config.StratumServerConfig == null && config.VanillaServerConfig == null)
+                throw new ArgumentNullException("config","At least one server configuration should be provided.");
+
+            if (config.StratumServerConfig != null)
+            {
+                this._stratumServer = new StratumServer(config.StratumServerConfig);
+                this._stratumRpcService = new StratumService();
+            }
+
+            if (config.VanillaServerConfig != null)
+            {
+                this._vanillaServer = new VanillaServer(config.VanillaServerConfig);
+                this._vanillaRpcService = new VanillaService();
+            }
+
+
+            // setup managers.
             this._minerManager = new MinerManager();
             this._jobManager = new JobManager(this.InstanceId);
             this._shareManager = new ShareManager();
 
             // set back references.
-            this.Server.Pool = this;
-            this.RpcService.Pool = this;
+            this.StratumServer.Pool = this;
+            this.StratumRpcService.Pool = this;
             this.MinerManager.Pool = this;
             this.JobManager.Pool = this;
             this.ShareManager.Pool = this;
@@ -85,7 +112,11 @@ namespace Coinium.Core.Mining.Pool
 
         public void Start()
         {
-            this._server.Start();
+            if (this.StratumServer != null)
+                this.StratumServer.Start();
+
+            if (this.VanillaServer != null)
+                this.VanillaServer.Start();
         }
 
         public void Stop()

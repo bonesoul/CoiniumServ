@@ -19,6 +19,9 @@
 using AustinHarris.JsonRpc;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Coin.Daemon.Responses;
+using Coinium.Core.Mining.Pool;
+using Coinium.Core.RPC;
+using Coinium.Core.RPC.Http;
 using Serilog;
 
 namespace Coinium.Core.Server.Vanilla
@@ -26,11 +29,9 @@ namespace Coinium.Core.Server.Vanilla
     /// <summary>
     /// Stratum protocol implementation.
     /// </summary>
-    public class VanillaService : JsonRpcService
-    {
-        public VanillaService()
-        { }
-
+    public class VanillaService : JsonRpcService, IRPCService
+    {    
+        public IPool Pool { get; set; }
 
         /// <summary>
         /// 
@@ -45,20 +46,19 @@ namespace Coinium.Core.Server.Vanilla
         [JsonRpcMethod("getwork")]
         public Work Getwork(string data = null)
         {
-            // var context = (HttpRpcContext)JsonRpcContext.Current().Value;
-            // var request = context.Request;
-            // var miner = (GetworkMiner)(context.Miner);
+             var context = (HttpRpcContext)JsonRpcContext.Current().Value;
+             var miner = (VanillaMiner)(context.Miner);
 
-            //if (data == null)
-            //    return DaemonManager.Instance.Client.Getwork();
-            //else
-            //{                
-            //    var result = DaemonManager.Instance.Client.Getwork(data);
-            //    if(result)
-            //        Log.Verbose("Found block!: {0}", data);
+            if (data == null)
+                this.Pool.DaemonClient.Getwork();
+            else
+            {
+                var result = this.Pool.DaemonClient.Getwork(data);
+                if(result)
+                    Log.Verbose("Found block!: {0}", data);
 
-            //    return null;
-            //}    
+                return null;
+            }    
 
             return null;
         }     

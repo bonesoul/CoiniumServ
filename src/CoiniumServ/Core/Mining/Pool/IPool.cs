@@ -28,7 +28,13 @@ namespace Coinium.Core.Mining.Pool
 {
     public interface IPool
     {
-        IMiningServer Server { get; }
+        IMiningServer StratumServer { get; }
+
+        IRPCService StratumRpcService { get; }
+
+        IMiningServer VanillaServer { get; }
+
+        IRPCService VanillaRpcService { get; }
 
         IDaemonClient DaemonClient { get; }
 
@@ -37,8 +43,6 @@ namespace Coinium.Core.Mining.Pool
         IJobManager JobManager { get; }
 
         IShareManager ShareManager { get; }
-
-        IRPCService RpcService { get; }
 
         UInt64 InstanceId { get; }
 

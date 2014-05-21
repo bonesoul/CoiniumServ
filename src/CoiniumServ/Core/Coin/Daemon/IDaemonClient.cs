@@ -12,6 +12,8 @@ namespace Coinium.Core.Coin.Daemon
 
         Work Getwork();
 
+        bool Getwork(string data);
+
         ValidateAddress ValidateAddress(string walletAddress);
 
     }

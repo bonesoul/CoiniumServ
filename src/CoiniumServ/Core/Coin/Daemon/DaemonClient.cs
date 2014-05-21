@@ -42,10 +42,10 @@ namespace Coinium.Core.Coin.Daemon
     /// </summary>
     public class DaemonClient:DaemonBase, IDaemonClient
     {
-        public DaemonClient(string url, string user, string password)
-            : base(url, user, password)
+        public DaemonClient(IDaemonConfig config)
+            : base(config.Url, config.Username, config.Password)
         {
-            Log.Verbose("Init DaemonClient(): {0}", url);
+            Log.Verbose("Init DaemonClient(): {0}", config.Url);
         }
 
         /// <summary>
