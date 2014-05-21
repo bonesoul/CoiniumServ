@@ -19,7 +19,7 @@
 using System;
 using Coinium.Core.Server.Stratum.Notifications;
 
-namespace Coinium.Core.Mining
+namespace Coinium.Core.Mining.Miner
 {
     /// <summary>
     /// Miner interface that any implementations should extend.

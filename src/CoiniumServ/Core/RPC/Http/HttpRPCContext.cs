@@ -17,6 +17,7 @@
 */
 
 using Coinium.Core.Mining;
+using Coinium.Core.Mining.Miner;
 
 namespace Coinium.Core.RPC.Http
 {

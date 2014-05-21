@@ -22,8 +22,9 @@ using Serilog;
 
 namespace Coinium.Core.Mining.Pool
 {
-    public class PoolManager
+    public class PoolManager:IPoolManager
     {
+        private readonly List<IPool> _pools = new List<IPool>();
         private Dictionary<string, PoolConfig> _configs; 
 
         public PoolManager()
@@ -33,7 +34,22 @@ namespace Coinium.Core.Mining.Pool
 
         public void Run()
         {
-            this.LoadPoolsConfig();
+            // we should be loading pools from configs here - this.LoadPoolsConfig();    
+            this.AddPool();
+        }
+
+        public IList<IPool> GetPools()
+        {
+            return this._pools;
+        }
+
+        public IPool AddPool()
+        {
+            // we should be reading the config here for parameter values.
+            var pool = new Pool("0.0.0.0", 3333, "http://127.0.0.1:9334", "devel", "develpass");
+            this._pools.Add(pool);
+
+            return pool;
         }
 
         private void LoadPoolsConfig()

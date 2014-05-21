@@ -16,39 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Mining
+using Coinium.Core.Mining.Pool;
+using Coinium.Core.Server.Stratum;
+
+namespace Coinium.Core.Mining.Share
 {
-    /// <summary>
-    /// Counter for job id's.
-    /// </summary>
-    public class JobCounter
+    public interface IShareManager
     {
-        private static ulong Current { get; set; }
+        IPool Pool { get; set; }
 
-        static JobCounter()
-        {
-            Current = 1;
-        }
-
-        /// <summary>
-        /// Gets a new job id.
-        /// </summary>
-        /// <returns></returns>
-        public ulong Next()
-        {
-            Current++;
-
-            if (Current%0xffff == 0)
-                Current = 1;
-
-            return Current;
-        }
-
-        private static readonly JobCounter _instance = new JobCounter(); // memory instance of the JobCounter.
-
-        /// <summary>
-        /// Singleton instance of JobCounter.
-        /// </summary>
-        public static JobCounter Instance { get { return _instance; } }
+        bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
     }
 }

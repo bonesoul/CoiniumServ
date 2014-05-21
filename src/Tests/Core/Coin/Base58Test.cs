@@ -19,6 +19,7 @@
 using System;
 using System.Text;
 using Coinium.Core.Coin;
+using Coinium.Core.Coin.Address;
 using Coinium.Core.Coin.Exceptions;
 using Org.BouncyCastle.Math;
 using Should.Fluent;

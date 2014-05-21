@@ -17,6 +17,7 @@
 */
 
 using System;
+using Coinium.Core.Mining.Miner;
 
 namespace Coinium.Core.Mining.Events
 {

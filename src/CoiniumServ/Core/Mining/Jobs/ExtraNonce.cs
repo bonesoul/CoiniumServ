@@ -20,18 +20,13 @@ using System;
 using Coinium.Common.Extensions;
 using Serilog;
 
-namespace Coinium.Core.Mining
+namespace Coinium.Core.Mining.Jobs
 {
     /// <summary>
     /// Counter for extra nonce.
     /// </summary>
-    public class ExtraNonce
+    public class ExtraNonce:IExtraNonce
     {
-        /// <summary>
-        /// Instance id of the Stratum server.
-        /// </summary>
-        public UInt64 InstanceId { get; private set; }
-
         /// <summary>
         /// Extra nonce counter supplied to miners.
         /// <remarks>Last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
@@ -44,7 +39,7 @@ namespace Coinium.Core.Mining
         /// <summary>
         /// ExtraNonce placeholder to be used with coinbase transactions.
         /// </summary>
-        public byte[] ExtraNoncePlaceholder;
+        public byte[] ExtraNoncePlaceholder { get; private set; }
 
         /// <summary>
         /// The number of bytes that the miner users for its ExtraNonce2 counter 
@@ -52,31 +47,19 @@ namespace Coinium.Core.Mining
         /// </summary>
         public const int ExpectedExtraNonce2Size = 0x4;
 
-        public ExtraNonce()
+        public ExtraNonce(UInt64 instanceId)
         {
             ExtraNoncePlaceholder = "f000000ff111111f".HexToByteArray();
-            this.GenerateInstanceId(); // generate instance id for the service.
-            this.InitExtraNonceCounter(); // init. the extra nonce counter.
+            this.InitExtraNonceCounter(instanceId); // init. the extra nonce counter.
         }
 
-        /// <summary>
-        /// Generates an instance Id for the pool that is cryptographically random. 
-        /// </summary>
-        private void GenerateInstanceId()
-        {
-            var rndGenerator = System.Security.Cryptography.RandomNumberGenerator.Create(); // cryptographically random generator.
-            var randomBytes = new byte[4];
-            rndGenerator.GetNonZeroBytes(randomBytes); // create cryptographically random array of bytes.
-            this.InstanceId = BitConverter.ToUInt32(randomBytes, 0); // convert them to instance Id.
-            Log.Debug("Generated cryptographically random instance Id: {0}", this.InstanceId);
-        }
 
         /// <summary>
         /// Inits ExtraNonce counter based on current instance Id.
         /// </summary>
-        private void InitExtraNonceCounter()
+        private void InitExtraNonceCounter(UInt64 instanceId)
         {
-            this.Current = InstanceId << 27;  // init the ExtraNonce counter - last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
+            this.Current = instanceId << 27;  // init the ExtraNonce counter - last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
         }
 
         /// <summary>
@@ -88,12 +71,5 @@ namespace Coinium.Core.Mining
             this.Current++; // increment the extranonce.
             return this.Current;
         }
-
-        private static readonly ExtraNonce _instance = new ExtraNonce(); // memory instance of the ExtraNonceCounter.
-
-        /// <summary>
-        /// Singleton instance of ExtraNonceCounter.
-        /// </summary>
-        public static ExtraNonce Instance { get { return _instance; } }
     }
 }

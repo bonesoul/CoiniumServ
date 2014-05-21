@@ -16,38 +16,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Net.Server
+using Coinium.Core.Mining.Pool;
+using Coinium.Net.Server;
+
+namespace Coinium.Core.Server
 {
-    /// <summary>
-    /// Server interface that any implementations should extend.
-    /// </summary>
-    public interface IServer
+    public interface IMiningServer : IServer
     {
-        /// <summary>
-        /// The IP address of the interface the server binded.
-        /// </summary>
-        string BindIP { get; }
-
-        /// <summary>
-        /// The listening port for the server.
-        /// </summary>
-        int Port { get; }
-
-        /// <summary>
-        /// Is server currently listening for connections?
-        /// </summary>
-        bool IsListening { get; }
-
-        /// <summary>
-        /// Starts a server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Start();
-
-        /// <summary>
-        /// Stops the server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Stop();
+        IPool Pool { get; set; }
     }
 }

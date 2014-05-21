@@ -16,38 +16,34 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Net.Server
+using System;
+using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Miner;
+using Coinium.Core.Mining.Share;
+using Coinium.Core.RPC;
+using Coinium.Core.Server;
+
+namespace Coinium.Core.Mining.Pool
 {
-    /// <summary>
-    /// Server interface that any implementations should extend.
-    /// </summary>
-    public interface IServer
+    public interface IPool
     {
-        /// <summary>
-        /// The IP address of the interface the server binded.
-        /// </summary>
-        string BindIP { get; }
+        IMiningServer Server { get; }
 
-        /// <summary>
-        /// The listening port for the server.
-        /// </summary>
-        int Port { get; }
+        IDaemonClient DaemonClient { get; }
 
-        /// <summary>
-        /// Is server currently listening for connections?
-        /// </summary>
-        bool IsListening { get; }
+        IMinerManager MinerManager { get; }
 
-        /// <summary>
-        /// Starts a server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Start();
+        IJobManager JobManager { get; }
 
-        /// <summary>
-        /// Stops the server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Stop();
+        IShareManager ShareManager { get; }
+
+        IRPCService RpcService { get; }
+
+        UInt64 InstanceId { get; }
+
+        void Start();
+
+        void Stop();
     }
 }

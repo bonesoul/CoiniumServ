@@ -16,38 +16,34 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Net.Server
+using System;
+
+namespace Coinium.Core.Mining.Jobs
 {
     /// <summary>
-    /// Server interface that any implementations should extend.
+    /// Counter for job id's.
     /// </summary>
-    public interface IServer
+    public class JobCounter
     {
-        /// <summary>
-        /// The IP address of the interface the server binded.
-        /// </summary>
-        string BindIP { get; }
+        private UInt64 Current { get; set; }
+
+        public JobCounter()
+        {
+            this.Current = 1;
+        }
 
         /// <summary>
-        /// The listening port for the server.
-        /// </summary>
-        int Port { get; }
-
-        /// <summary>
-        /// Is server currently listening for connections?
-        /// </summary>
-        bool IsListening { get; }
-
-        /// <summary>
-        /// Starts a server instance.
+        /// Gets a new job id.
         /// </summary>
         /// <returns></returns>
-        bool Start();
+        public UInt64 Next()
+        {
+            Current++;
 
-        /// <summary>
-        /// Stops the server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Stop();
+            if (Current % 0xffff == 0)
+                Current = 1;
+
+            return Current;
+        }
     }
 }

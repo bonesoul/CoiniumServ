@@ -18,6 +18,7 @@
 
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin;
+using Coinium.Core.Coin.Coinbase;
 using Xunit;
 
 namespace Tests.Core.Coin

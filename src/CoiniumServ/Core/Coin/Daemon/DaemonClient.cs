@@ -40,7 +40,7 @@ namespace Coinium.Core.Coin.Daemon
     /// <summary>
     /// RPC client for coind's.
     /// </summary>
-    public class DaemonClient:DaemonBase
+    public class DaemonClient:DaemonBase, IDaemonClient
     {
         public DaemonClient(string url, string user, string password)
             : base(url, user, password)

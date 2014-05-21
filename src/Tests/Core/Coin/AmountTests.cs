@@ -17,6 +17,7 @@
 */
 
 using Coinium.Core.Coin;
+using Coinium.Core.Coin.Helpers;
 using Should.Fluent;
 using Xunit;
 
