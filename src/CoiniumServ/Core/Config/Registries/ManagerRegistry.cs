@@ -17,32 +17,23 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Coinium.Core.Config.Registries;
+using Coinium.Core.Mining.Jobs;
 using Ninject;
 
-namespace Coinium.Core.Config
+namespace Coinium.Core.Config.Registries
 {
-    public class Bootstrapper
+    class ManagerRegistry : IRegistry
     {
         private readonly IKernel _kernel;
 
-        public Bootstrapper(IKernel kernel)
+        public ManagerRegistry(IKernel kernel)
         {
             _kernel = kernel;
         }
 
-        public void Run()
+        public void RegisterInstances()
         {
-            var masterRegistry = new MasterRegistry(_kernel);
-            masterRegistry.RegisterInstances();
-
-            foreach (var registry in _kernel.GetAll<IRegistry>())
-            {
-                registry.RegisterInstances();
-            }
+            _kernel.Bind<IJobManager>().To<JobManager>().InSingletonScope();
         }
     }
 }

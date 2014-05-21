@@ -77,7 +77,8 @@ namespace Coinium.Core.Server.Stratum
             var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
             var miner = (StratumMiner)(context.Miner);
 
-            return MiningManager.Instance.ProcessShare(miner, jobId, extranNonce2, nTime, nonce);             
+            return true;
+            //return MiningManager.Instance.ProcessShare(miner, jobId, extranNonce2, nTime, nonce);             
         }
     }
 }

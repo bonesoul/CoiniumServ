@@ -26,6 +26,7 @@ using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
 using Coinium.Core.Config;
 using Coinium.Core.Mining;
+using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
@@ -74,7 +75,8 @@ namespace Coinium
             var stratumServer = new StratumServer("0.0.0.0", 3333);
             stratumServer.Start();
 
-            var instance = MiningManager.Instance;
+            var jobManager = kernel.Get<IJobManager>();
+            var miningManager = new MiningManager(jobManager);
 
             // getwork server.
             //var getworkServer = new VanillaServer(8332);

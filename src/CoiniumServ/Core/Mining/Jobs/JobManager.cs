@@ -18,31 +18,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Coinium.Core.Config.Registries;
-using Ninject;
+using Coinium.Core.Server.Stratum.Notifications;
 
-namespace Coinium.Core.Config
+namespace Coinium.Core.Mining.Jobs
 {
-    public class Bootstrapper
+    public class JobManager : IJobManager
     {
-        private readonly IKernel _kernel;
+        private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
 
-        public Bootstrapper(IKernel kernel)
+        public Job GetJob(UInt64 id)
         {
-            _kernel = kernel;
+            return this._jobs.ContainsKey(id) ? this._jobs[id] : null;
         }
 
-        public void Run()
+        public void AddJob(Job job)
         {
-            var masterRegistry = new MasterRegistry(_kernel);
-            masterRegistry.RegisterInstances();
-
-            foreach (var registry in _kernel.GetAll<IRegistry>())
-            {
-                registry.RegisterInstances();
-            }
+            this._jobs.Add(job.Id, job);
         }
     }
 }

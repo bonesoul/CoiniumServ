@@ -35,13 +35,7 @@ namespace Coinium.Core.Config.Registries
 
         public void RegisterInstances()
         {
-            var masterRegistry = new MasterRegistry(_kernel);
-            masterRegistry.RegisterInstances();
-
-            foreach (var registry in _kernel.GetAll<IRegistry>())
-            {
-                registry.RegisterInstances();
-            }
+            _kernel.Bind<IRegistry>().To<ManagerRegistry>();
         }
     }
 }

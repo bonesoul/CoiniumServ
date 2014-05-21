@@ -25,6 +25,7 @@ using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Coin.Helpers;
 using Coinium.Core.Coin.Transactions;
 using Coinium.Core.Crypto;
+using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Notifications;
 using Coinium.Net.Server.Sockets;
@@ -38,20 +39,22 @@ namespace Coinium.Core.Mining
     /// </summary>
     public class MiningManager
     {
+        // dependencies.
+        private readonly IJobManager _jobManager;
+
         private int _counter; // counter for assigining unique id's to miners.
 
         private readonly Dictionary<int, IMiner> _miners = new Dictionary<int, IMiner>(); // Dictionary that holds id <-> miner pairs. 
 
-        private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
-
         private Timer _timer;
 
         private BigInteger diff1;
-
-        
-
-        public MiningManager()
+       
+        public MiningManager(IJobManager jobManager)
         {
+            // setup our dependencies.
+            this._jobManager = jobManager;
+
             this.diff1 = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
             this._timer = new Timer(BroadcastJobs, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
             this.BroadcastJobs(null);
@@ -118,7 +121,7 @@ namespace Coinium.Core.Mining
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };
 
-            this._jobs.Add(job.Id,job);
+            //this._jobs.Add(job.Id,job);
 
             foreach (var pair in this._miners)
             {
@@ -132,16 +135,11 @@ namespace Coinium.Core.Mining
             }
         }
 
-        public Job GetJob(UInt64 id)
-        {
-            return this._jobs.ContainsKey(id) ? this._jobs[id] : null;
-        }
-
         public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
-            var job = MiningManager.Instance.GetJob(id);
+            var job = this._jobManager.GetJob(id);                
 
             if (job == null)
             {
@@ -185,7 +183,7 @@ namespace Coinium.Core.Mining
             }
             else // invalid share.
             {
-               
+
             }
 
             return true;
@@ -195,13 +193,5 @@ namespace Coinium.Core.Mining
         {
             return coinbase.DoubleDigest();
         }
-
-
-        private static readonly MiningManager _instance = new MiningManager(); // memory instance of the MinerManager.
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static MiningManager Instance { get { return _instance; } }
     }
 }
