@@ -20,6 +20,7 @@
 
 using System.Net;
 using Coinium.Core.Mining.Pool;
+using Coinium.Core.Server.Config;
 using Coinium.Core.Server.Vanilla.Config;
 using Coinium.Net.Server.Http;
 using Serilog;
@@ -29,11 +30,12 @@ namespace Coinium.Core.Server.Vanilla
     public class VanillaServer : HttpServer, IMiningServer
     {
         public IPool Pool { get; set; }
+        public IServerConfig Config { get; private set; }
 
         public VanillaServer(IVanillaServerConfig config)
             : base(config.Port)
         {
-            Log.Information("Vanilla server listening on port {0}.", this.Port);
+            this.Config = config;
             this.ProcessRequest += ProcessHttpRequest;
         }
 

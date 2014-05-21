@@ -19,9 +19,7 @@
 using System.Collections.Generic;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Pool.Config;
-using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Config;
-using Coinium.Core.Server.Vanilla;
 using Coinium.Core.Server.Vanilla.Config;
 using Serilog;
 

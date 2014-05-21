@@ -17,6 +17,7 @@
 */
 
 using Coinium.Core.Mining.Pool;
+using Coinium.Core.Server.Config;
 using Coinium.Net.Server;
 
 namespace Coinium.Core.Server
@@ -24,5 +25,7 @@ namespace Coinium.Core.Server
     public interface IMiningServer : IServer
     {
         IPool Pool { get; set; }
+
+        IServerConfig Config { get; }
     }
 }

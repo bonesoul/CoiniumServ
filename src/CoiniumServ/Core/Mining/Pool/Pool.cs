@@ -26,7 +26,9 @@ using Coinium.Core.Mining.Share;
 using Coinium.Core.RPC;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
+using Coinium.Core.Server.Stratum.Config;
 using Coinium.Core.Server.Vanilla;
+using Coinium.Core.Server.Vanilla.Config;
 using Serilog;
 
 namespace Coinium.Core.Mining.Pool
@@ -36,31 +38,21 @@ namespace Coinium.Core.Mining.Pool
     /// </summary>
     public class Pool:IPool
     {
-        // dependencies.        
-        private readonly IMiningServer _stratumServer;
-        private readonly IRPCService _stratumRpcService;
-        private readonly IMiningServer _vanillaServer;
-        private readonly IRPCService _vanillaRpcService;
-        private readonly IDaemonClient _daemonClient;
-        private readonly IMinerManager _minerManager;
-        private readonly IJobManager _jobManager;
-        private readonly IShareManager _shareManager;
+        public IMiningServer StratumServer { get; private set; }
 
-        public IMiningServer StratumServer { get { return this._stratumServer; } }
+        public IRPCService StratumRpcService { get; private set; }        
 
-        public IRPCService StratumRpcService { get { return this._stratumRpcService; } }
+        public IMiningServer VanillaServer { get; private set; }
 
-        public IMiningServer VanillaServer { get { return this._vanillaServer; } }
+        public IRPCService VanillaRpcService { get; private set; }
 
-        public IRPCService VanillaRpcService { get { return this._vanillaRpcService; } }
+        public IDaemonClient DaemonClient { get; private set; }
 
-        public IDaemonClient DaemonClient { get { return this._daemonClient; } }
-        
-        public IMinerManager MinerManager {get {return this._minerManager;}}
+        public IMinerManager MinerManager { get; private set; }
 
-        public IJobManager JobManager { get { return this._jobManager; } }
+        public IJobManager JobManager { get; private set; }
 
-        public IShareManager ShareManager { get { return this._shareManager; } }
+        public IShareManager ShareManager { get; private set; }
 
         /// <summary>
         /// Instance id of the pool.
@@ -76,15 +68,15 @@ namespace Coinium.Core.Mining.Pool
             if (config.DaemonConfig == null)
                 throw new ArgumentNullException("config", "config.DaemonConfig can not be null!");
 
-            this._daemonClient = new DaemonClient(config.DaemonConfig);
+            this.DaemonClient = new DaemonClient(config.DaemonConfig);
 
             if(config.StratumServerConfig == null && config.VanillaServerConfig == null)
                 throw new ArgumentNullException("config","At least one server configuration should be provided.");
 
             if (config.StratumServerConfig != null)
             {
-                this._stratumServer = new StratumServer(config.StratumServerConfig);
-                this._stratumRpcService = new StratumService();
+                this.StratumServer = new StratumServer(config.StratumServerConfig);
+                this.StratumRpcService = new StratumService();
 
                 this.StratumServer.Pool = this;
                 this.StratumRpcService.Pool = this;
@@ -92,8 +84,8 @@ namespace Coinium.Core.Mining.Pool
 
             if (config.VanillaServerConfig != null)
             {
-                this._vanillaServer = new VanillaServer(config.VanillaServerConfig);
-                this._vanillaRpcService = new VanillaService();
+                this.VanillaServer = new VanillaServer(config.VanillaServerConfig);
+                this.VanillaRpcService = new VanillaService();
 
                 this.VanillaServer.Pool = this;
                 this.VanillaRpcService.Pool = this;
@@ -101,9 +93,9 @@ namespace Coinium.Core.Mining.Pool
 
 
             // setup managers.
-            this._minerManager = new MinerManager();
-            this._jobManager = new JobManager(this.InstanceId);
-            this._shareManager = new ShareManager();
+            this.MinerManager = new MinerManager();
+            this.JobManager = new JobManager(this.InstanceId);
+            this.ShareManager = new ShareManager();
 
             // set back references.
             this.MinerManager.Pool = this;
