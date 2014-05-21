@@ -16,23 +16,17 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Mining.Jobs;
-using Ninject;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Core.Dependency.Registries
+namespace Coinium.Core.Mining.Pool
 {
-    class ManagerRegistry : IRegistry
+    public interface IPoolManager
     {
-        private readonly IKernel _kernel;
+        IList<IPool> GetPools();
 
-        public ManagerRegistry(IKernel kernel)
-        {
-            _kernel = kernel;
-        }
-
-        public void RegisterInstances()
-        {
-            _kernel.Bind<IJobManager>().To<JobManager>();
-        }
+        IPool AddPool();
     }
 }

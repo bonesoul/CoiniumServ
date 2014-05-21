@@ -24,8 +24,8 @@ using Coinium.Common.Console;
 using Coinium.Common.Platform;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
-using Coinium.Core.Dependency;
 using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
@@ -48,10 +48,6 @@ namespace Coinium
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions.
             #endif
 
-            // setup the ninject kernel.
-            var kernel = new StandardKernel();
-            new Bootstrapper(kernel).Run();
-
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
 
             // print intro texts.
@@ -71,21 +67,10 @@ namespace Coinium
             // start pool manager.
             PoolManager.Instance.Run();
 
-            var stratumServer = kernel.Get<IStratumServer>(new ConstructorArgument("bindIp", "0.0.0.0"), new ConstructorArgument("port", 3333));
-            var jobManager = kernel.Get<IJobManager>();
-            var pool = kernel.Get<Pool>(new ConstructorArgument("server", stratumServer), new ConstructorArgument("jobManager", jobManager));
-            pool.Start();
-
-            // stratum server.
-            //var stratumServer = new StratumServer("0.0.0.0", 3333);
-            //stratumServer.Start();
-
-            //var jobManager = kernel.Get<IJobManager>();
-            //var miningManager = new MiningManager(jobManager);
-
-            // getwork server.
-            //var getworkServer = new VanillaServer(8332);
-            //getworkServer.Start();
+            foreach (var pool in PoolManager.Instance.GetPools())
+            {
+                pool.Start();
+            }
 
             // Start the server manager.
             ServerManager.Instance.Start();

@@ -16,14 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
 using Coinium.Common.Helpers.IO;
+using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Miner;
+using Coinium.Core.Server.Stratum;
 using Serilog;
 
 namespace Coinium.Core.Mining.Pool
 {
-    public class PoolManager
+    public class PoolManager:IPoolManager
     {
+        private readonly List<IPool> _pools = new List<IPool>();
         private Dictionary<string, PoolConfig> _configs; 
 
         public PoolManager()
@@ -33,7 +38,25 @@ namespace Coinium.Core.Mining.Pool
 
         public void Run()
         {
-            this.LoadPoolsConfig();
+            // we should be loading pools from configs here - this.LoadPoolsConfig();    
+            this.AddPool();
+        }
+
+        public IList<IPool> GetPools()
+        {
+            return this._pools;
+        }
+
+        public IPool AddPool()
+        {
+            var stratumServer = new StratumServer("0.0.0.0", 3333);
+            var minerManager = new MinerManager();
+            var jobManager = new JobManager();
+
+            var pool = new Pool(stratumServer, minerManager, jobManager);
+            this._pools.Add(pool);
+
+            return pool;
         }
 
         private void LoadPoolsConfig()

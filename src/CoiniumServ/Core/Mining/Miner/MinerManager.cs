@@ -16,23 +16,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Server.Stratum;
-using Ninject;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Core.Dependency.Registries
+namespace Coinium.Core.Mining.Miner
 {
-    public class ServerRegistry : IRegistry
+    public class MinerManager:IMinerManager
     {
-        private readonly IKernel _kernel;
+        private readonly Dictionary<Int32, IMiner> _miners = new Dictionary<Int32, IMiner>();
 
-        public ServerRegistry(IKernel kernel)
+        public IMiner GetMiner(Int32 id)
         {
-            _kernel = kernel;
+            return this._miners.ContainsKey(id) ? this._miners[id] : null;
         }
 
-        public void RegisterInstances()
+        public void AddMiner(IMiner miner)
         {
-            _kernel.Bind<IStratumServer>().To<StratumServer>();
+            this._miners.Add(miner.Id, miner);
         }
     }
 }
