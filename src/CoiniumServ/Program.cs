@@ -24,10 +24,12 @@ using Coinium.Common.Console;
 using Coinium.Common.Platform;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
+using Coinium.Core.Config;
 using Coinium.Core.Mining;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
+using Ninject;
 using Serilog;
 
 namespace Coinium
@@ -45,12 +47,20 @@ namespace Coinium
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions.
             #endif
 
+            // setup the ninject kernel.
+            var kernel = new StandardKernel();
+            new Bootstrapper(kernel).Run();
+
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
 
+            // print intro texts.
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
+            // init logging facilities.
             InitLogging();
+
+            // print a version banner.
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
