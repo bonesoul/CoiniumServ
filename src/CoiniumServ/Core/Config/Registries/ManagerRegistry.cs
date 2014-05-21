@@ -1,6 +1,7 @@
-﻿using Coinium.Common.Constants;
-using Coinium.Core.Coin.Processors;
-using Coinium.Core.Mining;
+﻿using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Miner;
+using Coinium.Core.Mining.Pool;
+using Coinium.Core.Mining.Share;
 using Ninject;
 
 namespace Coinium.Core.Config.Registries
@@ -16,7 +17,10 @@ namespace Coinium.Core.Config.Registries
 
         public void RegisterInstances()
         {
-            _kernel.Bind<IMiningManager>().To<MiningManager>().InSingletonScope();
+            _kernel.Bind<IShareManager>().To<ShareManager>();
+            _kernel.Bind<IMinerManager>().To<MinerManager>();
+            _kernel.Bind<IJobManager>().To<JobManager>();
+            _kernel.Bind<IPoolManager>().To<PoolManager>();
         }
     }
 }

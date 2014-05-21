@@ -40,11 +40,25 @@ namespace Coinium.Core.Coin.Daemon
     /// <summary>
     /// RPC client for coind's.
     /// </summary>
-    public class DaemonClient:DaemonBase, IDaemonClient
+    public class DaemonClient : DaemonBase, IDaemonClient
     {
-        public DaemonClient(string url, string user, string password)
-            : base(url, user, password)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DaemonClient"/> class.
+        /// </summary>
+        public DaemonClient()
+            : base()
         {
+        }
+
+        /// <summary>
+        /// Initializes the specified URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        public override void Initialize(string url, string username, string password)
+        {
+            base.Initialize(url, username, password);
             Log.Verbose("Init DaemonClient(): {0}", url);
         }
 

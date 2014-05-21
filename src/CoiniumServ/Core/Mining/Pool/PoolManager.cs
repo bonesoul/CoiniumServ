@@ -22,13 +22,16 @@ using Serilog;
 
 namespace Coinium.Core.Mining.Pool
 {
-    public class PoolManager:IPoolManager
+    public class PoolManager : IPoolManager
     {
         private readonly List<IPool> _pools = new List<IPool>();
-        private Dictionary<string, PoolConfig> _configs; 
+        private Dictionary<string, PoolConfig> _configs;
 
-        public PoolManager()
+        private readonly IPoolFactory _poolFactory;
+
+        public PoolManager(IPoolFactory poolFactory)
         {
+            _poolFactory = poolFactory;
             Log.Verbose("PoolManager() init..");
         }
 
@@ -46,7 +49,7 @@ namespace Coinium.Core.Mining.Pool
         public IPool AddPool()
         {
             // we should be reading the config here for parameter values.
-            var pool = new Pool("0.0.0.0", 3333, "http://127.0.0.1:9334", "devel", "develpass");
+            var pool = _poolFactory.Create("0.0.0.0", 3333, "http://127.0.0.1:9334", "devel", "develpass");
             this._pools.Add(pool);
 
             return pool;
@@ -64,12 +67,5 @@ namespace Coinium.Core.Mining.Pool
                 this._configs.Add(file, new PoolConfig(file));
             }
         }
-
-        private static readonly PoolManager _instance = new PoolManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static PoolManager Instance { get { return _instance; } }
     }
 }

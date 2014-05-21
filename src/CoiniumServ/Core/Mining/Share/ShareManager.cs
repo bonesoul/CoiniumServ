@@ -17,6 +17,7 @@
 */
 
 using System;
+using Coinium.Common.Constants;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Coinbase;
@@ -34,9 +35,19 @@ namespace Coinium.Core.Mining.Share
 
         private static BigInteger _diff1;
 
-        public ShareManager()
+        private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
+
+        public ShareManager(IHashAlgorithmFactory hashAlgorithmFactory)
         {
+            _hashAlgorithmFactory = hashAlgorithmFactory;
+
+            // TODO: THIS IS UNIQUE TO THE COIN!!!!
             _diff1 = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
+        }
+
+        public void Initialize(IPool pool)
+        {
+            Pool = pool;
         }
 
         public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
@@ -72,7 +83,7 @@ namespace Coinium.Core.Mining.Share
 
             var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();
 
-            var algorithm = HashAlgorithmFactory.Get("scrypt");
+            var algorithm = _hashAlgorithmFactory.Get(AlgorithmNames.Scrypt);
 
             var header = Serializers.SerializeHeader(job, merkleRoot, nTime, nonce);
             var headerHash = algorithm.Hash(header);

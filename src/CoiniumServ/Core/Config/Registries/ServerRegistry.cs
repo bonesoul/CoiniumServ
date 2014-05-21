@@ -1,7 +1,6 @@
 ﻿using Coinium.Common.Attributes;
-using Coinium.Common.Constants;
-using Coinium.Core.Coin.Processors;
-using Coinium.Core.Mining;
+using Coinium.Core.RPC;
+using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Vanilla;
 using Coinium.Net.Server;
@@ -20,8 +19,9 @@ namespace Coinium.Core.Config.Registries
 
         public void RegisterInstances()
         {
-            _kernel.Bind<IServer>().To<VanillaServer>().WhenClassHas<DefaultInstanceAttribute>().InSingletonScope();
-            _kernel.Bind<IServer>().To<StratumServer>().WhenClassHas<DefaultInstanceAttribute>().InSingletonScope();
+            _kernel.Bind<IServer>().To<VanillaServer>().WhenClassHas<DefaultInstanceAttribute>();
+            _kernel.Bind<IMiningServer>().To<StratumServer>(); // Only needed if there are multiple bindings for the interface: .WhenClassHas<DefaultInstanceAttribute>();
+            _kernel.Bind<IRPCService>().To<StratumService>();
         }
     }
 }

@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using Coinium.Core.Mining.Pool;
 using Coinium.Net.Server;
 
@@ -23,6 +24,12 @@ namespace Coinium.Core.Server
 {
     public interface IMiningServer : IServer
     {
-        IPool Pool { get; set; }
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="pool">The pool.</param>
+        /// <param name="ip">The ip.</param>
+        /// <param name="port">The port.</param>
+        void Initialize(IPool pool, string ip, Int32 port);
     }
 }

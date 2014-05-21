@@ -1,4 +1,4 @@
-﻿/*
+/*
  *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
@@ -16,29 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using Coinium.Core.Mining.Pool;
-using Coinium.Core.Server.Stratum.Notifications;
-
-namespace Coinium.Core.Mining.Jobs
+namespace Coinium.Core.Coin.Algorithms
 {
-    public interface IJobManager
+    public interface IHashAlgorithmFactory
     {
-        IPool Pool { get; set; }
-
-        IExtraNonce ExtraNonce { get; }
-
-        Job GetJob(UInt64 id);
-
-        void AddJob(Job job);
-
-        void Broadcast();
-
         /// <summary>
-        /// Initializes the specified pool.
+        /// Gets the specified algorithm name.
         /// </summary>
-        /// <param name="pool">The pool.</param>
-        /// <param name="instanceId">The instance identifier.</param>
-        void Initialize(IPool pool, ulong instanceId);
+        /// <param name="algorithmName">Name of the algorithm.</param>
+        /// <returns></returns>
+        IHashAlgorithm Get(string algorithmName);
     }
 }

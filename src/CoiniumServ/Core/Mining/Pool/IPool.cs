@@ -42,6 +42,16 @@ namespace Coinium.Core.Mining.Pool
 
         UInt64 InstanceId { get; }
 
+        /// <summary>
+        /// Initializes the specified bind ip.
+        /// </summary>
+        /// <param name="bindIp">The bind ip.</param>
+        /// <param name="port">The port.</param>
+        /// <param name="daemonUrl">The daemon URL.</param>
+        /// <param name="daemonUsername">The daemon username.</param>
+        /// <param name="daemonPassword">The daemon password.</param>
+        void Initialize(string bindIp, Int32 port, string daemonUrl, string daemonUsername, string daemonPassword);
+
         void Start();
 
         void Stop();

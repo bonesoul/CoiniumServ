@@ -25,6 +25,12 @@ namespace Coinium.Core.Mining.Share
     {
         IPool Pool { get; set; }
 
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="pool">The pool.</param>
+        void Initialize(IPool pool);
+
         bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
     }
 }

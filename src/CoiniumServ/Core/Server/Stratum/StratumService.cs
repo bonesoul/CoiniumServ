@@ -28,9 +28,18 @@ namespace Coinium.Core.Server.Stratum
     /// <summary>
     /// Stratum protocol implementation.
     /// </summary>
-    public class StratumService : JsonRpcService,IStratumRPCservice
+    public class StratumService : JsonRpcService, IStratumRPCservice
     {
         public IPool Pool { get; set; }
+
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="pool">The pool.</param>
+        public void Initialize(IPool pool)
+        {
+            Pool = pool;
+        }
 
         /// <summary>
         /// Subscribes a Miner to allow it to recieve work to begin hashing and submitting shares.

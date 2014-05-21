@@ -19,6 +19,7 @@
 // stratum server uses json-rpc 2.0 (over raw sockets) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 // classic server handles getwork & getblocktemplate miners over http.
 
+using Coinium.Common.Attributes;
 using Coinium.Core.Mining.Pool;
 using Coinium.Net.Server.Sockets;
 using Serilog;
@@ -28,19 +29,29 @@ namespace Coinium.Core.Server.Stratum
     /// <summary>
     /// Stratum protocol server implementation.
     /// </summary>
-    public class StratumServer:SocketServer, IStratumServer
+    [DefaultInstance]
+    public class StratumServer : SocketServer, IStratumServer
     {
         public IPool Pool { get; set; }
 
         /// <summary>
         /// Creates a new StratumServer instance.
         /// </summary>
-        /// <param name="bindIp"></param>
-        /// <param name="port"></param>
-        public StratumServer(string bindIp, int port)
+        public StratumServer()
         {
-            this.BindIP = bindIp;
-            this.Port = port;
+        }
+
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="pool">The pool.</param>
+        /// <param name="ip">The ip.</param>
+        /// <param name="port">The port.</param>
+        public void Initialize(IPool pool, string ip, int port)
+        {
+            Pool = pool;
+            BindIP = ip;
+            Port = port;
 
             this.OnConnect += Stratum_OnConnect;
             this.OnDisconnect += Stratum_OnDisconnect;

@@ -25,5 +25,7 @@ namespace Coinium.Core.Mining.Pool
         IList<IPool> GetPools();
 
         IPool AddPool();
+
+        void Run();
     }
 }

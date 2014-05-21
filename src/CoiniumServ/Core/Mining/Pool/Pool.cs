@@ -32,7 +32,7 @@ namespace Coinium.Core.Mining.Pool
     /// <summary>
     /// Contains pool services and server.
     /// </summary>
-    public class Pool:IPool
+    public class Pool : IPool
     {
         // dependencies.        
         private readonly IMiningServer _server;
@@ -42,16 +42,12 @@ namespace Coinium.Core.Mining.Pool
         private readonly IShareManager _shareManager;
         private readonly IRPCService _rpcService;
 
-        public IMiningServer Server { get { return this._server; } }
-
-        public IDaemonClient DaemonClient { get { return this._daemonClient; } }
-
-        public IRPCService RpcService { get { return this._rpcService; } }
-        public IMinerManager MinerManager {get {return this._minerManager;}}
-
-        public IJobManager JobManager { get { return this._jobManager; } }
-
-        public IShareManager ShareManager { get { return this._shareManager; } }
+        public IMiningServer Server { get { return _server; } }
+        public IDaemonClient DaemonClient { get { return _daemonClient; } }
+        public IMinerManager MinerManager { get { return _minerManager; } }
+        public IJobManager JobManager { get { return _jobManager; } }
+        public IShareManager ShareManager { get { return _shareManager; } }
+        public IRPCService RpcService { get { return _rpcService; } }
 
         /// <summary>
         /// Instance id of the pool.
@@ -60,24 +56,34 @@ namespace Coinium.Core.Mining.Pool
 
         private Timer _timer;
 
-        public Pool(string bindIp, Int32 port, string daemonUrl, string daemonUsername, string daemonPassword)
+        public Pool(IMiningServer server, IDaemonClient client, IMinerManager minerManager, IJobManager jobManager, IShareManager shareManager, IRPCService rpcService)
         {
+            _server = server;
+            _daemonClient = client;
+            _minerManager = minerManager;
+            _jobManager = jobManager;
+            _shareManager = shareManager;
+            _rpcService = rpcService;
+
             this.GenerateInstanceId();
+        }
 
-            // setup our dependencies.
-            this._server = new StratumServer(bindIp, port);
-            this._daemonClient = new DaemonClient(daemonUrl, daemonUsername, daemonPassword);
-            this._rpcService = new StratumService();
-            this._minerManager = new MinerManager();
-            this._jobManager = new JobManager(this.InstanceId);
-            this._shareManager = new ShareManager();
-
-            // set back references.
-            this.Server.Pool = this;
-            this.RpcService.Pool = this;
-            this.MinerManager.Pool = this;
-            this.JobManager.Pool = this;
-            this.ShareManager.Pool = this;
+        /// <summary>
+        /// Initializes the specified bind ip.
+        /// </summary>
+        /// <param name="bindIp">The bind ip.</param>
+        /// <param name="port">The port.</param>
+        /// <param name="daemonUrl">The daemon URL.</param>
+        /// <param name="daemonUsername">The daemon username.</param>
+        /// <param name="daemonPassword">The daemon password.</param>
+        public void Initialize(string bindIp, Int32 port, string daemonUrl, string daemonUsername, string daemonPassword)
+        {
+            _server.Initialize(this, bindIp, port);
+            _daemonClient.Initialize(daemonUrl, daemonUsername, daemonPassword);
+            _minerManager.Initialize(this);
+            _jobManager.Initialize(this, InstanceId);
+            _rpcService.Initialize(this);
+            _shareManager.Initialize(this);
 
             // other stuff
             this._timer = new Timer(Timer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
@@ -94,7 +100,7 @@ namespace Coinium.Core.Mining.Pool
         }
         private void Timer(object state)
         {
-            this.JobManager.Broadcast();
+            _jobManager.Broadcast();
         }
 
         /// <summary>

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Ninject;
+﻿using Ninject;
 
 namespace Coinium.Core.Config.Registries
 {
@@ -17,9 +13,10 @@ namespace Coinium.Core.Config.Registries
 
         public void RegisterInstances()
         {
-            _kernel.Bind<IRegistry>().To<CoinProcessorRegistry>();
             _kernel.Bind<IRegistry>().To<ManagerRegistry>();
             _kernel.Bind<IRegistry>().To<ServerRegistry>();
+            _kernel.Bind<IRegistry>().To<ClassRegistry>();
+            _kernel.Bind<IRegistry>().To<FactoryRegistry>();
         }
     }
 }
