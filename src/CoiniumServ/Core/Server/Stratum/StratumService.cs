@@ -28,6 +28,13 @@ namespace Coinium.Core.Server.Stratum
     /// </summary>
     public class StratumService : JsonRpcService
     {
+        private readonly IMiningManager _miningManager;
+
+        public StratumService(IMiningManager miningManager)
+        {
+            _miningManager = miningManager;
+        }
+
         /// <summary>
         /// Subscribes a Miner to allow it to recieve work to begin hashing and submitting shares.
         /// </summary>
@@ -77,7 +84,7 @@ namespace Coinium.Core.Server.Stratum
             var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
             var miner = (StratumMiner)(context.Miner);
 
-            return MiningManager.Instance.ProcessShare(miner, jobId, extranNonce2, nTime, nonce);             
+            return _miningManager.ProcessShare(miner, jobId, extranNonce2, nTime, nonce);             
         }
     }
 }

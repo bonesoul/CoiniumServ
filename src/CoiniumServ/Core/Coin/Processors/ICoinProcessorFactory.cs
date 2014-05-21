@@ -16,17 +16,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Coinium.Core.Coin.Algorithms
+namespace Coinium.Core.Coin.Processors
 {
-    public interface IHashAlgorithm
+    public interface ICoinProcessorFactory
     {
-        UInt32 Multiplier { get; }
-
-        byte[] Hash(byte[] input);
+        ICoinProcessor Get(string coinName);
     }
 }

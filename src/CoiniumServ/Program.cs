@@ -25,10 +25,14 @@ using Coinium.Common.Platform;
 using Coinium.Core.Coin;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
+using Coinium.Core.Config;
 using Coinium.Core.Mining;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
+using Coinium.Net.Server;
+using Ninject;
+using Ninject.Parameters;
 using Serilog;
 
 namespace Coinium
@@ -42,6 +46,10 @@ namespace Coinium
 
         static void Main(string[] args)
         {
+            // Setup ninject
+            var kernel = new StandardKernel();
+            new Bootstrapper(kernel).Run();
+
             #if !DEBUG
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions.
             #endif
@@ -61,11 +69,15 @@ namespace Coinium
             // start pool manager.
             PoolManager.Instance.Run();
 
-            // stratum server.
-            var stratumServer = new StratumServer("0.0.0.0", 3333);
-            stratumServer.Start();
+            var miningManager = kernel.Get<IMiningManager>();
 
-            var instance = MiningManager.Instance;
+            // stratum server.
+            var miningManagerParam = new ConstructorArgument("miningManager", miningManager);
+            var ipParam = new ConstructorArgument("bindIp", "0.0.0.0");
+            var portParam = new ConstructorArgument("port", 3333);
+            var stratumServer = kernel.Get<IServer>(miningManagerParam, ipParam, portParam);
+
+            stratumServer.Start();
 
             // getwork server.
             //var getworkServer = new VanillaServer(8332);
