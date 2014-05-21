@@ -21,15 +21,14 @@
 using System.Net;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server.Config;
-using Coinium.Core.Server.Vanilla.Config;
 using Coinium.Net.Server.Http;
-using Serilog;
 
 namespace Coinium.Core.Server.Vanilla
 {
     public class VanillaServer : HttpServer, IMiningServer
     {
         public IPool Pool { get; set; }
+
         public void Initialize(IPool pool, IServerConfig serverConfig)
         {
             base.Initialize(serverConfig.Port);

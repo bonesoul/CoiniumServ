@@ -28,7 +28,6 @@ namespace Coinium.Core.Mining.Pool
     public class PoolManager : IPoolManager
     {
         private readonly List<IPool> _pools = new List<IPool>();
-        //private Dictionary<string, PoolConfig> _configs; 
 
         private readonly IPoolFactory _poolFactory;
 

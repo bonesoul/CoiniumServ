@@ -16,22 +16,18 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using Coinium.Core.Mining.Pool;
 
-using Coinium.Core.Mining;
-using Coinium.Core.Mining.Miner;
-
-namespace Coinium.Core.RPC.Sockets
+namespace Coinium.Core.RPC.Service
 {
-    public class SocketsRpcContext
+    public interface IRPCService
     {
-        public IMiner Miner { get; private set; }
+        IPool Pool { get; set; }
 
-        public SocketsRpcRequest Request { get; private set; }
-
-        public SocketsRpcContext(IMiner miner, SocketsRpcRequest request)
-        {
-            this.Miner = miner;
-            this.Request = request;
-        }
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="pool">The pool.</param>
+        void Initialize(IPool pool);
     }
 }

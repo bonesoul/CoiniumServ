@@ -17,11 +17,11 @@
 */
 
 using System;
-using Coinium.Core.Server.Config;
+using Coinium.Common.Constants;
 
 namespace Coinium.Core.Server.Stratum.Config
 {
-    public class StratumServerConfig:IServerConfig
+    public class StratumServerConfig:IStratumServerConfig
     {
         public string Name { get; private set; }
 
@@ -31,6 +31,7 @@ namespace Coinium.Core.Server.Stratum.Config
 
         public StratumServerConfig(string bindIp, Int32 port)
         {
+            this.Name = RPCServiceNames.Stratum;
             this.BindIp = bindIp;
             this.Port = port;
         }

@@ -25,6 +25,7 @@ using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool.Config;
 using Coinium.Core.Mining.Share;
 using Coinium.Core.RPC;
+using Coinium.Core.RPC.Service;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Config;
@@ -88,26 +89,6 @@ namespace Coinium.Core.Mining.Pool
             _jobManager.Initialize(this, InstanceId);
             _shareManager.Initialize(this);
 
-            // TODO: Left this just to illustrate the difference. Let the factory determine the instance from a name in the config
-            /*
-            if (config.StratumServerConfig != null)
-            {
-                this.StratumServer = new StratumServer(config.StratumServerConfig);
-                this.StratumRpcService = new StratumService();
-
-                this.StratumServer.Pool = this;
-                this.StratumRpcService.Pool = this;
-            }
-
-            if (config.VanillaServerConfig != null)
-            {
-                this.VanillaServer = new VanillaServer(config.VanillaServerConfig);
-                this.VanillaRpcService = new VanillaService();
-
-                this.VanillaServer.Pool = this;
-                this.VanillaRpcService.Pool = this;
-            }
-            */
 
             _servers = new Dictionary<IMiningServer, IRPCService>();
             foreach (var serverConfig in config.ServerConfigs)

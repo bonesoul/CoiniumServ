@@ -23,19 +23,10 @@ namespace Coinium.Core.Server
 {
     public class ServerManager
     {
-        public ServerManager()
-        { }
-
-        public void Start()
+        public bool Start()
         {
             Log.Information("ServerManager starting..");
 
-            //if (Core.Web.Config.Instance.Enabled)
-                //this.StartWebServer();
-        }
-
-        private bool StartWebServer()
-        {
             var webServer = new WebServer();
             webServer.Start();
 

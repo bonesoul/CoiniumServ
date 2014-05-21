@@ -25,7 +25,7 @@ using Coinium.Common.Extensions;
 using Coinium.Core.Mining;
 using Coinium.Core.Mining.Events;
 using Coinium.Core.Mining.Miner;
-using Coinium.Core.RPC.Http;
+using Coinium.Core.RPC.Service.Http;
 using Coinium.Core.Server.Stratum.Notifications;
 using Serilog;
 
@@ -64,34 +64,31 @@ namespace Coinium.Core.Server.Vanilla
         {
             var httpRequest = httpContext.Request;
 
-            var encoding = Encoding.UTF8;
-
             var rpcResultHandler = new AsyncCallback(
                 callback =>
                 {
                     var asyncData = ((JsonRpcStateAsync) callback);
-
                     var result = asyncData.Result;
-                    var data = Encoding.UTF8.GetBytes(result);
-                    var request = ((HttpRpcResponse) asyncData.AsyncState);
+                    var response = Encoding.UTF8.GetBytes(result);
 
-                    request.Response.ContentType = "application/json";
-                    request.Response.ContentEncoding = encoding;
+                    var context = (HttpServiceContext)asyncData.AsyncState;
 
-                    request.Response.ContentLength64 = data.Length;
-                    request.Response.OutputStream.Write(data,0,data.Length);                    
+                    context.Request.Response.ContentType = "application/json";
+                    context.Request.Response.ContentEncoding = Encoding.UTF8;
+                    context.Request.Response.ContentLength64 = response.Length;
+                    context.Request.Response.OutputStream.Write(response, 0, response.Length);                    
                 });
 
-            using (var reader = new StreamReader(httpRequest.InputStream, encoding))
+            using (var reader = new StreamReader(httpRequest.InputStream, Encoding.UTF8))
             {
-                var line = reader.ReadToEnd();            
+                var line = reader.ReadToEnd();  
+          
                 Log.Verbose(line.PretifyJson());
-                var response = httpContext.Response;
 
-                var rpcResponse = new HttpRpcResponse(line, response);
-                var rpcContext = new HttpRpcContext(this, rpcResponse);
+                var rpcRequest = new HttpServiceRequest(line, httpContext);
+                var rpcContext = new HttpServiceContext(this, rpcRequest);
 
-                var async = new JsonRpcStateAsync(rpcResultHandler, rpcResponse) { JsonRpc = line };
+                var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
                 JsonRpcProcessor.Process(async, rpcContext);
             }        
         }

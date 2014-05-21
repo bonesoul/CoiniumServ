@@ -17,11 +17,10 @@
 */
 
 using AustinHarris.JsonRpc;
-using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Mining.Pool;
-using Coinium.Core.RPC;
-using Coinium.Core.RPC.Http;
+using Coinium.Core.RPC.Service;
+using Coinium.Core.RPC.Service.Http;
 using Serilog;
 
 namespace Coinium.Core.Server.Vanilla
@@ -50,7 +49,7 @@ namespace Coinium.Core.Server.Vanilla
         [JsonRpcMethod("getwork")]
         public Work Getwork(string data = null)
         {
-             var context = (HttpRpcContext)JsonRpcContext.Current().Value;
+             var context = (HttpServiceContext)JsonRpcContext.Current().Value;
              var miner = (VanillaMiner)(context.Miner);
 
             if (data == null)

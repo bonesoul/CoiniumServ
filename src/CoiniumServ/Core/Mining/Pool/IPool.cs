@@ -25,6 +25,7 @@ using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool.Config;
 using Coinium.Core.Mining.Share;
 using Coinium.Core.RPC;
+using Coinium.Core.RPC.Service;
 using Coinium.Core.Server;
 
 namespace Coinium.Core.Mining.Pool

@@ -16,19 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Mining.Pool;
-using Coinium.Core.Server.Stratum.Config;
+using Ninject;
 
-namespace Coinium.Core.RPC
+namespace Coinium.Core.RPC.Service
 {
-    public interface IRPCService
+    public class ServiceFactory : IServiceFactory
     {
-        IPool Pool { get; set; }
+        private readonly IKernel _kernel;
+
+        public ServiceFactory(IKernel kernel)
+        {
+            _kernel = kernel;
+        }
 
         /// <summary>
-        /// Initializes the specified pool.
+        /// Gets the specified service name.
         /// </summary>
-        /// <param name="pool">The pool.</param>
-        void Initialize(IPool pool);
+        /// <param name="serviceName">Name of the service.</param>
+        /// <returns></returns>
+        public IRPCService Get(string serviceName)
+        {
+            return _kernel.Get<IRPCService>(serviceName);
+        }
     }
 }
