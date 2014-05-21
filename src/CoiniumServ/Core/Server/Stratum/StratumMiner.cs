@@ -20,7 +20,6 @@ using System;
 using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
-using Coinium.Core.Mining;
 using Coinium.Core.Mining.Events;
 using Coinium.Core.Mining.Miner;
 using Coinium.Core.RPC.Sockets;

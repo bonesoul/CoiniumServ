@@ -19,12 +19,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Coinium.Core.Mining.Pool;
 using Coinium.Net.Server.Sockets;
 
 namespace Coinium.Core.Mining.Miner
 {
     public interface IMinerManager
     {
+        IPool Pool { get; set; }
+
         IList<IMiner> GetAll();
 
         IMiner GetMiner(Int32 id);

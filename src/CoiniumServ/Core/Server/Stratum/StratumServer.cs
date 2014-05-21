@@ -32,11 +32,6 @@ namespace Coinium.Core.Server.Stratum
     {
         public IPool Pool { get; set; }
 
-        private static object[] _services =
-        {
-            new StratumService()
-        };
-
         /// <summary>
         /// Creates a new StratumServer instance.
         /// </summary>

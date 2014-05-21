@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Coinium.Core.Mining.Pool;
 using Coinium.Net.Server.Sockets;
 
 namespace Coinium.Core.Mining.Miner
@@ -27,6 +28,8 @@ namespace Coinium.Core.Mining.Miner
     {
         private readonly Dictionary<Int32, IMiner> _miners = new Dictionary<Int32, IMiner>();
         private int _counter = 0; // counter for assigining unique id's to miners.
+
+        public IPool Pool { get; set; }
 
         public IList<IMiner> GetAll()
         {

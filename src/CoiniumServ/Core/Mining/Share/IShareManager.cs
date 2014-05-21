@@ -16,16 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server.Stratum;
 
 namespace Coinium.Core.Mining.Share
 {
     public interface IShareManager
     {
+        IPool Pool { get; set; }
+
         bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
     }
 }

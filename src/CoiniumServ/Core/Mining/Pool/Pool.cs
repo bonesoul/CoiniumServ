@@ -22,8 +22,8 @@ using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Share;
+using Coinium.Core.RPC;
 using Coinium.Core.Server;
-using Coinium.Net.Server;
 
 namespace Coinium.Core.Mining.Pool
 {
@@ -38,31 +38,39 @@ namespace Coinium.Core.Mining.Pool
         private readonly IMinerManager _minerManager;
         private readonly IJobManager _jobManager;
         private readonly IShareManager _shareManager;
+        private readonly IRPCService _rpcService;
 
         public IMiningServer Server { get { return this._server; } }
 
         public IDaemonClient DaemonClient { get { return this._daemonClient; } }
+
+        public IRPCService RpcService { get { return this._rpcService; } }
 
         public IMinerManager MinerManager {get {return this._minerManager;}}
 
         public IJobManager JobManager { get { return this._jobManager; } }
 
         public IShareManager ShareManager { get { return this._shareManager; } }
+        
 
         private Timer _timer;
 
-        public Pool(IMiningServer server, IDaemonClient daemonClient, IMinerManager minerManager, IJobManager jobManager, IShareManager shareManager)
+        public Pool(IMiningServer server, IDaemonClient daemonClient, IRPCService rpcService, IMinerManager minerManager, IJobManager jobManager, IShareManager shareManager)
         {
             // setup our dependencies.
             this._server = server;
             this._daemonClient = daemonClient;
+            this._rpcService = rpcService;
             this._minerManager = minerManager;
             this._jobManager = jobManager;
             this._shareManager = shareManager;
 
             // set back references.
             this.Server.Pool = this;
+            this.RpcService.Pool = this;
+            this.MinerManager.Pool = this;
             this.JobManager.Pool = this;
+            this.ShareManager.Pool = this;
 
             // other stuff
             this._timer = new Timer(Timer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.

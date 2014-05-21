@@ -16,16 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Share;
+using Coinium.Core.RPC;
 using Coinium.Core.Server;
-using Coinium.Net.Server;
 
 namespace Coinium.Core.Mining.Pool
 {
@@ -40,6 +36,8 @@ namespace Coinium.Core.Mining.Pool
         IJobManager JobManager { get; }
 
         IShareManager ShareManager { get; }
+
+        IRPCService RpcService { get; }
 
         void Start();
 

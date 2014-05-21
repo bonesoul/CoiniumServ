@@ -18,6 +18,7 @@
 
 using AustinHarris.JsonRpc;
 using Coinium.Core.Mining;
+using Coinium.Core.Mining.Pool;
 using Coinium.Core.RPC.Sockets;
 using Coinium.Core.Server.Stratum.Responses;
 
@@ -26,8 +27,10 @@ namespace Coinium.Core.Server.Stratum
     /// <summary>
     /// Stratum protocol implementation.
     /// </summary>
-    public class StratumService : JsonRpcService
+    public class StratumService : JsonRpcService,IStratumRPCservice
     {
+        public IPool Pool { get; set; }
+
         /// <summary>
         /// Subscribes a Miner to allow it to recieve work to begin hashing and submitting shares.
         /// </summary>
@@ -77,8 +80,7 @@ namespace Coinium.Core.Server.Stratum
             var context = (SocketsRpcContext)JsonRpcContext.Current().Value;
             var miner = (StratumMiner)(context.Miner);
 
-            return true;
-            //return MiningManager.Instance.ProcessShare(miner, jobId, extranNonce2, nTime, nonce);             
+            return this.Pool.ShareManager.ProcessShare(miner, jobId, extranNonce2, nTime, nonce);
         }
     }
 }

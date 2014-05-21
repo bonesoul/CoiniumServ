@@ -53,11 +53,12 @@ namespace Coinium.Core.Mining.Pool
         {
             var stratumServer = new StratumServer("0.0.0.0", 3333);
             var daemonClient = DaemonManager.Instance.Add("http://127.0.0.1:9334", "devel", "develpass");
+            var stratumRpcService = new StratumService();
             var minerManager = new MinerManager();
             var jobManager = new JobManager();
             var shareManager = new ShareManager();
 
-            var pool = new Pool(stratumServer, daemonClient, minerManager, jobManager, shareManager);
+            var pool = new Pool(stratumServer, daemonClient, stratumRpcService, minerManager, jobManager, shareManager);
 
             this._pools.Add(pool);
 

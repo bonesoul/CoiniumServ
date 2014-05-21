@@ -132,11 +132,12 @@
     <Compile Include="Core\Mining\Pool\Pool.cs" />
     <Compile Include="Core\Mining\Share\IShareManager.cs" />
     <Compile Include="Core\Mining\Share\ShareManager.cs" />
+    <Compile Include="Core\RPC\IRPCService.cs" />
     <Compile Include="Core\Server\IMiningServer.cs" />
+    <Compile Include="Core\Server\Stratum\IStratumRPCservice.cs" />
     <Compile Include="Core\Server\Stratum\IStratumServer.cs" />
     <Compile Include="Core\Server\Stratum\Notifications\Difficulty.cs" />
     <Compile Include="Core\Server\Vanilla\VanillaMiner.cs" />
-    <Compile Include="Core\Mining\MiningManager.cs" />
     <Compile Include="Core\Mining\Pool\PoolConfig.cs" />
     <Compile Include="Core\Mining\Pool\PoolManager.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCContext.cs" />
