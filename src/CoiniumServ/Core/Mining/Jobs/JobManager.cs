@@ -31,6 +31,8 @@ namespace Coinium.Core.Mining.Jobs
     {
         private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
 
+        public Job LastJob { get; private set; }
+
         public IPool Pool { get; set; }
 
         public Job GetJob(UInt64 id)
@@ -74,7 +76,8 @@ namespace Coinium.Core.Mining.Jobs
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };
 
-            //this._jobs.Add(job.Id,job);
+            this._jobs.Add(job.Id,job);
+            this.LastJob = job;
 
             foreach (var miner in this.Pool.MinerManager.GetAll())
             {

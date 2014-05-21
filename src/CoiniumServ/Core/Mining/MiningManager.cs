@@ -17,19 +17,13 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin.Algorithms;
-using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Coin.Coinbase;
 using Coinium.Core.Coin.Helpers;
-using Coinium.Core.Coin.Transactions;
 using Coinium.Core.Crypto;
 using Coinium.Core.Mining.Jobs;
-using Coinium.Core.Mining.Miner;
 using Coinium.Core.Server.Stratum;
-using Coinium.Core.Server.Stratum.Notifications;
-using Coinium.Net.Server.Sockets;
 using Org.BouncyCastle.Math;
 using Serilog;
 
@@ -87,7 +81,7 @@ namespace Coinium.Core.Mining
             var nonce = Convert.ToUInt32(nonceString, 16);
 
             var coinbase = Serializers.SerializeCoinbase(job, ExtraNonce.Instance.Current, Convert.ToUInt32(extraNonce2, 16));
-            var coinbaseHash = this.HashCoinbase(coinbase);
+            var coinbaseHash = CoinbaseUtils.HashCoinbase(coinbase);
 
             var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();
 
@@ -112,10 +106,5 @@ namespace Coinium.Core.Mining
 
             return true;
         }        
-
-        private Hash HashCoinbase(byte[] coinbase)
-        {
-            return coinbase.DoubleDigest();
-        }
     }
 }

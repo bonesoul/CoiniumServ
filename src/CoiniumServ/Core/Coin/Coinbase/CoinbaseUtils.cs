@@ -21,6 +21,7 @@ using System.IO;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Arrays;
 using Coinium.Core.Coin.Address;
+using Coinium.Core.Crypto;
 using Gibbed.IO;
 using Serilog;
 
@@ -184,6 +185,11 @@ namespace Coinium.Core.Coin.Coinbase
             }
 
             return result;
+        }
+
+        public static Hash HashCoinbase(byte[] coinbase)
+        {
+            return coinbase.DoubleDigest();
         }
     }
 }
