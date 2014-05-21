@@ -24,12 +24,11 @@ using Coinium.Common.Console;
 using Coinium.Common.Platform;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
-using Coinium.Core.Config;
-using Coinium.Core.Mining;
+using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server;
 using Coinium.Core.Server.Stratum;
-using Coinium.Net.Server;
 using Ninject;
 using Ninject.Parameters;
 using Serilog;
@@ -45,45 +44,34 @@ namespace Coinium
 
         static void Main(string[] args)
         {
-            // Setup ninject
-            var kernel = new StandardKernel();
-            new Bootstrapper(kernel).Run();
-
             #if !DEBUG
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions.
             #endif
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
 
+            // print intro texts.
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
+            // init logging facilities.
             InitLogging();
+
+            // print a version banner.
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
-
-            // start wallet manager.
-            DaemonManager.Instance.Run();
 
             // start pool manager.
             PoolManager.Instance.Run();
 
-            var miningManager = kernel.Get<IMiningManager>();
-
-            // stratum server.
-            var miningManagerParam = new ConstructorArgument("miningManager", miningManager);
-            var ipParam = new ConstructorArgument("bindIp", "0.0.0.0");
-            var portParam = new ConstructorArgument("port", 3333);
-            var stratumServer = kernel.Get<IServer>(miningManagerParam, ipParam, portParam);
-
-            stratumServer.Start();
-
-            // getwork server.
-            //var getworkServer = new VanillaServer(8332);
-            //getworkServer.Start();
+            // run pools.
+            foreach (var pool in PoolManager.Instance.GetPools())
+            {
+                pool.Start();
+            }
 
             // Start the server manager.
-            ServerManager.Instance.Start();
+            //ServerManager.Instance.Start();
 
             while (true) // idle loop & command parser
             {

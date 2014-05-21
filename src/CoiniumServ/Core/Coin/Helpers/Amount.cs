@@ -16,7 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Coin
+namespace Coinium.Core.Coin.Helpers
 {
     /// <summary>
     /// Amount helper class.

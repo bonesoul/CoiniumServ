@@ -32,20 +32,17 @@ namespace Coinium.Core.Server.Vanilla
             new VanillaService()
         };
 
-        private readonly IMiningManager _miningManager;
-
-        public VanillaServer(IMiningManager miningManager, int port)
+        public VanillaServer(int port)
             : base(port)
         {
-            _miningManager = miningManager;
             Log.Verbose("Classic server listening on port {0}.", this.Port);
             this.ProcessRequest += ProcessHttpRequest;
         }
 
         private void ProcessHttpRequest(HttpListenerContext context)
         {
-            var miner = _miningManager.Create<VanillaMiner>();
-            miner.Parse(context);
+            //var miner = MiningManager.Instance.Create<VanillaMiner>();
+            //miner.Parse(context);
         }
     }
 }

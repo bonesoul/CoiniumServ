@@ -16,38 +16,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Net.Server
+using System;
+using System.Collections.Generic;
+using Coinium.Core.Mining.Pool;
+using Coinium.Net.Server.Sockets;
+
+namespace Coinium.Core.Mining.Miner
 {
-    /// <summary>
-    /// Server interface that any implementations should extend.
-    /// </summary>
-    public interface IServer
+    public interface IMinerManager
     {
-        /// <summary>
-        /// The IP address of the interface the server binded.
-        /// </summary>
-        string BindIP { get; }
+        IPool Pool { get; set; }
 
-        /// <summary>
-        /// The listening port for the server.
-        /// </summary>
-        int Port { get; }
+        IList<IMiner> GetAll();
 
-        /// <summary>
-        /// Is server currently listening for connections?
-        /// </summary>
-        bool IsListening { get; }
+        IMiner GetMiner(Int32 id);
 
-        /// <summary>
-        /// Starts a server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Start();
+        T Create<T>() where T : IMiner;
 
-        /// <summary>
-        /// Stops the server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Stop();
+        T Create<T>(IConnection connection) where T : IMiner;
     }
 }

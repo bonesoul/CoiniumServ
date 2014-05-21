@@ -49,16 +49,18 @@ namespace Coinium.Core.Server.Vanilla
             // var request = context.Request;
             // var miner = (GetworkMiner)(context.Miner);
 
-            if (data == null)
-                return DaemonManager.Instance.Client.Getwork();
-            else
-            {                
-                var result = DaemonManager.Instance.Client.Getwork(data);
-                if(result)
-                    Log.Verbose("Found block!: {0}", data);
+            //if (data == null)
+            //    return DaemonManager.Instance.Client.Getwork();
+            //else
+            //{                
+            //    var result = DaemonManager.Instance.Client.Getwork(data);
+            //    if(result)
+            //        Log.Verbose("Found block!: {0}", data);
 
-                return null;
-            }                
+            //    return null;
+            //}    
+
+            return null;
         }     
     }
 }

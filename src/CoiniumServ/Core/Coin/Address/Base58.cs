@@ -23,7 +23,7 @@ using Coinium.Core.Coin.Exceptions;
 using Coinium.Core.Crypto;
 using Org.BouncyCastle.Math;
 
-namespace Coinium.Core.Coin
+namespace Coinium.Core.Coin.Address
 {
 
     /// <summary>

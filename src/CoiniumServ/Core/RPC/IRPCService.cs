@@ -16,35 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Serilog;
+using Coinium.Core.Mining.Pool;
 
-namespace Coinium.Core.Coin.Daemon
+namespace Coinium.Core.RPC
 {
-    /// <summary>
-    /// Allows communication with wallets.
-    /// </summary>
-    public class DaemonManager
+    public interface IRPCService
     {
-        public DaemonClient Client { get; private set; }
-
-        public DaemonManager()
-        {
-            Log.Verbose("DaemonManager() init..");
-        }
-
-        public void Run()
-        {
-            Log.Verbose("Starting daemon-clients..");
-            this.Client = new DaemonClient("http://127.0.0.1:9334", "devel", "develpass");
-            //Log.Verbose("Difficulty: " + this.Client.GetInfo().Difficulty);
-        }
-
-
-        private static readonly DaemonManager _instance = new DaemonManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static DaemonManager Instance { get { return _instance; } }
+        IPool Pool { get; set; }
     }
 }

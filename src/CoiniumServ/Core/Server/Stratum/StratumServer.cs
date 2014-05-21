@@ -19,8 +19,7 @@
 // stratum server uses json-rpc 2.0 (over raw sockets) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 // classic server handles getwork & getblocktemplate miners over http.
 
-using Coinium.Common.Attributes;
-using Coinium.Core.Mining;
+using Coinium.Core.Mining.Pool;
 using Coinium.Net.Server.Sockets;
 using Serilog;
 
@@ -29,29 +28,17 @@ namespace Coinium.Core.Server.Stratum
     /// <summary>
     /// Stratum protocol server implementation.
     /// </summary>
-    [DefaultInstance]
-    public class StratumServer : SocketServer
+    public class StratumServer:SocketServer, IStratumServer
     {
-        // TODO: This needs to be initialized after _miningManager has been instantiated so _miningManager can be passed as a constructor parameter
-        private static object[] _services =
-        {
-            // TODO: This should read new StratumService(miningManagerInstance);
-            // TODO: Alternatively, create an instance for StratumService so we can inject that as well
-            new StratumService(null)
-        };
-
-        private readonly IMiningManager _miningManager;
+        public IPool Pool { get; set; }
 
         /// <summary>
         /// Creates a new StratumServer instance.
         /// </summary>
-        /// <param name="miningManager">The mining manager.</param>
-        /// <param name="bindIp">The bind ip.</param>
-        /// <param name="port">The port.</param>
-        public StratumServer(IMiningManager miningManager, string bindIp, int port)
+        /// <param name="bindIp"></param>
+        /// <param name="port"></param>
+        public StratumServer(string bindIp, int port)
         {
-            _miningManager = miningManager;
-
             this.BindIP = bindIp;
             this.Port = port;
 
@@ -92,8 +79,8 @@ namespace Coinium.Core.Server.Stratum
         {
             Log.Verbose("Stratum client connected: {0}", e.Connection.ToString());
 
-            var miner = _miningManager.Create<StratumMiner>(e.Connection);
-            e.Connection.Client = miner;
+            var miner = this.Pool.MinerManager.Create<StratumMiner>(e.Connection);
+            e.Connection.Client = miner;           
         }
 
         /// <summary>
@@ -115,6 +102,6 @@ namespace Coinium.Core.Server.Stratum
         {
             var connection = (Connection)e.Connection;
             ((StratumMiner)connection.Client).Parse(e);
-        }
+        }        
     }
 }
