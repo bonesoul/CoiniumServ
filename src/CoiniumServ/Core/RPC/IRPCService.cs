@@ -17,11 +17,18 @@
 */
 
 using Coinium.Core.Mining.Pool;
+using Coinium.Core.Server.Stratum.Config;
 
 namespace Coinium.Core.RPC
 {
     public interface IRPCService
     {
         IPool Pool { get; set; }
+
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="pool">The pool.</param>
+        void Initialize(IPool pool);
     }
 }

@@ -32,6 +32,10 @@ namespace Coinium.Core.Server.Vanilla
     public class VanillaService : JsonRpcService, IRPCService
     {    
         public IPool Pool { get; set; }
+        public void Initialize(IPool pool)
+        {
+            Pool = pool;
+        }
 
         /// <summary>
         /// 

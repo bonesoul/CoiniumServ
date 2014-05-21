@@ -24,12 +24,22 @@ using Coinium.Net.Server.Sockets;
 
 namespace Coinium.Core.Mining.Miner
 {
-    public class MinerManager:IMinerManager
+    public class MinerManager : IMinerManager
     {
         private readonly Dictionary<Int32, IMiner> _miners = new Dictionary<Int32, IMiner>();
         private int _counter = 0; // counter for assigining unique id's to miners.
 
         public IPool Pool { get; set; }
+
+        public MinerManager()
+        {
+            
+        }
+
+        public void Initialize(IPool pool)
+        {
+            Pool = pool;
+        }
 
         public IList<IMiner> GetAll()
         {

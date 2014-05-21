@@ -16,16 +16,16 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System.Collections.Generic;
 using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Server.Stratum.Config;
-using Coinium.Core.Server.Vanilla.Config;
+using Coinium.Core.Server.Config;
 
 namespace Coinium.Core.Mining.Pool.Config
 {
     public interface IPoolConfig
     {
-        IStratumServerConfig StratumServerConfig { get; }
-        IVanillaServerConfig VanillaServerConfig { get; }
+        IList<IServerConfig> ServerConfigs { get; }
+
         IDaemonConfig DaemonConfig { get; }
     }
 }

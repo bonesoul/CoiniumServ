@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Coinium.Core.Coin.Daemon.Responses;
+using Coinium.Core.Mining.Pool;
 
 namespace Coinium.Core.Coin.Daemon
 {
@@ -16,5 +17,6 @@ namespace Coinium.Core.Coin.Daemon
 
         ValidateAddress ValidateAddress(string walletAddress);
 
+        void Initialize(IDaemonConfig daemonConfig);
     }
 }

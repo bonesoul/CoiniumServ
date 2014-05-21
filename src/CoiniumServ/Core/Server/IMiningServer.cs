@@ -22,9 +22,17 @@ using Coinium.Net.Server;
 
 namespace Coinium.Core.Server
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IMiningServer : IServer
     {
-        IPool Pool { get; set; }
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="pool">The pool.</param>
+        /// <param name="serverConfig">The server configuration.</param>
+        void Initialize(IPool pool, IServerConfig serverConfig);
 
         IServerConfig Config { get; }
     }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
@@ -16,32 +16,34 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System.Collections.Generic;
-using Serilog;
+using Ninject;
 
 namespace Coinium.Core.Coin.Algorithms
 {
-    public static class HashAlgorithmFactory
+    public class HashAlgorithmFactory : IHashAlgorithmFactory
     {
-        private static readonly Dictionary<string, IHashAlgorithm> Algorithms;
-        static HashAlgorithmFactory()
+        /// <summary>
+        /// The ninject _kernel.
+        /// </summary>
+        private readonly IKernel _kernel;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HashAlgorithmFactory"/> class.
+        /// </summary>
+        /// <param name="kernel">The ninject kernel.</param>
+        public HashAlgorithmFactory(IKernel kernel)
         {
-            Algorithms = new Dictionary<string, IHashAlgorithm>
-            {
-                {"scrypt", new Scrypt()}
-            };
+            _kernel = kernel;
         }
 
-        public static IHashAlgorithm Get(string algorithm)
+        /// <summary>
+        /// Gets the specified algorithm name.
+        /// </summary>
+        /// <param name="algorithmName">Name of the algorithm.</param>
+        /// <returns></returns>
+        public IHashAlgorithm Get(string algorithmName)
         {
-            switch (algorithm.ToLower())
-            {
-                case "scrypt":
-                    return Algorithms["scrypt"];
-                default:
-                    Log.Warning("Unknown algorithm: {0}", algorithm);
-                    return null;
-            }
+            return _kernel.Get<IHashAlgorithm>(algorithmName);
         }
     }
 }

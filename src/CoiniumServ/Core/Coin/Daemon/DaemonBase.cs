@@ -37,11 +37,15 @@ namespace Coinium.Core.Coin.Daemon
         public string RpcUser { get; set; }
         public string RpcPassword { get; set; }
 
-        public DaemonBase(string url, string user, string password)
+        public DaemonBase()
         {
-            this.RpcUrl = url;
-            this.RpcUser = user;
-            this.RpcPassword = password;
+        }
+
+        public virtual void Initialize(IDaemonConfig config)
+        {
+            this.RpcUrl = config.Url;
+            this.RpcUser = config.Username;
+            this.RpcPassword = config.Password;
         }
 
         /// <summary>

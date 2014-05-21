@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin.Transactions;
 using Coinium.Core.Crypto;
@@ -30,16 +31,21 @@ namespace Coinium.Core.Mining.Jobs
     {
         private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
         private readonly JobCounter _jobCounter = new JobCounter();
-        private readonly IExtraNonce _extraNonce;
+        private IExtraNonce _extraNonce;
 
         public IPool Pool { get; set; }
 
         public IExtraNonce ExtraNonce { get { return this._extraNonce; } }
         public Job LastJob { get; private set; }
 
-        public JobManager(UInt64 instanceId)
+        public JobManager()
         {
-            this._extraNonce = new ExtraNonce(instanceId);
+        }
+
+        public void Initialize(IPool pool, ulong instanceId)
+        {
+            Pool = pool;
+            _extraNonce = new ExtraNonce(instanceId);
         }
 
         public Job GetJob(UInt64 id)

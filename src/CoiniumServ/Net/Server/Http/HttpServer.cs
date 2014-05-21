@@ -42,13 +42,23 @@ namespace Coinium.Net.Server.Http
         /// </summary>
         public bool IsListening { get; private set; }
 
-        private readonly HttpListener _listener;
-        private readonly Thread _listenerThread;
-        private readonly Thread[] _workers;
-        private readonly ManualResetEvent _stop, _ready;
+        private HttpListener _listener;
+        private Thread _listenerThread;
+        private Thread[] _workers;
+        private ManualResetEvent _stop, _ready;
         private Queue<HttpListenerContext> _queue;
 
-        public HttpServer(int port, int maxThreads = 5)
+        public HttpServer()
+        {
+        }
+
+        /// <summary>
+        /// Initializes the specified port.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        /// <param name="maxThreads">The maximum threads.</param>
+        /// <exception cref="System.NotSupportedException">HttpListener not supported. Switch to mono provided one.</exception>
+        public void Initialize(int port, int maxThreads = 5)
         {
             if (!HttpListener.IsSupported)
                 throw new NotSupportedException("HttpListener not supported. Switch to mono provided one.");

@@ -16,16 +16,14 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 using System;
-using Coinium.Core.Server.Config;
 
-namespace Coinium.Core.Server.Stratum.Config
+namespace Coinium.Core.Coin.Algorithms
 {
-    public interface IStratumServerConfig : IServerConfig
+    public interface IHashAlgorithm
     {
-        string BindIp { get; }
+        UInt32 Multiplier { get; }
 
-        Int32 Port { get; }
+        byte[] Hash(byte[] input);
     }
 }

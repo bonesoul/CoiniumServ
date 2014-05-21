@@ -17,6 +17,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
@@ -29,6 +30,7 @@ using Coinium.Core.Server.Stratum;
 using Coinium.Core.Server.Stratum.Config;
 using Coinium.Core.Server.Vanilla;
 using Coinium.Core.Server.Vanilla.Config;
+using Ninject;
 using Serilog;
 
 namespace Coinium.Core.Mining.Pool
@@ -36,23 +38,22 @@ namespace Coinium.Core.Mining.Pool
     /// <summary>
     /// Contains pool services and server.
     /// </summary>
-    public class Pool:IPool
+    public class Pool : IPool
     {
-        public IMiningServer StratumServer { get; private set; }
+        private readonly IDaemonClient _daemonClient;
+        private readonly IMinerManager _minerManager;
+        private readonly IJobManager _jobManager;
+        private readonly IShareManager _shareManager;
+        private readonly IServerFactory _serverFactory;
+        private readonly IServiceFactory _serviceFactory;
 
-        public IRPCService StratumRpcService { get; private set; }        
+        private Dictionary<IMiningServer, IRPCService> _servers;
+        public IDictionary<IMiningServer, IRPCService> Servers { get { return _servers; } }
 
-        public IMiningServer VanillaServer { get; private set; }
-
-        public IRPCService VanillaRpcService { get; private set; }
-
-        public IDaemonClient DaemonClient { get; private set; }
-
-        public IMinerManager MinerManager { get; private set; }
-
-        public IJobManager JobManager { get; private set; }
-
-        public IShareManager ShareManager { get; private set; }
+        public IDaemonClient DaemonClient { get { return _daemonClient; } }
+        public IMinerManager MinerManager { get { return _minerManager; } }
+        public IJobManager JobManager { get { return _jobManager; } }
+        public IShareManager ShareManager { get { return _shareManager; } }
 
         /// <summary>
         /// Instance id of the pool.
@@ -61,18 +62,34 @@ namespace Coinium.Core.Mining.Pool
 
         private Timer _timer;
 
-        public Pool(IPoolConfig config)
+        public Pool(IServerFactory serverFactory, IServiceFactory serviceFactory, IDaemonClient client, IMinerManager minerManager, IJobManager jobManager, IShareManager shareManager)
         {
+            _daemonClient = client;
+            _minerManager = minerManager;
+            _jobManager = jobManager;
+            _shareManager = shareManager;
+            _serverFactory = serverFactory;
+            _serviceFactory = serviceFactory;
             this.GenerateInstanceId();
+        }
 
+        /// <summary>
+        /// Initializes the specified bind ip.
+        /// </summary>
+        /// <param name="config">The configuration.</param>
+        /// <exception cref="System.ArgumentNullException">config;config.DaemonConfig can not be null!</exception>
+        public void Initialize(IPoolConfig config)
+        {
             if (config.DaemonConfig == null)
                 throw new ArgumentNullException("config", "config.DaemonConfig can not be null!");
 
-            this.DaemonClient = new DaemonClient(config.DaemonConfig);
+            _daemonClient.Initialize(config.DaemonConfig);
+            _minerManager.Initialize(this);
+            _jobManager.Initialize(this, InstanceId);
+            _shareManager.Initialize(this);
 
-            if(config.StratumServerConfig == null && config.VanillaServerConfig == null)
-                throw new ArgumentNullException("config","At least one server configuration should be provided.");
-
+            // TODO: Left this just to illustrate the difference. Let the factory determine the instance from a name in the config
+            /*
             if (config.StratumServerConfig != null)
             {
                 this.StratumServer = new StratumServer(config.StratumServerConfig);
@@ -90,17 +107,19 @@ namespace Coinium.Core.Mining.Pool
                 this.VanillaServer.Pool = this;
                 this.VanillaRpcService.Pool = this;
             }
+            */
 
+            _servers = new Dictionary<IMiningServer, IRPCService>();
+            foreach (var serverConfig in config.ServerConfigs)
+            {
+                var server = _serverFactory.Get(serverConfig.Name);
+                server.Initialize(this, serverConfig);
 
-            // setup managers.
-            this.MinerManager = new MinerManager();
-            this.JobManager = new JobManager(this.InstanceId);
-            this.ShareManager = new ShareManager();
-
-            // set back references.
-            this.MinerManager.Pool = this;
-            this.JobManager.Pool = this;
-            this.ShareManager.Pool = this;
+                var rpcService = _serviceFactory.Get(serverConfig.Name);
+                rpcService.Initialize(this);
+                
+                _servers.Add(server, rpcService);
+            }
 
             // other stuff
             this._timer = new Timer(Timer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
@@ -108,11 +127,11 @@ namespace Coinium.Core.Mining.Pool
 
         public void Start()
         {
-            if (this.StratumServer != null)
-                this.StratumServer.Start();
-
-            if (this.VanillaServer != null)
-                this.VanillaServer.Start();
+            if (_servers == null) throw new Exception("At least one server is required. Please check your configuration.");
+            foreach (var server in _servers)
+            {
+                server.Key.Start();
+            }
         }
 
         public void Stop()
@@ -121,7 +140,7 @@ namespace Coinium.Core.Mining.Pool
         }
         private void Timer(object state)
         {
-            this.JobManager.Broadcast();
+            _jobManager.Broadcast();
         }
 
         /// <summary>

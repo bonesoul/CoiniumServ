@@ -33,5 +33,12 @@ namespace Coinium.Core.Mining.Jobs
         void AddJob(Job job);
 
         void Broadcast();
+
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="pool">The pool.</param>
+        /// <param name="instanceId">The instance identifier.</param>
+        void Initialize(IPool pool, ulong instanceId);
     }
 }

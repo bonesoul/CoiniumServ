@@ -16,7 +16,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System.Collections.Generic;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Server.Config;
 using Coinium.Core.Server.Stratum.Config;
 using Coinium.Core.Server.Vanilla.Config;
 
@@ -27,15 +29,21 @@ namespace Coinium.Core.Mining.Pool.Config
     /// </summary>
     public class PoolConfig : IPoolConfig
     {
-        public IStratumServerConfig StratumServerConfig { get; private set; }
-        public IVanillaServerConfig VanillaServerConfig { get; private set; }
+        public IList<IServerConfig> ServerConfigs { get; private set; }
 
         public IDaemonConfig DaemonConfig { get; private set; }
 
-        public PoolConfig(IStratumServerConfig stratumConfig, IVanillaServerConfig vanillaConfig, IDaemonConfig daemonConfig)
+        public PoolConfig(IServerConfig stratumServerConfig, IServerConfig vanillaServerConfig, IDaemonConfig daemonConfig)
         {
-            this.StratumServerConfig = stratumConfig;
-            this.VanillaServerConfig = vanillaConfig;
+            ServerConfigs = new List<IServerConfig>();
+            if (stratumServerConfig != null)
+            {
+                ServerConfigs.Add(stratumServerConfig);
+            }
+            if (vanillaServerConfig != null)
+            {
+                ServerConfigs.Add(vanillaServerConfig);
+            }
             this.DaemonConfig = daemonConfig;
         }
 

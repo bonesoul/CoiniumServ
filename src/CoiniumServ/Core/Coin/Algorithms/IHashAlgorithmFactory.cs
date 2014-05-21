@@ -1,4 +1,4 @@
-﻿/*
+/*
  *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
@@ -16,13 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using Coinium.Core.Server.Config;
-
-namespace Coinium.Core.Server.Vanilla.Config
+namespace Coinium.Core.Coin.Algorithms
 {
-    public interface IVanillaServerConfig:IServerConfig
+    public interface IHashAlgorithmFactory
     {
-        Int32 Port { get; }
+        /// <summary>
+        /// Gets the specified algorithm name.
+        /// </summary>
+        /// <param name="algorithmName">Name of the algorithm.</param>
+        /// <returns></returns>
+        IHashAlgorithm Get(string algorithmName);
     }
 }

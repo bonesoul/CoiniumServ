@@ -22,15 +22,10 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
 using Coinium.Common.Platform;
-using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Commands;
-using Coinium.Core.Mining.Jobs;
-using Coinium.Core.Mining.Miner;
+using Coinium.Core.Config;
 using Coinium.Core.Mining.Pool;
-using Coinium.Core.Server;
-using Coinium.Core.Server.Stratum;
 using Ninject;
-using Ninject.Parameters;
 using Serilog;
 
 namespace Coinium
@@ -48,6 +43,9 @@ namespace Coinium
                 AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions.
             #endif
 
+            var kernel = new StandardKernel();
+            new Bootstrapper(kernel).Run();
+
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
 
             // print intro texts.
@@ -62,10 +60,11 @@ namespace Coinium
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
             // start pool manager.
-            PoolManager.Instance.Run();
+            var poolManager = kernel.Get<IPoolManager>();
+            poolManager.Run();
 
             // run pools.
-            foreach (var pool in PoolManager.Instance.GetPools())
+            foreach (var pool in poolManager.GetPools())
             {
                 pool.Start();
             }

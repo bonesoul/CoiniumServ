@@ -17,12 +17,16 @@
 */
 
 using System;
+using Coinium.Core.Server.Config;
 
 namespace Coinium.Core.Server.Vanilla.Config
 {
-    public class VanillaServerConfig : IVanillaServerConfig
+    public class VanillaServerConfig : IServerConfig
     {
+        public string Name { get; private set; }
+
         public Int32 Port { get; private set; }
+        public string BindIp { get; private set; }
 
         public VanillaServerConfig(Int32 port)
         {

@@ -17,12 +17,16 @@
 */
 
 using System;
+using Coinium.Core.Server.Config;
 
 namespace Coinium.Core.Server.Stratum.Config
 {
-    public class StratumServerConfig:IStratumServerConfig
+    public class StratumServerConfig:IServerConfig
     {
+        public string Name { get; private set; }
+
         public string BindIp { get; private set; }
+
         public Int32 Port { get; private set; }
 
         public StratumServerConfig(string bindIp, Int32 port)

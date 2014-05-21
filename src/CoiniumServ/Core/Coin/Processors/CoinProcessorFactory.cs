@@ -1,4 +1,4 @@
-/*
+﻿/*
  *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
@@ -16,14 +16,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
+using Ninject;
 
-namespace Coinium.Core.Coin.Algorithms
+namespace Coinium.Core.Coin.Processors
 {
-    public interface IHashAlgorithm
+    public class CoinProcessorFactory : ICoinProcessorFactory
     {
-        UInt32 Multiplier { get; }
+        private readonly IKernel _kernel;
 
-        byte[] Hash(byte[] input);
+        public CoinProcessorFactory(IKernel kernel)
+        {
+            _kernel = kernel;
+        }
+
+        public ICoinProcessor Get(string coinName)
+        {
+            return _kernel.Get<ICoinProcessor>(coinName);
+        }
     }
 }
