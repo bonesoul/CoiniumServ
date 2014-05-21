@@ -1,5 +1,5 @@
 ﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
+ *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
  *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,14 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Coin.Processors
+using System;
+
+namespace Coinium.Core.Coin.Algorithms
 {
-    public interface ICoinProcessorFactory
+    public interface IHashAlgorithm
     {
-        ICoinProcessor Get(string coinName);
+        UInt32 Multiplier { get; }
+
+        byte[] Hash(byte[] input);
     }
 }

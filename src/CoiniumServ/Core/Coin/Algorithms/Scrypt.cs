@@ -17,46 +17,42 @@
 */
 
 using System;
+using CryptSharp.Utility;
 
-namespace Coinium.Common.Platform
+namespace Coinium.Core.Coin.Algorithms
 {
-    /// <summary>
-    /// Platform Manager that identifies platforms & manages them.
-    /// </summary>
-    public class PlatformManager
+    public class Scrypt : IHashAlgorithm
     {
-        /// <summary>
-        /// Current .Net framework.
-        /// </summary>
-        public static NetFrameworks Framework { get; private set; }
+        public UInt32 Multiplier { get; private set; }
 
         /// <summary>
-        /// Current .Net framework's version.
+        /// N parameter - CPU/memory cost parameter.
         /// </summary>
-        public static Version FrameworkVersion { get; private set; }
+        public int N { get; private set; }
 
-        static PlatformManager()
+        /// <summary>
+        /// R parameter - block size.
+        /// </summary>
+        public int R { get; private set; }
+
+        /// <summary>
+        /// P - parallelization parameter -  a large value of p can increase computational 
+        /// cost of scrypt without increasing the memory usage.
+        /// </summary>
+        public int P { get; private set; }
+
+        public Scrypt()
         {
-            IdentifyPlatform();
+            this.N = 1024;
+            this.R = 1;
+            this.P = 1;
+            this.Multiplier = (UInt32) Math.Pow(2, 16);
         }
 
-        /// <summary>
-        /// Identifies the current platform and used frameworks.
-        /// </summary>
-        private static void IdentifyPlatform()
+        public byte[] Hash(byte[] input)
         {
-            // find dot.net framework.
-            Framework = IsRunningOnMono() ? NetFrameworks.Mono : NetFrameworks.DotNet;
-            FrameworkVersion = Environment.Version;
-        }
-
-        /// <summary>
-        /// Returns true if code runs over Mono framework.
-        /// </summary>
-        /// <returns>true if running over Mono, false otherwise.</returns>
-        public static bool IsRunningOnMono()
-        {
-            return Type.GetType("Mono.Runtime") != null;
+            var result = SCrypt.ComputeDerivedKey(input, input, this.N, this.R, this.P, null, 32);
+            return result;
         }
     }
 }
