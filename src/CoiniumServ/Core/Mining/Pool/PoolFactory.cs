@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using Coinium.Core.Mining.Pool.Config;
+using Ninject;
 
 namespace Coinium.Core.Mining.Pool
 {
@@ -21,16 +22,12 @@ namespace Coinium.Core.Mining.Pool
         /// <summary>
         /// Creates the specified bind ip.
         /// </summary>
-        /// <param name="bindIp">The bind ip.</param>
-        /// <param name="port">The port.</param>
-        /// <param name="daemonUrl">The daemon URL.</param>
-        /// <param name="daemonUsername">The daemon username.</param>
-        /// <param name="daemonPassword">The daemon password.</param>
+        /// <param name="poolConfig">The pool configuration.</param>
         /// <returns></returns>
-        public IPool Create(string bindIp, int port, string daemonUrl, string daemonUsername, string daemonPassword)
+        public IPool Create(IPoolConfig poolConfig)
         {
             var pool = _kernel.Get<IPool>();
-            pool.Initialize(bindIp, port, daemonUrl, daemonUsername, daemonPassword);
+            pool.Initialize(poolConfig);
             return pool;
         }
     }

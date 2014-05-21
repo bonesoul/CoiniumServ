@@ -1,5 +1,6 @@
 ﻿using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Mining.Pool;
+using Coinium.Core.Server;
 using Ninject;
 
 namespace Coinium.Core.Config.Registries
@@ -17,6 +18,8 @@ namespace Coinium.Core.Config.Registries
         {
             _kernel.Bind<IHashAlgorithmFactory>().To<HashAlgorithmFactory>().InSingletonScope();
             _kernel.Bind<IPoolFactory>().To<PoolFactory>().InSingletonScope();
+            _kernel.Bind<IServerFactory>().To<ServerFactory>().InSingletonScope();
+            _kernel.Bind<IServiceFactory>().To<ServiceFactory>().InSingletonScope();
         }
     }
 }

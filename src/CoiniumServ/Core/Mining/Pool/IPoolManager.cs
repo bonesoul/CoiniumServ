@@ -17,6 +17,7 @@
 */
 
 using System.Collections.Generic;
+using Coinium.Core.Mining.Pool.Config;
 
 namespace Coinium.Core.Mining.Pool
 {
@@ -24,7 +25,7 @@ namespace Coinium.Core.Mining.Pool
     {
         IList<IPool> GetPools();
 
-        IPool AddPool();
+        IPool AddPool(IPoolConfig poolConfig);
 
         void Run();
     }

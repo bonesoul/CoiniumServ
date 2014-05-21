@@ -16,24 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Mining.Pool;
-using Coinium.Core.Server.Config;
-using Coinium.Net.Server;
-
-namespace Coinium.Core.Server
+namespace Coinium.Core.Coin.Daemon
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IMiningServer : IServer
+    public class DaemonConfig:IDaemonConfig
     {
-        /// <summary>
-        /// Initializes the specified pool.
-        /// </summary>
-        /// <param name="pool">The pool.</param>
-        /// <param name="serverConfig">The server configuration.</param>
-        void Initialize(IPool pool, IServerConfig serverConfig);
+        public string Url { get; private set; }
+        public string Username { get; private set; }
+        public string Password { get; private set; }
 
-        IServerConfig Config { get; }
+        public DaemonConfig(string url, string username, string password)
+        {
+            this.Url = url;
+            this.Username = username;
+            this.Password = password;
+        }
     }
 }

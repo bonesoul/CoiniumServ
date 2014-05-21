@@ -17,9 +17,12 @@
 */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
+using Coinium.Core.Mining.Pool.Config;
 using Coinium.Core.Mining.Share;
 using Coinium.Core.RPC;
 using Coinium.Core.Server;
@@ -28,7 +31,7 @@ namespace Coinium.Core.Mining.Pool
 {
     public interface IPool
     {
-        IMiningServer Server { get; }
+        IDictionary<IMiningServer, IRPCService> Servers { get; }
 
         IDaemonClient DaemonClient { get; }
 
@@ -38,19 +41,13 @@ namespace Coinium.Core.Mining.Pool
 
         IShareManager ShareManager { get; }
 
-        IRPCService RpcService { get; }
-
         UInt64 InstanceId { get; }
 
         /// <summary>
         /// Initializes the specified bind ip.
         /// </summary>
-        /// <param name="bindIp">The bind ip.</param>
-        /// <param name="port">The port.</param>
-        /// <param name="daemonUrl">The daemon URL.</param>
-        /// <param name="daemonUsername">The daemon username.</param>
-        /// <param name="daemonPassword">The daemon password.</param>
-        void Initialize(string bindIp, Int32 port, string daemonUrl, string daemonUsername, string daemonPassword);
+        /// <param name="config">The configuration.</param>
+        void Initialize(IPoolConfig config);
 
         void Start();
 

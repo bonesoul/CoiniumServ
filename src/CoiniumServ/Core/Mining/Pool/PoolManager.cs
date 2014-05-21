@@ -17,7 +17,10 @@
 */
 
 using System.Collections.Generic;
-using Coinium.Common.Helpers.IO;
+using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Mining.Pool.Config;
+using Coinium.Core.Server.Stratum.Config;
+using Coinium.Core.Server.Vanilla.Config;
 using Serilog;
 
 namespace Coinium.Core.Mining.Pool
@@ -25,7 +28,7 @@ namespace Coinium.Core.Mining.Pool
     public class PoolManager : IPoolManager
     {
         private readonly List<IPool> _pools = new List<IPool>();
-        private Dictionary<string, PoolConfig> _configs;
+        //private Dictionary<string, PoolConfig> _configs; 
 
         private readonly IPoolFactory _poolFactory;
 
@@ -38,7 +41,13 @@ namespace Coinium.Core.Mining.Pool
         public void Run()
         {
             // we should be loading pools from configs here - this.LoadPoolsConfig();    
-            this.AddPool();
+            
+            var stratumServerConfig = new StratumServerConfig("0.0.0.0", 3333);
+            var vanillaServerConfig = new VanillaServerConfig(3334);
+            var daemonConfig = new DaemonConfig("http://127.0.0.1:9334", "devel", "develpass");
+            var poolConfig = new PoolConfig(stratumServerConfig, vanillaServerConfig, daemonConfig);
+
+            this.AddPool(poolConfig);
         }
 
         public IList<IPool> GetPools()
@@ -46,26 +55,25 @@ namespace Coinium.Core.Mining.Pool
             return this._pools;
         }
 
-        public IPool AddPool()
+        public IPool AddPool(IPoolConfig poolConfig)
         {
-            // we should be reading the config here for parameter values.
-            var pool = _poolFactory.Create("0.0.0.0", 3333, "http://127.0.0.1:9334", "devel", "develpass");
+            var pool = _poolFactory.Create(poolConfig);
             this._pools.Add(pool);
 
             return pool;
         }
 
-        private void LoadPoolsConfig()
-        {
-            this._configs=new Dictionary<string, PoolConfig>();
+        //private void LoadPoolsConfig()
+        //{
+        //    this._configs=new Dictionary<string, PoolConfig>();
 
-            var poolsConfigFolder = string.Format("{0}/Conf/Pools", FileHelpers.AssemblyRoot);
-            var files = FileHelpers.GetFilesByExtensionRecursive(poolsConfigFolder, ".conf");
+        //    var poolsConfigFolder = string.Format("{0}/Conf/Pools", FileHelpers.AssemblyRoot);
+        //    var files = FileHelpers.GetFilesByExtensionRecursive(poolsConfigFolder, ".conf");
 
-            foreach (var file in files)
-            {
-                this._configs.Add(file, new PoolConfig(file));
-            }
-        }
+        //    foreach (var file in files)
+        //    {
+        //        this._configs.Add(file, new PoolConfig(file));
+        //    }
+        //}
     }
 }

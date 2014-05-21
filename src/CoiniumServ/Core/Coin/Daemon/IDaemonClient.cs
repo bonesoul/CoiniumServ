@@ -13,8 +13,10 @@ namespace Coinium.Core.Coin.Daemon
 
         Work Getwork();
 
+        bool Getwork(string data);
+
         ValidateAddress ValidateAddress(string walletAddress);
 
-        void Initialize(string url, string username, string password);
+        void Initialize(IDaemonConfig daemonConfig);
     }
 }

@@ -16,24 +16,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Mining.Pool;
+using System;
 using Coinium.Core.Server.Config;
-using Coinium.Net.Server;
 
-namespace Coinium.Core.Server
+namespace Coinium.Core.Server.Stratum.Config
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IMiningServer : IServer
+    public class StratumServerConfig:IServerConfig
     {
-        /// <summary>
-        /// Initializes the specified pool.
-        /// </summary>
-        /// <param name="pool">The pool.</param>
-        /// <param name="serverConfig">The server configuration.</param>
-        void Initialize(IPool pool, IServerConfig serverConfig);
+        public string Name { get; private set; }
 
-        IServerConfig Config { get; }
+        public string BindIp { get; private set; }
+
+        public Int32 Port { get; private set; }
+
+        public StratumServerConfig(string bindIp, Int32 port)
+        {
+            this.BindIp = bindIp;
+            this.Port = port;
+        }
     }
 }

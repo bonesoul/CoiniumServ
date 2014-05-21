@@ -21,6 +21,7 @@
 
 using Coinium.Common.Attributes;
 using Coinium.Core.Mining.Pool;
+using Coinium.Core.Server.Config;
 using Coinium.Net.Server.Sockets;
 using Serilog;
 
@@ -30,9 +31,11 @@ namespace Coinium.Core.Server.Stratum
     /// Stratum protocol server implementation.
     /// </summary>
     [DefaultInstance]
-    public class StratumServer : SocketServer, IStratumServer
+    public class StratumServer : SocketServer, IMiningServer
     {
         public IPool Pool { get; set; }
+
+        public IServerConfig Config { get; private set; }
 
         /// <summary>
         /// Creates a new StratumServer instance.
@@ -45,13 +48,13 @@ namespace Coinium.Core.Server.Stratum
         /// Initializes the specified pool.
         /// </summary>
         /// <param name="pool">The pool.</param>
-        /// <param name="ip">The ip.</param>
-        /// <param name="port">The port.</param>
-        public void Initialize(IPool pool, string ip, int port)
+        /// <param name="config">The configuration.</param>
+        public void Initialize(IPool pool, IServerConfig config)
         {
             Pool = pool;
-            BindIP = ip;
-            Port = port;
+            this.Config = config;
+            this.BindIP = config.BindIp;
+            this.Port = config.Port;
 
             this.OnConnect += Stratum_OnConnect;
             this.OnDisconnect += Stratum_OnDisconnect;

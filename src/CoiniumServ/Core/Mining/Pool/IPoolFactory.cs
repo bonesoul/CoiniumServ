@@ -1,4 +1,6 @@
 ﻿using System;
+using Coinium.Core.Mining.Pool.Config;
+
 namespace Coinium.Core.Mining.Pool
 {
     public interface IPoolFactory
@@ -6,12 +8,8 @@ namespace Coinium.Core.Mining.Pool
         /// <summary>
         /// Creates the specified bind ip.
         /// </summary>
-        /// <param name="bindIp">The bind ip.</param>
-        /// <param name="port">The port.</param>
-        /// <param name="daemonUrl">The daemon URL.</param>
-        /// <param name="daemonUsername">The daemon username.</param>
-        /// <param name="daemonPassword">The daemon password.</param>
+        /// <param name="poolConfig">The pool configuration.</param>
         /// <returns></returns>
-        IPool Create(string bindIp, Int32 port, string daemonUrl, string daemonUsername, string daemonPassword);
+        IPool Create(IPoolConfig poolConfig);
     }
 }

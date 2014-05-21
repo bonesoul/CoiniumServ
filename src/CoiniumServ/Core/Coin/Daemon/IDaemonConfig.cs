@@ -16,9 +16,14 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Server.Stratum
+namespace Coinium.Core.Coin.Daemon
 {
-    public interface IStratumServer : IMiningServer
+    public interface IDaemonConfig
     {
+        string Url { get; }
+
+        string Username { get; }
+
+        string Password { get; }
     }
 }

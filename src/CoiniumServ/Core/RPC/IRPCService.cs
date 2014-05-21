@@ -17,6 +17,7 @@
 */
 
 using Coinium.Core.Mining.Pool;
+using Coinium.Core.Server.Stratum.Config;
 
 namespace Coinium.Core.RPC
 {

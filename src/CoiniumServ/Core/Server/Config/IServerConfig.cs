@@ -16,11 +16,17 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.RPC;
+using System;
 
-namespace Coinium.Core.Server.Stratum
+namespace Coinium.Core.Server.Config
 {
-    public interface IStratumRPCservice:IRPCService
+    public interface IServerConfig
     {
+        // TODO: The Name needs to be "Stratum" or "Vanilla" pulled from the config
+        string Name { get; }
+
+        Int32 Port { get; }
+
+        string BindIp { get; }
     }
 }

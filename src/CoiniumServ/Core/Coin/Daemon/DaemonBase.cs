@@ -41,11 +41,11 @@ namespace Coinium.Core.Coin.Daemon
         {
         }
 
-        public virtual void Initialize(string url, string user, string password)
+        public virtual void Initialize(IDaemonConfig config)
         {
-            this.RpcUrl = url;
-            this.RpcUser = user;
-            this.RpcPassword = password;
+            this.RpcUrl = config.Url;
+            this.RpcUser = config.Username;
+            this.RpcPassword = config.Password;
         }
 
         /// <summary>

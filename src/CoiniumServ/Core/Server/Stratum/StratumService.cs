@@ -17,9 +17,9 @@
 */
 
 using AustinHarris.JsonRpc;
-using Coinium.Core.Mining;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Pool;
+using Coinium.Core.RPC;
 using Coinium.Core.RPC.Sockets;
 using Coinium.Core.Server.Stratum.Responses;
 
@@ -28,7 +28,7 @@ namespace Coinium.Core.Server.Stratum
     /// <summary>
     /// Stratum protocol implementation.
     /// </summary>
-    public class StratumService : JsonRpcService, IStratumRPCservice
+    public class StratumService : JsonRpcService, IRPCService
     {
         public IPool Pool { get; set; }
 

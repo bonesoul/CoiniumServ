@@ -53,13 +53,11 @@ namespace Coinium.Core.Coin.Daemon
         /// <summary>
         /// Initializes the specified URL.
         /// </summary>
-        /// <param name="url">The URL.</param>
-        /// <param name="username">The username.</param>
-        /// <param name="password">The password.</param>
-        public override void Initialize(string url, string username, string password)
+        /// <param name="config">The configuration.</param>
+        public override void Initialize(IDaemonConfig config)
         {
-            base.Initialize(url, username, password);
-            Log.Verbose("Init DaemonClient(): {0}", url);
+            base.Initialize(config);
+            Log.Verbose("Init DaemonClient(): {0}", config.Url);
         }
 
         /// <summary>

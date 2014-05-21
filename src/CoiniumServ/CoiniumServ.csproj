@@ -107,7 +107,9 @@
     <Compile Include="Core\Coin\Algorithms\IHashAlgorithm.cs" />
     <Compile Include="Core\Coin\Algorithms\Scrypt.cs" />
     <Compile Include="Core\Coin\Address\Base58.cs" />
+    <Compile Include="Core\Coin\Daemon\DaemonConfig.cs" />
     <Compile Include="Core\Coin\Daemon\IDaemonClient.cs" />
+    <Compile Include="Core\Coin\Daemon\IDaemonConfig.cs" />
     <Compile Include="Core\Coin\Helpers\Serializers.cs" />
     <Compile Include="Core\Coin\Coinbase\CoinbaseUtils.cs" />
     <Compile Include="Core\Coin\Exceptions\AddressFormatException.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Core\Mining\Jobs\JobManager.cs" />
     <Compile Include="Core\Mining\Miner\MinerManager.cs" />
     <Compile Include="Core\Mining\Pool\IPool.cs" />
+    <Compile Include="Core\Mining\Pool\Config\IPoolConfig.cs" />
     <Compile Include="Core\Mining\Pool\IPoolFactory.cs" />
     <Compile Include="Core\Mining\Pool\IPoolManager.cs" />
     <Compile Include="Core\Mining\Pool\Pool.cs" />
@@ -147,15 +150,19 @@
     <Compile Include="Core\Mining\Share\ShareManager.cs" />
     <Compile Include="Core\RPC\IRPCService.cs" />
     <Compile Include="Core\Server\IMiningServer.cs" />
-    <Compile Include="Core\Server\Stratum\IStratumRPCservice.cs" />
-    <Compile Include="Core\Server\Stratum\IStratumServer.cs" />
+    <Compile Include="Core\Server\Config\IServerConfig.cs" />
+    <Compile Include="Core\Server\IServerFactory.cs" />
+    <Compile Include="Core\Server\IServiceFactory.cs" />
+    <Compile Include="Core\Server\ServiceFactory.cs" />
+    <Compile Include="Core\Server\ServerFactory.cs" />
     <Compile Include="Core\Server\Stratum\Notifications\Difficulty.cs" />
     <Compile Include="Core\Server\Vanilla\VanillaMiner.cs" />
-    <Compile Include="Core\Mining\Pool\PoolConfig.cs" />
+    <Compile Include="Core\Mining\Pool\Config\PoolConfig.cs" />
     <Compile Include="Core\Mining\Pool\PoolManager.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCContext.cs" />
     <Compile Include="Core\RPC\Http\HttpRPCResponse.cs" />
     <Compile Include="Core\Server\Vanilla\VanillaServer.cs" />
+    <Compile Include="Core\Server\Vanilla\Config\VanillaServerConfig.cs" />
     <Compile Include="Core\Server\Vanilla\VanillaService.cs" />
     <Compile Include="Core\Mining\Miner\IMiner.cs" />
     <Compile Include="Core\RPC\Sockets\SocketsRPCContext.cs" />
@@ -236,7 +243,9 @@
       <Name>AustinHarris.JsonRpc</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Core\Server\Stratum\Config\StratumServerConfig.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
