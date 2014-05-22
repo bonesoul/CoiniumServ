@@ -17,7 +17,6 @@
 */
 
 using System;
-using Coinium.Common.Constants;
 using Coinium.Common.Extensions;
 using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Coinbase;

@@ -1,9 +1,7 @@
 {
-	Enabled: true,
+	Enabled: false,
 	
-	Coin: {
-		Config: "litecoin.json"
-	},
+	Coin: "litecoin.json",
 
 	# coin daemon config
 	Daemon: {
@@ -15,6 +13,7 @@
 
 	# stratum server config
 	Stratum: {
+		Enabled: true,
 		Bind: "0.0.0.0",
 		Port: 3333,
 		Diff: 16
@@ -22,6 +21,7 @@
 
 	# vanilla server config
 	Vanilla: {
+		Enabled: true,
 		Bind: "localhost",
 		Port: 3334			
 	},

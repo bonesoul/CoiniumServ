@@ -1,6 +1,6 @@
 ﻿using Ninject;
 
-namespace Coinium
+namespace Coinium.Core.Context
 {
     public class ApplicationContext : IApplicationContext
     {

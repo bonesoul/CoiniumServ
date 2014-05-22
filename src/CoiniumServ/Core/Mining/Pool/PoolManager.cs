@@ -42,26 +42,19 @@ namespace Coinium.Core.Mining.Pool
 
         public void Run()
         {
-            this.LoadConfigs(); 
-            
-            var stratumServerConfig = new StratumServerConfig("0.0.0.0", 3333);
-            var vanillaServerConfig = new VanillaServerConfig(3334);
-            var daemonConfig = new DaemonConfig("http://127.0.0.1:9334", "devel", "develpass");
-            var poolConfig = new PoolConfig(stratumServerConfig, vanillaServerConfig, daemonConfig);
-
-            this.AddPool(poolConfig);
+            this.LoadConfigs();            
         }
 
         public void LoadConfigs()
         {
-            var coinConfigRoot = "config/coins";
-            var poolConfigRoot = "config/pools";
+            const string configRoot = "config/pools";
 
-            var files = FileHelpers.GetFilesByExtensionRecursive(poolConfigRoot, ".json");
+            var files = FileHelpers.GetFilesByExtensionRecursive(configRoot, ".json");
 
             foreach (var file in files)
             {
                 var poolConfig = new PoolConfig(JsonConfigReader.Read(file));
+                this.AddPool(poolConfig);
             }
         }
 
@@ -77,18 +70,5 @@ namespace Coinium.Core.Mining.Pool
 
             return pool;
         }
-
-        //private void LoadPoolsConfig()
-        //{
-        //    this._configs=new Dictionary<string, PoolConfig>();
-
-        //    var poolsConfigFolder = string.Format("{0}/Conf/Pools", FileHelpers.AssemblyRoot);
-        //    var files = FileHelpers.GetFilesByExtensionRecursive(poolsConfigFolder, ".conf");
-
-        //    foreach (var file in files)
-        //    {
-        //        this._configs.Add(file, new PoolConfig(file));
-        //    }
-        //}
     }
 }

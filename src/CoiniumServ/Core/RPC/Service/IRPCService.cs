@@ -16,12 +16,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Mining.Pool;
-
 namespace Coinium.Core.RPC.Service
 {
-    public interface IRPCService
-    {
-
-    }
+    public interface IRpcService
+    { }
 }

@@ -16,10 +16,16 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Config.Registries
+using Coinium.Core.Config;
+
+namespace Coinium.Core.Coin.Configs
 {
-    public interface IRegistry
+    public interface ICoinConfig:IConfig
     {
-        void RegisterInstances();
+        string Name { get; }
+
+        string Symbol { get; }
+
+        string Algorithm { get; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Coinium.Core.Coin.Algorithms;
+using Coinium.Core.Context;
 using Coinium.Core.Mining.Jobs;
 using Ninject;
 

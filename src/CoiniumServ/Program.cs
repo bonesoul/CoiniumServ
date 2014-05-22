@@ -24,8 +24,8 @@ using Coinium.Common.Console;
 using Coinium.Common.Logging;
 using Coinium.Common.Platform;
 using Coinium.Core.Commands;
-using Coinium.Core.Config;
 using Coinium.Core.Mining.Pool;
+using Coinium.Core.Repository;
 using Serilog;
 using Ninject;
 
@@ -40,14 +40,17 @@ namespace Coinium
 
         static void Main(string[] args)
         {
-            #if !DEBUG
-                AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions.
+            #if !DEBUG  // Catch any unhandled exceptions if we are in release mode.
+                AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             #endif
 
+            // use invariant culture - we have to set it explicitly for every thread we create to 
+            // prevent any file-reading problems (mostly because of number formats).
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+
+            // start the ioc kernel.
             var kernel = new StandardKernel();
             new Bootstrapper(kernel).Run();
-
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
 
             // print intro texts.
             ConsoleWindow.PrintBanner();
@@ -91,9 +94,10 @@ namespace Coinium
             if (exception == null) // if we can't get the exception, whine about it.
                 throw new ArgumentNullException("e");
 
-            Console.WriteLine(
-                    e.IsTerminating ? "Terminating because of unhandled exception: {0}" : "Caught unhandled exception: {0}",
-                    exception);
+            if (e.IsTerminating)
+                Log.Fatal(exception, "Terminating program because of unhandled exception!");
+            else
+                Log.Error(exception, "Caught unhandled exception");
 
             Console.ReadLine();
         }

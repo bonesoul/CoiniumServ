@@ -1,4 +1,5 @@
-﻿using Coinium.Core.Mining.Pool.Config;
+﻿using Coinium.Core.Context;
+using Coinium.Core.Mining.Pool.Config;
 using Ninject;
 
 namespace Coinium.Core.Mining.Pool

@@ -16,14 +16,29 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Coin.Daemon
+using Coinium.Core.Context;
+using Ninject;
+
+namespace Coinium.Core.Repository.Registries
 {
-    public interface IDaemonConfig
+    public class Registry : IRegistry
     {
-        string Url { get; }
+        private readonly IKernel _kernel;
 
-        string Username { get; }
+        public Registry(IKernel kernel)
+        {
+            _kernel = kernel;
+        }
 
-        string Password { get; }
+        public void RegisterInstances()
+        {
+            _kernel.Bind<IApplicationContext>().To<ApplicationContext>().InSingletonScope();
+
+            _kernel.Bind<IRegistry>().To<ManagerRegistry>();
+            _kernel.Bind<IRegistry>().To<ServerRegistry>();
+            _kernel.Bind<IRegistry>().To<ServiceRegistry>();
+            _kernel.Bind<IRegistry>().To<ClassRegistry>();
+            _kernel.Bind<IRegistry>().To<FactoryRegistry>();
+        }
     }
 }

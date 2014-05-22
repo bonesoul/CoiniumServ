@@ -16,32 +16,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Config.Registries;
-using Ninject;
-
-namespace Coinium.Core.Config
+namespace Coinium.Core.Repository.Registries
 {
-    public class Bootstrapper
+    public interface IRegistry
     {
-        private readonly IKernel _kernel;
-
-        public Bootstrapper(IKernel kernel)
-        {
-            _kernel = kernel;
-        }
-
-        public void Run()
-        {
-            var masterRegistry = new Registry(_kernel);
-            masterRegistry.RegisterInstances();
-
-            var applicationContext = _kernel.Get<IApplicationContext>();
-            applicationContext.Initialize(_kernel);
-
-            foreach (var registry in _kernel.GetAll<IRegistry>())
-            {
-                registry.RegisterInstances();
-            }
-        }
+        void RegisterInstances();
     }
 }

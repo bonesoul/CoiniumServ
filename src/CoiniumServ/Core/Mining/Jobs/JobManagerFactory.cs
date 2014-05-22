@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Context;
 using Coinium.Core.Mining.Miner;
 using Ninject;
 

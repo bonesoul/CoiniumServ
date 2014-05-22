@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Coinium.Core.Coin.Daemon.Config;
 using Coinium.Core.Coin.Daemon.Responses;
 using Coinium.Core.Mining.Pool;
 

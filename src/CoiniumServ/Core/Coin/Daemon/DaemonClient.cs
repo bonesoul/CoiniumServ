@@ -31,6 +31,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Coinium.Core.Coin.Daemon.Config;
 using Coinium.Core.Coin.Daemon.Requests;
 using Coinium.Core.Coin.Daemon.Responses;
 using Serilog;
@@ -57,7 +58,7 @@ namespace Coinium.Core.Coin.Daemon
         public override void Initialize(IDaemonConfig config)
         {
             base.Initialize(config);
-            Log.Verbose("Init DaemonClient(): {0}", config.Url);
+            Log.Verbose("Init DaemonClient(): {0}:{1}", config.Host, config.Port);
         }
 
         /// <summary>

@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using Coinium.Core.Context;
 using Coinium.Core.Mining.Miner;
 using Ninject;
 

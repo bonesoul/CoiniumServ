@@ -29,13 +29,13 @@ namespace Coinium.Core.Server.Stratum
     /// <summary>
     /// Stratum protocol implementation.
     /// </summary>
-    public class StratumService : JsonRpcService, IRPCService
+    public class StratumService : JsonRpcService, IRpcService
     {
         private readonly IJobManager _jobManager;
 
         private readonly IShareManager _shareManager;
 
-        public StratumService(IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient)
+        public StratumService(IJobManager jobManager, IShareManager shareManager)
         {
             _jobManager = jobManager;
             _shareManager = shareManager;

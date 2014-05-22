@@ -16,26 +16,34 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using JsonConfig;
-using Serilog;
+using Coinium.Common.Config;
+using Coinium.Core.Context;
 
-namespace Coinium.Common.Config
+namespace Coinium.Core.Coin.Configs
 {
-    public static class JsonConfigReader
+    // todo: need to fix the factory.
+    public class CoinConfigFactory:ICoinConfigFactory
     {
-        public static dynamic Read(string fileName)
-        {
-            try
-            {
-                return JsonConfig.Config.ApplyJsonFromPath(fileName, new ConfigObject());
-            }
-            catch (Exception e)
-            {
-                Log.Error("Json parsing failed for: {0}.", fileName);
-            }
+        /// <summary>
+        /// The _application context
+        /// </summary>
+        private IApplicationContext _applicationContext;
 
-            return null;
+        public CoinConfigFactory(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
         }
+
+
+        public static ICoinConfig GetConfig(string name)  // todo: needs to be fixed - shouldn't be static
+        {
+            var fileName = string.Format("config/coins/{0}.json", name);
+            var file = JsonConfigReader.Read(fileName);
+
+            if (file == null)
+                return null;
+
+            return new CoinConfig(file);
+        }        
     }
 }

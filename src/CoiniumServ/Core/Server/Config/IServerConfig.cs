@@ -17,10 +17,11 @@
 */
 
 using System;
+using Coinium.Core.Config;
 
 namespace Coinium.Core.Server.Config
 {
-    public interface IServerConfig
+    public interface IServerConfig:IConfig 
     {
         string Name { get; }
 

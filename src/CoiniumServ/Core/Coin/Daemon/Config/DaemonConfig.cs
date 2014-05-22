@@ -16,27 +16,37 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Common.Constants;
-using Coinium.Core.Server;
-using Coinium.Core.Server.Stratum;
-using Coinium.Core.Server.Vanilla;
-using Ninject;
+using System;
 
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.Coin.Daemon.Config
 {
-    public class ServerRegistry : IRegistry
+    public class DaemonConfig:IDaemonConfig
     {
-        private readonly IApplicationContext _applicationContext;
+        public bool Valid { get; private set; }
+        public string Host { get; private set; }
+        public int Port { get; private set; }
+        public string Username { get; private set; }
+        public string Password { get; private set; }
 
-        public ServerRegistry(IApplicationContext applicationContext)
+        public string Url
         {
-            _applicationContext = applicationContext;
+            get { return string.Format("http://{0}:{1}", this.Host, this.Port); }
         }
 
-        public void RegisterInstances()
+        public DaemonConfig(dynamic config)
         {
-            _applicationContext.Kernel.Bind<IMiningServer>().To<VanillaServer>().Named(RPCServiceNames.Vanilla);
-            _applicationContext.Kernel.Bind<IMiningServer>().To<StratumServer>().Named(RPCServiceNames.Stratum);
+            if (config == null)
+            {
+                this.Valid = false;
+                return;
+            }
+
+            this.Host = !string.IsNullOrEmpty(config.Host) ? config.Host : "0.0.0.0";
+            this.Port = config.Port;
+            this.Username = config.Username;
+            this.Password = config.Password;
+
+            this.Valid = true;
         }
     }
 }

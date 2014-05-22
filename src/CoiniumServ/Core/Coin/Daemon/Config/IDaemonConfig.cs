@@ -17,25 +17,20 @@
 */
 
 using System;
-using JsonConfig;
-using Serilog;
+using Coinium.Core.Config;
 
-namespace Coinium.Common.Config
+namespace Coinium.Core.Coin.Daemon.Config
 {
-    public static class JsonConfigReader
+    public interface IDaemonConfig:IConfig
     {
-        public static dynamic Read(string fileName)
-        {
-            try
-            {
-                return JsonConfig.Config.ApplyJsonFromPath(fileName, new ConfigObject());
-            }
-            catch (Exception e)
-            {
-                Log.Error("Json parsing failed for: {0}.", fileName);
-            }
+        string Host { get; }
 
-            return null;
-        }
+        Int32 Port { get; }
+
+        string Username { get; }
+
+        string Password { get; }
+
+        string Url { get; }
     }
 }

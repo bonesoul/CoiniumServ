@@ -16,27 +16,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Common.Constants;
-using Coinium.Core.RPC.Service;
-using Coinium.Core.Server.Stratum;
-using Coinium.Core.Server.Vanilla;
-using Ninject;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.Config
 {
-    public class ServiceRegistry:IRegistry
+    public interface IConfig
     {
-        private readonly IApplicationContext _applicationContext;
-
-        public ServiceRegistry(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
-
-        public void RegisterInstances()
-        {
-            _applicationContext.Kernel.Bind<IRPCService>().To<VanillaService>().Named(RPCServiceNames.Vanilla);
-            _applicationContext.Kernel.Bind<IRPCService>().To<StratumService>().Named(RPCServiceNames.Stratum);
-        }
+        bool Valid { get; }
     }
 }
