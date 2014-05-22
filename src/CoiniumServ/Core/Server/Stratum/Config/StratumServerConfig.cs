@@ -25,14 +25,21 @@ namespace Coinium.Core.Server.Stratum.Config
     {
         public string Name { get; private set; }
 
-        public string BindIp { get; private set; }
+        public string BindInterface { get; private set; }
 
         public Int32 Port { get; private set; }
 
-        public StratumServerConfig(string bindIp, Int32 port)
+        public StratumServerConfig(dynamic config)
         {
             this.Name = RPCServiceNames.Stratum;
-            this.BindIp = bindIp;
+            this.BindInterface = !string.IsNullOrEmpty(config.Bind) ? config.Bind : "0.0.0.0";
+            this.Port = config.Port;
+        }
+
+        public StratumServerConfig(string bindInterface, Int32 port)
+        {
+            this.Name = RPCServiceNames.Stratum;
+            this.BindInterface = bindInterface;
             this.Port = port;
         }
     }

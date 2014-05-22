@@ -17,11 +17,13 @@
 */
 
 using System.Collections.Generic;
+using Coinium.Common.Config;
 using Coinium.Common.Helpers.IO;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Pool.Config;
 using Coinium.Core.Server.Stratum.Config;
 using Coinium.Core.Server.Vanilla.Config;
+using JsonConfig;
 using Serilog;
 
 namespace Coinium.Core.Mining.Pool
@@ -56,9 +58,10 @@ namespace Coinium.Core.Mining.Pool
             var poolConfigRoot = "config/pools";
 
             var files = FileHelpers.GetFilesByExtensionRecursive(poolConfigRoot, ".json");
+
             foreach (var file in files)
             {
-                var poolConfig = new PoolConfig(file);
+                var poolConfig = new PoolConfig(JsonConfigReader.Read(file));
             }
         }
 

@@ -57,7 +57,7 @@ namespace Coinium.Core.Server.Stratum
         {
             this.Config = config;
 
-            this.BindIP = ((IStratumServerConfig)config).BindIp;
+            this.BindIP = ((IStratumServerConfig)config).BindInterface;
             this.Port = config.Port;
 
             this.OnConnect += Stratum_OnConnect;

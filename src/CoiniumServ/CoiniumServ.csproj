@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContext.cs" />
+    <Compile Include="Common\Config\JsonConfigReader.cs" />
     <Compile Include="Common\Constants\RPCServiceNames.cs" />
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
@@ -131,8 +132,6 @@
     <Compile Include="Core\Commands\CommandAttributes.cs" />
     <Compile Include="Core\Commands\CommandGroup.cs" />
     <Compile Include="Core\Commands\CommandManager.cs" />
-    <Compile Include="Core\Config\ConfigSection.cs" />
-    <Compile Include="Core\Config\ConfigManager.cs" />
     <Compile Include="Core\Config\Registries\Registry.cs" />
     <Compile Include="Core\Crypto\Utils.cs" />
     <Compile Include="Core\Mining\Events\MinerAuthenticationEventArgs.cs" />
@@ -186,10 +185,8 @@
     <Compile Include="Core\Server\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Server\Stratum\StratumService.cs" />
     <Compile Include="Core\Coin\Daemon\Responses\Work.cs" />
-    <Compile Include="Core\Server\Web\Config.cs" />
     <Compile Include="IApplicationContext.cs" />
     <Compile Include="Net\Server\Http\HttpServer.cs" />
-    <Compile Include="Net\Config.cs" />
     <Compile Include="Net\Server\IServer.cs" />
     <Compile Include="Net\Server\Sockets\ConnectionEventArgs.cs" />
     <Compile Include="Net\Server\Sockets\Connection.cs" />
@@ -684,14 +681,6 @@
       <Link>config\coins\zzcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\assets\config\default.conf">
-      <Link>config\default.conf</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\assets\config\pools\sample.conf">
-      <Link>config\pools\sample.conf</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\..\assets\config\pools\sample.json">
       <Link>config\pools\sample.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -715,6 +704,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Server\Stratum\Config\StratumServerConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\Coin\Configs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

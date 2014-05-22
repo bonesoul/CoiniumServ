@@ -24,6 +24,8 @@ namespace Coinium.Core.Server.Config
     {
         string Name { get; }
 
+        string BindInterface { get; }
+
         Int32 Port { get; }
     }
 }
