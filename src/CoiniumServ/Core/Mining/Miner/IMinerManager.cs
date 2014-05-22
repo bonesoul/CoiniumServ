@@ -25,7 +25,6 @@ namespace Coinium.Core.Mining.Miner
 {
     public interface IMinerManager
     {
-        IPool Pool { get; set; }
 
         IList<IMiner> GetAll();
 
@@ -34,11 +33,5 @@ namespace Coinium.Core.Mining.Miner
         T Create<T>() where T : IMiner;
 
         T Create<T>(IConnection connection) where T : IMiner;
-
-        /// <summary>
-        /// Initializes the specified pool.
-        /// </summary>
-        /// <param name="pool">The pool.</param>
-        void Initialize(IPool pool);
     }
 }

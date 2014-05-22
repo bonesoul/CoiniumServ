@@ -20,8 +20,10 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Coinium.Common.Extensions;
+using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Coin.Transactions;
 using Coinium.Core.Crypto;
+using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server.Stratum.Notifications;
 
@@ -33,18 +35,22 @@ namespace Coinium.Core.Mining.Jobs
         private readonly JobCounter _jobCounter = new JobCounter();
         private IExtraNonce _extraNonce;
 
-        public IPool Pool { get; set; }
+        private readonly IDaemonClient _daemonClient;
+
+        private readonly IMinerManager _minerManager;
 
         public IExtraNonce ExtraNonce { get { return this._extraNonce; } }
+
         public Job LastJob { get; private set; }
 
-        public JobManager()
+        public JobManager(IDaemonClient daemonClient, IMinerManager minerManager)
         {
+            _daemonClient = daemonClient;
+            _minerManager = minerManager;
         }
 
-        public void Initialize(IPool pool, ulong instanceId)
+        public void Initialize(ulong instanceId)
         {
-            Pool = pool;
             _extraNonce = new ExtraNonce(instanceId);
         }
 
@@ -67,8 +73,8 @@ namespace Coinium.Core.Mining.Jobs
         /// <param name="state"></param>
         public void Broadcast()
         {
-            var blockTemplate = this.Pool.DaemonClient.GetBlockTemplate();
-            var generationTransaction = new GenerationTransaction(this.Pool, blockTemplate, false);
+            var blockTemplate = _daemonClient.GetBlockTemplate();
+            var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate, false);
 
             var hashList = new List<byte[]>();
 
@@ -92,7 +98,7 @@ namespace Coinium.Core.Mining.Jobs
             this._jobs.Add(job.Id,job);
             this.LastJob = job;
 
-            foreach (var miner in this.Pool.MinerManager.GetAll())
+            foreach (var miner in _minerManager.GetAll())
             {
                 if (!miner.SupportsJobNotifications)
                     continue;

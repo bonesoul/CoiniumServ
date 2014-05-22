@@ -104,23 +104,19 @@ namespace Coinium.Core.Coin.Transactions
         public byte[] Part2 { get; private set; }
 
         /// <summary>
-        /// Associated pool.
-        /// </summary>
-        public IPool Pool { get; private set; }
-
-        /// <summary>
         /// Creates a new instance of generation transaction.
         /// </summary>
+        /// <param name="extraNonce">The extra nonce.</param>
+        /// <param name="daemonClient">The daemon client.</param>
+        /// <param name="blockTemplate">The block template.</param>
+        /// <param name="supportTxMessages">if set to <c>true</c> [support tx messages].</param>
         /// <remarks>
         /// Reference implementations:
-        ///     https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
-        ///     https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
+        /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
+        /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
         /// </remarks>
-        /// <param name="blockTemplate"></param>
-        /// <param name="supportTxMessages"></param>
-        public GenerationTransaction(IPool pool, BlockTemplate blockTemplate, bool supportTxMessages = false)
+        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, BlockTemplate blockTemplate, bool supportTxMessages = false)
         {
-            this.Pool = pool;
             this.Version = (UInt32)(supportTxMessages ? 2 : 1);
             this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             this.LockTime = 0;
@@ -144,7 +140,7 @@ namespace Coinium.Core.Coin.Transactions
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedBlockHeight).ToArray();
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(coinBaseAuxFlags).ToArray();
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedUnixTime).ToArray();
-            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(new byte[this.Pool.JobManager.ExtraNonce.ExtraNoncePlaceholder.Length]).ToArray();
+            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(new byte[extraNonce.ExtraNoncePlaceholder.Length]).ToArray();
 
             input.SignatureScriptPart2 = CoinbaseUtils.SerializeString("/CoiniumServ/");
 
@@ -163,7 +159,7 @@ namespace Coinium.Core.Coin.Transactions
                 stream.WriteValueU32(this.Inputs[0].PreviousOutput.Index.LittleEndian());
 
                 // write signnature script lenght
-                var signatureScriptLenght = (UInt32)(input.SignatureScriptPart1.Length + this.Pool.JobManager.ExtraNonce.ExtraNoncePlaceholder.Length + input.SignatureScriptPart2.Length);
+                var signatureScriptLenght = (UInt32)(input.SignatureScriptPart1.Length + extraNonce.ExtraNoncePlaceholder.Length + input.SignatureScriptPart2.Length);
                 stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
 
                 stream.WriteBytes(input.SignatureScriptPart1);
@@ -175,7 +171,7 @@ namespace Coinium.Core.Coin.Transactions
                 scriptSig). Miners send us unique extranonces that we use to join the two parts in attempt to create
                 a valid share and/or block. */
 
-            this.Outputs = this.GenerateOutputTransactions(this.Pool, blockTemplate);
+            this.Outputs = this.GenerateOutputTransactions(daemonClient, blockTemplate);
             var outputBuffers = this.GetOutputBuffer();
 
             // create the second part.
@@ -219,7 +215,15 @@ namespace Coinium.Core.Coin.Transactions
             return result;
         }
 
-        private List<TxOut> GenerateOutputTransactions(IPool pool, BlockTemplate blockTemplate)
+        /// <summary>
+        /// Generates the output transactions.
+        /// </summary>
+        /// <param name="daemonClient">The daemon client.</param>
+        /// <param name="blockTemplate">The block template.</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidWalletAddressException">
+        /// </exception>
+        private List<TxOut> GenerateOutputTransactions(IDaemonClient daemonClient, BlockTemplate blockTemplate)
         {
             const string poolCentralWalletAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
 
@@ -232,13 +236,13 @@ namespace Coinium.Core.Coin.Transactions
             };
 
             // validate our pool wallet address.
-            if (!pool.DaemonClient.ValidateAddress(poolCentralWalletAddress).IsValid)
+            if (!daemonClient.ValidateAddress(poolCentralWalletAddress).IsValid)
                 throw new InvalidWalletAddressException(poolCentralWalletAddress);
 
             // validate reward recipients addresses too.
             foreach (var pair in rewardRecipients)
             {
-                if (!pool.DaemonClient.ValidateAddress(pair.Key).IsValid)
+                if (!daemonClient.ValidateAddress(pair.Key).IsValid)
                     throw new InvalidWalletAddressException(pair.Key);
             }
 

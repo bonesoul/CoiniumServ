@@ -26,19 +26,19 @@ namespace Coinium.Core.Config.Registries
 {
     public class ManagerRegistry : IRegistry
     {
-        private readonly IKernel _kernel;
+        private readonly IApplicationContext _applicationContext;
 
-        public ManagerRegistry(IKernel kernel)
+        public ManagerRegistry(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         public void RegisterInstances()
         {
-            _kernel.Bind<IShareManager>().To<ShareManager>();
-            _kernel.Bind<IMinerManager>().To<MinerManager>();
-            _kernel.Bind<IJobManager>().To<JobManager>();
-            _kernel.Bind<IPoolManager>().To<PoolManager>().InSingletonScope();
+            _applicationContext.Kernel.Bind<IShareManager>().To<ShareManager>();
+            _applicationContext.Kernel.Bind<IMinerManager>().To<MinerManager>();
+            _applicationContext.Kernel.Bind<IJobManager>().To<JobManager>();
+            _applicationContext.Kernel.Bind<IPoolManager>().To<PoolManager>().InSingletonScope();
         }
     }
 }

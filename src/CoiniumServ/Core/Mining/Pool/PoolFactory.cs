@@ -5,18 +5,19 @@ namespace Coinium.Core.Mining.Pool
 {
     public class PoolFactory : IPoolFactory
     {
-        /// <summary>
-        /// The _kernel
-        /// </summary>
-        private readonly IKernel _kernel;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PoolFactory"/> class.
+        /// The _application context
         /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        public PoolFactory(IKernel kernel)
+        private readonly IApplicationContext _applicationContext;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PoolFactory" /> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public PoolFactory(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace Coinium.Core.Mining.Pool
         /// <returns></returns>
         public IPool Create(IPoolConfig poolConfig)
         {
-            var pool = _kernel.Get<IPool>();
+            var pool = _applicationContext.Kernel.Get<IPool>();
             pool.Initialize(poolConfig);
             return pool;
         }

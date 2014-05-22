@@ -25,8 +25,8 @@ using Coinium.Common.Platform;
 using Coinium.Core.Commands;
 using Coinium.Core.Config;
 using Coinium.Core.Mining.Pool;
-using Ninject;
 using Serilog;
+using Ninject;
 
 namespace Coinium
 {

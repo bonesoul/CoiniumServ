@@ -20,7 +20,7 @@
 // classic server handles getwork & getblocktemplate miners over http.
 
 using Coinium.Common.Attributes;
-using Coinium.Core.Mining.Pool;
+using Coinium.Core.Mining.Miner;
 using Coinium.Core.Server.Config;
 using Coinium.Core.Server.Stratum.Config;
 using Coinium.Net.Server.Sockets;
@@ -34,18 +34,27 @@ namespace Coinium.Core.Server.Stratum
     [DefaultInstance]
     public class StratumServer : SocketServer, IMiningServer
     {
-        public IPool Pool { get; set; }
 
         public IServerConfig Config { get; private set; }
+
+        private readonly IMinerManager _minerManager;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StratumServer"/> class.
+        /// </summary>
+        /// <param name="minerManager">The miner manager.</param>
+        public StratumServer(IMinerManager minerManager)
+        {
+            _minerManager = minerManager;
+        }
 
         /// <summary>
         /// Initializes the specified pool.
         /// </summary>
         /// <param name="pool">The pool.</param>
         /// <param name="config">The configuration.</param>
-        public void Initialize(IPool pool, IServerConfig config)
+        public void Initialize(IServerConfig config)
         {
-            this.Pool = pool;
             this.Config = config;
 
             this.BindIP = ((IStratumServerConfig)config).BindIp;
@@ -88,7 +97,7 @@ namespace Coinium.Core.Server.Stratum
         {
             Log.Verbose("Stratum client connected: {0}", e.Connection.ToString());
 
-            var miner = this.Pool.MinerManager.Create<StratumMiner>(e.Connection);
+            var miner = _minerManager.Create<StratumMiner>(e.Connection);
             e.Connection.Client = miner;           
         }
 

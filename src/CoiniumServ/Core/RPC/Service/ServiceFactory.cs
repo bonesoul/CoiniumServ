@@ -16,27 +16,43 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Share;
 using Ninject;
 
 namespace Coinium.Core.RPC.Service
 {
     public class ServiceFactory : IServiceFactory
     {
-        private readonly IKernel _kernel;
+        /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
 
-        public ServiceFactory(IKernel kernel)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceFactory"/> class.
+        /// </summary>
+        /// <param name="kernel">The kernel.</param>
+        public ServiceFactory(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         /// <summary>
         /// Gets the specified service name.
         /// </summary>
         /// <param name="serviceName">Name of the service.</param>
+        /// <param name="jobManager">The job manager.</param>
+        /// <param name="shareManager">The share manager.</param>
+        /// <param name="daemonClient">The daemon client.</param>
         /// <returns></returns>
-        public IRPCService Get(string serviceName)
+        public IRPCService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient)
         {
-            return _kernel.Get<IRPCService>(serviceName);
+            var jobManagerParam = new Ninject.Parameters.ConstructorArgument("jobManager", jobManager);
+            var shareManagerParam = new Ninject.Parameters.ConstructorArgument("shareManager", shareManager);
+            var daemonClientParam = new Ninject.Parameters.ConstructorArgument("daemonClient", daemonClient);
+            return _applicationContext.Kernel.Get<IRPCService>(serviceName, jobManagerParam, shareManagerParam, daemonClientParam);
         }
     }
 }

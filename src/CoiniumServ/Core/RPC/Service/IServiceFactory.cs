@@ -16,10 +16,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Share;
+
 namespace Coinium.Core.RPC.Service
 {
     public interface IServiceFactory
     {
-        IRPCService Get(string serviceName);
+        /// <summary>
+        /// Gets the specified service name.
+        /// </summary>
+        /// <param name="serviceName">Name of the service.</param>
+        /// <param name="jobManager">The job manager.</param>
+        /// <param name="shareManager">The share manager.</param>
+        /// <param name="daemonClient">The daemon client.</param>
+        /// <returns></returns>
+        IRPCService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient);
     }
 }

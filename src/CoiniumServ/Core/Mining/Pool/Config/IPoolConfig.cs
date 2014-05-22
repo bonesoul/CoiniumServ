@@ -27,5 +27,13 @@ namespace Coinium.Core.Mining.Pool.Config
         IList<IServerConfig> ServerConfigs { get; }
 
         IDaemonConfig DaemonConfig { get; }
+
+        /// <summary>
+        /// Gets the name of the algorithm.
+        /// </summary>
+        /// <value>
+        /// The name of the algorithm.
+        /// </value>
+        string AlgorithmName { get; }
     }
 }
