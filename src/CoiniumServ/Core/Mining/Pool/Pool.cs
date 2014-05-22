@@ -25,14 +25,8 @@ using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool.Config;
 using Coinium.Core.Mining.Share;
-using Coinium.Core.RPC;
 using Coinium.Core.RPC.Service;
 using Coinium.Core.Server;
-using Coinium.Core.Server.Stratum;
-using Coinium.Core.Server.Stratum.Config;
-using Coinium.Core.Server.Vanilla;
-using Coinium.Core.Server.Vanilla.Config;
-using Ninject;
 using Serilog;
 
 namespace Coinium.Core.Mining.Pool
@@ -53,12 +47,6 @@ namespace Coinium.Core.Mining.Pool
         private IShareManager _shareManager;
 
         private Dictionary<IMiningServer, IRPCService> _servers;
-        public IDictionary<IMiningServer, IRPCService> Servers { get { return _servers; } }
-
-        public IDaemonClient DaemonClient { get { return _daemonClient; } }
-        public IMinerManager MinerManager { get { return _minerManager; } }
-        public IJobManager JobManager { get { return _jobManager; } }
-        public IShareManager ShareManager { get { return _shareManager; } }
 
         /// <summary>
         /// Instance id of the pool.
