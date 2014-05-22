@@ -21,6 +21,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using Coinium.Common.Console;
+using Coinium.Common.Logging;
 using Coinium.Common.Platform;
 using Coinium.Core.Commands;
 using Coinium.Core.Config;
@@ -53,7 +54,7 @@ namespace Coinium
             ConsoleWindow.PrintLicense();
 
             // init logging facilities.
-            InitLogging();
+            Logging.Init();
 
             // print a version banner.
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
@@ -69,28 +70,12 @@ namespace Coinium
                 pool.Start();
             }
 
-            // Start the server manager.
-            //ServerManager.Instance.Start();
-
             while (true) // idle loop & command parser
             {
                 var line = Console.ReadLine();
                 CommandManager.Parse(line);
             }
         }
-
-        #region logging facility
-
-        private static void InitLogging()
-        {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.ColoredConsole()
-                .WriteTo.RollingFile(@"logs\Debug.log")
-                .MinimumLevel.Verbose()
-                .CreateLogger();
-        }
-
-        #endregion
 
         #region unhandled exception emitter
 

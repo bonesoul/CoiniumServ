@@ -100,6 +100,7 @@
     <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\Helpers\Misc\Range.cs" />
     <Compile Include="Common\Helpers\Time\TimeHelpers.cs" />
+    <Compile Include="Common\Logging\Logging.cs" />
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
