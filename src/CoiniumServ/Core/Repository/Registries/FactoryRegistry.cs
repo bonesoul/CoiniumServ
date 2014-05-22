@@ -38,13 +38,13 @@ namespace Coinium.Core.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Kernel.Bind<IHashAlgorithmFactory>().To<HashAlgorithmFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IPoolFactory>().To<PoolFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IServerFactory>().To<ServerFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IServiceFactory>().To<ServiceFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IJobManagerFactory>().To<JobManagerFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IShareManagerFactory>().To<ShareManagerFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<ICoinConfigFactory>().To<CoinConfigFactory>().InSingletonScope();
+            _applicationContext.Container.Register<IHashAlgorithmFactory, HashAlgorithmFactory>().AsSingleton();
+            _applicationContext.Container.Register<IPoolFactory, PoolFactory>().AsSingleton();
+            _applicationContext.Container.Register<IServerFactory, ServerFactory>().AsSingleton();
+            _applicationContext.Container.Register<IServiceFactory, ServiceFactory>().AsSingleton();
+            _applicationContext.Container.Register<IJobManagerFactory, JobManagerFactory>().AsSingleton();
+            _applicationContext.Container.Register<IShareManagerFactory, ShareManagerFactory>().AsSingleton();
+            _applicationContext.Container.Register<ICoinConfigFactory, CoinConfigFactory>().AsSingleton();
         }
     }
 }

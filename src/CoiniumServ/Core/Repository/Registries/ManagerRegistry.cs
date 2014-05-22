@@ -35,10 +35,10 @@ namespace Coinium.Core.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Kernel.Bind<IShareManager>().To<ShareManager>();
-            _applicationContext.Kernel.Bind<IMinerManager>().To<MinerManager>();
-            _applicationContext.Kernel.Bind<IJobManager>().To<JobManager>();
-            _applicationContext.Kernel.Bind<IPoolManager>().To<PoolManager>().InSingletonScope();
+            _applicationContext.Container.Register<IShareManager, ShareManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IJobManager, JobManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IPoolManager, PoolManager>().AsMultiInstance();
         }
     }
 }

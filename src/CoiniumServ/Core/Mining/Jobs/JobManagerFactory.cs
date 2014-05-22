@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Coinium.Core.Coin.Daemon;
+﻿using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Context;
 using Coinium.Core.Mining.Miner;
-using Ninject;
+using Nancy.TinyIoc;
 
 namespace Coinium.Core.Mining.Jobs
 {
@@ -33,10 +29,9 @@ namespace Coinium.Core.Mining.Jobs
         /// <returns></returns>
         public IJobManager Get(IDaemonClient daemonClient, IMinerManager minerManager)
         {
-            var daemonClientParam = new Ninject.Parameters.ConstructorArgument("daemonClient", daemonClient);
-            var minerManagerParam = new Ninject.Parameters.ConstructorArgument("minerManager", minerManager);
+            var @params = new NamedParameterOverloads() {{"daemonClient", daemonClient}, {"minerManager", minerManager}};
 
-            return _applicationContext.Kernel.Get<IJobManager>(daemonClientParam, minerManagerParam);
+            return _applicationContext.Container.Resolve<IJobManager>(@params);
         }
     }
 }

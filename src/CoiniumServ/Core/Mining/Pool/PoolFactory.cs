@@ -1,6 +1,6 @@
 ﻿using Coinium.Core.Context;
 using Coinium.Core.Mining.Pool.Config;
-using Ninject;
+using Nancy.TinyIoc;
 
 namespace Coinium.Core.Mining.Pool
 {
@@ -28,7 +28,7 @@ namespace Coinium.Core.Mining.Pool
         /// <returns></returns>
         public IPool Create(IPoolConfig poolConfig)
         {
-            var pool = _applicationContext.Kernel.Get<IPool>();
+            var pool = _applicationContext.Container.Resolve<IPool>();
             pool.Initialize(poolConfig);
             return pool;
         }

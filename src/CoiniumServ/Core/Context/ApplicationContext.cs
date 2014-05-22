@@ -1,14 +1,14 @@
-﻿using Ninject;
+﻿using Nancy.TinyIoc;
 
 namespace Coinium.Core.Context
 {
     public class ApplicationContext : IApplicationContext
     {
-        public IKernel Kernel { get; private set; }
+        public TinyIoCContainer Container { get; private set; }
 
-        public void Initialize(IKernel kernel)
+        public void Initialize(TinyIoCContainer container)
         {
-            Kernel = kernel;
+            Container = container;
         }
     }
 }

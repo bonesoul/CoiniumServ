@@ -34,9 +34,9 @@ namespace Coinium.Core.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Kernel.Bind<IHashAlgorithm>().To<Scrypt>().Named(AlgorithmNames.Scrypt);
-            _applicationContext.Kernel.Bind<IDaemonClient>().To<DaemonClient>();
-            _applicationContext.Kernel.Bind<IPool>().To<Pool>();
+            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(AlgorithmNames.Scrypt).AsSingleton();
+            _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
+            _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
         }
     }
 }

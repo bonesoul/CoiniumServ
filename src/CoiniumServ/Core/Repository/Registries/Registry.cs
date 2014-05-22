@@ -16,29 +16,35 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.Collections.Generic;
 using Coinium.Core.Context;
-using Ninject;
+using Nancy.TinyIoc;
 
 namespace Coinium.Core.Repository.Registries
 {
     public class Registry : IRegistry
     {
-        private readonly IKernel _kernel;
+        private readonly TinyIoCContainer _kernel;
 
-        public Registry(IKernel kernel)
+        public Registry(TinyIoCContainer kernel)
         {
             _kernel = kernel;
         }
 
         public void RegisterInstances()
         {
-            _kernel.Bind<IApplicationContext>().To<ApplicationContext>().InSingletonScope();
+            _kernel.Register<IApplicationContext, ApplicationContext>().AsSingleton();
 
-            _kernel.Bind<IRegistry>().To<ManagerRegistry>();
-            _kernel.Bind<IRegistry>().To<ServerRegistry>();
-            _kernel.Bind<IRegistry>().To<ServiceRegistry>();
-            _kernel.Bind<IRegistry>().To<ClassRegistry>();
-            _kernel.Bind<IRegistry>().To<FactoryRegistry>();
+            _kernel.RegisterMultiple<IRegistry>(
+                new List<Type>
+                {
+                    typeof(ManagerRegistry),
+                    typeof(ServerRegistry),
+                    typeof(ServiceRegistry),
+                    typeof(ClassRegistry),
+                    typeof(FactoryRegistry),
+                });
         }
     }
 }
