@@ -24,17 +24,17 @@ namespace Coinium.Core.Coin.Algorithms
     public class HashAlgorithmFactory : IHashAlgorithmFactory
     {
         /// <summary>
-        /// The ninject _kernel.
+        /// The application context.
         /// </summary>
-        private readonly IKernel _kernel;
+        private readonly IApplicationContext _applicationContext;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HashAlgorithmFactory"/> class.
+        /// Initializes a new instance of the <see cref="HashAlgorithmFactory" /> class.
         /// </summary>
-        /// <param name="kernel">The ninject kernel.</param>
-        public HashAlgorithmFactory(IKernel kernel)
+        /// <param name="applicationContext">The application context.</param>
+        public HashAlgorithmFactory(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Coinium.Core.Coin.Algorithms
             // Default to Scrypt
             if (string.IsNullOrWhiteSpace(algorithmName)) algorithmName = AlgorithmNames.Scrypt;
 
-            return _kernel.Get<IHashAlgorithm>(algorithmName);
+            return _applicationContext.Kernel.Get<IHashAlgorithm>(algorithmName);
         }
     }
 }

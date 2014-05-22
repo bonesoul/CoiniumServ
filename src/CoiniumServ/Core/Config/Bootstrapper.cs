@@ -35,6 +35,9 @@ namespace Coinium.Core.Config
             var masterRegistry = new Registry(_kernel);
             masterRegistry.RegisterInstances();
 
+            var applicationContext = _kernel.Get<IApplicationContext>();
+            applicationContext.Initialize(_kernel);
+
             foreach (var registry in _kernel.GetAll<IRegistry>())
             {
                 registry.RegisterInstances();

@@ -23,11 +23,11 @@ namespace Coinium.Core.Server
 {
     public class ServerFactory : IServerFactory
     {
-        private readonly IKernel _kernel;
+        private readonly IApplicationContext _applicationContext;
 
-        public ServerFactory(IKernel kernel)
+        public ServerFactory(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Coinium.Core.Server
         public IMiningServer Get(string serviceName, IMinerManager minerManager)
         {
             var minerManagerParam = new Ninject.Parameters.ConstructorArgument("minerManager", minerManager);
-            return _kernel.Get<IMiningServer>(serviceName, minerManagerParam);
+            return _applicationContext.Kernel.Get<IMiningServer>(serviceName, minerManagerParam);
         }
     }
 }

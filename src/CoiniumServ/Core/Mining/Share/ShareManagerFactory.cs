@@ -9,15 +9,15 @@ namespace Coinium.Core.Mining.Share
         /// <summary>
         /// The _kernel
         /// </summary>
-        private readonly IKernel _kernel;
+        private readonly IApplicationContext _applicationContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareManagerFactory" /> class.
         /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        public ShareManagerFactory(IKernel kernel)
+        /// <param name="applicationContext">The application context.</param>
+        public ShareManagerFactory(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Coinium.Core.Mining.Share
             var hashAlgorithmParam = new Ninject.Parameters.ConstructorArgument("hashAlgorithm", hashAlgorithm);
             var jobManagerParam = new Ninject.Parameters.ConstructorArgument("jobManager", jobManager);
 
-            return _kernel.Get<IShareManager>(hashAlgorithmParam, jobManagerParam);
+            return _applicationContext.Kernel.Get<IShareManager>(hashAlgorithmParam, jobManagerParam);
         }
     }
 }

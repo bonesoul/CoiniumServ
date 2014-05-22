@@ -20,24 +20,23 @@ using Coinium.Common.Constants;
 using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Pool;
-using Ninject;
 
 namespace Coinium.Core.Config.Registries
 {
     public class ClassRegistry : IRegistry
     {
-        private readonly IKernel _kernel;
+        private readonly IApplicationContext _applicationContext;
 
-        public ClassRegistry(IKernel kernel)
+        public ClassRegistry(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         public void RegisterInstances()
         {
-            _kernel.Bind<IHashAlgorithm>().To<Scrypt>().Named(AlgorithmNames.Scrypt);
-            _kernel.Bind<IDaemonClient>().To<DaemonClient>();
-            _kernel.Bind<IPool>().To<Pool>();
+            _applicationContext.Kernel.Bind<IHashAlgorithm>().To<Scrypt>().Named(AlgorithmNames.Scrypt);
+            _applicationContext.Kernel.Bind<IDaemonClient>().To<DaemonClient>();
+            _applicationContext.Kernel.Bind<IPool>().To<Pool>();
         }
     }
 }

@@ -28,15 +28,15 @@ namespace Coinium.Core.RPC.Service
         /// <summary>
         /// The _kernel
         /// </summary>
-        private readonly IKernel _kernel;
+        private readonly IApplicationContext _applicationContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceFactory"/> class.
         /// </summary>
         /// <param name="kernel">The kernel.</param>
-        public ServiceFactory(IKernel kernel)
+        public ServiceFactory(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Coinium.Core.RPC.Service
             var jobManagerParam = new Ninject.Parameters.ConstructorArgument("jobManager", jobManager);
             var shareManagerParam = new Ninject.Parameters.ConstructorArgument("shareManager", shareManager);
             var daemonClientParam = new Ninject.Parameters.ConstructorArgument("daemonClient", daemonClient);
-            return _kernel.Get<IRPCService>(serviceName, jobManagerParam, shareManagerParam, daemonClientParam);
+            return _applicationContext.Kernel.Get<IRPCService>(serviceName, jobManagerParam, shareManagerParam, daemonClientParam);
         }
     }
 }

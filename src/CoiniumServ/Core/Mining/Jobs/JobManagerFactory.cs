@@ -13,15 +13,15 @@ namespace Coinium.Core.Mining.Jobs
         /// <summary>
         /// The _kernel
         /// </summary>
-        private readonly IKernel _kernel;
+        private readonly IApplicationContext _applicationContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JobManagerFactory"/> class.
         /// </summary>
         /// <param name="kernel">The kernel.</param>
-        public JobManagerFactory(IKernel kernel)
+        public JobManagerFactory(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Coinium.Core.Mining.Jobs
             var daemonClientParam = new Ninject.Parameters.ConstructorArgument("daemonClient", daemonClient);
             var minerManagerParam = new Ninject.Parameters.ConstructorArgument("minerManager", minerManager);
 
-            return _kernel.Get<IJobManager>(daemonClientParam, minerManagerParam);
+            return _applicationContext.Kernel.Get<IJobManager>(daemonClientParam, minerManagerParam);
         }
     }
 }

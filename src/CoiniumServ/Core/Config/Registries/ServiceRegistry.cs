@@ -26,17 +26,17 @@ namespace Coinium.Core.Config.Registries
 {
     public class ServiceRegistry:IRegistry
     {
-        private readonly IKernel _kernel;
+        private readonly IApplicationContext _applicationContext;
 
-        public ServiceRegistry(IKernel kernel)
+        public ServiceRegistry(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         public void RegisterInstances()
         {
-            _kernel.Bind<IRPCService>().To<VanillaService>().Named(RPCServiceNames.Vanilla);
-            _kernel.Bind<IRPCService>().To<StratumService>().Named(RPCServiceNames.Stratum);
+            _applicationContext.Kernel.Bind<IRPCService>().To<VanillaService>().Named(RPCServiceNames.Vanilla);
+            _applicationContext.Kernel.Bind<IRPCService>().To<StratumService>().Named(RPCServiceNames.Stratum);
         }
     }
 }

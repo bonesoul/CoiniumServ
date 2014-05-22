@@ -28,21 +28,21 @@ namespace Coinium.Core.Config.Registries
 {
     public class FactoryRegistry : IRegistry
     {
-        private readonly IKernel _kernel;
+        private readonly IApplicationContext _applicationContext;
 
-        public FactoryRegistry(IKernel kernel)
+        public FactoryRegistry(IApplicationContext applicationContext)
         {
-            _kernel = kernel;
+            _applicationContext = applicationContext;
         }
 
         public void RegisterInstances()
         {
-            _kernel.Bind<IHashAlgorithmFactory>().To<HashAlgorithmFactory>().InSingletonScope();
-            _kernel.Bind<IPoolFactory>().To<PoolFactory>().InSingletonScope();
-            _kernel.Bind<IServerFactory>().To<ServerFactory>().InSingletonScope();
-            _kernel.Bind<IServiceFactory>().To<ServiceFactory>().InSingletonScope();
-            _kernel.Bind<IJobManagerFactory>().To<JobManagerFactory>().InSingletonScope();
-            _kernel.Bind<IShareManagerFactory>().To<ShareManagerFactory>().InSingletonScope();
+            _applicationContext.Kernel.Bind<IHashAlgorithmFactory>().To<HashAlgorithmFactory>().InSingletonScope();
+            _applicationContext.Kernel.Bind<IPoolFactory>().To<PoolFactory>().InSingletonScope();
+            _applicationContext.Kernel.Bind<IServerFactory>().To<ServerFactory>().InSingletonScope();
+            _applicationContext.Kernel.Bind<IServiceFactory>().To<ServiceFactory>().InSingletonScope();
+            _applicationContext.Kernel.Bind<IJobManagerFactory>().To<JobManagerFactory>().InSingletonScope();
+            _applicationContext.Kernel.Bind<IShareManagerFactory>().To<ShareManagerFactory>().InSingletonScope();
         }
     }
 }

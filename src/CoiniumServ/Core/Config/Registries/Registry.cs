@@ -31,6 +31,8 @@ namespace Coinium.Core.Config.Registries
 
         public void RegisterInstances()
         {
+            _kernel.Bind<IApplicationContext>().To<ApplicationContext>().InSingletonScope();
+
             _kernel.Bind<IRegistry>().To<ManagerRegistry>();
             _kernel.Bind<IRegistry>().To<ServerRegistry>();
             _kernel.Bind<IRegistry>().To<ServiceRegistry>();
