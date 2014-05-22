@@ -17,6 +17,7 @@
 */
 
 using System.IO;
+using JsonConfig;
 using Serilog;
 using Serilog.Events;
 
@@ -33,6 +34,8 @@ namespace Coinium.Common.Logging
         {
             if (!Directory.Exists(LogRoot)) // make sure log root exists.
                 Directory.CreateDirectory(LogRoot);
+
+            var root = !string.IsNullOrEmpty(Config.Global.logs.root) ? Config.Global.logs.root : "logs";               
 
             // configure the global logger.
             Log.Logger = new LoggerConfiguration()

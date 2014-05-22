@@ -16,11 +16,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using Coinium.Core.Server.Config;
 
 namespace Coinium.Core.Server.Stratum.Config
 {
     public interface IStratumServerConfig : IServerConfig
     {
+        Int32 Diff { get; }
     }
 }

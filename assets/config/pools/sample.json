@@ -1,47 +1,47 @@
 {
-	Enabled: false,
+	"enabled": false,
 	
-	Coin: "litecoin.json",
+	"coin": "litecoin.json",
 
 	# coin daemon config
-	Daemon: {
-		Host: "127.0.0.1",
-		Port: 9333,
-		Username: "user",
-		Password: "password"
+	"daemon": {
+		"host": "127.0.0.1",
+		"port": 9333,
+		"username": "user",
+		"password": "password"
 	},
 
 	# stratum server config
-	Stratum: {
-		Enabled: true,
-		Bind: "0.0.0.0",
-		Port: 3333,
-		Diff: 16
+	"stratum": {
+		"enabled": true,
+		"bind": "0.0.0.0",
+		"port": 3333,
+		"diff": 16
 	},
 
 	# vanilla server config
-	Vanilla: {
-		Enabled: true,
-		Bind: "localhost",
-		Port: 3334			
+	"vanilla": {
+		"enabled": true,
+		"bind": "localhost",
+		"port": 3334			
 	},
 
 	# payment processing
-	PaymentProcessing: {
-		Enabled: false,
-		Interval: 60,
-		Minimum: 1
+	"payments": {
+		"enabled": false,
+		"interval": 60,
+		"minimum": 1
 	},
 
 	# mpos compat mode
-	MPOSCompat: {
-		Enabled: false,
-		Database: {
-			Host: "127.0.0.1",
-			Port: 3306,
-			Name: "db-name",
-			User: "username",
-			Password: "password"
+	"mpos": {
+		"enabled": false,
+		"database": {
+			"host": "127.0.0.1",
+			"port": 3306,
+			"name": "db-name",
+			"user": "username",
+			"password": "password"
 		}
 	}	
 }

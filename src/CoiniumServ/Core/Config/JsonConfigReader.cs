@@ -20,7 +20,7 @@ using System;
 using JsonConfig;
 using Serilog;
 
-namespace Coinium.Common.Config
+namespace Coinium.Core.Config
 {
     public static class JsonConfigReader
     {

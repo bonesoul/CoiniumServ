@@ -34,8 +34,11 @@ namespace Coinium.Core.Mining.Pool.Config
         public bool Valid { get; private set; }
 
         public bool Enabled { get; private set; }
+
         public ICoinConfig Coin { get; private set; }
+
         public IStratumServerConfig Stratum { get; private set; }
+
         public IVanillaServerConfig Vanilla { get; private set; }
 
         /// <summary>
@@ -54,9 +57,9 @@ namespace Coinium.Core.Mining.Pool.Config
                 return;
             }
 
-            this.Enabled = config.Enabled ? config.Enabled : false;
+            this.Enabled = config.enabled ? config.enabled : false;
 
-            var coinName = Path.GetFileNameWithoutExtension(config.Coin);
+            var coinName = Path.GetFileNameWithoutExtension(config.coin);
             this.Coin = CoinConfigFactory.GetConfig(coinName);
 
             if (this.Coin == null)
@@ -65,8 +68,8 @@ namespace Coinium.Core.Mining.Pool.Config
                 return;
             }
 
-            this.Stratum = new StratumServerConfig(config.Stratum);
-            this.Vanilla = new VanillaServerConfig(config.Vanilla);
+            this.Stratum = new StratumServerConfig(config.stratum);
+            this.Vanilla = new VanillaServerConfig(config.vanilla);
 
             if (this.Stratum == null && this.Vanilla == null)
             {
@@ -74,7 +77,7 @@ namespace Coinium.Core.Mining.Pool.Config
                 return;
             }
 
-            this.Daemon = new DaemonConfig(config.Daemon);
+            this.Daemon = new DaemonConfig(config.daemon);
 
             if (this.Daemon == null)
             {

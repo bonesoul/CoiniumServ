@@ -23,9 +23,13 @@ namespace Coinium.Core.Coin.Daemon.Config
     public class DaemonConfig:IDaemonConfig
     {
         public bool Valid { get; private set; }
+
         public string Host { get; private set; }
+
         public int Port { get; private set; }
+
         public string Username { get; private set; }
+
         public string Password { get; private set; }
 
         public string Url
@@ -41,10 +45,10 @@ namespace Coinium.Core.Coin.Daemon.Config
                 return;
             }
 
-            this.Host = !string.IsNullOrEmpty(config.Host) ? config.Host : "0.0.0.0";
-            this.Port = config.Port;
-            this.Username = config.Username;
-            this.Password = config.Password;
+            this.Host = !string.IsNullOrEmpty(config.host) ? config.host : "0.0.0.0";
+            this.Port = config.port;
+            this.Username = config.username;
+            this.Password = config.password;
 
             this.Valid = true;
         }

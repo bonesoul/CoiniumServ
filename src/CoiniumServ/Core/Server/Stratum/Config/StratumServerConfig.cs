@@ -27,9 +27,13 @@ namespace Coinium.Core.Server.Stratum.Config
 
         public string Name { get; private set; }
 
+        public bool Enabled { get; private set; }
+
         public string BindInterface { get; private set; }
 
         public Int32 Port { get; private set; }
+
+        public Int32 Diff { get; private set; }
 
         public StratumServerConfig(dynamic config)
         {
@@ -40,8 +44,10 @@ namespace Coinium.Core.Server.Stratum.Config
             }
 
             this.Name = RpcServiceNames.Stratum;
-            this.BindInterface = !string.IsNullOrEmpty(config.Bind) ? config.Bind : "0.0.0.0";
-            this.Port = config.Port;
+            this.Enabled = config.enabled;
+            this.BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
+            this.Port = config.port;
+            this.Diff = config.diff;
 
             this.Valid = true;
         }

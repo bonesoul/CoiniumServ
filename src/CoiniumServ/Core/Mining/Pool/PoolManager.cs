@@ -17,9 +17,9 @@
 */
 
 using System.Collections.Generic;
-using Coinium.Common.Config;
 using Coinium.Common.Helpers.IO;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Config;
 using Coinium.Core.Mining.Pool.Config;
 using Coinium.Core.Server.Stratum.Config;
 using Coinium.Core.Server.Vanilla.Config;
