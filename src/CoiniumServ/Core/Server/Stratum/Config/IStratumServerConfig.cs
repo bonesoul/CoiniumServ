@@ -22,6 +22,5 @@ namespace Coinium.Core.Server.Stratum.Config
 {
     public interface IStratumServerConfig : IServerConfig
     {
-        string BindIp { get; }
     }
 }

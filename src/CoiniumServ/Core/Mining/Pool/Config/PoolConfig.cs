@@ -20,6 +20,9 @@ using System;
 using System.Collections.Generic;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Server.Config;
+using Coinium.Core.Server.Stratum.Config;
+using Coinium.Core.Server.Vanilla.Config;
+using JsonConfig;
 
 namespace Coinium.Core.Mining.Pool.Config
 {
@@ -28,6 +31,10 @@ namespace Coinium.Core.Mining.Pool.Config
     /// </summary>
     public class PoolConfig : IPoolConfig
     {
+        public bool Enabled { get; private set; }
+        public IStratumServerConfig StratumConfig { get; private set; }
+        public IVanillaServerConfig VanillaConfig { get; private set; }
+
         /// <summary>
         /// Gets the server configs.
         /// </summary>
@@ -52,6 +59,14 @@ namespace Coinium.Core.Mining.Pool.Config
         /// </value>
         public string AlgorithmName { get; private set; }
 
+        public PoolConfig(dynamic config)
+        {
+            this.Enabled = config.Enabled ? config.Enabled : false;                            
+
+            this.StratumConfig = new StratumServerConfig(config.Stratum);
+            this.VanillaConfig = new VanillaServerConfig(config.Vanilla);
+        }
+
         public PoolConfig(IServerConfig stratumServerConfig, IServerConfig vanillaServerConfig, IDaemonConfig daemonConfig)
         {
             this.ServerConfigs = new List<IServerConfig>();
@@ -67,121 +82,5 @@ namespace Coinium.Core.Mining.Pool.Config
 
             this.DaemonConfig = daemonConfig;
         }
-
-        ///// <summary>
-        ///// Filename of the config..
-        ///// </summary>
-        //public string FileName { get; private set; }
-
-        ///// <summary>
-        ///// The parser assigned to the config.
-        ///// </summary>
-        //private IniConfigSource _parser; // the ini parser.
-
-        ///// <summary>
-        ///// The pool section.
-        ///// </summary>
-        //public PoolSection Pool { get; private set; }
-
-        ///// <summary>
-        ///// The wallet section.
-        ///// </summary>
-        //public WalletSection Wallet { get; private set; }
-
-        ///// <summary>
-        ///// Read a new pool-configuration instance from the given file.
-        ///// </summary>
-        ///// <param name="fileName"></param>
-        //public PoolConfig(string fileName)
-        //{
-        //    this.FileName = fileName;
-        //    this.LoadConfig();
-        //}
-
-        ///// <summary>
-        ///// Loads the config options.
-        ///// </summary>
-        //private void LoadConfig()
-        //{
-        //    try
-        //    {
-        //        this._parser = new IniConfigSource(this.FileName);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        Log.Error("Error loading pool config file: {0}", this.FileName);
-        //    }
-        //    finally
-        //    {
-        //        this._parser.ExpandKeyValues();
-        //        this.Pool = new PoolSection(this._parser);
-        //        this.Wallet = new WalletSection(this._parser);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Pool section
-        ///// </summary>
-        //public class PoolSection : ConfigSection
-        //{
-        //    public PoolSection(IniConfigSource source) 
-        //        : base(source, "Pool")
-        //    { }
-
-        //    public int InstanceId
-        //    {
-        //        get { return this.GetInt("InstanceId", 31); }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Wallet section.
-        ///// </summary>
-        //public class WalletSection : ConfigSection
-        //{
-        //    public WalletSection(IniConfigSource source)
-        //        : base(source, "Wallet")
-        //    { }
-
-        //    /// <summary>
-        //    /// Main wallet address.
-        //    /// </summary>
-        //    public string Address
-        //    {
-        //        get { return this.GetString("Address", string.Empty); }
-        //    }
-
-        //    /// <summary>
-        //    /// Wallet host.
-        //    /// </summary>
-        //    public string Host
-        //    {
-        //        get { return this.GetString("Host", string.Empty); }
-        //    }
-
-        //    /// <summary>
-        //    /// Wallet port.
-        //    /// </summary>
-        //    public int Port
-        //    {
-        //        get { return this.GetInt("Port", 0); }
-        //    }
-
-        //    /// <summary>
-        //    /// Wallet user.
-        //    /// </summary>
-        //    public string User
-        //    {
-        //        get { return this.GetString("User", string.Empty); }
-        //    }
-
-        //    /// <summary>
-        //    /// Wallet password.
-        //    /// </summary>
-        //    public string Password
-        //    {
-        //        get { return this.GetString("Password", string.Empty); }
-        //    }        
-        //  }        
     }
 }

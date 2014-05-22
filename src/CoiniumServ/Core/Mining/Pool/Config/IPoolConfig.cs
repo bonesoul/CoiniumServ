@@ -19,11 +19,22 @@
 using System.Collections.Generic;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Server.Config;
+using Coinium.Core.Server.Stratum.Config;
+using Coinium.Core.Server.Vanilla.Config;
 
 namespace Coinium.Core.Mining.Pool.Config
 {
     public interface IPoolConfig
     {
+        /// <summary>
+        /// Is the configuration enabled?
+        /// </summary>
+        bool Enabled { get; }
+
+        IStratumServerConfig StratumConfig { get; }
+
+        IVanillaServerConfig VanillaConfig { get; }
+
         IList<IServerConfig> ServerConfigs { get; }
 
         IDaemonConfig DaemonConfig { get; }

@@ -1,0 +1,6 @@
+{
+    "name": "Netcoin",
+    "symbol": "NET",
+    "algorithm": "scrypt",
+    "txMessages": true
+}

@@ -16,23 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Config;
+using System;
+using System.IO;
+using JsonConfig;
+using Serilog;
 
-namespace Coinium.Net
+namespace Coinium.Common.Config
 {
-    public sealed class Config : ConfigSection
+    public static class JsonConfigReader
     {
-        private Config()
-            : base("Networking")
-        { }
-
-        public bool EnableIPv6
+        public static dynamic Read(string fileName)
         {
-            get { return this.GetBoolean("EnableIPv6", true); }
-            set { this.Set("EnableIPv6", value); }
-        }
+            try
+            {
+                return JsonConfig.Config.ApplyJsonFromPath(fileName, new ConfigObject());
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Json parsing failed for: {0}.", fileName);
+            }
 
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
+            return null;
+        }
     }
 }

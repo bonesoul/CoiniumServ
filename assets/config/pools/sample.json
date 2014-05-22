@@ -1,0 +1,47 @@
+{
+	Enabled: true,
+	
+	Coin: {
+		Config: "litecoin.json"
+	},
+
+	# coin daemon config
+	Daemon: {
+		Host: "127.0.0.1",
+		Port: 9333,
+		Username: "user",
+		Password: "password"
+	},
+
+	# stratum server config
+	Stratum: {
+		Bind: "0.0.0.0",
+		Port: 3333,
+		Diff: 16
+	},
+
+	# vanilla server config
+	Vanilla: {
+		Bind: "localhost",
+		Port: 3334			
+	},
+
+	# payment processing
+	PaymentProcessing: {
+		Enabled: false,
+		Interval: 60,
+		Minimum: 1
+	},
+
+	# mpos compat mode
+	MPOSCompat: {
+		Enabled: false,
+		Database: {
+			Host: "127.0.0.1",
+			Port: 3306,
+			Name: "db-name",
+			User: "username",
+			Password: "password"
+		}
+	}	
+}

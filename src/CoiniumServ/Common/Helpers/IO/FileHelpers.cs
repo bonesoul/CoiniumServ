@@ -54,5 +54,10 @@ namespace Coinium.Common.Helpers.IO
 
             return files.Select(file => file.Replace("\\", "/")).ToList();
         }
+
+        public static string ReadFile(string fileName)
+        {
+            return File.ReadAllText(fileName);
+        }
     }
 }

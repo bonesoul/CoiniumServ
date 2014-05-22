@@ -16,35 +16,31 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Config;
+using System.IO;
+using Serilog;
+using Serilog.Events;
 
-namespace Coinium.Core.Server.Web
+namespace Coinium.Common.Logging
 {
-    public sealed class Config : ConfigSection
+    /// <summary>
+    /// Controls the logging facilities.
+    /// </summary>
+    public static class Logging
     {
-        private Config()
-            : base("WebServer")
-        { }
+        public const string LogRoot = @"logs";
 
-        public bool Enabled
+        public static void Init()
         {
-            get { return this.GetBoolean("Enabled", true); }
-            set { this.Set("Enabled", value); }
-        }
+            if (!Directory.Exists(LogRoot)) // make sure log root exists.
+                Directory.CreateDirectory(LogRoot);
 
-        public int Port
-        {
-            get { return this.GetInt("Port", 80); }
-            set { this.Set("Port", value); }
+            // configure the global logger.
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.ColoredConsole()
+                .WriteTo.RollingFile(@"logs\server-{Date}.log",restrictedToMinimumLevel: LogEventLevel.Information)
+                .WriteTo.RollingFile(@"logs\debug-{Date}.log")
+                .MinimumLevel.Verbose()
+                .CreateLogger();
         }
-
-        public string Interface
-        {
-            get { return this.GetString("Interface", "localhost"); }
-            set { this.Set("Interface", value); }
-        }
-
-        private static readonly Config _instance = new Config();
-        public static Config Instance { get { return _instance; } }
     }
 }
