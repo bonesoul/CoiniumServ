@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using Coinium.Core.Mining.Miner;
 using Ninject;
 
 namespace Coinium.Core.Server
@@ -33,10 +34,12 @@ namespace Coinium.Core.Server
         /// Gets the specified service name.
         /// </summary>
         /// <param name="serviceName">Name of the service.</param>
+        /// <param name="minerManager">The miner manager.</param>
         /// <returns></returns>
-        public IMiningServer Get(string serviceName)
+        public IMiningServer Get(string serviceName, IMinerManager minerManager)
         {
-            return _kernel.Get<IMiningServer>(serviceName);
+            var minerManagerParam = new Ninject.Parameters.ConstructorArgument("minerManager", minerManager);
+            return _kernel.Get<IMiningServer>(serviceName, minerManagerParam);
         }
     }
 }

@@ -30,9 +30,8 @@ namespace Coinium.Core.Server
         /// <summary>
         /// Initializes the specified pool.
         /// </summary>
-        /// <param name="pool">The pool.</param>
         /// <param name="serverConfig">The server configuration.</param>
-        void Initialize(IPool pool, IServerConfig serverConfig);
+        void Initialize(IServerConfig serverConfig);
 
         IServerConfig Config { get; }
     }

@@ -19,6 +19,7 @@
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 
 using System.Net;
+using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Server.Config;
 using Coinium.Net.Server.Http;
@@ -27,9 +28,14 @@ namespace Coinium.Core.Server.Vanilla
 {
     public class VanillaServer : HttpServer, IMiningServer
     {
-        public IPool Pool { get; set; }
+        private readonly IMinerManager _minerManager;
 
-        public void Initialize(IPool pool, IServerConfig serverConfig)
+        public VanillaServer(IMinerManager minerManager)
+        {
+            _minerManager = minerManager;
+        }
+
+        public void Initialize(IServerConfig serverConfig)
         {
             base.Initialize(serverConfig.Port);
             this.Config = serverConfig;
@@ -45,7 +51,7 @@ namespace Coinium.Core.Server.Vanilla
 
         private void ProcessHttpRequest(HttpListenerContext context)
         {
-            var miner = this.Pool.MinerManager.Create<VanillaMiner>();
+            var miner = _minerManager.Create<VanillaMiner>();
             miner.Parse(context);                        
         }
     }

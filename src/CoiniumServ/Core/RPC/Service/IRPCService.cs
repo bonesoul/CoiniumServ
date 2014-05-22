@@ -22,12 +22,6 @@ namespace Coinium.Core.RPC.Service
 {
     public interface IRPCService
     {
-        IPool Pool { get; set; }
 
-        /// <summary>
-        /// Initializes the specified pool.
-        /// </summary>
-        /// <param name="pool">The pool.</param>
-        void Initialize(IPool pool);
     }
 }

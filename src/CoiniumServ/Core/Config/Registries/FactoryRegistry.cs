@@ -17,7 +17,9 @@
 */
 
 using Coinium.Core.Coin.Algorithms;
+using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Pool;
+using Coinium.Core.Mining.Share;
 using Coinium.Core.RPC.Service;
 using Coinium.Core.Server;
 using Ninject;
@@ -39,6 +41,8 @@ namespace Coinium.Core.Config.Registries
             _kernel.Bind<IPoolFactory>().To<PoolFactory>().InSingletonScope();
             _kernel.Bind<IServerFactory>().To<ServerFactory>().InSingletonScope();
             _kernel.Bind<IServiceFactory>().To<ServiceFactory>().InSingletonScope();
+            _kernel.Bind<IJobManagerFactory>().To<JobManagerFactory>().InSingletonScope();
+            _kernel.Bind<IShareManagerFactory>().To<ShareManagerFactory>().InSingletonScope();
         }
     }
 }

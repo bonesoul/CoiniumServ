@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
@@ -43,10 +44,13 @@ namespace Coinium.Core.Mining.Pool
     {
         private readonly IDaemonClient _daemonClient;
         private readonly IMinerManager _minerManager;
-        private readonly IJobManager _jobManager;
-        private readonly IShareManager _shareManager;
         private readonly IServerFactory _serverFactory;
         private readonly IServiceFactory _serviceFactory;
+        private readonly IJobManagerFactory _jobManagerFactory;
+        private readonly IShareManagerFactory _shareManagerFactory;
+        private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
+        private IJobManager _jobManager;
+        private IShareManager _shareManager;
 
         private Dictionary<IMiningServer, IRPCService> _servers;
         public IDictionary<IMiningServer, IRPCService> Servers { get { return _servers; } }
@@ -63,14 +67,25 @@ namespace Coinium.Core.Mining.Pool
 
         private Timer _timer;
 
-        public Pool(IServerFactory serverFactory, IServiceFactory serviceFactory, IDaemonClient client, IMinerManager minerManager, IJobManager jobManager, IShareManager shareManager)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Pool" /> class.
+        /// </summary>
+        /// <param name="hashAlgorithmFactory">The hash algorithm factory.</param>
+        /// <param name="serverFactory">The server factory.</param>
+        /// <param name="serviceFactory">The service factory.</param>
+        /// <param name="client">The client.</param>
+        /// <param name="minerManager">The miner manager.</param>
+        /// <param name="jobManagerFactory">The job manager factory.</param>
+        /// <param name="shareManagerFactory">The share manager factory.</param>
+        public Pool(IHashAlgorithmFactory hashAlgorithmFactory, IServerFactory serverFactory, IServiceFactory serviceFactory, IDaemonClient client, IMinerManager minerManager, IJobManagerFactory jobManagerFactory, IShareManagerFactory shareManagerFactory)
         {
             _daemonClient = client;
             _minerManager = minerManager;
-            _jobManager = jobManager;
-            _shareManager = shareManager;
+            _jobManagerFactory = jobManagerFactory;
+            _shareManagerFactory = shareManagerFactory;
             _serverFactory = serverFactory;
             _serviceFactory = serviceFactory;
+            _hashAlgorithmFactory = hashAlgorithmFactory;
             this.GenerateInstanceId();
         }
 
@@ -85,19 +100,19 @@ namespace Coinium.Core.Mining.Pool
                 throw new ArgumentNullException("config", "config.DaemonConfig can not be null!");
 
             _daemonClient.Initialize(config.DaemonConfig);
-            _minerManager.Initialize(this);
-            _jobManager.Initialize(this, InstanceId);
-            _shareManager.Initialize(this);
 
+            _jobManager = _jobManagerFactory.Get(_daemonClient, _minerManager);
+            _jobManager.Initialize(InstanceId);
+
+            _shareManager = _shareManagerFactory.Get(_hashAlgorithmFactory.Get(config.AlgorithmName), _jobManager);
 
             _servers = new Dictionary<IMiningServer, IRPCService>();
             foreach (var serverConfig in config.ServerConfigs)
             {
-                var server = _serverFactory.Get(serverConfig.Name);
-                server.Initialize(this, serverConfig);
+                var server = _serverFactory.Get(serverConfig.Name, _minerManager);
+                server.Initialize(serverConfig);
 
-                var rpcService = _serviceFactory.Get(serverConfig.Name);
-                rpcService.Initialize(this);
+                var rpcService = _serviceFactory.Get(serverConfig.Name, _jobManager, _shareManager, _daemonClient);
                 
                 _servers.Add(server, rpcService);
             }

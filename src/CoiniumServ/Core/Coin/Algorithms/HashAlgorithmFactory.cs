@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using Coinium.Common.Constants;
 using Ninject;
 
 namespace Coinium.Core.Coin.Algorithms
@@ -43,6 +44,9 @@ namespace Coinium.Core.Coin.Algorithms
         /// <returns></returns>
         public IHashAlgorithm Get(string algorithmName)
         {
+            // Default to Scrypt
+            if (string.IsNullOrWhiteSpace(algorithmName)) algorithmName = AlgorithmNames.Scrypt;
+
             return _kernel.Get<IHashAlgorithm>(algorithmName);
         }
     }

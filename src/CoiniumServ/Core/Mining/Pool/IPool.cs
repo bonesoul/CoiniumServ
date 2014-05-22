@@ -16,34 +16,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Mining.Jobs;
-using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool.Config;
-using Coinium.Core.Mining.Share;
-using Coinium.Core.RPC;
-using Coinium.Core.RPC.Service;
-using Coinium.Core.Server;
 
 namespace Coinium.Core.Mining.Pool
 {
     public interface IPool
     {
-        IDictionary<IMiningServer, IRPCService> Servers { get; }
-
-        IDaemonClient DaemonClient { get; }
-
-        IMinerManager MinerManager { get; }
-
-        IJobManager JobManager { get; }
-
-        IShareManager ShareManager { get; }
-
-        UInt64 InstanceId { get; }
-
         /// <summary>
         /// Initializes the specified bind ip.
         /// </summary>

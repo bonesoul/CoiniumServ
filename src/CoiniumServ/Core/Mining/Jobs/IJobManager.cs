@@ -24,7 +24,6 @@ namespace Coinium.Core.Mining.Jobs
 {
     public interface IJobManager
     {
-        IPool Pool { get; set; }
 
         IExtraNonce ExtraNonce { get; }
 
@@ -37,8 +36,7 @@ namespace Coinium.Core.Mining.Jobs
         /// <summary>
         /// Initializes the specified pool.
         /// </summary>
-        /// <param name="pool">The pool.</param>
         /// <param name="instanceId">The instance identifier.</param>
-        void Initialize(IPool pool, ulong instanceId);
+        void Initialize(ulong instanceId);
     }
 }

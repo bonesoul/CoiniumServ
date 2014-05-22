@@ -28,9 +28,29 @@ namespace Coinium.Core.Mining.Pool.Config
     /// </summary>
     public class PoolConfig : IPoolConfig
     {
+        /// <summary>
+        /// Gets the server configs.
+        /// </summary>
+        /// <value>
+        /// The server configs.
+        /// </value>
         public IList<IServerConfig> ServerConfigs { get; private set; }
 
+        /// <summary>
+        /// Gets the daemon configuration.
+        /// </summary>
+        /// <value>
+        /// The daemon configuration.
+        /// </value>
         public IDaemonConfig DaemonConfig { get; private set; }
+        
+        /// <summary>
+        /// Gets the name of the algorithm.
+        /// </summary>
+        /// <value>
+        /// The name of the algorithm.
+        /// </value>
+        public string AlgorithmName { get; private set; }
 
         public PoolConfig(IServerConfig stratumServerConfig, IServerConfig vanillaServerConfig, IDaemonConfig daemonConfig)
         {
