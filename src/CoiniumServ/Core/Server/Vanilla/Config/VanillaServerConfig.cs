@@ -27,6 +27,8 @@ namespace Coinium.Core.Server.Vanilla.Config
 
         public string Name { get; private set; }
 
+        public bool Enabled { get; private set; }
+
         public string BindInterface { get; private set; }
 
         public Int32 Port { get; private set; }
@@ -40,8 +42,9 @@ namespace Coinium.Core.Server.Vanilla.Config
             }
 
             this.Name = RpcServiceNames.Vanilla;
-            this.BindInterface = !string.IsNullOrEmpty(config.Bind) ? config.Bind : "localhost";
-            this.Port = config.Port;
+            this.Enabled = config.enabled;
+            this.BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "localhost";
+            this.Port = config.port;
 
             this.Valid = true;
         }

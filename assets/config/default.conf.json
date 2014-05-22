@@ -1,0 +1,40 @@
+{
+    # log configuration
+	"logs": {
+		"root": "logs",
+		"targets": [
+			{
+				"type": "console",
+				"level": "verbose"
+			},
+			{
+				"type": "file",
+				"filename": "server-{Date}.log",
+				"rolling": true,
+				"level":	"information"
+			},
+			{
+				"type": "file",
+				"filename": "debug-{Date}.log",
+				"rolling": true,
+				"level": "verbose"
+			}
+        ]	
+	},
+
+	# website configuration
+	"website": {
+		"enabled": false,
+		"bind": "0.0.0.0",
+		"port": 80
+	},
+    
+    # database configuration.
+	"database": {
+		"redis": {
+			"enabled": false,
+			"host": "127.0.0.1",
+			"port": 6379
+		}
+	}
+}
