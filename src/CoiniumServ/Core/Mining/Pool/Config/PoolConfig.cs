@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using Coinium.Common.Helpers.IO;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Server.Config;
 
@@ -51,6 +52,12 @@ namespace Coinium.Core.Mining.Pool.Config
         /// The name of the algorithm.
         /// </value>
         public string AlgorithmName { get; private set; }
+
+        public PoolConfig(string fileName)
+        {
+            var file = FileHelpers.ReadFile(fileName);
+            var test = JsonConfig.Config.ApplyJsonFromPath(fileName);
+        }
 
         public PoolConfig(IServerConfig stratumServerConfig, IServerConfig vanillaServerConfig, IDaemonConfig daemonConfig)
         {

@@ -17,6 +17,7 @@
 */
 
 using System.Collections.Generic;
+using Coinium.Common.Helpers.IO;
 using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Mining.Pool.Config;
 using Coinium.Core.Server.Stratum.Config;
@@ -39,7 +40,7 @@ namespace Coinium.Core.Mining.Pool
 
         public void Run()
         {
-            // we should be loading pools from configs here - this.LoadPoolsConfig();    
+            this.LoadConfigs(); 
             
             var stratumServerConfig = new StratumServerConfig("0.0.0.0", 3333);
             var vanillaServerConfig = new VanillaServerConfig(3334);
@@ -47,6 +48,18 @@ namespace Coinium.Core.Mining.Pool
             var poolConfig = new PoolConfig(stratumServerConfig, vanillaServerConfig, daemonConfig);
 
             this.AddPool(poolConfig);
+        }
+
+        public void LoadConfigs()
+        {
+            var coinConfigRoot = "config/coins";
+            var poolConfigRoot = "config/pools";
+
+            var files = FileHelpers.GetFilesByExtensionRecursive(poolConfigRoot, ".json");
+            foreach (var file in files)
+            {
+                var poolConfig = new PoolConfig(file);
+            }
         }
 
         public IList<IPool> GetPools()

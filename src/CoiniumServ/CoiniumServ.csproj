@@ -692,6 +692,10 @@
       <Link>config\pools\sample.conf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\pools\sample.json">
+      <Link>config\pools\sample.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -703,6 +707,10 @@
     <ProjectReference Include="..\..\deps\json-rpc.net\Json-Rpc\AustinHarris.JsonRpc.csproj">
       <Project>{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}</Project>
       <Name>AustinHarris.JsonRpc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\deps\jsonconfig\JsonConfig\JsonConfig.csproj">
+      <Project>{10095092-e1e5-441f-9380-b6329f3cfeb4}</Project>
+      <Name>JsonConfig</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
