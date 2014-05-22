@@ -681,9 +681,15 @@
       <Link>config\coins\zzcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\default.conf">
+      <Link>default.conf</Link>
+    </None>
     <None Include="..\..\assets\config\pools\sample.json">
       <Link>config\pools\sample.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\settings.conf">
+      <Link>settings.conf</Link>
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
