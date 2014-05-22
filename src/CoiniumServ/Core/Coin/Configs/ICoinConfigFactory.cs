@@ -16,19 +16,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Core.Coin.Daemon
+namespace Coinium.Core.Coin.Configs
 {
-    public class DaemonConfig:IDaemonConfig
+    public interface ICoinConfigFactory
     {
-        public string Url { get; private set; }
-        public string Username { get; private set; }
-        public string Password { get; private set; }
-
-        public DaemonConfig(string url, string username, string password)
-        {
-            this.Url = url;
-            this.Username = username;
-            this.Password = password;
-        }
     }
 }

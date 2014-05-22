@@ -17,28 +17,33 @@
 */
 
 using System;
-using Coinium.Common.Constants;
+using Coinium.Core.RPC.Service;
 
 namespace Coinium.Core.Server.Vanilla.Config
 {
     public class VanillaServerConfig : IVanillaServerConfig 
     {
+        public bool Valid { get; private set; }
+
         public string Name { get; private set; }
+
         public string BindInterface { get; private set; }
 
         public Int32 Port { get; private set; }
 
         public VanillaServerConfig(dynamic config)
         {
-            this.Name = RPCServiceNames.Vanilla;
+            if (config == null)
+            {
+                this.Valid = false;
+                return;
+            }
+
+            this.Name = RpcServiceNames.Vanilla;
             this.BindInterface = !string.IsNullOrEmpty(config.Bind) ? config.Bind : "localhost";
             this.Port = config.Port;
-        }
 
-        public VanillaServerConfig(Int32 port)
-        {
-            this.Name = RPCServiceNames.Vanilla;
-            this.Port = port;
+            this.Valid = true;
         }
     }
 }

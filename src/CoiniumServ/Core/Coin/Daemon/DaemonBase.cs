@@ -26,6 +26,7 @@
 using System;
 using System.IO;
 using System.Net;
+using Coinium.Core.Coin.Daemon.Config;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -43,7 +44,8 @@ namespace Coinium.Core.Coin.Daemon
 
         public virtual void Initialize(IDaemonConfig config)
         {
-            this.RpcUrl = config.Url;
+            var url = string.Format("{0}", config.Url);
+            this.RpcUrl = url;
             this.RpcUser = config.Username;
             this.RpcPassword = config.Password;
         }
@@ -116,9 +118,9 @@ namespace Coinium.Core.Coin.Daemon
                     dataStream.Close();
                 }
             }
-            catch (Exception ex)
+            catch (WebException exception)
             {
-                throw new Exception("There was a problem sending the request.", ex);
+                throw new Exception("There was a problem communicating with coin daemon.", exception);
             }
 
             return webRequest;

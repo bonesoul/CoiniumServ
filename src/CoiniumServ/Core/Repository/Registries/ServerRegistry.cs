@@ -16,26 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using JsonConfig;
-using Serilog;
+using Coinium.Core.Context;
+using Coinium.Core.RPC.Service;
+using Coinium.Core.Server;
+using Coinium.Core.Server.Stratum;
+using Coinium.Core.Server.Vanilla;
 
-namespace Coinium.Common.Config
+namespace Coinium.Core.Repository.Registries
 {
-    public static class JsonConfigReader
+    public class ServerRegistry : IRegistry
     {
-        public static dynamic Read(string fileName)
-        {
-            try
-            {
-                return JsonConfig.Config.ApplyJsonFromPath(fileName, new ConfigObject());
-            }
-            catch (Exception e)
-            {
-                Log.Error("Json parsing failed for: {0}.", fileName);
-            }
+        private readonly IApplicationContext _applicationContext;
 
-            return null;
+        public ServerRegistry(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
+
+        public void RegisterInstances()
+        {
+            _applicationContext.Kernel.Bind<IMiningServer>().To<VanillaServer>().Named(RpcServiceNames.Vanilla);
+            _applicationContext.Kernel.Bind<IMiningServer>().To<StratumServer>().Named(RpcServiceNames.Stratum);
         }
     }
 }

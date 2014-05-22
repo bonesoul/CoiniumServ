@@ -58,6 +58,10 @@
     <Reference Include="Jayrock.Json">
       <HintPath>..\..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
     </Reference>
+    <Reference Include="JsonFx, Version=2.0.1209.2802, Culture=neutral, PublicKeyToken=315052dd637f8a52, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\packages\JsonFx.2.0.1209.2802\lib\net40\JsonFx.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\..\build\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -67,9 +71,6 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Nini">
-      <HintPath>..\..\build\packages\Trove.Nini.1.1.0.0\lib\net20\Nini.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -91,9 +92,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationContext.cs" />
+    <Compile Include="Core\Context\ApplicationContext.cs" />
     <Compile Include="Common\Config\JsonConfigReader.cs" />
-    <Compile Include="Common\Constants\RPCServiceNames.cs" />
+    <Compile Include="Core\RPC\Service\RpcServiceNames.cs" />
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Common\Extensions\StringExtensions.cs" />
@@ -106,33 +107,38 @@
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
     <Compile Include="Common\Attributes\DefaultInstanceAttribute.cs" />
-    <Compile Include="Common\Constants\AlgorithmNames.cs" />
+    <Compile Include="Core\Coin\Algorithms\AlgorithmNames.cs" />
     <Compile Include="Core\Coin\Algorithms\IHashAlgorithmFactory.cs" />
     <Compile Include="Core\Coin\Algorithms\HashAlgorithmFactory.cs" />
     <Compile Include="Core\Coin\Algorithms\IHashAlgorithm.cs" />
     <Compile Include="Core\Coin\Algorithms\Scrypt.cs" />
     <Compile Include="Core\Coin\Address\Base58.cs" />
-    <Compile Include="Core\Coin\Daemon\DaemonConfig.cs" />
+    <Compile Include="Core\Coin\Configs\CoinConfig.cs" />
+    <Compile Include="Core\Coin\Configs\CoinConfigFactory.cs" />
+    <Compile Include="Core\Coin\Configs\ICoinConfig.cs" />
+    <Compile Include="Core\Coin\Configs\ICoinConfigFactory.cs" />
+    <Compile Include="Core\Coin\Daemon\Config\DaemonConfig.cs" />
     <Compile Include="Core\Coin\Daemon\IDaemonClient.cs" />
-    <Compile Include="Core\Coin\Daemon\IDaemonConfig.cs" />
+    <Compile Include="Core\Coin\Daemon\Config\IDaemonConfig.cs" />
     <Compile Include="Core\Coin\Helpers\Serializers.cs" />
     <Compile Include="Core\Coin\Coinbase\CoinbaseUtils.cs" />
     <Compile Include="Core\Coin\Exceptions\AddressFormatException.cs" />
     <Compile Include="Core\Coin\Exceptions\InvalidWalletAddressException.cs" />
     <Compile Include="Core\Coin\Transactions\GenerationTransaction.cs" />
     <Compile Include="Core\Coin\Helpers\Amount.cs" />
-    <Compile Include="Core\Config\Bootstrapper.cs" />
-    <Compile Include="Core\Config\Registries\ClassRegistry.cs" />
-    <Compile Include="Core\Config\Registries\IRegistry.cs" />
-    <Compile Include="Core\Config\Registries\FactoryRegistry.cs" />
-    <Compile Include="Core\Config\Registries\ManagerRegistry.cs" />
-    <Compile Include="Core\Config\Registries\ServerRegistry.cs" />
-    <Compile Include="Core\Config\Registries\ServiceRegistry.cs" />
+    <Compile Include="Core\Repository\Bootstrapper.cs" />
+    <Compile Include="Core\Config\IConfig.cs" />
+    <Compile Include="Core\Repository\Registries\ClassRegistry.cs" />
+    <Compile Include="Core\Repository\Registries\IRegistry.cs" />
+    <Compile Include="Core\Repository\Registries\FactoryRegistry.cs" />
+    <Compile Include="Core\Repository\Registries\ManagerRegistry.cs" />
+    <Compile Include="Core\Repository\Registries\ServerRegistry.cs" />
+    <Compile Include="Core\Repository\Registries\ServiceRegistry.cs" />
     <Compile Include="Core\Crypto\Hash.cs" />
     <Compile Include="Core\Commands\CommandAttributes.cs" />
     <Compile Include="Core\Commands\CommandGroup.cs" />
     <Compile Include="Core\Commands\CommandManager.cs" />
-    <Compile Include="Core\Config\Registries\Registry.cs" />
+    <Compile Include="Core\Repository\Registries\Registry.cs" />
     <Compile Include="Core\Crypto\Utils.cs" />
     <Compile Include="Core\Mining\Events\MinerAuthenticationEventArgs.cs" />
     <Compile Include="Core\Mining\Jobs\ExtraNonce.cs" />
@@ -156,7 +162,7 @@
     <Compile Include="Core\Mining\Share\IShareManager.cs" />
     <Compile Include="Core\Mining\Share\ShareManagerFactory.cs" />
     <Compile Include="Core\Mining\Share\ShareManager.cs" />
-    <Compile Include="Core\RPC\Service\IRPCService.cs" />
+    <Compile Include="Core\RPC\Service\IRpcService.cs" />
     <Compile Include="Core\Server\IMiningServer.cs" />
     <Compile Include="Core\Server\Config\IServerConfig.cs" />
     <Compile Include="Core\Server\IServerFactory.cs" />
@@ -185,7 +191,7 @@
     <Compile Include="Core\Server\Stratum\StratumMiner.cs" />
     <Compile Include="Core\Server\Stratum\StratumService.cs" />
     <Compile Include="Core\Coin\Daemon\Responses\Work.cs" />
-    <Compile Include="IApplicationContext.cs" />
+    <Compile Include="Core\Context\IApplicationContext.cs" />
     <Compile Include="Net\Server\Http\HttpServer.cs" />
     <Compile Include="Net\Server\IServer.cs" />
     <Compile Include="Net\Server\Sockets\ConnectionEventArgs.cs" />
@@ -712,7 +718,7 @@
     <Compile Include="Core\Server\Stratum\Config\StratumServerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Coin\Configs\" />
+    <Folder Include="Common\Constants\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

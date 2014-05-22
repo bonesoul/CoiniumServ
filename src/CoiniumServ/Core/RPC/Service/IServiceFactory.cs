@@ -32,6 +32,6 @@ namespace Coinium.Core.RPC.Service
         /// <param name="shareManager">The share manager.</param>
         /// <param name="daemonClient">The daemon client.</param>
         /// <returns></returns>
-        IRPCService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient);
+        IRpcService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient);
     }
 }

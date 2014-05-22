@@ -17,12 +17,12 @@
 */
 
 using System;
-using System.Collections.Generic;
+using System.IO;
+using Coinium.Core.Coin.Configs;
 using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Server.Config;
+using Coinium.Core.Coin.Daemon.Config;
 using Coinium.Core.Server.Stratum.Config;
 using Coinium.Core.Server.Vanilla.Config;
-using JsonConfig;
 
 namespace Coinium.Core.Mining.Pool.Config
 {
@@ -31,17 +31,12 @@ namespace Coinium.Core.Mining.Pool.Config
     /// </summary>
     public class PoolConfig : IPoolConfig
     {
-        public bool Enabled { get; private set; }
-        public IStratumServerConfig StratumConfig { get; private set; }
-        public IVanillaServerConfig VanillaConfig { get; private set; }
+        public bool Valid { get; private set; }
 
-        /// <summary>
-        /// Gets the server configs.
-        /// </summary>
-        /// <value>
-        /// The server configs.
-        /// </value>
-        public IList<IServerConfig> ServerConfigs { get; private set; }
+        public bool Enabled { get; private set; }
+        public ICoinConfig Coin { get; private set; }
+        public IStratumServerConfig Stratum { get; private set; }
+        public IVanillaServerConfig Vanilla { get; private set; }
 
         /// <summary>
         /// Gets the daemon configuration.
@@ -49,38 +44,45 @@ namespace Coinium.Core.Mining.Pool.Config
         /// <value>
         /// The daemon configuration.
         /// </value>
-        public IDaemonConfig DaemonConfig { get; private set; }
-        
-        /// <summary>
-        /// Gets the name of the algorithm.
-        /// </summary>
-        /// <value>
-        /// The name of the algorithm.
-        /// </value>
-        public string AlgorithmName { get; private set; }
+        public IDaemonConfig Daemon { get; private set; }
 
         public PoolConfig(dynamic config)
         {
-            this.Enabled = config.Enabled ? config.Enabled : false;                            
+            if (config == null)
+            {
+                this.Valid = false;
+                return;
+            }
 
-            this.StratumConfig = new StratumServerConfig(config.Stratum);
-            this.VanillaConfig = new VanillaServerConfig(config.Vanilla);
-        }
+            this.Enabled = config.Enabled ? config.Enabled : false;
 
-        public PoolConfig(IServerConfig stratumServerConfig, IServerConfig vanillaServerConfig, IDaemonConfig daemonConfig)
-        {
-            this.ServerConfigs = new List<IServerConfig>();
+            var coinName = Path.GetFileNameWithoutExtension(config.Coin);
+            this.Coin = CoinConfigFactory.GetConfig(coinName);
 
-            if(stratumServerConfig == null && vanillaServerConfig == null)
-                throw new ArgumentException("At least one server configuration needs to be supplied.");
+            if (this.Coin == null)
+            {
+                this.Valid = false;
+                return;
+            }
 
-            if (stratumServerConfig != null)
-                ServerConfigs.Add(stratumServerConfig);
+            this.Stratum = new StratumServerConfig(config.Stratum);
+            this.Vanilla = new VanillaServerConfig(config.Vanilla);
 
-            if (vanillaServerConfig != null)
-                ServerConfigs.Add(vanillaServerConfig);
+            if (this.Stratum == null && this.Vanilla == null)
+            {
+                this.Valid = false;
+                return;
+            }
 
-            this.DaemonConfig = daemonConfig;
+            this.Daemon = new DaemonConfig(config.Daemon);
+
+            if (this.Daemon == null)
+            {
+                this.Valid = false;
+                return;
+            }
+
+            this.Valid = true;
         }
     }
 }

@@ -16,33 +16,29 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Coin.Algorithms;
+using Coinium.Core.Context;
 using Coinium.Core.Mining.Jobs;
+using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Mining.Share;
-using Coinium.Core.RPC.Service;
-using Coinium.Core.Server;
-using Ninject;
 
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.Repository.Registries
 {
-    public class FactoryRegistry : IRegistry
+    public class ManagerRegistry : IRegistry
     {
         private readonly IApplicationContext _applicationContext;
 
-        public FactoryRegistry(IApplicationContext applicationContext)
+        public ManagerRegistry(IApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
         }
 
         public void RegisterInstances()
         {
-            _applicationContext.Kernel.Bind<IHashAlgorithmFactory>().To<HashAlgorithmFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IPoolFactory>().To<PoolFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IServerFactory>().To<ServerFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IServiceFactory>().To<ServiceFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IJobManagerFactory>().To<JobManagerFactory>().InSingletonScope();
-            _applicationContext.Kernel.Bind<IShareManagerFactory>().To<ShareManagerFactory>().InSingletonScope();
+            _applicationContext.Kernel.Bind<IShareManager>().To<ShareManager>();
+            _applicationContext.Kernel.Bind<IMinerManager>().To<MinerManager>();
+            _applicationContext.Kernel.Bind<IJobManager>().To<JobManager>();
+            _applicationContext.Kernel.Bind<IPoolManager>().To<PoolManager>().InSingletonScope();
         }
     }
 }

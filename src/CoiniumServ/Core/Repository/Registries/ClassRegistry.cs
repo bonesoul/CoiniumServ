@@ -16,29 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Core.Mining.Jobs;
-using Coinium.Core.Mining.Miner;
+using Coinium.Core.Coin.Algorithms;
+using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Context;
 using Coinium.Core.Mining.Pool;
-using Coinium.Core.Mining.Share;
-using Ninject;
 
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.Repository.Registries
 {
-    public class ManagerRegistry : IRegistry
+    public class ClassRegistry : IRegistry
     {
         private readonly IApplicationContext _applicationContext;
 
-        public ManagerRegistry(IApplicationContext applicationContext)
+        public ClassRegistry(IApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
         }
 
         public void RegisterInstances()
         {
-            _applicationContext.Kernel.Bind<IShareManager>().To<ShareManager>();
-            _applicationContext.Kernel.Bind<IMinerManager>().To<MinerManager>();
-            _applicationContext.Kernel.Bind<IJobManager>().To<JobManager>();
-            _applicationContext.Kernel.Bind<IPoolManager>().To<PoolManager>().InSingletonScope();
+            _applicationContext.Kernel.Bind<IHashAlgorithm>().To<Scrypt>().Named(AlgorithmNames.Scrypt);
+            _applicationContext.Kernel.Bind<IDaemonClient>().To<DaemonClient>();
+            _applicationContext.Kernel.Bind<IPool>().To<Pool>();
         }
     }
 }

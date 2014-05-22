@@ -16,7 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Common.Constants;
+using Coinium.Core.Context;
 using Ninject;
 
 namespace Coinium.Core.Coin.Algorithms

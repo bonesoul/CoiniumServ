@@ -16,27 +16,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Common.Constants;
-using Coinium.Core.Coin.Algorithms;
-using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Mining.Pool;
-
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.Coin.Algorithms
 {
-    public class ClassRegistry : IRegistry
+    public static class AlgorithmNames
     {
-        private readonly IApplicationContext _applicationContext;
-
-        public ClassRegistry(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
-
-        public void RegisterInstances()
-        {
-            _applicationContext.Kernel.Bind<IHashAlgorithm>().To<Scrypt>().Named(AlgorithmNames.Scrypt);
-            _applicationContext.Kernel.Bind<IDaemonClient>().To<DaemonClient>();
-            _applicationContext.Kernel.Bind<IPool>().To<Pool>();
-        }
+        public const string Scrypt = "scrypt";
     }
 }

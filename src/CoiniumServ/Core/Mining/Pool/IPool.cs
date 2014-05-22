@@ -22,10 +22,12 @@ namespace Coinium.Core.Mining.Pool
 {
     public interface IPool
     {
+        IPoolConfig Config { get; }
+
         /// <summary>
         /// Initializes the specified bind ip.
         /// </summary>
-        /// <param name="config">The configuration.</param>
+        /// <param name="config">The configuration.</param>        
         void Initialize(IPoolConfig config);
 
         void Start();

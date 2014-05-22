@@ -17,6 +17,7 @@
 */
 
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Context;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Share;
 using Ninject;
@@ -33,7 +34,6 @@ namespace Coinium.Core.RPC.Service
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceFactory"/> class.
         /// </summary>
-        /// <param name="kernel">The kernel.</param>
         public ServiceFactory(IApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
@@ -47,12 +47,12 @@ namespace Coinium.Core.RPC.Service
         /// <param name="shareManager">The share manager.</param>
         /// <param name="daemonClient">The daemon client.</param>
         /// <returns></returns>
-        public IRPCService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient)
+        public IRpcService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient)
         {
             var jobManagerParam = new Ninject.Parameters.ConstructorArgument("jobManager", jobManager);
             var shareManagerParam = new Ninject.Parameters.ConstructorArgument("shareManager", shareManager);
             var daemonClientParam = new Ninject.Parameters.ConstructorArgument("daemonClient", daemonClient);
-            return _applicationContext.Kernel.Get<IRPCService>(serviceName, jobManagerParam, shareManagerParam, daemonClientParam);
+            return _applicationContext.Kernel.Get<IRpcService>(serviceName, jobManagerParam, shareManagerParam, daemonClientParam);
         }
     }
 }

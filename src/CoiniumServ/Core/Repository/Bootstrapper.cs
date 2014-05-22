@@ -16,26 +16,33 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using JsonConfig;
-using Serilog;
+using Coinium.Core.Context;
+using Coinium.Core.Repository.Registries;
+using Ninject;
 
-namespace Coinium.Common.Config
+namespace Coinium.Core.Repository
 {
-    public static class JsonConfigReader
+    public class Bootstrapper
     {
-        public static dynamic Read(string fileName)
-        {
-            try
-            {
-                return JsonConfig.Config.ApplyJsonFromPath(fileName, new ConfigObject());
-            }
-            catch (Exception e)
-            {
-                Log.Error("Json parsing failed for: {0}.", fileName);
-            }
+        private readonly IKernel _kernel;
 
-            return null;
+        public Bootstrapper(IKernel kernel)
+        {
+            _kernel = kernel;
+        }
+
+        public void Run()
+        {
+            var masterRegistry = new Registry(_kernel);
+            masterRegistry.RegisterInstances();
+
+            var applicationContext = _kernel.Get<IApplicationContext>();
+            applicationContext.Initialize(_kernel);
+
+            foreach (var registry in _kernel.GetAll<IRegistry>())
+            {
+                registry.RegisterInstances();
+            }
         }
     }
 }

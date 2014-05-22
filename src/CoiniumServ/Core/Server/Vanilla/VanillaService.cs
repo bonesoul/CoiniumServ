@@ -30,7 +30,7 @@ namespace Coinium.Core.Server.Vanilla
     /// <summary>
     /// Stratum protocol implementation.
     /// </summary>
-    public class VanillaService : JsonRpcService, IRPCService
+    public class VanillaService : JsonRpcService, IRpcService
     {
         private readonly IDaemonClient _daemonClient;
 

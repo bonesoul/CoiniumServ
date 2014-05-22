@@ -16,26 +16,11 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using JsonConfig;
-using Serilog;
-
-namespace Coinium.Common.Config
+namespace Coinium.Core.RPC.Service
 {
-    public static class JsonConfigReader
+    public static class RpcServiceNames
     {
-        public static dynamic Read(string fileName)
-        {
-            try
-            {
-                return JsonConfig.Config.ApplyJsonFromPath(fileName, new ConfigObject());
-            }
-            catch (Exception e)
-            {
-                Log.Error("Json parsing failed for: {0}.", fileName);
-            }
-
-            return null;
-        }
+        public const string Vanilla = "Vanilla";
+        public const string Stratum = "Stratum";
     }
 }

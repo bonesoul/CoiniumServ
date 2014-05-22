@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Coin.Daemon;
+using Coinium.Core.Coin.Daemon.Config;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Miner;
 using Coinium.Core.Mining.Pool.Config;
@@ -36,6 +37,8 @@ namespace Coinium.Core.Mining.Pool
     /// </summary>
     public class Pool : IPool
     {
+        public IPoolConfig Config { get; private set; }
+
         private readonly IDaemonClient _daemonClient;
         private readonly IMinerManager _minerManager;
         private readonly IServerFactory _serverFactory;
@@ -46,7 +49,7 @@ namespace Coinium.Core.Mining.Pool
         private IJobManager _jobManager;
         private IShareManager _shareManager;
 
-        private Dictionary<IMiningServer, IRPCService> _servers;
+        private Dictionary<IMiningServer, IRpcService> _servers;
 
         /// <summary>
         /// Instance id of the pool.
@@ -81,37 +84,74 @@ namespace Coinium.Core.Mining.Pool
         /// Initializes the specified bind ip.
         /// </summary>
         /// <param name="config">The configuration.</param>
-        /// <exception cref="System.ArgumentNullException">config;config.DaemonConfig can not be null!</exception>
+        /// <exception cref="System.ArgumentNullException">config;config.Daemon can not be null!</exception>
         public void Initialize(IPoolConfig config)
         {
-            if (config.DaemonConfig == null)
-                throw new ArgumentNullException("config", "config.DaemonConfig can not be null!");
+            this.Config = config;
 
-            _daemonClient.Initialize(config.DaemonConfig);
+            // init managers.
+            this.InitManagers();
 
-            _jobManager = _jobManagerFactory.Get(_daemonClient, _minerManager);
-            _jobManager.Initialize(InstanceId);
+            // init coin daemon.
+            this.InitDaemon();
 
-            _shareManager = _shareManagerFactory.Get(_hashAlgorithmFactory.Get(config.AlgorithmName), _jobManager);
-
-            _servers = new Dictionary<IMiningServer, IRPCService>();
-            foreach (var serverConfig in config.ServerConfigs)
-            {
-                var server = _serverFactory.Get(serverConfig.Name, _minerManager);
-                server.Initialize(serverConfig);
-
-                var rpcService = _serviceFactory.Get(serverConfig.Name, _jobManager, _shareManager, _daemonClient);
-                
-                _servers.Add(server, rpcService);
-            }
+            // init servers
+            this.InitServers();
 
             // other stuff
             this._timer = new Timer(Timer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
         }
 
+        private void InitManagers()
+        {
+            _jobManager = _jobManagerFactory.Get(_daemonClient, _minerManager);
+            _jobManager.Initialize(InstanceId);
+
+            _shareManager = _shareManagerFactory.Get(_hashAlgorithmFactory.Get(this.Config.Coin.Algorithm), _jobManager);
+        }
+
+        private void InitDaemon()
+        {
+            if (this.Config.Daemon == null || this.Config.Daemon.Valid == false)
+                Log.Error("Coin daemon configuration is not valid!");
+
+            _daemonClient.Initialize(this.Config.Daemon);
+        }
+
+        private void InitServers()
+        {
+            _servers = new Dictionary<IMiningServer, IRpcService>();
+
+            // we don't need here a server config list as a pool can host only one instance of stratum and one vanilla server.
+            // we must be dictative here, using a server list may cause situations we don't want (multiple stratum configs etc..)
+            if (this.Config.Stratum != null)
+            {
+                var stratumServer = _serverFactory.Get("Stratum", _minerManager);
+                var stratumService = _serviceFactory.Get("Stratum", _jobManager, _shareManager, _daemonClient);
+                stratumServer.Initialize(this.Config.Stratum);
+
+                _servers.Add(stratumServer, stratumService);
+            }
+
+            if (this.Config.Vanilla != null)
+            {
+                var vanillaServer = _serverFactory.Get("Vanilla", _minerManager);
+                var vanillaService = _serviceFactory.Get("Vanilla", _jobManager, _shareManager, _daemonClient);
+
+                vanillaServer.Initialize(this.Config.Vanilla);
+
+                _servers.Add(vanillaServer, vanillaService);
+            }
+        }
+
         public void Start()
         {
-            if (_servers == null) throw new Exception("At least one server is required. Please check your configuration.");
+            if (!this.Config.Valid)
+            {
+                Log.Error("Can't start pool as configuration is not valid.");
+                return;
+            }                
+
             foreach (var server in _servers)
             {
                 server.Key.Start();

@@ -17,12 +17,14 @@
 */
 
 using System;
-using Coinium.Common.Constants;
+using Coinium.Core.RPC.Service;
 
 namespace Coinium.Core.Server.Stratum.Config
 {
     public class StratumServerConfig:IStratumServerConfig
     {
+        public bool Valid { get; private set; }
+
         public string Name { get; private set; }
 
         public string BindInterface { get; private set; }
@@ -31,16 +33,17 @@ namespace Coinium.Core.Server.Stratum.Config
 
         public StratumServerConfig(dynamic config)
         {
-            this.Name = RPCServiceNames.Stratum;
+            if (config == null)
+            {
+                this.Valid = false;
+                return;
+            }
+
+            this.Name = RpcServiceNames.Stratum;
             this.BindInterface = !string.IsNullOrEmpty(config.Bind) ? config.Bind : "0.0.0.0";
             this.Port = config.Port;
-        }
 
-        public StratumServerConfig(string bindInterface, Int32 port)
-        {
-            this.Name = RPCServiceNames.Stratum;
-            this.BindInterface = bindInterface;
-            this.Port = port;
+            this.Valid = true;
         }
     }
 }

@@ -16,28 +16,30 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Ninject;
+using System;
 
-namespace Coinium.Core.Config.Registries
+namespace Coinium.Core.Coin.Configs
 {
-    public class Registry : IRegistry
+    public class CoinConfig : ICoinConfig
     {
-        private readonly IKernel _kernel;
+        public bool Valid { get; private set; }
+        public string Name { get; private set; }
+        public string Symbol { get; private set; }
+        public string Algorithm { get; private set; }
 
-        public Registry(IKernel kernel)
+        public CoinConfig(dynamic config)
         {
-            _kernel = kernel;
-        }
+            if (config == null)
+            {
+                this.Valid = false;
+                return;
+            }
 
-        public void RegisterInstances()
-        {
-            _kernel.Bind<IApplicationContext>().To<ApplicationContext>().InSingletonScope();
+            this.Name = config.name;
+            this.Symbol = config.symbol;
+            this.Algorithm = config.algorithm;
 
-            _kernel.Bind<IRegistry>().To<ManagerRegistry>();
-            _kernel.Bind<IRegistry>().To<ServerRegistry>();
-            _kernel.Bind<IRegistry>().To<ServiceRegistry>();
-            _kernel.Bind<IRegistry>().To<ClassRegistry>();
-            _kernel.Bind<IRegistry>().To<FactoryRegistry>();
+            this.Valid = true;
         }
     }
 }
