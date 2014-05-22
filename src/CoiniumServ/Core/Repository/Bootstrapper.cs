@@ -18,28 +18,28 @@
 
 using Coinium.Core.Context;
 using Coinium.Core.Repository.Registries;
-using Ninject;
+using Nancy.TinyIoc;
 
 namespace Coinium.Core.Repository
 {
     public class Bootstrapper
     {
-        private readonly IKernel _kernel;
+        private readonly TinyIoCContainer _container;
 
-        public Bootstrapper(IKernel kernel)
+        public Bootstrapper(TinyIoCContainer container)
         {
-            _kernel = kernel;
+            _container = container;
         }
 
         public void Run()
         {
-            var masterRegistry = new Registry(_kernel);
+            var masterRegistry = new Registry(_container);
             masterRegistry.RegisterInstances();
 
-            var applicationContext = _kernel.Get<IApplicationContext>();
-            applicationContext.Initialize(_kernel);
+            var applicationContext = _container.Resolve<IApplicationContext>();
+            applicationContext.Initialize(_container);
 
-            foreach (var registry in _kernel.GetAll<IRegistry>())
+            foreach (var registry in _container.ResolveAll<IRegistry>())
             {
                 registry.RegisterInstances();
             }

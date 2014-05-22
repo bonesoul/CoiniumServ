@@ -20,7 +20,7 @@ using Coinium.Core.Coin.Daemon;
 using Coinium.Core.Context;
 using Coinium.Core.Mining.Jobs;
 using Coinium.Core.Mining.Share;
-using Ninject;
+using Nancy.TinyIoc;
 
 namespace Coinium.Core.RPC.Service
 {
@@ -49,10 +49,8 @@ namespace Coinium.Core.RPC.Service
         /// <returns></returns>
         public IRpcService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient)
         {
-            var jobManagerParam = new Ninject.Parameters.ConstructorArgument("jobManager", jobManager);
-            var shareManagerParam = new Ninject.Parameters.ConstructorArgument("shareManager", shareManager);
-            var daemonClientParam = new Ninject.Parameters.ConstructorArgument("daemonClient", daemonClient);
-            return _applicationContext.Kernel.Get<IRpcService>(serviceName, jobManagerParam, shareManagerParam, daemonClientParam);
+            var @params = new NamedParameterOverloads() { { "jobManager", jobManager }, { "shareManager", shareManager }, { "daemonClient", daemonClient } };
+            return _applicationContext.Container.Resolve<IRpcService>(serviceName, @params);
         }
     }
 }

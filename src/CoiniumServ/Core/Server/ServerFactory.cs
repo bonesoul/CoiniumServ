@@ -18,7 +18,7 @@
 
 using Coinium.Core.Context;
 using Coinium.Core.Mining.Miner;
-using Ninject;
+using Nancy.TinyIoc;
 
 namespace Coinium.Core.Server
 {
@@ -39,8 +39,8 @@ namespace Coinium.Core.Server
         /// <returns></returns>
         public IMiningServer Get(string serviceName, IMinerManager minerManager)
         {
-            var minerManagerParam = new Ninject.Parameters.ConstructorArgument("minerManager", minerManager);
-            return _applicationContext.Kernel.Get<IMiningServer>(serviceName, minerManagerParam);
+            var @params = new NamedParameterOverloads() {{"minerManager", minerManager}};
+            return _applicationContext.Container.Resolve<IMiningServer>(serviceName, @params);
         }
     }
 }
