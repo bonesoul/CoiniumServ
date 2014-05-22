@@ -1,7 +1,7 @@
 ﻿using Coinium.Core.Coin.Algorithms;
 using Coinium.Core.Context;
 using Coinium.Core.Mining.Jobs;
-using Ninject;
+using Nancy.TinyIoc;
 
 namespace Coinium.Core.Mining.Share
 {
@@ -29,10 +29,9 @@ namespace Coinium.Core.Mining.Share
         /// <returns></returns>
         public IShareManager Get(IHashAlgorithm hashAlgorithm, IJobManager jobManager)
         {
-            var hashAlgorithmParam = new Ninject.Parameters.ConstructorArgument("hashAlgorithm", hashAlgorithm);
-            var jobManagerParam = new Ninject.Parameters.ConstructorArgument("jobManager", jobManager);
+            var @params = new NamedParameterOverloads() {{"hashAlgorithm", hashAlgorithm}, {"jobManager", jobManager}};
 
-            return _applicationContext.Kernel.Get<IShareManager>(hashAlgorithmParam, jobManagerParam);
+            return _applicationContext.Container.Resolve<IShareManager>(@params);
         }
     }
 }

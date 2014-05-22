@@ -17,7 +17,7 @@
 */
 
 using Coinium.Core.Context;
-using Ninject;
+using Nancy.TinyIoc;
 
 namespace Coinium.Core.Coin.Algorithms
 {
@@ -47,7 +47,7 @@ namespace Coinium.Core.Coin.Algorithms
             // Default to Scrypt
             if (string.IsNullOrWhiteSpace(algorithmName)) algorithmName = AlgorithmNames.Scrypt;
 
-            return _applicationContext.Kernel.Get<IHashAlgorithm>(algorithmName);
+            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithmName);
         }
     }
 }

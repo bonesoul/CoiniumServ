@@ -27,7 +27,8 @@ using Coinium.Core.Commands;
 using Coinium.Core.Mining.Pool;
 using Coinium.Core.Repository;
 using Serilog;
-using Ninject;
+using Nancy.TinyIoc;
+using Nancy.TinyIoc;
 
 namespace Coinium
 {
@@ -49,7 +50,7 @@ namespace Coinium
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
             // start the ioc kernel.
-            var kernel = new StandardKernel();
+            var kernel = TinyIoCContainer.Current;
             new Bootstrapper(kernel).Run();
 
             // print intro texts.
@@ -64,7 +65,7 @@ namespace Coinium
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
             // start pool manager.
-            var poolManager = kernel.Get<IPoolManager>();
+            var poolManager = kernel.Resolve<IPoolManager>();
             poolManager.Run();
 
             // run pools.
