@@ -1,0 +1,5 @@
+{
+    "name": "Bitcoin",
+    "symbol": "BTC",
+    "algorithm": "sha256"
+}

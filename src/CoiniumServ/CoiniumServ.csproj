@@ -236,13 +236,463 @@
     <Compile Include="Common\Console\ConsoleWindow.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\assets\config\coins\365coin.json">
+      <Link>config\coins\365coin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\alphacoin.json">
+      <Link>config\coins\alphacoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\anoncoin.json">
+      <Link>config\coins\anoncoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\applecoin.json">
+      <Link>config\coins\applecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\asiccoin.json">
+      <Link>config\coins\asiccoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\auroracoin.json">
+      <Link>config\coins\auroracoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\battlecoin.json">
+      <Link>config\coins\battlecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\benjamins.json">
+      <Link>config\coins\benjamins.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\betacoin.json">
+      <Link>config\coins\betacoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\bitcoin.json">
+      <Link>config\coins\bitcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\bottlecaps.json">
+      <Link>config\coins\bottlecaps.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\bytecoin.json">
+      <Link>config\coins\bytecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\cachecoin.json">
+      <Link>config\coins\cachecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\casinocoin.json">
+      <Link>config\coins\casinocoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\catcoin.json">
+      <Link>config\coins\catcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\copperbars.json">
+      <Link>config\coins\copperbars.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\copperlark.json">
+      <Link>config\coins\copperlark.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\cryptometh.json">
+      <Link>config\coins\cryptometh.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\darkcoin.json">
+      <Link>config\coins\darkcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\defcoin.json">
+      <Link>config\coins\defcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\devcoin.json">
+      <Link>config\coins\devcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\diamondcoin.json">
+      <Link>config\coins\diamondcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\digibyte.json">
+      <Link>config\coins\digibyte.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\dogecoin.json">
+      <Link>config\coins\dogecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\earthcoin.json">
+      <Link>config\coins\earthcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\einsteinium.json">
+      <Link>config\coins\einsteinium.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\elephantcoin.json">
+      <Link>config\coins\elephantcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\emark.json">
+      <Link>config\coins\emark.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\emerald.json">
+      <Link>config\coins\emerald.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\execoin.json">
+      <Link>config\coins\execoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\ezcoin.json">
+      <Link>config\coins\ezcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\fastcoin.json">
+      <Link>config\coins\fastcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\feathercoin.json">
+      <Link>config\coins\feathercoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\fedoracoin.json">
+      <Link>config\coins\fedoracoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\fireflycoin.json">
+      <Link>config\coins\fireflycoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\flappycoin.json">
+      <Link>config\coins\flappycoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\florincoin.json">
+      <Link>config\coins\florincoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\frankocoin.json">
+      <Link>config\coins\frankocoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\freecoin.json">
+      <Link>config\coins\freecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\freicoin.json">
+      <Link>config\coins\freicoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\galaxycoin.json">
+      <Link>config\coins\galaxycoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\galleon.json">
+      <Link>config\coins\galleon.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\gamecoin.json">
+      <Link>config\coins\gamecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\giarcoin.json">
+      <Link>config\coins\giarcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\globalboost.json">
+      <Link>config\coins\globalboost.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\globalcoin.json">
+      <Link>config\coins\globalcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\globaldenomination.json">
+      <Link>config\coins\globaldenomination.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\goldpressedlatinum.json">
+      <Link>config\coins\goldpressedlatinum.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\grandcoin.json">
+      <Link>config\coins\grandcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\groestlcoin.json">
+      <Link>config\coins\groestlcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\guarantcoin.json">
+      <Link>config\coins\guarantcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\helixcoin.json">
+      <Link>config\coins\helixcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\hirocoin.json">
+      <Link>config\coins\hirocoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\hobonickels.json">
+      <Link>config\coins\hobonickels.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\internetcoin.json">
+      <Link>config\coins\internetcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\ixcoin.json">
+      <Link>config\coins\ixcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\jennycoin.json">
+      <Link>config\coins\jennycoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\joulecoin.json">
+      <Link>config\coins\joulecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\junkcoin.json">
+      <Link>config\coins\junkcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\kittehcoin.json">
+      <Link>config\coins\kittehcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\klondikecoin.json">
+      <Link>config\coins\klondikecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\krugercoin.json">
+      <Link>config\coins\krugercoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\litecoin.json">
+      <Link>config\coins\litecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\lottocoin.json">
+      <Link>config\coins\lottocoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\luckycoin.json">
+      <Link>config\coins\luckycoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\maxcoin.json">
+      <Link>config\coins\maxcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\mazacoin.json">
+      <Link>config\coins\mazacoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\memecoin.json">
+      <Link>config\coins\memecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\microcoin.json">
+      <Link>config\coins\microcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\mintcoin.json">
+      <Link>config\coins\mintcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\muniti.json">
+      <Link>config\coins\muniti.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\myriadcoin.json">
+      <Link>config\coins\myriadcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\neocoin.json">
+      <Link>config\coins\neocoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\netcoin.json">
+      <Link>config\coins\netcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\noirbits.json">
+      <Link>config\coins\noirbits.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\onecoin.json">
+      <Link>config\coins\onecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\opensourcecoin.json">
+      <Link>config\coins\opensourcecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\peercoin.json">
+      <Link>config\coins\peercoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\phoenixcoin.json">
+      <Link>config\coins\phoenixcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\potcoin.json">
+      <Link>config\coins\potcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\procoin.json">
+      <Link>config\coins\procoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\quarkcoin.json">
+      <Link>config\coins\quarkcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\radioactivecoin.json">
+      <Link>config\coins\radioactivecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\reddcoin.json">
+      <Link>config\coins\reddcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\ronpaulcoin.json">
+      <Link>config\coins\ronpaulcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\rubycoin.json">
+      <Link>config\coins\rubycoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\saffroncoin.json">
+      <Link>config\coins\saffroncoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\sexcoin.json">
+      <Link>config\coins\sexcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\skeincoin.json">
+      <Link>config\coins\skeincoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\spartancoin.json">
+      <Link>config\coins\spartancoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\spots.json">
+      <Link>config\coins\spots.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\stablecoin.json">
+      <Link>config\coins\stablecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\starcoin.json">
+      <Link>config\coins\starcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\stoopidcoin.json">
+      <Link>config\coins\stoopidcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\suncoin.json">
+      <Link>config\coins\suncoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\takcoin.json">
+      <Link>config\coins\takcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\teacoin.json">
+      <Link>config\coins\teacoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\tekcoin.json">
+      <Link>config\coins\tekcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\terracoin.json">
+      <Link>config\coins\terracoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\tigercoin.json">
+      <Link>config\coins\tigercoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\ultimatecoin.json">
+      <Link>config\coins\ultimatecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\ultracoin.json">
+      <Link>config\coins\ultracoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\unobtanium.json">
+      <Link>config\coins\unobtanium.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\velocitycoin.json">
+      <Link>config\coins\velocitycoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\vertcoin.json">
+      <Link>config\coins\vertcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\wecoin.json">
+      <Link>config\coins\wecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\whitecoin.json">
+      <Link>config\coins\whitecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\xencoin.json">
+      <Link>config\coins\xencoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\yacoin.json">
+      <Link>config\coins\yacoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\ybcoin.json">
+      <Link>config\coins\ybcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\zetacoin.json">
+      <Link>config\coins\zetacoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\zzcoin.json">
+      <Link>config\coins\zzcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\default.conf">
+      <Link>config\default.conf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\pools\sample.conf">
+      <Link>config\pools\sample.conf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="App.config" />
-    <None Include="Conf\default.conf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Conf\Pools\sample.conf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
