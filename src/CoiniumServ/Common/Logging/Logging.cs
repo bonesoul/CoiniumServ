@@ -72,7 +72,7 @@ namespace Coinium.Common.Logging
                 // bind the config to global log.
                 Log.Logger = loggerConfig.CreateLogger();
             }
-            catch (RuntimeBinderException e)
+            catch (RuntimeBinderException)
             {
                 System.Console.ForegroundColor = ConsoleColor.Red;
                 System.Console.WriteLine("Couldn't read settings.conf.json! Make sure you rename settings-sample.conf.json.");

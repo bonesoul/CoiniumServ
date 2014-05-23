@@ -24,17 +24,17 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 using Coinium.Common.Versions;
 
-[assembly: AssemblyTitle("Coinium")]
+[assembly: AssemblyTitle("CoiniumServ")]
 [assembly: AssemblyDescription("Crypto currency pool software")]
 #if DEBUG
     [assembly: AssemblyConfiguration("Debug")]
 #else
     [assembly: AssemblyConfiguration("Release")]
 #endif
-[assembly: AssemblyCompany("coinium.org")]
-[assembly: AssemblyProduct("coinium")]
+    [assembly: AssemblyCompany("Coinium.org")]
+    [assembly: AssemblyProduct("CoiniumServ")]
 [assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, coinium project, http://www.coinium.org")]
-[assembly: AssemblyTrademark("coinium")]
+[assembly: AssemblyTrademark("CoiniumServ")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

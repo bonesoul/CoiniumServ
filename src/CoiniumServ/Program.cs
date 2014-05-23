@@ -20,12 +20,12 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using Coinium.Common.Commands;
 using Coinium.Common.Console;
 using Coinium.Common.Logging;
 using Coinium.Common.Platform;
-using Coinium.Core.Commands;
-using Coinium.Core.Mining.Pool;
-using Coinium.Core.Repository;
+using Coinium.Common.Repository;
+using Coinium.Mining.Pool;
 using Serilog;
 using Nancy.TinyIoc;
 
