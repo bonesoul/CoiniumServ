@@ -251,7 +251,7 @@ namespace Coinium.Coin.Daemon
         /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
         /// https://en.bitcoin.it/wiki/Getblocktemplate
         /// </summary>
-        public BlockTemplate GetBlockTemplate(params object[] @params)
+        public BlockTemplate GetBlockTemplate()
         {
             var capabilities = new Dictionary<string, object>
             {
@@ -259,6 +259,30 @@ namespace Coinium.Coin.Daemon
             };
 
             return MakeRequest<BlockTemplate>("getblocktemplate", capabilities);
+        }
+
+        /// <summary>
+        /// Submits a block.
+        /// </summary>
+        /// <param name="blockHex"></param>
+        /// <returns></returns>
+        public BlockTemplate GetBlockTemplate(string blockHex)
+        {
+            var submission = new Dictionary<string, object>
+            {
+                {"mode", "submit"},
+                {"data", blockHex}
+            };
+
+            return MakeRequest<BlockTemplate>("getblocktemplate", submission);
+        }
+
+        /// <summary>
+        /// Attempts to submit new block to network.
+        /// </summary>
+        public string SubmitBlock(string blockHex)
+        {
+            return MakeRequest<string>("submitblock", blockHex);
         }
 
         /// <summary>
@@ -726,15 +750,7 @@ namespace Coinium.Coin.Daemon
         {
             return MakeRequest<string>("stop", null);
         }
-
-        
-        /// <summary>
-        /// Attempts to submit new block to network.
-        /// </summary>
-        public void SubmitBlock()
-        {
-            throw new NotImplementedException();
-        }
+       
 
         /// <summary>
         /// Return information about the bitcoin address. 

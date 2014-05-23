@@ -5,7 +5,11 @@ namespace Coinium.Coin.Daemon
 {
     public interface IDaemonClient
     {
-        BlockTemplate GetBlockTemplate(params object[] @params);
+        BlockTemplate GetBlockTemplate();
+
+        BlockTemplate GetBlockTemplate(string blockHex);
+
+        string SubmitBlock(string blockHex);
 
         Work Getwork();
 
