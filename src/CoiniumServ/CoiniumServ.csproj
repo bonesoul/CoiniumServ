@@ -683,10 +683,6 @@
       <Link>config\coins\zzcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <EmbeddedResource Include="..\..\assets\config\default.conf.json">
-      <Link>default.conf.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
     <None Include="..\..\assets\config\pools\sample.json">
       <Link>config\pools\sample.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
