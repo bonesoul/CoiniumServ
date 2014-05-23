@@ -28,7 +28,6 @@ using Coinium.Core.Mining.Pool;
 using Coinium.Core.Repository;
 using Serilog;
 using Nancy.TinyIoc;
-using Nancy.TinyIoc;
 
 namespace Coinium
 {
