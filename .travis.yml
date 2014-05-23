@@ -13,7 +13,8 @@ before_install:
 - ./build/extra/travis-build.sh
 script:
 - xbuild build/CoiniumServ.sln
-- mono contrib/xunit/xunit.console.clr4.x86.exe src/Tests/bin/Debug/CoiniumServ.Tests.dll
+- chmod +x ./build/extra/run-tests.sh
+- ./build/extra/run-tests.sh
 notifications:
   irc: chat.freenode.net#coinium-dev
   email: false
