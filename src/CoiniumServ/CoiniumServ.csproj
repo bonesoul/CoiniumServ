@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="Common\Context\ApplicationContext.cs" />
     <Compile Include="Common\Configuration\JsonConfigReader.cs" />
+    <Compile Include="Common\Helpers\Validation\Enforce.cs" />
     <Compile Include="Rpc\Service\RpcServiceNames.cs" />
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />

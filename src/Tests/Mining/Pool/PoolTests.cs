@@ -1,4 +1,5 @@
-﻿using Coinium.Coin.Algorithms;
+﻿using System;
+using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Miner;
 using Coinium.Mining.Jobs;
@@ -7,7 +8,6 @@ using Coinium.Mining.Share;
 using Coinium.Rpc.Service;
 using Coinium.Server;
 using Moq;
-using Should.Fluent;
 using Xunit;
 
 namespace Tests.Mining.Pool
@@ -59,6 +59,132 @@ namespace Tests.Mining.Pool
         }
 
         [Fact]
+        public void ConstructorTest_NullHashAlgorithmFactory_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pool.Pool(
+                    null,
+                    _serverFactory.Object,
+                    _serviceFactory.Object,
+                    _daemonClient.Object,
+                    _minerManager.Object,
+                    _jobManagerFactory.Object,
+                    _shareManagerFactory.Object);
+            });
+
+            Assert.True(ex.Message.Contains("IHashAlgorithmFactory"));
+        }
+
+        [Fact]
+        public void ConstructorTest_NullServerFactory_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pool.Pool(
+                    _hashAlgorithmFactory.Object,
+                    null,
+                    _serviceFactory.Object,
+                    _daemonClient.Object,
+                    _minerManager.Object,
+                    _jobManagerFactory.Object,
+                    _shareManagerFactory.Object);
+            });
+
+            Assert.True(ex.Message.Contains("IServerFactory"));
+        }
+
+        [Fact]
+        public void ConstructorTest_NullServiceFactory_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pool.Pool(
+                    _hashAlgorithmFactory.Object,
+                    _serverFactory.Object,
+                    null,
+                    _daemonClient.Object,
+                    _minerManager.Object,
+                    _jobManagerFactory.Object,
+                    _shareManagerFactory.Object);
+            });
+
+            Assert.True(ex.Message.Contains("IServiceFactory"));
+        }
+
+        [Fact]
+        public void ConstructorTest_NullDaemonClient_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pool.Pool(
+                    _hashAlgorithmFactory.Object,
+                    _serverFactory.Object,
+                    _serviceFactory.Object,
+                    null,
+                    _minerManager.Object,
+                    _jobManagerFactory.Object,
+                    _shareManagerFactory.Object);
+            });
+
+            Assert.True(ex.Message.Contains("IDaemonClient"));
+        }
+
+        [Fact]
+        public void ConstructorTest_NullMinerManager_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pool.Pool(
+                    _hashAlgorithmFactory.Object,
+                    _serverFactory.Object,
+                    _serviceFactory.Object,
+                    _daemonClient.Object,
+                    null,
+                    _jobManagerFactory.Object,
+                    _shareManagerFactory.Object);
+            });
+
+            Assert.True(ex.Message.Contains("IMinerManager"));
+        }
+
+        [Fact]
+        public void ConstructorTest_NullJobManagerFactory_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pool.Pool(
+                    _hashAlgorithmFactory.Object,
+                    _serverFactory.Object,
+                    _serviceFactory.Object,
+                    _daemonClient.Object,
+                    _minerManager.Object,
+                    null,
+                    _shareManagerFactory.Object);
+            });
+
+            Assert.True(ex.Message.Contains("IJobManagerFactory"));
+        }
+
+        [Fact]
+        public void ConstructorTest_NullShareManagerFactory_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pool.Pool(
+                    _hashAlgorithmFactory.Object,
+                    _serverFactory.Object,
+                    _serviceFactory.Object,
+                    _daemonClient.Object,
+                    _minerManager.Object,
+                    _jobManagerFactory.Object,
+                    null);
+            });
+
+            Assert.True(ex.Message.Contains("IShareManagerFactory"));
+        }
+
+        [Fact]
         public void InitializeTest_NonNullParams_ShouldSucceed()
         {
             #region Assemble
@@ -77,6 +203,7 @@ namespace Tests.Mining.Pool
 
             var config = new Mock<IPoolConfig>();
             config.SetupAllProperties();
+            config.SetupGet(x => x.Daemon.Valid).Returns(true);
 
             _jobManagerFactory
                 .Setup(x => x.Get(_daemonClient.Object, _minerManager.Object))
