@@ -55,9 +55,6 @@
     <Reference Include="HashLib">
       <HintPath>..\..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
     </Reference>
-    <Reference Include="Jayrock.Json">
-      <HintPath>..\..\build\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
-    </Reference>
     <Reference Include="JsonFx, Version=2.0.1209.2802, Culture=neutral, PublicKeyToken=315052dd637f8a52, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\JsonFx.2.0.1209.2802\lib\net40\JsonFx.dll</HintPath>
@@ -89,7 +86,6 @@
     <Compile Include="Rpc\Service\RpcServiceNames.cs" />
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Common\Extensions\StringExtensions.cs" />
     <Compile Include="Common\Helpers\Arrays\ArrayHelpers.cs" />
     <Compile Include="Common\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Common\Helpers\Misc\Range.cs" />
@@ -98,7 +94,6 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
-    <Compile Include="Common\Attributes\DefaultInstanceAttribute.cs" />
     <Compile Include="Coin\Algorithms\AlgorithmNames.cs" />
     <Compile Include="Coin\Algorithms\IHashAlgorithmFactory.cs" />
     <Compile Include="Coin\Algorithms\HashAlgorithmFactory.cs" />
@@ -193,7 +188,7 @@
     <Compile Include="Net\Server\Sockets\IConnection.cs" />
     <Compile Include="Server\Stratum\Notifications\Job.cs" />
     <Compile Include="Server\Stratum\StratumServer.cs" />
-    <Compile Include="Common\Extensions\JSONFormatter.cs" />
+    <Compile Include="Common\Extensions\JsonExtensions.cs" />
     <Compile Include="Coin\Daemon\Requests\CreateRawTransaction.cs" />
     <Compile Include="Coin\Daemon\Requests\CreateRawTransactionInput.cs" />
     <Compile Include="Coin\Daemon\Requests\SignRawTransaction.cs" />
@@ -706,6 +701,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Server\Stratum\Config\StratumServerConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\Attributes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

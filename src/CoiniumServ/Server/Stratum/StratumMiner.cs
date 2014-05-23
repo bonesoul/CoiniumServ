@@ -83,7 +83,7 @@ namespace Coinium.Server.Stratum
         /// <param name="e"></param>
         public void Parse(ConnectionDataEventArgs e)
         {
-            Log.Verbose("Stratum recv:\n{0}", e.Data.ToEncodedString());
+            Log.Verbose("Stratum recv:\n{0}", e.Data.ToEncodedString().PrettifyJson());
 
             var rpcResultHandler = new AsyncCallback(
                 callback =>
@@ -97,7 +97,7 @@ namespace Coinium.Server.Stratum
                     var miner = (StratumMiner)context.Miner;
                     miner.Connection.Send(response);
 
-                    Log.Verbose("Stratum send:\n{0}", result);
+                    Log.Verbose("Stratum send:\n{0}", result.PrettifyJson());
                 });
 
             var line = e.Data.ToEncodedString();
@@ -154,7 +154,7 @@ namespace Coinium.Server.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             this.Connection.Send(data);
 
-            Log.Verbose("Stratum send:\n{0}", data.ToEncodedString());
+            Log.Verbose("Stratum send:\n{0}", data.ToEncodedString().PrettifyJson());
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Coinium.Server.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             this.Connection.Send(data);
 
-            Log.Verbose("Stratum send:\n{0}", data.ToEncodedString());
+            Log.Verbose("Stratum send:\n{0}", data.ToEncodedString().PrettifyJson());
         }
     }
 }
