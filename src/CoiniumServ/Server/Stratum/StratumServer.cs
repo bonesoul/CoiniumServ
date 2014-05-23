@@ -19,7 +19,6 @@
 // stratum server uses json-rpc 2.0 (over raw sockets) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 // classic server handles getwork & getblocktemplate miners over http.
 
-using Coinium.Common.Attributes;
 using Coinium.Miner;
 using Coinium.Net.Server.Sockets;
 using Coinium.Server.Config;
@@ -31,7 +30,6 @@ namespace Coinium.Server.Stratum
     /// <summary>
     /// Stratum protocol server implementation.
     /// </summary>
-    [DefaultInstance]
     public class StratumServer : SocketServer, IMiningServer
     {
 

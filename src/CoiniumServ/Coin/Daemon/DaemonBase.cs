@@ -27,6 +27,7 @@ using System;
 using System.IO;
 using System.Net;
 using Coinium.Coin.Daemon.Config;
+using Coinium.Common.Extensions;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -34,9 +35,10 @@ namespace Coinium.Coin.Daemon
 {
     public class DaemonBase
     {
-        public string RpcUrl { get; set; }
-        public string RpcUser { get; set; }
-        public string RpcPassword { get; set; }
+        public string RpcUrl { get; private set; }
+        public string RpcUser { get; private set; }
+        public string RpcPassword { get; private set; }
+        public Int32 RequestCounter { get; private set; }
 
         public DaemonBase()
         {
@@ -48,6 +50,7 @@ namespace Coinium.Coin.Daemon
             this.RpcUrl = url;
             this.RpcUser = config.Username;
             this.RpcPassword = config.Password;
+            this.RequestCounter = 0;
         }
 
         /// <summary>
@@ -62,7 +65,7 @@ namespace Coinium.Coin.Daemon
         /// <returns>The JSON RPC response deserialized as the given type.</returns>
         public T MakeRequest<T>(string method, params object[] parameters)
         {
-            var rpcResponse = MakeRpcRequest<T>(new DaemonRequest(1, method, parameters));
+            var rpcResponse = MakeRpcRequest<T>(new DaemonRequest(this.RequestCounter++, method, parameters));
             return rpcResponse.Result;
         }
 
@@ -105,7 +108,7 @@ namespace Coinium.Coin.Daemon
             webRequest.Method = "POST";
             webRequest.Timeout = 5000; // 5 seconds
 
-            Log.Verbose("WalletClient TX: {0}", System.Text.Encoding.UTF8.GetString(walletRequest.GetBytes()));
+            Log.Verbose("Daemon send: {0}", System.Text.Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
 
             byte[] byteArray = walletRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;
@@ -136,7 +139,7 @@ namespace Coinium.Coin.Daemon
         {
             string json = GetJsonResponse(httpWebRequest);
 
-            Log.Verbose("WalletClient RX: {0}", json);
+            Log.Verbose("Daemon recv: {0}", json.PrettifyJson());
 
             try
             {
@@ -183,6 +186,10 @@ namespace Coinium.Coin.Daemon
                 using (var stream = response.GetResponseStream())
                 using (var reader = new StreamReader(stream))
                 {
+                    string error = reader.ReadToEnd();
+
+                    Log.Verbose("Daemon error: {0}",  error.PrettifyJson());
+
                     throw new Exception(string.Format("{0} - {1}", response.StatusCode, reader.ReadToEnd()));
                 }
             }

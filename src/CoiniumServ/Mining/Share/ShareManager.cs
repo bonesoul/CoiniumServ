@@ -19,6 +19,7 @@
 using System;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Coinbase;
+using Coinium.Coin.Daemon;
 using Coinium.Coin.Helpers;
 using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
@@ -35,16 +36,18 @@ namespace Coinium.Mining.Share
 
         private readonly IHashAlgorithm _hashAlgorithm;
         private readonly IJobManager _jobManager;
+        private readonly IDaemonClient _daemonClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareManager" /> class.
         /// </summary>
         /// <param name="hashAlgorithm">The hash algorithm.</param>
         /// <param name="jobManager">The job manager.</param>
-        public ShareManager(IHashAlgorithm hashAlgorithm, IJobManager jobManager)
+        public ShareManager(IHashAlgorithm hashAlgorithm, IJobManager jobManager, IDaemonClient daemonClient)
         {
-            _hashAlgorithm = hashAlgorithm;
-            _jobManager = jobManager;
+            this._hashAlgorithm = hashAlgorithm;
+            this._jobManager = jobManager;
+            this._daemonClient = daemonClient;
 
             // TODO: THIS IS UNIQUE TO THE ALGO!!!!
             _diff1 = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
@@ -102,14 +105,30 @@ namespace Coinium.Mining.Share
             var target = new BigInteger(job.NetworkDifficulty, 16);
             if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
             {
-                var block = Serializers.SerializeBlock(job, header, coinbase).ToHexString();
+                var blockHex = Serializers.SerializeBlock(job, header, coinbase).ToHexString();
+
+                // we should be using another scrypt hash here? - https://github.com/zone117x/node-stratum-pool/blob/eb4b62e9c4de8a8cde83c2b3756ca1a45f02b957/lib/jobManager.js#L232
+
+                return this.SubmitBlock(blockHex);
             }
             else // invalid share.
             {
 
             }
 
-            return true;
+            return false;
+        }
+
+        private bool SubmitBlock(string blockHex)
+        {
+            var response = this._daemonClient.SubmitBlock(blockHex).ToLower();
+
+            if (response == "accepted")
+                return true;
+            else if (response == "rejected")
+                return false;
+
+            return false;
         }
     }
 }

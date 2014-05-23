@@ -82,7 +82,7 @@ namespace Coinium.Server.Vanilla
             {
                 var line = reader.ReadToEnd();  
           
-                Log.Verbose(line.PretifyJson());
+                Log.Verbose(line.PrettifyJson());
 
                 var rpcRequest = new HttpServiceRequest(line, httpContext);
                 var rpcContext = new HttpServiceContext(this, rpcRequest);

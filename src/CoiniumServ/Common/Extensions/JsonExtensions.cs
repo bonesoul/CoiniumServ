@@ -26,12 +26,13 @@ namespace Coinium.Common.Extensions
     /// Utility class to format a given JSON string so it is more readable and nicely indented.
     /// Original source from: http://stackoverflow.com/questions/4580397/json-formatter-in-c
     /// </summary>
-    public static class JsonFormatter
+    public static class JsonExtensions
     {
         public static string Indent = "    ";
 
-        public static string PrettyPrint(string input)
+        public static string PrettifyJson(this string input)
         {
+            input = input.Replace('\"', '\'');
             var output = new StringBuilder(input.Length * 2);
             char? quote = null;
             int depth = 0;

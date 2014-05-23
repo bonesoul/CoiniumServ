@@ -1,4 +1,5 @@
 ﻿using Coinium.Coin.Algorithms;
+using Coinium.Coin.Daemon;
 using Coinium.Mining.Jobs;
 
 namespace Coinium.Mining.Share
@@ -11,6 +12,6 @@ namespace Coinium.Mining.Share
         /// <param name="hashAlgorithm">The hash algorithm.</param>
         /// <param name="jobManager">The job manager.</param>
         /// <returns></returns>
-        IShareManager Get(IHashAlgorithm hashAlgorithm, IJobManager jobManager);
+        IShareManager Get(IHashAlgorithm hashAlgorithm, IJobManager jobManager, IDaemonClient daemonClient);
     }
 }
