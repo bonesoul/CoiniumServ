@@ -1,23 +1,22 @@
 {
+	# changing values in this file will no have no effects as it's actually loaded as an embedded assembly!
+	# to overload values, rename settings-sample.conf.json as settings.conf.json and use it.
+
     # log configuration
 	"logs": {
 		"root": "logs",
 		"targets": [
 			{
+				"enabled": true,
 				"type": "console",
 				"level": "verbose"
 			},
 			{
+				"enabled": true,
 				"type": "file",
 				"filename": "server-{Date}.log",
 				"rolling": true,
 				"level":	"information"
-			},
-			{
-				"type": "file",
-				"filename": "debug-{Date}.log",
-				"rolling": true,
-				"level": "verbose"
 			}
         ]	
 	},

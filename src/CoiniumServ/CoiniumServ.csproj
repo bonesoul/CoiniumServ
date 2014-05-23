@@ -691,8 +691,8 @@
       <Link>config\pools\sample.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\assets\config\settings.conf.json">
-      <Link>settings.conf.json</Link>
+    <None Include="..\..\assets\config\settings-sample.conf.json">
+      <Link>settings-sample.conf.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
