@@ -58,6 +58,12 @@ BountySource integration available over [here](https://www.bountysource.com/trac
 
 [![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1)
 
+#### Tips
+
+You can send tips and furher support the project or get tips for contributing by commiting.
+
+[![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)
+
 ### Donation
 
 You can contribute the development of the project by donating; 
