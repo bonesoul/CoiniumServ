@@ -47,7 +47,12 @@ namespace Coinium.Mining.Pool.Config
         /// </value>
         public IDaemonConfig Daemon { get; private set; }
 
-        public PoolConfig(dynamic config)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PoolConfig"/> class.
+        /// </summary>
+        /// <param name="coinConfigFactory">The coin configuration factory.</param>
+        /// <param name="config">The configuration.</param>
+        public PoolConfig(ICoinConfigFactory coinConfigFactory, dynamic config)
         {
             if (config == null)
             {
@@ -58,7 +63,7 @@ namespace Coinium.Mining.Pool.Config
             this.Enabled = config.enabled ? config.enabled : false;
 
             var coinName = Path.GetFileNameWithoutExtension(config.coin);
-            this.Coin = CoinConfigFactory.GetConfig(coinName);
+            this.Coin = coinConfigFactory.GetConfig(coinName);
 
             if (this.Coin == null)
             {

@@ -30,9 +30,12 @@ namespace Coinium.Mining.Pool
 
         private readonly IPoolFactory _poolFactory;
 
-        public PoolManager(IPoolFactory poolFactory)
+        private readonly IPoolConfigFactory _poolConfigFactory;
+
+        public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory)
         {
             _poolFactory = poolFactory;
+            _poolConfigFactory = poolConfigFactory;
             Log.Verbose("PoolManager() init..");
         }
 
@@ -49,7 +52,7 @@ namespace Coinium.Mining.Pool
 
             foreach (var file in files)
             {
-                var poolConfig = new PoolConfig(JsonConfigReader.Read(file));
+                var poolConfig = _poolConfigFactory.Get(JsonConfigReader.Read(file));
                 this.AddPool(poolConfig);
             }
         }

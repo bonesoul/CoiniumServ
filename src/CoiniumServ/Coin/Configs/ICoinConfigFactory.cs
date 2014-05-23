@@ -20,5 +20,11 @@ namespace Coinium.Coin.Configs
 {
     public interface ICoinConfigFactory
     {
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        ICoinConfig GetConfig(string name);
     }
 }

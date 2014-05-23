@@ -18,12 +18,27 @@
 
 using System;
 using CryptSharp.Utility;
+using Org.BouncyCastle.Math;
 
 namespace Coinium.Coin.Algorithms
 {
     public class Scrypt : IHashAlgorithm
     {
+        /// <summary>
+        /// Gets the multiplier.
+        /// </summary>
+        /// <value>
+        /// The multiplier.
+        /// </value>
         public UInt32 Multiplier { get; private set; }
+
+        /// <summary>
+        /// Gets the difficulty.
+        /// </summary>
+        /// <value>
+        /// The difficulty.
+        /// </value>
+        public BigInteger Difficulty { get; private set; }
 
         /// <summary>
         /// N parameter - CPU/memory cost parameter.
@@ -47,6 +62,8 @@ namespace Coinium.Coin.Algorithms
             this.R = 1;
             this.P = 1;
             this.Multiplier = (UInt32) Math.Pow(2, 16);
+
+            Difficulty = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
         }
 
         public byte[] Hash(byte[] input)

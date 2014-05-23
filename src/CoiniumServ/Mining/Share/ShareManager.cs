@@ -49,8 +49,7 @@ namespace Coinium.Mining.Share
             this._jobManager = jobManager;
             this._daemonClient = daemonClient;
 
-            // TODO: THIS IS UNIQUE TO THE ALGO!!!!
-            _diff1 = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
+            _diff1 = _hashAlgorithm.Difficulty;
         }
 
         /// <summary>
