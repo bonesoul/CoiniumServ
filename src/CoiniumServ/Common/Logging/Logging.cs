@@ -73,7 +73,7 @@ namespace Coinium.Common.Logging
         private static void AddConsoleLog(LoggerConfiguration configuration, dynamic target)
         {
             LogEventLevel level = GetLogLevel(target.level);
-            configuration.WriteTo.ColoredConsole(level);
+            configuration.WriteTo.ColoredConsole(level, "{Timestamp:HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}");            
         }
 
         private static void AddLogFile(LoggerConfiguration configuration, dynamic target)

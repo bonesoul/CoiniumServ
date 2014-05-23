@@ -14,9 +14,16 @@
 			{
 				"enabled": true,
 				"type": "file",
-				"filename": "server-{Date}.log",
+				"filename": "server.log",
 				"rolling": true,
-				"level":	"information"
+				"level": "information"
+			},
+			{
+				"enabled": true,
+				"type": "file",
+				"filename": "debug.log",
+				"rolling": true,
+				"level": "verbose"
 			}
         ]	
 	},

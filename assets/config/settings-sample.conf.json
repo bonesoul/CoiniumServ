@@ -1,15 +1,5 @@
 {
 	# you can add here your customized options that will be merged with values in default.conf
 
-	"logs": {
-		"targets": [
-			{
-				"enabled": true,
-				"type": "file",
-				"filename": "debug-{Date}.log",
-				"rolling": true,
-				"level": "verbose"
-			}
-        ]	
-	}
+
 }
