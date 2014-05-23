@@ -45,12 +45,14 @@ namespace Coinium.Common.Console
         /// </summary>
         public static void PrintLicense()
         {
-            System.Console.ForegroundColor = ConsoleColor.DarkYellow;
+            System.Console.ForegroundColor = ConsoleColor.Magenta;
             System.Console.WriteLine("Copyright (C) 2013 - 2014, Coinium project - http://www.coinium.org");
             System.Console.WriteLine();
+            System.Console.ForegroundColor = ConsoleColor.DarkYellow;
             System.Console.WriteLine("Coinium comes with ABSOLUTELY NO WARRANTY.");
             System.Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
             System.Console.WriteLine();
+            System.Console.ForegroundColor = ConsoleColor.Cyan;
             System.Console.WriteLine("You can contribute the development of the project by donating;");
             System.Console.WriteLine("BTC : 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D.");
             System.Console.WriteLine("LTC : LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa.");
