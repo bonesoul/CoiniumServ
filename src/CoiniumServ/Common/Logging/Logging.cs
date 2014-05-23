@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.IO;
 using JsonConfig;
 using Serilog;
@@ -28,22 +29,85 @@ namespace Coinium.Common.Logging
     /// </summary>
     public static class Logging
     {
-        public const string LogRoot = @"logs";
+        public static string RootFolder { get; private set; }
 
         public static void Init()
         {
-            if (!Directory.Exists(LogRoot)) // make sure log root exists.
-                Directory.CreateDirectory(LogRoot);
+            // read the root folder for logs.
+            RootFolder = !string.IsNullOrEmpty(Config.Global.logs.root) ? Config.Global.logs.root : "logs";
 
-            var root = !string.IsNullOrEmpty(Config.Global.logs.root) ? Config.Global.logs.root : "logs";               
+            if (!Directory.Exists(RootFolder)) // make sure log root exists.
+                Directory.CreateDirectory(RootFolder);
 
-            // configure the global logger.
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.ColoredConsole()
-                .WriteTo.RollingFile(@"logs\server-{Date}.log",restrictedToMinimumLevel: LogEventLevel.Information)
-                .WriteTo.RollingFile(@"logs\debug-{Date}.log")
-                .MinimumLevel.Verbose()
-                .CreateLogger();
+            // create the global logger.
+            var loggerConfig = new LoggerConfiguration();
+
+            // read log targets.
+            var targets = Config.Global.logs.targets;
+            foreach (dynamic target in targets)
+            {
+                var enabled = target.enabled;
+                if (!enabled)
+                    continue;
+
+                switch ((string)target.type)
+                {
+                    case "console":
+                        AddConsoleLog(loggerConfig, target);
+                        break;
+                    case "file":
+                        AddLogFile(loggerConfig, target);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // lower the default minimum level to verbose as sinks can only rise them but not lower.
+            loggerConfig.MinimumLevel.Verbose(); 
+
+            // bind the config to global log.
+            Log.Logger = loggerConfig.CreateLogger();
+        }
+
+        private static void AddConsoleLog(LoggerConfiguration configuration, dynamic target)
+        {
+            LogEventLevel level = GetLogLevel(target.level);
+            configuration.WriteTo.ColoredConsole(level, "{Timestamp:HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}");            
+        }
+
+        private static void AddLogFile(LoggerConfiguration configuration, dynamic target)
+        {
+            LogEventLevel level = GetLogLevel(target.level);
+            bool rolling = target.rolling;
+            var fileName = target.filename;
+            string filePath = String.Format("{0}/{1}", RootFolder, fileName);
+
+            if (rolling)
+                configuration.WriteTo.RollingFile(filePath, level);
+            else
+                configuration.WriteTo.File(filePath, level);
+        }
+
+        private static LogEventLevel GetLogLevel(dynamic level)
+        {
+            switch ((string)level)
+            {
+                case "verbose":
+                    return LogEventLevel.Verbose;
+                case "debug":
+                    return LogEventLevel.Debug;
+                case "information":
+                    return LogEventLevel.Information;
+                case "warning":
+                    return LogEventLevel.Warning;
+                case "error":
+                    return LogEventLevel.Error;
+                case "fatal":
+                    return LogEventLevel.Fatal;
+                default:
+                    return LogEventLevel.Verbose;
+            }
         }
     }
 }
