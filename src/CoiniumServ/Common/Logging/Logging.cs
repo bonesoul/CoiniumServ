@@ -18,6 +18,7 @@
 
 using System;
 using System.IO;
+using JsonConfig;
 using Microsoft.CSharp.RuntimeBinder;
 using Serilog;
 using Serilog.Events;
@@ -36,7 +37,7 @@ namespace Coinium.Common.Logging
             try
             {
                 // read the root folder for logs.
-                RootFolder = !string.IsNullOrEmpty(JsonConfig.Config.Global.logs.root) ? JsonConfig.Config.Global.logs.root : "logs";
+                RootFolder = !string.IsNullOrEmpty(Config.Global.logs.root) ? Config.Global.logs.root : "logs";
 
                 if (!Directory.Exists(RootFolder)) // make sure log root exists.
                     Directory.CreateDirectory(RootFolder);
@@ -45,7 +46,7 @@ namespace Coinium.Common.Logging
                 var loggerConfig = new LoggerConfiguration();
 
                 // read log targets.
-                var targets = JsonConfig.Config.Global.logs.targets;
+                var targets = Config.Global.logs.targets;
                 foreach (dynamic target in targets)
                 {
                     var enabled = target.enabled;

@@ -17,25 +17,15 @@
 */
 
 using System;
-using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Jobs
+namespace Coinium.Mining.Jobs
 {
-    public interface IJobManager
+    public interface IExtraNonce
     {
+        UInt64 Current { get; }
 
-        IExtraNonce ExtraNonce { get; }
+        byte[] ExtraNoncePlaceholder { get; }
 
-        Job GetJob(UInt64 id);
-
-        void AddJob(Job job);
-
-        void Broadcast();
-
-        /// <summary>
-        /// Initializes the specified pool.
-        /// </summary>
-        /// <param name="instanceId">The instance identifier.</param>
-        void Initialize(ulong instanceId);
+        UInt64 NextExtraNonce();
     }
 }

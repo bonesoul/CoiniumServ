@@ -17,12 +17,12 @@
 */
 
 using System.Collections.Generic;
-using Coinium.Common.Config;
+using Coinium.Common.Configuration;
 using Coinium.Common.Helpers.IO;
-using Coinium.Pool.Config;
+using Coinium.Mining.Pool.Config;
 using Serilog;
 
-namespace Coinium.Pool
+namespace Coinium.Mining.Pool
 {
     public class PoolManager : IPoolManager
     {

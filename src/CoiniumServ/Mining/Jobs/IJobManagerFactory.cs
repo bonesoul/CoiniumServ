@@ -1,7 +1,7 @@
 ﻿using Coinium.Coin.Daemon;
 using Coinium.Miner;
 
-namespace Coinium.Jobs
+namespace Coinium.Mining.Jobs
 {
     public interface IJobManagerFactory
     {

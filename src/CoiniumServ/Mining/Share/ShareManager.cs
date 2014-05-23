@@ -21,12 +21,12 @@ using Coinium.Coin.Algorithms;
 using Coinium.Coin.Coinbase;
 using Coinium.Coin.Helpers;
 using Coinium.Common.Extensions;
-using Coinium.Jobs;
+using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum;
 using Org.BouncyCastle.Math;
 using Serilog;
 
-namespace Coinium.Share
+namespace Coinium.Mining.Share
 {
     public class ShareManager : IShareManager
     {

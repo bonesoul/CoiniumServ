@@ -3,7 +3,7 @@ using Coinium.Common.Context;
 using Coinium.Miner;
 using Nancy.TinyIoc;
 
-namespace Coinium.Jobs
+namespace Coinium.Mining.Jobs
 {
     public class JobManagerFactory : IJobManagerFactory
     {

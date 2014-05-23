@@ -25,7 +25,7 @@ using Coinium.Common.Console;
 using Coinium.Common.Logging;
 using Coinium.Common.Platform;
 using Coinium.Common.Repository;
-using Coinium.Pool;
+using Coinium.Mining.Pool;
 using Serilog;
 using Nancy.TinyIoc;
 

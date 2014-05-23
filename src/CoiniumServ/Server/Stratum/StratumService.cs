@@ -17,11 +17,11 @@
 */
 
 using AustinHarris.JsonRpc;
-using Coinium.Jobs;
+using Coinium.Mining.Jobs;
+using Coinium.Mining.Share;
 using Coinium.Rpc.Service;
 using Coinium.Rpc.Service.Socket;
 using Coinium.Server.Stratum.Responses;
-using Coinium.Share;
 
 namespace Coinium.Server.Stratum
 {

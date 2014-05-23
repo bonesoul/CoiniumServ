@@ -1,7 +1,7 @@
 ﻿using Coinium.Coin.Algorithms;
-using Coinium.Jobs;
+using Coinium.Mining.Jobs;
 
-namespace Coinium.Share
+namespace Coinium.Mining.Share
 {
     public interface IShareManagerFactory
     {

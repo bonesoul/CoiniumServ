@@ -16,22 +16,26 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Pool.Config;
+using System;
+using JsonConfig;
+using Serilog;
 
-namespace Coinium.Pool
+namespace Coinium.Common.Configuration
 {
-    public interface IPool
+    public static class JsonConfigReader
     {
-        IPoolConfig Config { get; }
+        public static dynamic Read(string fileName)
+        {
+            try
+            {
+                return JsonConfig.Config.ApplyJsonFromPath(fileName, new ConfigObject());
+            }
+            catch (Exception)
+            {
+                Log.Error("Json parsing failed for: {0}.", fileName);
+            }
 
-        /// <summary>
-        /// Initializes the specified bind ip.
-        /// </summary>
-        /// <param name="config">The configuration.</param>        
-        void Initialize(IPoolConfig config);
-
-        void Start();
-
-        void Stop();
+            return null;
+        }
     }
 }

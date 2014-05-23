@@ -18,8 +18,8 @@
 
 using Coinium.Coin.Daemon;
 using Coinium.Common.Context;
-using Coinium.Jobs;
-using Coinium.Share;
+using Coinium.Mining.Jobs;
+using Coinium.Mining.Share;
 using Nancy.TinyIoc;
 
 namespace Coinium.Rpc.Service

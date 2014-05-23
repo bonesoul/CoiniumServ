@@ -1,6 +1,6 @@
-﻿using Coinium.Pool.Config;
+﻿using Coinium.Mining.Pool.Config;
 
-namespace Coinium.Pool
+namespace Coinium.Mining.Pool
 {
     public interface IPoolFactory
     {

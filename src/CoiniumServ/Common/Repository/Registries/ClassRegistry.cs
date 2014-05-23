@@ -19,7 +19,7 @@
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Common.Context;
-using Coinium.Pool;
+using Coinium.Mining.Pool;
 
 namespace Coinium.Common.Repository.Registries
 {
@@ -36,7 +36,7 @@ namespace Coinium.Common.Repository.Registries
         {
             _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(AlgorithmNames.Scrypt).AsSingleton();
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
-            _applicationContext.Container.Register<IPool, Pool.Pool>().AsMultiInstance();
+            _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
         }
     }
 }

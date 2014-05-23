@@ -1,9 +1,9 @@
 ﻿using Coinium.Coin.Algorithms;
 using Coinium.Common.Context;
-using Coinium.Jobs;
+using Coinium.Mining.Jobs;
 using Nancy.TinyIoc;
 
-namespace Coinium.Share
+namespace Coinium.Mining.Share
 {
     public class ShareManagerFactory : IShareManagerFactory
     {

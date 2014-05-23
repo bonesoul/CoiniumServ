@@ -17,10 +17,10 @@
 */
 
 using Coinium.Common.Context;
-using Coinium.Jobs;
 using Coinium.Miner;
-using Coinium.Pool;
-using Coinium.Share;
+using Coinium.Mining.Jobs;
+using Coinium.Mining.Pool;
+using Coinium.Mining.Share;
 
 namespace Coinium.Common.Repository.Registries
 {

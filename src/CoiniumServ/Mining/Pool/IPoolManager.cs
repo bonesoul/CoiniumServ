@@ -16,27 +16,17 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Coin.Configs;
-using Coinium.Coin.Daemon.Config;
-using Coinium.Common.Config;
-using Coinium.Server.Stratum.Config;
-using Coinium.Server.Vanilla.Config;
+using System.Collections.Generic;
+using Coinium.Mining.Pool.Config;
 
-namespace Coinium.Pool.Config
+namespace Coinium.Mining.Pool
 {
-    public interface IPoolConfig:IConfig
+    public interface IPoolManager
     {
-        /// <summary>
-        /// Is the configuration enabled?
-        /// </summary>
-        bool Enabled { get; }
+        IList<IPool> GetPools();
 
-        ICoinConfig Coin { get; }
+        IPool AddPool(IPoolConfig poolConfig);
 
-        IStratumServerConfig Stratum { get; }
-
-        IVanillaServerConfig Vanilla { get; }
-
-        IDaemonConfig Daemon { get; }
+        void Run();
     }
 }

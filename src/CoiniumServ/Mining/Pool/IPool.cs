@@ -16,10 +16,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace Coinium.Common.Config
+using Coinium.Mining.Pool.Config;
+
+namespace Coinium.Mining.Pool
 {
-    public interface IConfig
+    public interface IPool
     {
-        bool Valid { get; }
+        IPoolConfig Config { get; }
+
+        /// <summary>
+        /// Initializes the specified bind ip.
+        /// </summary>
+        /// <param name="config">The configuration.</param>        
+        void Initialize(IPoolConfig config);
+
+        void Start();
+
+        void Stop();
     }
 }

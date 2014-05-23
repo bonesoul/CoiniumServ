@@ -16,17 +16,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System.Collections.Generic;
-using Coinium.Pool.Config;
-
-namespace Coinium.Pool
+namespace Coinium.Common.Configuration
 {
-    public interface IPoolManager
+    public interface IConfig
     {
-        IList<IPool> GetPools();
-
-        IPool AddPool(IPoolConfig poolConfig);
-
-        void Run();
+        bool Valid { get; }
     }
 }

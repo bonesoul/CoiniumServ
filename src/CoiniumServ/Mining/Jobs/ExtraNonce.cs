@@ -19,7 +19,7 @@
 using System;
 using Coinium.Common.Extensions;
 
-namespace Coinium.Jobs
+namespace Coinium.Mining.Jobs
 {
     /// <summary>
     /// Counter for extra nonce.

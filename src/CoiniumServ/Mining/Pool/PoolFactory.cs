@@ -1,7 +1,7 @@
 ﻿using Coinium.Common.Context;
-using Coinium.Pool.Config;
+using Coinium.Mining.Pool.Config;
 
-namespace Coinium.Pool
+namespace Coinium.Mining.Pool
 {
     public class PoolFactory : IPoolFactory
     {

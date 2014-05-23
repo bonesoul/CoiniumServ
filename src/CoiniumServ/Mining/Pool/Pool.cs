@@ -21,15 +21,15 @@ using System.Collections.Generic;
 using System.Threading;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
-using Coinium.Jobs;
 using Coinium.Miner;
-using Coinium.Pool.Config;
+using Coinium.Mining.Jobs;
+using Coinium.Mining.Pool.Config;
+using Coinium.Mining.Share;
 using Coinium.Rpc.Service;
 using Coinium.Server;
-using Coinium.Share;
 using Serilog;
 
-namespace Coinium.Pool
+namespace Coinium.Mining.Pool
 {
     /// <summary>
     /// Contains pool services and server.

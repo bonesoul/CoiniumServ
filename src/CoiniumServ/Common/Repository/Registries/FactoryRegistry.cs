@@ -19,11 +19,11 @@
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Configs;
 using Coinium.Common.Context;
-using Coinium.Jobs;
-using Coinium.Pool;
+using Coinium.Mining.Jobs;
+using Coinium.Mining.Pool;
+using Coinium.Mining.Share;
 using Coinium.Rpc.Service;
 using Coinium.Server;
-using Coinium.Share;
 
 namespace Coinium.Common.Repository.Registries
 {

@@ -16,34 +16,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
+using Coinium.Coin.Configs;
+using Coinium.Coin.Daemon.Config;
+using Coinium.Common.Configuration;
+using Coinium.Server.Stratum.Config;
+using Coinium.Server.Vanilla.Config;
 
-namespace Coinium.Jobs
+namespace Coinium.Mining.Pool.Config
 {
-    /// <summary>
-    /// Counter for job id's.
-    /// </summary>
-    public class JobCounter
+    public interface IPoolConfig:IConfig
     {
-        private UInt64 Current { get; set; }
-
-        public JobCounter()
-        {
-            this.Current = 1;
-        }
-
         /// <summary>
-        /// Gets a new job id.
+        /// Is the configuration enabled?
         /// </summary>
-        /// <returns></returns>
-        public UInt64 Next()
-        {
-            Current++;
+        bool Enabled { get; }
 
-            if (Current % 0xffff == 0)
-                Current = 1;
+        ICoinConfig Coin { get; }
 
-            return Current;
-        }
+        IStratumServerConfig Stratum { get; }
+
+        IVanillaServerConfig Vanilla { get; }
+
+        IDaemonConfig Daemon { get; }
     }
 }

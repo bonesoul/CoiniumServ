@@ -25,7 +25,7 @@ using Coinium.Crypto;
 using Coinium.Miner;
 using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Jobs
+namespace Coinium.Mining.Jobs
 {
     public class JobManager : IJobManager
     {

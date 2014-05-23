@@ -17,25 +17,33 @@
 */
 
 using System;
-using JsonConfig;
-using Serilog;
 
-namespace Coinium.Common.Config
+namespace Coinium.Mining.Jobs
 {
-    public static class JsonConfigReader
+    /// <summary>
+    /// Counter for job id's.
+    /// </summary>
+    public class JobCounter
     {
-        public static dynamic Read(string fileName)
-        {
-            try
-            {
-                return JsonConfig.Config.ApplyJsonFromPath(fileName, new ConfigObject());
-            }
-            catch (Exception)
-            {
-                Log.Error("Json parsing failed for: {0}.", fileName);
-            }
+        private UInt64 Current { get; set; }
 
-            return null;
+        public JobCounter()
+        {
+            this.Current = 1;
+        }
+
+        /// <summary>
+        /// Gets a new job id.
+        /// </summary>
+        /// <returns></returns>
+        public UInt64 Next()
+        {
+            Current++;
+
+            if (Current % 0xffff == 0)
+                Current = 1;
+
+            return Current;
         }
     }
 }

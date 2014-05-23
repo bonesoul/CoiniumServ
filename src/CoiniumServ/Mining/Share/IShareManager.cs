@@ -18,7 +18,7 @@
 
 using Coinium.Server.Stratum;
 
-namespace Coinium.Share
+namespace Coinium.Mining.Share
 {
     public interface IShareManager
     {

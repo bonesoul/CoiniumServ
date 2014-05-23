@@ -17,7 +17,7 @@
 */
 
 using System;
-using Coinium.Common.Config;
+using Coinium.Common.Configuration;
 
 namespace Coinium.Server.Config
 {

@@ -27,7 +27,7 @@ using Coinium.Coin.Exceptions;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Time;
 using Coinium.Crypto;
-using Coinium.Jobs;
+using Coinium.Mining.Jobs;
 using Gibbed.IO;
 
 namespace Coinium.Coin.Transactions
