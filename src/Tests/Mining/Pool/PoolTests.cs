@@ -215,7 +215,7 @@ namespace Tests.Mining.Pool
 
             _hashAlgorithmFactory.Setup(x => x.Get(config.Object.Coin.Algorithm)).Returns(hashAlgorithmMock);
 
-            _shareManagerFactory.Setup(x => x.Get(hashAlgorithmMock, _jobManager.Object)).Returns(_shareManager.Object);
+            _shareManagerFactory.Setup(x => x.Get(hashAlgorithmMock, _jobManager.Object, _daemonClient.Object)).Returns(_shareManager.Object);
 
             _daemonClient.Setup(x => x.Initialize(config.Object.Daemon));
 
