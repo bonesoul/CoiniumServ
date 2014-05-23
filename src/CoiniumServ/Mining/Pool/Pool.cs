@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
+using Coinium.Common.Helpers.Validation;
 using Coinium.Miner;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Pool.Config;
@@ -67,8 +68,23 @@ namespace Coinium.Mining.Pool
         /// <param name="minerManager">The miner manager.</param>
         /// <param name="jobManagerFactory">The job manager factory.</param>
         /// <param name="shareManagerFactory">The share manager factory.</param>
-        public Pool(IHashAlgorithmFactory hashAlgorithmFactory, IServerFactory serverFactory, IServiceFactory serviceFactory, IDaemonClient client, IMinerManager minerManager, IJobManagerFactory jobManagerFactory, IShareManagerFactory shareManagerFactory)
+        public Pool(
+            IHashAlgorithmFactory hashAlgorithmFactory, 
+            IServerFactory serverFactory, 
+            IServiceFactory serviceFactory,
+            IDaemonClient client, 
+            IMinerManager minerManager, 
+            IJobManagerFactory jobManagerFactory, 
+            IShareManagerFactory shareManagerFactory)
         {
+            Enforce.ArgumentNotNull(hashAlgorithmFactory, "IHashAlgorithmFactory");
+            Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
+            Enforce.ArgumentNotNull(serviceFactory, "IServiceFactory");
+            Enforce.ArgumentNotNull(client, "IDaemonClient");
+            Enforce.ArgumentNotNull(minerManager, "IMinerManager");
+            Enforce.ArgumentNotNull(jobManagerFactory, "IJobManagerFactory");
+            Enforce.ArgumentNotNull(shareManagerFactory, "IShareManagerFactory");
+
             _daemonClient = client;
             _minerManager = minerManager;
             _jobManagerFactory = jobManagerFactory;
@@ -76,6 +92,7 @@ namespace Coinium.Mining.Pool
             _serverFactory = serverFactory;
             _serviceFactory = serviceFactory;
             _hashAlgorithmFactory = hashAlgorithmFactory;
+
             this.GenerateInstanceId();
         }
 

@@ -21,8 +21,7 @@ using Coinium.Common.Context;
 
 namespace Coinium.Coin.Configs
 {
-    // todo: need to fix the factory.
-    public class CoinConfigFactory:ICoinConfigFactory
+    public class CoinConfigFactory : ICoinConfigFactory
     {
         /// <summary>
         /// The _application context
@@ -35,7 +34,7 @@ namespace Coinium.Coin.Configs
         }
 
 
-        public static ICoinConfig GetConfig(string name)  // todo: needs to be fixed - shouldn't be static
+        public ICoinConfig GetConfig(string name)
         {
             var fileName = string.Format("config/coins/{0}.json", name);
             var file = JsonConfigReader.Read(fileName);

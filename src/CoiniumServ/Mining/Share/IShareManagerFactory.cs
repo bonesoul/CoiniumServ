@@ -11,6 +11,7 @@ namespace Coinium.Mining.Share
         /// </summary>
         /// <param name="hashAlgorithm">The hash algorithm.</param>
         /// <param name="jobManager">The job manager.</param>
+        /// <param name="daemonClient">The daemon client.</param>
         /// <returns></returns>
         IShareManager Get(IHashAlgorithm hashAlgorithm, IJobManager jobManager, IDaemonClient daemonClient);
     }

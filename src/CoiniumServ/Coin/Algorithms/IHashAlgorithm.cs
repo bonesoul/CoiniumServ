@@ -17,6 +17,7 @@
 */
 
 using System;
+using Org.BouncyCastle.Math;
 
 namespace Coinium.Coin.Algorithms
 {
@@ -25,5 +26,7 @@ namespace Coinium.Coin.Algorithms
         UInt32 Multiplier { get; }
 
         byte[] Hash(byte[] input);
+
+        BigInteger Difficulty { get; }
     }
 }
