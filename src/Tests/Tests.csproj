@@ -58,6 +58,7 @@
     <Compile Include="Coin\Base58Test.cs" />
     <Compile Include="Coin\CoinbaseUtilsTests.cs" />
     <Compile Include="Crypto\MerkleTreeTests.cs" />
+    <Compile Include="Mining\Pool\PoolTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
