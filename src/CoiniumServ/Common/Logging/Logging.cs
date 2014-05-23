@@ -19,6 +19,7 @@
 using System;
 using System.IO;
 using JsonConfig;
+using Microsoft.CSharp.RuntimeBinder;
 using Serilog;
 using Serilog.Events;
 
@@ -33,41 +34,50 @@ namespace Coinium.Common.Logging
 
         public static void Init()
         {
-            // read the root folder for logs.
-            RootFolder = !string.IsNullOrEmpty(Config.Global.logs.root) ? Config.Global.logs.root : "logs";
-
-            if (!Directory.Exists(RootFolder)) // make sure log root exists.
-                Directory.CreateDirectory(RootFolder);
-
-            // create the global logger.
-            var loggerConfig = new LoggerConfiguration();
-
-            // read log targets.
-            var targets = Config.Global.logs.targets;
-            foreach (dynamic target in targets)
+            try
             {
-                var enabled = target.enabled;
-                if (!enabled)
-                    continue;
+                // read the root folder for logs.
+                RootFolder = !string.IsNullOrEmpty(Config.Global.logs.root) ? Config.Global.logs.root : "logs";
 
-                switch ((string)target.type)
+                if (!Directory.Exists(RootFolder)) // make sure log root exists.
+                    Directory.CreateDirectory(RootFolder);
+
+                // create the global logger.
+                var loggerConfig = new LoggerConfiguration();
+
+                // read log targets.
+                var targets = Config.Global.logs.targets;
+                foreach (dynamic target in targets)
                 {
-                    case "console":
-                        AddConsoleLog(loggerConfig, target);
-                        break;
-                    case "file":
-                        AddLogFile(loggerConfig, target);
-                        break;
-                    default:
-                        break;
+                    var enabled = target.enabled;
+                    if (!enabled)
+                        continue;
+
+                    switch ((string) target.type)
+                    {
+                        case "console":
+                            AddConsoleLog(loggerConfig, target);
+                            break;
+                        case "file":
+                            AddLogFile(loggerConfig, target);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+
+                // lower the default minimum level to verbose as sinks can only rise them but not lower.
+                loggerConfig.MinimumLevel.Verbose();
+
+                // bind the config to global log.
+                Log.Logger = loggerConfig.CreateLogger();
             }
-
-            // lower the default minimum level to verbose as sinks can only rise them but not lower.
-            loggerConfig.MinimumLevel.Verbose(); 
-
-            // bind the config to global log.
-            Log.Logger = loggerConfig.CreateLogger();
+            catch (RuntimeBinderException e)
+            {
+                System.Console.ForegroundColor = ConsoleColor.Red;
+                System.Console.WriteLine("Couldn't read settings.conf.json! Make sure you rename settings-sample.conf.json.");
+                System.Console.ResetColor();
+            }
         }
 
         private static void AddConsoleLog(LoggerConfiguration configuration, dynamic target)
