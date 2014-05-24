@@ -1,6 +1,7 @@
 ﻿using Coinium.Coin.Configs;
 using Coinium.Common.Context;
 using Nancy.TinyIoc;
+using Serilog;
 
 namespace Coinium.Mining.Pool.Config
 {
@@ -17,6 +18,7 @@ namespace Coinium.Mining.Pool.Config
         /// <param name="applicationContext">The application context.</param>
         public PoolConfigFactory(IApplicationContext applicationContext)
         {
+            Log.Debug("PoolConfigFactory() init..");
             _applicationContext = applicationContext;
         }
 

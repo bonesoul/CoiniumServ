@@ -34,9 +34,10 @@ namespace Coinium.Mining.Pool
 
         public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory)
         {
+            Log.Information("PoolManager initialized, reading pool configs..");
+
             _poolFactory = poolFactory;
             _poolConfigFactory = poolConfigFactory;
-            Log.Verbose("PoolManager() init..");
         }
 
         public void Run()
@@ -53,13 +54,14 @@ namespace Coinium.Mining.Pool
             foreach (var file in files)
             {
                 var poolConfig = _poolConfigFactory.Get(JsonConfigReader.Read(file));
+                
+                if (!poolConfig.Enabled) // skip pools that are not enabled.
+                    continue;
+
                 this.AddPool(poolConfig);
             }
-        }
 
-        public IList<IPool> GetPools()
-        {
-            return this._pools;
+            Log.Information("Found {0} enabled pool configurations..", this._pools.Count);
         }
 
         public IPool AddPool(IPoolConfig poolConfig)
@@ -68,6 +70,11 @@ namespace Coinium.Mining.Pool
             this._pools.Add(pool);
 
             return pool;
+        }
+
+        public IList<IPool> GetPools()
+        {
+            return this._pools;
         }
     }
 }
