@@ -17,6 +17,7 @@
 */
 
 using Coinium.Common.Context;
+using Serilog;
 
 namespace Coinium.Coin.Algorithms
 {
@@ -33,6 +34,7 @@ namespace Coinium.Coin.Algorithms
         /// <param name="applicationContext">The application context.</param>
         public HashAlgorithmFactory(IApplicationContext applicationContext)
         {
+            Log.Debug("HashAlgorithmFactory() init..");
             _applicationContext = applicationContext;
         }
 

@@ -19,6 +19,7 @@
 using Coinium.Common.Context;
 using Coinium.Miner;
 using Nancy.TinyIoc;
+using Serilog;
 
 namespace Coinium.Server
 {
@@ -28,6 +29,7 @@ namespace Coinium.Server
 
         public ServerFactory(IApplicationContext applicationContext)
         {
+            Log.Debug("ServerFactory() init..");
             _applicationContext = applicationContext;
         }
 

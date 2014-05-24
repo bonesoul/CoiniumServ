@@ -3,6 +3,7 @@ using Coinium.Coin.Daemon;
 using Coinium.Common.Context;
 using Coinium.Mining.Jobs;
 using Nancy.TinyIoc;
+using Serilog;
 
 namespace Coinium.Mining.Share
 {
@@ -19,6 +20,7 @@ namespace Coinium.Mining.Share
         /// <param name="applicationContext">The application context.</param>
         public ShareManagerFactory(IApplicationContext applicationContext)
         {
+            Log.Debug("ShareManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 

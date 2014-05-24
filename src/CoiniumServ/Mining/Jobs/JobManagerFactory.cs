@@ -2,6 +2,7 @@
 using Coinium.Common.Context;
 using Coinium.Miner;
 using Nancy.TinyIoc;
+using Serilog;
 
 namespace Coinium.Mining.Jobs
 {
@@ -15,9 +16,10 @@ namespace Coinium.Mining.Jobs
         /// <summary>
         /// Initializes a new instance of the <see cref="JobManagerFactory"/> class.
         /// </summary>
-        /// <param name="kernel">The kernel.</param>
+        /// <param name="applicationContext">The application context.</param>
         public JobManagerFactory(IApplicationContext applicationContext)
         {
+            Log.Debug("JobManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 
