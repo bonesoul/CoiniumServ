@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extra\ConflictTests.cs" />
     <Compile Include="Coin\AmountTests.cs" />
     <Compile Include="Coin\Base58Test.cs" />
     <Compile Include="Coin\CoinbaseUtilsTests.cs" />
