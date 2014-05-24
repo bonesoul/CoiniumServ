@@ -16,7 +16,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,7 +30,7 @@ namespace Tests.Extra
 
     public class ConflictTests
     {
-        [Fact]
+        // [Fact] - enable the test when you want to check conflicts.
         public void FindConflictingReferences()
         {
             var assemblies = GetAllAssemblies(@"E:\Coding\CoiniumServ\bin\Debug");
@@ -105,5 +104,9 @@ namespace Tests.Extra
             public AssemblyName ReferencedAssembly { get; set; }
         }
 
+        public string AssemblyRoot
+        {
+            get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
+        }
     }
 }
