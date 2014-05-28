@@ -17,6 +17,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace Coinium.Coin.Daemon.Responses
 {
@@ -88,6 +89,16 @@ namespace Coinium.Coin.Daemon.Responses
         /// if provided, this value must be returned with results (see Block Submission)
         /// </summary>
         public int WorkId { get; set; }
+
+        // extra ones - based on https://github.com/CoiniumServ/CoiniumServ/wiki/Litecoin-Testnet-Stream
+
+        public string Target { get; set; }
+
+        public UInt32 MinTime { get; set; }
+
+        public List<string> Mutable { get; set; }
+
+        public string NonceRange { get; set; }
     }
 
     /// <summary>
