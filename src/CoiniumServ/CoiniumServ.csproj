@@ -698,10 +698,6 @@
       <Project>{047857ba-daa3-4ca7-afb8-a1b082b28c6a}</Project>
       <Name>Gibbed.IO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\deps\json-rpc.net\Json-Rpc\AustinHarris.JsonRpc.csproj">
-      <Project>{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}</Project>
-      <Name>AustinHarris.JsonRpc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\deps\jsonconfig\JsonConfig\JsonConfig.csproj">
       <Project>{10095092-e1e5-441f-9380-b6329f3cfeb4}</Project>
       <Name>JsonConfig</Name>
