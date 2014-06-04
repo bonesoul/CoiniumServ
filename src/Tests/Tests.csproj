@@ -50,6 +50,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Numerics" />
     <Reference Include="xunit">
       <HintPath>..\..\build\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
     </Reference>

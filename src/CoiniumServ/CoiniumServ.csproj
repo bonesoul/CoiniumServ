@@ -46,6 +46,10 @@
     <ApplicationIcon>..\..\assets\Coinium.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AustinHarris.JsonRpc, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\packages\AustinHarris.JsonRpc.1.0.4.18\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
+    </Reference>
     <Reference Include="BouncyCastle.Crypto">
       <HintPath>..\..\build\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
@@ -697,10 +701,6 @@
     <ProjectReference Include="..\..\deps\gibbed.io\Gibbed.IO.csproj">
       <Project>{047857ba-daa3-4ca7-afb8-a1b082b28c6a}</Project>
       <Name>Gibbed.IO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\deps\json-rpc.net\Json-Rpc\AustinHarris.JsonRpc.csproj">
-      <Project>{24FC1A2A-0BC3-43A7-9BFE-B628C2C4A307}</Project>
-      <Name>AustinHarris.JsonRpc</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\deps\jsonconfig\JsonConfig\JsonConfig.csproj">
       <Project>{10095092-e1e5-441f-9380-b6329f3cfeb4}</Project>
