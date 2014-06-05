@@ -19,6 +19,9 @@
 using System;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
+using Coinium.Common.Context;
+using Coinium.Common.Repository;
+using Coinium.Common.Repository.Registries;
 using Coinium.Miner;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Pool.Config;
@@ -26,6 +29,9 @@ using Coinium.Mining.Share;
 using Coinium.Rpc.Service;
 using Coinium.Server;
 using Moq;
+using Nancy.TinyIoc;
+using NSubstitute;
+using Should.Fluent;
 using Xunit;
 
 namespace Tests.Mining.Pool
@@ -200,6 +206,29 @@ namespace Tests.Mining.Pool
             });
 
             Assert.True(ex.Message.Contains("IShareManagerFactory"));
+        }
+
+
+        [Fact]
+        public void InitializationTest_NonNullParams_ShouldSuccess()
+        {
+            var hashAlgorithmFactory = Substitute.For<IHashAlgorithmFactory>();
+            var serverFactory = Substitute.For<IServerFactory>();
+            var serviceFactory = Substitute.For<IServiceFactory>();
+            var daemonClient = Substitute.For<IDaemonClient>();
+            var minerManager = Substitute.For<IMinerManager>();
+            var jobManager = Substitute.For<IJobManagerFactory>();
+            var shareManager = Substitute.For<IShareManagerFactory>();
+
+            var pool = new Coinium.Mining.Pool.Pool(hashAlgorithmFactory, serverFactory, serviceFactory, daemonClient,
+                minerManager, jobManager, shareManager);
+
+            pool.Should().Not.Be.Null();
+            Assert.True(pool.InstanceId > 0, "InstanceId was not initialized.");
+
+            // pool-config mockup.
+            var config = Substitute.For<IPoolConfig>();
+            config.Daemon.Valid.Returns(true);
         }
 
         [Fact]
