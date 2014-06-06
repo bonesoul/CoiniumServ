@@ -22,9 +22,13 @@ using Nancy.TinyIoc;
 
 namespace Coinium.Common.Repository
 {
+    /// <summary>
+    /// IOC & DI registry.
+    /// To get a better overview of IOC, check http://joelabrahamsson.com/inversion-of-control-an-introduction-with-examples-in-net/
+    /// </summary>
     public class Bootstrapper
     {
-        private readonly TinyIoCContainer _container;
+        private readonly TinyIoCContainer _container ;
 
         public Bootstrapper(TinyIoCContainer container)
         {

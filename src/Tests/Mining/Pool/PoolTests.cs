@@ -25,7 +25,8 @@ using Coinium.Mining.Pool.Config;
 using Coinium.Mining.Share;
 using Coinium.Rpc.Service;
 using Coinium.Server;
-using Moq;
+using NSubstitute;
+using Should.Fluent;
 using Xunit;
 
 namespace Tests.Mining.Pool
@@ -33,44 +34,46 @@ namespace Tests.Mining.Pool
     public class PoolTests
     {
 
-        private readonly Mock<IDaemonClient> _daemonClient;
-        private readonly Mock<IMinerManager> _minerManager;
-        private readonly Mock<IServerFactory >_serverFactory;
-        private readonly Mock<IServiceFactory> _serviceFactory;
-        private readonly Mock<IJobManagerFactory> _jobManagerFactory;
-        private readonly Mock<IShareManagerFactory> _shareManagerFactory;
-        private readonly Mock<IHashAlgorithmFactory> _hashAlgorithmFactory;
-        private readonly Mock<IJobManager> _jobManager;
-        private readonly Mock<IShareManager> _shareManager;
-        private readonly Mock<IMiningServer> _server;
-        private readonly Mock<IRpcService> _service;
+        private readonly IServerFactory _serverFactory;
+        private readonly IServiceFactory _serviceFactory;
+        private readonly IJobManagerFactory _jobManagerFactory;
+        private readonly IShareManagerFactory _shareManagerFactory;
+        private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
+
+        private readonly IDaemonClient _daemonClient;
+        private readonly IMinerManager _minerManager;
+        private readonly IJobManager _jobManager;
+        private readonly IShareManager _shareManager;
+        private readonly IMiningServer _miningServer;
+        private readonly IRpcService _rpcService;
 
         public PoolTests()
         {
-            _daemonClient = new Mock<IDaemonClient>();
-            _minerManager = new Mock<IMinerManager>();
-            _jobManagerFactory = new Mock<IJobManagerFactory>();
-            _shareManagerFactory = new Mock<IShareManagerFactory>();
-            _serverFactory = new Mock<IServerFactory>();
-            _serviceFactory = new Mock<IServiceFactory>();
-            _hashAlgorithmFactory = new Mock<IHashAlgorithmFactory>();
-            _jobManager = new Mock<IJobManager>();
-            _shareManager = new Mock<IShareManager>();
-            _server = new Mock<IMiningServer>();
-            _service = new Mock<IRpcService>();
+            _jobManagerFactory = Substitute.For<IJobManagerFactory>();
+            _hashAlgorithmFactory = Substitute.For<IHashAlgorithmFactory>();
+            _shareManagerFactory = Substitute.For<IShareManagerFactory>();
+            _serverFactory = Substitute.For<IServerFactory>();
+            _serviceFactory = Substitute.For<IServiceFactory>();
+
+            _daemonClient = Substitute.For<IDaemonClient>();
+            _minerManager = Substitute.For<IMinerManager>();
+            _jobManager = Substitute.For<IJobManager>();
+            _shareManager = Substitute.For<IShareManager>();
+            _miningServer = Substitute.For<IMiningServer>();
+            _rpcService = Substitute.For<IRpcService>();
         }
 
         [Fact]
         public void ConstructorTest_NonNullParams_ShouldSucceed()
         {
             var pool = new Coinium.Mining.Pool.Pool(
-                _hashAlgorithmFactory.Object,
-                _serverFactory.Object,
-                _serviceFactory.Object,
-                _daemonClient.Object,
-                _minerManager.Object,
-                _jobManagerFactory.Object,
-                _shareManagerFactory.Object);
+                _hashAlgorithmFactory,
+                _serverFactory,
+                _serviceFactory,
+                _daemonClient,
+                _minerManager,
+                _jobManagerFactory,
+                _shareManagerFactory);
 
             Assert.NotNull(pool);
             Assert.True(pool.InstanceId > 0, "InstanceId was not initialized.");
@@ -83,12 +86,12 @@ namespace Tests.Mining.Pool
             {
                 var pool = new Coinium.Mining.Pool.Pool(
                     null,
-                    _serverFactory.Object,
-                    _serviceFactory.Object,
-                    _daemonClient.Object,
-                    _minerManager.Object,
-                    _jobManagerFactory.Object,
-                    _shareManagerFactory.Object);
+                    _serverFactory,
+                    _serviceFactory,
+                    _daemonClient,
+                    _minerManager,
+                    _jobManagerFactory,
+                    _shareManagerFactory);
             });
 
             Assert.True(ex.Message.Contains("IHashAlgorithmFactory"));
@@ -100,13 +103,13 @@ namespace Tests.Mining.Pool
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
                 var pool = new Coinium.Mining.Pool.Pool(
-                    _hashAlgorithmFactory.Object,
+                    _hashAlgorithmFactory,
                     null,
-                    _serviceFactory.Object,
-                    _daemonClient.Object,
-                    _minerManager.Object,
-                    _jobManagerFactory.Object,
-                    _shareManagerFactory.Object);
+                    _serviceFactory,
+                    _daemonClient,
+                    _minerManager,
+                    _jobManagerFactory,
+                    _shareManagerFactory);
             });
 
             Assert.True(ex.Message.Contains("IServerFactory"));
@@ -118,13 +121,13 @@ namespace Tests.Mining.Pool
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
                 var pool = new Coinium.Mining.Pool.Pool(
-                    _hashAlgorithmFactory.Object,
-                    _serverFactory.Object,
+                    _hashAlgorithmFactory,
+                    _serverFactory,
                     null,
-                    _daemonClient.Object,
-                    _minerManager.Object,
-                    _jobManagerFactory.Object,
-                    _shareManagerFactory.Object);
+                    _daemonClient,
+                    _minerManager,
+                    _jobManagerFactory,
+                    _shareManagerFactory);
             });
 
             Assert.True(ex.Message.Contains("IServiceFactory"));
@@ -136,13 +139,13 @@ namespace Tests.Mining.Pool
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
                 var pool = new Coinium.Mining.Pool.Pool(
-                    _hashAlgorithmFactory.Object,
-                    _serverFactory.Object,
-                    _serviceFactory.Object,
+                    _hashAlgorithmFactory,
+                    _serverFactory,
+                    _serviceFactory,
                     null,
-                    _minerManager.Object,
-                    _jobManagerFactory.Object,
-                    _shareManagerFactory.Object);
+                    _minerManager,
+                    _jobManagerFactory,
+                    _shareManagerFactory);
             });
 
             Assert.True(ex.Message.Contains("IDaemonClient"));
@@ -154,13 +157,13 @@ namespace Tests.Mining.Pool
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
                 var pool = new Coinium.Mining.Pool.Pool(
-                    _hashAlgorithmFactory.Object,
-                    _serverFactory.Object,
-                    _serviceFactory.Object,
-                    _daemonClient.Object,
+                    _hashAlgorithmFactory,
+                    _serverFactory,
+                    _serviceFactory,
+                    _daemonClient,
                     null,
-                    _jobManagerFactory.Object,
-                    _shareManagerFactory.Object);
+                    _jobManagerFactory,
+                    _shareManagerFactory);
             });
 
             Assert.True(ex.Message.Contains("IMinerManager"));
@@ -172,13 +175,13 @@ namespace Tests.Mining.Pool
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
                 var pool = new Coinium.Mining.Pool.Pool(
-                    _hashAlgorithmFactory.Object,
-                    _serverFactory.Object,
-                    _serviceFactory.Object,
-                    _daemonClient.Object,
-                    _minerManager.Object,
+                    _hashAlgorithmFactory,
+                    _serverFactory,
+                    _serviceFactory,
+                    _daemonClient,
+                    _minerManager,
                     null,
-                    _shareManagerFactory.Object);
+                    _shareManagerFactory);
             });
 
             Assert.True(ex.Message.Contains("IJobManagerFactory"));
@@ -190,73 +193,61 @@ namespace Tests.Mining.Pool
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
                 var pool = new Coinium.Mining.Pool.Pool(
-                    _hashAlgorithmFactory.Object,
-                    _serverFactory.Object,
-                    _serviceFactory.Object,
-                    _daemonClient.Object,
-                    _minerManager.Object,
-                    _jobManagerFactory.Object,
+                    _hashAlgorithmFactory,
+                    _serverFactory,
+                    _serviceFactory,
+                    _daemonClient,
+                    _minerManager,
+                    _jobManagerFactory,
                     null);
             });
 
             Assert.True(ex.Message.Contains("IShareManagerFactory"));
         }
 
+
         [Fact]
-        public void InitializeTest_NonNullParams_ShouldSucceed()
+        public void InitializationTest_NonNullParams_ShouldSuccess()
         {
-            #region Assemble
-
             var pool = new Coinium.Mining.Pool.Pool(
-                _hashAlgorithmFactory.Object,
-                _serverFactory.Object,
-                _serviceFactory.Object,
-                _daemonClient.Object,
-                _minerManager.Object,
-                _jobManagerFactory.Object,
-                _shareManagerFactory.Object);
+                _hashAlgorithmFactory, 
+                _serverFactory, 
+                _serviceFactory, 
+                _daemonClient,
+                _minerManager, 
+                _jobManagerFactory, 
+                _shareManagerFactory);
 
-            Assert.NotNull(pool);
+            pool.Should().Not.Be.Null();
             Assert.True(pool.InstanceId > 0, "InstanceId was not initialized.");
 
-            var config = new Mock<IPoolConfig>();
-            config.SetupAllProperties();
-            config.SetupGet(x => x.Daemon.Valid).Returns(true);
+            // pool-config mockup.
+            var config = Substitute.For<IPoolConfig>();
+            config.Daemon.Valid.Returns(true);
 
-            _jobManagerFactory
-                .Setup(x => x.Get(_daemonClient.Object, _minerManager.Object))
-                .Returns(_jobManager.Object);
+            // initalize job manager.
+            _jobManagerFactory.Get(_daemonClient, _minerManager).Returns(_jobManager);
+            _jobManager.Initialize(pool.InstanceId);
 
-            _jobManager.Setup(x => x.Initialize(pool.InstanceId));
+            // initialize hash algorithm
+            var hashAlgorithm = Substitute.For<IHashAlgorithm>();
+            _hashAlgorithmFactory.Get(config.Coin.Algorithm).Returns(hashAlgorithm);
 
-            var hashAlgorithmMock = Mock.Of<IHashAlgorithm>();
+            // initialize share manager.
+            _shareManagerFactory.Get(hashAlgorithm, _jobManager, _daemonClient).Returns(_shareManager);
+        
+            // init daemon client
+            _daemonClient.Initialize(config.Daemon);
 
-            _hashAlgorithmFactory.Setup(x => x.Get(config.Object.Coin.Algorithm)).Returns(hashAlgorithmMock);
+            // init server
+            _serverFactory.Get(RpcServiceNames.Stratum, _minerManager).Returns(_miningServer);
 
-            _shareManagerFactory.Setup(x => x.Get(hashAlgorithmMock, _jobManager.Object, _daemonClient.Object)).Returns(_shareManager.Object);
+            // init service
+            _serviceFactory.Get(RpcServiceNames.Stratum, _jobManager, _shareManager, _daemonClient).Returns(_rpcService);
 
-            _daemonClient.Setup(x => x.Initialize(config.Object.Daemon));
+            _miningServer.Initialize(config.Stratum);
 
-            _serverFactory.Setup(x => x.Get(RpcServiceNames.Stratum, _minerManager.Object)).Returns(_server.Object);
-            _serviceFactory.Setup(
-                x => x.Get(RpcServiceNames.Stratum, _jobManager.Object, _shareManager.Object, _daemonClient.Object)).Returns(_service.Object);
-
-            _server.Setup(x => x.Initialize(config.Object.Stratum));
-
-            #endregion Assemble
-
-            #region Act
-
-            pool.Initialize(config.Object);
-
-            #endregion Act
-
-            #region Assert
-
-            // No assertions because affected properties are private
-            // TODO: make assertions possible on Pool
-
-            #endregion Assert
+            pool.Initialize(config);
         }
     }
 }
