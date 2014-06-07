@@ -63,10 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Daemon\BlockTemplateTests.cs" />
+    <Compile Include="Transactions\GenerationTransactionTests.cs" />
     <Compile Include="Extra\ConflictTests.cs" />
     <Compile Include="Coin\AmountTests.cs" />
     <Compile Include="Coin\Base58Test.cs" />
-    <Compile Include="Coin\CoinbaseUtilsTests.cs" />
+    <Compile Include="Transactions\Coinbase\CoinbaseUtilsTests.cs" />
     <Compile Include="Crypto\MerkleTreeTests.cs" />
     <Compile Include="Mining\Pool\PoolTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,9 +86,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Coin\Transactions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

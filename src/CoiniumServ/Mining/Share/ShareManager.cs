@@ -18,12 +18,12 @@
 
 using System;
 using Coinium.Coin.Algorithms;
-using Coinium.Coin.Coinbase;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Helpers;
 using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum;
+using Coinium.Transactions.Coinbase;
 using Org.BouncyCastle.Math;
 using Serilog;
 

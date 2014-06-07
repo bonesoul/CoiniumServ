@@ -25,7 +25,7 @@ using Coinium.Crypto;
 using Gibbed.IO;
 using Serilog;
 
-namespace Coinium.Coin.Coinbase
+namespace Coinium.Transactions.Coinbase
 {
     /// <summary>
     /// Provides helper functions for "serialized CSscript formatting" as defined here: https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification

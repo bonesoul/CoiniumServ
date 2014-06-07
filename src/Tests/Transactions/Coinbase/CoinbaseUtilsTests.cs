@@ -16,11 +16,11 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Coin.Coinbase;
 using Coinium.Common.Extensions;
+using Coinium.Transactions.Coinbase;
 using Xunit;
 
-namespace Tests.Coin
+namespace Tests.Transactions.Coinbase
 {
     public class CoinbaseUtilsTests
     {

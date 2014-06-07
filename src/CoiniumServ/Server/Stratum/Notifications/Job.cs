@@ -20,9 +20,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Coinium.Coin.Daemon.Responses;
-using Coinium.Coin.Transactions;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
+using Coinium.Transactions;
 using Gibbed.IO;
 using Newtonsoft.Json;
 
