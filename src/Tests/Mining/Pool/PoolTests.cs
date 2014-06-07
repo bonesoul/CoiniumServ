@@ -33,13 +33,14 @@ namespace Tests.Mining.Pool
 {
     public class PoolTests
     {
-
+        // factory mocks
         private readonly IServerFactory _serverFactory;
         private readonly IServiceFactory _serviceFactory;
         private readonly IJobManagerFactory _jobManagerFactory;
         private readonly IShareManagerFactory _shareManagerFactory;
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
 
+        // object mocks.
         private readonly IDaemonClient _daemonClient;
         private readonly IMinerManager _minerManager;
         private readonly IJobManager _jobManager;
@@ -47,6 +48,9 @@ namespace Tests.Mining.Pool
         private readonly IMiningServer _miningServer;
         private readonly IRpcService _rpcService;
 
+        /// <summary>
+        /// Initialize mock objects.
+        /// </summary>
         public PoolTests()
         {
             _jobManagerFactory = Substitute.For<IJobManagerFactory>();
@@ -63,6 +67,9 @@ namespace Tests.Mining.Pool
             _rpcService = Substitute.For<IRpcService>();
         }
 
+        /// <summary>
+        /// Tests pool constructor with all valid parameters. Should succeed.
+        /// </summary>
         [Fact]
         public void ConstructorTest_NonNullParams_ShouldSucceed()
         {
@@ -79,6 +86,9 @@ namespace Tests.Mining.Pool
             Assert.True(pool.InstanceId > 0, "InstanceId was not initialized.");
         }
 
+        /// <summary>
+        /// Tests pool constructor with null HashAlgorithm, should trow exception.
+        /// </summary>
         [Fact]
         public void ConstructorTest_NullHashAlgorithmFactory_ShouldThrow()
         {
@@ -97,6 +107,9 @@ namespace Tests.Mining.Pool
             Assert.True(ex.Message.Contains("IHashAlgorithmFactory"));
         }
 
+        /// <summary>
+        /// Tests pool constructor with null ServerFactory, should trow exception.
+        /// </summary>
         [Fact]
         public void ConstructorTest_NullServerFactory_ShouldThrow()
         {
@@ -115,6 +128,9 @@ namespace Tests.Mining.Pool
             Assert.True(ex.Message.Contains("IServerFactory"));
         }
 
+        /// <summary>
+        /// Tests pool constructor with null ServiceFactory, should trow exception.
+        /// </summary>
         [Fact]
         public void ConstructorTest_NullServiceFactory_ShouldThrow()
         {
@@ -133,6 +149,9 @@ namespace Tests.Mining.Pool
             Assert.True(ex.Message.Contains("IServiceFactory"));
         }
 
+        /// <summary>
+        /// Tests pool constructor with null DaemonClient, should trow exception.
+        /// </summary>
         [Fact]
         public void ConstructorTest_NullDaemonClient_ShouldThrow()
         {
@@ -151,6 +170,9 @@ namespace Tests.Mining.Pool
             Assert.True(ex.Message.Contains("IDaemonClient"));
         }
 
+        /// <summary>
+        /// Tests pool constructor with null MinerManager, should trow exception.
+        /// </summary>
         [Fact]
         public void ConstructorTest_NullMinerManager_ShouldThrow()
         {
@@ -169,6 +191,9 @@ namespace Tests.Mining.Pool
             Assert.True(ex.Message.Contains("IMinerManager"));
         }
 
+        /// <summary>
+        /// Tests pool constructor with null JobManager, should trow exception.
+        /// </summary>
         [Fact]
         public void ConstructorTest_NullJobManagerFactory_ShouldThrow()
         {
@@ -187,6 +212,9 @@ namespace Tests.Mining.Pool
             Assert.True(ex.Message.Contains("IJobManagerFactory"));
         }
 
+        /// <summary>
+        /// Tests pool constructor with null ShareManager, should trow exception.
+        /// </summary>
         [Fact]
         public void ConstructorTest_NullShareManagerFactory_ShouldThrow()
         {
@@ -205,7 +233,9 @@ namespace Tests.Mining.Pool
             Assert.True(ex.Message.Contains("IShareManagerFactory"));
         }
 
-
+        /// <summary>
+        /// Initializes pool with all valid parameters, should succeed.
+        /// </summary>
         [Fact]
         public void InitializationTest_NonNullParams_ShouldSuccess()
         {
@@ -245,8 +275,10 @@ namespace Tests.Mining.Pool
             // init service
             _serviceFactory.Get(RpcServiceNames.Stratum, _jobManager, _shareManager, _daemonClient).Returns(_rpcService);
 
+            // initalize the server.
             _miningServer.Initialize(config.Stratum);
 
+            // initialize the pool.
             pool.Initialize(config);
         }
     }
