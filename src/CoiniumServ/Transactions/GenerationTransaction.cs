@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Coinium.Coin.Coinbase;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Coin.Exceptions;
@@ -28,9 +27,10 @@ using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Time;
 using Coinium.Crypto;
 using Coinium.Mining.Jobs;
+using Coinium.Transactions.Coinbase;
 using Gibbed.IO;
 
-namespace Coinium.Coin.Transactions
+namespace Coinium.Transactions
 {
     /// <summary>
     /// A generation transaction.
@@ -276,81 +276,5 @@ namespace Coinium.Coin.Transactions
 
             return transactions;
         }
-    }
-
-    /// <summary>
-    /// Inputs for transaction.
-    /// </summary>
-    /// <remarks>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
-    /// Information: http://bitcoin.stackexchange.com/a/20725/8899
-    /// The input sufficiently describes where and how to get the bitcoin amout to be redeemed. If it is the (only) input of the first transaction 
-    /// of a block, it is called the generation transaction input and its content completely ignored. (Historically the Previous Transaction hash is 0 
-    /// and the Previous Txout-index is -1.)
-    /// </remarks>
-    public class TxIn
-    {
-        /// <summary>
-        /// The previous output transaction reference, as an OutPoint structure
-        /// </summary>
-        public OutPoint PreviousOutput { get; set; }
-
-        /// <summary>
-        /// Computational Script for confirming transaction authorization - part 1
-        /// </summary>
-        public byte[] SignatureScriptPart1 { get; set; }
-
-        /// <summary>
-        /// Computational Script for confirming transaction authorization - part 2
-        /// </summary>
-        public byte[] SignatureScriptPart2 { get; set; }
-
-        /// <summary>
-        /// Transaction version as defined by the sender. Intended for "replacement" of transactions when information is updated before inclusion into a block.
-        /// </summary>
-        public UInt32 Sequence { get; set; }
-    }
-
-    /// <summary>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
-    /// </summary>
-    public class OutPoint
-    {
-        /// <summary>
-        /// The hash of the referenced transaction - as we creating a generation transaction - none.
-        /// </summary>
-        public Hash Hash { get; set; }
-
-        /// <summary>
-        /// The index of the specific output in the transaction. The first output is 0, etc.
-        /// </summary>
-        public UInt32 Index { get; set; }
-    }
-
-    /// <summary>
-    /// Outpus for transaction.
-    /// </summary>
-    /// <remarks>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
-    /// The output sets the conditions to release this bitcoin amount later. The sum of the output values of the 
-    /// first transaction is the value of the mined bitcoins for the block plus possible transactions fees of the 
-    /// other transactions in the block.
-    /// </remarks>
-    public class TxOut
-    {
-        /// <summary>
-        /// Transaction Value
-        /// </summary>
-        public UInt64 Value { get; set; }
-
-        /// <summary>
-        /// Length of the pk_script
-        /// </summary>
-        public byte[] PublicKeyScriptLenght { get; set; }
-
-        /// <summary>
-        /// Usually contains the public key as a Bitcoin script setting up conditions to claim this output.
-        /// </summary>
-        public byte[] PublicKeyScript { get; set; }
-    }
+    }    
 }

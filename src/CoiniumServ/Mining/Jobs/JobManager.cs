@@ -19,11 +19,11 @@
 using System;
 using System.Collections.Generic;
 using Coinium.Coin.Daemon;
-using Coinium.Coin.Transactions;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Miner;
 using Coinium.Server.Stratum.Notifications;
+using Coinium.Transactions;
 
 namespace Coinium.Mining.Jobs
 {

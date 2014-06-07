@@ -85,6 +85,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Transactions\OutPoint.cs" />
+    <Compile Include="Transactions\TxIn.cs" />
+    <Compile Include="Transactions\TxOut.cs" />
     <Compile Include="Common\Context\ApplicationContext.cs" />
     <Compile Include="Common\Configuration\JsonConfigReader.cs" />
     <Compile Include="Common\Helpers\Validation\Enforce.cs" />
@@ -115,10 +118,10 @@
     <Compile Include="Coin\Daemon\IDaemonClient.cs" />
     <Compile Include="Coin\Daemon\Config\IDaemonConfig.cs" />
     <Compile Include="Coin\Helpers\Serializers.cs" />
-    <Compile Include="Coin\Coinbase\CoinbaseUtils.cs" />
+    <Compile Include="Transactions\Coinbase\CoinbaseUtils.cs" />
     <Compile Include="Coin\Exceptions\AddressFormatException.cs" />
     <Compile Include="Coin\Exceptions\InvalidWalletAddressException.cs" />
-    <Compile Include="Coin\Transactions\GenerationTransaction.cs" />
+    <Compile Include="Transactions\GenerationTransaction.cs" />
     <Compile Include="Coin\Helpers\Amount.cs" />
     <Compile Include="Common\Repository\Bootstrapper.cs" />
     <Compile Include="Common\Configuration\IConfig.cs" />

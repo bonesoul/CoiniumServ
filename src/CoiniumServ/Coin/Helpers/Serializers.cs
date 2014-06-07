@@ -18,9 +18,9 @@
 
 using System;
 using System.IO;
-using Coinium.Coin.Coinbase;
 using Coinium.Common.Extensions;
 using Coinium.Server.Stratum.Notifications;
+using Coinium.Transactions.Coinbase;
 using Gibbed.IO;
 
 namespace Coinium.Coin.Helpers

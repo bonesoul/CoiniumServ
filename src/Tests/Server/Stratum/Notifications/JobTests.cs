@@ -19,10 +19,10 @@
 using System.Collections.Generic;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
-using Coinium.Coin.Transactions;
 using Coinium.Crypto;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum.Notifications;
+using Coinium.Transactions;
 using Xunit;
 using Newtonsoft.Json;
 using NSubstitute;
