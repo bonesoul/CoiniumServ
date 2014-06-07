@@ -83,6 +83,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Numerics">
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Transactions\OutPoint.cs" />
