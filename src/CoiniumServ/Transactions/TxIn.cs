@@ -51,6 +51,11 @@ namespace Coinium.Transactions
         /// Transaction version as defined by the sender. Intended for "replacement" of transactions when information is updated before inclusion into a block.
         /// </summary>
         public UInt32 Sequence { get; set; }
+
+        public TxIn()
+        {
+            this.SignatureScriptPart1 = new byte[] {};
+        }
     }
 
 }

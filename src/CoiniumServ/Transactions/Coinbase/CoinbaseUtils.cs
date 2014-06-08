@@ -109,6 +109,39 @@ namespace Coinium.Transactions.Coinbase
         }
 
         /// <summary>
+        /// Used to format height and date when putting into script signature:
+        /// </summary>
+        /// <remarks>
+        /// Used to format height and date when putting into script signature: https://en.bitcoin.it/wiki/Script
+        /// </remarks>
+        /// <specification>https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification</specification>
+        /// <param name="value"></param>
+        /// <returns>Serialized CScript</returns>
+        /// <example>
+        /// python: http://runnable.com/U3Hb26U1918Zx0NR/bitcoin-coinbase-serialize-number-python
+        /// nodejs: http://runnable.com/U3HgCVY2RIAjrw9I/bitcoin-coinbase-serialize-number-nodejs-for-node-js
+        /// </example>
+        public static byte[] SerializeNumber(Int64 value)
+        {
+            if (value >= 1 && value <= 16)
+                return new byte[] { 0x01, (byte)value };
+
+            var buffer = new byte[9];
+            byte lenght = 1;
+
+            while (value > 127)
+            {
+                buffer[lenght++] = (byte)(value & 0xff);
+                value >>= 8;
+            }
+
+            buffer[0] = lenght;
+            buffer[lenght++] = (byte)value;
+
+            return buffer.Slice(0, lenght);
+        }
+
+        /// <summary>
         /// Creates a serialized string used in script signature.
         /// </summary>
         /// <remarks>
