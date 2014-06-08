@@ -115,6 +115,8 @@ namespace Coinium.Transactions
         /// </remarks>
         public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, BlockTemplate blockTemplate, bool supportTxMessages = false)
         {
+            // TODO: change internal processing code to functions, so the functions itself are testable.
+
             this.Version = (UInt32)(supportTxMessages ? 2 : 1);
             this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             this.LockTime = 0;
@@ -129,8 +131,6 @@ namespace Coinium.Transactions
             // The txin's prevout script is an arbitrary byte array (it doesn't have to be a valid script, though this is commonly 
             // done anyway) of 2 to 100 bytes. It has to start with a correct push of the block height (see BIP34).
 
-            input.SignatureScriptPart1 = new byte[0]; 
-
             var serializedBlockHeight = CoinbaseUtils.SerializeNumber(blockTemplate.Height);
             var coinBaseAuxFlags = blockTemplate.CoinBaseAux.Flags.HexToByteArray();
             var serializedUnixTime = CoinbaseUtils.SerializeNumber(TimeHelpers.NowInUnixTime()/1000 | 0);
@@ -138,7 +138,7 @@ namespace Coinium.Transactions
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedBlockHeight).ToArray();
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(coinBaseAuxFlags).ToArray();
             input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedUnixTime).ToArray();
-            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(new byte[extraNonce.ExtraNoncePlaceholder.Length]).ToArray();
+            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(new[] { (byte)extraNonce.ExtraNoncePlaceholder.Length }).ToArray();
 
             input.SignatureScriptPart2 = CoinbaseUtils.SerializeString("/CoiniumServ/");
 
