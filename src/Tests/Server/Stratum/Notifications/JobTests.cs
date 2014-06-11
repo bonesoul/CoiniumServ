@@ -56,7 +56,7 @@ namespace Tests.Server.Stratum.Notifications
             daemonClient.ValidateAddress("myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t").Returns(addressValidation);
 
 
-            var transaction = Substitute.For<GenerationTransaction>(extraNonce, daemonClient, blockTemplate, false, "/CoiniumServ/");
+            var transaction = Substitute.For<GenerationTransaction>(extraNonce, daemonClient, blockTemplate, false);
 
             var job = new Job(jobCounter.Next(), blockTemplate, transaction, merkleTree);
 

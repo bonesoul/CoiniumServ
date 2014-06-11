@@ -116,31 +116,31 @@ namespace Coinium.Transactions
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
         /// </remarks>
-        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, BlockTemplate blockTemplate, bool supportTxMessages = false, string signature = "/CoiniumServ/")
+        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, BlockTemplate blockTemplate, bool supportTxMessages = false)
         {
             this.Version = (UInt32)(supportTxMessages ? 2 : 1);
             this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             this.LockTime = 0;
 
-            var input = new TxIn
+            this.Inputs = new List<TxIn>
             {
-                PreviousOutput = new OutPoint
+                new TxIn
                 {
-                    Hash = Hash.ZeroHash,
-                    Index = (UInt32) Math.Pow(2, 32) - 1
-                },
-                Sequence = 0x0,
-                SignatureScript =
-                    new SignatureScript(
-                        blockTemplate.Height, 
-                        blockTemplate.CoinBaseAux.Flags,
-                        TimeHelpers.NowInUnixTime(), 
-                        (byte) extraNonce.ExtraNoncePlaceholder.Length,
-                        signature)
+                    PreviousOutput = new OutPoint
+                    {
+                        Hash = Hash.ZeroHash,
+                        Index = (UInt32) Math.Pow(2, 32) - 1
+                    },
+                    Sequence = 0x0,
+                    SignatureScript =
+                        new SignatureScript(
+                            blockTemplate.Height,
+                            blockTemplate.CoinBaseAux.Flags,
+                            TimeHelpers.NowInUnixTime(),
+                            (byte) extraNonce.ExtraNoncePlaceholder.Length,
+                            "/CoiniumServ/")
+                }
             };
-
-
-            this.Inputs = new List<TxIn> {input};
 
             // create the first part.
             using (var stream = new MemoryStream())
@@ -151,14 +151,14 @@ namespace Coinium.Transactions
                 
                 // write transaction input.
                 stream.WriteBytes(CoinbaseUtils.VarInt(this.InputsCount));
-                stream.WriteBytes(this.Inputs[0].PreviousOutput.Hash.Bytes);
-                stream.WriteValueU32(this.Inputs[0].PreviousOutput.Index.LittleEndian());
+                stream.WriteBytes(this.Inputs.First().PreviousOutput.Hash.Bytes);
+                stream.WriteValueU32(this.Inputs.First().PreviousOutput.Index.LittleEndian());
 
                 // write signature script lenght
-                var signatureScriptLenght = (UInt32)(input.SignatureScript.Initial.Length + extraNonce.ExtraNoncePlaceholder.Length + input.SignatureScript.Final.Length);
+                var signatureScriptLenght = (UInt32)(this.Inputs.First().SignatureScript.Initial.Length + extraNonce.ExtraNoncePlaceholder.Length + this.Inputs.First().SignatureScript.Final.Length);
                 stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
 
-                stream.WriteBytes(input.SignatureScript.Initial);
+                stream.WriteBytes(this.Inputs.First().SignatureScript.Initial);
 
                 this.Initial = stream.ToArray();
             }
@@ -173,8 +173,8 @@ namespace Coinium.Transactions
             // create the second part.
             using (var stream = new MemoryStream())
             {
-                stream.WriteBytes(input.SignatureScript.Final);
-                stream.WriteValueU32(this.Inputs[0].Sequence); // transaction inputs end here.
+                stream.WriteBytes(this.Inputs.First().SignatureScript.Final);
+                stream.WriteValueU32(this.Inputs.First().Sequence); // transaction inputs end here.
 
                 stream.WriteBytes(CoinbaseUtils.VarInt((UInt32) outputBuffers.Length).ToArray()); // transaction output start here.
                 stream.WriteBytes(outputBuffers); // transaction output ends here.

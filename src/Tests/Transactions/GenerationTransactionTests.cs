@@ -66,7 +66,7 @@ namespace Tests.Transactions
             var extraNonce = new ExtraNonce(0);
 
             // create the test object.
-            var generationTransaction = new GenerationTransaction(extraNonce, daemonClient, blockTemplate, false, "/nodeStratum/");
+            var generationTransaction = new GenerationTransaction(extraNonce, daemonClient, blockTemplate);
 
             // test version.
             generationTransaction.Initial.Take(4).Should().Equal(new Byte[] { 0x01, 0x00, 0x00, 0x00 }); 
