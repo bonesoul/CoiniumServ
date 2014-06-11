@@ -72,6 +72,8 @@
     <Compile Include="Mining\Pool\PoolTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\Stratum\Notifications\JobTests.cs" />
+    <Compile Include="Transactions\Script\SignatureScriptTests.cs" />
+    <Compile Include="Transactions\Utils\TransactionUtilsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

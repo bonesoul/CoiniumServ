@@ -119,8 +119,8 @@ namespace Coinium.Server.Stratum.Notifications
             // init the values.
             this.Id = id;
             this.PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
-            this.CoinbaseInitial = generationTransaction.Part1.ToHexString();
-            this.CoinbaseFinal = generationTransaction.Part2.ToHexString();
+            this.CoinbaseInitial = generationTransaction.Initial.ToHexString();
+            this.CoinbaseFinal = generationTransaction.Final.ToHexString();
 
             this.MerkleBranches = new List<byte[]>();
             foreach (var transaction in blockTemplate.Transactions)
