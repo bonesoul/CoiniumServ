@@ -110,15 +110,14 @@ namespace Coinium.Transactions
         /// <param name="daemonClient">The daemon client.</param>
         /// <param name="blockTemplate">The block template.</param>
         /// <param name="supportTxMessages">if set to <c>true</c> [support tx messages].</param>
+        /// <param name="signature"></param>
         /// <remarks>
         /// Reference implementations:
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
         /// </remarks>
-        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, BlockTemplate blockTemplate, bool supportTxMessages = false)
+        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, BlockTemplate blockTemplate, bool supportTxMessages = false, string signature = "/CoiniumServ/")
         {
-            // TODO: change internal processing code to functions, so the functions itself are testable.
-
             this.Version = (UInt32)(supportTxMessages ? 2 : 1);
             this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             this.LockTime = 0;
@@ -137,7 +136,7 @@ namespace Coinium.Transactions
                         blockTemplate.CoinBaseAux.Flags,
                         TimeHelpers.NowInUnixTime(), 
                         (byte) extraNonce.ExtraNoncePlaceholder.Length,
-                        "/CoiniumServ/")
+                        signature)
             };
 
 

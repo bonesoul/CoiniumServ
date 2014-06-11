@@ -59,52 +59,17 @@ namespace Tests.Transactions
 
             // init mockup objects
             var daemonClient = Substitute.For<IDaemonClient>();
-            var addressValidation = new ValidateAddress
-            {
-                IsValid = true
-            };
+            var addressValidation = new ValidateAddress { IsValid = true };
             daemonClient.ValidateAddress("n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY").Returns(addressValidation);
             daemonClient.ValidateAddress("myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t").Returns(addressValidation);
 
             var extraNonce = new ExtraNonce(0);
 
-            var txIn = new TxIn
-            {
-                SignatureScript = new SignatureScript(
-                    blockTemplate.Height,
-                    blockTemplate.CoinBaseAux.Flags,
-                    1402265775319,
-                    (byte) extraNonce.ExtraNoncePlaceholder.Length,
-                    "/nodeStratum/")
-            };
+            // create the test object.
+            var generationTransaction = new GenerationTransaction(extraNonce, daemonClient, blockTemplate, false, "/nodeStratum/");
 
-            // test the part 1
-            const uint txVersion = 1;
-
-            // create the first part.
-
-            byte[] part1;
-            using (var stream = new MemoryStream())
-            {
-                stream.WriteValueU32(txVersion.LittleEndian()); // write version
-
-                // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
-
-                // write transaction input.
-                //stream.WriteBytes(CoinbaseUtils.VarInt(this.InputsCount));
-                //stream.WriteBytes(this.Inputs[0].PreviousOutput.Hash.Bytes);
-                //stream.WriteValueU32(this.Inputs[0].PreviousOutput.Index.LittleEndian());
-
-                //// write signnature script lenght
-                //var signatureScriptLenght = (UInt32)(input.SignatureScriptPart1.Length + extraNonce.ExtraNoncePlaceholder.Length + input.SignatureScriptPart2.Length);
-                //stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
-
-                //stream.WriteBytes(input.SignatureScriptPart1);
-
-                part1 = stream.ToArray();
-            }
-
-            part1.Take(4).Should().Equal(new Byte[] {0x01, 0x00, 0x00, 0x00});
+            // test version.
+            generationTransaction.Initial.Take(4).Should().Equal(new Byte[] { 0x01, 0x00, 0x00, 0x00 }); 
         }
     }
 }
