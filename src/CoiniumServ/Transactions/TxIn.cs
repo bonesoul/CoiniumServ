@@ -17,6 +17,7 @@
 */
 
 using System;
+using Coinium.Transactions.Script;
 
 namespace Coinium.Transactions
 {
@@ -38,24 +39,14 @@ namespace Coinium.Transactions
         public OutPoint PreviousOutput { get; set; }
 
         /// <summary>
-        /// Computational Script for confirming transaction authorization - part 1
+        /// Computational Script for confirming transaction authorization
         /// </summary>
-        public byte[] SignatureScriptPart1 { get; set; }
-
-        /// <summary>
-        /// Computational Script for confirming transaction authorization - part 2
-        /// </summary>
-        public byte[] SignatureScriptPart2 { get; set; }
+        public SignatureScript SignatureScript { get; set; }
 
         /// <summary>
         /// Transaction version as defined by the sender. Intended for "replacement" of transactions when information is updated before inclusion into a block.
         /// </summary>
         public UInt32 Sequence { get; set; }
-
-        public TxIn()
-        {
-            this.SignatureScriptPart1 = new byte[] {};
-        }
     }
 
 }

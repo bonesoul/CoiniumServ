@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Transactions\OutPoint.cs" />
+    <Compile Include="Transactions\Script\SignatureScript.cs" />
     <Compile Include="Transactions\TxIn.cs" />
     <Compile Include="Transactions\TxOut.cs" />
     <Compile Include="Common\Context\ApplicationContext.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Console\ConsoleWindow.cs" />
+    <Compile Include="Transactions\Utils\TransactionUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\config\coins\365coin.json">

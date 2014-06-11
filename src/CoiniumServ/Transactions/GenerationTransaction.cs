@@ -28,6 +28,8 @@ using Coinium.Common.Helpers.Time;
 using Coinium.Crypto;
 using Coinium.Mining.Jobs;
 using Coinium.Transactions.Coinbase;
+using Coinium.Transactions.Script;
+using Coinium.Transactions.Utils;
 using Gibbed.IO;
 
 namespace Coinium.Transactions
@@ -94,12 +96,12 @@ namespace Coinium.Transactions
         /// <summary>
         /// Part 1 of the generation transaction.
         /// </summary>
-        public byte[] Part1 { get; private set; }
+        public byte[] Initial { get; private set; }
 
         /// <summary>
         /// Part 2 of the generation transaction.
         /// </summary>
-        public byte[] Part2 { get; private set; }
+        public byte[] Final { get; private set; }
 
         /// <summary>
         /// Creates a new instance of generation transaction.
@@ -121,26 +123,23 @@ namespace Coinium.Transactions
             this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             this.LockTime = 0;
 
-            var input = new TxIn();
-            input.PreviousOutput = new OutPoint();
-            input.PreviousOutput.Hash = Hash.ZeroHash;
-            input.PreviousOutput.Index = (UInt32) Math.Pow(2, 32) - 1;
-            input.Sequence = 0x0;
+            var input = new TxIn
+            {
+                PreviousOutput = new OutPoint
+                {
+                    Hash = Hash.ZeroHash,
+                    Index = (UInt32) Math.Pow(2, 32) - 1
+                },
+                Sequence = 0x0,
+                SignatureScript =
+                    new SignatureScript(
+                        blockTemplate.Height, 
+                        blockTemplate.CoinBaseAux.Flags,
+                        TimeHelpers.NowInUnixTime(), 
+                        (byte) extraNonce.ExtraNoncePlaceholder.Length,
+                        "/CoiniumServ/")
+            };
 
-            // cook input signature script.
-            // The txin's prevout script is an arbitrary byte array (it doesn't have to be a valid script, though this is commonly 
-            // done anyway) of 2 to 100 bytes. It has to start with a correct push of the block height (see BIP34).
-
-            var serializedBlockHeight = CoinbaseUtils.SerializeNumber(blockTemplate.Height);
-            var coinBaseAuxFlags = blockTemplate.CoinBaseAux.Flags.HexToByteArray();
-            var serializedUnixTime = CoinbaseUtils.SerializeNumber(TimeHelpers.NowInUnixTime()/1000 | 0);
-
-            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedBlockHeight).ToArray();
-            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(coinBaseAuxFlags).ToArray();
-            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(serializedUnixTime).ToArray();
-            input.SignatureScriptPart1 = input.SignatureScriptPart1.Concat(new[] { (byte)extraNonce.ExtraNoncePlaceholder.Length }).ToArray();
-
-            input.SignatureScriptPart2 = CoinbaseUtils.SerializeString("/CoiniumServ/");
 
             this.Inputs = new List<TxIn> {input};
 
@@ -156,13 +155,13 @@ namespace Coinium.Transactions
                 stream.WriteBytes(this.Inputs[0].PreviousOutput.Hash.Bytes);
                 stream.WriteValueU32(this.Inputs[0].PreviousOutput.Index.LittleEndian());
 
-                // write signnature script lenght
-                var signatureScriptLenght = (UInt32)(input.SignatureScriptPart1.Length + extraNonce.ExtraNoncePlaceholder.Length + input.SignatureScriptPart2.Length);
+                // write signature script lenght
+                var signatureScriptLenght = (UInt32)(input.SignatureScript.Initial.Length + extraNonce.ExtraNoncePlaceholder.Length + input.SignatureScript.Final.Length);
                 stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
 
-                stream.WriteBytes(input.SignatureScriptPart1);
+                stream.WriteBytes(input.SignatureScript.Initial);
 
-                this.Part1 = stream.ToArray();
+                this.Initial = stream.ToArray();
             }
 
             /*  The generation transaction must be split at the extranonce (which located in the transaction input
@@ -175,7 +174,7 @@ namespace Coinium.Transactions
             // create the second part.
             using (var stream = new MemoryStream())
             {
-                stream.WriteBytes(input.SignatureScriptPart2);
+                stream.WriteBytes(input.SignatureScript.Final);
                 stream.WriteValueU32(this.Inputs[0].Sequence); // transaction inputs end here.
 
                 stream.WriteBytes(CoinbaseUtils.VarInt((UInt32) outputBuffers.Length).ToArray()); // transaction output start here.
@@ -186,7 +185,7 @@ namespace Coinium.Transactions
                 if (supportTxMessages)
                     stream.WriteBytes(this.Message);
 
-                this.Part2 = stream.ToArray();
+                this.Final = stream.ToArray();
             }
         }
 
