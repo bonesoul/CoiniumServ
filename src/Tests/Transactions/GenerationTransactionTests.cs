@@ -17,17 +17,12 @@
 */
 
 using System;
-using System.IO;
 using System.Linq;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
-using Coinium.Common.Helpers.Time;
-using Coinium.Crypto;
 using Coinium.Mining.Jobs;
 using Coinium.Transactions;
-using Coinium.Transactions.Coinbase;
 using Coinium.Transactions.Script;
-using Gibbed.IO;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;

@@ -22,14 +22,11 @@ using System.IO;
 using System.Linq;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
-using Coinium.Coin.Exceptions;
-using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Time;
 using Coinium.Crypto;
 using Coinium.Mining.Jobs;
 using Coinium.Transactions.Coinbase;
 using Coinium.Transactions.Script;
-using Coinium.Transactions.Utils;
 using Gibbed.IO;
 
 namespace Coinium.Transactions
@@ -69,16 +66,10 @@ namespace Coinium.Transactions
         /// </summary>
         public List<TxIn> Inputs { get; private set; } 
 
-        // Number of Transaction outputs
-        public UInt32 OutputsCount
-        {
-            get { return (UInt32)this.Inputs.Count; }
-        }
-
         /// <summary>
         /// A list of 1 or more transaction outputs or destinations for coins
         /// </summary>
-        public List<TxOut> Outputs;
+        public Outputs Outputs;
 
         /// <summary>
         ///  For coins that support/require transaction comments
@@ -118,7 +109,6 @@ namespace Coinium.Transactions
         /// <param name="daemonClient">The daemon client.</param>
         /// <param name="blockTemplate">The block template.</param>
         /// <param name="supportTxMessages">if set to <c>true</c> [support tx messages].</param>
-        /// <param name="signature"></param>
         /// <remarks>
         /// Reference implementations:
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
@@ -130,6 +120,7 @@ namespace Coinium.Transactions
             this.BlockTemplate = blockTemplate;
             this.ExtraNonce = extraNonce;
             this.SupportTxMessages = supportTxMessages;
+            this.Outputs = new Outputs(daemonClient, blockTemplate);
 
             this.Version = (UInt32)(supportTxMessages ? 2 : 1);
             this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
@@ -183,8 +174,26 @@ namespace Coinium.Transactions
                 scriptSig). Miners send us unique extranonces that we use to join the two parts in attempt to create
                 a valid share and/or block. */
 
-            this.Outputs = this.GenerateOutputTransactions(this.DaemonClient, this.BlockTemplate);
-            var outputBuffers = this.GetOutputBuffer();
+            double blockReward = this.BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
+
+            const string poolWallet = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
+
+            var rewardRecipients = new Dictionary<string, double>() // reward recipients addresses.
+            {
+                {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t", 1} // pool fee
+            };
+
+            // generate output transactions for recipients (set in config).
+            foreach (var pair in rewardRecipients)
+            {
+                var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
+                blockReward -= amount;
+
+                this.Outputs.Add(pair.Key, amount);
+            }
+
+            // send the remaining coins to pool's central wallet.
+            this.Outputs.Add(poolWallet, blockReward);  
 
             // create the second part.
             using (var stream = new MemoryStream())
@@ -192,8 +201,10 @@ namespace Coinium.Transactions
                 stream.WriteBytes(this.Inputs.First().SignatureScript.Final);
                 stream.WriteValueU32(this.Inputs.First().Sequence); // transaction inputs end here.
 
-                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32)outputBuffers.Length).ToArray()); // transaction output start here.
-                stream.WriteBytes(outputBuffers); // transaction output ends here.
+                var outputBuffer = this.Outputs.GetBuffer();
+
+                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32)outputBuffer.Length).ToArray()); // transaction output start here.
+                stream.WriteBytes(outputBuffer); // transaction output ends here.
 
                 stream.WriteValueU32(this.LockTime.LittleEndian());
 
@@ -202,93 +213,6 @@ namespace Coinium.Transactions
 
                 this.Final = stream.ToArray();
             }
-        }
-
-        /// <summary>
-        /// Returns the buffer that contains output transactions.
-        /// </summary>
-        /// <returns></returns>
-        private byte[] GetOutputBuffer()
-        {
-            byte[] result;
-
-            using (var stream = new MemoryStream())
-            {
-                foreach (var transaction in this.Outputs)
-                {
-                    stream.WriteValueU64(transaction.Value);
-                    stream.WriteBytes(transaction.PublicKeyScriptLenght);
-                    stream.WriteBytes(transaction.PublicKeyScript);
-                }
-
-                result = stream.ToArray();
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Generates the output transactions.
-        /// </summary>
-        /// <param name="daemonClient">The daemon client.</param>
-        /// <param name="blockTemplate">The block template.</param>
-        /// <returns></returns>
-        /// <exception cref="InvalidWalletAddressException">
-        /// </exception>
-        private List<TxOut> GenerateOutputTransactions(IDaemonClient daemonClient, BlockTemplate blockTemplate)
-        {
-            const string poolCentralWalletAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
-
-            var transactions = new List<TxOut>();
-
-            var rewardRecipients = new Dictionary<string, double>() // reward recipients addresses.
-            {
-                {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t", 1} // pool fee
-
-            };
-
-            // validate our pool wallet address.
-            if (!daemonClient.ValidateAddress(poolCentralWalletAddress).IsValid)
-                throw new InvalidWalletAddressException(poolCentralWalletAddress);
-
-            // validate reward recipients addresses too.
-            foreach (var pair in rewardRecipients)
-            {
-                if (!daemonClient.ValidateAddress(pair.Key).IsValid)
-                    throw new InvalidWalletAddressException(pair.Key);
-            }
-
-            double blockReward = blockTemplate.Coinbasevalue;
-
-            // generate output transactions for recipients (set in config).
-            foreach (var pair in rewardRecipients)
-            {
-                var recipientScript = CoinbaseUtils.CoinAddressToScript(pair.Key); // generate the script to claim the output for recipient.
-                var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
-                blockReward -= amount;
-
-                var recipientTxOut = new TxOut()
-                {
-                    Value = ((UInt64)amount).LittleEndian(),
-                    PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32)recipientScript.Length),
-                    PublicKeyScript = recipientScript
-                };
-                transactions.Add(recipientTxOut);
-            }
-
-            // send the remaining coins to pool's central wallet.
-            var centralWalletScript = CoinbaseUtils.CoinAddressToScript(poolCentralWalletAddress); // script to claim the output for pool-fee.
-          
-            var poolFeeTxOut = new TxOut
-            {
-                Value = ((UInt64) blockReward).LittleEndian(),
-                PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32) centralWalletScript.Length),
-                PublicKeyScript = centralWalletScript
-            };
-
-            transactions.Add(poolFeeTxOut);
-
-            return transactions;
         }
     }    
 }

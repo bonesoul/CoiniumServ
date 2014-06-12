@@ -88,7 +88,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Transactions\ITransactionOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
+    <Compile Include="Transactions\Outputs.cs" />
     <Compile Include="Transactions\Script\SignatureScript.cs" />
     <Compile Include="Transactions\TxIn.cs" />
     <Compile Include="Transactions\TxOut.cs" />
