@@ -21,6 +21,8 @@ using System.IO;
 using System.Linq;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
+using Coinium.Common.Helpers.Time;
+using Coinium.Crypto;
 using Coinium.Mining.Jobs;
 using Coinium.Transactions;
 using Coinium.Transactions.Coinbase;
@@ -39,19 +41,25 @@ namespace Tests.Transactions
         public void CreateGenerationTransactionTest()
         {
             /*  sample data
-                -- create-generation start --
-                rpcData: {"version":2,"previousblockhash":"f5f50aa8da33bde3805fe2a56b5f5ab82a2c0ce8597ef97a0abd8348d33ef1b6","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"00000fffff000000000000000000000000000000000000000000000000000000","mintime":1402264399,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402265776,"bits":"1e0fffff","height":294740}
-                -- scriptSigPart data --
-                -> height: 294740 serialized: 03547f04
-                -> coinbase: 062f503253482f hex: 062f503253482f
-                -> date: 1402265775319 final:1402265775 serialized: 04afe09453
-                scriptSigPart1: 03547f04062f503253482f04afe0945308
-                scriptSigPart2: /nodeStratum/ serialized: 0d2f6e6f64655374726174756d2f
-                -- p1 data --
-                txVersion: 1 packed: 01000000*/
+            -- create-generation start --
+            rpcData: {"version":2,"previousblockhash":"8e5eb2399fcaae485bad3d80265345c6b37ccf0141fecf2a88c5d89b56a2ca86","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"000000f399000000000000000000000000000000000000000000000000000000","mintime":1402568989,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402569149,"bits":"1e00f399","height":300661}
+            -- scriptSigPart data --
+            -> height: 300661 serialized: 03759604
+            -> coinbase: 062f503253482f hex: 062f503253482f
+            -> date: 1402569148396 final:1402569148 serialized: 04bc819953
+            scriptSigPart1: 03759604062f503253482f04bc81995308
+            scriptSigPart2: /nodeStratum/ serialized: 0d2f6e6f64655374726174756d2f
+            -- p1 data --
+            txVersion: 1 packed: 01000000
+            txInputsCount: 1 varIntBuffer: 01
+            txInPrevOutHash: 0 uint256BufferFromHash: 0000000000000000000000000000000000000000000000000000000000000000
+            txInPrevOutIndex: 4294967295 packUInt32LE: ffffffff
+            scriptSigPart1.length: 17 extraNoncePlaceholder.length:8 scriptSigPart2.length:14 all: 39 varIntBuffer: 27
+            scriptSigPart1: 03759604062f503253482f04bc81995308
+            p1: 01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703759604062f503253482f04bc81995308 */
 
             // block template json
-            const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"f5f50aa8da33bde3805fe2a56b5f5ab82a2c0ce8597ef97a0abd8348d33ef1b6\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"00000fffff000000000000000000000000000000000000000000000000000000\",\"mintime\":1402264399,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1402265776,\"bits\":\"1e0fffff\",\"height\":294740},\"error\":null,\"id\":1}";
+            const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"8e5eb2399fcaae485bad3d80265345c6b37ccf0141fecf2a88c5d89b56a2ca86\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"000000f399000000000000000000000000000000000000000000000000000000\",\"mintime\":1402568989,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1402569149,\"bits\":\"1e00f399\",\"height\":300661},\"error\":null,\"id\":1}";
 
             // now init blocktemplate from our json.
             var @object = JsonConvert.DeserializeObject<DaemonResponse<BlockTemplate>>(json);
@@ -59,52 +67,67 @@ namespace Tests.Transactions
 
             // init mockup objects
             var daemonClient = Substitute.For<IDaemonClient>();
-            var addressValidation = new ValidateAddress
-            {
-                IsValid = true
-            };
+            var addressValidation = new ValidateAddress { IsValid = true };
             daemonClient.ValidateAddress("n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY").Returns(addressValidation);
             daemonClient.ValidateAddress("myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t").Returns(addressValidation);
 
             var extraNonce = new ExtraNonce(0);
 
-            var txIn = new TxIn
-            {
-                SignatureScript = new SignatureScript(
-                    blockTemplate.Height,
-                    blockTemplate.CoinBaseAux.Flags,
-                    1402265775319,
-                    (byte) extraNonce.ExtraNoncePlaceholder.Length,
-                    "/nodeStratum/")
-            };
+            // create the test object.
+            var generationTransaction = new GenerationTransaction(extraNonce, daemonClient, blockTemplate);
 
-            // test the part 1
-            const uint txVersion = 1;
+            // use the exactly same inputscript data within our sample data.
+            generationTransaction.Inputs.First().SignatureScript = new SignatureScript(
+                blockTemplate.Height,
+                blockTemplate.CoinBaseAux.Flags,
+                1402569148396,
+                (byte) extraNonce.ExtraNoncePlaceholder.Length,
+                "/nodeStratum/");
 
-            // create the first part.
+            generationTransaction.Create();
 
-            byte[] part1;
-            using (var stream = new MemoryStream())
-            {
-                stream.WriteValueU32(txVersion.LittleEndian()); // write version
+            // test version.
+            generationTransaction.Version.Should().Equal((UInt32)1);
+            generationTransaction.Initial.Take(4).Should().Equal(new byte[] { 0x01, 0x00, 0x00, 0x00 }); 
 
-                // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
+            // test inputs count.
+            generationTransaction.InputsCount.Should().Equal((UInt32)1);
+            generationTransaction.Initial.Skip(4).Take(1).Should().Equal(new byte[] { 0x01 }); 
 
-                // write transaction input.
-                //stream.WriteBytes(CoinbaseUtils.VarInt(this.InputsCount));
-                //stream.WriteBytes(this.Inputs[0].PreviousOutput.Hash.Bytes);
-                //stream.WriteValueU32(this.Inputs[0].PreviousOutput.Index.LittleEndian());
+            // test the input previous-output hash
+            generationTransaction.Initial.Skip(5)
+                .Take(32)
+                .Should()
+                .Equal(new byte[]
+                {
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                });
 
-                //// write signnature script lenght
-                //var signatureScriptLenght = (UInt32)(input.SignatureScriptPart1.Length + extraNonce.ExtraNoncePlaceholder.Length + input.SignatureScriptPart2.Length);
-                //stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
+            generationTransaction.Inputs.First().PreviousOutput.Index.Should().Equal(0xffffffff);
+            generationTransaction.Initial.Skip(37).Take(4).Should().Equal(new byte[] {0xff, 0xff, 0xff, 0xff});
 
-                //stream.WriteBytes(input.SignatureScriptPart1);
+            // test the lenghts byte
+            generationTransaction.Inputs.First().SignatureScript.Initial.Length.Should().Equal(17);
+            extraNonce.ExtraNoncePlaceholder.Length.Should().Equal(8);
+            generationTransaction.Inputs.First().SignatureScript.Final.Length.Should().Equal(14);
+            generationTransaction.Initial.Skip(41).Take(1).Should().Equal(new byte[] { 0x27 });
 
-                part1 = stream.ToArray();
-            }
+            // test the signature script
+            generationTransaction.Initial.Skip(42).Take(17).Should().Equal(new byte[]
+                {
+                    0x03, 0x75, 0x96, 0x04, 0x06, 0x2f, 0x50, 0x32, 0x53, 0x48, 0x2f, 0x04, 0xbc, 0x81, 0x99, 0x53,
+                    0x08
+                });
 
-            part1.Take(4).Should().Equal(new Byte[] {0x01, 0x00, 0x00, 0x00});
+            // test the generation transactions initial part.
+            generationTransaction.Initial.Should().Equal(new byte[]
+                {
+                    0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x27, 0x03, 0x75, 0x96,
+                    0x04, 0x06, 0x2f, 0x50, 0x32, 0x53, 0x48, 0x2f, 0x04, 0xbc, 0x81, 0x99, 0x53, 0x08
+                });
         }
     }
 }

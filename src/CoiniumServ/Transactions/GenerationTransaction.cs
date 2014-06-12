@@ -103,6 +103,14 @@ namespace Coinium.Transactions
         /// </summary>
         public byte[] Final { get; private set; }
 
+        public IDaemonClient DaemonClient { get; private set; }
+
+        public BlockTemplate BlockTemplate { get; private set; }
+
+        public IExtraNonce ExtraNonce { get; private set; }
+
+        public bool SupportTxMessages { get; private set; }
+
         /// <summary>
         /// Creates a new instance of generation transaction.
         /// </summary>
@@ -110,6 +118,7 @@ namespace Coinium.Transactions
         /// <param name="daemonClient">The daemon client.</param>
         /// <param name="blockTemplate">The block template.</param>
         /// <param name="supportTxMessages">if set to <c>true</c> [support tx messages].</param>
+        /// <param name="signature"></param>
         /// <remarks>
         /// Reference implementations:
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
@@ -117,49 +126,55 @@ namespace Coinium.Transactions
         /// </remarks>
         public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, BlockTemplate blockTemplate, bool supportTxMessages = false)
         {
-            // TODO: change internal processing code to functions, so the functions itself are testable.
+            this.DaemonClient = daemonClient;
+            this.BlockTemplate = blockTemplate;
+            this.ExtraNonce = extraNonce;
+            this.SupportTxMessages = supportTxMessages;
 
             this.Version = (UInt32)(supportTxMessages ? 2 : 1);
             this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             this.LockTime = 0;
 
-            var input = new TxIn
+            this.Inputs = new List<TxIn>
             {
-                PreviousOutput = new OutPoint
+                new TxIn
                 {
-                    Hash = Hash.ZeroHash,
-                    Index = (UInt32) Math.Pow(2, 32) - 1
-                },
-                Sequence = 0x0,
-                SignatureScript =
-                    new SignatureScript(
-                        blockTemplate.Height, 
-                        blockTemplate.CoinBaseAux.Flags,
-                        TimeHelpers.NowInUnixTime(), 
-                        (byte) extraNonce.ExtraNoncePlaceholder.Length,
-                        "/CoiniumServ/")
+                    PreviousOutput = new OutPoint
+                    {
+                        Hash = Hash.ZeroHash,
+                        Index = (UInt32) Math.Pow(2, 32) - 1
+                    },
+                    Sequence = 0x0,
+                    SignatureScript =
+                        new SignatureScript(
+                            blockTemplate.Height,
+                            blockTemplate.CoinBaseAux.Flags,
+                            TimeHelpers.NowInUnixTime(),
+                            (byte) extraNonce.ExtraNoncePlaceholder.Length,
+                            "/CoiniumServ/")
+                }
             };
+        }
 
-
-            this.Inputs = new List<TxIn> {input};
-
+        public void Create()
+        {
             // create the first part.
             using (var stream = new MemoryStream())
             {
                 stream.WriteValueU32(this.Version.LittleEndian()); // write version
 
                 // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
-                
+
                 // write transaction input.
                 stream.WriteBytes(CoinbaseUtils.VarInt(this.InputsCount));
-                stream.WriteBytes(this.Inputs[0].PreviousOutput.Hash.Bytes);
-                stream.WriteValueU32(this.Inputs[0].PreviousOutput.Index.LittleEndian());
+                stream.WriteBytes(this.Inputs.First().PreviousOutput.Hash.Bytes);
+                stream.WriteValueU32(this.Inputs.First().PreviousOutput.Index.LittleEndian());
 
                 // write signature script lenght
-                var signatureScriptLenght = (UInt32)(input.SignatureScript.Initial.Length + extraNonce.ExtraNoncePlaceholder.Length + input.SignatureScript.Final.Length);
+                var signatureScriptLenght = (UInt32)(this.Inputs.First().SignatureScript.Initial.Length + this.ExtraNonce.ExtraNoncePlaceholder.Length + this.Inputs.First().SignatureScript.Final.Length);
                 stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
 
-                stream.WriteBytes(input.SignatureScript.Initial);
+                stream.WriteBytes(this.Inputs.First().SignatureScript.Initial);
 
                 this.Initial = stream.ToArray();
             }
@@ -168,21 +183,21 @@ namespace Coinium.Transactions
                 scriptSig). Miners send us unique extranonces that we use to join the two parts in attempt to create
                 a valid share and/or block. */
 
-            this.Outputs = this.GenerateOutputTransactions(daemonClient, blockTemplate);
+            this.Outputs = this.GenerateOutputTransactions(this.DaemonClient, this.BlockTemplate);
             var outputBuffers = this.GetOutputBuffer();
 
             // create the second part.
             using (var stream = new MemoryStream())
             {
-                stream.WriteBytes(input.SignatureScript.Final);
-                stream.WriteValueU32(this.Inputs[0].Sequence); // transaction inputs end here.
+                stream.WriteBytes(this.Inputs.First().SignatureScript.Final);
+                stream.WriteValueU32(this.Inputs.First().Sequence); // transaction inputs end here.
 
-                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32) outputBuffers.Length).ToArray()); // transaction output start here.
+                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32)outputBuffers.Length).ToArray()); // transaction output start here.
                 stream.WriteBytes(outputBuffers); // transaction output ends here.
 
                 stream.WriteValueU32(this.LockTime.LittleEndian());
 
-                if (supportTxMessages)
+                if (this.SupportTxMessages)
                     stream.WriteBytes(this.Message);
 
                 this.Final = stream.ToArray();

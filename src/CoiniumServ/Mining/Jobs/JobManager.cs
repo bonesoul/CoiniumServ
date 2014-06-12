@@ -73,6 +73,7 @@ namespace Coinium.Mining.Jobs
         {
             var blockTemplate = _daemonClient.GetBlockTemplate();
             var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate, false);
+            generationTransaction.Create();
 
             var hashList = new List<byte[]>();
 
