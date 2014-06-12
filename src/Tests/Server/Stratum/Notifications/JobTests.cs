@@ -57,6 +57,7 @@ namespace Tests.Server.Stratum.Notifications
 
 
             var transaction = Substitute.For<GenerationTransaction>(extraNonce, daemonClient, blockTemplate, false);
+            transaction.Create();
 
             var job = new Job(jobCounter.Next(), blockTemplate, transaction, merkleTree);
 
