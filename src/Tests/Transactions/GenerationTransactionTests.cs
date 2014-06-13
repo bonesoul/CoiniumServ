@@ -142,6 +142,12 @@ namespace Tests.Transactions
             {
                 0x0d, 0x2f, 0x6e, 0x6f, 0x64, 0x65, 0x53, 0x74, 0x72, 0x61, 0x74, 0x75, 0x6d, 0x2f
             });
+
+            // test the inputs sequence
+            generationTransaction.Inputs.First().Sequence.Should().Equal((UInt32)0x00);
+            generationTransaction.Final.Skip(14).Take(4).Should().Equal(new byte[] { 0x00, 0x00, 0x00, 0x00 });
+
+
         }
     }
 }

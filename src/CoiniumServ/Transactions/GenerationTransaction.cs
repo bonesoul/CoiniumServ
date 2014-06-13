@@ -202,11 +202,15 @@ namespace Coinium.Transactions
             // create the second part.
             using (var stream = new MemoryStream())
             {
+                // transaction input
                 stream.WriteBytes(Inputs.First().SignatureScript.Final);
-                stream.WriteValueU32(Inputs.First().Sequence); // transaction inputs end here.
+                stream.WriteValueU32(Inputs.First().Sequence); 
+                // transaction inputs end here.
 
+                // transaction output
                 var outputBuffer = Outputs.GetBuffer();
-                stream.WriteBytes(outputBuffer); // transaction output ends here.
+                stream.WriteBytes(outputBuffer); 
+                // transaction output ends here.
 
                 stream.WriteValueU32(LockTime.LittleEndian());
 
