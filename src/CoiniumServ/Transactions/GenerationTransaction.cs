@@ -120,12 +120,12 @@ namespace Coinium.Transactions
             BlockTemplate = blockTemplate;
             ExtraNonce = extraNonce;
             SupportTxMessages = supportTxMessages;
-            Outputs = new Outputs(daemonClient, blockTemplate);
 
             Version = (UInt32)(supportTxMessages ? 2 : 1);
             Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             LockTime = 0;
 
+            // transaction inputs
             Inputs = new List<TxIn>
             {
                 new TxIn
@@ -144,7 +144,31 @@ namespace Coinium.Transactions
                             (byte) extraNonce.ExtraNoncePlaceholder.Length,
                             "/CoiniumServ/")
                 }
+            }; 
+
+            // transaction outputs
+            Outputs = new Outputs(daemonClient);
+
+            double blockReward = BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
+
+            const string poolWallet = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
+
+            var rewardRecipients = new Dictionary<string, double> // reward recipients addresses.
+            {
+                {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t", 1} // pool fee
             };
+
+            // generate output transactions for recipients (set in config).
+            foreach (var pair in rewardRecipients)
+            {
+                var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
+                blockReward -= amount;
+
+                Outputs.AddRecipient(pair.Key, amount);
+            }
+
+            // send the remaining coins to pool's central wallet.
+            Outputs.AddPool(poolWallet, blockReward); 
         }
 
         public void Create()
@@ -174,26 +198,6 @@ namespace Coinium.Transactions
                 scriptSig). Miners send us unique extranonces that we use to join the two parts in attempt to create
                 a valid share and/or block. */
 
-            double blockReward = BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
-
-            const string poolWallet = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
-
-            var rewardRecipients = new Dictionary<string, double> // reward recipients addresses.
-            {
-                {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t", 1} // pool fee
-            };
-
-            // generate output transactions for recipients (set in config).
-            foreach (var pair in rewardRecipients)
-            {
-                var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
-                blockReward -= amount;
-
-                Outputs.Add(pair.Key, amount);
-            }
-
-            // send the remaining coins to pool's central wallet.
-            Outputs.Add(poolWallet, blockReward);  
 
             // create the second part.
             using (var stream = new MemoryStream())
@@ -202,8 +206,6 @@ namespace Coinium.Transactions
                 stream.WriteValueU32(Inputs.First().Sequence); // transaction inputs end here.
 
                 var outputBuffer = Outputs.GetBuffer();
-
-                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32)outputBuffer.Length).ToArray()); // transaction output start here.
                 stream.WriteBytes(outputBuffer); // transaction output ends here.
 
                 stream.WriteValueU32(LockTime.LittleEndian());

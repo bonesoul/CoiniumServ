@@ -32,14 +32,15 @@ namespace Tests.Transactions.Script
         public void SignatureScriptTest()
         {
             /*  sample data
-            -- create-generation start --
-            rpcData: {"version":2,"previousblockhash":"f5f50aa8da33bde3805fe2a56b5f5ab82a2c0ce8597ef97a0abd8348d33ef1b6","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"00000fffff000000000000000000000000000000000000000000000000000000","mintime":1402264399,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402265776,"bits":"1e0fffff","height":294740}
-            -- scriptSigPart data --
-            -> height: 294740 serialized: 03547f04
-            -> coinbase: 062f503253482f hex: 062f503253482f
-            -> date: 1402265775319 final:1402265775 serialized: 04afe09453
-            scriptSigPart1: 03547f04062f503253482f04afe0945308
-            scriptSigPart2: /nodeStratum/ serialized: 0d2f6e6f64655374726174756d2f */
+                -- create-generation start --
+                rpcData: {"version":2,"previousblockhash":"f5f50aa8da33bde3805fe2a56b5f5ab82a2c0ce8597ef97a0abd8348d33ef1b6","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"00000fffff000000000000000000000000000000000000000000000000000000","mintime":1402264399,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402265776,"bits":"1e0fffff","height":294740}
+                -- scriptSigPart data --
+                -> height: 294740 serialized: 03547f04
+                -> coinbase: 062f503253482f hex: 062f503253482f
+                -> date: 1402265775319 final:1402265775 serialized: 04afe09453
+                scriptSigPart1: 03547f04062f503253482f04afe0945308
+                scriptSigPart2: /nodeStratum/ serialized: 0d2f6e6f64655374726174756d2f 
+             */
 
             // block template json
             const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"f5f50aa8da33bde3805fe2a56b5f5ab82a2c0ce8597ef97a0abd8348d33ef1b6\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"00000fffff000000000000000000000000000000000000000000000000000000\",\"mintime\":1402264399,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1402265776,\"bits\":\"1e0fffff\",\"height\":294740},\"error\":null,\"id\":1}";

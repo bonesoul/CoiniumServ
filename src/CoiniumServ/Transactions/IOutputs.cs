@@ -20,11 +20,13 @@ using System.Collections.Generic;
 
 namespace Coinium.Transactions
 {
-    public interface ITransactionOutputs
+    public interface IOutputs
     {
         List<TxOut> List { get; }
 
-        void Add(string walletAddress, double amount);
+        void AddPool(string address, double amount);
+
+        void AddRecipient(string address, double amount);
 
         byte[] GetBuffer();
     }

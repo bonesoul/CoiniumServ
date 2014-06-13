@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Coin.Exceptions;
@@ -27,22 +28,30 @@ using Gibbed.IO;
 
 namespace Coinium.Transactions
 {
-    public class Outputs : ITransactionOutputs
+    public class Outputs : IOutputs
     {
         public List<TxOut> List { get; private set; }
 
         public IDaemonClient DaemonClient { get; private set; }
 
-        public BlockTemplate BlockTemplate { get; private set; }
 
-        public Outputs(IDaemonClient daemonClient, BlockTemplate blockTemplate)
+        public Outputs(IDaemonClient daemonClient)
         {
             DaemonClient = daemonClient;
-            BlockTemplate = blockTemplate;
             List = new List<TxOut>();
         }
 
-        public void Add(string walletAddress, double amount)
+        public void AddPool(string address, double amount)
+        {
+            Add(address, amount, true);
+        }
+
+        public void AddRecipient(string address, double amount)
+        {
+            Add(address, amount, false);
+        }
+
+        private void Add(string walletAddress, double amount, bool toFront)
         {
             // check if the supplied wallet address is correct.
 
@@ -56,9 +65,12 @@ namespace Coinium.Transactions
                 Value = ((UInt64)amount).LittleEndian(),
                 PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32)recipientScript.Length),
                 PublicKeyScript = recipientScript
-            };
+            };   
 
-            List.Add(txOut);
+            if(toFront)
+                List.Insert(0,txOut);
+            else
+                List.Add(txOut);
         }
 
         public byte[] GetBuffer()
@@ -67,6 +79,8 @@ namespace Coinium.Transactions
 
             using (var stream = new MemoryStream())
             {
+                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32)List.Count).ToArray());
+
                 foreach (var transaction in List)
                 {
                     stream.WriteValueU64(transaction.Value);
