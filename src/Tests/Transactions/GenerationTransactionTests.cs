@@ -36,25 +36,40 @@ namespace Tests.Transactions
         public void CreateGenerationTransactionTest()
         {
             /*  sample data
-            -- create-generation start --
-            rpcData: {"version":2,"previousblockhash":"8e5eb2399fcaae485bad3d80265345c6b37ccf0141fecf2a88c5d89b56a2ca86","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"000000f399000000000000000000000000000000000000000000000000000000","mintime":1402568989,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402569149,"bits":"1e00f399","height":300661}
-            -- scriptSigPart data --
-            -> height: 300661 serialized: 03759604
-            -> coinbase: 062f503253482f hex: 062f503253482f
-            -> date: 1402569148396 final:1402569148 serialized: 04bc819953
-            scriptSigPart1: 03759604062f503253482f04bc81995308
-            scriptSigPart2: /nodeStratum/ serialized: 0d2f6e6f64655374726174756d2f
-            -- p1 data --
-            txVersion: 1 packed: 01000000
-            txInputsCount: 1 varIntBuffer: 01
-            txInPrevOutHash: 0 uint256BufferFromHash: 0000000000000000000000000000000000000000000000000000000000000000
-            txInPrevOutIndex: 4294967295 packUInt32LE: ffffffff
-            scriptSigPart1.length: 17 extraNoncePlaceholder.length:8 scriptSigPart2.length:14 all: 39 varIntBuffer: 27
-            scriptSigPart1: 03759604062f503253482f04bc81995308
-            p1: 01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703759604062f503253482f04bc81995308 */
+                -- create-generation start --
+                rpcData: {"version":2,"previousblockhash":"e9bbcc9b46ed98fd4850f2d21e85566defdefad3453460caabc7a635fc5a1261","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"0000004701b20000000000000000000000000000000000000000000000000000","mintime":1402660580,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402661060,"bits":"1d4701b2","height":302526}
+                -- scriptSigPart data --
+                -> height: 302526 serialized: 03be9d04
+                -> coinbase: 062f503253482f hex: 062f503253482f
+                -> date: 1402661059432 final:1402661059 serialized: 04c3e89a53
+                -- p1 data --
+                txVersion: 1 packed: 01000000
+                txInputsCount: 1 varIntBuffer: 01
+                txInPrevOutHash: 0 uint256BufferFromHash: 0000000000000000000000000000000000000000000000000000000000000000
+                txInPrevOutIndex: 4294967295 packUInt32LE: ffffffff
+                scriptSigPart1.length: 17 extraNoncePlaceholder.length:8 scriptSigPart2.length:14 all: 39 varIntBuffer: 27
+                scriptSigPart1: 03be9d04062f503253482f04c3e89a5308
+                p1: 01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703be9d04062f503253482f04c3e89a5308
+                -- generateOutputTransactions --
+                block-reward: 5000000000
+                recipient-reward: 50000000 packInt64LE: 80f0fa0200000000
+                lenght: 25 varIntBuffer: 19
+                script: 76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
+                pool-reward: 4950000000 packInt64LE: 80010b2701000000
+                lenght: 25 varIntBuffer: 19
+                script: 76a914329035234168b8da5af106ceb20560401236849888ac
+                txOutputBuffers.lenght : 2 varIntBuffer: 02
+                -- p2 --
+                scriptSigPart2: 0d2f6e6f64655374726174756d2f
+                txInSequence: 0 packUInt32LE: 00000000
+                outputTransactions: 0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
+                txLockTime: 0 packUInt32LE: 00000000
+                txComment: 
+                p2: 0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000
+            */
 
             // block template json
-            const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"8e5eb2399fcaae485bad3d80265345c6b37ccf0141fecf2a88c5d89b56a2ca86\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"000000f399000000000000000000000000000000000000000000000000000000\",\"mintime\":1402568989,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1402569149,\"bits\":\"1e00f399\",\"height\":300661},\"error\":null,\"id\":1}";
+            const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"e9bbcc9b46ed98fd4850f2d21e85566defdefad3453460caabc7a635fc5a1261\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"0000004701b20000000000000000000000000000000000000000000000000000\",\"mintime\":1402660580,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1402661060,\"bits\":\"1d4701b2\",\"height\":302526},\"error\":null,\"id\":1}";
 
             // now init blocktemplate from our json.
             var @object = JsonConvert.DeserializeObject<DaemonResponse<BlockTemplate>>(json);
@@ -62,20 +77,18 @@ namespace Tests.Transactions
 
             // init mockup objects
             var daemonClient = Substitute.For<IDaemonClient>();
-            var addressValidation = new ValidateAddress { IsValid = true };
-            daemonClient.ValidateAddress("n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY").Returns(addressValidation);
-            daemonClient.ValidateAddress("myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t").Returns(addressValidation);
+            daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress {IsValid = true});
 
             var extraNonce = new ExtraNonce(0);
 
             // create the test object.
             var generationTransaction = new GenerationTransaction(extraNonce, daemonClient, blockTemplate);
 
-            // use the exactly same inputscript data within our sample data.
+            // use the exactly same input script data within our sample data.
             generationTransaction.Inputs.First().SignatureScript = new SignatureScript(
                 blockTemplate.Height,
                 blockTemplate.CoinBaseAux.Flags,
-                1402569148396,
+                1402661059432,
                 (byte) extraNonce.ExtraNoncePlaceholder.Length,
                 "/nodeStratum/");
 
@@ -108,21 +121,27 @@ namespace Tests.Transactions
             generationTransaction.Inputs.First().SignatureScript.Final.Length.Should().Equal(14);
             generationTransaction.Initial.Skip(41).Take(1).Should().Equal(new byte[] { 0x27 });
 
-            // test the signature script
+            // test the signature script initial
             generationTransaction.Initial.Skip(42).Take(17).Should().Equal(new byte[]
-                {
-                    0x03, 0x75, 0x96, 0x04, 0x06, 0x2f, 0x50, 0x32, 0x53, 0x48, 0x2f, 0x04, 0xbc, 0x81, 0x99, 0x53,
-                    0x08
-                });
+            {
+                0x03, 0xbe, 0x9d, 0x04, 0x06, 0x2f, 0x50, 0x32, 0x53, 0x48, 0x2f, 0x04, 0xc3, 0xe8, 0x9a, 0x53,
+                0x08                    
+            });
 
             // test the generation transactions initial part.
             generationTransaction.Initial.Should().Equal(new byte[]
-                {
-                    0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x27, 0x03, 0x75, 0x96,
-                    0x04, 0x06, 0x2f, 0x50, 0x32, 0x53, 0x48, 0x2f, 0x04, 0xbc, 0x81, 0x99, 0x53, 0x08
-                });
+            {
+                0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x27, 0x03, 0xbe, 0x9d, 
+                0x04, 0x06, 0x2f, 0x50, 0x32, 0x53, 0x48, 0x2f, 0x04, 0xc3, 0xe8, 0x9a, 0x53, 0x08
+            });
+
+            // test the signature script final
+            generationTransaction.Final.Take(14).Should().Equal(new byte[]
+            {
+                0x0d, 0x2f, 0x6e, 0x6f, 0x64, 0x65, 0x53, 0x74, 0x72, 0x61, 0x74, 0x75, 0x6d, 0x2f
+            });
         }
     }
 }
