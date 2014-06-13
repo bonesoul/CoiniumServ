@@ -31,7 +31,7 @@ namespace Coinium.Mining.Jobs
         /// <returns></returns>
         public IJobManager Get(IDaemonClient daemonClient, IMinerManager minerManager)
         {
-            var @params = new NamedParameterOverloads() {{"daemonClient", daemonClient}, {"minerManager", minerManager}};
+            var @params = new NamedParameterOverloads {{"daemonClient", daemonClient}, {"minerManager", minerManager}};
 
             return _applicationContext.Container.Resolve<IJobManager>(@params);
         }

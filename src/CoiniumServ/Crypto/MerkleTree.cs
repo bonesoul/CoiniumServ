@@ -57,9 +57,9 @@ namespace Coinium.Crypto
         /// <param name="hashList"></param>
         public MerkleTree(List<byte[]> hashList)
         {
-            this.Tree = this.Build(hashList);
-            this.Steps = this.CalculateSteps(hashList);
-            this.Root = this.Tree.Count > 0 ? new Hash(this.Tree[this.Tree.Count - 1]) : Hash.ZeroHash;
+            Tree = Build(hashList);
+            Steps = CalculateSteps(hashList);
+            Root = Tree.Count > 0 ? new Hash(Tree[Tree.Count - 1]) : Hash.ZeroHash;
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Coinium.Crypto
 
                     foreach (int i in Range.From(startL).To(Ll).WithStepSize(2))
                     {
-                        Ld.Add(this.MerkleJoin(L[i], L[i + 1]));
+                        Ld.Add(MerkleJoin(L[i], L[i + 1]));
                     }
 
                     L = new List<byte[]> {null};
@@ -193,7 +193,7 @@ namespace Coinium.Crypto
 
         public byte[] WithFirst(byte[] first)
         {
-            foreach (var step in this.Steps)
+            foreach (var step in Steps)
             {
                 first = first.Append(step).DoubleDigest();
             }

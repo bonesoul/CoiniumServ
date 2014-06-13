@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Threading;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
@@ -93,7 +94,7 @@ namespace Coinium.Mining.Pool
             _serviceFactory = serviceFactory;
             _hashAlgorithmFactory = hashAlgorithmFactory;
 
-            this.GenerateInstanceId();
+            GenerateInstanceId();
         }
 
         /// <summary>
@@ -103,19 +104,19 @@ namespace Coinium.Mining.Pool
         /// <exception cref="System.ArgumentNullException">config;config.Daemon can not be null!</exception>
         public void Initialize(IPoolConfig config)
         {
-            this.Config = config;
+            Config = config;
 
             // init coin daemon.
-            this.InitDaemon();
+            InitDaemon();
 
             // init managers.
-            this.InitManagers();
+            InitManagers();
 
             // init servers
-            this.InitServers();
+            InitServers();
 
             // other stuff
-            this._timer = new Timer(Timer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
+            _timer = new Timer(Timer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
         }
 
         private void InitManagers()
@@ -123,15 +124,15 @@ namespace Coinium.Mining.Pool
             _jobManager = _jobManagerFactory.Get(_daemonClient, _minerManager);
             _jobManager.Initialize(InstanceId);
 
-            _shareManager = _shareManagerFactory.Get(_hashAlgorithmFactory.Get(this.Config.Coin.Algorithm), _jobManager, _daemonClient);
+            _shareManager = _shareManagerFactory.Get(_hashAlgorithmFactory.Get(Config.Coin.Algorithm), _jobManager, _daemonClient);
         }
 
         private void InitDaemon()
         {
-            if (this.Config.Daemon == null || this.Config.Daemon.Valid == false)
+            if (Config.Daemon == null || Config.Daemon.Valid == false)
                 Log.Error("Coin daemon configuration is not valid!");
 
-            _daemonClient.Initialize(this.Config.Daemon);
+            _daemonClient.Initialize(Config.Daemon);
         }
 
         private void InitServers()
@@ -140,21 +141,21 @@ namespace Coinium.Mining.Pool
 
             // we don't need here a server config list as a pool can host only one instance of stratum and one vanilla server.
             // we must be dictative here, using a server list may cause situations we don't want (multiple stratum configs etc..)
-            if (this.Config.Stratum != null)
+            if (Config.Stratum != null)
             {
                 var stratumServer = _serverFactory.Get("Stratum", _minerManager);
                 var stratumService = _serviceFactory.Get("Stratum", _jobManager, _shareManager, _daemonClient);
-                stratumServer.Initialize(this.Config.Stratum);
+                stratumServer.Initialize(Config.Stratum);
 
                 _servers.Add(stratumServer, stratumService);
             }
 
-            if (this.Config.Vanilla != null)
+            if (Config.Vanilla != null)
             {
                 var vanillaServer = _serverFactory.Get("Vanilla", _minerManager);
                 var vanillaService = _serviceFactory.Get("Vanilla", _jobManager, _shareManager, _daemonClient);
 
-                vanillaServer.Initialize(this.Config.Vanilla);
+                vanillaServer.Initialize(Config.Vanilla);
 
                 _servers.Add(vanillaServer, vanillaService);
             }
@@ -162,7 +163,7 @@ namespace Coinium.Mining.Pool
 
         public void Start()
         {
-            if (!this.Config.Valid)
+            if (!Config.Valid)
             {
                 Log.Error("Can't start pool as configuration is not valid.");
                 return;
@@ -188,11 +189,11 @@ namespace Coinium.Mining.Pool
         /// </summary>
         private void GenerateInstanceId()
         {
-            var rndGenerator = System.Security.Cryptography.RandomNumberGenerator.Create(); // cryptographically random generator.
+            var rndGenerator = RandomNumberGenerator.Create(); // cryptographically random generator.
             var randomBytes = new byte[4];
             rndGenerator.GetNonZeroBytes(randomBytes); // create cryptographically random array of bytes.
-            this.InstanceId = BitConverter.ToUInt32(randomBytes, 0); // convert them to instance Id.
-            Log.Debug("Generated cryptographically random instance Id: {0}", this.InstanceId);
+            InstanceId = BitConverter.ToUInt32(randomBytes, 0); // convert them to instance Id.
+            Log.Debug("Generated cryptographically random instance Id: {0}", InstanceId);
         }
     }
 }

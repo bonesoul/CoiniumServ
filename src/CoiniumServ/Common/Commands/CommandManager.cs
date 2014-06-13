@@ -142,7 +142,7 @@ namespace Coinium.Common.Commands
             public override string Handle(string parameters)
             {
                 if (parameters == string.Empty)
-                    return this.Fallback();
+                    return Fallback();
 
                 string output = string.Empty;
                 bool found = false;

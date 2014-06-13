@@ -59,14 +59,7 @@ namespace Coinium.Coin.Daemon
             Id = id;
             Method = method;
 
-            if (parameters != null)
-            {
-                Parameters = parameters.ToList<object>();
-            }
-            else
-            {
-                Parameters = new List<object>();
-            }
+            Parameters = parameters != null ? parameters.ToList() : new List<object>();
         }
 
         /// <summary>

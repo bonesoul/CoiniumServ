@@ -69,12 +69,12 @@ namespace Coinium.Server.Stratum
         /// <param name="connection"></param>
         public StratumMiner(int id, IConnection connection)
         {
-            this.Id = id; // the id of the miner.
-            this.Connection = connection; // the underlying connection.
-            this.SupportsJobNotifications = true; // stratum miner'ssupports new mining job notifications.
+            Id = id; // the id of the miner.
+            Connection = connection; // the underlying connection.
+            SupportsJobNotifications = true; // stratum miner'ssupports new mining job notifications.
 
-            this.Subscribed = false;
-            this.Authenticated = false;
+            Subscribed = false;
+            Authenticated = false;
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Coinium.Server.Stratum
         /// </summary>
         public void Subscribe()
         {
-            this.Subscribed = true;
+            Subscribed = true;
         }
 
         /// <summary>
@@ -126,14 +126,14 @@ namespace Coinium.Server.Stratum
         /// <returns></returns>
         public bool Authenticate(string user, string password)
         {
-            this.Authenticated = true;            
+            Authenticated = true;            
 
             // notify any listeners about the miner's authentication.
             var handler = OnAuthenticate;
             if (handler != null)
                 handler(this, new MinerAuthenticationEventArgs(this));
 
-            return this.Authenticated;
+            return Authenticated;
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Coinium.Server.Stratum
             var json = JsonConvert.SerializeObject(notification) + "\n";
 
             var data = Encoding.UTF8.GetBytes(json);
-            this.Connection.Send(data);
+            Connection.Send(data);
 
             Log.Verbose("Stratum send:\n{0}", data.ToEncodedString().PrettifyJson());
         }
@@ -172,7 +172,7 @@ namespace Coinium.Server.Stratum
             var json = JsonConvert.SerializeObject(notification) + "\n";
 
             var data = Encoding.UTF8.GetBytes(json);
-            this.Connection.Send(data);
+            Connection.Send(data);
 
             Log.Verbose("Stratum send:\n{0}", data.ToEncodedString().PrettifyJson());
         }

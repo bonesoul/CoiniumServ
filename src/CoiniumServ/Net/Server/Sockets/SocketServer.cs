@@ -98,7 +98,7 @@ namespace Coinium.Net.Server.Sockets
         {
             // Check if the server instance has been already disposed.
             if (_disposed) 
-                throw new ObjectDisposedException(this.GetType().Name, "Server instance has been already disposed.");
+                throw new ObjectDisposedException(GetType().Name, "Server instance has been already disposed.");
 
             // Check if the server is already listening.
             if (IsListening)
@@ -117,7 +117,7 @@ namespace Coinium.Net.Server.Sockets
 
                 // try the actual bind.
                 Listener.Bind(new IPEndPoint(IPAddress.Parse(bindIP), port));
-                this.Port = port;
+                Port = port;
 
                 // Start listening for incoming connections.
                 Listener.Listen(10);
@@ -130,8 +130,8 @@ namespace Coinium.Net.Server.Sockets
             }
             catch (SocketException exception)
             {
-                Log.Fatal("{0} can not bind on {1}, server shutting down.. Reason: {2}", this.GetType().Name, bindIP, exception);
-                this.Shutdown();
+                Log.Fatal("{0} can not bind on {1}, server shutting down.. Reason: {2}", GetType().Name, bindIP, exception);
+                Shutdown();
                 return false;
             }
         }
@@ -312,7 +312,7 @@ namespace Coinium.Net.Server.Sockets
         {
             // Check if the server has been disposed.
             if (_disposed) 
-                throw new ObjectDisposedException(this.GetType().Name, "Server has been already disposed.");
+                throw new ObjectDisposedException(GetType().Name, "Server has been already disposed.");
 
             // Check if the server is actually listening.
             if (!IsListening) return;
@@ -325,7 +325,7 @@ namespace Coinium.Net.Server.Sockets
             }
 
             // Disconnect the clients.
-            foreach (var connection in this.Connections.ToList()) // use ToList() so we don't get collection modified exception there
+            foreach (var connection in Connections.ToList()) // use ToList() so we don't get collection modified exception there
             {
                 connection.Disconnect();
             }

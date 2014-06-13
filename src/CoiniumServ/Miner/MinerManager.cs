@@ -28,35 +28,30 @@ namespace Coinium.Miner
         private readonly Dictionary<Int32, IMiner> _miners = new Dictionary<Int32, IMiner>();
         private int _counter = 0; // counter for assigining unique id's to miners.
 
-        public MinerManager()
-        {
-            
-        }
-
         public IList<IMiner> GetAll()
         {
-            return this._miners.Values.ToList();
+            return _miners.Values.ToList();
         }
 
         public IMiner GetMiner(Int32 id)
         {
-            return this._miners.ContainsKey(id) ? this._miners[id] : null;
+            return _miners.ContainsKey(id) ? _miners[id] : null;
         }
 
         public T Create<T>() where T : IMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { this._counter++ }); // create an instance of the miner.
+            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++ }); // create an instance of the miner.
             var miner = (IMiner)instance;
-            this._miners.Add(miner.Id, miner); // add it to our collection.
+            _miners.Add(miner.Id, miner); // add it to our collection.
 
             return (T)miner;
         }
 
         public T Create<T>(IConnection connection) where T : IMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { this._counter++, connection });  // create an instance of the miner.
+            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, connection });  // create an instance of the miner.
             var miner = (IMiner)instance;
-            this._miners.Add(miner.Id, miner); // add it to our collection.           
+            _miners.Add(miner.Id, miner); // add it to our collection.           
 
             return (T)miner;
         }

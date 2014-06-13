@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace Coinium.Common.Helpers.IO
                 var dirInfo = new DirectoryInfo(topDir);
 
                 files.AddRange((from fileInfo in dirInfo.GetFiles()
-                                where string.Compare(fileInfo.Extension, fileExtension, System.StringComparison.OrdinalIgnoreCase) == 0
+                                where string.Compare(fileInfo.Extension, fileExtension, StringComparison.OrdinalIgnoreCase) == 0
                                 select topDir + "/" + fileInfo.Name).ToList());
 
                 foreach (var dir in Directory.GetDirectories(topDir)) // Add all directories at this directory.

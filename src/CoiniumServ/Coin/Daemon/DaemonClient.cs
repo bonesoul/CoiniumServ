@@ -44,14 +44,6 @@ namespace Coinium.Coin.Daemon
     public class DaemonClient : DaemonBase, IDaemonClient
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DaemonClient"/> class.
-        /// </summary>
-        public DaemonClient()
-            : base()
-        {
-        }
-
-        /// <summary>
         /// Initializes the specified URL.
         /// </summary>
         /// <param name="config">The configuration.</param>
@@ -62,7 +54,7 @@ namespace Coinium.Coin.Daemon
         }
 
         /// <summary>
-        /// Version 0.8: Attempts add or remove <node> from the addnode list or try a connection to <node> once.
+        /// Version 0.8: Attempts add or remove node from the addnode list or try a connection to node once.
         /// </summary>
         /// <param name="nRquired">Number of required signatures to sign a transaction.</param>
         /// <param name="publicKeys">Public keys associated with the multi signature address.</param>
@@ -74,7 +66,7 @@ namespace Coinium.Coin.Daemon
         }
 
         /// <summary>
-        /// Version 0.8: Attempts add or remove <node> from the addnode list or try a connection to <node> once.
+        /// Version 0.8: Attempts add or remove node from the addnode list or try a connection to node once.
         /// </summary>
         /// <param name="node">Node URL to add.</param>
         /// <param name="mode">One of the following: add / remove / onetry.</param>
@@ -232,7 +224,7 @@ namespace Coinium.Coin.Daemon
         }
 
         /// <summary>
-        /// Returns hash of block in best-block-chain at <index>; index 0 is the genesis block.
+        /// Returns hash of block in best-block-chain at index; index 0 is the genesis block.
         /// </summary>
         /// <param name="index">The index of the block.</param>
         /// <returns>The hash of the block at the given index.</returns>
@@ -244,7 +236,7 @@ namespace Coinium.Coin.Daemon
         [Obsolete("Deprecated. Removed in version 0.7. Use getblockcount.")]
         public long GetBlockNumber()
         {
-            return this.GetBlockCount();
+            return GetBlockCount();
         }
 
         /// <summary>
@@ -394,13 +386,11 @@ namespace Coinium.Coin.Daemon
         {
             if (verbose == 0)
             {
-                string hex = MakeRequest<string>("getrawtransaction", txId, verbose);
+                var hex = MakeRequest<string>("getrawtransaction", txId, verbose);
                 return new DecodedRawTransaction { Hex = hex };
             }
-            else
-            {
-                return MakeRequest<DecodedRawTransaction>("getrawtransaction", txId, verbose);
-            }
+
+            return MakeRequest<DecodedRawTransaction>("getrawtransaction", txId, verbose);
         }
 
         /// <summary>
@@ -424,7 +414,7 @@ namespace Coinium.Coin.Daemon
         /// not "getaddressbalance". Works only for addresses in the local wallet, 
         /// external addresses will always show 0. 
         /// </summary>
-        /// <param name="account">The address to get the balance for.</param>
+        /// <param name="bitcoinAddress">The address to get the balance for.</param>
         /// <param name="minconf">Minimum amount of confirmations before a transaction is included.</param>
         /// <returns>The total amount received by the bitcoinaddress.</returns>
         public decimal GetReceivedByAddress(string bitcoinAddress, int minconf = 1)
@@ -541,7 +531,7 @@ namespace Coinium.Coin.Daemon
         /// amount : total amount received by addresses with this account 
         /// confirmations : number of confirmations of the most recent transaction included
         /// </summary>
-        /// <param name="minConf">Minimum number of confirmations before the transaction is included in the result.</param>
+        /// <param name="minconf">Minimum number of confirmations before the transaction is included in the result.</param>
         /// <param name="includeEmpty">Include empty accounts?</param>
         /// <returns>A list of balances per account.</returns>
         public List<ListReceivedByAccountTransaction> ListReceivedByAccount(int minconf = 1, bool includeEmpty = false)
@@ -557,7 +547,7 @@ namespace Coinium.Coin.Daemon
         /// confirmations : number of confirmations of the most recent transaction included 
         /// To get a list of accounts on the system, execute bitcoind listreceivedbyaddress 0 true
         /// </summary>
-        /// <param name="minConf">Minimum number of confirmations before the transaction is included in the result.</param>
+        /// <param name="minconf">Minimum number of confirmations before the transaction is included in the result.</param>
         /// <param name="includeEmpty">Include empty address.</param>
         /// <returns>A list of balances per address.</returns>
         public List<ListReceivedByAddressTransaction> ListReceivedByAddress(int minconf = 1, bool includeEmpty = false)
@@ -672,7 +662,7 @@ namespace Coinium.Coin.Daemon
         }
 
         /// <summary>
-        /// Amount is a real and is rounded to 8 decimal places. Returns the transaction ID <txid> if successful.
+        /// Amount is a real and is rounded to 8 decimal places. Returns the transaction ID txid if successful.
         /// </summary>
         /// <param name="bitcoinAddress">Bitcoin address to sent to.</param>
         /// <param name="amount">Amount to send.</param>

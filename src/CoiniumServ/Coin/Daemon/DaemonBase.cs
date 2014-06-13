@@ -26,6 +26,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using Coinium.Coin.Daemon.Config;
 using Coinium.Common.Extensions;
 using Newtonsoft.Json;
@@ -40,17 +41,13 @@ namespace Coinium.Coin.Daemon
         public string RpcPassword { get; private set; }
         public Int32 RequestCounter { get; private set; }
 
-        public DaemonBase()
-        {
-        }
-
         public virtual void Initialize(IDaemonConfig config)
         {
             var url = string.Format("{0}", config.Url);
-            this.RpcUrl = url;
-            this.RpcUser = config.Username;
-            this.RpcPassword = config.Password;
-            this.RequestCounter = 0;
+            RpcUrl = url;
+            RpcUser = config.Username;
+            RpcPassword = config.Password;
+            RequestCounter = 0;
         }
 
         /// <summary>
@@ -65,7 +62,7 @@ namespace Coinium.Coin.Daemon
         /// <returns>The JSON RPC response deserialized as the given type.</returns>
         public T MakeRequest<T>(string method, params object[] parameters)
         {
-            var rpcResponse = MakeRpcRequest<T>(new DaemonRequest(this.RequestCounter++, method, parameters));
+            var rpcResponse = MakeRpcRequest<T>(new DaemonRequest(RequestCounter++, method, parameters));
             return rpcResponse.Result;
         }
 
@@ -108,7 +105,7 @@ namespace Coinium.Coin.Daemon
             webRequest.Method = "POST";
             webRequest.Timeout = 5000; // 5 seconds
 
-            Log.Verbose("Daemon send: {0}", System.Text.Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
+            Log.Verbose("Daemon send: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
 
             byte[] byteArray = walletRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;
@@ -190,7 +187,7 @@ namespace Coinium.Coin.Daemon
 
                     Log.Verbose("Daemon error: {0}",  error.PrettifyJson());
 
-                    throw new Exception(string.Format("{0} - {1}", response.StatusCode, reader.ReadToEnd()));
+                    throw new Exception(string.Format("{0} - {1}", response.StatusCode, error));
                 }
             }
             catch (Exception exception)

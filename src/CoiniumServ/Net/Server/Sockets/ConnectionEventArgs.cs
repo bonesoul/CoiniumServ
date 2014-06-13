@@ -29,7 +29,7 @@ namespace Coinium.Net.Server.Sockets
             if (connection == null)
                 throw new ArgumentNullException("connection");
 
-            this.Connection = connection;
+            Connection = connection;
         }
 
         public override string ToString()

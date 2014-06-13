@@ -31,7 +31,7 @@ namespace Coinium.Common.Extensions
             if (array == null)
                 throw new ArgumentNullException("array");
 
-            return Enumerate<T>(array, start, array.Length);
+            return Enumerate(array, start, array.Length);
         }
 
         public static IEnumerable<T> Enumerate<T>(this T[] array, int start, int count)
@@ -138,7 +138,7 @@ namespace Coinium.Common.Extensions
             int len = end - start;
 
             // Return new array.
-            T[] res = new T[len];
+            var res = new T[len];
             for (int i = 0; i < len; i++)
             {
                 res[i] = source[i + start];

@@ -36,10 +36,10 @@ namespace Coinium.Rpc.Service.Http
 
         public HttpServiceRequest(string text, HttpListenerContext context)
         {
-            this.Text = text;
-            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
-            this.Context = context;
-            this.Response = this.Context.Response;
+            Text = text;
+            Data = JsonConvert.DeserializeObject<dynamic>(Text);
+            Context = context;
+            Response = Context.Response;
         }
     }
 }

@@ -32,23 +32,23 @@ namespace Coinium.Coin.Daemon.Config
 
         public string Url
         {
-            get { return string.Format("http://{0}:{1}", this.Host, this.Port); }
+            get { return string.Format("http://{0}:{1}", Host, Port); }
         }
 
         public DaemonConfig(dynamic config)
         {
             if (config == null)
             {
-                this.Valid = false;
+                Valid = false;
                 return;
             }
 
-            this.Host = !string.IsNullOrEmpty(config.host) ? config.host : "0.0.0.0";
-            this.Port = config.port;
-            this.Username = config.username;
-            this.Password = config.password;
+            Host = !string.IsNullOrEmpty(config.host) ? config.host : "0.0.0.0";
+            Port = config.port;
+            Username = config.username;
+            Password = config.password;
 
-            this.Valid = true;
+            Valid = true;
         }
     }
 }

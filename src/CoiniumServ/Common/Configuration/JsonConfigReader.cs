@@ -28,7 +28,7 @@ namespace Coinium.Common.Configuration
         {
             try
             {
-                return JsonConfig.Config.ApplyJsonFromPath(fileName, new ConfigObject());
+                return Config.ApplyJsonFromPath(fileName, new ConfigObject());
             }
             catch (Exception)
             {

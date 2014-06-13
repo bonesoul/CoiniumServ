@@ -49,7 +49,7 @@ namespace Coinium.Mining.Jobs
         public ExtraNonce(UInt64 instanceId)
         {
             ExtraNoncePlaceholder = "f000000ff111111f".HexToByteArray();
-            this.InitExtraNonceCounter(instanceId); // init. the extra nonce counter.
+            InitExtraNonceCounter(instanceId); // init. the extra nonce counter.
         }
 
 
@@ -58,7 +58,7 @@ namespace Coinium.Mining.Jobs
         /// </summary>
         private void InitExtraNonceCounter(UInt64 instanceId)
         {
-            this.Current = instanceId << 27;  // init the ExtraNonce counter - last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
+            Current = instanceId << 27;  // init the ExtraNonce counter - last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
         }
 
         /// <summary>
@@ -67,8 +67,8 @@ namespace Coinium.Mining.Jobs
         /// <returns></returns>
         public UInt64 NextExtraNonce()
         {
-            this.Current++; // increment the extranonce.
-            return this.Current;
+            Current++; // increment the extranonce.
+            return Current;
         }
     }
 }

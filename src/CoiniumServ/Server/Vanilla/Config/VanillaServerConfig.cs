@@ -37,16 +37,16 @@ namespace Coinium.Server.Vanilla.Config
         {
             if (config == null)
             {
-                this.Valid = false;
+                Valid = false;
                 return;
             }
 
-            this.Name = RpcServiceNames.Vanilla;
-            this.Enabled = config.enabled;
-            this.BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "localhost";
-            this.Port = config.port;
+            Name = RpcServiceNames.Vanilla;
+            Enabled = config.enabled;
+            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "localhost";
+            Port = config.port;
 
-            this.Valid = true;
+            Valid = true;
         }
     }
 }

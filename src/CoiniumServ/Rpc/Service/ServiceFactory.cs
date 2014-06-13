@@ -49,7 +49,7 @@ namespace Coinium.Rpc.Service
         /// <returns></returns>
         public IRpcService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient)
         {
-            var @params = new NamedParameterOverloads() { { "jobManager", jobManager }, { "shareManager", shareManager }, { "daemonClient", daemonClient } };
+            var @params = new NamedParameterOverloads { { "jobManager", jobManager }, { "shareManager", shareManager }, { "daemonClient", daemonClient } };
             return _applicationContext.Container.Resolve<IRpcService>(serviceName, @params);
         }
     }

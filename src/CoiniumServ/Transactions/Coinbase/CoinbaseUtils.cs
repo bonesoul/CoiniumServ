@@ -18,6 +18,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 using Coinium.Coin.Address;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Arrays;
@@ -155,7 +156,7 @@ namespace Coinium.Transactions.Coinbase
         public static byte[] SerializeString(string input)
         {
             if (input.Length < 253)
-                return ArrayHelpers.Combine(new[] { (byte)input.Length }, System.Text.Encoding.UTF8.GetBytes(input));
+                return ArrayHelpers.Combine(new[] { (byte)input.Length }, Encoding.UTF8.GetBytes(input));
 
             // if input string is >=253, we need need a special format.
 

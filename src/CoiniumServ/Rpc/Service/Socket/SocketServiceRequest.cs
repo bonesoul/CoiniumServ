@@ -31,8 +31,8 @@ namespace Coinium.Rpc.Service.Socket
 
         public SocketServiceRequest(string text)
         {
-            this.Text = text;
-            this.Data = JsonConvert.DeserializeObject<dynamic>(this.Text);
+            Text = text;
+            Data = JsonConvert.DeserializeObject<dynamic>(Text);
         }
     }
 }

@@ -58,17 +58,17 @@ namespace Coinium.Coin.Algorithms
 
         public Scrypt()
         {
-            this.N = 1024;
-            this.R = 1;
-            this.P = 1;
-            this.Multiplier = (UInt32) Math.Pow(2, 16);
+            N = 1024;
+            R = 1;
+            P = 1;
+            Multiplier = (UInt32) Math.Pow(2, 16);
 
             Difficulty = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
         }
 
         public byte[] Hash(byte[] input)
         {
-            var result = SCrypt.ComputeDerivedKey(input, input, this.N, this.R, this.P, null, 32);
+            var result = SCrypt.ComputeDerivedKey(input, input, N, R, P, null, 32);
             return result;
         }
     }

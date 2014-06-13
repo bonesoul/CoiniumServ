@@ -29,10 +29,11 @@ namespace Coinium.Mining.Share
         /// </summary>
         /// <param name="hashAlgorithm">The hash algorithm.</param>
         /// <param name="jobManager">The job manager.</param>
+        /// <param name="daemonClient"></param>
         /// <returns></returns>
         public IShareManager Get(IHashAlgorithm hashAlgorithm, IJobManager jobManager, IDaemonClient daemonClient)
         {
-            var @params = new NamedParameterOverloads()
+            var @params = new NamedParameterOverloads
             {
                 {"hashAlgorithm", hashAlgorithm},
                 {"jobManager", jobManager},

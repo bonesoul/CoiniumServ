@@ -37,28 +37,28 @@ namespace Coinium.Transactions
 
         public Outputs(IDaemonClient daemonClient, BlockTemplate blockTemplate)
         {
-            this.DaemonClient = daemonClient;
-            this.BlockTemplate = blockTemplate;
-            this.List = new List<TxOut>();
+            DaemonClient = daemonClient;
+            BlockTemplate = blockTemplate;
+            List = new List<TxOut>();
         }
 
         public void Add(string walletAddress, double amount)
         {
             // check if the supplied wallet address is correct.
 
-            if (!this.DaemonClient.ValidateAddress(walletAddress).IsValid)
+            if (!DaemonClient.ValidateAddress(walletAddress).IsValid)
                 throw new InvalidWalletAddressException(walletAddress);
 
             var recipientScript = CoinbaseUtils.CoinAddressToScript(walletAddress); // generate the script to claim the output for recipient.
 
-            var txOut = new TxOut()
+            var txOut = new TxOut
             {
                 Value = ((UInt64)amount).LittleEndian(),
                 PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32)recipientScript.Length),
                 PublicKeyScript = recipientScript
             };
 
-            this.List.Add(txOut);
+            List.Add(txOut);
         }
 
         public byte[] GetBuffer()
@@ -67,7 +67,7 @@ namespace Coinium.Transactions
 
             using (var stream = new MemoryStream())
             {
-                foreach (var transaction in this.List)
+                foreach (var transaction in List)
                 {
                     stream.WriteValueU64(transaction.Value);
                     stream.WriteBytes(transaction.PublicKeyScriptLenght);

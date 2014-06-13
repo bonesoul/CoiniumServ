@@ -43,11 +43,12 @@ namespace Coinium.Mining.Share
         /// </summary>
         /// <param name="hashAlgorithm">The hash algorithm.</param>
         /// <param name="jobManager">The job manager.</param>
+        /// <param name="daemonClient"></param>
         public ShareManager(IHashAlgorithm hashAlgorithm, IJobManager jobManager, IDaemonClient daemonClient)
         {
-            this._hashAlgorithm = hashAlgorithm;
-            this._jobManager = jobManager;
-            this._daemonClient = daemonClient;
+            _hashAlgorithm = hashAlgorithm;
+            _jobManager = jobManager;
+            _daemonClient = daemonClient;
 
             _diff1 = _hashAlgorithm.Difficulty;
         }
@@ -108,11 +109,11 @@ namespace Coinium.Mining.Share
 
                 // we should be using another scrypt hash here? - https://github.com/zone117x/node-stratum-pool/blob/eb4b62e9c4de8a8cde83c2b3756ca1a45f02b957/lib/jobManager.js#L232
 
-                return this.SubmitBlock(blockHex);
+                return SubmitBlock(blockHex);
             }
             else // invalid share.
             {
-
+                // TODO: implement me
             }
 
             return false;
@@ -120,7 +121,7 @@ namespace Coinium.Mining.Share
 
         private bool SubmitBlock(string blockHex)
         {
-            var response = this._daemonClient.SubmitBlock(blockHex).ToLower();
+            var response = _daemonClient.SubmitBlock(blockHex).ToLower();
 
             if (response == "accepted")
                 return true;

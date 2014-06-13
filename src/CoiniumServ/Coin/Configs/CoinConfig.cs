@@ -29,15 +29,15 @@ namespace Coinium.Coin.Configs
         {
             if (config == null)
             {
-                this.Valid = false;
+                Valid = false;
                 return;
             }
 
-            this.Name = config.name;
-            this.Symbol = config.symbol;
-            this.Algorithm = config.algorithm;
+            Name = config.name;
+            Symbol = config.symbol;
+            Algorithm = config.algorithm;
 
-            this.Valid = true;
+            Valid = true;
         }
     }
 }

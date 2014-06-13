@@ -37,7 +37,7 @@ namespace Coinium.Mining.Jobs
 
         private readonly IMinerManager _minerManager;
 
-        public IExtraNonce ExtraNonce { get { return this._extraNonce; } }
+        public IExtraNonce ExtraNonce { get { return _extraNonce; } }
 
         public Job LastJob { get; private set; }
 
@@ -54,12 +54,12 @@ namespace Coinium.Mining.Jobs
 
         public Job GetJob(UInt64 id)
         {
-            return this._jobs.ContainsKey(id) ? this._jobs[id] : null;
+            return _jobs.ContainsKey(id) ? _jobs[id] : null;
         }
 
         public void AddJob(Job job)
         {
-            this._jobs.Add(job.Id, job);
+            _jobs.Add(job.Id, job);
         }
 
         /// <summary>
@@ -68,11 +68,10 @@ namespace Coinium.Mining.Jobs
         /// <example>
         /// sample communication: http://bitcoin.stackexchange.com/a/23112/8899
         /// </example>
-        /// <param name="state"></param>
         public void Broadcast()
         {
             var blockTemplate = _daemonClient.GetBlockTemplate();
-            var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate, false);
+            var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate);
             generationTransaction.Create();
 
             var hashList = new List<byte[]>();
@@ -89,13 +88,13 @@ namespace Coinium.Mining.Jobs
             var difficulty = new Difficulty(16);
 
             // create the job notification.
-            var job = new Job(this._jobCounter.Next(), blockTemplate, generationTransaction, merkleTree)
+            var job = new Job(_jobCounter.Next(), blockTemplate, generationTransaction, merkleTree)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };
 
-            this._jobs.Add(job.Id,job);
-            this.LastJob = job;
+            _jobs.Add(job.Id,job);
+            LastJob = job;
 
             foreach (var miner in _minerManager.GetAll())
             {
