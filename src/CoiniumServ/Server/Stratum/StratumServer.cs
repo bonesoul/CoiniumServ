@@ -49,18 +49,17 @@ namespace Coinium.Server.Stratum
         /// <summary>
         /// Initializes the specified pool.
         /// </summary>
-        /// <param name="pool">The pool.</param>
         /// <param name="config">The configuration.</param>
         public void Initialize(IServerConfig config)
         {
-            this.Config = config;
+            Config = config;
 
-            this.BindIP = ((IStratumServerConfig)config).BindInterface;
-            this.Port = config.Port;
+            BindIP = config.BindInterface;
+            Port = config.Port;
 
-            this.OnConnect += Stratum_OnConnect;
-            this.OnDisconnect += Stratum_OnDisconnect;
-            this.DataReceived += Stratum_DataReceived;
+            OnConnect += Stratum_OnConnect;
+            OnDisconnect += Stratum_OnDisconnect;
+            DataReceived += Stratum_DataReceived;
         }
 
         /// <summary>
@@ -69,10 +68,10 @@ namespace Coinium.Server.Stratum
         /// <returns></returns>
         public override bool Start()
         {
-            var success = this.Listen(this.BindIP, this.Port);
+            var success = Listen(BindIP, Port);
 
             if(success)
-                Log.Information("Stratum server listening on {0}:{1}", this.BindIP, this.Port);            
+                Log.Information("Stratum server listening on {0}:{1}", BindIP, Port);            
 
             return true;
         }

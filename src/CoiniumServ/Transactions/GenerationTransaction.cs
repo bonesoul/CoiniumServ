@@ -58,7 +58,7 @@ namespace Coinium.Transactions
         /// </summary>
         public UInt32 InputsCount
         {
-            get { return (UInt32)this.Inputs.Count; } 
+            get { return (UInt32)Inputs.Count; } 
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace Coinium.Transactions
 
         /// <summary>
         /// The block number or timestamp at which this transaction is locked:
-        ///     0 	Always locked
-        ///  <  500000000 	Block number at which this transaction is locked
-        ///  >= 500000000 	UNIX timestamp at which this transaction is locked
+        ///                 0 	        Always locked
+        ///  LESS THEN      500000000 	Block number at which this transaction is locked
+        ///  EQUAL GREATER  500000000 	UNIX timestamp at which this transaction is locked
         /// </summary>
         public UInt32 LockTime { get; private set; }
 
@@ -116,17 +116,17 @@ namespace Coinium.Transactions
         /// </remarks>
         public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, BlockTemplate blockTemplate, bool supportTxMessages = false)
         {
-            this.DaemonClient = daemonClient;
-            this.BlockTemplate = blockTemplate;
-            this.ExtraNonce = extraNonce;
-            this.SupportTxMessages = supportTxMessages;
-            this.Outputs = new Outputs(daemonClient, blockTemplate);
+            DaemonClient = daemonClient;
+            BlockTemplate = blockTemplate;
+            ExtraNonce = extraNonce;
+            SupportTxMessages = supportTxMessages;
+            Outputs = new Outputs(daemonClient, blockTemplate);
 
-            this.Version = (UInt32)(supportTxMessages ? 2 : 1);
-            this.Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
-            this.LockTime = 0;
+            Version = (UInt32)(supportTxMessages ? 2 : 1);
+            Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
+            LockTime = 0;
 
-            this.Inputs = new List<TxIn>
+            Inputs = new List<TxIn>
             {
                 new TxIn
                 {
@@ -152,33 +152,33 @@ namespace Coinium.Transactions
             // create the first part.
             using (var stream = new MemoryStream())
             {
-                stream.WriteValueU32(this.Version.LittleEndian()); // write version
+                stream.WriteValueU32(Version.LittleEndian()); // write version
 
                 // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
 
                 // write transaction input.
-                stream.WriteBytes(CoinbaseUtils.VarInt(this.InputsCount));
-                stream.WriteBytes(this.Inputs.First().PreviousOutput.Hash.Bytes);
-                stream.WriteValueU32(this.Inputs.First().PreviousOutput.Index.LittleEndian());
+                stream.WriteBytes(CoinbaseUtils.VarInt(InputsCount));
+                stream.WriteBytes(Inputs.First().PreviousOutput.Hash.Bytes);
+                stream.WriteValueU32(Inputs.First().PreviousOutput.Index.LittleEndian());
 
                 // write signature script lenght
-                var signatureScriptLenght = (UInt32)(this.Inputs.First().SignatureScript.Initial.Length + this.ExtraNonce.ExtraNoncePlaceholder.Length + this.Inputs.First().SignatureScript.Final.Length);
+                var signatureScriptLenght = (UInt32)(Inputs.First().SignatureScript.Initial.Length + ExtraNonce.ExtraNoncePlaceholder.Length + Inputs.First().SignatureScript.Final.Length);
                 stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
 
-                stream.WriteBytes(this.Inputs.First().SignatureScript.Initial);
+                stream.WriteBytes(Inputs.First().SignatureScript.Initial);
 
-                this.Initial = stream.ToArray();
+                Initial = stream.ToArray();
             }
 
             /*  The generation transaction must be split at the extranonce (which located in the transaction input
                 scriptSig). Miners send us unique extranonces that we use to join the two parts in attempt to create
                 a valid share and/or block. */
 
-            double blockReward = this.BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
+            double blockReward = BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
 
             const string poolWallet = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
 
-            var rewardRecipients = new Dictionary<string, double>() // reward recipients addresses.
+            var rewardRecipients = new Dictionary<string, double> // reward recipients addresses.
             {
                 {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t", 1} // pool fee
             };
@@ -189,29 +189,29 @@ namespace Coinium.Transactions
                 var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
                 blockReward -= amount;
 
-                this.Outputs.Add(pair.Key, amount);
+                Outputs.Add(pair.Key, amount);
             }
 
             // send the remaining coins to pool's central wallet.
-            this.Outputs.Add(poolWallet, blockReward);  
+            Outputs.Add(poolWallet, blockReward);  
 
             // create the second part.
             using (var stream = new MemoryStream())
             {
-                stream.WriteBytes(this.Inputs.First().SignatureScript.Final);
-                stream.WriteValueU32(this.Inputs.First().Sequence); // transaction inputs end here.
+                stream.WriteBytes(Inputs.First().SignatureScript.Final);
+                stream.WriteValueU32(Inputs.First().Sequence); // transaction inputs end here.
 
-                var outputBuffer = this.Outputs.GetBuffer();
+                var outputBuffer = Outputs.GetBuffer();
 
                 stream.WriteBytes(CoinbaseUtils.VarInt((UInt32)outputBuffer.Length).ToArray()); // transaction output start here.
                 stream.WriteBytes(outputBuffer); // transaction output ends here.
 
-                stream.WriteValueU32(this.LockTime.LittleEndian());
+                stream.WriteValueU32(LockTime.LittleEndian());
 
-                if (this.SupportTxMessages)
-                    stream.WriteBytes(this.Message);
+                if (SupportTxMessages)
+                    stream.WriteBytes(Message);
 
-                this.Final = stream.ToArray();
+                Final = stream.ToArray();
             }
         }
     }    

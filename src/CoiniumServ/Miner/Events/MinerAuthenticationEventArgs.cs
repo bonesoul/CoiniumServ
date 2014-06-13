@@ -29,7 +29,7 @@ namespace Coinium.Miner.Events
             if (miner == null)
                 throw new ArgumentNullException("miner");
 
-            this.Miner = miner;
+            Miner = miner;
         }
     }
 }

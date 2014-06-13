@@ -29,8 +29,8 @@ namespace Coinium.Rpc.Service.Socket
 
         public SocketServiceContext(IMiner miner, SocketServiceRequest request)
         {
-            this.Miner = miner;
-            this.Request = request;
+            Miner = miner;
+            Request = request;
         }
     }
 }

@@ -36,17 +36,12 @@ namespace Coinium.Server.Vanilla
 
         public void Initialize(IServerConfig serverConfig)
         {
-            base.Initialize(serverConfig.Port);
-            this.Config = serverConfig;
-            this.ProcessRequest += ProcessHttpRequest;
+            Initialize(serverConfig.Port);
+            Config = serverConfig;
+            ProcessRequest += ProcessHttpRequest;
         }
 
         public IServerConfig Config { get; private set; }
-
-        public VanillaServer()
-            : base()
-        {
-        }
 
         private void ProcessHttpRequest(HttpListenerContext context)
         {

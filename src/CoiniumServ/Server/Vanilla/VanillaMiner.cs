@@ -54,9 +54,9 @@ namespace Coinium.Server.Vanilla
 
         public VanillaMiner(int id)
         {
-            this.Id = id; // the id of the miner.
-            this.SupportsJobNotifications = false; // vanilla miner's doesn't support new mining job notifications.
-            this.Authenticated = false;
+            Id = id; // the id of the miner.
+            SupportsJobNotifications = false; // vanilla miner's doesn't support new mining job notifications.
+            Authenticated = false;
         }
 
         public void Parse(HttpListenerContext httpContext)
@@ -94,7 +94,7 @@ namespace Coinium.Server.Vanilla
 
         public bool Authenticate(string user, string password)
         {
-            this.Authenticated = true;
+            Authenticated = true;
 
             // notify any listeners about the miner's authentication.
             var handler = OnAuthenticate;
@@ -102,7 +102,7 @@ namespace Coinium.Server.Vanilla
                 handler(this, new MinerAuthenticationEventArgs(this));
 
 
-            return this.Authenticated;
+            return Authenticated;
         }
 
         /// <summary>

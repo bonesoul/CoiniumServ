@@ -33,6 +33,7 @@ namespace Coinium.Coin.Helpers
         /// <remarks>
         /// https://en.bitcoin.it/wiki/Protocol_specification#block
         /// </remarks>
+        /// <param name="job"></param>
         /// <param name="header"></param>
         /// <param name="coinbase"></param>
         /// <returns></returns>

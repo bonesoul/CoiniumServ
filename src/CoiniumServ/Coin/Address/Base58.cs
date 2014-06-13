@@ -42,25 +42,25 @@ namespace Coinium.Coin.Address
     /// </remarks>
     public class Base58
     {
-        private const string _alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-        private static readonly BigInteger _base = BigInteger.ValueOf(58);
+        private const string Alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+        private static readonly BigInteger Base = BigInteger.ValueOf(58);
 
         public static string Encode(byte[] input)
         {
             var bi = new BigInteger(1, input);
             var s = new StringBuilder();
-            while (bi.CompareTo(_base) >= 0)
+            while (bi.CompareTo(Base) >= 0)
             {
-                var mod = bi.Mod(_base);
-                s.Insert(0, new[] {_alphabet[mod.IntValue]});
-                bi = bi.Subtract(mod).Divide(_base);
+                var mod = bi.Mod(Base);
+                s.Insert(0, new[] {Alphabet[mod.IntValue]});
+                bi = bi.Subtract(mod).Divide(Base);
             }
-            s.Insert(0, new[] {_alphabet[bi.IntValue]});
+            s.Insert(0, new[] {Alphabet[bi.IntValue]});
             // Convert leading zeros too.
             foreach (var anInput in input)
             {
                 if (anInput == 0)
-                    s.Insert(0, new[] {_alphabet[0]});
+                    s.Insert(0, new[] {Alphabet[0]});
                 else
                     break;
             }
@@ -78,7 +78,7 @@ namespace Coinium.Coin.Address
             var stripSignByte = bytes.Length > 1 && bytes[0] == 0 && bytes[1] >= 0x80;
             // Count the leading zeros, if any.
             var leadingZeros = 0;
-            for (var i = 0; input[i] == _alphabet[0]; i++)
+            for (var i = 0; input[i] == Alphabet[0]; i++)
             {
                 leadingZeros++;
             }
@@ -95,12 +95,12 @@ namespace Coinium.Coin.Address
             // Work backwards through the string.
             for (var i = input.Length - 1; i >= 0; i--)
             {
-                var alphaIndex = _alphabet.IndexOf(input[i]);
+                var alphaIndex = Alphabet.IndexOf(input[i]);
                 if (alphaIndex == -1)
                 {
                     throw new AddressFormatException("Illegal character " + input[i] + " at " + i);
                 }
-                bi = bi.Add(BigInteger.ValueOf(alphaIndex).Multiply(_base.Pow(input.Length - 1 - i)));
+                bi = bi.Add(BigInteger.ValueOf(alphaIndex).Multiply(Base.Pow(input.Length - 1 - i)));
             }
             return bi;
         }

@@ -38,14 +38,14 @@ namespace Coinium.Server.Stratum.Notifications
         /// <param name="difficulty"></param>
         public Difficulty(UInt32 difficulty)
         {
-            this.Diff = difficulty;
+            Diff = difficulty;
         }
 
         public IEnumerator<object> GetEnumerator()
         {
             var data = new List<object>
             {
-                this.Diff
+                Diff
             };
 
             return data.GetEnumerator();

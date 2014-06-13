@@ -29,7 +29,7 @@ namespace Coinium.Mining.Pool.Config
         /// <returns></returns>
         public IPoolConfig Get(dynamic readConfig)
         {
-            var @params = new NamedParameterOverloads() { { "coinConfigFactory", _applicationContext.Container.Resolve<ICoinConfigFactory>() }, { "config", readConfig } };
+            var @params = new NamedParameterOverloads { { "coinConfigFactory", _applicationContext.Container.Resolve<ICoinConfigFactory>() }, { "config", readConfig } };
             return _applicationContext.Container.Resolve<IPoolConfig>(@params);
         }
     }

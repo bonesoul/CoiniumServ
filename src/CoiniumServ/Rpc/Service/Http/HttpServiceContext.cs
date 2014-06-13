@@ -28,8 +28,8 @@ namespace Coinium.Rpc.Service.Http
 
         public HttpServiceContext(IMiner miner, HttpServiceRequest request)
         {
-            this.Miner = miner;
-            this.Request = request;
+            Miner = miner;
+            Request = request;
         }
     }
 }

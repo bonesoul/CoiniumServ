@@ -29,13 +29,13 @@ namespace Coinium.Common.Helpers.Misc
     /// </remarks>
     public class Range : IEnumerable<int>
     {
-        private int start = 0;
-        private int stop = 0;
-        private int step = 1;
+        private readonly int _start;
+        private int _stop;
+        private int _step = 1;
 
         public Range(int start)
         {
-            this.start = stop = start;
+            _start = _stop = start;
         }
 
         public static Range From(int startRange)
@@ -45,19 +45,19 @@ namespace Coinium.Common.Helpers.Misc
 
         public Range To(int endRange)
         {
-            stop = endRange;
+            _stop = endRange;
             return this;
         }
 
         public Range WithStepSize(int step)
         {
-            this.step = step;
+            _step = step;
             return this;
         }
 
         public IEnumerator<int> GetEnumerator()
         {
-            for (var i = start; step > 0 ? i < stop : i > stop; i += step)
+            for (var i = _start; _step > 0 ? i < _stop : i > _stop; i += _step)
             {
                 yield return i;
             }

@@ -48,10 +48,6 @@ namespace Coinium.Net.Server.Http
         private ManualResetEvent _stop, _ready;
         private Queue<HttpListenerContext> _queue;
 
-        public HttpServer()
-        {
-        }
-
         /// <summary>
         /// Initializes the specified port.
         /// </summary>
@@ -63,7 +59,7 @@ namespace Coinium.Net.Server.Http
             if (!HttpListener.IsSupported)
                 throw new NotSupportedException("HttpListener not supported. Switch to mono provided one.");
 
-            this.Port = port;
+            Port = port;
 
             _workers = new Thread[maxThreads];
             _queue = new Queue<HttpListenerContext>();
@@ -75,7 +71,7 @@ namespace Coinium.Net.Server.Http
 
         public bool Start()
         {
-            _listener.Prefixes.Add(String.Format(@"http://localhost:{0}/", this.Port));
+            _listener.Prefixes.Add(String.Format(@"http://localhost:{0}/", Port));
             _listener.Start();
             _listenerThread.Start();
 
@@ -85,9 +81,9 @@ namespace Coinium.Net.Server.Http
                 _workers[i].Start();
             }
 
-            this.IsListening = true;
+            IsListening = true;
 
-            Log.Information("Vanilla server listening on port {0}.", this.Port);
+            Log.Information("Vanilla server listening on port {0}.", Port);
 
             return true;
         }
@@ -133,7 +129,7 @@ namespace Coinium.Net.Server.Http
 
         private void Worker()
         {
-            WaitHandle[] wait = new[] {_ready, _stop};
+            WaitHandle[] wait = {_ready, _stop};
             while (0 == WaitHandle.WaitAny(wait))
             {
                 HttpListenerContext context;

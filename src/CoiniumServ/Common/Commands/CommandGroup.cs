@@ -32,14 +32,14 @@ namespace Coinium.Common.Commands
 
         public void Register(CommandGroupAttribute attributes)
         {
-            this.Attributes = attributes;
-            this.RegisterDefaultCommand();
-            this.RegisterCommands();
+            Attributes = attributes;
+            RegisterDefaultCommand();
+            RegisterCommands();
         }
 
         private void RegisterCommands()
         {
-            foreach (var method in this.GetType().GetMethods())
+            foreach (var method in GetType().GetMethods())
             {
                 object[] attributes = method.GetCustomAttributes(typeof(CommandAttribute), true);
                 if (attributes.Length == 0) 
@@ -49,8 +49,8 @@ namespace Coinium.Common.Commands
                 if (attribute is DefaultCommand) 
                     continue;
 
-                if (!this._commands.ContainsKey(attribute))
-                    this._commands.Add(attribute, method);
+                if (!_commands.ContainsKey(attribute))
+                    _commands.Add(attribute, method);
 
                 else
                     Log.Warning("There exists an already registered command '{0}'.", attribute.Name);
@@ -59,7 +59,7 @@ namespace Coinium.Common.Commands
 
         private void RegisterDefaultCommand()
         {
-            foreach (var method in this.GetType().GetMethods())
+            foreach (var method in GetType().GetMethods())
             {
                 object[] attributes = method.GetCustomAttributes(typeof(DefaultCommand), true);
                 if (attributes.Length == 0) 
@@ -68,12 +68,12 @@ namespace Coinium.Common.Commands
                 if (method.Name.ToLower() == "fallback") 
                     continue;
 
-                this._commands.Add(new DefaultCommand(), method);
+                _commands.Add(new DefaultCommand(), method);
                 return;
             }
 
             // set the fallback command if we couldn't find a defined DefaultCommand.
-            this._commands.Add(new DefaultCommand(), this.GetType().GetMethod("Fallback"));
+            _commands.Add(new DefaultCommand(), GetType().GetMethod("Fallback"));
         }
 
         public virtual string Handle(string parameters)
@@ -82,22 +82,22 @@ namespace Coinium.Common.Commands
             CommandAttribute target = null;
 
             if (parameters == string.Empty)
-                target = this.GetDefaultSubcommand();
+                target = GetDefaultSubcommand();
             else
             {
                 @params = parameters.Split(' ');
-                target = this.GetSubcommand(@params[0]) ?? this.GetDefaultSubcommand();
+                target = GetSubcommand(@params[0]) ?? GetDefaultSubcommand();
 
-                if (target != this.GetDefaultSubcommand())
+                if (target != GetDefaultSubcommand())
                     @params = @params.Skip(1).ToArray();
             }
 
-            return (string)this._commands[target].Invoke(this, new object[] { @params });
+            return (string)_commands[target].Invoke(this, new object[] { @params });
         }
 
         public string GetHelp(string command)
         {
-            foreach (var pair in this._commands)
+            foreach (var pair in _commands)
             {
                 if (command != pair.Key.Name) continue;
                 return pair.Key.Help;
@@ -110,7 +110,7 @@ namespace Coinium.Common.Commands
         public virtual string Fallback(string[] @params = null)
         {
             var output = "Available subcommands: ";
-            foreach (var pair in this._commands)
+            foreach (var pair in _commands)
             {
                 if (pair.Key.Name.Trim() == string.Empty) 
                     continue; // skip fallback command.
@@ -123,12 +123,12 @@ namespace Coinium.Common.Commands
 
         protected CommandAttribute GetDefaultSubcommand()
         {
-            return this._commands.Keys.First();
+            return _commands.Keys.First();
         }
 
         protected CommandAttribute GetSubcommand(string name)
         {
-            return this._commands.Keys.FirstOrDefault(command => command.Name == name);
+            return _commands.Keys.FirstOrDefault(command => command.Name == name);
         }
     }
 }

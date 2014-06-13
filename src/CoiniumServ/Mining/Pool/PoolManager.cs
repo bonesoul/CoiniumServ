@@ -42,7 +42,7 @@ namespace Coinium.Mining.Pool
 
         public void Run()
         {
-            this.LoadConfigs();            
+            LoadConfigs();            
         }
 
         public void LoadConfigs()
@@ -58,23 +58,23 @@ namespace Coinium.Mining.Pool
                 if (!poolConfig.Enabled) // skip pools that are not enabled.
                     continue;
 
-                this.AddPool(poolConfig);
+                AddPool(poolConfig);
             }
 
-            Log.Information("Found {0} enabled pool configurations..", this._pools.Count);
+            Log.Information("Found {0} enabled pool configurations..", _pools.Count);
         }
 
         public IPool AddPool(IPoolConfig poolConfig)
         {
             var pool = _poolFactory.Create(poolConfig);
-            this._pools.Add(pool);
+            _pools.Add(pool);
 
             return pool;
         }
 
         public IList<IPool> GetPools()
         {
-            return this._pools;
+            return _pools;
         }
     }
 }

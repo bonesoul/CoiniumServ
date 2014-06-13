@@ -39,17 +39,17 @@ namespace Coinium.Server.Stratum.Config
         {
             if (config == null)
             {
-                this.Valid = false;
+                Valid = false;
                 return;
             }
 
-            this.Name = RpcServiceNames.Stratum;
-            this.Enabled = config.enabled;
-            this.BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
-            this.Port = config.port;
-            this.Diff = config.diff;
+            Name = RpcServiceNames.Stratum;
+            Enabled = config.enabled;
+            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
+            Port = config.port;
+            Diff = config.diff;
 
-            this.Valid = true;
+            Valid = true;
         }
     }
 }

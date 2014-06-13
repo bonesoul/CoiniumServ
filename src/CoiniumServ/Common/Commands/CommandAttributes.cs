@@ -38,8 +38,8 @@ namespace Coinium.Common.Commands
 
         public CommandGroupAttribute(string name, string help)
         {
-            this.Name = name.ToLower();
-            this.Help = help;
+            Name = name.ToLower();
+            Help = help;
         }
     }
 
@@ -58,8 +58,8 @@ namespace Coinium.Common.Commands
 
         public CommandAttribute(string command, string help)
         {
-            this.Name = command.ToLower();
-            this.Help = help;
+            Name = command.ToLower();
+            Help = help;
         }
     }
 

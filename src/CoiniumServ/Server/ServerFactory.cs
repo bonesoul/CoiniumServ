@@ -41,7 +41,7 @@ namespace Coinium.Server
         /// <returns></returns>
         public IMiningServer Get(string serviceName, IMinerManager minerManager)
         {
-            var @params = new NamedParameterOverloads() {{"minerManager", minerManager}};
+            var @params = new NamedParameterOverloads {{"minerManager", minerManager}};
             return _applicationContext.Container.Resolve<IMiningServer>(serviceName, @params);
         }
     }

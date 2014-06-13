@@ -37,27 +37,26 @@ namespace Coinium.Transactions.Script
         /// </summary>
         public byte[] Final { get; private set; }
 
-        public SignatureScript(int blockHeight, string CoinbaseAuxFlags, Int64 unixTime, byte ExtraNoncePlaceholder, string signature)
+        public SignatureScript(int blockHeight, string coinbaseAuxFlags, Int64 unixTime, byte extraNoncePlaceholder, string signature)
         {
             // cook input signature script.
             // The txin's prevout script is an arbitrary byte array (it doesn't have to be a valid script, though this is commonly 
             // done anyway) of 2 to 100 bytes. It has to start with a correct push of the block height (see BIP34).
 
             var serializedBlockHeight = CoinbaseUtils.SerializeNumber(blockHeight);
-            var coinBaseAuxFlags = CoinbaseAuxFlags.HexToByteArray();
             var serializedUnixTime = TransactionUtils.GetSerializedUnixDateTime(unixTime);
 
             using (var stream = new MemoryStream())
             {
                 stream.WriteBytes(serializedBlockHeight);
-                stream.WriteBytes(coinBaseAuxFlags);
+                stream.WriteBytes(coinbaseAuxFlags.HexToByteArray());
                 stream.WriteBytes(serializedUnixTime);
-                stream.WriteByte(ExtraNoncePlaceholder);
+                stream.WriteByte(extraNoncePlaceholder);
 
-                this.Initial = stream.ToArray();
+                Initial = stream.ToArray();
             }
 
-            this.Final = CoinbaseUtils.SerializeString(signature);
+            Final = CoinbaseUtils.SerializeString(signature);
         }
     }
 }

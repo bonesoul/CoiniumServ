@@ -29,7 +29,7 @@ namespace Coinium.Mining.Jobs
 
         public JobCounter()
         {
-            this.Current = 1;
+            Current = 1;
         }
 
         /// <summary>

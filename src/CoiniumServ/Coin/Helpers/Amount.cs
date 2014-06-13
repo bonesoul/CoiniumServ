@@ -33,13 +33,13 @@ namespace Coinium.Coin.Helpers
         /// </summary>
         public double Coins
         {
-            get { return this._coins; }
+            get { return _coins; }
             set
             {
-                this._coins = value;
-                this._millitBits = value*1000;
-                this._microBits = this._millitBits*1000;
-                this._satoshis = this._microBits * 100;
+                _coins = value;
+                _millitBits = value*1000;
+                _microBits = _millitBits*1000;
+                _satoshis = _microBits * 100;
             }
         }
 
@@ -48,13 +48,13 @@ namespace Coinium.Coin.Helpers
         /// </summary>
         public double MilliBits
         {
-            get { return this._millitBits; }
+            get { return _millitBits; }
             set
             {
-                this._millitBits = value;
-                this._coins = value/1000;
-                this._microBits = this._millitBits * 1000;
-                this._satoshis = this._microBits * 100;
+                _millitBits = value;
+                _coins = value/1000;
+                _microBits = _millitBits * 1000;
+                _satoshis = _microBits * 100;
             }
         }
 
@@ -63,13 +63,13 @@ namespace Coinium.Coin.Helpers
         /// </summary>
         public double MicroBits
         {
-            get { return this._microBits; }
+            get { return _microBits; }
             set
             {
-                this._microBits = value;
-                this._millitBits = this._microBits / 1000;
-                this._coins = this._millitBits / 1000;
-                this._satoshis = this._microBits * 100;
+                _microBits = value;
+                _millitBits = _microBits / 1000;
+                _coins = _millitBits / 1000;
+                _satoshis = _microBits * 100;
             }
         }
 
@@ -78,13 +78,13 @@ namespace Coinium.Coin.Helpers
         /// </summary>
         public double Satoshis
         {
-            get { return this._satoshis; }
+            get { return _satoshis; }
             set
             {
-                this._satoshis = value;
-                this._microBits = this._satoshis / 100;
-                this._millitBits = this._microBits / 1000;
-                this._coins = this._millitBits / 1000;                
+                _satoshis = value;
+                _microBits = _satoshis / 100;
+                _millitBits = _microBits / 1000;
+                _coins = _millitBits / 1000;                
             }
         }        
     }
