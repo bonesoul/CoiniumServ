@@ -51,12 +51,9 @@ namespace Tests.Transactions
             var daemonClient = Substitute.For<IDaemonClient>();
             daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress { IsValid = true });
 
-            var blockTemplate = Substitute.For<BlockTemplate>();
-            blockTemplate.Coinbasevalue = 5000000000;
-
             // setup the outputs based on the sample.
             var outputs = new Outputs(daemonClient);
-            double blockReward = blockTemplate.Coinbasevalue; // the amount rewarded by the block.
+            double blockReward = 5000000000; // the amount rewarded by the block.
 
             // sample recipient
             const string recipient = "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji";
