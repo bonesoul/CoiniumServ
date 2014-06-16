@@ -21,7 +21,7 @@ using Coinium.Transactions.Coinbase;
 
 namespace Coinium.Transactions.Utils
 {
-    public class TransactionUtils
+    public static class TransactionUtils
     {
         public static byte[] GetSerializedUnixDateTime(Int64 unixDateTime)
         {

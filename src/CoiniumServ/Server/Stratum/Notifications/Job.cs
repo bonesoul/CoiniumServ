@@ -41,7 +41,7 @@ namespace Coinium.Server.Stratum.Notifications
         /// Hash of previous block.
         /// </summary>
         [JsonIgnore]
-        public string PreviousBlockHash { get; private set; }
+        public string PreviousBlockHashReversed { get; private set; }
 
         /// <summary>
         /// Initial part of coinbase transaction.
@@ -120,7 +120,7 @@ namespace Coinium.Server.Stratum.Notifications
 
             // init the values.
             Id = id;
-            PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
+            PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();
 
@@ -140,7 +140,7 @@ namespace Coinium.Server.Stratum.Notifications
             var data = new List<object>
             {
                 Id.ToString("x4"),
-                PreviousBlockHash,
+                PreviousBlockHashReversed,
                 CoinbaseInitial,
                 CoinbaseFinal,
                 MerkleBranches,

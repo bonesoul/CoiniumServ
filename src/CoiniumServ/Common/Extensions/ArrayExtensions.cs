@@ -100,7 +100,7 @@ namespace Coinium.Common.Extensions
             {
                 for (var i = 0; i < 8; i++)
                 {
-                    var value = BitConverter.ToUInt32(bytes, i*4).LittleEndian();
+                    var value = BitConverter.ToUInt32(bytes, i*4).BigEndian();
                     stream.WriteValueU32(value);
                 }
 
@@ -108,7 +108,24 @@ namespace Coinium.Common.Extensions
                 
             }
 
-            return result.ReverseBytes();
+            return result.ReverseBuffer();
+        }
+
+        public static byte[] ReverseBuffer(this byte[] bytes)
+        {
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                for (var i = bytes.Length -1 ; i >= 0; i--)
+                {
+                    stream.WriteByte(bytes[i]);
+                }
+
+                result = stream.ToArray();
+            }
+
+            return result;
         }
 
         public static byte[] HexToByteArray(this string str)
