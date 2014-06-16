@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Daemon\BlockTemplateTests.cs" />
+    <Compile Include="Common\Extensions\ArrayExtensionsTests.cs" />
     <Compile Include="Transactions\GenerationTransactionTests.cs" />
     <Compile Include="Extra\ConflictTests.cs" />
     <Compile Include="Coin\AmountTests.cs" />

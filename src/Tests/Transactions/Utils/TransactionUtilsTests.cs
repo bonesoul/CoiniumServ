@@ -17,6 +17,7 @@
 */
 
 using System;
+using Coinium.Common.Extensions;
 using Coinium.Transactions.Utils;
 using Should.Fluent;
 using Xunit;
@@ -36,7 +37,7 @@ namespace Tests.Transactions.Utils
             finalUnixDateTime.Should().Equal((Int64)1402265775);
 
             var serializedUnixTime = TransactionUtils.GetSerializedUnixDateTime(unixDateTime);
-            serializedUnixTime.Should().Equal(new byte[] { 0x04, 0xaf, 0xe0, 0x94, 0x53 });
+            serializedUnixTime.ToHexString().Should().Equal("04afe09453");
         }
     }
 }

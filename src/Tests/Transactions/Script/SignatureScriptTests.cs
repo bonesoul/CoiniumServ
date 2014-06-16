@@ -18,6 +18,7 @@
 
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
+using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
 using Coinium.Transactions.Script;
 using Newtonsoft.Json;
@@ -60,8 +61,8 @@ namespace Tests.Transactions.Script
                 "/nodeStratum/");
 
             // test the objects.
-            signatureScript.Initial.Should().Equal(new byte[] { 0x03, 0x54, 0x7f, 0x04, 0x06, 0x2f, 0x50, 0x32, 0x53, 0x48, 0x2f, 0x04, 0xaf, 0xe0, 0x94, 0x53, 0x08 });
-            signatureScript.Final.Should().Equal(new byte[] { 0x0d, 0x2f, 0x6e, 0x6f, 0x64, 0x65, 0x53, 0x74, 0x72, 0x61, 0x74, 0x75, 0x6d, 0x2f });
+            signatureScript.Initial.ToHexString().Should().Equal("03547f04062f503253482f04afe0945308");
+            signatureScript.Final.ToHexString().Should().Equal("0d2f6e6f64655374726174756d2f");
         }
     }
 }
