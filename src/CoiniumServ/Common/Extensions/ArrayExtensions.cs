@@ -66,6 +66,11 @@ namespace Coinium.Common.Extensions
             return EnumerableExtensions.Dump(array);
         }
 
+        public static string ToHexString(this IEnumerable<byte> byteArray)
+        {
+            return ToHexString(byteArray.ToArray());
+        }
+
         public static string ToHexString(this byte[] byteArray)
         {
             return byteArray.Aggregate("", (current, b) => current + b.ToString("x2"));

@@ -94,6 +94,7 @@ namespace Tests.Server.Stratum.Notifications
             // test the output.
             var job = new Job(jobCounter.Next(), blockTemplate, transaction, merkleTree);
 
+            // test previous block hash reversed.
             job.Id.Should().Equal((UInt64)1);
             job.PreviousBlockHashReversed.Should().Equal("dbf1c8155a4a8b1c0a9f4353179943f0de8cc73771c441a840f6c7d4ea79cc96");
         }

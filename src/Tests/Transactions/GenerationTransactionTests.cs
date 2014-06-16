@@ -20,6 +20,7 @@ using System;
 using System.Linq;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
+using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
@@ -111,81 +112,47 @@ namespace Tests.Transactions
 
             // test version.
             generationTransaction.Version.Should().Equal((UInt32)1);
-            generationTransaction.Initial.Take(4).Should().Equal(new byte[] { 0x01, 0x00, 0x00, 0x00 }); 
+            generationTransaction.Initial.Take(4).ToHexString().Should().Equal("01000000");
 
             // test inputs count.
             generationTransaction.InputsCount.Should().Equal((UInt32)1);
             generationTransaction.Initial.Skip(4).Take(1).Should().Equal(new byte[] { 0x01 }); 
 
             // test the input previous-output hash
-            generationTransaction.Initial.Skip(5)
-                .Take(32)
-                .Should()
-                .Equal(new byte[]
-                {
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-                });
+            generationTransaction.Initial.Skip(5).Take(32).ToHexString().Should().Equal("0000000000000000000000000000000000000000000000000000000000000000");
 
+            // test the input previous-output index
             generationTransaction.Inputs.First().PreviousOutput.Index.Should().Equal(0xffffffff);
-            generationTransaction.Initial.Skip(37).Take(4).Should().Equal(new byte[] {0xff, 0xff, 0xff, 0xff});
+            generationTransaction.Initial.Skip(37).Take(4).ToHexString().Should().Equal("ffffffff");
 
             // test the lenghts byte
             generationTransaction.Inputs.First().SignatureScript.Initial.Length.Should().Equal(17);
             extraNonce.ExtraNoncePlaceholder.Length.Should().Equal(8);
             generationTransaction.Inputs.First().SignatureScript.Final.Length.Should().Equal(14);
-            generationTransaction.Initial.Skip(41).Take(1).Should().Equal(new byte[] { 0x27 });
+            generationTransaction.Initial.Skip(41).Take(1).ToHexString().Should().Equal("27");
 
             // test the signature script initial
-            generationTransaction.Initial.Skip(42).Take(17).Should().Equal(new byte[]
-            {
-                0x03, 0xbe, 0x9d, 0x04, 0x06, 0x2f, 0x50, 0x32, 0x53, 0x48, 0x2f, 0x04, 0xc3, 0xe8, 0x9a, 0x53,
-                0x08                    
-            });
-
-            // test the generation transactions initial part.
-            generationTransaction.Initial.Should().Equal(new byte[]
-            {
-                0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x27, 0x03, 0xbe, 0x9d, 
-                0x04, 0x06, 0x2f, 0x50, 0x32, 0x53, 0x48, 0x2f, 0x04, 0xc3, 0xe8, 0x9a, 0x53, 0x08
-            });
-
+            generationTransaction.Initial.Skip(42).Take(17).ToHexString().Should().Equal("03be9d04062f503253482f04c3e89a5308");
+            
             // test the signature script final
-            generationTransaction.Final.Take(14).Should().Equal(new byte[]
-            {
-                0x0d, 0x2f, 0x6e, 0x6f, 0x64, 0x65, 0x53, 0x74, 0x72, 0x61, 0x74, 0x75, 0x6d, 0x2f
-            });
+            generationTransaction.Final.Take(14).ToHexString().Should().Equal("0d2f6e6f64655374726174756d2f");
 
             // test the inputs sequence
             generationTransaction.Inputs.First().Sequence.Should().Equal((UInt32)0x00);
-            generationTransaction.Final.Skip(14).Take(4).Should().Equal(new byte[] { 0x00, 0x00, 0x00, 0x00 });
+            generationTransaction.Final.Skip(14).Take(4).ToHexString().Should().Equal("00000000");
 
             // test the outputs buffer
-            generationTransaction.Final.Skip(18).Take(69).Should().Equal(new byte[]
-            {
-                0x02, 0x80, 0x01, 0x0b, 0x27, 0x01, 0x00, 0x00, 0x00, 0x19, 0x76, 0xa9, 0x14, 0x32, 0x90, 0x35, 
-                0x23, 0x41, 0x68, 0xb8, 0xda, 0x5a, 0xf1, 0x06, 0xce, 0xb2, 0x05, 0x60, 0x40, 0x12, 0x36, 0x84, 
-                0x98, 0x88, 0xac, 0x80, 0xf0, 0xfa, 0x02, 0x00, 0x00, 0x00, 0x00, 0x19, 0x76, 0xa9, 0x14, 0x7d,
-                0x57, 0x6f, 0xbf, 0xca, 0x48, 0xb8, 0x99, 0xdc, 0x75, 0x01, 0x67, 0xdd, 0x2a, 0x2a, 0x65, 0x72,
-                0xff, 0xf4, 0x95, 0x88, 0xac
-            });
+            generationTransaction.Final.Skip(18).Take(69).ToHexString().Should().Equal("0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac");
 
             // test the lock time
             generationTransaction.LockTime.Should().Equal((UInt32)0x00);
-            generationTransaction.Final.Skip(87).Take(4).Should().Equal(new byte[] { 0x00, 0x00, 0x00, 0x00 });
+            generationTransaction.Final.Skip(87).Take(4).ToHexString().Should().Equal("00000000");
 
-            // test the generation transactions final part.
-            generationTransaction.Final.Should().Equal(new byte[]
-            {
-                0x0d, 0x2f, 0x6e, 0x6f, 0x64, 0x65, 0x53, 0x74, 0x72, 0x61, 0x74, 0x75, 0x6d, 0x2f, 0x00, 0x00, 
-                0x00, 0x00, 0x02, 0x80, 0x01, 0x0b, 0x27, 0x01, 0x00, 0x00, 0x00, 0x19, 0x76, 0xa9, 0x14, 0x32, 
-                0x90, 0x35, 0x23, 0x41, 0x68, 0xb8, 0xda, 0x5a, 0xf1, 0x06, 0xce, 0xb2, 0x05, 0x60, 0x40, 0x12, 
-                0x36, 0x84, 0x98, 0x88, 0xac, 0x80, 0xf0, 0xfa, 0x02, 0x00, 0x00, 0x00, 0x00, 0x19, 0x76, 0xa9, 
-                0x14, 0x7d, 0x57, 0x6f, 0xbf, 0xca, 0x48, 0xb8, 0x99, 0xdc, 0x75, 0x01, 0x67, 0xdd, 0x2a, 0x2a, 
-                0x65, 0x72, 0xff, 0xf4, 0x95, 0x88, 0xac, 0x00, 0x00, 0x00, 0x00,
-            });
+            // test the generation transaction initial part.
+            generationTransaction.Initial.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703be9d04062f503253482f04c3e89a5308");
+
+            // test the generation transaction final part.
+            generationTransaction.Final.ToHexString().Should().Equal("0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
         }
     }
 }

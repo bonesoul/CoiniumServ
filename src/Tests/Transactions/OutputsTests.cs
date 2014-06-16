@@ -17,12 +17,11 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
+using Coinium.Common.Extensions;
 using Coinium.Transactions;
-using Nancy.ViewEngines.Razor;
 using NSubstitute;
 using Should.Fluent;
 using Xunit;
@@ -68,31 +67,15 @@ namespace Tests.Transactions
             // test the recipient rewards
             outputs.List.Last().Value.Should().Equal((UInt64)0x0000000002faf080); // packInt64LE: 80f0fa0200000000
             outputs.List.Last().PublicKeyScriptLenght.Should().Equal(new byte[] { 0x19 });
-            outputs.List.Last().PublicKeyScript.Should().Equal(new byte[]
-            {
-                0x76, 0xa9, 0x14, 0x7d, 0x57, 0x6f, 0xbf, 0xca, 0x48, 0xb8, 0x99, 0xdc, 0x75, 0x01, 0x67, 0xdd,
-                0x2a, 0x2a, 0x65, 0x72, 0xff, 0xf4, 0x95, 0x88, 0xac
-            });
+            outputs.List.Last().PublicKeyScript.ToHexString().Should().Equal("76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac");
 
             // test the pool wallet 
             outputs.List.First().Value.Should().Equal((UInt64)0x00000001270b0180); // packInt64LE: 80010b2701000000
             outputs.List.First().PublicKeyScriptLenght.Should().Equal(new byte[] { 0x19 });
-            outputs.List.First().PublicKeyScript.Should().Equal(new byte[]
-            {
-                0x76, 0xa9, 0x14, 0x32, 0x90, 0x35, 0x23, 0x41, 0x68, 0xb8, 0xda, 0x5a, 0xf1, 0x06, 0xce, 0xb2,
-                0x05, 0x60, 0x40, 0x12, 0x36, 0x84, 0x98, 0x88, 0xac
-            });
+            outputs.List.First().PublicKeyScript.ToHexString().Should().Equal("76a914329035234168b8da5af106ceb20560401236849888ac");
 
             // test the outputs buffer.
-            outputs.GetBuffer().Should().Equal(new byte[]
-            {
-                0x02, 0x80, 0x01, 0x0b, 0x27, 0x01, 0x00, 0x00, 0x00, 0x19, 0x76, 0xa9, 0x14, 0x32, 0x90, 0x35, 
-                0x23, 0x41, 0x68, 0xb8, 0xda, 0x5a, 0xf1, 0x06, 0xce, 0xb2, 0x05, 0x60, 0x40, 0x12, 0x36, 0x84, 
-                0x98, 0x88, 0xac, 0x80, 0xf0, 0xfa, 0x02, 0x00, 0x00, 0x00, 0x00, 0x19, 0x76, 0xa9, 0x14, 0x7d,
-                0x57, 0x6f, 0xbf, 0xca, 0x48, 0xb8, 0x99, 0xdc, 0x75, 0x01, 0x67, 0xdd, 0x2a, 0x2a, 0x65, 0x72,
-                0xff, 0xf4, 0x95, 0x88, 0xac
-            });
-
+            outputs.GetBuffer().ToHexString().Should().Equal("0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac");
         }
     }
 }

@@ -16,6 +16,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Coinium.Common.Extensions;
 using Should.Fluent;
 using Xunit;
@@ -48,6 +52,19 @@ namespace Tests.Common.Extensions
 
             var output = input.ToHexString();
             output.Should().Equal("71f6391e10600e54d83bd8c0265303cccaafe375bcc3b0117296ebd144e3f95a");
+        }
+
+        [Fact]
+        public void ToHexStringFromEnumareableTest()
+        {
+            var input = new byte[]
+            {
+                0x71, 0xf6, 0x39, 0x1e, 0x10, 0x60, 0x0e, 0x54, 0xd8, 0x3b, 0xd8, 0xc0, 0x26, 0x53, 0x03, 0xcc,
+                0xca, 0xaf, 0xe3, 0x75, 0xbc, 0xc3, 0xb0, 0x11, 0x72, 0x96, 0xeb, 0xd1, 0x44, 0xe3, 0xf9, 0x5a
+            }.Take(32);
+
+            var output = input.ToHexString();
+            output.Should().Equal("71f6391e10600e54d83bd8c0265303cccaafe375bcc3b0117296ebd144e3f95a");            
         }
 
         [Fact]
