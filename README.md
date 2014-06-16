@@ -48,9 +48,9 @@ For more information about the motivation behind CoiniumServ, check [Master Plan
 
 #### Continious Integration
 
-Every build of CoiniumServ is built & tested over mono & dotnet.
-* Mono: using mono 2.x and 3.x: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
-* dotNet: using dotnet 4.x: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
+Every build of CoiniumServ is built & tested;
+* Mono: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
+* dotNet: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
  
 #### Bounties
 
