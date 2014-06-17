@@ -68,7 +68,7 @@ namespace Tests.Transactions
     {
         // object mocks.
         private readonly IDaemonClient _daemonClient;
-        private readonly BlockTemplate _blockTemplate;
+        private readonly IBlockTemplate _blockTemplate;
         private readonly IExtraNonce _extraNonce;
         private readonly ISignatureScript _signatureScript;
         private readonly IOutputs _outputs;

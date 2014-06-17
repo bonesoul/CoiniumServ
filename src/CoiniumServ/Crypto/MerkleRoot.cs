@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using Coinium.Common.Extensions;
-using Coinium.Common.Helpers.Misc;
 
 namespace Coinium.Crypto
 {
@@ -34,7 +33,7 @@ namespace Coinium.Crypto
     /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-2-for-python
     /// Original implementation: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
     /// </example>
-    public class MerkleRoot
+    public class MerkleRoot:IMerkleRoot
     {
         /// <summary>
         /// Leaves of the merkle tree.

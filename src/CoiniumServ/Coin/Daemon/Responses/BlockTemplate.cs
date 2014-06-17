@@ -28,7 +28,7 @@ namespace Coinium.Coin.Daemon.Responses
     /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
     /// </remarks>
     /// </summary>
-    public class BlockTemplate
+    public class BlockTemplate : IBlockTemplate
     {
         /// <summary>
         /// the compressed difficulty in hexadecimal
