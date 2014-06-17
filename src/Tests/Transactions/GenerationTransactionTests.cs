@@ -29,83 +29,96 @@ using NSubstitute;
 using Should.Fluent;
 using Xunit;
 
+/*  sample data
+    -- create-generation start --
+    rpcData: {"version":2,"previousblockhash":"e9bbcc9b46ed98fd4850f2d21e85566defdefad3453460caabc7a635fc5a1261","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"0000004701b20000000000000000000000000000000000000000000000000000","mintime":1402660580,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402661060,"bits":"1d4701b2","height":302526}
+    -- scriptSigPart data --
+    -> height: 302526 serialized: 03be9d04
+    -> coinbase: 062f503253482f hex: 062f503253482f
+    -> date: 1402661059432 final:1402661059 serialized: 04c3e89a53
+    -- p1 data --
+    txVersion: 1 packed: 01000000
+    txInputsCount: 1 varIntBuffer: 01
+    txInPrevOutHash: 0 uint256BufferFromHash: 0000000000000000000000000000000000000000000000000000000000000000
+    txInPrevOutIndex: 4294967295 packUInt32LE: ffffffff
+    scriptSigPart1.length: 17 extraNoncePlaceholder.length:8 scriptSigPart2.length:14 all: 39 varIntBuffer: 27
+    scriptSigPart1: 03be9d04062f503253482f04c3e89a5308
+    p1: 01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703be9d04062f503253482f04c3e89a5308
+    -- generateOutputTransactions --
+    block-reward: 5000000000
+    recipient-reward: 50000000 packInt64LE: 80f0fa0200000000
+    lenght: 25 varIntBuffer: 19
+    script: 76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
+    pool-reward: 4950000000 packInt64LE: 80010b2701000000
+    lenght: 25 varIntBuffer: 19
+    script: 76a914329035234168b8da5af106ceb20560401236849888ac
+    txOutputBuffers.lenght : 2 varIntBuffer: 02
+    -- p2 --
+    scriptSigPart2: 0d2f6e6f64655374726174756d2f
+    txInSequence: 0 packUInt32LE: 00000000
+    outputTransactions: 0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
+    txLockTime: 0 packUInt32LE: 00000000
+    txComment: 
+    p2: 0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000
+*/
+
 namespace Tests.Transactions
 {
     public class GenerationTransactionTests
     {
-        [Fact]
-        public void CreateGenerationTransactionTest()
+        // object mocks.
+        private readonly IDaemonClient _daemonClient;
+        private readonly IBlockTemplate _blockTemplate;
+        private readonly IExtraNonce _extraNonce;
+        private readonly ISignatureScript _signatureScript;
+        private readonly IOutputs _outputs;
+
+        public GenerationTransactionTests()
         {
-            /*  sample data
-                -- create-generation start --
-                rpcData: {"version":2,"previousblockhash":"e9bbcc9b46ed98fd4850f2d21e85566defdefad3453460caabc7a635fc5a1261","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"0000004701b20000000000000000000000000000000000000000000000000000","mintime":1402660580,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402661060,"bits":"1d4701b2","height":302526}
-                -- scriptSigPart data --
-                -> height: 302526 serialized: 03be9d04
-                -> coinbase: 062f503253482f hex: 062f503253482f
-                -> date: 1402661059432 final:1402661059 serialized: 04c3e89a53
-                -- p1 data --
-                txVersion: 1 packed: 01000000
-                txInputsCount: 1 varIntBuffer: 01
-                txInPrevOutHash: 0 uint256BufferFromHash: 0000000000000000000000000000000000000000000000000000000000000000
-                txInPrevOutIndex: 4294967295 packUInt32LE: ffffffff
-                scriptSigPart1.length: 17 extraNoncePlaceholder.length:8 scriptSigPart2.length:14 all: 39 varIntBuffer: 27
-                scriptSigPart1: 03be9d04062f503253482f04c3e89a5308
-                p1: 01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703be9d04062f503253482f04c3e89a5308
-                -- generateOutputTransactions --
-                block-reward: 5000000000
-                recipient-reward: 50000000 packInt64LE: 80f0fa0200000000
-                lenght: 25 varIntBuffer: 19
-                script: 76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
-                pool-reward: 4950000000 packInt64LE: 80010b2701000000
-                lenght: 25 varIntBuffer: 19
-                script: 76a914329035234168b8da5af106ceb20560401236849888ac
-                txOutputBuffers.lenght : 2 varIntBuffer: 02
-                -- p2 --
-                scriptSigPart2: 0d2f6e6f64655374726174756d2f
-                txInSequence: 0 packUInt32LE: 00000000
-                outputTransactions: 0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
-                txLockTime: 0 packUInt32LE: 00000000
-                txComment: 
-                p2: 0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000
-            */
+            // daemon client
+            _daemonClient = Substitute.For<IDaemonClient>();
+            _daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress { IsValid = true });
 
-            // block template json
+            // block template
             const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"e9bbcc9b46ed98fd4850f2d21e85566defdefad3453460caabc7a635fc5a1261\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"0000004701b20000000000000000000000000000000000000000000000000000\",\"mintime\":1402660580,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1402661060,\"bits\":\"1d4701b2\",\"height\":302526},\"error\":null,\"id\":1}";
-
-            // now init blocktemplate from our json.
             var @object = JsonConvert.DeserializeObject<DaemonResponse<BlockTemplate>>(json);
-            var blockTemplate = @object.Result;
+            _blockTemplate = @object.Result;
 
-            // init mockup objects
-            var daemonClient = Substitute.For<IDaemonClient>();
-            daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress {IsValid = true});
-            
-            var extraNonce = new ExtraNonce(0);
+            // extra nonce
+            _extraNonce = new ExtraNonce(0);
 
-            // create the test object.
-            var generationTransaction = new GenerationTransaction(extraNonce, daemonClient, blockTemplate);
-
-            // use the exactly same input script data within our sample data.
-            generationTransaction.Inputs.First().SignatureScript = new SignatureScript(
-                blockTemplate.Height,
-                blockTemplate.CoinBaseAux.Flags,
+            // signature script
+            _signatureScript = new SignatureScript(
+                _blockTemplate.Height,
+                _blockTemplate.CoinBaseAux.Flags,
                 1402661059432,
-                (byte) extraNonce.ExtraNoncePlaceholder.Length,
+                (byte)_extraNonce.ExtraNoncePlaceholder.Length,
                 "/nodeStratum/");
 
             // use the same output data within our sample data.
-            generationTransaction.Outputs = new Outputs(daemonClient);
+            _outputs = new Outputs(_daemonClient);
             double blockReward = 5000000000; // the amount rewarded by the block.
 
             // sample recipient
             const string recipient = "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji";
             var amount = blockReward * 0.01;
             blockReward -= amount;
-            generationTransaction.Outputs.AddRecipient(recipient, amount);
+            _outputs.AddRecipient(recipient, amount);
 
             // sample pool wallet
             const string poolWallet = "mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq";
-            generationTransaction.Outputs.AddPool(poolWallet, blockReward);
+            _outputs.AddPool(poolWallet, blockReward);
+        }
+
+        [Fact]
+        public void CreateGenerationTransactionTest()
+        {
+            // create the test object.
+            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate);
+
+            // use the exactly same input script data within our sample data.
+            generationTransaction.Inputs.First().SignatureScript = _signatureScript;
+            generationTransaction.Outputs = _outputs;
 
             // create the transaction
             generationTransaction.Create();
@@ -127,7 +140,7 @@ namespace Tests.Transactions
 
             // test the lenghts byte
             generationTransaction.Inputs.First().SignatureScript.Initial.Length.Should().Equal(17);
-            extraNonce.ExtraNoncePlaceholder.Length.Should().Equal(8);
+            _extraNonce.ExtraNoncePlaceholder.Length.Should().Equal(8);
             generationTransaction.Inputs.First().SignatureScript.Final.Length.Should().Equal(14);
             generationTransaction.Initial.Skip(41).Take(1).ToHexString().Should().Equal("27");
 

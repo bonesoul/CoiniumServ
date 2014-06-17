@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Coinium.Coin.Daemon;
-using Coinium.Coin.Daemon.Responses;
 using Coinium.Coin.Exceptions;
 using Coinium.Transactions.Coinbase;
 using Gibbed.IO;

@@ -46,7 +46,7 @@ namespace Coinium.Transactions
     /// https://en.bitcoin.it/wiki/Protocol_specification#tx
     /// https://en.bitcoin.it/wiki/Transactions#Generation
     /// </specification>
-    public class GenerationTransaction
+    public class GenerationTransaction : IGenerationTransaction
     {
         /// <summary>
         /// Transaction data format version
@@ -69,7 +69,7 @@ namespace Coinium.Transactions
         /// <summary>
         /// A list of 1 or more transaction outputs or destinations for coins
         /// </summary>
-        public Outputs Outputs;
+        public IOutputs Outputs { get; set; }
 
         /// <summary>
         ///  For coins that support/require transaction comments
@@ -96,7 +96,7 @@ namespace Coinium.Transactions
 
         public IDaemonClient DaemonClient { get; private set; }
 
-        public BlockTemplate BlockTemplate { get; private set; }
+        public IBlockTemplate BlockTemplate { get; private set; }
 
         public IExtraNonce ExtraNonce { get; private set; }
 
@@ -114,7 +114,7 @@ namespace Coinium.Transactions
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
         /// </remarks>
-        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, BlockTemplate blockTemplate, bool supportTxMessages = false)
+        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, bool supportTxMessages = false)
         {
             DaemonClient = daemonClient;
             BlockTemplate = blockTemplate;

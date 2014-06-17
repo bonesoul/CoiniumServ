@@ -26,32 +26,38 @@ using NSubstitute;
 using Should.Fluent;
 using Xunit;
 
+/*
+    -- generateOutputTransactions --
+    block-reward: 5000000000
+    recipient-reward: 50000000 packInt64LE: 80f0fa0200000000
+    lenght: 25 varIntBuffer: 19
+    script: 76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
+    pool-reward: 4950000000 packInt64LE: 80010b2701000000
+    lenght: 25 varIntBuffer: 19
+    script: 76a914329035234168b8da5af106ceb20560401236849888ac
+    txOutputBuffers.lenght : 2 varIntBuffer: 02
+    outputTransactions: 0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
+ */
+
 namespace Tests.Transactions
 {
     public class OutputsTests
     {
+        // object mocks.
+        private readonly IDaemonClient _daemonClient;
+
+        public OutputsTests()
+        {
+            _daemonClient = Substitute.For<IDaemonClient>();
+            _daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress { IsValid = true });
+        }
+
         [Fact]
         public void TestOutputs()
         {
-            /*
-                -- generateOutputTransactions --
-                block-reward: 5000000000
-                recipient-reward: 50000000 packInt64LE: 80f0fa0200000000
-                lenght: 25 varIntBuffer: 19
-                script: 76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
-                pool-reward: 4950000000 packInt64LE: 80010b2701000000
-                lenght: 25 varIntBuffer: 19
-                script: 76a914329035234168b8da5af106ceb20560401236849888ac
-                txOutputBuffers.lenght : 2 varIntBuffer: 02
-                outputTransactions: 0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
-             */
-
-            // init mockup objects
-            var daemonClient = Substitute.For<IDaemonClient>();
-            daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress { IsValid = true });
+            var outputs = new Outputs(_daemonClient);
 
             // setup the outputs based on the sample.
-            var outputs = new Outputs(daemonClient);
             double blockReward = 5000000000; // the amount rewarded by the block.
 
             // sample recipient

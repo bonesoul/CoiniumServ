@@ -41,7 +41,7 @@ namespace Coinium.Transactions
         /// <summary>
         /// Computational Script for confirming transaction authorization
         /// </summary>
-        public SignatureScript SignatureScript { get; set; }
+        public ISignatureScript SignatureScript { get; set; }
 
         /// <summary>
         /// Transaction version as defined by the sender. Intended for "replacement" of transactions when information is updated before inclusion into a block.

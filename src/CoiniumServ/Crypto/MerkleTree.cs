@@ -16,7 +16,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Coinium.Common.Extensions;
@@ -35,7 +34,7 @@ namespace Coinium.Crypto
     /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-2-for-python
     /// Original implementation: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
     /// </example>
-    public class MerkleTree
+    public class MerkleTree : IMerkleTree
     {
         /// <summary>
         /// The steps in tree.

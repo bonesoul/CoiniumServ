@@ -88,10 +88,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Coin\Daemon\Responses\IBlockTemplate.cs" />
+    <Compile Include="Crypto\IMerkleRoot.cs" />
+    <Compile Include="Crypto\IMerkleTree.cs" />
     <Compile Include="Crypto\MerkleRoot.cs" />
+    <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
     <Compile Include="Transactions\Outputs.cs" />
+    <Compile Include="Transactions\Script\ISignatureScript.cs" />
     <Compile Include="Transactions\Script\SignatureScript.cs" />
     <Compile Include="Transactions\TxIn.cs" />
     <Compile Include="Transactions\TxOut.cs" />
