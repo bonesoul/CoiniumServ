@@ -58,14 +58,6 @@ namespace Coinium.Server.Stratum.Notifications
         public string CoinbaseFinal { get; private set; }
 
         /// <summary>
-        /// List of hashes, will be used for calculation of merkle root. 
-        /// <remarks>This is not a list of all transactions, it only contains prepared hashes of steps of merkle tree algorithm. Please read some materials (http://en.wikipedia.org/wiki/Hash_tree) for understanding how merkle trees calculation works. (http://mining.bitcoin.cz/stratum-mining)</remarks>
-        /// <remarks>The coinbase transaction is hashed against the merkle branches to build the final merkle root.</remarks>
-        /// </summary>
-        [JsonIgnore]
-        public List<byte[]> MerkleBranches { get; private set; }
-
-        /// <summary>
         /// Coin's block version.
         /// </summary>
         [JsonIgnore]
@@ -123,12 +115,6 @@ namespace Coinium.Server.Stratum.Notifications
             PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();
-
-            MerkleBranches = new List<byte[]>();
-            foreach (var transaction in blockTemplate.Transactions)
-            {
-                MerkleBranches.Add(transaction.Data.HexToByteArray());
-            }
         
             Version = BitConverter.GetBytes(blockTemplate.Version.BigEndian()).ToHexString();
             NetworkDifficulty = blockTemplate.Bits;
@@ -139,11 +125,11 @@ namespace Coinium.Server.Stratum.Notifications
         {
             var data = new List<object>
             {
-                Id.ToString("x4"),
+                Id.ToString(),
                 PreviousBlockHashReversed,
                 CoinbaseInitial,
                 CoinbaseFinal,
-                MerkleBranches,
+                MerkleTree.Branches,
                 Version,
                 NetworkDifficulty,
                 nTime,

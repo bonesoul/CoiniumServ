@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Coinium.Common.Extensions;
 using Coinium.Common.Helpers.Misc;
 
@@ -44,7 +45,20 @@ namespace Coinium.Crypto
         /// <summary>
         /// The steps in tree.
         /// </summary>
-        public IList<byte[]> Steps { get; private set; } 
+        public IList<byte[]> Steps { get; private set; }
+
+        /// <summary>
+        /// List of hashes, will be used for calculation of merkle root. 
+        /// <remarks>This is not a list of all transactions, it only contains prepared hashes of steps of merkle tree algorithm. Please read some materials (http://en.wikipedia.org/wiki/Hash_tree) for understanding how merkle trees calculation works. (http://mining.bitcoin.cz/stratum-mining)</remarks>
+        /// <remarks>The coinbase transaction is hashed against the merkle branches to build the final merkle root.</remarks>
+        /// </summary>
+        public List<string> Branches
+        {
+            get
+            {
+                return Steps.Select(step => step.ToHexString()).ToList();
+            }
+        }
 
         /// <summary>
         /// The root of the merkle tree.
