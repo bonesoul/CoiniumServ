@@ -25,7 +25,7 @@ using Gibbed.IO;
 
 namespace Coinium.Transactions.Script
 {
-    public class SignatureScript
+    public class SignatureScript : ISignatureScript
     {
         /// <summary>
         /// Computational Script for confirming transaction authorization - part 1

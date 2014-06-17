@@ -69,7 +69,7 @@ namespace Coinium.Transactions
         /// <summary>
         /// A list of 1 or more transaction outputs or destinations for coins
         /// </summary>
-        public Outputs Outputs;
+        public IOutputs Outputs;
 
         /// <summary>
         ///  For coins that support/require transaction comments

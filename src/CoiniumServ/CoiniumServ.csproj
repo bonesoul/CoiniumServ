@@ -92,6 +92,7 @@
     <Compile Include="Transactions\IOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
     <Compile Include="Transactions\Outputs.cs" />
+    <Compile Include="Transactions\Script\ISignatureScript.cs" />
     <Compile Include="Transactions\Script\SignatureScript.cs" />
     <Compile Include="Transactions\TxIn.cs" />
     <Compile Include="Transactions\TxOut.cs" />
