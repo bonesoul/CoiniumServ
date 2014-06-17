@@ -125,7 +125,7 @@ namespace Coinium.Server.Stratum.Notifications
         {
             var data = new List<object>
             {
-                Id.ToString(),
+                Id.ToString("x"),
                 PreviousBlockHashReversed,
                 CoinbaseInitial,
                 CoinbaseFinal,

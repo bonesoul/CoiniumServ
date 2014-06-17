@@ -88,6 +88,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crypto\MerkleRoot.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
     <Compile Include="Transactions\Outputs.cs" />

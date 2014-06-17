@@ -38,11 +38,6 @@ namespace Coinium.Crypto
     public class MerkleTree
     {
         /// <summary>
-        /// Leaves of the merkle tree.
-        /// </summary>
-        public IList<byte[]> Tree { get; private set; }
-
-        /// <summary>
         /// The steps in tree.
         /// </summary>
         public IList<byte[]> Steps { get; private set; }
@@ -61,87 +56,13 @@ namespace Coinium.Crypto
         }
 
         /// <summary>
-        /// The root of the merkle tree.
-        /// </summary>
-        public Hash Root { get; private set; }
-
-        /// <summary>
         /// Creates a new merkle-tree instance.
         /// </summary>
         /// <param name="hashList"></param>
         public MerkleTree(List<byte[]> hashList)
         {
-            Tree = Build(hashList);
             Steps = CalculateSteps(hashList);
-            Root = Tree.Count > 0 ? new Hash(Tree[Tree.Count - 1]) : Hash.ZeroHash;
-        }
-
-        /// <summary>
-        /// Builds merkle tree.
-        /// </summary>
-        /// <param name="hashList"></param>
-        /// <returns></returns>
-        private IList<byte[]> Build(List<byte[]> hashList)
-        {
-            // The Merkle root is based on a tree of hashes calculated from the transactions:
-            //
-            //          root
-            //             /\
-            //            /  \
-            //          A      B
-            //         / \    / \
-            //       t1 t2  t3 t4
-            //
-            // The tree is represented as a list: t1,t2,t3,t4,A,B,root where each entry is a hash.
-            //
-            // The hashing algorithm is double SHA-256. The leaves are a hash of the serialized contents of the
-            // transaction. The interior nodes are hashes of the concentration of the two child hashes.
-            //
-            // This structure allows the creation of proof that a transaction was included into a block without having to
-            // provide the full block contents. Instead, you can provide only a Merkle branch. For example to prove tx2 was
-            // in a block you can just provide tx2, the hash(tx1) and B. Now the other party has everything they need to
-            // derive the root, which can be checked against the block header. These proofs aren't used right now but
-            // will be helpful later when we want to download partial block contents.
-            //
-            // Note that if the number of transactions is not even the last tx is repeated to make it so (see
-            // tx3 above). A tree with 5 transactions would look like this:
-            //
-            //                root
-            //                /  \
-            //              1     \
-            //            /  \     \
-            //          2     3     4
-            //         / \   / \   /  \
-            //       t1 t2  t3 t4  t5 t5
-
-            var tree = new List<byte[]>();
-
-            // Start by adding all the hashes of the transactions as leaves of the tree.
-            foreach (var item in hashList)
-            {
-                tree.Add(item);
-            }
-
-            var levelOffset = 0; // Offset in the list where the currently processed level starts.
-
-            // Step through each level, stopping when we reach the root (levelSize == 1).
-            for (var levelSize = hashList.Count; levelSize > 1; levelSize = (levelSize + 1) / 2)
-            {
-                // For each pair of nodes on that level:
-                for (var left = 0; left < levelSize; left += 2)
-                {   
-                    // The right hand node can be the same as the left hand, in the case where we don't have enough transactions.
-                    var right = Math.Min(left + 1, levelSize - 1);
-                    var leftBytes = tree[levelOffset + left].ReverseBytes();
-                    var rightBytes = tree[levelOffset + right].ReverseBytes();
-
-                    tree.Add(Utils.DoubleDigestTwoBuffers(leftBytes, 0, 32, rightBytes, 0, 32).ReverseBytes());
-                }
-                // Move to the next level.
-                levelOffset += levelSize;
-            }
-            return tree;
-        }
+        }       
 
         /// <summary>
         /// 
