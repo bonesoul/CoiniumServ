@@ -79,7 +79,7 @@ namespace Tests.Transactions
             // init mockup objects
             var daemonClient = Substitute.For<IDaemonClient>();
             daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress {IsValid = true});
-
+            
             var extraNonce = new ExtraNonce(0);
 
             // create the test object.
