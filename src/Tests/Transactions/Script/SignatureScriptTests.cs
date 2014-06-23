@@ -22,42 +22,48 @@ using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
 using Coinium.Transactions.Script;
 using Newtonsoft.Json;
+using NSubstitute;
 using Should.Fluent;
 using Xunit;
+
+/*  sample data
+    -- create-generation start --
+    rpcData: {"version":2,"previousblockhash":"f5f50aa8da33bde3805fe2a56b5f5ab82a2c0ce8597ef97a0abd8348d33ef1b6","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"00000fffff000000000000000000000000000000000000000000000000000000","mintime":1402264399,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402265776,"bits":"1e0fffff","height":294740}
+    -- scriptSigPart data --
+    -> height: 294740 serialized: 03547f04
+    -> coinbase: 062f503253482f hex: 062f503253482f
+    -> date: 1402265775319 final:1402265775 serialized: 04afe09453
+    scriptSigPart1: 03547f04062f503253482f04afe0945308
+    scriptSigPart2: /nodeStratum/ serialized: 0d2f6e6f64655374726174756d2f 
+ */
 
 namespace Tests.Transactions.Script
 {
     public class SignatureScriptTests
     {
+        // object mocks.
+        private readonly IBlockTemplate _blockTemplate;
+        private readonly IExtraNonce _extraNonce;
+
+        public SignatureScriptTests()
+        {
+            // block template
+            const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"f5f50aa8da33bde3805fe2a56b5f5ab82a2c0ce8597ef97a0abd8348d33ef1b6\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"00000fffff000000000000000000000000000000000000000000000000000000\",\"mintime\":1402264399,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1402265776,\"bits\":\"1e0fffff\",\"height\":294740},\"error\":null,\"id\":1}";
+            var @object = JsonConvert.DeserializeObject<DaemonResponse<BlockTemplate>>(json);
+            _blockTemplate = @object.Result;
+
+            // extra nonce
+            _extraNonce = new ExtraNonce(0);
+        }
+
         [Fact]
         public void SignatureScriptTest()
-        {
-            /*  sample data
-                -- create-generation start --
-                rpcData: {"version":2,"previousblockhash":"f5f50aa8da33bde3805fe2a56b5f5ab82a2c0ce8597ef97a0abd8348d33ef1b6","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"00000fffff000000000000000000000000000000000000000000000000000000","mintime":1402264399,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1402265776,"bits":"1e0fffff","height":294740}
-                -- scriptSigPart data --
-                -> height: 294740 serialized: 03547f04
-                -> coinbase: 062f503253482f hex: 062f503253482f
-                -> date: 1402265775319 final:1402265775 serialized: 04afe09453
-                scriptSigPart1: 03547f04062f503253482f04afe0945308
-                scriptSigPart2: /nodeStratum/ serialized: 0d2f6e6f64655374726174756d2f 
-             */
-
-            // block template json
-            const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"f5f50aa8da33bde3805fe2a56b5f5ab82a2c0ce8597ef97a0abd8348d33ef1b6\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"00000fffff000000000000000000000000000000000000000000000000000000\",\"mintime\":1402264399,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1402265776,\"bits\":\"1e0fffff\",\"height\":294740},\"error\":null,\"id\":1}";
-
-            // now init blocktemplate from our json.
-            var @object = JsonConvert.DeserializeObject<DaemonResponse<BlockTemplate>>(json);
-            var blockTemplate = @object.Result;
-
-            // init required objects.
-            var extraNonce = new ExtraNonce(0);   
-
+        {            
             var signatureScript = new SignatureScript(
-                blockTemplate.Height,
-                blockTemplate.CoinBaseAux.Flags,
+                _blockTemplate.Height,
+                _blockTemplate.CoinBaseAux.Flags,
                 1402265775319,
-                (byte) extraNonce.ExtraNoncePlaceholder.Length,
+                (byte)_extraNonce.ExtraNoncePlaceholder.Length,
                 "/nodeStratum/");
 
             // test the objects.

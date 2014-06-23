@@ -49,7 +49,7 @@ namespace Tests.Transactions.Coinbase
 
 
         /// <summary>
-        /// Tests <see cref="CoinbaseUtils.SerializeNumber"/>.
+        /// Tests <see cref="CoinbaseUtils.SerializeNumber(int)"/>.
         /// </summary>
         [Fact]
         public void SerializeNumberTest()
