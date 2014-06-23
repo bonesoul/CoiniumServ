@@ -37,8 +37,10 @@ namespace Coinium.Coin.Helpers
         /// <param name="header"></param>
         /// <param name="coinbase"></param>
         /// <returns></returns>
-        public static byte[] SerializeBlock(Job job, byte[] header, byte[] coinbase)
+        public static byte[] SerializeBlock(IJob job, byte[] header, byte[] coinbase)
         {
+            // TODO: implement a test for it!
+
             byte[] result;
 
             using (var stream = new MemoryStream())
@@ -74,8 +76,10 @@ namespace Coinium.Coin.Helpers
         /// <param name="nTime"></param>
         /// <param name="nonce"></param>
         /// <returns></returns>
-        public static byte[] SerializeHeader(Job job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
+        public static byte[] SerializeHeader(IJob job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
         {
+            // TODO: implement a test for it!
+
             byte[] result;
 
             using (var stream = new MemoryStream())
@@ -94,8 +98,10 @@ namespace Coinium.Coin.Helpers
             return result;
         }
 
-        public static byte[] SerializeCoinbase(Job job, UInt64 extraNonce1, UInt32 extraNonce2)
+        public static byte[] SerializeCoinbase(IJob job, UInt64 extraNonce1, UInt32 extraNonce2)
         {
+            // TODO: implement a test for it!
+
             var extraNonce1Buffer = BitConverter.GetBytes(extraNonce1);
             var extraNonce2Buffer = BitConverter.GetBytes(extraNonce2);
 

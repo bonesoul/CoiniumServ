@@ -23,6 +23,6 @@ namespace Coinium.Mining.Share
     public interface IShareManager
     {
 
-        bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
+        IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
     }
 }

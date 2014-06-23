@@ -19,23 +19,22 @@
 using System;
 using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Mining.Jobs
+namespace Coinium.Mining.Share
 {
-    public interface IJobManager
+    public interface IShare
     {
+        bool Valid { get; }
 
-        IExtraNonce ExtraNonce { get; }
+        IJob Job { get; }
 
-        IJob GetJob(UInt64 id);
+        UInt32 nTime { get; }
 
-        void AddJob(Job job);
+        UInt32 Nonce { get; }
 
-        void Broadcast();
+        UInt64 ExtraNonce1 { get; }
 
-        /// <summary>
-        /// Initializes the specified pool.
-        /// </summary>
-        /// <param name="instanceId">The instance identifier.</param>
-        void Initialize(ulong instanceId);
+        UInt32 ExtraNonce2 { get; }
+
+        byte[] Coinbase { get; }
     }
 }
