@@ -19,6 +19,7 @@ CoiniumServ is a high-performance pool-server implementation developed with C# t
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
 ### Features
+* [Follows](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) [Test Driven Development](http://en.wikipedia.org/wiki/Test-driven_development) model.
 * Stratum server (over socket server).
 * Vanilla (getwork) server (over http server).
 * getblocktemplate & job-manager support.
