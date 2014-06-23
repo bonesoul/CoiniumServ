@@ -22,6 +22,7 @@ using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
+using Coinium.Miner;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Share;
 using Coinium.Net.Server.Sockets;
@@ -56,6 +57,12 @@ namespace Tests.Mining.Share
         private readonly IBlockTemplate _blockTemplate;
         private readonly IExtraNonce _extraNonce;
         private readonly IMerkleTree _merkleTree;
+        private readonly IConnection _connection;
+        private readonly IJobManager _jobManager;
+        private readonly IHashAlgorithm _hashAlgorithm;
+        private readonly IMiner _miner;
+        private readonly GenerationTransaction _generationTransaction;        
+        private readonly IJob _job;        
 
         public ShareManagerTests()
         {
@@ -74,25 +81,32 @@ namespace Tests.Mining.Share
             // merkle tree
             var hashList = _blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();            
             _merkleTree = new MerkleTree(hashList);
+
+            // generation transaction
+            _generationTransaction = Substitute.For<GenerationTransaction>(_extraNonce, _daemonClient, _blockTemplate, false);
+            _generationTransaction.Create();
+
+            // the job.
+            _job = new Job(1, _blockTemplate, _generationTransaction, _merkleTree);
+
+            // the job manager.
+            _connection = Substitute.For<IConnection>();
+            _jobManager = Substitute.For<IJobManager>();
+            _jobManager.GetJob(1).Returns(_job);
+
+            // hash algorithm
+            _hashAlgorithm = Substitute.For<IHashAlgorithm>();
+
+            // miner
+            _miner = Substitute.For<StratumMiner>(1, _connection);
         }
 
         [Fact]
         public void ProcessShare()
         {
-            var generationTransaction = Substitute.For<GenerationTransaction>(_extraNonce, _daemonClient, _blockTemplate, false);
-            generationTransaction.Create();
-
-            var job = new Job(1, _blockTemplate, generationTransaction, _merkleTree);
-
-            // create the job manager.
-            var connection = Substitute.For<IConnection>();
-            var jobManager = Substitute.For<IJobManager>();
-            jobManager.GetJob(1).Returns(job);
 
             // create the share manager
-            var miner = Substitute.For<StratumMiner>(1, connection);
-            var hashAlgorithm = Substitute.For<IHashAlgorithm>();
-            var shareManager = new ShareManager(hashAlgorithm, jobManager, _daemonClient);
+            var shareManager = new ShareManager(_hashAlgorithm, _jobManager, _daemonClient);
 
             // init share the json
             const string shareJson = "{\"params\":[\"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc\",\"1\",\"00000000\",\"53a02404\",\"efa22500\"],\"id\":2,\"method\":\"mining.submit\"}";

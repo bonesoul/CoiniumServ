@@ -92,6 +92,7 @@
     <Compile Include="Crypto\IMerkleRoot.cs" />
     <Compile Include="Crypto\IMerkleTree.cs" />
     <Compile Include="Crypto\MerkleRoot.cs" />
+    <Compile Include="Server\Stratum\Notifications\IJob.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
