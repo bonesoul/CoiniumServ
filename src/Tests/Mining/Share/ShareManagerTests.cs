@@ -16,7 +16,6 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
 using System.Linq;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
@@ -29,7 +28,6 @@ using Coinium.Net.Server.Sockets;
 using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
-using Coinium.Transactions.Script;
 using Newtonsoft.Json;
 using NSubstitute;
 using Xunit;

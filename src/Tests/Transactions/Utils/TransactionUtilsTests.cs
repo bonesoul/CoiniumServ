@@ -26,17 +26,18 @@ namespace Tests.Transactions.Utils
 {
     public class TransactionUtilsTests
     {
+        const long UnixDateTime = 1402265775319;
+        const long FinalUnixDateTime = UnixDateTime / 1000 | 0;
+
         /// <summary>
         /// -> date: 1402265775319 final:1402265775 serialized: 04afe09453
         /// </summary>
         [Fact]
         public void SerializedUnixDateTimeTest()
         {
-            const long unixDateTime = 1402265775319;
-            const long finalUnixDateTime = unixDateTime / 1000 | 0;
-            finalUnixDateTime.Should().Equal((Int64)1402265775);
+            FinalUnixDateTime.Should().Equal((Int64)1402265775);
 
-            var serializedUnixTime = TransactionUtils.GetSerializedUnixDateTime(unixDateTime);
+            var serializedUnixTime = TransactionUtils.GetSerializedUnixDateTime(UnixDateTime);
             serializedUnixTime.ToHexString().Should().Equal("04afe09453");
         }
     }
