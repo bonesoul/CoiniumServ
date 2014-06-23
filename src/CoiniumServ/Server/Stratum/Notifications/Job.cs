@@ -29,7 +29,7 @@ using Newtonsoft.Json;
 namespace Coinium.Server.Stratum.Notifications
 {
     [JsonArray]
-    public class Job : IEnumerable<object>
+    public class Job : IJob
     {
         /// <summary>
         /// ID of the job. Use this ID while submitting share generated from this job.
@@ -67,7 +67,7 @@ namespace Coinium.Server.Stratum.Notifications
         /// Encoded current network difficulty.
         /// </summary>
         [JsonIgnore]
-        public string NetworkDifficulty;
+        public string NetworkDifficulty { get; private set; }
 
         /// <summary>
         /// The current time. nTime rolling should be supported, but should not increase faster than actual time.

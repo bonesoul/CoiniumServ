@@ -18,27 +18,36 @@
 
 using System;
 using System.Collections.Generic;
+using Coinium.Coin.Daemon.Responses;
+using Coinium.Crypto;
+using Coinium.Transactions;
 
-namespace Coinium.Transactions
+namespace Coinium.Server.Stratum.Notifications
 {
-    public interface IGenerationTransaction
+    public interface IJob : IEnumerable<object>
     {
-        UInt32 Version { get; }
+        UInt64 Id { get; }
 
-        UInt32 InputsCount { get; }
+        string PreviousBlockHashReversed { get;  }
 
-        List<TxIn> Inputs { get; }
+        string CoinbaseInitial { get; }
 
-        IOutputs Outputs { get; set; }
+        string CoinbaseFinal { get; }
 
-        byte[] Message { get;  }
+        string Version { get; }
 
-        UInt32 LockTime { get; }
+        string NetworkDifficulty { get; }
 
-        byte[] Initial { get; }
+        string nTime { get; }
 
-        byte[] Final { get; }
+        bool CleanJobs { get; set; }
 
-        void Create();
+        IBlockTemplate BlockTemplate { get; }
+
+        GenerationTransaction GenerationTransaction { get; }
+
+        IMerkleTree MerkleTree { get; }
+
+        new IEnumerator<object> GetEnumerator();
     }
 }
