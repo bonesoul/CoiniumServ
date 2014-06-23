@@ -62,61 +62,41 @@ namespace Coinium.Mining.Share
         /// <param name="nTimeString">The n time string.</param>
         /// <param name="nonceString">The nonce string.</param>
         /// <returns></returns>
-        public bool ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
+        public IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
-
             var job = _jobManager.GetJob(id);
 
-            if (job == null)
-            {
-                Log.Warning("Job doesn't exist: {0}", id);
-                return false;
-            }
+            // create the share
+            var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
-            if (nTimeString.Length != 8)
-            {
-                Log.Warning("Incorrect size of nTime");
-                return false;
-            }
+            //var coinbaseHash = CoinbaseUtils.HashCoinbase(coinbase);
 
-            if (nonceString.Length != 8)
-            {
-                Log.Warning("incorrect size of nonce");
-                return false;
-            }
+            //var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
 
-            var nTime = Convert.ToUInt32(nTimeString, 16);
-            var nonce = Convert.ToUInt32(nonceString, 16);
+            //var header = Serializers.SerializeHeader(job, merkleRoot, share.nTime, share.Nonce);
+            //var headerHash = _hashAlgorithm.Hash(header);
+            //var headerValue = new BigInteger(headerHash.ToHexString(), 16);
 
-            var coinbase = Serializers.SerializeCoinbase(job, _jobManager.ExtraNonce.Current, Convert.ToUInt32(extraNonce2, 16));
-            var coinbaseHash = CoinbaseUtils.HashCoinbase(coinbase);
+            //var shareDiff = _diff1.Divide(headerValue).Multiply(BigInteger.ValueOf(_hashAlgorithm.Multiplier));
+            //var blockDiffAdjusted = 16 * _hashAlgorithm.Multiplier;
 
-            var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
+            //var target = new BigInteger(job.NetworkDifficulty, 16);
+            //if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
+            //{
+            //    var blockHex = Serializers.SerializeBlock(job, header, coinbase).ToHexString();
 
-            var header = Serializers.SerializeHeader(job, merkleRoot, nTime, nonce);
-            var headerHash = _hashAlgorithm.Hash(header);
-            var headerValue = new BigInteger(headerHash.ToHexString(), 16);
+            //    // we should be using another scrypt hash here? - https://github.com/zone117x/node-stratum-pool/blob/eb4b62e9c4de8a8cde83c2b3756ca1a45f02b957/lib/jobManager.js#L232
 
-            var shareDiff = _diff1.Divide(headerValue).Multiply(BigInteger.ValueOf(_hashAlgorithm.Multiplier));
-            var blockDiffAdjusted = 16 * _hashAlgorithm.Multiplier;
+            //    // return SubmitBlock(blockHex);
+            //}
+            //else // invalid share.
+            //{
+            //    // TODO: implement me
+            //}
 
-            var target = new BigInteger(job.NetworkDifficulty, 16);
-            if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
-            {
-                var blockHex = Serializers.SerializeBlock(job, header, coinbase).ToHexString();
-
-                // we should be using another scrypt hash here? - https://github.com/zone117x/node-stratum-pool/blob/eb4b62e9c4de8a8cde83c2b3756ca1a45f02b957/lib/jobManager.js#L232
-
-                return SubmitBlock(blockHex);
-            }
-            else // invalid share.
-            {
-                // TODO: implement me
-            }
-
-            return false;
+            return share;
         }
 
         private bool SubmitBlock(string blockHex)

@@ -52,7 +52,7 @@ namespace Coinium.Mining.Jobs
             _extraNonce = new ExtraNonce(instanceId);
         }
 
-        public Job GetJob(UInt64 id)
+        public IJob GetJob(UInt64 id)
         {
             return _jobs.ContainsKey(id) ? _jobs[id] : null;
         }

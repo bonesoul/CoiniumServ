@@ -124,6 +124,8 @@ namespace Coinium.Transactions.Coinbase
         /// </example>
         public static byte[] SerializeNumber(Int64 value)
         {
+            // TODO: implement a test for it!
+
             if (value >= 1 && value <= 16)
                 return new byte[] { 0x01, (byte)value };
 
@@ -197,6 +199,8 @@ namespace Coinium.Transactions.Coinbase
         /// <returns></returns>
         public static byte[] CoinAddressToScript(string address)
         {
+            // TODO: implement a test for it!
+
             var decoded = Base58.Decode(address);
 
             if (decoded.Length != 25)
