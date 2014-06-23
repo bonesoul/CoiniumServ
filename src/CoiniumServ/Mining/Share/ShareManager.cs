@@ -93,7 +93,7 @@ namespace Coinium.Mining.Share
             var coinbase = Serializers.SerializeCoinbase(job, _jobManager.ExtraNonce.Current, Convert.ToUInt32(extraNonce2, 16));
             var coinbaseHash = CoinbaseUtils.HashCoinbase(coinbase);
 
-            var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBytes();
+            var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
 
             var header = Serializers.SerializeHeader(job, merkleRoot, nTime, nonce);
             var headerHash = _hashAlgorithm.Hash(header);
