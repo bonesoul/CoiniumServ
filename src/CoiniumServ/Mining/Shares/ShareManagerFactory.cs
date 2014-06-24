@@ -22,7 +22,7 @@ using Coinium.Mining.Jobs;
 using Nancy.TinyIoc;
 using Serilog;
 
-namespace Coinium.Mining.Share
+namespace Coinium.Mining.Shares
 {
     public class ShareManagerFactory : IShareManagerFactory
     {

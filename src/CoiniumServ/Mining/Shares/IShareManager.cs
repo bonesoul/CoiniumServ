@@ -16,42 +16,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Numerics;
-using Coinium.Coin.Algorithms;
-using Coinium.Crypto;
-using Coinium.Server.Stratum.Notifications;
+using Coinium.Server.Stratum;
 
-namespace Coinium.Mining.Share
+namespace Coinium.Mining.Shares
 {
-    public interface IShare
+    public interface IShareManager
     {
-        bool Valid { get; }
 
-        IJob Job { get; }
-
-        UInt32 nTime { get; }
-
-        UInt32 Nonce { get; }
-
-        UInt32 ExtraNonce1 { get; }
-
-        UInt32 ExtraNonce2 { get; }
-
-        byte[] Coinbase { get; }
-
-        Hash CoinbaseHash { get; }
-
-        byte[] MerkleRoot { get; }
-
-        byte[] Header { get; }
-
-        byte[] HeaderHash { get; }
-
-        BigInteger HeaderValue { get; }
-
-        Double Difficulty { get; }
-
-        Double BlockDiffAdjusted { get; }
+        IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
     }
 }

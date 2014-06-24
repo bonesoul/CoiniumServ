@@ -20,7 +20,7 @@ using AustinHarris.JsonRpc;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Mining.Jobs;
-using Coinium.Mining.Share;
+using Coinium.Mining.Shares;
 using Coinium.Rpc.Service;
 using Coinium.Rpc.Service.Http;
 using Serilog;

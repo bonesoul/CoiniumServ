@@ -97,8 +97,8 @@
     <Compile Include="Crypto\IMerkleTree.cs" />
     <Compile Include="Crypto\MerkleRoot.cs" />
     <Compile Include="Mining\Jobs\IJobCounter.cs" />
-    <Compile Include="Mining\Share\IShare.cs" />
-    <Compile Include="Mining\Share\Share.cs" />
+    <Compile Include="Mining\Shares\IShare.cs" />
+    <Compile Include="Mining\Shares\Share.cs" />
     <Compile Include="Server\Stratum\Notifications\IJob.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
@@ -175,10 +175,10 @@
     <Compile Include="Mining\Pool\IPoolManager.cs" />
     <Compile Include="Mining\Pool\Pool.cs" />
     <Compile Include="Mining\Pool\PoolFactory.cs" />
-    <Compile Include="Mining\Share\IShareManagerFactory.cs" />
-    <Compile Include="Mining\Share\IShareManager.cs" />
-    <Compile Include="Mining\Share\ShareManagerFactory.cs" />
-    <Compile Include="Mining\Share\ShareManager.cs" />
+    <Compile Include="Mining\Shares\IShareManagerFactory.cs" />
+    <Compile Include="Mining\Shares\IShareManager.cs" />
+    <Compile Include="Mining\Shares\ShareManagerFactory.cs" />
+    <Compile Include="Mining\Shares\ShareManager.cs" />
     <Compile Include="Rpc\Service\IRpcService.cs" />
     <Compile Include="Server\IMiningServer.cs" />
     <Compile Include="Server\Config\IServerConfig.cs" />

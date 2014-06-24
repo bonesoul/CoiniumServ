@@ -22,7 +22,7 @@ using Coinium.Common.Context;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Pool;
 using Coinium.Mining.Pool.Config;
-using Coinium.Mining.Share;
+using Coinium.Mining.Shares;
 using Coinium.Rpc.Service;
 using Coinium.Server;
 

@@ -16,19 +16,41 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Coin.Daemon;
-using Coinium.Mining.Jobs;
+using System;
+using System.Numerics;
+using Coinium.Crypto;
+using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Mining.Share
+namespace Coinium.Mining.Shares
 {
-    public interface IShareManagerFactory
+    public interface IShare
     {
-        /// <summary>
-        /// Gets the specified daemon client.
-        /// </summary>
-        /// <param name="jobManager">The job manager.</param>
-        /// <param name="daemonClient">The daemon client.</param>
-        /// <returns></returns>
-        IShareManager Get(IJobManager jobManager, IDaemonClient daemonClient);
+        bool Valid { get; }
+
+        IJob Job { get; }
+
+        UInt32 nTime { get; }
+
+        UInt32 Nonce { get; }
+
+        UInt32 ExtraNonce1 { get; }
+
+        UInt32 ExtraNonce2 { get; }
+
+        byte[] Coinbase { get; }
+
+        Hash CoinbaseHash { get; }
+
+        byte[] MerkleRoot { get; }
+
+        byte[] Header { get; }
+
+        byte[] HeaderHash { get; }
+
+        BigInteger HeaderValue { get; }
+
+        Double Difficulty { get; }
+
+        Double BlockDiffAdjusted { get; }
     }
 }

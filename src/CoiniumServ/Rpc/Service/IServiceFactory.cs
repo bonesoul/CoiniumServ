@@ -18,7 +18,7 @@
 
 using Coinium.Coin.Daemon;
 using Coinium.Mining.Jobs;
-using Coinium.Mining.Share;
+using Coinium.Mining.Shares;
 
 namespace Coinium.Rpc.Service
 {

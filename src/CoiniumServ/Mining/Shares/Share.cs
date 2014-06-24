@@ -18,16 +18,14 @@
 
 using System;
 using System.Numerics;
-using Coinium.Coin.Algorithms;
 using Coinium.Coin.Coinbase;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Server.Stratum.Notifications;
-using Gibbed.IO;
 using Numerics;
 using Serilog;
 
-namespace Coinium.Mining.Share
+namespace Coinium.Mining.Shares
 {
     public class Share : IShare
     {
