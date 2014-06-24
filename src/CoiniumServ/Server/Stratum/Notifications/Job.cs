@@ -19,12 +19,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Numerics;
+using Coinium.Coin.Algorithms;
+using Coinium.Coin.Coinbase;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Transactions;
 using Gibbed.IO;
 using Newtonsoft.Json;
+using Numerics;
 
 namespace Coinium.Server.Stratum.Notifications
 {
@@ -69,7 +74,14 @@ namespace Coinium.Server.Stratum.Notifications
         /// Encoded current network difficulty.
         /// </summary>
         [JsonIgnore]
-        public string NetworkDifficulty { get; private set; }
+        public string EncodedDifficulty { get; private set; }
+
+        public BigInteger Target { get; private set; }
+
+        /// <summary>
+        /// Job difficulty.
+        /// </summary>
+        public double Difficulty { get; private set; }
 
         /// <summary>
         /// The current time. nTime rolling should be supported, but should not increase faster than actual time.
@@ -83,6 +95,11 @@ namespace Coinium.Server.Stratum.Notifications
         /// </summary>
         [JsonIgnore]
         public bool CleanJobs { get; set; }
+
+        /// <summary>
+        /// The assigned hash algorithm for the job.
+        /// </summary>
+        public IHashAlgorithm HashAlgorithm { get; private set; }
 
         /// <summary>
         /// Associated block template.
@@ -103,11 +120,13 @@ namespace Coinium.Server.Stratum.Notifications
         /// Creates a new instance of JobNotification.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="algorithm"></param>
         /// <param name="blockTemplate"></param>
         /// <param name="generationTransaction"></param>
         /// <param name="merkeTree"></param>
-        public Job(UInt64 id, IBlockTemplate blockTemplate, IGenerationTransaction generationTransaction, IMerkleTree merkeTree)
+        public Job(UInt64 id, IHashAlgorithm algorithm, IBlockTemplate blockTemplate, IGenerationTransaction generationTransaction, IMerkleTree merkeTree)
         {
+            HashAlgorithm = algorithm;
             BlockTemplate = blockTemplate;
             GenerationTransaction = generationTransaction;
             MerkleTree = merkeTree;
@@ -120,7 +139,13 @@ namespace Coinium.Server.Stratum.Notifications
             CoinbaseFinal = generationTransaction.Final.ToHexString();
         
             Version = BitConverter.GetBytes(blockTemplate.Version.BigEndian()).ToHexString();
-            NetworkDifficulty = blockTemplate.Bits;
+            EncodedDifficulty = blockTemplate.Bits;
+
+            Target = string.IsNullOrEmpty(blockTemplate.Target)
+                ? EncodedDifficulty.BigIntFromBitsHex()
+                : BigInteger.Parse("000000ffff000000000000000000000000000000000000000000000000000000",NumberStyles.HexNumber);
+
+            Difficulty = ((double)new BigRational(HashAlgorithm.Difficulty, Target));
             nTime = BitConverter.GetBytes(blockTemplate.CurTime.BigEndian()).ToHexString();
         }
 
@@ -134,7 +159,7 @@ namespace Coinium.Server.Stratum.Notifications
                 CoinbaseFinal,
                 MerkleTree.Branches,
                 Version,
-                NetworkDifficulty,
+                EncodedDifficulty,
                 nTime,
                 CleanJobs
             };

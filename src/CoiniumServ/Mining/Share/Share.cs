@@ -23,6 +23,8 @@ using Coinium.Coin.Coinbase;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Server.Stratum.Notifications;
+using Gibbed.IO;
+using Numerics;
 using Serilog;
 
 namespace Coinium.Mining.Share
@@ -40,11 +42,12 @@ namespace Coinium.Mining.Share
         public Hash CoinbaseHash { get; private set; }
         public byte[] MerkleRoot { get; private set; }
         public byte[] Header { get; private set; }
-        public IHashAlgorithm HashAlgorithm { get; private set; }
         public byte[] HeaderHash { get; private set; }
         public BigInteger HeaderValue { get; private set; }
+        public Double Difficulty { get; private set; }
+        public double BlockDiffAdjusted { get; private set; }
 
-        public Share(UInt64 jobId, IJob job, IHashAlgorithm algorithm,  UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
+        public Share(UInt64 jobId, IJob job, UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
         {
             if (job == null)
             {
@@ -67,9 +70,6 @@ namespace Coinium.Mining.Share
                 return;
             }
 
-            // the hash algorithm
-            HashAlgorithm = algorithm;
-
             // miner supplied parameters
             nTime = Convert.ToUInt32(nTimeString, 16); // ntime for the share
             Nonce = Convert.ToUInt32(nonceString, 16); // nonce supplied by the miner for the share.
@@ -89,8 +89,14 @@ namespace Coinium.Mining.Share
             Header = Serializers.SerializeHeader(job, MerkleRoot, nTime, Nonce);
 
             // create the block hash
-            HeaderHash = HashAlgorithm.Hash(Header);
+            HeaderHash = job.HashAlgorithm.Hash(Header);
             HeaderValue = new BigInteger(HeaderHash);
+
+            // calculate the share difficulty
+            Difficulty = ((double)new BigRational(job.HashAlgorithm.Difficulty, HeaderValue)) * job.HashAlgorithm.Multiplier;
+
+            // calculate the block difficulty
+            BlockDiffAdjusted = job.Difficulty * job.HashAlgorithm.Multiplier;
         }
     }
 }

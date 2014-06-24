@@ -121,10 +121,10 @@ namespace Coinium.Mining.Pool
 
         private void InitManagers()
         {
-            _jobManager = _jobManagerFactory.Get(_daemonClient, _minerManager);
+            _jobManager = _jobManagerFactory.Get(_daemonClient, _minerManager, _hashAlgorithmFactory.Get(Config.Coin.Algorithm));
             _jobManager.Initialize(InstanceId);
 
-            _shareManager = _shareManagerFactory.Get(_hashAlgorithmFactory.Get(Config.Coin.Algorithm), _jobManager, _daemonClient);
+            _shareManager = _shareManagerFactory.Get(_jobManager, _daemonClient);
         }
 
         private void InitDaemon()

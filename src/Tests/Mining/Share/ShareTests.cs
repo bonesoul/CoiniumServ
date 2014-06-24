@@ -165,8 +165,11 @@ namespace Tests.Mining.Share
             // job counter
             _jobCounter = Substitute.For<JobCounter>();
 
+            // hash algorithm
+            _hashAlgorithm = Substitute.For<Scrypt>();
+
             // the job.
-            _job = new Job(_jobCounter.Next(), _blockTemplate, _generationTransaction, _merkleTree)
+            _job = new Job(_jobCounter.Next(),_hashAlgorithm, _blockTemplate, _generationTransaction, _merkleTree)
             {
                 CleanJobs = true
             };
@@ -176,9 +179,6 @@ namespace Tests.Mining.Share
             _jobManager = Substitute.For<IJobManager>();
             _jobManager.ExtraNonce.Current.Returns((UInt32)0x70000000);
             _jobManager.GetJob(1).Returns(_job);
-
-            // hash algorithm
-            _hashAlgorithm = Substitute.For<Scrypt>();
 
             // miner
             _miner = new StratumMiner(1, _connection);
@@ -208,7 +208,7 @@ namespace Tests.Mining.Share
             // create the share
             var id = Convert.ToUInt64(jobId, 16);
             var job = _jobManager.GetJob(id);
-            var share = new Coinium.Mining.Share.Share(id, job,_hashAlgorithm, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
+            var share = new Coinium.Mining.Share.Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
             share.nTime.Should().Equal((UInt32)0x53a8afba);
@@ -231,6 +231,10 @@ namespace Tests.Mining.Share
             // test the block hash.
             share.HeaderHash.ToHexString().Should().Equal("c271dc00d2389083bf547a905a8d441ee9c710c6a87edfd35d7c8cafbe030000");
             share.HeaderValue.Should().Equal(BigInteger.Parse("25846116350681099734171790912699060475203659552966485851836826877981122"));
+
+            // test the difficulty
+            share.Difficulty.Should().Equal(68,35921036876233);
+            share.BlockDiffAdjusted.Should().Equal(256);
         }
     }
 }

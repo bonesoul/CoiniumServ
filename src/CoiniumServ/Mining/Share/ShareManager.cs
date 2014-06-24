@@ -21,16 +21,11 @@ using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum;
-using Org.BouncyCastle.Math;
 
 namespace Coinium.Mining.Share
 {
     public class ShareManager : IShareManager
     {
-
-        private static BigInteger _diff1;
-
-        private readonly IHashAlgorithm _hashAlgorithm;
         private readonly IJobManager _jobManager;
         private readonly IDaemonClient _daemonClient;
 
@@ -40,13 +35,10 @@ namespace Coinium.Mining.Share
         /// <param name="hashAlgorithm">The hash algorithm.</param>
         /// <param name="jobManager">The job manager.</param>
         /// <param name="daemonClient"></param>
-        public ShareManager(IHashAlgorithm hashAlgorithm, IJobManager jobManager, IDaemonClient daemonClient)
+        public ShareManager(IJobManager jobManager, IDaemonClient daemonClient)
         {
-            _hashAlgorithm = hashAlgorithm;
             _jobManager = jobManager;
             _daemonClient = daemonClient;
-
-            _diff1 = _hashAlgorithm.Difficulty;
         }
 
         /// <summary>
@@ -65,14 +57,9 @@ namespace Coinium.Mining.Share
             var job = _jobManager.GetJob(id);
 
             // create the share
-            var share = new Share(id, job,_hashAlgorithm, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
+            var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
-            //var headerValue = new BigInteger(headerHash.ToHexString(), 16);
-
-            //var shareDiff = _diff1.Divide(headerValue).Multiply(BigInteger.ValueOf(_hashAlgorithm.Multiplier));
-            //var blockDiffAdjusted = 16 * _hashAlgorithm.Multiplier;
-
-            //var target = new BigInteger(job.NetworkDifficulty, 16);
+            //var target = new BigInteger(job.EncodedDifficulty, 16);
             //if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
             //{
             //    var blockHex = Serializers.SerializeBlock(job, header, coinbase).ToHexString();

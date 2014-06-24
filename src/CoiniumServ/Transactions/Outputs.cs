@@ -62,7 +62,7 @@ namespace Coinium.Transactions
             var txOut = new TxOut
             {
                 Value = ((UInt64)amount).LittleEndian(),
-                PublicKeyScriptLenght = Coin.Coinbase.Utils.VarInt((UInt32)recipientScript.Length),
+                PublicKeyScriptLenght = Serializers.VarInt((UInt32)recipientScript.Length),
                 PublicKeyScript = recipientScript
             };   
 
@@ -78,7 +78,7 @@ namespace Coinium.Transactions
 
             using (var stream = new MemoryStream())
             {
-                stream.WriteBytes(Coin.Coinbase.Utils.VarInt((UInt32)List.Count).ToArray());
+                stream.WriteBytes(Serializers.VarInt((UInt32)List.Count).ToArray());
 
                 foreach (var transaction in List)
                 {

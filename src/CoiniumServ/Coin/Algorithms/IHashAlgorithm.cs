@@ -17,7 +17,7 @@
 */
 
 using System;
-using Org.BouncyCastle.Math;
+using System.Numerics;
 
 namespace Coinium.Coin.Algorithms
 {

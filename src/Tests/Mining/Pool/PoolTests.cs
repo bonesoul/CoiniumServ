@@ -255,16 +255,16 @@ namespace Tests.Mining.Pool
             var config = Substitute.For<IPoolConfig>();
             config.Daemon.Valid.Returns(true);
 
-            // initalize job manager.
-            _jobManagerFactory.Get(_daemonClient, _minerManager).Returns(_jobManager);
-            _jobManager.Initialize(pool.InstanceId);
-
             // initialize hash algorithm
             var hashAlgorithm = Substitute.For<IHashAlgorithm>();
             _hashAlgorithmFactory.Get(config.Coin.Algorithm).Returns(hashAlgorithm);
 
+            // initalize job manager.
+            _jobManagerFactory.Get(_daemonClient, _minerManager, hashAlgorithm).Returns(_jobManager);
+            _jobManager.Initialize(pool.InstanceId);
+
             // initialize share manager.
-            _shareManagerFactory.Get(hashAlgorithm, _jobManager, _daemonClient).Returns(_shareManager);
+            _shareManagerFactory.Get(_jobManager, _daemonClient).Returns(_shareManager);
         
             // init daemon client
             _daemonClient.Initialize(config.Daemon);
