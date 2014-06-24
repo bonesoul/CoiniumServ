@@ -20,10 +20,15 @@ CoiniumServ is a high-performance pool-server implementation developed with C# t
 
 ### Features
 
+##### Platform Agnostic
+Can run on any platforms that C# can live in;
+* *nix (including Linux) over mono
+* Windows over DotNet.
+
 ##### Multiplexed Structure
 * Multiple pools & ports.
 * Multi-pool (switched) mining support.
-* Multiple daemon connections.
+* Multiple coin daemon connections.
 * Multiple database layers.
 
 ##### Functionality
@@ -33,8 +38,6 @@ CoiniumServ is a high-performance pool-server implementation developed with C# t
 ##### Development Model
 * Strictly [follows](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) the [Test Driven Development](http://en.wikipedia.org/wiki/Test-driven_development) model. We have implemented extensive tests for all important functionality and never merge in code that breaks tests and stuff. Yet again, when a new functionality is introduced we also expect proper tests to be implemented within the PR. In simple words, most probably you won't notice any functionality-breaking changes within the repository.
 * A strict ruleset for the [Development Model](https://github.com/CoiniumServ/CoiniumServ/wiki/Development-Model). You can follow our bleeding-edge [Develop](https://github.com/CoiniumServ/CoiniumServ) branch or stay with-in the stable [Master](https://github.com/CoiniumServ/CoiniumServ/tree/master) branch.
-
-* Coin wallet daemon rpc connection support.
    
 ### Motivation
 
