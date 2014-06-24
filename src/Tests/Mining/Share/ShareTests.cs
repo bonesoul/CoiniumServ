@@ -18,13 +18,13 @@
 
 using System;
 using System.Linq;
+using System.Numerics;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Mining.Jobs;
-using Coinium.Mining.Share;
 using Coinium.Net.Server.Sockets;
 using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Notifications;
@@ -98,7 +98,7 @@ using Xunit;
 
 namespace Tests.Mining.Share
 {
-    public class ShareManagerTests
+    public class ShareTests
     {
         // object mocks.
         private readonly IDaemonClient _daemonClient;
@@ -116,7 +116,7 @@ namespace Tests.Mining.Share
         private readonly dynamic _share;
         private readonly StratumMiner _miner;
 
-        public ShareManagerTests()
+        public ShareTests()
         {
             // daemon client
             _daemonClient = Substitute.For<IDaemonClient>();
@@ -178,7 +178,7 @@ namespace Tests.Mining.Share
             _jobManager.GetJob(1).Returns(_job);
 
             // hash algorithm
-            _hashAlgorithm = Substitute.For<IHashAlgorithm>();
+            _hashAlgorithm = Substitute.For<Scrypt>();
 
             // miner
             _miner = new StratumMiner(1, _connection);
@@ -190,7 +190,7 @@ namespace Tests.Mining.Share
         }
 
         [Fact]
-        public void ProcessShare()
+        public void ShareTest()
         {
             // check the submitted share info
             string minerName = _share[0];
@@ -205,11 +205,10 @@ namespace Tests.Mining.Share
             nTime.Should().Equal("53a8afba");
             nonce.Should().Equal("8c6b0c00");
 
-            // create the share manager
-            var shareManager = new ShareManager(_hashAlgorithm, _jobManager, _daemonClient);
-
-            // process the share
-            var share = shareManager.ProcessShare(_miner, jobId, extraNonce2, nTime, nonce);
+            // create the share
+            var id = Convert.ToUInt64(jobId, 16);
+            var job = _jobManager.GetJob(id);
+            var share = new Coinium.Mining.Share.Share(id, job,_hashAlgorithm, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
             share.nTime.Should().Equal((UInt32)0x53a8afba);
@@ -221,6 +220,17 @@ namespace Tests.Mining.Share
 
             // test coinbase
             share.Coinbase.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+            share.CoinbaseHash.Bytes.ToHexString().Should().Equal("dcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76");
+
+            // test merkle-root.
+            share.MerkleRoot.ToHexString().Should().Equal("76cdfea1a682f61f70cd3aeb231e6d3c4775da2694b3223d89b64be0aac3badc");
+
+            // test the block header
+            share.Header.ToHexString().Should().Equal("0200000009cb7a76e76cad28af57214d47e45b54dfdc73197f2a3bcc903b8cd58f63471adcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76baafa853ffff001e000c6b8c");
+
+            // test the block hash.
+            share.HeaderHash.ToHexString().Should().Equal("c271dc00d2389083bf547a905a8d441ee9c710c6a87edfd35d7c8cafbe030000");
+            share.HeaderValue.Should().Equal(BigInteger.Parse("25846116350681099734171790912699060475203659552966485851836826877981122"));
         }
     }
 }

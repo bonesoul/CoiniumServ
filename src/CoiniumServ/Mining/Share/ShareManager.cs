@@ -19,12 +19,9 @@
 using System;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
-using Coinium.Coin.Helpers;
-using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum;
 using Org.BouncyCastle.Math;
-using Serilog;
 
 namespace Coinium.Mining.Share
 {
@@ -68,14 +65,8 @@ namespace Coinium.Mining.Share
             var job = _jobManager.GetJob(id);
 
             // create the share
-            var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
+            var share = new Share(id, job,_hashAlgorithm, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
-            //var coinbaseHash = Utils.HashCoinbase(coinbase);
-
-            //var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
-
-            //var header = Serializers.SerializeHeader(job, merkleRoot, share.nTime, share.Nonce);
-            //var headerHash = _hashAlgorithm.Hash(header);
             //var headerValue = new BigInteger(headerHash.ToHexString(), 16);
 
             //var shareDiff = _diff1.Divide(headerValue).Multiply(BigInteger.ValueOf(_hashAlgorithm.Multiplier));

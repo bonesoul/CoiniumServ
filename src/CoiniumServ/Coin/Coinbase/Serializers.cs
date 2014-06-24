@@ -77,17 +77,15 @@ namespace Coinium.Coin.Coinbase
         /// <returns></returns>
         public static byte[] SerializeHeader(IJob job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
         {
-            // TODO: implement a test for it!
-
             byte[] result;
 
             using (var stream = new MemoryStream())
             {
-                stream.WriteValueU32(nonce);
-                stream.WriteValueU32(Convert.ToUInt32(job.NetworkDifficulty, 16));
-                stream.WriteValueU32(nTime);
+                stream.WriteValueU32(nonce.BigEndian());
+                stream.WriteValueU32(Convert.ToUInt32(job.NetworkDifficulty, 16).BigEndian());
+                stream.WriteValueU32(nTime.BigEndian());
                 stream.WriteBytes(merkleRoot);
-                stream.WriteBytes(job.PreviousBlockHashReversed.HexToByteArray());
+                stream.WriteBytes(job.PreviousBlockHash.HexToByteArray());
                 stream.WriteValueU32(job.BlockTemplate.Version.BigEndian());
 
                 result = stream.ToArray();

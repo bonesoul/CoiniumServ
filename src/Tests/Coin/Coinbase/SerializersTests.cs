@@ -17,9 +17,7 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Coinium.Coin.Coinbase;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
@@ -29,11 +27,11 @@ using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
-using Gibbed.IO;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
 using Xunit;
+using Utils = Coinium.Coin.Coinbase.Utils;
 
 /* Sample data
 
@@ -164,13 +162,35 @@ namespace Tests.Coin.Coinbase
         }
 
         [Fact]
-        public void CoinbaseSerializerTest()
+        public void SerializeCoinbaseTest()
         {
             const UInt32 extraNonce1 = 0x70000000;
             const UInt32 extraNonce2 = 0x00000000;
             var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
 
             coinbase.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+        }
+
+        [Fact]
+        public void SerializeHeaderTest()
+        {
+            const UInt32 extraNonce1 = 0x70000000;
+            const UInt32 extraNonce2 = 0x00000000;
+            const UInt32 nTime = 0x53a8afba;
+            const UInt32 nonce = 0x8c6b0c00;
+
+            // construct the coinbase.
+            var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
+            var coinbaseHash = Utils.HashCoinbase(coinbase);
+
+            // create the merkle root.
+            var merkleRoot = _job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
+
+            nonce.Should().Equal(0x8c6b0c00);
+
+            // test the header.
+            var header = Serializers.SerializeHeader(_job, merkleRoot, nTime, nonce);
+            header.ToHexString().Should().Equal("0200000009cb7a76e76cad28af57214d47e45b54dfdc73197f2a3bcc903b8cd58f63471adcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76baafa853ffff001e000c6b8c");
         }
     }
 }

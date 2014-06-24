@@ -37,6 +37,8 @@ namespace Coinium.Server.Stratum.Notifications
         [JsonIgnore]
         public UInt64 Id { get; private set; }
 
+        public string PreviousBlockHash { get; private set; }
+
         /// <summary>
         /// Hash of previous block.
         /// </summary>
@@ -112,6 +114,7 @@ namespace Coinium.Server.Stratum.Notifications
 
             // init the values.
             Id = id;
+            PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ToHexString();
             PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();
