@@ -18,6 +18,7 @@
 
 using System;
 using System.Linq;
+using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
@@ -89,6 +90,7 @@ namespace Tests.Server.Stratum.Notifications
         private readonly ISignatureScript _signatureScript;
         private readonly IOutputs _outputs;
         private readonly IJobCounter _jobCounter;
+        private readonly IHashAlgorithm _hashAlgorithm;
         private readonly IGenerationTransaction _generationTransaction;
 
         public JobTests()
@@ -139,13 +141,16 @@ namespace Tests.Server.Stratum.Notifications
             _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
             _generationTransaction.Outputs = _outputs;
             _generationTransaction.Create();     
+
+            // hash algorithm
+            _hashAlgorithm = Substitute.For<Scrypt>();
         }
 
         [Fact]
         public void TestJob()
         {
             // test the output.
-            var job = new Job(_jobCounter.Next(), _blockTemplate, _generationTransaction, _merkleTree)
+            var job = new Job(_jobCounter.Next(), _hashAlgorithm, _blockTemplate, _generationTransaction, _merkleTree)
             {
                 CleanJobs = true
             };
@@ -165,7 +170,7 @@ namespace Tests.Server.Stratum.Notifications
             job.Version.Should().Equal("00000002");
 
             // test the bits (encoded network difficulty)
-            job.NetworkDifficulty.Should().Equal("1d2bd7c3");
+            job.EncodedDifficulty.Should().Equal("1d2bd7c3");
 
             // test the current time
             job.nTime.Should().Equal("539ee666");

@@ -23,6 +23,8 @@ using Coinium.Coin.Coinbase;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Server.Stratum.Notifications;
+using Gibbed.IO;
+using Numerics;
 using Serilog;
 
 namespace Coinium.Mining.Share
@@ -43,6 +45,8 @@ namespace Coinium.Mining.Share
         public IHashAlgorithm HashAlgorithm { get; private set; }
         public byte[] HeaderHash { get; private set; }
         public BigInteger HeaderValue { get; private set; }
+        public Double Difficulty { get; private set; }
+        public double BlockDiffAdjusted { get; private set; }
 
         public Share(UInt64 jobId, IJob job, IHashAlgorithm algorithm,  UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
         {
@@ -91,6 +95,13 @@ namespace Coinium.Mining.Share
             // create the block hash
             HeaderHash = HashAlgorithm.Hash(Header);
             HeaderValue = new BigInteger(HeaderHash);
+
+            // calculate the share difficulty
+            Difficulty = ((double)new BigRational(HashAlgorithm.Difficulty, HeaderValue)) * HashAlgorithm.Multiplier;
+
+            // calculate the block difficulty
+            //var @diffi = Convert.ToUInt32(job.EncodedDifficulty, 16).BigEndian();
+            //BlockDiffAdjusted = job.EncodedDifficulty * HashAlgorithm.Multiplier;
         }
     }
 }

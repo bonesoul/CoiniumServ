@@ -51,5 +51,9 @@ namespace Coinium.Mining.Share
         byte[] HeaderHash { get; }
 
         BigInteger HeaderValue { get; }
+
+        Double Difficulty { get; }
+
+        Double BlockDiffAdjusted { get; }
     }
 }

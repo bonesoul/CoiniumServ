@@ -26,7 +26,7 @@ namespace Coinium.Transactions.Utils
         public static byte[] GetSerializedUnixDateTime(Int64 unixDateTime)
         {
             var dateTime = unixDateTime / 1000 | 0;
-            return Coin.Coinbase.Utils.SerializeNumber(dateTime);
+            return Serializers.SerializeNumber(dateTime);
         }
     }
 }

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
@@ -88,7 +89,8 @@ namespace Coinium.Mining.Jobs
             var difficulty = new Difficulty(16);
 
             // create the job notification.
-            var job = new Job(_jobCounter.Next(), blockTemplate, generationTransaction, merkleTree)
+            // TODO: fix me - use the hash algoirthm instead.
+            var job = new Job(_jobCounter.Next(),new Scrypt(), blockTemplate, generationTransaction, merkleTree)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };

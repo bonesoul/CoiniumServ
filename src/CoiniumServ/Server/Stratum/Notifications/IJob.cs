@@ -18,6 +18,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Crypto;
 using Coinium.Transactions;
@@ -38,11 +40,17 @@ namespace Coinium.Server.Stratum.Notifications
 
         string Version { get; }
 
-        string NetworkDifficulty { get; }
+        string EncodedDifficulty { get; }
+
+        BigInteger Target { get; }
+
+        double Difficulty { get; }
 
         string nTime { get; }
 
         bool CleanJobs { get; set; }
+
+        IHashAlgorithm HashAlgorithm { get; }
 
         IBlockTemplate BlockTemplate { get; }
 

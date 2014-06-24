@@ -122,7 +122,7 @@ namespace Coinium.Transactions
             SupportTxMessages = supportTxMessages;
 
             Version = (UInt32)(supportTxMessages ? 2 : 1);
-            Message = Coin.Coinbase.Utils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
+            Message = Serializers.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             LockTime = 0;
 
             // transaction inputs
@@ -181,13 +181,13 @@ namespace Coinium.Transactions
                 // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
 
                 // write transaction input.
-                stream.WriteBytes(Coin.Coinbase.Utils.VarInt(InputsCount));
+                stream.WriteBytes(Serializers.VarInt(InputsCount));
                 stream.WriteBytes(Inputs.First().PreviousOutput.Hash.Bytes);
                 stream.WriteValueU32(Inputs.First().PreviousOutput.Index.LittleEndian());
 
                 // write signature script lenght
                 var signatureScriptLenght = (UInt32)(Inputs.First().SignatureScript.Initial.Length + ExtraNonce.ExtraNoncePlaceholder.Length + Inputs.First().SignatureScript.Final.Length);
-                stream.WriteBytes(Coin.Coinbase.Utils.VarInt(signatureScriptLenght).ToArray());
+                stream.WriteBytes(Serializers.VarInt(signatureScriptLenght).ToArray());
 
                 stream.WriteBytes(Inputs.First().SignatureScript.Initial);
 

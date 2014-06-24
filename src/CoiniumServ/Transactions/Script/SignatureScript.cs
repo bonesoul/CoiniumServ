@@ -43,7 +43,7 @@ namespace Coinium.Transactions.Script
             // The txin's prevout script is an arbitrary byte array (it doesn't have to be a valid script, though this is commonly 
             // done anyway) of 2 to 100 bytes. It has to start with a correct push of the block height (see BIP34).
 
-            var serializedBlockHeight = Coin.Coinbase.Utils.SerializeNumber(blockHeight);
+            var serializedBlockHeight = Serializers.SerializeNumber(blockHeight);
             var serializedUnixTime = TransactionUtils.GetSerializedUnixDateTime(unixTime);
 
             using (var stream = new MemoryStream())
@@ -56,7 +56,7 @@ namespace Coinium.Transactions.Script
                 Initial = stream.ToArray();
             }
 
-            Final = Coin.Coinbase.Utils.SerializeString(signature);
+            Final = Serializers.SerializeString(signature);
         }
     }
 }

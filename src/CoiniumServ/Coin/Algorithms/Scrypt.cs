@@ -17,8 +17,9 @@
 */
 
 using System;
+using System.Globalization;
+using System.Numerics;
 using CryptSharp.Utility;
-using Org.BouncyCastle.Math;
 
 namespace Coinium.Coin.Algorithms
 {
@@ -63,7 +64,7 @@ namespace Coinium.Coin.Algorithms
             P = 1;
             Multiplier = (UInt32) Math.Pow(2, 16);
 
-            Difficulty = new BigInteger("00000000ffff0000000000000000000000000000000000000000000000000000", 16);
+            Difficulty = BigInteger.Parse("00000000ffff0000000000000000000000000000000000000000000000000000", NumberStyles.HexNumber);
         }
 
         public byte[] Hash(byte[] input)
