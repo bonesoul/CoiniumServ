@@ -68,7 +68,6 @@
     <Compile Include="Crypto\MerkleRootTests.cs" />
     <Compile Include="Mining\Share\ShareTests.cs" />
     <Compile Include="Transactions\GenerationTransactionTests.cs" />
-    <Compile Include="Extra\ConflictTests.cs" />
     <Compile Include="Coin\AmountTests.cs" />
     <Compile Include="Coin\Base58Test.cs" />
     <Compile Include="Coin\Coinbase\UtilsTests.cs" />
