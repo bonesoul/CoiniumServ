@@ -49,16 +49,18 @@ namespace Coinium.Mining.Shares
 
         public Share(UInt64 jobId, IJob job, UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
         {
+            Valid = true; // we'll flag the share as invalid if requred later.
+
             // set associated job
 
-            if (job == null)
+            Job = job;
+
+            if (Job == null)
             {
                 Valid = false;
                 Log.Warning("Job doesn't exist: {0}", jobId);
                 return;
             }
-
-            Job = job;
 
             // miner supplied parameters
 
