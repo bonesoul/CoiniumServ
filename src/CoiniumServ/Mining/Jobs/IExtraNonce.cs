@@ -22,10 +22,10 @@ namespace Coinium.Mining.Jobs
 {
     public interface IExtraNonce
     {
-        UInt64 Current { get; }
+        UInt32 Current { get; }
 
         byte[] ExtraNoncePlaceholder { get; }
 
-        UInt64 NextExtraNonce();
+        UInt32 NextExtraNonce();
     }
 }

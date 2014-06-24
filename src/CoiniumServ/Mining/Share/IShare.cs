@@ -31,7 +31,7 @@ namespace Coinium.Mining.Share
 
         UInt32 Nonce { get; }
 
-        UInt64 ExtraNonce1 { get; }
+        UInt32 ExtraNonce1 { get; }
 
         UInt32 ExtraNonce2 { get; }
 

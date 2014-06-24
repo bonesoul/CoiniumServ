@@ -29,6 +29,7 @@ using Coinium.Net.Server.Sockets;
 using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
+using Coinium.Transactions.Script;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
@@ -107,10 +108,13 @@ namespace Tests.Mining.Share
         private readonly IConnection _connection;
         private readonly IJobManager _jobManager;
         private readonly IHashAlgorithm _hashAlgorithm;
-        private readonly StratumMiner _miner;
-        private readonly GenerationTransaction _generationTransaction;        
+        private readonly ISignatureScript _signatureScript;
+        private readonly IOutputs _outputs;
+        private readonly IJobCounter _jobCounter;
+        private readonly IGenerationTransaction _generationTransaction;      
         private readonly IJob _job;
         private readonly dynamic _share;
+        private readonly StratumMiner _miner;
 
         public ShareManagerTests()
         {
@@ -124,23 +128,53 @@ namespace Tests.Mining.Share
             _blockTemplate = blockTemplateObject.Result;
 
             // extra nonce
-            _extraNonce = Substitute.For<IExtraNonce>();
+            _extraNonce = Substitute.For<ExtraNonce>((UInt32)0);
 
             // merkle tree
-            var hashList = _blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();            
-            _merkleTree = new MerkleTree(hashList);
+            var hashList = _blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();
+            _merkleTree = Substitute.For<MerkleTree>(hashList);
+
+            // signature script
+            _signatureScript = Substitute.For<SignatureScript>(
+                _blockTemplate.Height,
+                _blockTemplate.CoinBaseAux.Flags,
+                1403563961807,
+                (byte)_extraNonce.ExtraNoncePlaceholder.Length,
+                "/nodeStratum/");
+
+            // outputs
+            _outputs = Substitute.For<Outputs>(_daemonClient);
+            double blockReward = 5000000000; // the amount rewarded by the block.
+
+            // sample recipient
+            const string recipient = "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji";
+            var amount = blockReward * 0.01;
+            blockReward -= amount;
+            _outputs.AddRecipient(recipient, amount);
+
+            // sample pool wallet
+            const string poolWallet = "mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq";
+            _outputs.AddPool(poolWallet, blockReward);
 
             // generation transaction
             _generationTransaction = Substitute.For<GenerationTransaction>(_extraNonce, _daemonClient, _blockTemplate, false);
+            _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
+            _generationTransaction.Outputs = _outputs;
             _generationTransaction.Create();
 
+            // job counter
+            _jobCounter = Substitute.For<JobCounter>();
+
             // the job.
-            _job = new Job(1, _blockTemplate, _generationTransaction, _merkleTree);
+            _job = new Job(_jobCounter.Next(), _blockTemplate, _generationTransaction, _merkleTree)
+            {
+                CleanJobs = true
+            };
 
             // the job manager.
             _connection = Substitute.For<IConnection>();
             _jobManager = Substitute.For<IJobManager>();
-            _jobManager.ExtraNonce.Current.Returns((UInt64)70000000);
+            _jobManager.ExtraNonce.Current.Returns((UInt32)0x70000000);
             _jobManager.GetJob(1).Returns(_job);
 
             // hash algorithm
@@ -182,8 +216,8 @@ namespace Tests.Mining.Share
             share.Nonce.Should().Equal(0x8c6b0c00);
 
             // test job provided extraNonce1 and extraNonce2
-            share.ExtraNonce1.Should().Equal((UInt64)70000000);
-            share.ExtraNonce2.Should().Equal((UInt32)00000000);
+            share.ExtraNonce1.Should().Equal((UInt32)0x70000000);
+            share.ExtraNonce2.Should().Equal((UInt32)0x00000000);
 
             // test coinbase
             share.Coinbase.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");

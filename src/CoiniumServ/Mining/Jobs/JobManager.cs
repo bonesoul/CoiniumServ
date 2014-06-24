@@ -47,7 +47,7 @@ namespace Coinium.Mining.Jobs
             _minerManager = minerManager;
         }
 
-        public void Initialize(ulong instanceId)
+        public void Initialize(UInt32 instanceId)
         {
             _extraNonce = new ExtraNonce(instanceId);
         }

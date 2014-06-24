@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Coinium.Coin.Coinbase;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
@@ -28,8 +29,10 @@ using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
+using Gibbed.IO;
 using Newtonsoft.Json;
 using NSubstitute;
+using Should.Fluent;
 using Xunit;
 
 /* Sample data
@@ -116,14 +119,14 @@ namespace Tests.Coin.Coinbase
             _blockTemplate = @object.Result;
 
             // extra nonce
-            _extraNonce = new ExtraNonce(0);
+            _extraNonce = Substitute.For<ExtraNonce>((UInt32)0);
 
             // merkle tree
             var hashList = _blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();
-            _merkleTree = new MerkleTree(hashList);
+            _merkleTree = Substitute.For<MerkleTree>(hashList);                
 
             // signature script
-            _signatureScript = new SignatureScript(
+            _signatureScript = Substitute.For<SignatureScript>(
                 _blockTemplate.Height,
                 _blockTemplate.CoinBaseAux.Flags,
                 1403563961807,
@@ -131,7 +134,7 @@ namespace Tests.Coin.Coinbase
                 "/nodeStratum/");
 
             // outputs
-            _outputs = new Outputs(_daemonClient);
+            _outputs = Substitute.For<Outputs>(_daemonClient);
             double blockReward = 5000000000; // the amount rewarded by the block.
 
             // sample recipient
@@ -144,27 +147,30 @@ namespace Tests.Coin.Coinbase
             const string poolWallet = "mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq";
             _outputs.AddPool(poolWallet, blockReward);
 
-            // job counter
-            _jobCounter = Substitute.For<JobCounter>();
-
             // generation transaction.
-            _generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate);
+            _generationTransaction = Substitute.For<GenerationTransaction>(_extraNonce, _daemonClient, _blockTemplate, false);
             _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
             _generationTransaction.Outputs = _outputs;
-            _generationTransaction.Create(); 
+            _generationTransaction.Create();
+
+            // job counter
+            _jobCounter = Substitute.For<JobCounter>();
 
             // create the job
             _job = new Job(_jobCounter.Next(), _blockTemplate, _generationTransaction, _merkleTree)
             {
                 CleanJobs = true
-            };    
+            };
         }
 
         [Fact]
         public void CoinbaseSerializerTest()
         {
+            const UInt32 extraNonce1 = 0x70000000;
+            const UInt32 extraNonce2 = 0x00000000;
+            var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
 
-        
+            coinbase.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
         }
     }
 }

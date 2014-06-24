@@ -28,13 +28,13 @@ namespace Coinium.Mining.Share
         public bool Valid { get; private set; }
 
         public IJob Job { get; private set; }
-        public uint nTime { get; private set; }
-        public uint Nonce { get; private set; }
-        public ulong ExtraNonce1 { get; private set; }
+        public UInt32 nTime { get; private set; }
+        public UInt32 Nonce { get; private set; }
+        public UInt32 ExtraNonce1 { get; private set; }
         public UInt32 ExtraNonce2 { get; private set; }
         public byte[] Coinbase { get; private set; }
 
-        public Share(UInt64 jobId, IJob job, UInt64 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
+        public Share(UInt64 jobId, IJob job, UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
         {
             if (job == null)
             {

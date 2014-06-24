@@ -97,12 +97,10 @@ namespace Coinium.Coin.Coinbase
             return result;
         }
 
-        public static byte[] SerializeCoinbase(IJob job, UInt64 extraNonce1, UInt32 extraNonce2)
+        public static byte[] SerializeCoinbase(IJob job, UInt32 extraNonce1, UInt32 extraNonce2)
         {
-            // TODO: implement a test for it!
-
-            var extraNonce1Buffer = BitConverter.GetBytes(extraNonce1);
-            var extraNonce2Buffer = BitConverter.GetBytes(extraNonce2);
+            var extraNonce1Buffer = BitConverter.GetBytes(extraNonce1.BigEndian());
+            var extraNonce2Buffer = BitConverter.GetBytes(extraNonce2.BigEndian());
 
             byte[] result;
 
