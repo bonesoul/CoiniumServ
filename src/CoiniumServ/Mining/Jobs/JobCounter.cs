@@ -23,7 +23,7 @@ namespace Coinium.Mining.Jobs
     /// <summary>
     /// Counter for job id's.
     /// </summary>
-    public class JobCounter
+    public class JobCounter : IJobCounter
     {
         private UInt64 Current { get; set; }
 

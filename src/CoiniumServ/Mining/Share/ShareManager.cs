@@ -23,7 +23,6 @@ using Coinium.Coin.Helpers;
 using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum;
-using Coinium.Transactions.Coinbase;
 using Org.BouncyCastle.Math;
 using Serilog;
 
@@ -71,7 +70,7 @@ namespace Coinium.Mining.Share
             // create the share
             var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
-            //var coinbaseHash = CoinbaseUtils.HashCoinbase(coinbase);
+            //var coinbaseHash = Utils.HashCoinbase(coinbase);
 
             //var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
 

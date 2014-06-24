@@ -20,9 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Coinium.Coin.Coinbase;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Exceptions;
-using Coinium.Transactions.Coinbase;
 using Gibbed.IO;
 
 namespace Coinium.Transactions
@@ -57,12 +57,12 @@ namespace Coinium.Transactions
             if (!DaemonClient.ValidateAddress(walletAddress).IsValid)
                 throw new InvalidWalletAddressException(walletAddress);
 
-            var recipientScript = CoinbaseUtils.CoinAddressToScript(walletAddress); // generate the script to claim the output for recipient.
+            var recipientScript = Coin.Coinbase.Utils.CoinAddressToScript(walletAddress); // generate the script to claim the output for recipient.
 
             var txOut = new TxOut
             {
                 Value = ((UInt64)amount).LittleEndian(),
-                PublicKeyScriptLenght = CoinbaseUtils.VarInt((UInt32)recipientScript.Length),
+                PublicKeyScriptLenght = Coin.Coinbase.Utils.VarInt((UInt32)recipientScript.Length),
                 PublicKeyScript = recipientScript
             };   
 
@@ -78,7 +78,7 @@ namespace Coinium.Transactions
 
             using (var stream = new MemoryStream())
             {
-                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32)List.Count).ToArray());
+                stream.WriteBytes(Coin.Coinbase.Utils.VarInt((UInt32)List.Count).ToArray());
 
                 foreach (var transaction in List)
                 {

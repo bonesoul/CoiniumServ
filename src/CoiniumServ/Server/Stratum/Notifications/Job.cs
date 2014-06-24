@@ -90,7 +90,7 @@ namespace Coinium.Server.Stratum.Notifications
         /// <summary>
         /// Associated generation transaction.
         /// </summary>
-        public GenerationTransaction GenerationTransaction { get; private set; }
+        public IGenerationTransaction GenerationTransaction { get; private set; }
 
         /// <summary>
         /// Merkle tree associated to blockTemplate transactions.
@@ -104,7 +104,7 @@ namespace Coinium.Server.Stratum.Notifications
         /// <param name="blockTemplate"></param>
         /// <param name="generationTransaction"></param>
         /// <param name="merkeTree"></param>
-        public Job(UInt64 id, IBlockTemplate blockTemplate, GenerationTransaction generationTransaction, IMerkleTree merkeTree)
+        public Job(UInt64 id, IBlockTemplate blockTemplate, IGenerationTransaction generationTransaction, IMerkleTree merkeTree)
         {
             BlockTemplate = blockTemplate;
             GenerationTransaction = generationTransaction;

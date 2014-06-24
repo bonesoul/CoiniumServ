@@ -44,7 +44,7 @@ namespace Coinium.Server.Stratum.Notifications
 
         IBlockTemplate BlockTemplate { get; }
 
-        GenerationTransaction GenerationTransaction { get; }
+        IGenerationTransaction GenerationTransaction { get; }
 
         IMerkleTree MerkleTree { get; }
 

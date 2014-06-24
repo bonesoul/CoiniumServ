@@ -17,7 +17,7 @@
 */
 
 using System;
-using Coinium.Coin.Helpers;
+using Coinium.Coin.Coinbase;
 using Coinium.Server.Stratum.Notifications;
 using Serilog;
 

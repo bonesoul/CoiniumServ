@@ -20,10 +20,9 @@ using System;
 using System.IO;
 using Coinium.Common.Extensions;
 using Coinium.Server.Stratum.Notifications;
-using Coinium.Transactions.Coinbase;
 using Gibbed.IO;
 
-namespace Coinium.Coin.Helpers
+namespace Coinium.Coin.Coinbase
 {
     public static class Serializers
     {
@@ -46,7 +45,7 @@ namespace Coinium.Coin.Helpers
             using (var stream = new MemoryStream())
             {
                 stream.WriteBytes(header);
-                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32)job.BlockTemplate.Transactions.Length));
+                stream.WriteBytes(Utils.VarInt((UInt32)job.BlockTemplate.Transactions.Length));
                 stream.WriteBytes(coinbase);
 
                 foreach (var transaction in job.BlockTemplate.Transactions)

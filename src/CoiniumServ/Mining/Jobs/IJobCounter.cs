@@ -17,16 +17,14 @@
 */
 
 using System;
-using Coinium.Coin.Coinbase;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Transactions.Utils
+namespace Coinium.Mining.Jobs
 {
-    public static class TransactionUtils
+    public interface IJobCounter
     {
-        public static byte[] GetSerializedUnixDateTime(Int64 unixDateTime)
-        {
-            var dateTime = unixDateTime / 1000 | 0;
-            return Coin.Coinbase.Utils.SerializeNumber(dateTime);
-        }
+        UInt64 Next();
     }
 }
