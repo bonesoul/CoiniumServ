@@ -100,8 +100,7 @@ namespace Coinium.Mining.Share
             Difficulty = ((double)new BigRational(HashAlgorithm.Difficulty, HeaderValue)) * HashAlgorithm.Multiplier;
 
             // calculate the block difficulty
-            //var @diffi = Convert.ToUInt32(job.EncodedDifficulty, 16).BigEndian();
-            //BlockDiffAdjusted = job.EncodedDifficulty * HashAlgorithm.Multiplier;
+            BlockDiffAdjusted = job.Difficulty * HashAlgorithm.Multiplier;
         }
     }
 }

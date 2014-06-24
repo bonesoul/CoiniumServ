@@ -16,7 +16,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using Coinium.Coin.Address;
 using Coinium.Common.Extensions;
@@ -77,14 +79,30 @@ namespace Coinium.Coin.Coinbase
             return coinbase.DoubleDigest();
         }
 
-        public static BigInteger FromBitsHex(string bits)
+        /// <summary>
+        /// Used to convert getblocktemplate bits field into target if target is not included.
+        //// More info: https://en.bitcoin.it/wiki/Target
+        /// </summary>
+        /// <param name="bits"></param>
+        /// <returns></returns>
+        public static BigInteger BigIntFromBitsHex(this string bits)
         {
-            return BigInteger.One;
+            // TODO: implement a test for it!
+
+            return bits.HexToByteArray().BigIntFromBitsBuffer();
         }
 
-        public static BigInteger FromBitsBuffer(byte[] buffer)
+        public static BigInteger BigIntFromBitsBuffer(this byte[] buffer)
         {
-            return BigInteger.One;
+            // TODO: implement a test for it!
+
+            var numBytes = Convert.ToByte(buffer.Take(1));
+            var bigIntBits = new BigInteger(buffer.Slice(1, buffer.Length - 1));
+
+            var multiplier = new BigInteger(2 ^ 8*(numBytes - 3));
+            var target = BigInteger.Multiply(bigIntBits, multiplier);
+
+            return target;
         }
     }
 }

@@ -67,8 +67,6 @@ namespace Coinium.Mining.Share
             // create the share
             var share = new Share(id, job,_hashAlgorithm, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
-            //var blockDiffAdjusted = 16 * _hashAlgorithm.Multiplier;
-
             //var target = new BigInteger(job.EncodedDifficulty, 16);
             //if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
             //{

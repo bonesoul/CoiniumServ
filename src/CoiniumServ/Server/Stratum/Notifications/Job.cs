@@ -19,14 +19,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Numerics;
 using Coinium.Coin.Algorithms;
+using Coinium.Coin.Coinbase;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Transactions;
 using Gibbed.IO;
 using Newtonsoft.Json;
+using Numerics;
 
 namespace Coinium.Server.Stratum.Notifications
 {
@@ -136,15 +139,12 @@ namespace Coinium.Server.Stratum.Notifications
         
             Version = BitConverter.GetBytes(blockTemplate.Version.BigEndian()).ToHexString();
             EncodedDifficulty = blockTemplate.Bits;
-            if (string.IsNullOrEmpty(blockTemplate.Target))
-                Target = BigInteger.Parse(blockTemplate.Target);
-            else
-            {
-                Target = 0;
-                // TODO: fix me!
-            }
 
-            //var test = HashAlgorithm.Difficulty/this.
+            Target = string.IsNullOrEmpty(blockTemplate.Target)
+                ? EncodedDifficulty.BigIntFromBitsHex()
+                : BigInteger.Parse("000000ffff000000000000000000000000000000000000000000000000000000",NumberStyles.HexNumber);
+
+            Difficulty = ((double)new BigRational(HashAlgorithm.Difficulty, Target));
             nTime = BitConverter.GetBytes(blockTemplate.CurTime.BigEndian()).ToHexString();
         }
 
