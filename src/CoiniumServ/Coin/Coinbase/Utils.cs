@@ -26,12 +26,12 @@ using Coinium.Crypto;
 using Gibbed.IO;
 using Serilog;
 
-namespace Coinium.Transactions.Coinbase
+namespace Coinium.Coin.Coinbase
 {
     /// <summary>
     /// Provides helper functions for "serialized CSscript formatting" as defined here: https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification
     /// </summary>
-    public static class CoinbaseUtils
+    public static class Utils
     {
         /// <summary>
         /// Encoded an integer to save space.

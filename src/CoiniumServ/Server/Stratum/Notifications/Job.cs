@@ -37,6 +37,8 @@ namespace Coinium.Server.Stratum.Notifications
         [JsonIgnore]
         public UInt64 Id { get; private set; }
 
+        public string PreviousBlockHash { get; private set; }
+
         /// <summary>
         /// Hash of previous block.
         /// </summary>
@@ -90,7 +92,7 @@ namespace Coinium.Server.Stratum.Notifications
         /// <summary>
         /// Associated generation transaction.
         /// </summary>
-        public GenerationTransaction GenerationTransaction { get; private set; }
+        public IGenerationTransaction GenerationTransaction { get; private set; }
 
         /// <summary>
         /// Merkle tree associated to blockTemplate transactions.
@@ -104,7 +106,7 @@ namespace Coinium.Server.Stratum.Notifications
         /// <param name="blockTemplate"></param>
         /// <param name="generationTransaction"></param>
         /// <param name="merkeTree"></param>
-        public Job(UInt64 id, IBlockTemplate blockTemplate, GenerationTransaction generationTransaction, IMerkleTree merkeTree)
+        public Job(UInt64 id, IBlockTemplate blockTemplate, IGenerationTransaction generationTransaction, IMerkleTree merkeTree)
         {
             BlockTemplate = blockTemplate;
             GenerationTransaction = generationTransaction;
@@ -112,6 +114,7 @@ namespace Coinium.Server.Stratum.Notifications
 
             // init the values.
             Id = id;
+            PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ToHexString();
             PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();

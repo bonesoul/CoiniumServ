@@ -62,15 +62,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Coin\Coinbase\SerializersTests.cs" />
     <Compile Include="Coin\Daemon\BlockTemplateTests.cs" />
     <Compile Include="Common\Extensions\ArrayExtensionsTests.cs" />
     <Compile Include="Crypto\MerkleRootTests.cs" />
-    <Compile Include="Mining\Share\ShareManagerTests.cs" />
+    <Compile Include="Mining\Share\ShareTests.cs" />
     <Compile Include="Transactions\GenerationTransactionTests.cs" />
     <Compile Include="Extra\ConflictTests.cs" />
     <Compile Include="Coin\AmountTests.cs" />
     <Compile Include="Coin\Base58Test.cs" />
-    <Compile Include="Transactions\Coinbase\CoinbaseUtilsTests.cs" />
+    <Compile Include="Coin\Coinbase\UtilsTests.cs" />
     <Compile Include="Crypto\MerkleTreeTests.cs" />
     <Compile Include="Mining\Pool\PoolTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

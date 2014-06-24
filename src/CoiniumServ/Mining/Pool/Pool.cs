@@ -55,7 +55,7 @@ namespace Coinium.Mining.Pool
         /// <summary>
         /// Instance id of the pool.
         /// </summary>
-        public ulong InstanceId { get; private set; }
+        public UInt32 InstanceId { get; private set; }
 
         private Timer _timer;
 

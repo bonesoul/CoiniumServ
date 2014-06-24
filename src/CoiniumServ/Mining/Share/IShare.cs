@@ -17,6 +17,9 @@
 */
 
 using System;
+using System.Numerics;
+using Coinium.Coin.Algorithms;
+using Coinium.Crypto;
 using Coinium.Server.Stratum.Notifications;
 
 namespace Coinium.Mining.Share
@@ -31,10 +34,22 @@ namespace Coinium.Mining.Share
 
         UInt32 Nonce { get; }
 
-        UInt64 ExtraNonce1 { get; }
+        UInt32 ExtraNonce1 { get; }
 
         UInt32 ExtraNonce2 { get; }
 
         byte[] Coinbase { get; }
+
+        Hash CoinbaseHash { get; }
+
+        byte[] MerkleRoot { get; }
+
+        byte[] Header { get; }
+
+        IHashAlgorithm HashAlgorithm { get; }
+
+        byte[] HeaderHash { get; }
+
+        BigInteger HeaderValue { get; }
     }
 }

@@ -28,6 +28,8 @@ namespace Coinium.Server.Stratum.Notifications
     {
         UInt64 Id { get; }
 
+        string PreviousBlockHash { get; }
+
         string PreviousBlockHashReversed { get;  }
 
         string CoinbaseInitial { get; }
@@ -44,7 +46,7 @@ namespace Coinium.Server.Stratum.Notifications
 
         IBlockTemplate BlockTemplate { get; }
 
-        GenerationTransaction GenerationTransaction { get; }
+        IGenerationTransaction GenerationTransaction { get; }
 
         IMerkleTree MerkleTree { get; }
 

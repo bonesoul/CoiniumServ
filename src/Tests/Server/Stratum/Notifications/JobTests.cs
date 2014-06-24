@@ -88,6 +88,8 @@ namespace Tests.Server.Stratum.Notifications
         private readonly IMerkleTree _merkleTree;
         private readonly ISignatureScript _signatureScript;
         private readonly IOutputs _outputs;
+        private readonly IJobCounter _jobCounter;
+        private readonly IGenerationTransaction _generationTransaction;
 
         public JobTests()
         {
@@ -128,21 +130,22 @@ namespace Tests.Server.Stratum.Notifications
             // sample pool wallet
             const string poolWallet = "mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq";
             _outputs.AddPool(poolWallet, blockReward);
+
+            // job counter
+            _jobCounter = Substitute.For<JobCounter>();
+
+            // generation transaction.
+            _generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate);
+            _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
+            _generationTransaction.Outputs = _outputs;
+            _generationTransaction.Create();     
         }
 
         [Fact]
         public void TestJob()
         {
-            var jobCounter = Substitute.For<JobCounter>();
-
-            // create the transaction.
-            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate);
-            generationTransaction.Inputs.First().SignatureScript = _signatureScript;
-            generationTransaction.Outputs = _outputs;
-            generationTransaction.Create();             
-
             // test the output.
-            var job = new Job(jobCounter.Next(), _blockTemplate, generationTransaction, _merkleTree)
+            var job = new Job(_jobCounter.Next(), _blockTemplate, _generationTransaction, _merkleTree)
             {
                 CleanJobs = true
             };

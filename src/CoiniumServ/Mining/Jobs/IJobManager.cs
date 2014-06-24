@@ -36,6 +36,6 @@ namespace Coinium.Mining.Jobs
         /// Initializes the specified pool.
         /// </summary>
         /// <param name="instanceId">The instance identifier.</param>
-        void Initialize(ulong instanceId);
+        void Initialize(UInt32 instanceId);
     }
 }

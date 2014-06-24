@@ -18,21 +18,20 @@
 
 using System;
 using System.Linq;
-using Coinium.Coin.Algorithms;
+using Coinium.Coin.Coinbase;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Mining.Jobs;
-using Coinium.Mining.Share;
-using Coinium.Net.Server.Sockets;
-using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
+using Coinium.Transactions.Script;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
 using Xunit;
+using Utils = Coinium.Coin.Coinbase.Utils;
 
 /* Sample data
 
@@ -75,10 +74,6 @@ using Xunit;
     ---------------
     getJobParams: ["1","767acb0928ad6ce74d2157af545be4471973dcdfcc3b2a7fd58c3b901a47638f","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa85308","0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000",[],"00000002","1e00ffff","53a8afba",true]
  
-    handle-submit:
-    ---------------
-    handleSubmit: {"params":["mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc","1","00000000","53a8afba","8c6b0c00"],"id":13,"method":"mining.submit"}
- 
     process-share:
     ---------------
     jobId: 1 previousDifficulty: undefined difficulty: 32 extraNonce1: 70000000 extraNonce2: 00000000 nTime: 53a8afba nonce: 8c6b0c00 ipAddress: 10.0.0.40 port: 3333 workerName: mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc
@@ -95,24 +90,22 @@ using Xunit;
     emit: {"job":"1","ip":"10.0.0.40","port":3333,"worker":"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc","height":313498,"blockReward":5000000000,"difficulty":32,"shareDiff":"68.35921037","blockDiff":256,"blockDiffActual":0.00390625}
  */
 
-namespace Tests.Mining.Share
+namespace Tests.Coin.Coinbase
 {
-    public class ShareManagerTests
+    public class SerializerTests
     {
         // object mocks.
         private readonly IDaemonClient _daemonClient;
         private readonly IBlockTemplate _blockTemplate;
         private readonly IExtraNonce _extraNonce;
         private readonly IMerkleTree _merkleTree;
-        private readonly IConnection _connection;
-        private readonly IJobManager _jobManager;
-        private readonly IHashAlgorithm _hashAlgorithm;
-        private readonly StratumMiner _miner;
-        private readonly GenerationTransaction _generationTransaction;        
+        private readonly ISignatureScript _signatureScript;
+        private readonly IOutputs _outputs;
+        private readonly IJobCounter _jobCounter;
+        private readonly IGenerationTransaction _generationTransaction;
         private readonly IJob _job;
-        private readonly dynamic _share;
 
-        public ShareManagerTests()
+        public SerializerTests()
         {
             // daemon client
             _daemonClient = Substitute.For<IDaemonClient>();
@@ -120,73 +113,84 @@ namespace Tests.Mining.Share
 
             // block template
             const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"1a47638fd58c3b90cc3b2a7f1973dcdf545be4474d2157af28ad6ce7767acb09\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"000000ffff000000000000000000000000000000000000000000000000000000\",\"mintime\":1403563551,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1403563962,\"bits\":\"1e00ffff\",\"height\":313498},\"error\":null,\"id\":1}";
-            var blockTemplateObject = JsonConvert.DeserializeObject<DaemonResponse<BlockTemplate>>(json);
-            _blockTemplate = blockTemplateObject.Result;
+            var @object = JsonConvert.DeserializeObject<DaemonResponse<BlockTemplate>>(json);
+            _blockTemplate = @object.Result;
 
             // extra nonce
-            _extraNonce = Substitute.For<IExtraNonce>();
+            _extraNonce = Substitute.For<ExtraNonce>((UInt32)0);
 
             // merkle tree
-            var hashList = _blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();            
-            _merkleTree = new MerkleTree(hashList);
+            var hashList = _blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();
+            _merkleTree = Substitute.For<MerkleTree>(hashList);                
 
-            // generation transaction
+            // signature script
+            _signatureScript = Substitute.For<SignatureScript>(
+                _blockTemplate.Height,
+                _blockTemplate.CoinBaseAux.Flags,
+                1403563961807,
+                (byte)_extraNonce.ExtraNoncePlaceholder.Length,
+                "/nodeStratum/");
+
+            // outputs
+            _outputs = Substitute.For<Outputs>(_daemonClient);
+            double blockReward = 5000000000; // the amount rewarded by the block.
+
+            // sample recipient
+            const string recipient = "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji";
+            var amount = blockReward * 0.01;
+            blockReward -= amount;
+            _outputs.AddRecipient(recipient, amount);
+
+            // sample pool wallet
+            const string poolWallet = "mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq";
+            _outputs.AddPool(poolWallet, blockReward);
+
+            // generation transaction.
             _generationTransaction = Substitute.For<GenerationTransaction>(_extraNonce, _daemonClient, _blockTemplate, false);
+            _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
+            _generationTransaction.Outputs = _outputs;
             _generationTransaction.Create();
 
-            // the job.
-            _job = new Job(1, _blockTemplate, _generationTransaction, _merkleTree);
+            // job counter
+            _jobCounter = Substitute.For<JobCounter>();
 
-            // the job manager.
-            _connection = Substitute.For<IConnection>();
-            _jobManager = Substitute.For<IJobManager>();
-            _jobManager.ExtraNonce.Current.Returns((UInt64)70000000);
-            _jobManager.GetJob(1).Returns(_job);
-
-            // hash algorithm
-            _hashAlgorithm = Substitute.For<IHashAlgorithm>();
-
-            // miner
-            _miner = new StratumMiner(1, _connection);
-
-            // share json
-            const string shareJson = " {\"params\":[\"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc\",\"1\",\"00000000\",\"53a8afba\",\"8c6b0c00\"],\"id\":13,\"method\":\"mining.submit\"}";
-            dynamic shareObject = JsonConvert.DeserializeObject(shareJson);
-            _share = shareObject.@params;
+            // create the job
+            _job = new Job(_jobCounter.Next(), _blockTemplate, _generationTransaction, _merkleTree)
+            {
+                CleanJobs = true
+            };
         }
 
         [Fact]
-        public void ProcessShare()
+        public void SerializeCoinbaseTest()
         {
-            // check the submitted share info
-            string minerName = _share[0];
-            string jobId = _share[1];
-            string extraNonce2 = _share[2];
-            string nTime = _share[3];
-            string nonce = _share[4];
+            const UInt32 extraNonce1 = 0x70000000;
+            const UInt32 extraNonce2 = 0x00000000;
+            var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
 
-            minerName.Should().Equal("mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc");
-            jobId.Should().Equal("1");
-            extraNonce2.Should().Equal("00000000");
-            nTime.Should().Equal("53a8afba");
-            nonce.Should().Equal("8c6b0c00");
+            coinbase.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+        }
 
-            // create the share manager
-            var shareManager = new ShareManager(_hashAlgorithm, _jobManager, _daemonClient);
+        [Fact]
+        public void SerializeHeaderTest()
+        {
+            const UInt32 extraNonce1 = 0x70000000;
+            const UInt32 extraNonce2 = 0x00000000;
+            const UInt32 nTime = 0x53a8afba;
+            const UInt32 nonce = 0x8c6b0c00;
 
-            // process the share
-            var share = shareManager.ProcessShare(_miner, jobId, extraNonce2, nTime, nonce);
+            // construct the coinbase.
+            var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
+            var coinbaseHash = Utils.HashCoinbase(coinbase);
 
-            // test miner provided nonce and ntime
-            share.nTime.Should().Equal((UInt32)0x53a8afba);
-            share.Nonce.Should().Equal(0x8c6b0c00);
+            // create the merkle root.
+            var merkleRoot = _job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
 
-            // test job provided extraNonce1 and extraNonce2
-            share.ExtraNonce1.Should().Equal((UInt64)70000000);
-            share.ExtraNonce2.Should().Equal((UInt32)00000000);
+            nonce.Should().Equal(0x8c6b0c00);
 
-            // test coinbase
-            share.Coinbase.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+            // test the header.
+            var header = Serializers.SerializeHeader(_job, merkleRoot, nTime, nonce);
+            header.ToHexString().Should().Equal("0200000009cb7a76e76cad28af57214d47e45b54dfdc73197f2a3bcc903b8cd58f63471adcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76baafa853ffff001e000c6b8c");
         }
     }
 }

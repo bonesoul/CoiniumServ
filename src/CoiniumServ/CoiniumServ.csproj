@@ -92,6 +92,7 @@
     <Compile Include="Crypto\IMerkleRoot.cs" />
     <Compile Include="Crypto\IMerkleTree.cs" />
     <Compile Include="Crypto\MerkleRoot.cs" />
+    <Compile Include="Mining\Jobs\IJobCounter.cs" />
     <Compile Include="Mining\Share\IShare.cs" />
     <Compile Include="Mining\Share\Share.cs" />
     <Compile Include="Server\Stratum\Notifications\IJob.cs" />
@@ -132,8 +133,8 @@
     <Compile Include="Coin\Daemon\Config\DaemonConfig.cs" />
     <Compile Include="Coin\Daemon\IDaemonClient.cs" />
     <Compile Include="Coin\Daemon\Config\IDaemonConfig.cs" />
-    <Compile Include="Coin\Helpers\Serializers.cs" />
-    <Compile Include="Transactions\Coinbase\CoinbaseUtils.cs" />
+    <Compile Include="Coin\Coinbase\Serializers.cs" />
+    <Compile Include="Coin\Coinbase\Utils.cs" />
     <Compile Include="Coin\Exceptions\AddressFormatException.cs" />
     <Compile Include="Coin\Exceptions\InvalidWalletAddressException.cs" />
     <Compile Include="Transactions\GenerationTransaction.cs" />

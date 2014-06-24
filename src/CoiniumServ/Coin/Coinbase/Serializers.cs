@@ -20,10 +20,9 @@ using System;
 using System.IO;
 using Coinium.Common.Extensions;
 using Coinium.Server.Stratum.Notifications;
-using Coinium.Transactions.Coinbase;
 using Gibbed.IO;
 
-namespace Coinium.Coin.Helpers
+namespace Coinium.Coin.Coinbase
 {
     public static class Serializers
     {
@@ -46,7 +45,7 @@ namespace Coinium.Coin.Helpers
             using (var stream = new MemoryStream())
             {
                 stream.WriteBytes(header);
-                stream.WriteBytes(CoinbaseUtils.VarInt((UInt32)job.BlockTemplate.Transactions.Length));
+                stream.WriteBytes(Utils.VarInt((UInt32)job.BlockTemplate.Transactions.Length));
                 stream.WriteBytes(coinbase);
 
                 foreach (var transaction in job.BlockTemplate.Transactions)
@@ -78,17 +77,15 @@ namespace Coinium.Coin.Helpers
         /// <returns></returns>
         public static byte[] SerializeHeader(IJob job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
         {
-            // TODO: implement a test for it!
-
             byte[] result;
 
             using (var stream = new MemoryStream())
             {
-                stream.WriteValueU32(nonce);
-                stream.WriteValueU32(Convert.ToUInt32(job.NetworkDifficulty, 16));
-                stream.WriteValueU32(nTime);
+                stream.WriteValueU32(nonce.BigEndian());
+                stream.WriteValueU32(Convert.ToUInt32(job.NetworkDifficulty, 16).BigEndian());
+                stream.WriteValueU32(nTime.BigEndian());
                 stream.WriteBytes(merkleRoot);
-                stream.WriteBytes(job.PreviousBlockHashReversed.HexToByteArray());
+                stream.WriteBytes(job.PreviousBlockHash.HexToByteArray());
                 stream.WriteValueU32(job.BlockTemplate.Version.BigEndian());
 
                 result = stream.ToArray();
@@ -98,12 +95,10 @@ namespace Coinium.Coin.Helpers
             return result;
         }
 
-        public static byte[] SerializeCoinbase(IJob job, UInt64 extraNonce1, UInt32 extraNonce2)
+        public static byte[] SerializeCoinbase(IJob job, UInt32 extraNonce1, UInt32 extraNonce2)
         {
-            // TODO: implement a test for it!
-
-            var extraNonce1Buffer = BitConverter.GetBytes(extraNonce1);
-            var extraNonce2Buffer = BitConverter.GetBytes(extraNonce2);
+            var extraNonce1Buffer = BitConverter.GetBytes(extraNonce1.BigEndian());
+            var extraNonce2Buffer = BitConverter.GetBytes(extraNonce2.BigEndian());
 
             byte[] result;
 

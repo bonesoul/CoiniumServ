@@ -33,7 +33,7 @@ namespace Coinium.Mining.Jobs
         /// More: https://github.com/moopless/stratum-mining-litecoin/issues/23#issuecomment-22728564
         /// </remarks>
         /// </summary>
-        public UInt64 Current { get; private set; }
+        public UInt32 Current { get; private set; }
 
         /// <summary>
         /// ExtraNonce placeholder to be used with coinbase transactions.
@@ -46,7 +46,7 @@ namespace Coinium.Mining.Jobs
         /// </summary>
         public const int ExpectedExtraNonce2Size = 0x4;
 
-        public ExtraNonce(UInt64 instanceId)
+        public ExtraNonce(UInt32 instanceId)
         {
             ExtraNoncePlaceholder = "f000000ff111111f".HexToByteArray();
             InitExtraNonceCounter(instanceId); // init. the extra nonce counter.
@@ -56,7 +56,7 @@ namespace Coinium.Mining.Jobs
         /// <summary>
         /// Inits ExtraNonce counter based on current instance Id.
         /// </summary>
-        private void InitExtraNonceCounter(UInt64 instanceId)
+        private void InitExtraNonceCounter(UInt32 instanceId)
         {
             Current = instanceId << 27;  // init the ExtraNonce counter - last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
         }
@@ -65,7 +65,7 @@ namespace Coinium.Mining.Jobs
         /// Returns the next extranonce.
         /// </summary>
         /// <returns></returns>
-        public UInt64 NextExtraNonce()
+        public UInt32 NextExtraNonce()
         {
             Current++; // increment the extranonce.
             return Current;

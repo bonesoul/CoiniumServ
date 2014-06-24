@@ -20,12 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Coinium.Coin.Coinbase;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Helpers.Time;
 using Coinium.Crypto;
 using Coinium.Mining.Jobs;
-using Coinium.Transactions.Coinbase;
 using Coinium.Transactions.Script;
 using Gibbed.IO;
 
@@ -122,7 +122,7 @@ namespace Coinium.Transactions
             SupportTxMessages = supportTxMessages;
 
             Version = (UInt32)(supportTxMessages ? 2 : 1);
-            Message = CoinbaseUtils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
+            Message = Coin.Coinbase.Utils.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
             LockTime = 0;
 
             // transaction inputs
@@ -181,13 +181,13 @@ namespace Coinium.Transactions
                 // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
 
                 // write transaction input.
-                stream.WriteBytes(CoinbaseUtils.VarInt(InputsCount));
+                stream.WriteBytes(Coin.Coinbase.Utils.VarInt(InputsCount));
                 stream.WriteBytes(Inputs.First().PreviousOutput.Hash.Bytes);
                 stream.WriteValueU32(Inputs.First().PreviousOutput.Index.LittleEndian());
 
                 // write signature script lenght
                 var signatureScriptLenght = (UInt32)(Inputs.First().SignatureScript.Initial.Length + ExtraNonce.ExtraNoncePlaceholder.Length + Inputs.First().SignatureScript.Final.Length);
-                stream.WriteBytes(CoinbaseUtils.VarInt(signatureScriptLenght).ToArray());
+                stream.WriteBytes(Coin.Coinbase.Utils.VarInt(signatureScriptLenght).ToArray());
 
                 stream.WriteBytes(Inputs.First().SignatureScript.Initial);
 
