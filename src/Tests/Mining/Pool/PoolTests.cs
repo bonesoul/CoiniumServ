@@ -82,8 +82,8 @@ namespace Tests.Mining.Pool
                 _jobManagerFactory,
                 _shareManagerFactory);
 
-            Assert.NotNull(pool);
-            Assert.True(pool.InstanceId > 0, "InstanceId was not initialized.");
+            pool.Should().Not.Be.Null();
+            pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace Tests.Mining.Pool
                 _shareManagerFactory);
 
             pool.Should().Not.Be.Null();
-            Assert.True(pool.InstanceId > 0, "InstanceId was not initialized.");
+            pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
 
             // pool-config mockup.
             var config = Substitute.For<IPoolConfig>();
