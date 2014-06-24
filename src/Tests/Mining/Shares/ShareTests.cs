@@ -25,6 +25,7 @@ using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Mining.Jobs;
+using Coinium.Mining.Shares;
 using Coinium.Net.Server.Sockets;
 using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Notifications;
@@ -96,7 +97,7 @@ using Xunit;
     emit: {"job":"1","ip":"10.0.0.40","port":3333,"worker":"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc","height":313498,"blockReward":5000000000,"difficulty":32,"shareDiff":"68.35921037","blockDiff":256,"blockDiffActual":0.00390625}
  */
 
-namespace Tests.Mining.Share
+namespace Tests.Mining.Shares
 {
     public class ShareTests
     {
@@ -113,7 +114,7 @@ namespace Tests.Mining.Share
         private readonly IJobCounter _jobCounter;
         private readonly IGenerationTransaction _generationTransaction;      
         private readonly IJob _job;
-        private readonly dynamic _share;
+        private readonly dynamic _shareData;
         private readonly StratumMiner _miner;
 
         public ShareTests()
@@ -186,18 +187,18 @@ namespace Tests.Mining.Share
             // share json
             const string shareJson = " {\"params\":[\"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc\",\"1\",\"00000000\",\"53a8afba\",\"8c6b0c00\"],\"id\":13,\"method\":\"mining.submit\"}";
             dynamic shareObject = JsonConvert.DeserializeObject(shareJson);
-            _share = shareObject.@params;
+            _shareData = shareObject.@params;
         }
 
         [Fact]
         public void ShareTest()
         {
             // check the submitted share info
-            string minerName = _share[0];
-            string jobId = _share[1];
-            string extraNonce2 = _share[2];
-            string nTime = _share[3];
-            string nonce = _share[4];
+            string minerName = _shareData[0];
+            string jobId = _shareData[1];
+            string extraNonce2 = _shareData[2];
+            string nTime = _shareData[3];
+            string nonce = _shareData[4];
 
             minerName.Should().Equal("mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc");
             jobId.Should().Equal("1");
@@ -208,7 +209,7 @@ namespace Tests.Mining.Share
             // create the share
             var id = Convert.ToUInt64(jobId, 16);
             var job = _jobManager.GetJob(id);
-            var share = new Coinium.Mining.Share.Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
+            var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
             share.nTime.Should().Equal((UInt32)0x53a8afba);

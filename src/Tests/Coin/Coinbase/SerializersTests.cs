@@ -204,17 +204,17 @@ namespace Tests.Coin.Coinbase
             // < 0xfd test
             var varInt = Serializers.VarInt(0xfc);
             var expected = new byte[] { 0xfc };
-            Assert.Equal(varInt, expected);
+            varInt.Should().Equal(expected);
 
             // < 0xffff
             varInt = Serializers.VarInt(0xfffe);
             expected = new byte[] { 0xfd, 0xfe, 0xff };
-            Assert.Equal(varInt, expected);
+            varInt.Should().Equal(expected);
 
             // 0xffffffff
             varInt = Serializers.VarInt(0xfffffffe);
             expected = new byte[] { 0xfe, 0xfe, 0xff, 0xff, 0xff };
-            Assert.Equal(varInt, expected);
+            varInt.Should().Equal(expected);
         }
 
 
@@ -227,12 +227,12 @@ namespace Tests.Coin.Coinbase
             // =< 16 test
             var buffer = Serializers.SerializeNumber(16);
             var expected = new byte[] { 0x01, 0x10 };
-            Assert.Equal(buffer, expected);
+            buffer.Should().Equal(expected);
 
             // > 16 test
             buffer = Serializers.SerializeNumber(10000);
             expected = new byte[] { 0x02, 0x10, 0x27 };
-            Assert.Equal(buffer, expected);
+            buffer.Should().Equal(expected);
         }
 
         /// <summary>

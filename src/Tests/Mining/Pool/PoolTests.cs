@@ -22,7 +22,7 @@ using Coinium.Coin.Daemon;
 using Coinium.Miner;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Pool.Config;
-using Coinium.Mining.Share;
+using Coinium.Mining.Shares;
 using Coinium.Rpc.Service;
 using Coinium.Server;
 using NSubstitute;
@@ -82,8 +82,8 @@ namespace Tests.Mining.Pool
                 _jobManagerFactory,
                 _shareManagerFactory);
 
-            Assert.NotNull(pool);
-            Assert.True(pool.InstanceId > 0, "InstanceId was not initialized.");
+            pool.Should().Not.Be.Null();
+            pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace Tests.Mining.Pool
                 _shareManagerFactory);
 
             pool.Should().Not.Be.Null();
-            Assert.True(pool.InstanceId > 0, "InstanceId was not initialized.");
+            pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
 
             // pool-config mockup.
             var config = Substitute.For<IPoolConfig>();

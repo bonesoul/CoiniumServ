@@ -16,13 +16,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Server.Stratum;
+using Coinium.Coin.Daemon;
+using Coinium.Mining.Jobs;
 
-namespace Coinium.Mining.Share
+namespace Coinium.Mining.Shares
 {
-    public interface IShareManager
+    public interface IShareManagerFactory
     {
-
-        IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
+        /// <summary>
+        /// Gets the specified daemon client.
+        /// </summary>
+        /// <param name="jobManager">The job manager.</param>
+        /// <param name="daemonClient">The daemon client.</param>
+        /// <returns></returns>
+        IShareManager Get(IJobManager jobManager, IDaemonClient daemonClient);
     }
 }

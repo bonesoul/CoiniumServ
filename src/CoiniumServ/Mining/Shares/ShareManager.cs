@@ -17,12 +17,11 @@
 */
 
 using System;
-using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum;
 
-namespace Coinium.Mining.Share
+namespace Coinium.Mining.Shares
 {
     public class ShareManager : IShareManager
     {
