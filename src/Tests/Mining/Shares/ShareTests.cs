@@ -220,14 +220,14 @@ namespace Tests.Mining.Shares
             share.ExtraNonce2.Should().Equal((UInt32)0x00000000);
 
             // test coinbase
-            share.Coinbase.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+            share.CoinbaseBuffer.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
             share.CoinbaseHash.Bytes.ToHexString().Should().Equal("dcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76");
 
             // test merkle-root.
             share.MerkleRoot.ToHexString().Should().Equal("76cdfea1a682f61f70cd3aeb231e6d3c4775da2694b3223d89b64be0aac3badc");
 
             // test the block header
-            share.Header.ToHexString().Should().Equal("0200000009cb7a76e76cad28af57214d47e45b54dfdc73197f2a3bcc903b8cd58f63471adcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76baafa853ffff001e000c6b8c");
+            share.HeaderBuffer.ToHexString().Should().Equal("0200000009cb7a76e76cad28af57214d47e45b54dfdc73197f2a3bcc903b8cd58f63471adcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76baafa853ffff001e000c6b8c");
 
             // test the block hash.
             share.HeaderHash.ToHexString().Should().Equal("c271dc00d2389083bf547a905a8d441ee9c710c6a87edfd35d7c8cafbe030000");
@@ -236,6 +236,7 @@ namespace Tests.Mining.Shares
             // test the difficulty
             share.Difficulty.Should().Equal(68,35921036876233);
             share.BlockDiffAdjusted.Should().Equal(256);
+            share.Job.Difficulty.Should().Equal(0.00390625);
         }
     }
 }

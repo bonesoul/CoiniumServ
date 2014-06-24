@@ -37,13 +37,13 @@ namespace Coinium.Mining.Shares
 
         UInt32 ExtraNonce2 { get; }
 
-        byte[] Coinbase { get; }
+        byte[] CoinbaseBuffer { get; }
 
         Hash CoinbaseHash { get; }
 
         byte[] MerkleRoot { get; }
 
-        byte[] Header { get; }
+        byte[] HeaderBuffer { get; }
 
         byte[] HeaderHash { get; }
 
@@ -52,5 +52,11 @@ namespace Coinium.Mining.Shares
         Double Difficulty { get; }
 
         Double BlockDiffAdjusted { get; }
+
+        bool Candicate { get; }
+
+        byte[] BlockHex { get; }
+
+        byte[] BlockHash { get; }
     }
 }

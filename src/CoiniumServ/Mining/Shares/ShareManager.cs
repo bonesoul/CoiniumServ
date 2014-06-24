@@ -18,6 +18,7 @@
 
 using System;
 using Coinium.Coin.Daemon;
+using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum;
 
@@ -31,7 +32,6 @@ namespace Coinium.Mining.Shares
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareManager" /> class.
         /// </summary>
-        /// <param name="hashAlgorithm">The hash algorithm.</param>
         /// <param name="jobManager">The job manager.</param>
         /// <param name="daemonClient"></param>
         public ShareManager(IJobManager jobManager, IDaemonClient daemonClient)
@@ -58,19 +58,8 @@ namespace Coinium.Mining.Shares
             // create the share
             var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
-            //var target = new BigInteger(job.EncodedDifficulty, 16);
-            //if (target.Subtract(headerValue).IntValue > 0) // Check if share is a block candidate (matched network difficulty)
-            //{
-            //    var blockHex = Serializers.SerializeBlock(job, header, coinbase).ToHexString();
-
-            //    // we should be using another scrypt hash here? - https://github.com/zone117x/node-stratum-pool/blob/eb4b62e9c4de8a8cde83c2b3756ca1a45f02b957/lib/jobManager.js#L232
-
-            //    // return SubmitBlock(blockHex);
-            //}
-            //else // invalid share.
-            //{
-            //    // TODO: implement me
-            //}
+            if (share.Valid && share.Candicate)
+                SubmitBlock(share.BlockHex.ToHexString());
 
             return share;
         }

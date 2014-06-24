@@ -87,7 +87,6 @@ namespace Coinium.Mining.Jobs
             var difficulty = new Difficulty(16);
 
             // create the job notification.
-            // TODO: fix me - use the hash algoirthm instead.
             var job = new Job(_jobCounter.Next(), _hashAlgorithm, blockTemplate, generationTransaction, merkleTree)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
