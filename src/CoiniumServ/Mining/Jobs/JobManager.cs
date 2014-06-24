@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Common.Extensions;
@@ -38,14 +39,17 @@ namespace Coinium.Mining.Jobs
 
         private readonly IMinerManager _minerManager;
 
+        private readonly IHashAlgorithm _hashAlgorithm;
+
         public IExtraNonce ExtraNonce { get { return _extraNonce; } }
 
         public Job LastJob { get; private set; }
 
-        public JobManager(IDaemonClient daemonClient, IMinerManager minerManager)
+        public JobManager(IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             _daemonClient = daemonClient;
             _minerManager = minerManager;
+            _hashAlgorithm = hashAlgorithm;
         }
 
         public void Initialize(UInt32 instanceId)
@@ -75,13 +79,7 @@ namespace Coinium.Mining.Jobs
             var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate);
             generationTransaction.Create();
 
-            var hashList = new List<byte[]>();
-
-            foreach (var transaction in blockTemplate.Transactions)
-            {
-                hashList.Add(transaction.Hash.HexToByteArray());
-            }
-
+            var hashList = blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();
             var merkleTree = new MerkleTree(hashList);
 
 
@@ -90,7 +88,7 @@ namespace Coinium.Mining.Jobs
 
             // create the job notification.
             // TODO: fix me - use the hash algoirthm instead.
-            var job = new Job(_jobCounter.Next(),new Scrypt(), blockTemplate, generationTransaction, merkleTree)
+            var job = new Job(_jobCounter.Next(), _hashAlgorithm, blockTemplate, generationTransaction, merkleTree)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };

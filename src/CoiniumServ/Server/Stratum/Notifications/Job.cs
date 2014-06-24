@@ -120,6 +120,7 @@ namespace Coinium.Server.Stratum.Notifications
         /// Creates a new instance of JobNotification.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="algorithm"></param>
         /// <param name="blockTemplate"></param>
         /// <param name="generationTransaction"></param>
         /// <param name="merkeTree"></param>

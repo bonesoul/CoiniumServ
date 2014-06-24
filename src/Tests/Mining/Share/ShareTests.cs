@@ -208,7 +208,7 @@ namespace Tests.Mining.Share
             // create the share
             var id = Convert.ToUInt64(jobId, 16);
             var job = _jobManager.GetJob(id);
-            var share = new Coinium.Mining.Share.Share(id, job,_hashAlgorithm, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
+            var share = new Coinium.Mining.Share.Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
             share.nTime.Should().Equal((UInt32)0x53a8afba);
