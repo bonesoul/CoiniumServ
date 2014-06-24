@@ -21,6 +21,7 @@ using Coinium.Coin.Daemon;
 using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum;
+using Serilog;
 
 namespace Coinium.Mining.Shares
 {
@@ -67,6 +68,8 @@ namespace Coinium.Mining.Shares
         private bool SubmitBlock(string blockHex)
         {
             var response = _daemonClient.SubmitBlock(blockHex).ToLower();
+
+            Log.Debug("Coin daemon {0} block: {1}", response, blockHex);
 
             if (response == "accepted")
                 return true;

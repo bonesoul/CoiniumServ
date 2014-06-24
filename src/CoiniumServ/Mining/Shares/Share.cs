@@ -117,7 +117,7 @@ namespace Coinium.Mining.Shares
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
 
                 // Check if share difficulty reaches miner difficulty.
-                if (Difficulty / 32 < 0.99)
+                if (Difficulty / 16 < 0.99)
                 {
                     
                 }
