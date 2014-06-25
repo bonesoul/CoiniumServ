@@ -59,22 +59,31 @@ namespace Coinium.Mining.Shares
             // create the share
             var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
-            if (share.Valid && share.Candidate)
-            {
-                var result = SubmitBlock(share.BlockHash);
+
+            if (share.Valid)
+            {               
+                if (share.Candidate)
+                {
+                    Log.Information("Share with block candidate accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Id);
+                    var result = SubmitBlock(share);
+                }
+                else
+                    Log.Information("Share accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Id);
             }
+            else
+            {
+                Log.Information("Share rejected at {0}/{1} by miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Id);
+            }
+
 
             return share;
         }
 
-        private bool SubmitBlock(byte[] hash)
+        private bool SubmitBlock(Share share)
         {
-            var hashString = hash.ToHexString();
-            var response = _daemonClient.SubmitBlock(hashString).ToLower();
+            var response = _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
 
-            Log.Information(
-                response == "accepted" ? "Submitted & found block: {0}." : "Submitted block which was rejected: {0}",
-                hashString);
+            Log.Information("Submitted block using submitblock: {0}.", share.BlockHash.ToHexString());
 
             return response == "accepted";
         }

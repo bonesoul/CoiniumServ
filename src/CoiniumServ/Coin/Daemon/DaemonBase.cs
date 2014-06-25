@@ -103,7 +103,7 @@ namespace Coinium.Coin.Daemon
             // Important, otherwise the service can't deserialse your request properly
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
-            webRequest.Timeout = 5000; // 5 seconds
+            webRequest.Timeout = 1000;
 
             Log.Verbose("Daemon send: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
 
