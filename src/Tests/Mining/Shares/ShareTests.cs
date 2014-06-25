@@ -29,6 +29,7 @@ using Coinium.Mining.Shares;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
+using Coinium.Transactions.Utils;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
@@ -101,7 +102,7 @@ namespace Tests.Mining.Shares
             _extraNonce = Substitute.For<ExtraNonce>((UInt32)0);
 
             // merkle tree
-            var hashList = _blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();
+            var hashList = _blockTemplate.Transactions.GetHashList();
             _merkleTree = Substitute.For<MerkleTree>(hashList);
 
             // signature script
@@ -243,10 +244,17 @@ namespace Tests.Mining.Shares
             share.HeaderHash.ToHexString().Should().Equal("83011ba79aa48eefd2fccef32ebe190f538c1d188fecf764d2aca2259c060000");
             share.HeaderValue.Should().Equal(BigInteger.Parse("45620193236259201373579162993315268294283759910880625924204234612081027"));
 
+            // test the job
+            share.Job.Target.Should().Equal(BigInteger.Parse("1963543975774994773269086777481374456547162842587540503781935641788416"));
+            //share.Job.Difficulty.Should().Equal(0.013730039);
+
             // test the difficulty
-            share.Difficulty.Should().Equal(549.396764174295);
-            share.BlockDiffAdjusted.Should().Equal(256);
-            share.Job.Difficulty.Should().Equal(0.00390625);
+            share.Difficulty.Should().Equal(38,72890444987063);
+            //share.BlockDiffAdjusted.Should().Equal(899.811835904);
+
+            // check the block hex & block hash
+            share.BlockHex.Should().Be.Null();
+            share.BlockHash.ToHexString().Should().Equal("87776a72cedf7467ef78c0dc8a7181340342888e33bd19e6ff48d579299d38c1");
 
             // check the share itself.
             share.Valid.Should().Equal(true);

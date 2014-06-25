@@ -27,6 +27,7 @@ using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
+using Coinium.Transactions.Utils;
 using Should.Fluent;
 using Xunit;
 using Newtonsoft.Json;
@@ -108,7 +109,7 @@ namespace Tests.Server.Stratum.Notifications
             _extraNonce = new ExtraNonce(0);
 
             // merkle tree
-            var hashList = _blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();
+            var hashList = _blockTemplate.Transactions.GetHashList();
             _merkleTree = new MerkleTree(hashList);
 
             // signature script

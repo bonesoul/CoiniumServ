@@ -17,7 +17,11 @@
 */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Coinium.Coin.Coinbase;
+using Coinium.Coin.Daemon.Responses;
+using Coinium.Common.Extensions;
 
 namespace Coinium.Transactions.Utils
 {
@@ -27,6 +31,11 @@ namespace Coinium.Transactions.Utils
         {
             var dateTime = unixDateTime / 1000 | 0;
             return Serializers.SerializeNumber(dateTime);
+        }
+
+        public static List<byte[]> GetHashList(this BlockTemplateTransaction[] transactions)
+        {
+            return transactions.Select(transaction => transaction.Hash.HexToByteArray().ReverseBuffer()).ToList();
         }
     }
 }

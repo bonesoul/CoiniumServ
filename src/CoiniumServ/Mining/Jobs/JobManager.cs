@@ -26,6 +26,7 @@ using Coinium.Crypto;
 using Coinium.Miner;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
+using Coinium.Transactions.Utils;
 
 namespace Coinium.Mining.Jobs
 {
@@ -79,9 +80,8 @@ namespace Coinium.Mining.Jobs
             var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate);
             generationTransaction.Create();
 
-            var hashList = blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();
+            var hashList = blockTemplate.Transactions.GetHashList();
             var merkleTree = new MerkleTree(hashList);
-
 
             // create the difficulty notification.
             var difficulty = new Difficulty(16);

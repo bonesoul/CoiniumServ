@@ -143,7 +143,7 @@ namespace Coinium.Server.Stratum.Notifications
 
             Target = string.IsNullOrEmpty(blockTemplate.Target)
                 ? EncodedDifficulty.BigIntFromBitsHex()
-                : BigInteger.Parse("000000ffff000000000000000000000000000000000000000000000000000000",NumberStyles.HexNumber);
+                : BigInteger.Parse(blockTemplate.Target, NumberStyles.HexNumber);
 
             Difficulty = ((double)new BigRational(HashAlgorithm.Difficulty, Target));
             nTime = BitConverter.GetBytes(blockTemplate.CurTime.BigEndian()).ToHexString();
