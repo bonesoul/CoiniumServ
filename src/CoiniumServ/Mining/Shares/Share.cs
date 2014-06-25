@@ -105,7 +105,7 @@ namespace Coinium.Mining.Shares
             BlockDiffAdjusted = Job.Difficulty * Job.HashAlgorithm.Multiplier;
 
             // check if block candicate
-            if (Job.Target > HeaderValue)
+            if (Job.Target >= HeaderValue)
             {
                 Candicate = true;
                 BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer);
