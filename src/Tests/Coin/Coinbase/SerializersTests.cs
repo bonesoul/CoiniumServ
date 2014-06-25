@@ -99,7 +99,6 @@ namespace Tests.Coin.Coinbase
         private readonly IDaemonClient _daemonClient;
         private readonly IBlockTemplate _blockTemplate;
         private readonly IExtraNonce _extraNonce;
-        private readonly IMerkleTree _merkleTree;
         private readonly ISignatureScript _signatureScript;
         private readonly IOutputs _outputs;
         private readonly IJobCounter _jobCounter;
@@ -120,10 +119,6 @@ namespace Tests.Coin.Coinbase
 
             // extra nonce
             _extraNonce = Substitute.For<ExtraNonce>((UInt32)0);
-
-            // merkle tree
-            var hashList = _blockTemplate.Transactions.Select(transaction => transaction.Hash.HexToByteArray()).ToList();
-            _merkleTree = Substitute.For<MerkleTree>(hashList);                
 
             // signature script
             _signatureScript = Substitute.For<SignatureScript>(
@@ -160,7 +155,7 @@ namespace Tests.Coin.Coinbase
             _hashAlgorithm = Substitute.For<IHashAlgorithm>();
 
             // create the job
-            _job = Substitute.For<Job>(_jobCounter.Next(), _hashAlgorithm, _blockTemplate, _generationTransaction, _merkleTree);
+            _job = Substitute.For<Job>(_jobCounter.Next(), _hashAlgorithm, _blockTemplate, _generationTransaction);
         }
 
         [Fact]
@@ -236,7 +231,7 @@ namespace Tests.Coin.Coinbase
         }
 
         /// <summary>
-        /// Tests <see cref="Utils.SerializeString"/>.
+        /// Tests <see cref="Serializers.SerializeString"/>.
         /// </summary>
         [Fact]
         public void SerializeStringTest()

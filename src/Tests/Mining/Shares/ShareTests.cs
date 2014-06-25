@@ -43,7 +43,6 @@ namespace Tests.Mining.Shares
         private readonly IDaemonClient _daemonClient;
         private readonly IBlockTemplate _blockTemplate;
         private readonly IExtraNonce _extraNonce;
-        private readonly IMerkleTree _merkleTree;
         private readonly IJobManager _jobManager;
         private readonly IHashAlgorithm _hashAlgorithm;
         private readonly ISignatureScript _signatureScript;
@@ -101,10 +100,6 @@ namespace Tests.Mining.Shares
             // extra nonce
             _extraNonce = Substitute.For<ExtraNonce>((UInt32)0);
 
-            // merkle tree
-            var hashList = _blockTemplate.Transactions.GetHashList();
-            _merkleTree = Substitute.For<MerkleTree>(hashList);
-
             // signature script
             _signatureScript = Substitute.For<SignatureScript>(
                 _blockTemplate.Height,
@@ -137,7 +132,7 @@ namespace Tests.Mining.Shares
             _hashAlgorithm = Substitute.For<Scrypt>();
 
             // the job.
-            _job = new Job(2,_hashAlgorithm, _blockTemplate, _generationTransaction, _merkleTree)
+            _job = new Job(2,_hashAlgorithm, _blockTemplate, _generationTransaction)
             {
                 CleanJobs = true
             };

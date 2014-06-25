@@ -27,6 +27,7 @@ using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Transactions;
+using Coinium.Transactions.Utils;
 using Gibbed.IO;
 using Newtonsoft.Json;
 using Numerics;
@@ -123,29 +124,36 @@ namespace Coinium.Server.Stratum.Notifications
         /// <param name="algorithm"></param>
         /// <param name="blockTemplate"></param>
         /// <param name="generationTransaction"></param>
-        /// <param name="merkeTree"></param>
-        public Job(UInt64 id, IHashAlgorithm algorithm, IBlockTemplate blockTemplate, IGenerationTransaction generationTransaction, IMerkleTree merkeTree)
+        public Job(UInt64 id, IHashAlgorithm algorithm, IBlockTemplate blockTemplate, IGenerationTransaction generationTransaction)
         {
+            // init the values.
+            Id = id;
             HashAlgorithm = algorithm;
             BlockTemplate = blockTemplate;
             GenerationTransaction = generationTransaction;
-            MerkleTree = merkeTree;
-
-            // init the values.
-            Id = id;
             PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ToHexString();
             PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();
+
+            // calculate the merkle tree
+            this.MerkleTree = new MerkleTree(BlockTemplate.Transactions.GetHashList());
         
+            // set version
             Version = BitConverter.GetBytes(blockTemplate.Version.BigEndian()).ToHexString();
+
+            // set the encoded difficulty (bits)
             EncodedDifficulty = blockTemplate.Bits;
 
+            // set the target
             Target = string.IsNullOrEmpty(blockTemplate.Target)
                 ? EncodedDifficulty.BigIntFromBitsHex()
                 : BigInteger.Parse(blockTemplate.Target, NumberStyles.HexNumber);
 
+            // set the block diff
             Difficulty = ((double)new BigRational(HashAlgorithm.Difficulty, Target));
+
+            // set the ntime
             nTime = BitConverter.GetBytes(blockTemplate.CurTime.BigEndian()).ToHexString();
         }
 

@@ -87,7 +87,6 @@ namespace Tests.Server.Stratum.Notifications
         private readonly IDaemonClient _daemonClient;
         private readonly IBlockTemplate _blockTemplate;
         private readonly IExtraNonce _extraNonce;
-        private readonly IMerkleTree _merkleTree;
         private readonly ISignatureScript _signatureScript;
         private readonly IOutputs _outputs;
         private readonly IJobCounter _jobCounter;
@@ -107,10 +106,6 @@ namespace Tests.Server.Stratum.Notifications
 
             // extra nonce
             _extraNonce = new ExtraNonce(0);
-
-            // merkle tree
-            var hashList = _blockTemplate.Transactions.GetHashList();
-            _merkleTree = new MerkleTree(hashList);
 
             // signature script
             _signatureScript = new SignatureScript(
@@ -151,7 +146,7 @@ namespace Tests.Server.Stratum.Notifications
         public void TestJob()
         {
             // test the output.
-            var job = new Job(_jobCounter.Next(), _hashAlgorithm, _blockTemplate, _generationTransaction, _merkleTree)
+            var job = new Job(_jobCounter.Next(), _hashAlgorithm, _blockTemplate, _generationTransaction)
             {
                 CleanJobs = true
             };

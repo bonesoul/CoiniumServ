@@ -18,10 +18,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
-using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Miner;
 using Coinium.Server.Stratum.Notifications;
@@ -80,14 +78,11 @@ namespace Coinium.Mining.Jobs
             var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate);
             generationTransaction.Create();
 
-            var hashList = blockTemplate.Transactions.GetHashList();
-            var merkleTree = new MerkleTree(hashList);
-
             // create the difficulty notification.
             var difficulty = new Difficulty(16);
 
             // create the job notification.
-            var job = new Job(_jobCounter.Next(), _hashAlgorithm, blockTemplate, generationTransaction, merkleTree)
+            var job = new Job(_jobCounter.Next(), _hashAlgorithm, blockTemplate, generationTransaction)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };
