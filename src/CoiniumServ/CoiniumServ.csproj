@@ -257,6 +257,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Console\ConsoleWindow.cs" />
     <Compile Include="Transactions\Utils\TransactionUtils.cs" />
+    <Compile Include="Utils\BigInteger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\config\coins\365coin.json">
