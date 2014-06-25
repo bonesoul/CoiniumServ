@@ -62,6 +62,7 @@
     <Compile Include="Coin\Coinbase\SerializersTests.cs" />
     <Compile Include="Coin\Daemon\BlockTemplateTests.cs" />
     <Compile Include="Common\Extensions\ArrayExtensionsTests.cs" />
+    <Compile Include="Common\Extensions\StringExtensionsTests.cs" />
     <Compile Include="Crypto\MerkleRootTests.cs" />
     <Compile Include="Mining\Shares\ShareTests.cs" />
     <Compile Include="Transactions\GenerationTransactionTests.cs" />

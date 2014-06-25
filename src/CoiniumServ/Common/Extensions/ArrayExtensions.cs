@@ -133,19 +133,6 @@ namespace Coinium.Common.Extensions
             return result;
         }
 
-        public static byte[] HexToByteArray(this string str)
-        {
-            str = str.Replace(" ", String.Empty);
-
-            var res = new byte[str.Length / 2];
-            for (int i = 0; i < res.Length; ++i)
-            {
-                string temp = String.Concat(str[i * 2], str[i * 2 + 1]);
-                res[i] = Convert.ToByte(temp, 16);
-            }
-            return res;
-        }
-
         /// <summary>
         /// Get the array slice between the two indexes.
         /// ... Inclusive for start index, exclusive for end index.
