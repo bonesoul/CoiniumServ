@@ -50,9 +50,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\AustinHarris.JsonRpc.1.0.4.18\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
-    <Reference Include="BigRationalLibrary">
-      <HintPath>..\..\build\packages\BigRationalLibrary.1.0.0.0\lib\NETFramework40\BigRationalLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
@@ -87,9 +84,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Numerics">
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Daemon\Responses\IBlockTemplate.cs" />
@@ -258,6 +252,7 @@
     <Compile Include="Common\Console\ConsoleWindow.cs" />
     <Compile Include="Transactions\Utils\TransactionUtils.cs" />
     <Compile Include="Utils\BigInteger.cs" />
+    <Compile Include="Utils\BigRational.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\config\coins\365coin.json">

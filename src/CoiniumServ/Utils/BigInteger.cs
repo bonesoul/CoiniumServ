@@ -1,6 +1,4 @@
-﻿#if __MonoCS__
-
-//
+﻿//
 // System.Numerics.BigInteger
 //
 // Rodrigo Kumpera (rkumpera@novell.com)
@@ -45,18 +43,17 @@
  *
  * ***************************************************************************/
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text;
 using System.Threading;
 
-/* Most mono versions doesn't include a proper implementation, so we just include one that's complete from the latest mono repository */
+/* 
+ * Most mono versions doesn't include a proper implementation, so we just include one that's complete from the latest mono repository 
+ * https://github.com/mono/mono/blob/master/mcs/class/System.Numerics/System.Numerics/BigInteger.cs
+ */
 
 /*
-Optimization
+    Optimization
 	Have proper popcount function for IsPowerOfTwo
 	Use unsafe ops to avoid bounds check
 	CoreAdd could avoid some resizes by checking for equal sized array that top overflow
@@ -65,6 +62,7 @@ Optimization
 	Use a carry variable to make shift opts do half the number of array ops.
 	Schoolbook multiply is O(n^2), use Karatsuba /Toom-3 for large numbers
 */
+
 namespace System.Numerics
 {
     public struct BigInteger : IComparable, IFormattable, IComparable<BigInteger>, IEquatable<BigInteger>
@@ -3113,4 +3111,3 @@ namespace System.Numerics
     }
 }
 
-#endif
