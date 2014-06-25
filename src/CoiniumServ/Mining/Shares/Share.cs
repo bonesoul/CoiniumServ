@@ -109,7 +109,7 @@ namespace Coinium.Mining.Shares
             {
                 Candicate = true;
                 BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer);
-                // BlockHash = 
+                BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer(); // TODO: make sure this is okay!
             }
             else
             {
