@@ -26,8 +26,6 @@ using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Shares;
-using Coinium.Net.Server.Sockets;
-using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
