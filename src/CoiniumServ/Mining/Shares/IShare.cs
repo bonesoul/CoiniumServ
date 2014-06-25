@@ -53,7 +53,7 @@ namespace Coinium.Mining.Shares
 
         Double BlockDiffAdjusted { get; }
 
-        bool Candicate { get; }
+        bool Candidate { get; }
 
         byte[] BlockHex { get; }
 

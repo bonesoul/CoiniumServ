@@ -43,7 +43,7 @@ namespace Coinium.Mining.Shares
         public BigInteger HeaderValue { get; private set; }
         public Double Difficulty { get; private set; }
         public double BlockDiffAdjusted { get; private set; }
-        public bool Candicate { get; private set; }
+        public bool Candidate { get; private set; }
         public byte[] BlockHex { get; private set; }
         public byte[] BlockHash { get; private set; }
 
@@ -107,13 +107,13 @@ namespace Coinium.Mining.Shares
             // check if block candicate
             if (Job.Target >= HeaderValue)
             {
-                Candicate = true;
+                Candidate = true;
                 BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer);
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer(); // TODO: make sure this is okay!
             }
             else
             {
-                Candicate = false;
+                Candidate = false;
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
 
                 // Check if share difficulty reaches miner difficulty.

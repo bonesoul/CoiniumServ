@@ -59,7 +59,7 @@ namespace Coinium.Mining.Shares
             // create the share
             var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
-            if (share.Valid && share.Candicate)
+            if (share.Valid && share.Candidate)
             {
                 var result = SubmitBlock(share.BlockHash);
             }

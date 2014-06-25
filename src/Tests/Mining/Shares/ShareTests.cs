@@ -227,7 +227,7 @@ namespace Tests.Mining.Shares
 
             // check the share itself.
             share.Valid.Should().Equal(true);
-            share.Candicate.Should().Equal(true);
+            share.Candidate.Should().Equal(true);
         }
 
         [Fact]
@@ -314,7 +314,7 @@ namespace Tests.Mining.Shares
 
             // check the share itself.
             share.Valid.Should().Equal(true);
-            share.Candicate.Should().Equal(false);
+            share.Candidate.Should().Equal(false);
         }
     }
 }
