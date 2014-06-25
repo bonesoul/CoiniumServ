@@ -18,7 +18,6 @@
 
 using System;
 using System.IO;
-using JsonConfig;
 using Microsoft.CSharp.RuntimeBinder;
 using Serilog;
 using Serilog.Events;
@@ -32,12 +31,12 @@ namespace Coinium.Common.Logging
     {
         public static string RootFolder { get; private set; }
 
-        public static void Init()
+        public static void Init(dynamic globalConfig)
         {
             try
             {
                 // read the root folder for logs.
-                RootFolder = !string.IsNullOrEmpty(Config.Global.logs.root) ? Config.Global.logs.root : "logs";
+                RootFolder = !string.IsNullOrEmpty(globalConfig.logs.root) ? globalConfig.logs.root : "logs";
 
                 if (!Directory.Exists(RootFolder)) // make sure log root exists.
                     Directory.CreateDirectory(RootFolder);
@@ -46,7 +45,7 @@ namespace Coinium.Common.Logging
                 var loggerConfig = new LoggerConfiguration();
 
                 // read log targets.
-                var targets = Config.Global.logs.targets;
+                var targets = globalConfig.logs.targets;
                 foreach (dynamic target in targets)
                 {
                     var enabled = target.enabled;
@@ -61,8 +60,6 @@ namespace Coinium.Common.Logging
                         case "file":
                             AddLogFile(loggerConfig, target);
                             break;
-                        default:
-                            break;
                     }
                 }
 
@@ -72,11 +69,12 @@ namespace Coinium.Common.Logging
                 // bind the config to global log.
                 Log.Logger = loggerConfig.CreateLogger();
             }
-            catch (RuntimeBinderException)
+            catch (RuntimeBinderException e)
             {
                 System.Console.ForegroundColor = ConsoleColor.Red;
-                System.Console.WriteLine("Couldn't read settings.conf.json! Make sure you rename settings-sample.conf.json.");
+                System.Console.WriteLine("Couldn't read log targets in config.json! [{0}]", e);
                 System.Console.ResetColor();
+                Environment.Exit(-1);
             }
         }
 
