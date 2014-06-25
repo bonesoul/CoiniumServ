@@ -40,8 +40,6 @@ namespace Coinium.Coin.Coinbase
         /// <returns></returns>
         public static byte[] SerializeBlock(IJob job, byte[] header, byte[] coinbase)
         {
-            // TODO: implement a test for it!
-
             byte[] result;
 
             using (var stream = new MemoryStream())
