@@ -167,6 +167,67 @@ namespace Tests.Mining.Shares
                 2014-06-25 13:24:04 [Pool]	[litecoin] (Thread 1) Submitted Block using submitblock successfully to daemon instance(s)
                 2014-06-25 13:24:04 [Pool]	[litecoin] (Thread 1) Block found: e242093d92f4c98bfd5dd1f9f6489652d1165f5ce4eed1f28747d2b8e3efd8b6
              */
+
+            // submitted share json
+            const string shareJson = "{\"params\":[\"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc\",\"2\",\"07000000\",\"53aaa331\",\"44725000\"],\"id\":120,\"method\":\"mining.submit\"}";
+            dynamic shareObject = JsonConvert.DeserializeObject(shareJson);
+            dynamic shareData = shareObject.@params;
+
+            string minerName = shareData[0];
+            string jobId = shareData[1];
+            string extraNonce2 = shareData[2];
+            string nTime = shareData[3];
+            string nonce = shareData[4];
+
+            minerName.Should().Equal("mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc");
+            jobId.Should().Equal("2");
+            extraNonce2.Should().Equal("07000000");
+            nTime.Should().Equal("53aaa331");
+            nonce.Should().Equal("44725000");
+
+            // create the share
+            var id = Convert.ToUInt64(jobId, 16);
+            var job = _jobManager.GetJob(id);
+
+            var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
+
+            // test miner provided nonce and ntime
+            share.nTime.Should().Equal((UInt32)0x53aaa331);
+            share.Nonce.Should().Equal((UInt32)0x44725000);
+
+            // test job provided extraNonce1 and extraNonce2
+            share.ExtraNonce1.Should().Equal((UInt32)0x58000000);
+            share.ExtraNonce2.Should().Equal((UInt32)0x07000000);
+
+            // test coinbase
+            share.CoinbaseBuffer.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270310cf04062f503253482f0430a3aa530858000000070000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+            share.CoinbaseHash.Bytes.ToHexString().Should().Equal("76a3f30f9dfdb980bf08a153f097c6456d5e0d290a41f760ce380c4b9c73f5d0");
+
+            // test merkle-root.
+            share.MerkleRoot.ToHexString().Should().Equal("7875fb5effb2f631634523f777090ba1568ec4c4ceee35a9b1c6832d24a23217");
+
+            // test the block header
+            share.HeaderBuffer.ToHexString().Should().Equal("0200000062804ac7aa2748b16841fc12ac15721dc5be748c64c6b596b74c56478eb84e1c1732a2242d83c6b1a935eecec4c48e56a10b0977f723456331f6b2ff5efb757831a3aa53f7d4481d00507244");
+
+            // test the block hash.
+            share.HeaderHash.ToHexString().Should().Equal("da8b1ccf43b05a9fcea33f5ca15b0c3498a89bd764e07c7486620ccb15000000");
+            share.HeaderValue.Should().Equal(BigInteger.Parse("587542370056468750648693126335067486740543774422516057325819970489306"));
+
+            // test the job
+            share.Job.Target.Should().Equal(BigInteger.Parse("1963543975774994773269086777481374456547162842587540503781935641788416"));
+            //share.Job.Difficulty.Should().Equal(0.013730039);
+
+            // test the difficulty
+            //share.Difficulty.Should().Equal(3007.1364975123547);
+            //share.BlockDiffAdjusted.Should().Equal(899.811835904);
+
+            // check the block hex & block hash
+            //share.BlockHex.ToHexString().Should().Equal("0200000062804ac7aa2748b16841fc12ac15721dc5be748c64c6b596b74c56478eb84e1c1732a2242d83c6b1a935eecec4c48e56a10b0977f723456331f6b2ff5efb757831a3aa53f7d4481d005072440201000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270310cf04062f503253482f0430a3aa530858000000070000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000010000000332a82e92f522deee69b09e27858ba9b87585f2a4913ef71018df40909032fdc3000000006a473044022019ca05cb880a04f0d842268b7e75ac6d2695fc544df033e3daeb29239251a8970220031f6336767f2ea617347484e1290ec0bdcc71056ea2d3084e75384905250ec50121030dd394118fb66ca288bff71d8ea762678783b005770f7f9ba4128233191e0847ffffffff086747cbd339b21b950774186091653a7b8f5751b00a906ff6f5561b3a6fcee6010000006b4830450221009ae1ba9a216d313cc592fc2c1ef08f1e0e555a32b6c1b305f685ac882d38356b0220243106bbb5bb76dde142e574cba8f30c1e2f7059e8e9161770396fbd2b50420f0121030dd394118fb66ca288bff71d8ea762678783b005770f7f9ba4128233191e0847ffffffffe2f15804b1e41c36c925c6f64f219b2bdb3c9fbff4c97a4f0e8c7f31d7e6f2af000000006b48304502200be8894fdd7f5c19be248a979c08bbf2395f606e038c3e02c0266474c03699ab022100ff5de87086e487410f5d7b68012655ca6d814f0caeb9ca42d9c425a90f68b3030121030dd394118fb66ca288bff71d8ea762678783b005770f7f9ba4128233191e0847ffffffff02a0f01900000000001976a9141c50209a1dfdf53313d237b75e9aeb553ca1dfda88ac00e1f505000000001976a914cbb9a3e7a7c1651b1006f876f08b40be85b274f588ac00000000");
+            //share.BlockHash.ToHexString().Should().Equal("e242093d92f4c98bfd5dd1f9f6489652d1165f5ce4eed1f28747d2b8e3efd8b6");
+
+            // check the share itself.
+            share.Valid.Should().Equal(true);
+            share.Candicate.Should().Equal(true);
         }
 
         [Fact]
@@ -244,7 +305,7 @@ namespace Tests.Mining.Shares
             //share.Job.Difficulty.Should().Equal(0.013730039);
 
             // test the difficulty
-            share.Difficulty.Should().Equal(38,72890444987063);
+            //share.Difficulty.Should().Equal(38.72890444987063);
             //share.BlockDiffAdjusted.Should().Equal(899.811835904);
 
             // check the block hex & block hash
