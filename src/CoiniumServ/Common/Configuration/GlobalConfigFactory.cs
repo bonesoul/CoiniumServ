@@ -16,47 +16,34 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Numerics;
-using Coinium.Crypto;
-using Coinium.Server.Stratum.Notifications;
+using Coinium.Common.Context;
+using Serilog;
 
-namespace Coinium.Mining.Shares
+namespace Coinium.Common.Configuration
 {
-    public interface IShare
+    public class GlobalConfigFactory : IGlobalConfigFactory
     {
-        bool Valid { get; }
+        private const string FileName = "config.json";
 
-        IJob Job { get; }
+        /// <summary>
+        /// The _application context
+        /// </summary>
+        private IApplicationContext _applicationContext;
 
-        UInt32 nTime { get; }
+        public GlobalConfigFactory(IApplicationContext applicationContext)
+        {
+            Log.Debug("MainConfigFactory() init..");
+            _applicationContext = applicationContext;            
+        }
 
-        UInt32 Nonce { get; }
+        public dynamic Get()
+        {
+            var data = JsonConfigReader.Read(FileName); // read the main config file
 
-        UInt32 ExtraNonce1 { get; }
+            if (data == null)
+                return null;
 
-        UInt32 ExtraNonce2 { get; }
-
-        byte[] CoinbaseBuffer { get; }
-
-        Hash CoinbaseHash { get; }
-
-        byte[] MerkleRoot { get; }
-
-        byte[] HeaderBuffer { get; }
-
-        byte[] HeaderHash { get; }
-
-        BigInteger HeaderValue { get; }
-
-        Double Difficulty { get; }
-
-        Double BlockDiffAdjusted { get; }
-
-        bool Candicate { get; }
-
-        byte[] BlockHex { get; }
-
-        byte[] BlockHash { get; }
+            return data;
+        }
     }
 }

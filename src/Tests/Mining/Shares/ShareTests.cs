@@ -36,67 +36,6 @@ using NSubstitute;
 using Should.Fluent;
 using Xunit;
 
-/* Sample data
-
-    block template:
-    ---------------
-    rpcData: {"version":2,"previousblockhash":"1a47638fd58c3b90cc3b2a7f1973dcdf545be4474d2157af28ad6ce7767acb09","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"000000ffff000000000000000000000000000000000000000000000000000000","mintime":1403563551,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1403563962,"bits":"1e00ffff","height":313498}
- 
-    generation transaction:
-    --------------- 
-    -- scriptSigPart data --
-    -> height: 313498 serialized: 039ac804
-    -> coinbase: 062f503253482f hex: 062f503253482f
-    -> date: 1403563961807 final:1403563961 serialized: 04b9afa853
-    -- p1 data --
-    txVersion: 1 packed: 01000000
-    txInputsCount: 1 varIntBuffer: 01
-    txInPrevOutHash: 0 uint256BufferFromHash: 0000000000000000000000000000000000000000000000000000000000000000
-    txInPrevOutIndex: 4294967295 packUInt32LE: ffffffff
-    scriptSigPart1.length: 17 extraNoncePlaceholder.length:8 scriptSigPart2.length:14 all: 39 varIntBuffer: 27
-    scriptSigPart1: 039ac804062f503253482f04b9afa85308
-    p1: 01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa85308
-    -- generateOutputTransactions --
-    block-reward: 5000000000
-    recipient-reward: 50000000 packInt64LE: 80f0fa0200000000
-    lenght: 25 varIntBuffer: 19
-    script: 76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
-    pool-reward: 4950000000 packInt64LE: 80010b2701000000
-    lenght: 25 varIntBuffer: 19
-    script: 76a914329035234168b8da5af106ceb20560401236849888ac
-    txOutputBuffers.lenght : 2 varIntBuffer: 02
-    -- p2 --
-    scriptSigPart2: 0d2f6e6f64655374726174756d2f
-    txInSequence: 0 packUInt32LE: 00000000
-    outputTransactions: 0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
-    txLockTime: 0 packUInt32LE: 00000000
-    txComment: 
-    p2: 0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000
-
-    job-params:
-    ---------------
-    getJobParams: ["1","767acb0928ad6ce74d2157af545be4471973dcdfcc3b2a7fd58c3b901a47638f","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa85308","0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000",[],"00000002","1e00ffff","53a8afba",true]
- 
-    handle-submit:
-    ---------------
-    handleSubmit: {"params":["mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc","1","00000000","53a8afba","8c6b0c00"],"id":13,"method":"mining.submit"}
- 
-    process-share:
-    ---------------
-    jobId: 1 previousDifficulty: undefined difficulty: 32 extraNonce1: 70000000 extraNonce2: 00000000 nTime: 53a8afba nonce: 8c6b0c00 ipAddress: 10.0.0.40 port: 3333 workerName: mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc
-    nTimeInt: 1403563962
-    coinbaseBuffer: 01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000
-    coinbaseHash: dcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76
-    merkleRoot: 76cdfea1a682f61f70cd3aeb231e6d3c4775da2694b3223d89b64be0aac3badc
-    headerBuffer: 0200000009cb7a76e76cad28af57214d47e45b54dfdc73197f2a3bcc903b8cd58f63471adcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76baafa853ffff001e000c6b8c
-    headerHash: c271dc00d2389083bf547a905a8d441ee9c710c6a87edfd35d7c8cafbe030000
-    headerBigNum: 25846116350681099734171790912699060475203659552966485851836826877981122
-    shareDiff: 68.35921036876233 diff1: 2.695953529101131e+67 shareMultiplier: 65536
-    blockDiffAdjusted : 256 job.difficulty: 0.00390625
-    2014-06-24 01:52:52 [Pool]	[litecoin] (Thread 1) Share accepted at diff 32/68.35921037 by mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc [10.0.0.40]
-    emit: {"job":"1","ip":"10.0.0.40","port":3333,"worker":"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc","height":313498,"blockReward":5000000000,"difficulty":32,"shareDiff":"68.35921037","blockDiff":256,"blockDiffActual":0.00390625}
- */
-
 namespace Tests.Mining.Shares
 {
     public class ShareTests
@@ -106,7 +45,6 @@ namespace Tests.Mining.Shares
         private readonly IBlockTemplate _blockTemplate;
         private readonly IExtraNonce _extraNonce;
         private readonly IMerkleTree _merkleTree;
-        private readonly IConnection _connection;
         private readonly IJobManager _jobManager;
         private readonly IHashAlgorithm _hashAlgorithm;
         private readonly ISignatureScript _signatureScript;
@@ -114,11 +52,46 @@ namespace Tests.Mining.Shares
         private readonly IJobCounter _jobCounter;
         private readonly IGenerationTransaction _generationTransaction;      
         private readonly IJob _job;
-        private readonly dynamic _shareData;
-        private readonly StratumMiner _miner;
 
         public ShareTests()
         {
+            /*
+                block template:
+                ---------------
+                rpcData: {"version":2,"previousblockhash":"1a47638fd58c3b90cc3b2a7f1973dcdf545be4474d2157af28ad6ce7767acb09","transactions":[],"coinbaseaux":{"flags":"062f503253482f"},"coinbasevalue":5000000000,"target":"000000ffff000000000000000000000000000000000000000000000000000000","mintime":1403563551,"mutable":["time","transactions","prevblock"],"noncerange":"00000000ffffffff","sigoplimit":20000,"sizelimit":1000000,"curtime":1403563962,"bits":"1e00ffff","height":313498}
+ 
+                generation transaction:
+                --------------- 
+                -- scriptSigPart data --
+                -> height: 313498 serialized: 039ac804
+                -> coinbase: 062f503253482f hex: 062f503253482f
+                -> date: 1403563961807 final:1403563961 serialized: 04b9afa853
+                -- p1 data --
+                txVersion: 1 packed: 01000000
+                txInputsCount: 1 varIntBuffer: 01
+                txInPrevOutHash: 0 uint256BufferFromHash: 0000000000000000000000000000000000000000000000000000000000000000
+                txInPrevOutIndex: 4294967295 packUInt32LE: ffffffff
+                scriptSigPart1.length: 17 extraNoncePlaceholder.length:8 scriptSigPart2.length:14 all: 39 varIntBuffer: 27
+                scriptSigPart1: 039ac804062f503253482f04b9afa85308
+                p1: 01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa85308
+                -- generateOutputTransactions --
+                block-reward: 5000000000
+                recipient-reward: 50000000 packInt64LE: 80f0fa0200000000
+                lenght: 25 varIntBuffer: 19
+                script: 76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
+                pool-reward: 4950000000 packInt64LE: 80010b2701000000
+                lenght: 25 varIntBuffer: 19
+                script: 76a914329035234168b8da5af106ceb20560401236849888ac
+                txOutputBuffers.lenght : 2 varIntBuffer: 02
+                -- p2 --
+                scriptSigPart2: 0d2f6e6f64655374726174756d2f
+                txInSequence: 0 packUInt32LE: 00000000
+                outputTransactions: 0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac
+                txLockTime: 0 packUInt32LE: 00000000
+                txComment: 
+                p2: 0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000
+             */
+
             // daemon client
             _daemonClient = Substitute.For<IDaemonClient>();
             _daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress { IsValid = true });
@@ -176,29 +149,55 @@ namespace Tests.Mining.Shares
             };
 
             // the job manager.
-            _connection = Substitute.For<IConnection>();
             _jobManager = Substitute.For<IJobManager>();
             _jobManager.ExtraNonce.Current.Returns((UInt32)0x70000000);
             _jobManager.GetJob(1).Returns(_job);
-
-            // miner
-            _miner = new StratumMiner(1, _connection);
-
-            // share json
-            const string shareJson = " {\"params\":[\"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc\",\"1\",\"00000000\",\"53a8afba\",\"8c6b0c00\"],\"id\":13,\"method\":\"mining.submit\"}";
-            dynamic shareObject = JsonConvert.DeserializeObject(shareJson);
-            _shareData = shareObject.@params;
         }
 
         [Fact]
-        public void ShareTest()
+        public void CandicateShareTest()
         {
-            // check the submitted share info
-            string minerName = _shareData[0];
-            string jobId = _shareData[1];
-            string extraNonce2 = _shareData[2];
-            string nTime = _shareData[3];
-            string nonce = _shareData[4];
+            
+        }
+
+        [Fact]
+        public void NonCandicateShareTest()
+        {
+            /* 
+                job-params:
+                ---------------
+                getJobParams: ["1","767acb0928ad6ce74d2157af545be4471973dcdfcc3b2a7fd58c3b901a47638f","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa85308","0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000",[],"00000002","1e00ffff","53a8afba",true]
+ 
+                handle-submit:
+                ---------------
+                handleSubmit: {"params":["mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc","1","00000000","53a8afba","8c6b0c00"],"id":13,"method":"mining.submit"}
+ 
+                process-share:
+                ---------------
+                jobId: 1 previousDifficulty: undefined difficulty: 32 extraNonce1: 70000000 extraNonce2: 00000000 nTime: 53a8afba nonce: 8c6b0c00 ipAddress: 10.0.0.40 port: 3333 workerName: mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc
+                nTimeInt: 1403563962
+                coinbaseBuffer: 01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000
+                coinbaseHash: dcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76
+                merkleRoot: 76cdfea1a682f61f70cd3aeb231e6d3c4775da2694b3223d89b64be0aac3badc
+                headerBuffer: 0200000009cb7a76e76cad28af57214d47e45b54dfdc73197f2a3bcc903b8cd58f63471adcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76baafa853ffff001e000c6b8c
+                headerHash: c271dc00d2389083bf547a905a8d441ee9c710c6a87edfd35d7c8cafbe030000
+                headerBigNum: 25846116350681099734171790912699060475203659552966485851836826877981122
+                shareDiff: 68.35921036876233 diff1: 2.695953529101131e+67 shareMultiplier: 65536
+                blockDiffAdjusted : 256 job.difficulty: 0.00390625
+                2014-06-24 01:52:52 [Pool]	[litecoin] (Thread 1) Share accepted at diff 32/68.35921037 by mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc [10.0.0.40]
+                emit: {"job":"1","ip":"10.0.0.40","port":3333,"worker":"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc","height":313498,"blockReward":5000000000,"difficulty":32,"shareDiff":"68.35921037","blockDiff":256,"blockDiffActual":0.00390625}
+             */
+
+            // submitted share json
+            const string shareJson = " {\"params\":[\"mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc\",\"1\",\"00000000\",\"53a8afba\",\"8c6b0c00\"],\"id\":13,\"method\":\"mining.submit\"}";
+            dynamic shareObject = JsonConvert.DeserializeObject(shareJson);
+            dynamic shareData = shareObject.@params;
+
+            string minerName = shareData[0];
+            string jobId = shareData[1];
+            string extraNonce2 = shareData[2];
+            string nTime = shareData[3];
+            string nonce = shareData[4];
 
             minerName.Should().Equal("mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc");
             jobId.Should().Equal("1");
@@ -220,14 +219,14 @@ namespace Tests.Mining.Shares
             share.ExtraNonce2.Should().Equal((UInt32)0x00000000);
 
             // test coinbase
-            share.Coinbase.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+            share.CoinbaseBuffer.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff27039ac804062f503253482f04b9afa8530870000000000000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
             share.CoinbaseHash.Bytes.ToHexString().Should().Equal("dcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76");
 
             // test merkle-root.
             share.MerkleRoot.ToHexString().Should().Equal("76cdfea1a682f61f70cd3aeb231e6d3c4775da2694b3223d89b64be0aac3badc");
 
             // test the block header
-            share.Header.ToHexString().Should().Equal("0200000009cb7a76e76cad28af57214d47e45b54dfdc73197f2a3bcc903b8cd58f63471adcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76baafa853ffff001e000c6b8c");
+            share.HeaderBuffer.ToHexString().Should().Equal("0200000009cb7a76e76cad28af57214d47e45b54dfdc73197f2a3bcc903b8cd58f63471adcbac3aae04bb6893d22b39426da75473c6d1e23eb3acd701ff682a6a1fecd76baafa853ffff001e000c6b8c");
 
             // test the block hash.
             share.HeaderHash.ToHexString().Should().Equal("c271dc00d2389083bf547a905a8d441ee9c710c6a87edfd35d7c8cafbe030000");
@@ -236,6 +235,11 @@ namespace Tests.Mining.Shares
             // test the difficulty
             share.Difficulty.Should().Equal(68,35921036876233);
             share.BlockDiffAdjusted.Should().Equal(256);
+            share.Job.Difficulty.Should().Equal(0.00390625);
+
+            // check the share itself.
+            share.Valid.Should().Equal(true);
+            share.Candicate.Should().Equal(false);
         }
     }
 }

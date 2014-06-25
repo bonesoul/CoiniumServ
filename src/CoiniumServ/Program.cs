@@ -21,6 +21,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using Coinium.Common.Commands;
+using Coinium.Common.Configuration;
 using Coinium.Common.Console;
 using Coinium.Common.Logging;
 using Coinium.Common.Platform;
@@ -56,8 +57,18 @@ namespace Coinium
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
+            // check if we have a valid config file.
+            var globalConfig = kernel.Resolve<IGlobalConfigFactory>().Get();
+            if (globalConfig == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Couldn't read config.json! Make sure you rename config-sample.json as config.json.");
+                Console.ResetColor();
+                return;
+            }
+
             // init logging facilities.
-            Logging.Init();
+            Logging.Init(globalConfig);
 
             // print a version banner.
             Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
@@ -95,11 +106,12 @@ namespace Coinium
                 throw new ArgumentNullException("e");
 
             if (e.IsTerminating)
+            {
                 Log.Fatal(exception, "Terminating program because of unhandled exception!");
+                Environment.Exit(-1);
+            }
             else
                 Log.Error(exception, "Caught unhandled exception");
-
-            Console.ReadLine();
         }
 
         #endregion

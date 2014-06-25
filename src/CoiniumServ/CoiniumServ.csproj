@@ -93,6 +93,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Daemon\Responses\IBlockTemplate.cs" />
+    <Compile Include="Common\Configuration\IGlobalConfigFactory.cs" />
+    <Compile Include="Common\Configuration\GlobalConfigFactory.cs" />
     <Compile Include="Crypto\IMerkleRoot.cs" />
     <Compile Include="Crypto\IMerkleTree.cs" />
     <Compile Include="Crypto\MerkleRoot.cs" />
@@ -705,12 +707,12 @@
       <Link>config\coins\zzcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\assets\config\pools\sample.json">
-      <Link>config\pools\sample.json</Link>
+    <None Include="..\..\assets\config\config-sample.json">
+      <Link>config-sample.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\assets\config\settings-sample.conf.json">
-      <Link>settings-sample.conf.json</Link>
+    <None Include="..\..\assets\config\pools\sample.json">
+      <Link>config\pools\sample.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
