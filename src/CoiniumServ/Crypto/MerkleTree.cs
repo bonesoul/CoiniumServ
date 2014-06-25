@@ -58,7 +58,7 @@ namespace Coinium.Crypto
         /// Creates a new merkle-tree instance.
         /// </summary>
         /// <param name="hashList"></param>
-        public MerkleTree(List<byte[]> hashList)
+        public MerkleTree(IEnumerable<byte[]> hashList)
         {
             Steps = CalculateSteps(hashList);
         }       
@@ -72,7 +72,7 @@ namespace Coinium.Crypto
         /// </example>
         /// <param name="hashList"></param>
         /// <returns></returns>
-        private IList<byte[]> CalculateSteps(List<byte[]> hashList)
+        private IList<byte[]> CalculateSteps(IEnumerable<byte[]> hashList)
         {
             var steps = new List<byte[]>();
 

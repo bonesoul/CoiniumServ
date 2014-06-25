@@ -89,6 +89,7 @@
     <Compile Include="Coin\Daemon\Responses\IBlockTemplate.cs" />
     <Compile Include="Common\Configuration\IGlobalConfigFactory.cs" />
     <Compile Include="Common\Configuration\GlobalConfigFactory.cs" />
+    <Compile Include="Common\Extensions\StringExtensions.cs" />
     <Compile Include="Crypto\IMerkleRoot.cs" />
     <Compile Include="Crypto\IMerkleTree.cs" />
     <Compile Include="Crypto\MerkleRoot.cs" />

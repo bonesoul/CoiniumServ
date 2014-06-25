@@ -17,25 +17,27 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Coinium.Coin.Coinbase;
-using Coinium.Coin.Daemon.Responses;
-using Coinium.Common.Extensions;
 
-namespace Coinium.Transactions.Utils
+namespace Coinium.Common.Extensions
 {
-    public static class TransactionUtils
+    public static class StringExtensions
     {
-        public static byte[] GetSerializedUnixDateTime(Int64 unixDateTime)
+        /// <summary>
+        /// Converts a hex string to byte array.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static byte[] HexToByteArray(this string str)
         {
-            var dateTime = unixDateTime / 1000 | 0;
-            return Serializers.SerializeNumber(dateTime);
-        }
+            str = str.Replace(" ", String.Empty);
 
-        public static List<byte[]> GetHashList(this BlockTemplateTransaction[] transactions)
-        {
-            return transactions.Select(transaction => transaction.Hash.HexToByteArray().ReverseBuffer()).ToList();
+            var res = new byte[str.Length / 2];
+            for (int i = 0; i < res.Length; ++i)
+            {
+                string temp = String.Concat(str[i * 2], str[i * 2 + 1]);
+                res[i] = Convert.ToByte(temp, 16);
+            }
+            return res;
         }
     }
 }
