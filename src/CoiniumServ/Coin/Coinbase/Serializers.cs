@@ -45,7 +45,7 @@ namespace Coinium.Coin.Coinbase
             using (var stream = new MemoryStream())
             {
                 stream.WriteBytes(header);
-                stream.WriteBytes(VarInt((UInt32)job.BlockTemplate.Transactions.Length));
+                stream.WriteBytes(VarInt((UInt32)job.BlockTemplate.Transactions.Length + 1));
                 stream.WriteBytes(coinbase);
 
                 foreach (var transaction in job.BlockTemplate.Transactions)
