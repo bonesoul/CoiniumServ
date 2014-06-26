@@ -94,6 +94,7 @@ You can contribute the development of the project by donating;
 ### License
 
 CoiniumServ - crypto currency pool software
+
 Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
 
 This software is dual-licensed: you can redistribute it and/or modify
