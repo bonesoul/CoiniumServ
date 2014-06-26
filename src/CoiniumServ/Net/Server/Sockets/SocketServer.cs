@@ -1,21 +1,25 @@
-﻿/*
- *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
- *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+﻿#region License
+// 
+//     CoiniumServ - Crypto Currency Mining Pool Server Software
+//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
+//     https://github.com/CoiniumServ/CoiniumServ
+// 
+//     This software is dual-licensed: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//    
+//     For the terms of this license, see licenses/gpl_v3.txt.
+// 
+//     Alternatively, you can license this software under a commercial
+//     license or white-label it as set out in licenses/commercial.txt.
+// 
+#endregion
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -150,7 +154,8 @@ namespace Coinium.Net.Server.Sockets
                 var socket = Listener.EndAccept(result); // Finish accepting the incoming connection.
                 var connection = new Connection(this, socket); // Track the connection.
 
-                lock (ConnectionLock) Connections.Add(connection); // Add the new connection to the activec connections list.
+                lock (ConnectionLock) 
+                    Connections.Add(connection); // Add the new connection to the active connections list.
 
                 OnClientConnection(new ConnectionEventArgs(connection)); // Raise the OnConnect event.
 
@@ -191,18 +196,18 @@ namespace Coinium.Net.Server.Sockets
                 }
                 else
                 {
-                    RemoveConnection(connection, true); // Connection was lost.
+                    RemoveConnection(connection); // Connection was lost.
                 }
             }
             catch (SocketException e)
             {
-                RemoveConnection(connection, true); // An error occured while receiving, connection has disconnected.
-                Log.Error(e, "ReceiveCallback");
+                Log.Debug(e, "ReceiveCallback");
+                RemoveConnection(connection); // An error occured while receiving, connection has disconnected.
             }
             catch (Exception e)
             {
-                RemoveConnection(connection, true); // An error occured while receiving, the connection may have been disconnected.
-                Log.Error(e, "ReceiveCallback");
+                Log.Debug(e, "ReceiveCallback");
+                RemoveConnection(connection); // An error occured while receiving, the connection may have been disconnected.
             }
         }
 
@@ -237,12 +242,12 @@ namespace Coinium.Net.Server.Sockets
             }
             catch (SocketException socketException)
             {
-                RemoveConnection(connection, true); // An error occured while sending, connection has disconnected.
+                RemoveConnection(connection); // An error occured while sending, connection has disconnected.
                 Log.Error(socketException, "Send");
             }
             catch (Exception e)
             {
-                RemoveConnection(connection, true); // An error occured while sending, it is possible that the connection has a problem.
+                RemoveConnection(connection); // An error occured while sending, it is possible that the connection has a problem.
                 Log.Error(e, "Send");
             }
 
@@ -271,8 +276,8 @@ namespace Coinium.Net.Server.Sockets
                 foreach (var connection in Connections.Cast<Connection>()) // Check if the connection is connected.
                 {
                     // Disconnect and raise the OnDisconnect event.
+
                     connection.Disconnect();
-                    //                    connection.Socket.Disconnect(false);
                     OnClientDisconnect(new ConnectionEventArgs(connection));
                 }
 
@@ -280,13 +285,12 @@ namespace Coinium.Net.Server.Sockets
             }
         }
 
-        private void RemoveConnection(Connection connection, bool raiseEvent)
+        private void RemoveConnection(Connection connection)
         {
             if (connection == null)
                 return;
 
-            // The whole Server.Disconnect vs Server.RemoveConnection vs Connection.Disconnect is a complete mess.
-            // Trying to modify the code so everything gets cleaned up properly without causing an infinite recursion.
+            // disconnect the client
             connection.Disconnect();
 
             // Remove the connection from the dictionary and raise the OnDisconnection event.
@@ -296,13 +300,7 @@ namespace Coinium.Net.Server.Sockets
                     Connections.Remove(connection);
             }
 
-            if (raiseEvent)
-                NotifyRemoveConnection(connection);
-        }
-
-        private void NotifyRemoveConnection(Connection connection)
-        {
-            OnClientDisconnect(new ConnectionEventArgs(connection));
+            OnClientDisconnect(new ConnectionEventArgs(connection)); // raise the OnDisconnect event.
         }
 
         /// <summary>
@@ -352,6 +350,7 @@ namespace Coinium.Net.Server.Sockets
         protected virtual void OnClientConnection(ConnectionEventArgs e)
         {
             var handler = OnConnect;
+
             if (handler != null) 
                 handler(this, e);
         }
@@ -359,6 +358,7 @@ namespace Coinium.Net.Server.Sockets
         protected virtual void OnClientDisconnect(ConnectionEventArgs e)
         {
             var handler = OnDisconnect;
+
             if (handler != null) 
                 handler(this, e);
         }
@@ -366,6 +366,7 @@ namespace Coinium.Net.Server.Sockets
         protected virtual void OnDataReceived(ConnectionDataEventArgs e)
         {
             var handler = DataReceived;
+
             if (handler != null) 
                 handler(this, e);
         }
@@ -373,6 +374,7 @@ namespace Coinium.Net.Server.Sockets
         protected virtual void OnDataSent(ConnectionDataEventArgs e)
         {
             var handler = DataSent;
+
             if (handler != null) 
                 handler(this, e);
         }

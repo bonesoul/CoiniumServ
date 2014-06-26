@@ -1,27 +1,30 @@
-﻿/*
- *   CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
- *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+﻿#region License
+// 
+//     CoiniumServ - Crypto Currency Mining Pool Server Software
+//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
+//     https://github.com/CoiniumServ/CoiniumServ
+// 
+//     This software is dual-licensed: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//    
+//     For the terms of this license, see licenses/gpl_v3.txt.
+// 
+//     Alternatively, you can license this software under a commercial
+//     license or white-label it as set out in licenses/commercial.txt.
+// 
+#endregion
 using System;
 using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
-using Coinium.Miner;
-using Coinium.Miner.Events;
+using Coinium.Mining.Miners;
 using Coinium.Net.Server.Sockets;
 using Coinium.Rpc.Service.Socket;
 using Coinium.Server.Stratum.Notifications;
@@ -43,6 +46,11 @@ namespace Coinium.Server.Stratum
         public int Id { get; private set; }
 
         /// <summary>
+        /// Username of the miner.
+        /// </summary>
+        public string Username { get; private set; }
+
+        /// <summary>
         /// Is the miner subscribed?
         /// </summary>
         public bool Subscribed { get; private set; }
@@ -52,15 +60,10 @@ namespace Coinium.Server.Stratum
         /// </summary>
         public bool Authenticated { get; private set; }
 
-                /// <summary>
+        /// <summary>
         /// Sends a new mining job to the miner.
         /// </summary>
         public bool SupportsJobNotifications { get; private set; }
-
-        /// <summary>
-        /// Event that fires when a miner authenticates.
-        /// </summary>
-        public event EventHandler OnAuthenticate;
 
         /// <summary>
         /// Creates a new miner instance.
@@ -71,10 +74,33 @@ namespace Coinium.Server.Stratum
         {
             Id = id; // the id of the miner.
             Connection = connection; // the underlying connection.
-            SupportsJobNotifications = true; // stratum miner'ssupports new mining job notifications.
 
-            Subscribed = false;
-            Authenticated = false;
+            Subscribed = false; // miner has to subscribe.
+            Authenticated = false; // miner has to authenticate.
+            SupportsJobNotifications = true; // stratum miner'ssupports new mining job notifications.
+        }
+
+        /// <summary>
+        /// Subscribes the miner to mining service.
+        /// </summary>
+        public void Subscribe()
+        {
+            Subscribed = true;
+        }
+
+        /// <summary>
+        /// Authenticates the miner.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public bool Authenticate(string user, string password)
+        {
+            Username = user;
+
+            Authenticated = true;
+
+            return Authenticated;
         }
 
         /// <summary>
@@ -108,32 +134,6 @@ namespace Coinium.Server.Stratum
 
             var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
             JsonRpcProcessor.Process(async, rpcContext);
-        }
-
-        /// <summary>
-        /// Subscribes the miner to mining service.
-        /// </summary>
-        public void Subscribe()
-        {
-            Subscribed = true;
-        }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public bool Authenticate(string user, string password)
-        {
-            Authenticated = true;            
-
-            // notify any listeners about the miner's authentication.
-            var handler = OnAuthenticate;
-            if (handler != null)
-                handler(this, new MinerAuthenticationEventArgs(this));
-
-            return Authenticated;
         }
 
         /// <summary>

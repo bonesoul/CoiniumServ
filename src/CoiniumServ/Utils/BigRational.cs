@@ -1,42 +1,33 @@
-﻿//   Copyright (c) Microsoft Corporation.  All rights reserved.
-/*============================================================
-** Class: BigRational
-**
-** Purpose: 
-** --------
-** This class is used to represent an arbitrary precision
-** BigRational number
-**
-** A rational number (commonly called a fraction) is a ratio
-** between two integers.  For example (3/6) = (2/4) = (1/2)
-**
-** Arithmetic
-** ----------
-** a/b = c/d, iff ad = bc
-** a/b + c/d  == (ad + bc)/bd
-** a/b - c/d  == (ad - bc)/bd
-** a/b % c/d  == (ad % bc)/bd
-** a/b * c/d  == (ac)/(bd)
-** a/b / c/d  == (ad)/(bc)
-** -(a/b)     == (-a)/b
-** (a/b)^(-1) == b/a, if a != 0
-**
-** Reduction Algorithm
-** ------------------------
-** Euclid's algorithm is used to simplify the fraction.
-** Calculating the greatest common divisor of two n-digit
-** numbers can be found in
-**
-** O(n(log n)^5 (log log n)) steps as n -> +infinity
-============================================================*/
-
-/* Most mono versions doesn't include a proper BigInteger implementation, so we just include one that's complete from the latest mono repository
- * and basically have to include BigRational.cs code so it can use our included implementation of BigInteger.cs for mono 
- * https://bcl.codeplex.com/SourceControl/latest#Libraries/BigRational/BigRationalLibrary/BigRational.cs
- */
-
+﻿#region License
+// 
+//     CoiniumServ - Crypto Currency Mining Pool Server Software
+//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
+//     https://github.com/CoiniumServ/CoiniumServ
+// 
+//     This software is dual-licensed: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//    
+//     For the terms of this license, see licenses/gpl_v3.txt.
+// 
+//     Alternatively, you can license this software under a commercial
+//     license or white-label it as set out in licenses/commercial.txt.
+// 
+#endregion
 namespace Numerics
 {
+
+    /* Most mono versions doesn't include a proper BigInteger implementation, so we just include one that's complete from the latest mono repository
+     * and basically have to include BigRational.cs code so it can use our included implementation of BigInteger.cs for mono 
+     * https://bcl.codeplex.com/SourceControl/latest#Libraries/BigRational/BigRationalLibrary/BigRational.cs
+     */
+
     using System;
     using System.Globalization;
     using System.Numerics;
@@ -44,6 +35,38 @@ namespace Numerics
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using System.Text;
+
+    //   Copyright (c) Microsoft Corporation.  All rights reserved.
+    /*============================================================
+    ** Class: BigRational
+    **
+    ** Purpose: 
+    ** --------
+    ** This class is used to represent an arbitrary precision
+    ** BigRational number
+    **
+    ** A rational number (commonly called a fraction) is a ratio
+    ** between two integers.  For example (3/6) = (2/4) = (1/2)
+    **
+    ** Arithmetic
+    ** ----------
+    ** a/b = c/d, iff ad = bc
+    ** a/b + c/d  == (ad + bc)/bd
+    ** a/b - c/d  == (ad - bc)/bd
+    ** a/b % c/d  == (ad % bc)/bd
+    ** a/b * c/d  == (ac)/(bd)
+    ** a/b / c/d  == (ad)/(bc)
+    ** -(a/b)     == (-a)/b
+    ** (a/b)^(-1) == b/a, if a != 0
+    **
+    ** Reduction Algorithm
+    ** ------------------------
+    ** Euclid's algorithm is used to simplify the fraction.
+    ** Calculating the greatest common divisor of two n-digit
+    ** numbers can be found in
+    **
+    ** O(n(log n)^5 (log log n)) steps as n -> +infinity
+    ============================================================*/
 
     [Serializable]
     [ComVisible(false)]

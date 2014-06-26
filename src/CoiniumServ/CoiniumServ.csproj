@@ -108,8 +108,8 @@
     <Compile Include="Common\Context\ApplicationContext.cs" />
     <Compile Include="Common\Configuration\JsonConfigReader.cs" />
     <Compile Include="Common\Helpers\Validation\Enforce.cs" />
-    <Compile Include="Mining\Pool\Config\IPoolConfigFactory.cs" />
-    <Compile Include="Mining\Pool\Config\PoolConfigFactory.cs" />
+    <Compile Include="Mining\Pools\Config\IPoolConfigFactory.cs" />
+    <Compile Include="Mining\Pools\Config\PoolConfigFactory.cs" />
     <Compile Include="Rpc\Service\RpcServiceNames.cs" />
     <Compile Include="Common\Extensions\ArrayExtensions.cs" />
     <Compile Include="Common\Extensions\EnumerableExtensions.cs" />
@@ -154,24 +154,23 @@
     <Compile Include="Common\Commands\CommandManager.cs" />
     <Compile Include="Common\Repository\Registries\Registry.cs" />
     <Compile Include="Crypto\Utils.cs" />
-    <Compile Include="Miner\Events\MinerAuthenticationEventArgs.cs" />
     <Compile Include="Mining\Jobs\ExtraNonce.cs" />
     <Compile Include="Mining\Jobs\IExtraNonce.cs" />
     <Compile Include="Mining\Jobs\IJobManagerFactory.cs" />
     <Compile Include="Mining\Jobs\JobCounter.cs" />
     <Compile Include="Mining\Jobs\JobManagerFactory.cs" />
-    <Compile Include="Miner\IMinerManager.cs" />
+    <Compile Include="Mining\Miners\IMinerManager.cs" />
     <Compile Include="Crypto\MerkleTree.cs" />
     <Compile Include="Coin\Daemon\Responses\BlockTemplateTransaction.cs" />
     <Compile Include="Mining\Jobs\IJobManager.cs" />
     <Compile Include="Mining\Jobs\JobManager.cs" />
-    <Compile Include="Miner\MinerManager.cs" />
-    <Compile Include="Mining\Pool\IPool.cs" />
-    <Compile Include="Mining\Pool\Config\IPoolConfig.cs" />
-    <Compile Include="Mining\Pool\IPoolFactory.cs" />
-    <Compile Include="Mining\Pool\IPoolManager.cs" />
-    <Compile Include="Mining\Pool\Pool.cs" />
-    <Compile Include="Mining\Pool\PoolFactory.cs" />
+    <Compile Include="Mining\Miners\MinerManager.cs" />
+    <Compile Include="Mining\Pools\IPool.cs" />
+    <Compile Include="Mining\Pools\Config\IPoolConfig.cs" />
+    <Compile Include="Mining\Pools\IPoolFactory.cs" />
+    <Compile Include="Mining\Pools\IPoolManager.cs" />
+    <Compile Include="Mining\Pools\Pool.cs" />
+    <Compile Include="Mining\Pools\PoolFactory.cs" />
     <Compile Include="Mining\Shares\IShareManagerFactory.cs" />
     <Compile Include="Mining\Shares\IShareManager.cs" />
     <Compile Include="Mining\Shares\ShareManagerFactory.cs" />
@@ -187,14 +186,14 @@
     <Compile Include="Server\Stratum\Notifications\Difficulty.cs" />
     <Compile Include="Server\Vanilla\Config\IVanillaServerConfig.cs" />
     <Compile Include="Server\Vanilla\VanillaMiner.cs" />
-    <Compile Include="Mining\Pool\Config\PoolConfig.cs" />
-    <Compile Include="Mining\Pool\PoolManager.cs" />
+    <Compile Include="Mining\Pools\Config\PoolConfig.cs" />
+    <Compile Include="Mining\Pools\PoolManager.cs" />
     <Compile Include="Rpc\Service\Http\HttpServiceContext.cs" />
     <Compile Include="Rpc\Service\Http\HttpServiceRequest.cs" />
     <Compile Include="Server\Vanilla\VanillaServer.cs" />
     <Compile Include="Server\Vanilla\Config\VanillaServerConfig.cs" />
     <Compile Include="Server\Vanilla\VanillaService.cs" />
-    <Compile Include="Miner\IMiner.cs" />
+    <Compile Include="Mining\Miners\IMiner.cs" />
     <Compile Include="Rpc\Service\Socket\SocketServiceContext.cs" />
     <Compile Include="Rpc\Service\Socket\SocketServiceRequest.cs" />
     <Compile Include="Server\Commands\Server.cs" />
@@ -256,6 +255,10 @@
     <Compile Include="Utils\BigRational.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\assets\config\coins\21coin.json">
+      <Link>config\coins\21coin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\365coin.json">
       <Link>config\coins\365coin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -270,6 +273,14 @@
     </None>
     <None Include="..\..\assets\config\coins\applecoin.json">
       <Link>config\coins\applecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\arkenstone.json">
+      <Link>config\coins\arkenstone.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\arkhash.json">
+      <Link>config\coins\arkhash.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\asiccoin.json">
@@ -296,8 +307,24 @@
       <Link>config\coins\bitcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\coins\bitraam.json">
+      <Link>config\coins\bitraam.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\bitstar.json">
+      <Link>config\coins\bitstar.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\bluecoin.json">
+      <Link>config\coins\bluecoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\bottlecaps.json">
       <Link>config\coins\bottlecaps.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\bunnycoin.json">
+      <Link>config\coins\bunnycoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\bytecoin.json">
@@ -316,12 +343,28 @@
       <Link>config\coins\catcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\coins\coino.json">
+      <Link>config\coins\coino.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\continuumcoin.json">
+      <Link>config\coins\continuumcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\copperbars.json">
       <Link>config\coins\copperbars.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\copperlark.json">
       <Link>config\coins\copperlark.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\cryptogenicbullion.json">
+      <Link>config\coins\cryptogenicbullion.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\cryptographicanomaly.json">
+      <Link>config\coins\cryptographicanomaly.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\cryptometh.json">
@@ -382,6 +425,10 @@
     </None>
     <None Include="..\..\assets\config\coins\fastcoin.json">
       <Link>config\coins\fastcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\fastcoinsha.json">
+      <Link>config\coins\fastcoinsha.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\feathercoin.json">
@@ -504,6 +551,10 @@
       <Link>config\coins\krugercoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\coins\kumacoin.json">
+      <Link>config\coins\kumacoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\litecoin.json">
       <Link>config\coins\litecoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -536,6 +587,10 @@
       <Link>config\coins\mintcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\coins\monacoin.json">
+      <Link>config\coins\monacoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\muniti.json">
       <Link>config\coins\muniti.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -556,6 +611,10 @@
       <Link>config\coins\noirbits.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\coins\octocoin.json">
+      <Link>config\coins\octocoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\onecoin.json">
       <Link>config\coins\onecoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -564,12 +623,20 @@
       <Link>config\coins\opensourcecoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\coins\pawncoin.json">
+      <Link>config\coins\pawncoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\peercoin.json">
       <Link>config\coins\peercoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\phoenixcoin.json">
       <Link>config\coins\phoenixcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\plncoin.json">
+      <Link>config\coins\plncoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\potcoin.json">
@@ -588,6 +655,10 @@
       <Link>config\coins\radioactivecoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\coins\README.md">
+      <Link>config\coins\README.md</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\reddcoin.json">
       <Link>config\coins\reddcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -604,8 +675,16 @@
       <Link>config\coins\saffroncoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\coins\sayacoin.json">
+      <Link>config\coins\sayacoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\sexcoin.json">
       <Link>config\coins\sexcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\sha1coin.json">
+      <Link>config\coins\sha1coin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\skeincoin.json">
@@ -626,6 +705,10 @@
     </None>
     <None Include="..\..\assets\config\coins\starcoin.json">
       <Link>config\coins\starcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\stashcoin.json">
+      <Link>config\coins\stashcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\stoopidcoin.json">
@@ -676,6 +759,10 @@
       <Link>config\coins\vertcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\config\coins\wearesatoshi.json">
+      <Link>config\coins\wearesatoshi.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\assets\config\coins\wecoin.json">
       <Link>config\coins\wecoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -694,6 +781,10 @@
     </None>
     <None Include="..\..\assets\config\coins\ybcoin.json">
       <Link>config\coins\ybcoin.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\config\coins\zedcoin.json">
+      <Link>config\coins\zedcoin.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\..\assets\config\coins\zetacoin.json">
