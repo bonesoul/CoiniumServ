@@ -194,7 +194,7 @@ namespace Tests.Mining.Shares
             var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
-            share.nTime.Should().Equal((UInt32)0x53aaa331);
+            share.NTime.Should().Equal((UInt32)0x53aaa331);
             share.Nonce.Should().Equal((UInt32)0x44725000);
 
             // test job provided extraNonce1 and extraNonce2
@@ -281,7 +281,7 @@ namespace Tests.Mining.Shares
             var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
-            share.nTime.Should().Equal((UInt32)0x53aaa331);
+            share.NTime.Should().Equal((UInt32)0x53aaa331);
             share.Nonce.Should().Equal((UInt32)0x87500200);
 
             // test job provided extraNonce1 and extraNonce2

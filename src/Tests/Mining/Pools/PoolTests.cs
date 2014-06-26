@@ -43,6 +43,7 @@ namespace Tests.Mining.Pools
         private readonly IJobManagerFactory _jobManagerFactory;
         private readonly IShareManagerFactory _shareManagerFactory;
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
+        private readonly IMinerManagerFactory _minerManagerFactory;
 
         // object mocks.
         private readonly IDaemonClient _daemonClient;
@@ -60,6 +61,7 @@ namespace Tests.Mining.Pools
             _jobManagerFactory = Substitute.For<IJobManagerFactory>();
             _hashAlgorithmFactory = Substitute.For<IHashAlgorithmFactory>();
             _shareManagerFactory = Substitute.For<IShareManagerFactory>();
+            _minerManagerFactory = Substitute.For<IMinerManagerFactory>();
             _serverFactory = Substitute.For<IServerFactory>();
             _serviceFactory = Substitute.For<IServiceFactory>();
 
@@ -82,7 +84,7 @@ namespace Tests.Mining.Pools
                 _serverFactory,
                 _serviceFactory,
                 _daemonClient,
-                _minerManager,
+                _minerManagerFactory,
                 _jobManagerFactory,
                 _shareManagerFactory);
 
@@ -103,12 +105,12 @@ namespace Tests.Mining.Pools
                     _serverFactory,
                     _serviceFactory,
                     _daemonClient,
-                    _minerManager,
+                    _minerManagerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory);
             });
 
-            Assert.True(ex.Message.Contains("IHashAlgorithmFactory"));
+            ex.Message.Should().Contain("IHashAlgorithmFactory");
         }
 
         /// <summary>
@@ -124,12 +126,12 @@ namespace Tests.Mining.Pools
                     null,
                     _serviceFactory,
                     _daemonClient,
-                    _minerManager,
+                    _minerManagerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory);
             });
 
-            Assert.True(ex.Message.Contains("IServerFactory"));
+            ex.Message.Should().Contain("IServerFactory");
         }
 
         /// <summary>
@@ -145,12 +147,12 @@ namespace Tests.Mining.Pools
                     _serverFactory,
                     null,
                     _daemonClient,
-                    _minerManager,
+                    _minerManagerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory);
             });
 
-            Assert.True(ex.Message.Contains("IServiceFactory"));
+            ex.Message.Should().Contain("IServiceFactory");
         }
 
         /// <summary>
@@ -166,19 +168,19 @@ namespace Tests.Mining.Pools
                     _serverFactory,
                     _serviceFactory,
                     null,
-                    _minerManager,
+                    _minerManagerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory);
             });
 
-            Assert.True(ex.Message.Contains("IDaemonClient"));
+            ex.Message.Should().Contain("IDaemonClient");
         }
 
         /// <summary>
-        /// Tests pool constructor with null MinerManager, should trow exception.
+        /// Tests pool constructor with null IMinerManagerFactory, should trow exception.
         /// </summary>
         [Fact]
-        public void ConstructorTest_NullMinerManager_ShouldThrow()
+        public void ConstructorTest_NullMinerManagerFactory_ShouldThrow()
         {
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
@@ -192,7 +194,7 @@ namespace Tests.Mining.Pools
                     _shareManagerFactory);
             });
 
-            Assert.True(ex.Message.Contains("IMinerManager"));
+            ex.Message.Should().Contain("IMinerManagerFactory");
         }
 
         /// <summary>
@@ -208,12 +210,12 @@ namespace Tests.Mining.Pools
                     _serverFactory,
                     _serviceFactory,
                     _daemonClient,
-                    _minerManager,
+                    _minerManagerFactory,
                     null,
                     _shareManagerFactory);
             });
 
-            Assert.True(ex.Message.Contains("IJobManagerFactory"));
+            ex.Message.Should().Contain("IJobManagerFactory");
         }
 
         /// <summary>
@@ -229,12 +231,12 @@ namespace Tests.Mining.Pools
                     _serverFactory,
                     _serviceFactory,
                     _daemonClient,
-                    _minerManager,
+                    _minerManagerFactory,
                     _jobManagerFactory,
                     null);
             });
 
-            Assert.True(ex.Message.Contains("IShareManagerFactory"));
+            ex.Message.Should().Contain("IShareManagerFactory");
         }
 
         /// <summary>
@@ -248,7 +250,7 @@ namespace Tests.Mining.Pools
                 _serverFactory, 
                 _serviceFactory, 
                 _daemonClient,
-                _minerManager, 
+                _minerManagerFactory, 
                 _jobManagerFactory, 
                 _shareManagerFactory);
 
@@ -262,6 +264,9 @@ namespace Tests.Mining.Pools
             // initialize hash algorithm
             var hashAlgorithm = Substitute.For<IHashAlgorithm>();
             _hashAlgorithmFactory.Get(config.Coin.Algorithm).Returns(hashAlgorithm);
+
+            // initialize the miner manager.
+            _minerManagerFactory.Get(_daemonClient);
 
             // initalize job manager.
             _jobManagerFactory.Get(_daemonClient, _minerManager, hashAlgorithm).Returns(_jobManager);
