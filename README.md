@@ -54,7 +54,11 @@ For more information about the motivation behind CoiniumServ, check [Master Plan
 
 ### Screenshots
 
-![Screenshot](http://i.imgur.com/Pql7h0y.png)
+##### Running over mono & ubuntu
+![Screenshot](http://i.imgur.com/izIB5nq.png)
+
+##### Running over dotnet & windows
+![Screenshot](http://i.imgur.com/kHyztQf.png)
 
 ### Developers
 
