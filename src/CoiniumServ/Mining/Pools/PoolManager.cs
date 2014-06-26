@@ -49,6 +49,7 @@ namespace Coinium.Mining.Pools
         {
             const string configRoot = "config/pools";
 
+            var enabledPools = new List<string>();
             var files = FileHelpers.GetFilesByExtensionRecursive(configRoot, ".json");
 
             foreach (var file in files)
@@ -58,10 +59,12 @@ namespace Coinium.Mining.Pools
                 if (!poolConfig.Enabled) // skip pools that are not enabled.
                     continue;
 
+                enabledPools.Add(poolConfig.Coin.Name);
+
                 AddPool(poolConfig);
             }
 
-            Log.Information("Found {0} enabled pool configurations..", _pools.Count);
+            Log.Information("Discovered a total of {0} enabled pool configurations: {1}.", _pools.Count, enabledPools);
         }
 
         public IPool AddPool(IPoolConfig poolConfig)
