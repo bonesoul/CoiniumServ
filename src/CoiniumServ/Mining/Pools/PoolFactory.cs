@@ -1,8 +1,8 @@
 ﻿using Coinium.Common.Context;
-using Coinium.Mining.Pool.Config;
+using Coinium.Mining.Pools.Config;
 using Serilog;
 
-namespace Coinium.Mining.Pool
+namespace Coinium.Mining.Pools
 {
     public class PoolFactory : IPoolFactory
     {

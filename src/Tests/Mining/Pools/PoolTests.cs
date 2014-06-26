@@ -19,9 +19,9 @@
 using System;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
-using Coinium.Miner;
 using Coinium.Mining.Jobs;
-using Coinium.Mining.Pool.Config;
+using Coinium.Mining.Miners;
+using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 using Coinium.Rpc.Service;
 using Coinium.Server;
@@ -29,7 +29,7 @@ using NSubstitute;
 using Should.Fluent;
 using Xunit;
 
-namespace Tests.Mining.Pool
+namespace Tests.Mining.Pools
 {
     public class PoolTests
     {
@@ -73,7 +73,7 @@ namespace Tests.Mining.Pool
         [Fact]
         public void ConstructorTest_NonNullParams_ShouldSucceed()
         {
-            var pool = new Coinium.Mining.Pool.Pool(
+            var pool = new Coinium.Mining.Pools.Pool(
                 _hashAlgorithmFactory,
                 _serverFactory,
                 _serviceFactory,
@@ -94,7 +94,7 @@ namespace Tests.Mining.Pool
         {
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
-                var pool = new Coinium.Mining.Pool.Pool(
+                var pool = new Coinium.Mining.Pools.Pool(
                     null,
                     _serverFactory,
                     _serviceFactory,
@@ -115,7 +115,7 @@ namespace Tests.Mining.Pool
         {
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
-                var pool = new Coinium.Mining.Pool.Pool(
+                var pool = new Coinium.Mining.Pools.Pool(
                     _hashAlgorithmFactory,
                     null,
                     _serviceFactory,
@@ -136,7 +136,7 @@ namespace Tests.Mining.Pool
         {
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
-                var pool = new Coinium.Mining.Pool.Pool(
+                var pool = new Coinium.Mining.Pools.Pool(
                     _hashAlgorithmFactory,
                     _serverFactory,
                     null,
@@ -157,7 +157,7 @@ namespace Tests.Mining.Pool
         {
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
-                var pool = new Coinium.Mining.Pool.Pool(
+                var pool = new Coinium.Mining.Pools.Pool(
                     _hashAlgorithmFactory,
                     _serverFactory,
                     _serviceFactory,
@@ -178,7 +178,7 @@ namespace Tests.Mining.Pool
         {
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
-                var pool = new Coinium.Mining.Pool.Pool(
+                var pool = new Coinium.Mining.Pools.Pool(
                     _hashAlgorithmFactory,
                     _serverFactory,
                     _serviceFactory,
@@ -199,7 +199,7 @@ namespace Tests.Mining.Pool
         {
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
-                var pool = new Coinium.Mining.Pool.Pool(
+                var pool = new Coinium.Mining.Pools.Pool(
                     _hashAlgorithmFactory,
                     _serverFactory,
                     _serviceFactory,
@@ -220,7 +220,7 @@ namespace Tests.Mining.Pool
         {
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
-                var pool = new Coinium.Mining.Pool.Pool(
+                var pool = new Coinium.Mining.Pools.Pool(
                     _hashAlgorithmFactory,
                     _serverFactory,
                     _serviceFactory,
@@ -239,7 +239,7 @@ namespace Tests.Mining.Pool
         [Fact]
         public void InitializationTest_NonNullParams_ShouldSuccess()
         {
-            var pool = new Coinium.Mining.Pool.Pool(
+            var pool = new Coinium.Mining.Pools.Pool(
                 _hashAlgorithmFactory, 
                 _serverFactory, 
                 _serviceFactory, 

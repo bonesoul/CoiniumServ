@@ -17,7 +17,7 @@
 */
 
 using Coinium.Common.Context;
-using Coinium.Miner;
+using Coinium.Mining.Miners;
 using Nancy.TinyIoc;
 using Serilog;
 

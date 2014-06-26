@@ -17,9 +17,9 @@
 */
 
 using Coinium.Common.Context;
-using Coinium.Miner;
 using Coinium.Mining.Jobs;
-using Coinium.Mining.Pool;
+using Coinium.Mining.Miners;
+using Coinium.Mining.Pools;
 using Coinium.Mining.Shares;
 
 namespace Coinium.Common.Repository.Registries

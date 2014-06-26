@@ -3,7 +3,7 @@ using Coinium.Common.Context;
 using Nancy.TinyIoc;
 using Serilog;
 
-namespace Coinium.Mining.Pool.Config
+namespace Coinium.Mining.Pools.Config
 {
     public class PoolConfigFactory : IPoolConfigFactory
     {

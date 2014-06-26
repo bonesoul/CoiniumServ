@@ -20,7 +20,7 @@ using System;
 using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
-using Coinium.Miner;
+using Coinium.Mining.Miners;
 using Coinium.Net.Server.Sockets;
 using Coinium.Rpc.Service.Socket;
 using Coinium.Server.Stratum.Notifications;

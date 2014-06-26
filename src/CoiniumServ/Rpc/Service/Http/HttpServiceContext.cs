@@ -16,7 +16,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Miner;
+using Coinium.Mining.Miners;
 
 namespace Coinium.Rpc.Service.Http
 {

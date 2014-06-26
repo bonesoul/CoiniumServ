@@ -16,9 +16,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Mining.Pool.Config;
+using Coinium.Mining.Pools.Config;
 
-namespace Coinium.Mining.Pool
+namespace Coinium.Mining.Pools
 {
     public interface IPool
     {

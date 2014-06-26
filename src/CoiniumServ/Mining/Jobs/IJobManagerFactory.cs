@@ -18,7 +18,7 @@
 
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
-using Coinium.Miner;
+using Coinium.Mining.Miners;
 
 namespace Coinium.Mining.Jobs
 {

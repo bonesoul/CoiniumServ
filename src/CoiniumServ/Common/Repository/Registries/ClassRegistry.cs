@@ -19,8 +19,8 @@
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Common.Context;
-using Coinium.Mining.Pool;
-using Coinium.Mining.Pool.Config;
+using Coinium.Mining.Pools;
+using Coinium.Mining.Pools.Config;
 
 namespace Coinium.Common.Repository.Registries
 {

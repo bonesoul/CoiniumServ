@@ -22,7 +22,7 @@ using Coinium.Coin.Daemon.Config;
 using Coinium.Server.Stratum.Config;
 using Coinium.Server.Vanilla.Config;
 
-namespace Coinium.Mining.Pool.Config
+namespace Coinium.Mining.Pools.Config
 {
     /// <summary>
     /// Reads and serves the configuration for a pool.

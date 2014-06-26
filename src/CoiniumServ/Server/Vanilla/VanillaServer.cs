@@ -19,7 +19,7 @@
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 
 using System.Net;
-using Coinium.Miner;
+using Coinium.Mining.Miners;
 using Coinium.Net.Server.Http;
 using Coinium.Server.Config;
 

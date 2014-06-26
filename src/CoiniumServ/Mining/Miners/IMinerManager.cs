@@ -16,27 +16,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Coinium.Coin.Configs;
-using Coinium.Coin.Daemon.Config;
-using Coinium.Common.Configuration;
-using Coinium.Server.Stratum.Config;
-using Coinium.Server.Vanilla.Config;
+using System;
+using System.Collections.Generic;
+using Coinium.Net.Server.Sockets;
 
-namespace Coinium.Mining.Pool.Config
+namespace Coinium.Mining.Miners
 {
-    public interface IPoolConfig:IConfig
+    public interface IMinerManager
     {
-        /// <summary>
-        /// Is the configuration enabled?
-        /// </summary>
-        bool Enabled { get; }
 
-        ICoinConfig Coin { get; }
+        IList<IMiner> GetAll();
 
-        IStratumServerConfig Stratum { get; }
+        IMiner GetMiner(Int32 id);
 
-        IVanillaServerConfig Vanilla { get; }
+        IMiner GetByConnection(IConnection connection);
 
-        IDaemonConfig Daemon { get; }
+        T Create<T>() where T : IMiner;
+
+        T Create<T>(IConnection connection) where T : IMiner;
+
+        void Remove(IConnection connection);
     }
 }

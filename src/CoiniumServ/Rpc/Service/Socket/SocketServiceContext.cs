@@ -17,7 +17,7 @@
 */
 
 
-using Coinium.Miner;
+using Coinium.Mining.Miners;
 
 namespace Coinium.Rpc.Service.Socket
 {

@@ -1,4 +1,4 @@
-﻿namespace Coinium.Mining.Pool.Config
+﻿namespace Coinium.Mining.Pools.Config
 {
     /// <summary>
     /// Returns an instance of IPoolConfig based on the parsed config file

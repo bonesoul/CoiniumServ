@@ -22,7 +22,7 @@ using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
-using Coinium.Miner;
+using Coinium.Mining.Miners;
 using Coinium.Rpc.Service.Http;
 using Coinium.Server.Stratum.Notifications;
 using Serilog;

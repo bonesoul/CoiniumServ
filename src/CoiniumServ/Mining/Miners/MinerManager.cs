@@ -22,7 +22,7 @@ using System.Linq;
 using Coinium.Coin.Daemon;
 using Coinium.Net.Server.Sockets;
 
-namespace Coinium.Miner
+namespace Coinium.Mining.Miners
 {
     public class MinerManager : IMinerManager
     {

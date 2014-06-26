@@ -16,10 +16,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
 using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Miner
+namespace Coinium.Mining.Miners
 {
     /// <summary>
     /// Miner interface that any implementations should extend.
