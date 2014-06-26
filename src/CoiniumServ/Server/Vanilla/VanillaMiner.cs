@@ -60,9 +60,17 @@ namespace Coinium.Server.Vanilla
         /// </summary>
         public bool SupportsJobNotifications { get; private set; }
 
-        public VanillaMiner(int id)
+        private IMinerManager _minerManager;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="minerManager"></param>
+        public VanillaMiner(int id, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.
+            _minerManager = minerManager;
 
             Subscribed = true; // vanilla miners are subscribed by default.
             Authenticated = false; // miner has to authenticate.
@@ -106,7 +114,7 @@ namespace Coinium.Server.Vanilla
         {
             Username = user;
 
-            Authenticated = true;
+            Authenticated = _minerManager.Authenticate(this);
 
             return Authenticated;
         }

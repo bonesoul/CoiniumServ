@@ -28,7 +28,6 @@ namespace Coinium.Mining.Miners
 {
     public interface IMinerManager
     {
-
         IList<IMiner> GetAll();
 
         IMiner GetMiner(Int32 id);
@@ -40,5 +39,7 @@ namespace Coinium.Mining.Miners
         T Create<T>(IConnection connection) where T : IMiner;
 
         void Remove(IConnection connection);
+
+        bool Authenticate(IMiner miner);
     }
 }

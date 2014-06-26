@@ -65,15 +65,19 @@ namespace Coinium.Server.Stratum
         /// </summary>
         public bool SupportsJobNotifications { get; private set; }
 
+        private IMinerManager _minerManager;
+
         /// <summary>
         /// Creates a new miner instance.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="connection"></param>
-        public StratumMiner(int id, IConnection connection)
+        /// <param name="minerManager"></param>
+        public StratumMiner(int id, IConnection connection, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.
             Connection = connection; // the underlying connection.
+            _minerManager = minerManager;
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
@@ -97,8 +101,7 @@ namespace Coinium.Server.Stratum
         public bool Authenticate(string user, string password)
         {
             Username = user;
-
-            Authenticated = true;
+            Authenticated = _minerManager.Authenticate(this);
 
             return Authenticated;
         }
