@@ -20,12 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Server.Stratum;
 
 namespace Coinium.Mining.Shares
 {
-    public interface IShareManager
+    public enum ShareError
     {
-        IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
+        None,
+        JobNotFound,
+        IncorrectNonceSize,
+        NTimeOutOfRange,
+        IncorrectExtraNonce2Size,
+        IncorrectNTimeSize,
+        DuplicateShare,
+        LowDifficultyShare,
     }
 }

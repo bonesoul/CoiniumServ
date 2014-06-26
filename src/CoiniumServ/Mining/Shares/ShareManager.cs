@@ -21,10 +21,12 @@
 // 
 #endregion
 using System;
+using AustinHarris.JsonRpc;
 using Coinium.Coin.Daemon;
 using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum;
+using Coinium.Server.Stratum.Errors;
 using Serilog;
 
 namespace Coinium.Mining.Shares
@@ -77,6 +79,31 @@ namespace Coinium.Mining.Shares
             }
             else
             {
+                switch (share.Error)
+                {
+                    case ShareError.DuplicateShare:
+                        JsonRpcContext.SetException(new DuplicateShareError(share.Nonce));
+                        break;
+                    case ShareError.IncorrectExtraNonce2Size:
+                        JsonRpcContext.SetException(new OtherError("Incorrect extranonce2 size"));
+                        break;
+                    case ShareError.IncorrectNTimeSize:
+                        JsonRpcContext.SetException(new OtherError("Incorrect nTime size"));
+                        break;
+                    case ShareError.IncorrectNonceSize:
+                        JsonRpcContext.SetException(new OtherError("Incorrect nonce size"));
+                        break;
+                    case ShareError.JobNotFound:
+                        JsonRpcContext.SetException(new JobNotFoundError(share.Job.Id));
+                        break;
+                    case ShareError.LowDifficultyShare:
+                        JsonRpcContext.SetException(new LowDifficultyShare(share.Difficulty));
+                        break;
+                    case ShareError.NTimeOutOfRange:
+                        JsonRpcContext.SetException(new OtherError("nTime out of range"));
+                        break;
+                }
+                
                 Log.Information("Share rejected at {0}/{1} by miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Id);
             }
 

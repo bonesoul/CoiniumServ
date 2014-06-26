@@ -98,8 +98,14 @@
     <Compile Include="Mining\Miners\MinerManagerFactory.cs" />
     <Compile Include="Mining\Shares\IShare.cs" />
     <Compile Include="Mining\Shares\Share.cs" />
+    <Compile Include="Mining\Shares\ShareError.cs" />
     <Compile Include="Server\Stratum\Errors\AuthenticationError.cs" />
+    <Compile Include="Server\Stratum\Errors\DuplicateShareError.cs" />
     <Compile Include="Server\Stratum\Errors\IStratumError.cs" />
+    <Compile Include="Server\Stratum\Errors\JobNotFoundError.cs" />
+    <Compile Include="Server\Stratum\Errors\LowDifficultyShare.cs" />
+    <Compile Include="Server\Stratum\Errors\NotSubscriberError.cs" />
+    <Compile Include="Server\Stratum\Errors\OtherError.cs" />
     <Compile Include="Server\Stratum\Notifications\IJob.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />

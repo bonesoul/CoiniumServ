@@ -30,10 +30,13 @@ namespace Coinium.Mining.Shares
     public interface IShare
     {
         bool Valid { get; }
+        bool Candidate { get; }
+
+        ShareError Error { get; }
 
         IJob Job { get; }
 
-        UInt32 nTime { get; }
+        UInt32 NTime { get; }
 
         UInt32 Nonce { get; }
 
@@ -56,8 +59,6 @@ namespace Coinium.Mining.Shares
         Double Difficulty { get; }
 
         Double BlockDiffAdjusted { get; }
-
-        bool Candidate { get; }
 
         byte[] BlockHex { get; }
 

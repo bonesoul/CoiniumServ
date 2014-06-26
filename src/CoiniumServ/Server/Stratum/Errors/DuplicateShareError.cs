@@ -20,12 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Server.Stratum;
 
-namespace Coinium.Mining.Shares
+using System;
+using AustinHarris.JsonRpc;
+
+namespace Coinium.Server.Stratum.Errors
 {
-    public interface IShareManager
+    // defined in: http://mining.bitcoin.cz/stratum-mining
+
+    public class DuplicateShareError : JsonRpcException, IStratumError
     {
-        IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
+        public DuplicateShareError(UInt32 id)
+            : base(22, string.Format("Duplicate share: {0:x}", id), null)
+        { }
     }
 }

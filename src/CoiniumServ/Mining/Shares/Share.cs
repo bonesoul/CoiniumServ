@@ -33,9 +33,14 @@ namespace Coinium.Mining.Shares
 {
     public class Share : IShare
     {
-        public bool Valid { get; private set; }
+        public bool Valid
+        {
+            get { return Error == ShareError.None; }
+        }
+        public bool Candidate { get; private set; }
+        public ShareError Error { get; private set; }
         public IJob Job { get; private set; }
-        public UInt32 nTime { get; private set; }
+        public UInt32 NTime { get; private set; }
         public UInt32 Nonce { get; private set; }
         public UInt32 ExtraNonce1 { get; private set; }
         public UInt32 ExtraNonce2 { get; private set; }
@@ -47,44 +52,46 @@ namespace Coinium.Mining.Shares
         public BigInteger HeaderValue { get; private set; }
         public Double Difficulty { get; private set; }
         public double BlockDiffAdjusted { get; private set; }
-        public bool Candidate { get; private set; }
         public byte[] BlockHex { get; private set; }
         public byte[] BlockHash { get; private set; }
 
         public Share(UInt64 jobId, IJob job, UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
         {
-            Valid = true; // we'll flag the share as invalid if requred later.
-
-            // set associated job
-
+            Error = ShareError.None;
             Job = job;
+
+            // TODO: add extranonce2 size check!.
 
             if (Job == null)
             {
-                Valid = false;
+                Error = ShareError.JobNotFound;
                 Log.Warning("Job doesn't exist: {0}", jobId);
                 return;
             }
 
-            // miner supplied parameters
+            // check miner supplied parameters
 
             if (nTimeString.Length != 8)
             {
-                Valid = false;
+                Error = ShareError.IncorrectNTimeSize;
                 Log.Warning("Incorrect size of nTime");
                 return;
             }
 
-            nTime = Convert.ToUInt32(nTimeString, 16); // ntime for the share
+            NTime = Convert.ToUInt32(nTimeString, 16); // ntime for the share
+
+            // TODO: add nTime out of range check
 
             if (nonceString.Length != 8)
             {
-                Valid = false;
+                Error = ShareError.IncorrectNonceSize;
                 Log.Warning("incorrect size of nonce");
                 return;
             }
 
             Nonce = Convert.ToUInt32(nonceString, 16); // nonce supplied by the miner for the share.
+
+            // TODO: add duplicate share check.
 
             // job supplied parameters.
             ExtraNonce1 = extraNonce1; // extra nonce1 assigned to job.
@@ -98,7 +105,7 @@ namespace Coinium.Mining.Shares
             MerkleRoot = Job.MerkleTree.WithFirst(CoinbaseHash).ReverseBuffer();
 
             // create the block headers
-            HeaderBuffer = Serializers.SerializeHeader(Job, MerkleRoot, nTime, Nonce);
+            HeaderBuffer = Serializers.SerializeHeader(Job, MerkleRoot, NTime, Nonce);
             HeaderHash = Job.HashAlgorithm.Hash(HeaderBuffer);
             HeaderValue = new BigInteger(HeaderHash);
 
@@ -123,7 +130,7 @@ namespace Coinium.Mining.Shares
                 // Check if share difficulty reaches miner difficulty.
                 if (Difficulty / 16 < 0.99)
                 {
-                    
+                    // todo: add low difficulty share check.
                 }
             }
         }

@@ -87,7 +87,7 @@ namespace Coinium.Mining.Pools
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
             Enforce.ArgumentNotNull(serviceFactory, "IServiceFactory");
             Enforce.ArgumentNotNull(client, "IDaemonClient");
-            Enforce.ArgumentNotNull(minerManagerFactory, "IMinerManager");
+            Enforce.ArgumentNotNull(minerManagerFactory, "IMinerManagerFactory");
             Enforce.ArgumentNotNull(jobManagerFactory, "IJobManagerFactory");
             Enforce.ArgumentNotNull(shareManagerFactory, "IShareManagerFactory");
 
