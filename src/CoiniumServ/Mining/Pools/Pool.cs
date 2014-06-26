@@ -45,12 +45,13 @@ namespace Coinium.Mining.Pools
         public IPoolConfig Config { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
-        private readonly IMinerManager _minerManager;
         private readonly IServerFactory _serverFactory;
         private readonly IServiceFactory _serviceFactory;
         private readonly IJobManagerFactory _jobManagerFactory;
         private readonly IShareManagerFactory _shareManagerFactory;
+        private readonly IMinerManagerFactory _minerManagerFactory;
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
+        private IMinerManager _minerManager;
         private IJobManager _jobManager;
         private IShareManager _shareManager;
 
@@ -70,7 +71,7 @@ namespace Coinium.Mining.Pools
         /// <param name="serverFactory">The server factory.</param>
         /// <param name="serviceFactory">The service factory.</param>
         /// <param name="client">The client.</param>
-        /// <param name="minerManager">The miner manager.</param>
+        /// <param name="minerManagerFactory">The miner manager factory.</param>
         /// <param name="jobManagerFactory">The job manager factory.</param>
         /// <param name="shareManagerFactory">The share manager factory.</param>
         public Pool(
@@ -78,7 +79,7 @@ namespace Coinium.Mining.Pools
             IServerFactory serverFactory, 
             IServiceFactory serviceFactory,
             IDaemonClient client, 
-            IMinerManager minerManager, 
+            IMinerManagerFactory minerManagerFactory, 
             IJobManagerFactory jobManagerFactory, 
             IShareManagerFactory shareManagerFactory)
         {
@@ -86,12 +87,12 @@ namespace Coinium.Mining.Pools
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
             Enforce.ArgumentNotNull(serviceFactory, "IServiceFactory");
             Enforce.ArgumentNotNull(client, "IDaemonClient");
-            Enforce.ArgumentNotNull(minerManager, "IMinerManager");
+            Enforce.ArgumentNotNull(minerManagerFactory, "IMinerManager");
             Enforce.ArgumentNotNull(jobManagerFactory, "IJobManagerFactory");
             Enforce.ArgumentNotNull(shareManagerFactory, "IShareManagerFactory");
 
             _daemonClient = client;
-            _minerManager = minerManager;
+            _minerManagerFactory = minerManagerFactory;
             _jobManagerFactory = jobManagerFactory;
             _shareManagerFactory = shareManagerFactory;
             _serverFactory = serverFactory;
@@ -125,6 +126,8 @@ namespace Coinium.Mining.Pools
 
         private void InitManagers()
         {
+            _minerManager = _minerManagerFactory.Get(_daemonClient);
+
             _jobManager = _jobManagerFactory.Get(_daemonClient, _minerManager, _hashAlgorithmFactory.Get(Config.Coin.Algorithm));
             _jobManager.Initialize(InstanceId);
 

@@ -27,6 +27,7 @@ using Coinium.Common.Extensions;
 using Coinium.Mining.Miners;
 using Coinium.Net.Server.Sockets;
 using Coinium.Rpc.Service.Socket;
+using Coinium.Server.Stratum.Errors;
 using Coinium.Server.Stratum.Notifications;
 using Newtonsoft.Json;
 using Serilog;
@@ -65,7 +66,7 @@ namespace Coinium.Server.Stratum
         /// </summary>
         public bool SupportsJobNotifications { get; private set; }
 
-        private IMinerManager _minerManager;
+        private readonly IMinerManager _minerManager;
 
         /// <summary>
         /// Creates a new miner instance.
@@ -102,6 +103,9 @@ namespace Coinium.Server.Stratum
         {
             Username = user;
             Authenticated = _minerManager.Authenticate(this);
+
+            if(!Authenticated)
+                JsonRpcContext.SetException(new AuthenticationError(Username));
 
             return Authenticated;
         }

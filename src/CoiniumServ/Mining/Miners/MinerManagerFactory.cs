@@ -20,30 +20,39 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Common.Context;
-using Coinium.Mining.Jobs;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Mining.Shares;
 
-namespace Coinium.Common.Repository.Registries
+using Coinium.Coin.Daemon;
+using Coinium.Common.Context;
+using Nancy.TinyIoc;
+using Serilog;
+
+namespace Coinium.Mining.Miners
 {
-    public class ManagerRegistry : IRegistry
+    public class MinerManagerFactory : IMinerManagerFactory
     {
+        /// <summary>
+        /// The _kernel
+        /// </summary>
         private readonly IApplicationContext _applicationContext;
 
-        public ManagerRegistry(IApplicationContext applicationContext)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MinerManagerFactory" /> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public MinerManagerFactory(IApplicationContext applicationContext)
         {
+            Log.Debug("MinerManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 
-        public void RegisterInstances()
+        public IMinerManager Get(IDaemonClient daemonClient)
         {
-            _applicationContext.Container.Register<IShareManager, ShareManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IJobManager, JobManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IPoolManager, PoolManager>().AsMultiInstance();
+            var @params = new NamedParameterOverloads
+            {
+                {"daemonClient", daemonClient}
+            };
+
+            return _applicationContext.Container.Resolve<IMinerManager>(@params);
         }
     }
 }

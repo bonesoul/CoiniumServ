@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Coinium.Coin.Daemon;
 using Coinium.Net.Server.Sockets;
+using Serilog;
 
 namespace Coinium.Mining.Miners
 {
@@ -89,10 +90,12 @@ namespace Coinium.Mining.Miners
 
         public bool Authenticate(IMiner miner)
         {
-            var result = _daemonClient.ValidateAddress(miner.Username).IsValid;
+            var success = _daemonClient.ValidateAddress(miner.Username).IsValid;
 
+            Log.Information(success ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
+                miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
-            return result;
+            return success;
         }
     }
 }
