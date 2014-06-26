@@ -6,7 +6,7 @@
 			{
 				"enabled": true,
 				"type": "console",
-				"level": "verbose"
+				"level": "debug"
 			},
 			{
 				"enabled": true,

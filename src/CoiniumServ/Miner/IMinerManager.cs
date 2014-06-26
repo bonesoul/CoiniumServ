@@ -29,8 +29,12 @@ namespace Coinium.Miner
 
         IMiner GetMiner(Int32 id);
 
+        IMiner GetByConnection(IConnection connection);
+
         T Create<T>() where T : IMiner;
 
         T Create<T>(IConnection connection) where T : IMiner;
+
+        void Remove(IConnection connection);
     }
 }

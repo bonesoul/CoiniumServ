@@ -20,11 +20,9 @@ using System;
 using System.Collections.Generic;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
-using Coinium.Crypto;
 using Coinium.Miner;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
-using Coinium.Transactions.Utils;
 
 namespace Coinium.Mining.Jobs
 {
@@ -32,6 +30,7 @@ namespace Coinium.Mining.Jobs
     {
         private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
         private readonly JobCounter _jobCounter = new JobCounter();
+
         private IExtraNonce _extraNonce;
 
         private readonly IDaemonClient _daemonClient;

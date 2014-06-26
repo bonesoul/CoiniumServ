@@ -38,6 +38,14 @@ namespace Coinium.Miner
             return _miners.ContainsKey(id) ? _miners[id] : null;
         }
 
+        public IMiner GetByConnection(IConnection connection)
+        {
+            return (from pair in _miners  // returned the miner associated with the given connection.
+                let client = (IClient) pair.Value 
+                where client.Connection == connection 
+                select pair.Value).FirstOrDefault();
+        }
+
         public T Create<T>() where T : IMiner
         {
             var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++ }); // create an instance of the miner.
@@ -54,6 +62,17 @@ namespace Coinium.Miner
             _miners.Add(miner.Id, miner); // add it to our collection.           
 
             return (T)miner;
+        }
+
+        public void Remove(IConnection connection)
+        {
+            var miner = (from pair in _miners // find the miner associated with the connection.
+                let client = (IClient)pair.Value 
+                where client.Connection == connection 
+                select pair.Value).FirstOrDefault();
+
+            if (miner != null)
+                _miners.Remove(miner.Id);
         }
     }
 }

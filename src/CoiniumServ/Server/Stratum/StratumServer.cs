@@ -22,7 +22,6 @@
 using Coinium.Miner;
 using Coinium.Net.Server.Sockets;
 using Coinium.Server.Config;
-using Coinium.Server.Stratum.Config;
 using Serilog;
 
 namespace Coinium.Server.Stratum
@@ -92,7 +91,7 @@ namespace Coinium.Server.Stratum
         /// <param name="e"></param>
         private void Stratum_OnConnect(object sender, ConnectionEventArgs e)
         {
-            Log.Verbose("Stratum client connected: {0}", e.Connection.ToString());
+            Log.Information("Stratum client connected: {0}", e.Connection.ToString());
 
             var miner = _minerManager.Create<StratumMiner>(e.Connection);
             e.Connection.Client = miner;           
@@ -105,7 +104,9 @@ namespace Coinium.Server.Stratum
         /// <param name="e"></param>
         private void Stratum_OnDisconnect(object sender, ConnectionEventArgs e)
         {
-            Log.Verbose("Stratum client disconnected: {0}", e.Connection.ToString());
+            Log.Information("Stratum client disconnected: {0}", e.Connection.ToString());
+
+            _minerManager.Remove(e.Connection);
         }
 
         /// <summary>
