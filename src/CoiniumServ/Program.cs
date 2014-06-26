@@ -71,7 +71,7 @@ namespace Coinium
             Logging.Init(globalConfig);
 
             // print a version banner.
-            Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+            Log.Information("CoiniumServ {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
             // start pool manager.
