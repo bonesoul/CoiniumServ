@@ -1,7 +1,8 @@
 #region License
 // 
-//     CoiniumServ - crypto currency pool software - https://github.com/CoiniumServ/CoiniumServ
-//     Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
+//     CoiniumServ - Crypto Currency Mining Pool Server Software
+//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
+//     https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
