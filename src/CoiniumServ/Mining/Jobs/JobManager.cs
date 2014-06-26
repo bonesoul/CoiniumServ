@@ -28,10 +28,9 @@ namespace Coinium.Mining.Jobs
 {
     public class JobManager : IJobManager
     {
-        private readonly Dictionary<UInt64, Job> _jobs = new Dictionary<UInt64, Job>();
-        private readonly JobCounter _jobCounter = new JobCounter();
+        public Dictionary<UInt64, IJob> Jobs { get; private set; }
 
-        private IExtraNonce _extraNonce;
+        public IJobCounter JobCounter { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
 
@@ -39,15 +38,19 @@ namespace Coinium.Mining.Jobs
 
         private readonly IHashAlgorithm _hashAlgorithm;
 
+        private IExtraNonce _extraNonce;
+
         public IExtraNonce ExtraNonce { get { return _extraNonce; } }
 
-        public Job LastJob { get; private set; }
+        public IJob LastJob { get; private set; }
 
         public JobManager(IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             _daemonClient = daemonClient;
             _minerManager = minerManager;
             _hashAlgorithm = hashAlgorithm;
+            JobCounter = new JobCounter();
+            Jobs = new Dictionary<UInt64, IJob>();
         }
 
         public void Initialize(UInt32 instanceId)
@@ -57,12 +60,12 @@ namespace Coinium.Mining.Jobs
 
         public IJob GetJob(UInt64 id)
         {
-            return _jobs.ContainsKey(id) ? _jobs[id] : null;
+            return Jobs.ContainsKey(id) ? Jobs[id] : null;
         }
 
-        public void AddJob(Job job)
+        public void AddJob(IJob job)
         {
-            _jobs.Add(job.Id, job);
+            Jobs.Add(job.Id, job);
         }
 
         /// <summary>
@@ -81,12 +84,12 @@ namespace Coinium.Mining.Jobs
             var difficulty = new Difficulty(16);
 
             // create the job notification.
-            var job = new Job(_jobCounter.Next(), _hashAlgorithm, blockTemplate, generationTransaction)
+            var job = new Job(JobCounter.Next(), _hashAlgorithm, blockTemplate, generationTransaction)
             {
                 CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
             };
 
-            _jobs.Add(job.Id,job);
+            Jobs.Add(job.Id, job);
             LastJob = job;
 
             foreach (var miner in _minerManager.GetAll())

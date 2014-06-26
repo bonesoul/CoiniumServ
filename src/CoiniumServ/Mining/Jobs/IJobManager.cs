@@ -17,18 +17,23 @@
 */
 
 using System;
+using System.Collections.Generic;
 using Coinium.Server.Stratum.Notifications;
 
 namespace Coinium.Mining.Jobs
 {
     public interface IJobManager
     {
+        Dictionary<UInt64, IJob> Jobs { get; }
+        IJobCounter JobCounter { get; }
 
         IExtraNonce ExtraNonce { get; }
 
+        IJob LastJob { get; }
+
         IJob GetJob(UInt64 id);
 
-        void AddJob(Job job);
+        void AddJob(IJob job);
 
         void Broadcast();
 
