@@ -23,7 +23,6 @@ using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Common.Extensions;
 using Coinium.Miner;
-using Coinium.Miner.Events;
 using Coinium.Rpc.Service.Http;
 using Coinium.Server.Stratum.Notifications;
 using Serilog;
@@ -38,14 +37,19 @@ namespace Coinium.Server.Vanilla
         public int Id { get; private set; }
 
         /// <summary>
+        /// Username of the miner.
+        /// </summary>
+        public string Username { get; private set; }
+
+        /// <summary>
+        /// Is the miner subscribed?
+        /// </summary>
+        public bool Subscribed { get; private set; }
+
+        /// <summary>
         /// Is the miner authenticated?
         /// </summary>
         public bool Authenticated { get; private set; }
-
-        /// <summary>
-        /// Event that fires when a miner authenticates.
-        /// </summary>
-        public event EventHandler OnAuthenticate;
 
         /// <summary>
         /// Can we send new mining job's to miner?
@@ -55,8 +59,10 @@ namespace Coinium.Server.Vanilla
         public VanillaMiner(int id)
         {
             Id = id; // the id of the miner.
+
+            Subscribed = true; // vanilla miners are subscribed by default.
+            Authenticated = false; // miner has to authenticate.
             SupportsJobNotifications = false; // vanilla miner's doesn't support new mining job notifications.
-            Authenticated = false;
         }
 
         public void Parse(HttpListenerContext httpContext)
@@ -94,13 +100,9 @@ namespace Coinium.Server.Vanilla
 
         public bool Authenticate(string user, string password)
         {
+            Username = user;
+
             Authenticated = true;
-
-            // notify any listeners about the miner's authentication.
-            var handler = OnAuthenticate;
-            if (handler != null)
-                handler(this, new MinerAuthenticationEventArgs(this));
-
 
             return Authenticated;
         }

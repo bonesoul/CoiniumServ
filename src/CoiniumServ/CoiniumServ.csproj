@@ -154,7 +154,6 @@
     <Compile Include="Common\Commands\CommandManager.cs" />
     <Compile Include="Common\Repository\Registries\Registry.cs" />
     <Compile Include="Crypto\Utils.cs" />
-    <Compile Include="Miner\Events\MinerAuthenticationEventArgs.cs" />
     <Compile Include="Mining\Jobs\ExtraNonce.cs" />
     <Compile Include="Mining\Jobs\IExtraNonce.cs" />
     <Compile Include="Mining\Jobs\IJobManagerFactory.cs" />

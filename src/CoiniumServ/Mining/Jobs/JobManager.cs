@@ -94,6 +94,12 @@ namespace Coinium.Mining.Jobs
 
             foreach (var miner in _minerManager.GetAll())
             {
+                if (!miner.Authenticated)
+                    continue;
+
+                if (!miner.Subscribed)
+                    continue;
+
                 if (!miner.SupportsJobNotifications)
                     continue;
 

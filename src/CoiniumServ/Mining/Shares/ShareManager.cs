@@ -28,6 +28,7 @@ namespace Coinium.Mining.Shares
     public class ShareManager : IShareManager
     {
         private readonly IJobManager _jobManager;
+
         private readonly IDaemonClient _daemonClient;
 
         /// <summary>

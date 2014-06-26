@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Coinium.Coin.Daemon;
 using Coinium.Net.Server.Sockets;
 
 namespace Coinium.Miner
@@ -27,6 +28,13 @@ namespace Coinium.Miner
     {
         private readonly Dictionary<Int32, IMiner> _miners = new Dictionary<Int32, IMiner>();
         private int _counter = 0; // counter for assigining unique id's to miners.
+
+        private readonly IDaemonClient _daemonClient;
+
+        public MinerManager(IDaemonClient daemonClient)
+        {
+            _daemonClient = daemonClient;
+        }
 
         public IList<IMiner> GetAll()
         {

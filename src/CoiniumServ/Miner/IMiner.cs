@@ -32,6 +32,16 @@ namespace Coinium.Miner
         int Id { get; }
 
         /// <summary>
+        /// Username of the miner.
+        /// </summary>
+        string Username { get; }
+
+        /// <summary>
+        /// Is the miner subscribed?
+        /// </summary>
+        bool Subscribed { get; }
+
+        /// <summary>
         /// Is the miner authenticated.
         /// </summary>
         bool Authenticated { get; }
@@ -43,11 +53,6 @@ namespace Coinium.Miner
         /// <param name="password"></param>
         /// <returns></returns>
         bool Authenticate(string user, string password);
-
-        /// <summary>
-        /// Event that fires when a miner authenticates.
-        /// </summary>
-        event EventHandler OnAuthenticate;
 
         /// <summary>
         /// Can we send new mining job's to miner?
