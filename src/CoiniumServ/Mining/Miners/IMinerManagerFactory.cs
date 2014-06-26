@@ -20,26 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using Coinium.Net.Server.Sockets;
+
+using Coinium.Coin.Daemon;
 
 namespace Coinium.Mining.Miners
 {
-    public interface IMinerManager
+    public interface IMinerManagerFactory
     {
-        IList<IMiner> GetAll();
-
-        IMiner GetMiner(Int32 id);
-
-        IMiner GetByConnection(IConnection connection);
-
-        T Create<T>() where T : IMiner;
-
-        T Create<T>(IConnection connection) where T : IMiner;
-
-        void Remove(IConnection connection);
-
-        bool Authenticate(IMiner miner);
+        /// <summary>
+        /// Gets the specified daemon client.
+        /// </summary>
+        /// <param name="daemonClient">The daemon client.</param>
+        /// <returns></returns>
+        IMinerManager Get(IDaemonClient daemonClient);
     }
 }

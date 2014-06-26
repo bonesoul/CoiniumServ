@@ -60,13 +60,30 @@ namespace Coinium.Server.Vanilla
         /// </summary>
         public bool SupportsJobNotifications { get; private set; }
 
-        public VanillaMiner(int id)
+        private readonly IMinerManager _minerManager;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="minerManager"></param>
+        public VanillaMiner(int id, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.
+            _minerManager = minerManager;
 
             Subscribed = true; // vanilla miners are subscribed by default.
             Authenticated = false; // miner has to authenticate.
             SupportsJobNotifications = false; // vanilla miner's doesn't support new mining job notifications.
+        }
+
+        public bool Authenticate(string user, string password)
+        {
+            Username = user;
+
+            Authenticated = _minerManager.Authenticate(this);
+
+            return Authenticated;
         }
 
         public void Parse(HttpListenerContext httpContext)
@@ -100,15 +117,6 @@ namespace Coinium.Server.Vanilla
                 var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
                 JsonRpcProcessor.Process(async, rpcContext);
             }        
-        }
-
-        public bool Authenticate(string user, string password)
-        {
-            Username = user;
-
-            Authenticated = true;
-
-            return Authenticated;
         }
 
         /// <summary>

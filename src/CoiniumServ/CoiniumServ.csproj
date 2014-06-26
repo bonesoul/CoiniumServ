@@ -94,8 +94,12 @@
     <Compile Include="Crypto\IMerkleTree.cs" />
     <Compile Include="Crypto\MerkleRoot.cs" />
     <Compile Include="Mining\Jobs\IJobCounter.cs" />
+    <Compile Include="Mining\Miners\IMinerManagerFactory.cs" />
+    <Compile Include="Mining\Miners\MinerManagerFactory.cs" />
     <Compile Include="Mining\Shares\IShare.cs" />
     <Compile Include="Mining\Shares\Share.cs" />
+    <Compile Include="Server\Stratum\Errors\AuthenticationError.cs" />
+    <Compile Include="Server\Stratum\Errors\IStratumError.cs" />
     <Compile Include="Server\Stratum\Notifications\IJob.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />

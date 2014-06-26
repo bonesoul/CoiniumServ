@@ -20,26 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using Coinium.Net.Server.Sockets;
 
-namespace Coinium.Mining.Miners
+using AustinHarris.JsonRpc;
+
+namespace Coinium.Server.Stratum.Errors
 {
-    public interface IMinerManager
+    // defined in: http://mining.bitcoin.cz/stratum-mining
+
+    public class AuthenticationError : JsonRpcException, IStratumError
     {
-        IList<IMiner> GetAll();
-
-        IMiner GetMiner(Int32 id);
-
-        IMiner GetByConnection(IConnection connection);
-
-        T Create<T>() where T : IMiner;
-
-        T Create<T>(IConnection connection) where T : IMiner;
-
-        void Remove(IConnection connection);
-
-        bool Authenticate(IMiner miner);
+        public AuthenticationError(string username)
+            : base(24, string.Format("Unauthorized worker: {0}", username), null)
+        { }
     }
 }

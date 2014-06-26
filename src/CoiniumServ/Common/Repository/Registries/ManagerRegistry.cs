@@ -42,6 +42,7 @@ namespace Coinium.Common.Repository.Registries
             _applicationContext.Container.Register<IShareManager, ShareManager>().AsMultiInstance();
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
             _applicationContext.Container.Register<IJobManager, JobManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
             _applicationContext.Container.Register<IPoolManager, PoolManager>().AsMultiInstance();
         }
     }

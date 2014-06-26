@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Coinium.Coin.Daemon;
 using Coinium.Net.Server.Sockets;
+using Serilog;
 
 namespace Coinium.Mining.Miners
 {
@@ -60,7 +61,7 @@ namespace Coinium.Mining.Miners
 
         public T Create<T>() where T : IMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++ }); // create an instance of the miner.
+            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, this }); // create an instance of the miner.
             var miner = (IMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.
 
@@ -69,7 +70,7 @@ namespace Coinium.Mining.Miners
 
         public T Create<T>(IConnection connection) where T : IMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, connection });  // create an instance of the miner.
+            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, connection, this });  // create an instance of the miner.
             var miner = (IMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.           
 
@@ -85,6 +86,16 @@ namespace Coinium.Mining.Miners
 
             if (miner != null)
                 _miners.Remove(miner.Id);
+        }
+
+        public bool Authenticate(IMiner miner)
+        {
+            var success = _daemonClient.ValidateAddress(miner.Username).IsValid;
+
+            Log.Information(success ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
+                miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
+
+            return success;
         }
     }
 }

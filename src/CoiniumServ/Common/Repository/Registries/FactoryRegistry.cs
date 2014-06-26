@@ -25,6 +25,7 @@ using Coinium.Coin.Configs;
 using Coinium.Common.Configuration;
 using Coinium.Common.Context;
 using Coinium.Mining.Jobs;
+using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
@@ -50,6 +51,7 @@ namespace Coinium.Common.Repository.Registries
             _applicationContext.Container.Register<IServiceFactory, ServiceFactory>().AsSingleton();
             _applicationContext.Container.Register<IJobManagerFactory, JobManagerFactory>().AsSingleton();
             _applicationContext.Container.Register<IShareManagerFactory, ShareManagerFactory>().AsSingleton();
+            _applicationContext.Container.Register<IMinerManagerFactory, MinerManagerFactory>().AsSingleton();
             _applicationContext.Container.Register<ICoinConfigFactory, CoinConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfigFactory, PoolConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IGlobalConfigFactory, GlobalConfigFactory>().AsSingleton();

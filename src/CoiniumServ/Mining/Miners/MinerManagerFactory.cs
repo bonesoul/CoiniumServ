@@ -20,26 +20,39 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using Coinium.Net.Server.Sockets;
+
+using Coinium.Coin.Daemon;
+using Coinium.Common.Context;
+using Nancy.TinyIoc;
+using Serilog;
 
 namespace Coinium.Mining.Miners
 {
-    public interface IMinerManager
+    public class MinerManagerFactory : IMinerManagerFactory
     {
-        IList<IMiner> GetAll();
+        /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
 
-        IMiner GetMiner(Int32 id);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MinerManagerFactory" /> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public MinerManagerFactory(IApplicationContext applicationContext)
+        {
+            Log.Debug("MinerManagerFactory() init..");
+            _applicationContext = applicationContext;
+        }
 
-        IMiner GetByConnection(IConnection connection);
+        public IMinerManager Get(IDaemonClient daemonClient)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"daemonClient", daemonClient}
+            };
 
-        T Create<T>() where T : IMiner;
-
-        T Create<T>(IConnection connection) where T : IMiner;
-
-        void Remove(IConnection connection);
-
-        bool Authenticate(IMiner miner);
+            return _applicationContext.Container.Resolve<IMinerManager>(@params);
+        }
     }
 }
