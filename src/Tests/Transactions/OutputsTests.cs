@@ -22,10 +22,10 @@
 #endregion
 using System;
 using System.Linq;
-using Coinium.Coin.Daemon;
-using Coinium.Coin.Daemon.Responses;
-using Coinium.Common.Extensions;
+using Coinium.Daemon;
+using Coinium.Daemon.Responses;
 using Coinium.Transactions;
+using Coinium.Utils.Extensions;
 using NSubstitute;
 using Should.Fluent;
 using Xunit;

@@ -23,7 +23,7 @@
 using System;
 using System.Text;
 using Coinium.Coin.Address;
-using Coinium.Coin.Exceptions;
+using Coinium.Coin.Address.Exceptions;
 using Org.BouncyCastle.Math;
 using Should.Fluent;
 using Xunit;

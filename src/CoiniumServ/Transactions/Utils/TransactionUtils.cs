@@ -24,8 +24,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Coinium.Coin.Coinbase;
-using Coinium.Coin.Daemon.Responses;
-using Coinium.Common.Extensions;
+using Coinium.Daemon.Responses;
+using Coinium.Utils.Extensions;
 
 namespace Coinium.Transactions.Utils
 {

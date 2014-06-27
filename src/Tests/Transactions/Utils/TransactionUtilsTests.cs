@@ -21,8 +21,8 @@
 // 
 #endregion
 using System;
-using Coinium.Common.Extensions;
 using Coinium.Transactions.Utils;
+using Coinium.Utils.Extensions;
 using Should.Fluent;
 using Xunit;
 

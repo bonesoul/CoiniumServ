@@ -22,7 +22,7 @@
 #endregion
 using System;
 using System.Globalization;
-using System.Numerics;
+using Coinium.Utils.Numerics;
 using CryptSharp.Utility;
 
 namespace Coinium.Crypto.Algorithms

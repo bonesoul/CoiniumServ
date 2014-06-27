@@ -20,8 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Daemon;
-using Coinium.Common.Context;
+
+using Coinium.Daemon;
+using Coinium.Repository.Context;
 using Nancy.TinyIoc;
 using Serilog;
 

@@ -20,7 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Common.Configuration;
+
+using Coinium.Utils.Configuration;
 
 namespace Coinium.Coin.Configs
 {

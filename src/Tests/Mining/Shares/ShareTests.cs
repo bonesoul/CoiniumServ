@@ -22,16 +22,16 @@
 #endregion
 using System;
 using System.Linq;
-using System.Numerics;
-using Coinium.Coin.Daemon;
-using Coinium.Coin.Daemon.Responses;
-using Coinium.Common.Extensions;
 using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Shares;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
+using Coinium.Utils.Extensions;
+using Coinium.Utils.Numerics;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;

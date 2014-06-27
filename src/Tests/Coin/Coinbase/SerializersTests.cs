@@ -23,14 +23,14 @@
 using System;
 using System.Linq;
 using Coinium.Coin.Coinbase;
-using Coinium.Coin.Daemon;
-using Coinium.Coin.Daemon.Responses;
-using Coinium.Common.Extensions;
 using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
+using Coinium.Utils.Extensions;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
@@ -181,7 +181,7 @@ namespace Tests.Coin.Coinbase
 
             // create the coinbase.
             var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
-            var coinbaseHash = Utils.HashCoinbase(coinbase);
+            var coinbaseHash = Coinium.Coin.Coinbase.Utils.HashCoinbase(coinbase);
 
             // create the merkle root.
             var merkleRoot = _job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
@@ -203,7 +203,7 @@ namespace Tests.Coin.Coinbase
 
             // create the coinbase.
             var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
-            var coinbaseHash = Utils.HashCoinbase(coinbase);
+            var coinbaseHash = Coinium.Coin.Coinbase.Utils.HashCoinbase(coinbase);
 
             // create the merkle root.
             var merkleRoot = _job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();

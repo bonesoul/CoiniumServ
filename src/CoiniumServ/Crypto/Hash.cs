@@ -23,7 +23,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using Coinium.Common.Extensions;
+using Coinium.Utils.Extensions;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Utilities.Encoders;
 

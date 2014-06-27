@@ -24,17 +24,17 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading;
-using Coinium.Coin.Daemon;
-using Coinium.Common.Configuration;
-using Coinium.Common.Helpers.Validation;
 using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 using Coinium.Persistance;
-using Coinium.Rpc.Service;
 using Coinium.Server;
+using Coinium.Services.Rpc;
+using Coinium.Utils.Configuration;
+using Coinium.Utils.Helpers.Validation;
 using Serilog;
 
 namespace Coinium.Mining.Pools

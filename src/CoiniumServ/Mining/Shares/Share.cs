@@ -21,12 +21,11 @@
 // 
 #endregion
 using System;
-using System.Numerics;
 using Coinium.Coin.Coinbase;
-using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Server.Stratum.Notifications;
-using Numerics;
+using Coinium.Utils.Extensions;
+using Coinium.Utils.Numerics;
 using Serilog;
 
 namespace Coinium.Mining.Shares

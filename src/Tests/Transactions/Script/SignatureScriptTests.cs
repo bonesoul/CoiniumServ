@@ -20,13 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Daemon;
-using Coinium.Coin.Daemon.Responses;
-using Coinium.Common.Extensions;
+
+using Coinium.Daemon;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
 using Coinium.Transactions.Script;
+using Coinium.Utils.Extensions;
 using Newtonsoft.Json;
-using NSubstitute;
 using Should.Fluent;
 using Xunit;
 

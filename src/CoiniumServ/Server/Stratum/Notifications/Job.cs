@@ -24,17 +24,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Numerics;
 using Coinium.Coin.Coinbase;
-using Coinium.Coin.Daemon.Responses;
-using Coinium.Common.Extensions;
 using Coinium.Crypto;
 using Coinium.Crypto.Algorithms;
+using Coinium.Crypto.Merkle;
+using Coinium.Daemon.Responses;
 using Coinium.Transactions;
 using Coinium.Transactions.Utils;
+using Coinium.Utils.Extensions;
+using Coinium.Utils.Numerics;
 using Gibbed.IO;
 using Newtonsoft.Json;
-using Numerics;
 
 namespace Coinium.Server.Stratum.Notifications
 {

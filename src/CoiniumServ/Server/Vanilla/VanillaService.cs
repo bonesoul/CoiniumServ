@@ -21,12 +21,12 @@
 // 
 #endregion
 using AustinHarris.JsonRpc;
-using Coinium.Coin.Daemon;
-using Coinium.Coin.Daemon.Responses;
+using Coinium.Daemon;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Shares;
-using Coinium.Rpc.Service;
-using Coinium.Rpc.Service.Http;
+using Coinium.Services.Rpc;
+using Coinium.Services.Rpc.Http;
 using Serilog;
 
 namespace Coinium.Server.Vanilla

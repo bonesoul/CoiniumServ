@@ -22,12 +22,12 @@
 #endregion
 using System;
 using AustinHarris.JsonRpc;
-using Coinium.Coin.Daemon;
-using Coinium.Common.Extensions;
+using Coinium.Daemon;
 using Coinium.Mining.Jobs;
 using Coinium.Persistance;
 using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Errors;
+using Coinium.Utils.Extensions;
 using Serilog;
 
 namespace Coinium.Mining.Shares

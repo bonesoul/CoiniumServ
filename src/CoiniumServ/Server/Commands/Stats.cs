@@ -23,7 +23,7 @@
 using System;
 using System.Diagnostics;
 using System.Text;
-using Coinium.Common.Commands;
+using Coinium.Utils.Commands;
 
 namespace Coinium.Server.Commands
 {

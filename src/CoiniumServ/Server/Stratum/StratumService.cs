@@ -23,9 +23,9 @@
 using AustinHarris.JsonRpc;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Shares;
-using Coinium.Rpc.Service;
-using Coinium.Rpc.Service.Socket;
 using Coinium.Server.Stratum.Responses;
+using Coinium.Services.Rpc;
+using Coinium.Services.Rpc.Socket;
 
 namespace Coinium.Server.Stratum
 {

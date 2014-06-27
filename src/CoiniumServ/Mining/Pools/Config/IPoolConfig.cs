@@ -21,10 +21,10 @@
 // 
 #endregion
 using Coinium.Coin.Configs;
-using Coinium.Coin.Daemon.Config;
-using Coinium.Common.Configuration;
+using Coinium.Daemon.Config;
 using Coinium.Server.Stratum.Config;
 using Coinium.Server.Vanilla.Config;
+using Coinium.Utils.Configuration;
 
 namespace Coinium.Mining.Pools.Config
 {

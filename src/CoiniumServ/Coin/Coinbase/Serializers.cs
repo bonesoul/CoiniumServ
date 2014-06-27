@@ -23,9 +23,9 @@
 using System;
 using System.IO;
 using System.Text;
-using Coinium.Common.Extensions;
-using Coinium.Common.Helpers.Arrays;
 using Coinium.Server.Stratum.Notifications;
+using Coinium.Utils.Extensions;
+using Coinium.Utils.Helpers.Arrays;
 using Gibbed.IO;
 
 namespace Coinium.Coin.Coinbase
