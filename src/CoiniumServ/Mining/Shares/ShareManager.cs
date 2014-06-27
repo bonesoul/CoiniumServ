@@ -77,11 +77,11 @@ namespace Coinium.Mining.Shares
 
                 if (share.Candidate)
                 {
-                    Log.ForContext<ShareManager>().Information("Share with block candidate accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Id);
+                    Log.ForContext<ShareManager>().Information("Share with block candidate accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
                     var result = SubmitBlock(share);
                 }
                 else
-                    Log.ForContext<ShareManager>().Information("Share accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Id);
+                    Log.ForContext<ShareManager>().Information("Share accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
             }
             else
             {
@@ -110,7 +110,7 @@ namespace Coinium.Mining.Shares
                         break;
                 }
 
-                Log.ForContext<ShareManager>().Information("Share rejected at {0}/{1} by miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Id);
+                Log.ForContext<ShareManager>().Information("Share rejected at {0}/{1} by miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
             }
 
 

@@ -21,23 +21,27 @@
 // 
 #endregion
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
+using MetroFramework.Forms;
 
 namespace CoiniumServGui
 {
-    static class Program
+    public partial class MainForm : MetroForm
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        public MainForm()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            InitializeComponent();
+            Application.ApplicationExit += OnApplicationExit;
+        }
+
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
+            consoleControl1.ProcessInterface.StopProcess();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            consoleControl1.StartProcess("CoiniumServ.exe","");
         }
     }
 }
