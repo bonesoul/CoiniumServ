@@ -20,19 +20,20 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Net;
+using System.Net.Sockets;
 using Coinium.Common.Configuration;
 using Coinium.Mining.Shares;
+using Serilog;
 using StackExchange.Redis;
 
 namespace Coinium.Persistance
 {
     public class Redis:IStorage, IRedis
     {
-        public bool Enabled { get; private set; }
-
+        public bool IsEnabled { get; private set; }
+        public bool IsConnected { get { return _connectionMultiplexer.IsConnected; } }
         public string Host { get; private set; }
         public Int32 Port { get; private set; }
         public int DatabaseId { get; private set; }
@@ -47,32 +48,44 @@ namespace Coinium.Persistance
 
             ReadConfig();
 
-            if(Enabled)
+            if(IsEnabled)
                 Initialize();
         }
 
         public void CommitShare(IShare share)
         {
-            throw new NotImplementedException();
+            if (!IsConnected)
+                return;
         }
 
         private void Initialize()
         {
             var options = new ConfigurationOptions();
-            options.EndPoints.Add(new DnsEndPoint(Host, Port));
+            var endpoint = new DnsEndPoint(Host, Port, AddressFamily.InterNetwork);
+            options.EndPoints.Add(endpoint);
 
-            // create the connection
-            _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options).Result;
+            try
+            {
 
-            // access to database.
-            _database = _connectionMultiplexer.GetDatabase(DatabaseId);
+                // create the connection
+                _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options).Result;
+
+                // access to database.
+                _database = _connectionMultiplexer.GetDatabase(DatabaseId);
+
+                Log.ForContext<Redis>().Information("Storage initialized: {0}", endpoint);
+            }
+            catch (Exception e)
+            {
+                Log.ForContext<Redis>().Error(e, string.Format("Storage initialization failed: {0}", endpoint));
+            }
         }
 
         private void ReadConfig()
         {
             var globalConfig = _globalConfigFactory.Get();
             var redisConfig = globalConfig.database.redis;
-            Enabled = redisConfig.enabled;
+            IsEnabled = redisConfig.enabled;
             Host = redisConfig.host;
             Port = redisConfig.port;
             DatabaseId = redisConfig.databaseId;

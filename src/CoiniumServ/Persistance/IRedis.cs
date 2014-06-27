@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 
 namespace Coinium.Persistance
 {
     public interface IRedis
     {
+        bool IsConnected { get; }
+
         string Host { get; }
 
         Int32 Port { get; }

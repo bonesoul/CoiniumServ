@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -20,37 +20,39 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Daemon;
 using Coinium.Common.Context;
-using Nancy.TinyIoc;
 using Serilog;
 
-namespace Coinium.Mining.Miners
+namespace Coinium.Crypto.Algorithms
 {
-    public class MinerManagerFactory : IMinerManagerFactory
+    public class HashAlgorithmFactory : IHashAlgorithmFactory
     {
         /// <summary>
-        /// The _kernel
+        /// The application context.
         /// </summary>
         private readonly IApplicationContext _applicationContext;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MinerManagerFactory" /> class.
+        /// Initializes a new instance of the <see cref="HashAlgorithmFactory" /> class.
         /// </summary>
         /// <param name="applicationContext">The application context.</param>
-        public MinerManagerFactory(IApplicationContext applicationContext)
+        public HashAlgorithmFactory(IApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
         }
 
-        public IMinerManager Get(IDaemonClient daemonClient)
+        /// <summary>
+        /// Gets the specified algorithm name.
+        /// </summary>
+        /// <param name="algorithmName">Name of the algorithm.</param>
+        /// <returns></returns>
+        public IHashAlgorithm Get(string algorithmName)
         {
-            var @params = new NamedParameterOverloads
-            {
-                {"daemonClient", daemonClient}
-            };
+            // Default to Scrypt
+            if (string.IsNullOrWhiteSpace(algorithmName)) 
+                algorithmName = Algorithms.Scrypt;
 
-            return _applicationContext.Container.Resolve<IMinerManager>(@params);
+            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithmName);
         }
     }
 }

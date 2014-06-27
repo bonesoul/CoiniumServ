@@ -48,7 +48,7 @@ namespace Coinium.Server.Web
         public void Start()
         {
             var uri = new Uri(string.Format("http://{0}:{1}", Interface, Port));
-            Log.Verbose("Web-server listening on: {0}", uri);
+            Log.ForContext<WebServer>().Verbose("Web-server listening on: {0}", uri);
 
             var hostConfiguration = new HostConfiguration();
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
@@ -62,7 +62,7 @@ namespace Coinium.Server.Web
             }
             catch (InvalidOperationException e) // nancy requires elevated privileges to run on port 80.
             {
-                Log.Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
+                Log.ForContext<WebServer>().Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
                 Environment.Exit(-1);
             }
         }
@@ -73,7 +73,7 @@ namespace Coinium.Server.Web
         /// <param name="exception"></param>
         private void UnhandledExceptionHandler(Exception exception)
         {
-            Log.Error("Web-server: {0}",exception);
+            Log.ForContext<WebServer>().Error("Web-server: {0}", exception);
         }
     }
 

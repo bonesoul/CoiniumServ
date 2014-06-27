@@ -54,7 +54,6 @@ namespace Coinium.Coin.Daemon
         public override void Initialize(IDaemonConfig config)
         {
             base.Initialize(config);
-            Log.Verbose("Init DaemonClient(): {0}:{1}", config.Host, config.Port);
         }
 
         /// <summary>

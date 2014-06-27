@@ -20,14 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using Coinium.Mining.Shares;
 
 namespace Coinium.Persistance
 {
     public interface IStorage
     {
-        bool Enabled { get; }
+        bool IsEnabled { get; }
 
         void CommitShare(IShare share);
     }

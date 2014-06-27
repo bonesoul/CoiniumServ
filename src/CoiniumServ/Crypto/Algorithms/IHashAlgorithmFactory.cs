@@ -20,40 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Common.Context;
-using Serilog;
-
-namespace Coinium.Coin.Algorithms
+namespace Coinium.Crypto.Algorithms
 {
-    public class HashAlgorithmFactory : IHashAlgorithmFactory
+    public interface IHashAlgorithmFactory
     {
-        /// <summary>
-        /// The application context.
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HashAlgorithmFactory" /> class.
-        /// </summary>
-        /// <param name="applicationContext">The application context.</param>
-        public HashAlgorithmFactory(IApplicationContext applicationContext)
-        {
-            Log.Debug("HashAlgorithmFactory() init..");
-            _applicationContext = applicationContext;
-        }
-
         /// <summary>
         /// Gets the specified algorithm name.
         /// </summary>
         /// <param name="algorithmName">Name of the algorithm.</param>
         /// <returns></returns>
-        public IHashAlgorithm Get(string algorithmName)
-        {
-            // Default to Scrypt
-            if (string.IsNullOrWhiteSpace(algorithmName)) 
-                algorithmName = Algorithms.Scrypt;
-
-            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithmName);
-        }
+        IHashAlgorithm Get(string algorithmName);
     }
 }

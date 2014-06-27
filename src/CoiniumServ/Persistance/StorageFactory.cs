@@ -20,8 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-using Coinium.Coin.Algorithms;
 using Coinium.Common.Context;
 using Nancy.TinyIoc;
 using Serilog;
@@ -42,7 +40,6 @@ namespace Coinium.Persistance
         /// <param name="applicationContext">The application context.</param>
         public StorageFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("StorageManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 

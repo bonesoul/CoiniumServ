@@ -22,9 +22,9 @@
 #endregion
 using System;
 using System.Linq;
-using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
+using Coinium.Crypto.Algorithms;
 using Coinium.Mining.Jobs;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;

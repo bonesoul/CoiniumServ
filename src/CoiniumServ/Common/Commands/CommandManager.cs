@@ -34,7 +34,6 @@ namespace Coinium.Common.Commands
 
         static CommandManager()
         {
-            Log.Verbose("CommandManager init..");
             RegisterCommandGroups();
         }
 

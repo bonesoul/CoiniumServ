@@ -134,7 +134,7 @@ namespace Coinium.Net.Server.Sockets
             }
             catch (SocketException exception)
             {
-                Log.Fatal("{0} can not bind on {1}, server shutting down.. Reason: {2}", GetType().Name, bindIP, exception);
+                Log.ForContext<SocketServer>().Fatal("{0} can not bind on {1}, server shutting down.. Reason: {2}", GetType().Name, bindIP, exception);
                 Shutdown();
                 return false;
             }
@@ -192,7 +192,7 @@ namespace Coinium.Net.Server.Sockets
                     if (connection.IsConnected)
                         connection.BeginReceive(ReceiveCallback, connection);
                     else
-                        Log.Debug("Connection closed:" + connection.Client);
+                        Log.ForContext<SocketServer>().Debug("Connection closed:" + connection.Client);
                 }
                 else
                 {
@@ -201,12 +201,12 @@ namespace Coinium.Net.Server.Sockets
             }
             catch (SocketException e)
             {
-                Log.Debug(e, "ReceiveCallback");
+                Log.ForContext<SocketServer>().Debug(e, "ReceiveCallback");
                 RemoveConnection(connection); // An error occured while receiving, connection has disconnected.
             }
             catch (Exception e)
             {
-                Log.Debug(e, "ReceiveCallback");
+                Log.ForContext<SocketServer>().Debug(e, "ReceiveCallback");
                 RemoveConnection(connection); // An error occured while receiving, the connection may have been disconnected.
             }
         }
@@ -243,12 +243,12 @@ namespace Coinium.Net.Server.Sockets
             catch (SocketException socketException)
             {
                 RemoveConnection(connection); // An error occured while sending, connection has disconnected.
-                Log.Error(socketException, "Send");
+                Log.ForContext<SocketServer>().Error(socketException, "Send");
             }
             catch (Exception e)
             {
                 RemoveConnection(connection); // An error occured while sending, it is possible that the connection has a problem.
-                Log.Error(e, "Send");
+                Log.ForContext<SocketServer>().Error(e, "Send");
             }
 
             return totalBytesSent;

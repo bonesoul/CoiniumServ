@@ -40,7 +40,6 @@ namespace Coinium.Mining.Pools.Config
         /// <param name="applicationContext">The application context.</param>
         public PoolConfigFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("PoolConfigFactory() init..");
             _applicationContext = applicationContext;
         }
 

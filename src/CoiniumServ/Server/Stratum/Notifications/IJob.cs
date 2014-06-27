@@ -23,9 +23,9 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Crypto;
+using Coinium.Crypto.Algorithms;
 using Coinium.Transactions;
 
 namespace Coinium.Server.Stratum.Notifications

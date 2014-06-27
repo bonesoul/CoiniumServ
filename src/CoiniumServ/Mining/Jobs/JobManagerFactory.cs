@@ -20,9 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Common.Context;
+using Coinium.Crypto.Algorithms;
 using Coinium.Mining.Miners;
 using Nancy.TinyIoc;
 using Serilog;
@@ -42,7 +42,6 @@ namespace Coinium.Mining.Jobs
         /// <param name="applicationContext">The application context.</param>
         public JobManagerFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("JobManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 

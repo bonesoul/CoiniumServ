@@ -29,7 +29,7 @@ namespace Coinium.Server
     {
         public bool Start()
         {
-            Log.Information("ServerManager starting..");
+            Log.ForContext<ServerManager>().Information("ServerManager starting..");
 
             var webServer = new WebServer();
             webServer.Start();

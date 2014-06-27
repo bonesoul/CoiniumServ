@@ -25,7 +25,7 @@ using System.Globalization;
 using System.Numerics;
 using CryptSharp.Utility;
 
-namespace Coinium.Coin.Algorithms
+namespace Coinium.Crypto.Algorithms
 {
     public class Scrypt : IHashAlgorithm
     {

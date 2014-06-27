@@ -92,7 +92,7 @@ namespace Coinium.Mining.Miners
         {
             var success = _daemonClient.ValidateAddress(miner.Username).IsValid;
 
-            Log.Information(success ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
+            Log.ForContext<MinerManager>().Information(success ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
             return success;

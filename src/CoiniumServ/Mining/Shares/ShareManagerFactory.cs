@@ -1,5 +1,4 @@
-﻿
-#region License
+﻿#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -43,7 +42,6 @@ namespace Coinium.Mining.Shares
         /// <param name="applicationContext">The application context.</param>
         public ShareManagerFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("ShareManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 
