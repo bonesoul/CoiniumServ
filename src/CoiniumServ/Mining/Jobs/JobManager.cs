@@ -22,8 +22,8 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
+using Coinium.Crypto.Algorithms;
 using Coinium.Mining.Miners;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;

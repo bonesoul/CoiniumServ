@@ -158,11 +158,11 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
-    <Compile Include="Coin\Algorithms\Algorithms.cs" />
-    <Compile Include="Coin\Algorithms\IHashAlgorithmFactory.cs" />
-    <Compile Include="Coin\Algorithms\HashAlgorithmFactory.cs" />
-    <Compile Include="Coin\Algorithms\IHashAlgorithm.cs" />
-    <Compile Include="Coin\Algorithms\Scrypt.cs" />
+    <Compile Include="Crypto\Algorithms\Algorithms.cs" />
+    <Compile Include="Crypto\Algorithms\IHashAlgorithmFactory.cs" />
+    <Compile Include="Crypto\Algorithms\HashAlgorithmFactory.cs" />
+    <Compile Include="Crypto\Algorithms\IHashAlgorithm.cs" />
+    <Compile Include="Crypto\Algorithms\Scrypt.cs" />
     <Compile Include="Coin\Address\Base58.cs" />
     <Compile Include="Coin\Configs\CoinConfig.cs" />
     <Compile Include="Coin\Configs\CoinConfigFactory.cs" />

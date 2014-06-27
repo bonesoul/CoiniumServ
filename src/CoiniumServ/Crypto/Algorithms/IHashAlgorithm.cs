@@ -20,15 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Coin.Algorithms
+
+using System;
+using System.Numerics;
+
+namespace Coinium.Crypto.Algorithms
 {
-    public interface IHashAlgorithmFactory
+    public interface IHashAlgorithm
     {
-        /// <summary>
-        /// Gets the specified algorithm name.
-        /// </summary>
-        /// <param name="algorithmName">Name of the algorithm.</param>
-        /// <returns></returns>
-        IHashAlgorithm Get(string algorithmName);
+        UInt32 Multiplier { get; }
+
+        byte[] Hash(byte[] input);
+
+        BigInteger Difficulty { get; }
     }
 }

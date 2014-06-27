@@ -23,10 +23,10 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
 using Coinium.Coin.Daemon.Responses;
 using Coinium.Common.Extensions;
+using Coinium.Crypto.Algorithms;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Shares;
 using Coinium.Server.Stratum.Notifications;

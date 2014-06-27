@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -21,31 +21,40 @@
 // 
 #endregion
 
-using Coinium.Coin.Daemon;
 using Coinium.Common.Context;
-using Coinium.Crypto.Algorithms;
-using Coinium.Mining.Pools;
-using Coinium.Mining.Pools.Config;
-using Coinium.Persistance;
+using Serilog;
 
-namespace Coinium.Common.Repository.Registries
+namespace Coinium.Crypto.Algorithms
 {
-    public class ClassRegistry : IRegistry
+    public class HashAlgorithmFactory : IHashAlgorithmFactory
     {
+        /// <summary>
+        /// The application context.
+        /// </summary>
         private readonly IApplicationContext _applicationContext;
 
-        public ClassRegistry(IApplicationContext applicationContext)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HashAlgorithmFactory" /> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public HashAlgorithmFactory(IApplicationContext applicationContext)
         {
+            Log.Debug("HashAlgorithmFactory() init..");
             _applicationContext = applicationContext;
         }
 
-        public void RegisterInstances()
+        /// <summary>
+        /// Gets the specified algorithm name.
+        /// </summary>
+        /// <param name="algorithmName">Name of the algorithm.</param>
+        /// <returns></returns>
+        public IHashAlgorithm Get(string algorithmName)
         {
-            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(Algorithms.Scrypt).AsSingleton();
-            _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
-            _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
-            _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsSingleton();
+            // Default to Scrypt
+            if (string.IsNullOrWhiteSpace(algorithmName)) 
+                algorithmName = Algorithms.Scrypt;
+
+            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithmName);
         }
     }
 }
