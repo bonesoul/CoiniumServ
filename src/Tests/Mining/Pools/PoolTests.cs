@@ -23,10 +23,12 @@
 using System;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
+using Coinium.Common.Configuration;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
+using Coinium.Persistance;
 using Coinium.Rpc.Service;
 using Coinium.Server;
 using NSubstitute;
@@ -44,12 +46,15 @@ namespace Tests.Mining.Pools
         private readonly IShareManagerFactory _shareManagerFactory;
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
         private readonly IMinerManagerFactory _minerManagerFactory;
+        private readonly IStorageFactory _storageManagerFactory;
+        private readonly IGlobalConfigFactory _globalConfigFactory;
 
         // object mocks.
         private readonly IDaemonClient _daemonClient;
         private readonly IMinerManager _minerManager;
         private readonly IJobManager _jobManager;
         private readonly IShareManager _shareManager;
+        private readonly IStorage _storage;
         private readonly IMiningServer _miningServer;
         private readonly IRpcService _rpcService;
 
@@ -64,6 +69,8 @@ namespace Tests.Mining.Pools
             _minerManagerFactory = Substitute.For<IMinerManagerFactory>();
             _serverFactory = Substitute.For<IServerFactory>();
             _serviceFactory = Substitute.For<IServiceFactory>();
+            _storageManagerFactory = Substitute.For<IStorageFactory>();
+            _globalConfigFactory = Substitute.For<IGlobalConfigFactory>();
 
             _daemonClient = Substitute.For<IDaemonClient>();
             _minerManager = Substitute.For<IMinerManager>();
@@ -71,6 +78,7 @@ namespace Tests.Mining.Pools
             _shareManager = Substitute.For<IShareManager>();
             _miningServer = Substitute.For<IMiningServer>();
             _rpcService = Substitute.For<IRpcService>();
+            _storage = Substitute.For<IStorage>();
         }
 
         /// <summary>
@@ -86,7 +94,9 @@ namespace Tests.Mining.Pools
                 _daemonClient,
                 _minerManagerFactory,
                 _jobManagerFactory,
-                _shareManagerFactory);
+                _shareManagerFactory,
+                _storageManagerFactory,
+                _globalConfigFactory);
 
             pool.Should().Not.Be.Null();
             pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
@@ -107,7 +117,9 @@ namespace Tests.Mining.Pools
                     _daemonClient,
                     _minerManagerFactory,
                     _jobManagerFactory,
-                    _shareManagerFactory);
+                    _shareManagerFactory,
+                    _storageManagerFactory,
+                    _globalConfigFactory);
             });
 
             ex.Message.Should().Contain("IHashAlgorithmFactory");
@@ -128,7 +140,9 @@ namespace Tests.Mining.Pools
                     _daemonClient,
                     _minerManagerFactory,
                     _jobManagerFactory,
-                    _shareManagerFactory);
+                    _shareManagerFactory,
+                    _storageManagerFactory,
+                    _globalConfigFactory);
             });
 
             ex.Message.Should().Contain("IServerFactory");
@@ -149,7 +163,9 @@ namespace Tests.Mining.Pools
                     _daemonClient,
                     _minerManagerFactory,
                     _jobManagerFactory,
-                    _shareManagerFactory);
+                    _shareManagerFactory,
+                    _storageManagerFactory,
+                    _globalConfigFactory);
             });
 
             ex.Message.Should().Contain("IServiceFactory");
@@ -170,7 +186,9 @@ namespace Tests.Mining.Pools
                     null,
                     _minerManagerFactory,
                     _jobManagerFactory,
-                    _shareManagerFactory);
+                    _shareManagerFactory,
+                    _storageManagerFactory,
+                    _globalConfigFactory);
             });
 
             ex.Message.Should().Contain("IDaemonClient");
@@ -191,7 +209,9 @@ namespace Tests.Mining.Pools
                     _daemonClient,
                     null,
                     _jobManagerFactory,
-                    _shareManagerFactory);
+                    _shareManagerFactory,
+                    _storageManagerFactory,
+                    _globalConfigFactory);
             });
 
             ex.Message.Should().Contain("IMinerManagerFactory");
@@ -212,7 +232,9 @@ namespace Tests.Mining.Pools
                     _daemonClient,
                     _minerManagerFactory,
                     null,
-                    _shareManagerFactory);
+                    _shareManagerFactory,
+                    _storageManagerFactory,
+                    _globalConfigFactory);
             });
 
             ex.Message.Should().Contain("IJobManagerFactory");
@@ -233,10 +255,58 @@ namespace Tests.Mining.Pools
                     _daemonClient,
                     _minerManagerFactory,
                     _jobManagerFactory,
-                    null);
+                    null,
+                    _storageManagerFactory,
+                    _globalConfigFactory);
             });
 
             ex.Message.Should().Contain("IShareManagerFactory");
+        }
+
+        /// <summary>
+        /// Tests pool constructor with null StorageFactory, should trow exception.
+        /// </summary>
+        [Fact]
+        public void ConstructorTest_NullStorageFactory_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pools.Pool(
+                    _hashAlgorithmFactory,
+                    _serverFactory,
+                    _serviceFactory,
+                    _daemonClient,
+                    _minerManagerFactory,
+                    _jobManagerFactory,
+                    _shareManagerFactory,
+                    null,
+                    _globalConfigFactory);
+            });
+
+            ex.Message.Should().Contain("IStorageFactory");
+        }
+
+        /// <summary>
+        /// Tests pool constructor with null GlobalConfigFactory, should trow exception.
+        /// </summary>
+        [Fact]
+        public void ConstructorTest_NullStorageManagerFactory_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pools.Pool(
+                    _hashAlgorithmFactory,
+                    _serverFactory,
+                    _serviceFactory,
+                    _daemonClient,
+                    _minerManagerFactory,
+                    _jobManagerFactory,
+                    _shareManagerFactory,
+                    _storageManagerFactory,
+                    null);
+            });
+
+            ex.Message.Should().Contain("IGlobalConfigFactory");
         }
 
         /// <summary>
@@ -252,7 +322,9 @@ namespace Tests.Mining.Pools
                 _daemonClient,
                 _minerManagerFactory, 
                 _jobManagerFactory, 
-                _shareManagerFactory);
+                _shareManagerFactory,
+                _storageManagerFactory,
+                _globalConfigFactory);
 
             pool.Should().Not.Be.Null();
             pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
@@ -272,8 +344,11 @@ namespace Tests.Mining.Pools
             _jobManagerFactory.Get(_daemonClient, _minerManager, hashAlgorithm).Returns(_jobManager);
             _jobManager.Initialize(pool.InstanceId);
 
+            // initialize storage manager
+            _storageManagerFactory.Get(Storages.Redis);
+
             // initialize share manager.
-            _shareManagerFactory.Get(_jobManager, _daemonClient).Returns(_shareManager);
+            _shareManagerFactory.Get(_daemonClient, _jobManager, _storage).Returns(_shareManager);
         
             // init daemon client
             _daemonClient.Initialize(config.Daemon);

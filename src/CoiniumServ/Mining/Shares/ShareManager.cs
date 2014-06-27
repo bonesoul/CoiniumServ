@@ -25,6 +25,7 @@ using AustinHarris.JsonRpc;
 using Coinium.Coin.Daemon;
 using Coinium.Common.Extensions;
 using Coinium.Mining.Jobs;
+using Coinium.Persistance;
 using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Errors;
 using Serilog;
@@ -37,15 +38,18 @@ namespace Coinium.Mining.Shares
 
         private readonly IDaemonClient _daemonClient;
 
+        private readonly IStorage _storage;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareManager" /> class.
         /// </summary>
         /// <param name="jobManager">The job manager.</param>
         /// <param name="daemonClient"></param>
-        public ShareManager(IJobManager jobManager, IDaemonClient daemonClient)
+        public ShareManager(IJobManager jobManager, IDaemonClient daemonClient, IStorage storage)
         {
             _jobManager = jobManager;
             _daemonClient = daemonClient;
+            _storage = storage;
         }
 
         /// <summary>
@@ -69,6 +73,8 @@ namespace Coinium.Mining.Shares
 
             if (share.Valid)
             {               
+                _storage.CommitShare(share);
+
                 if (share.Candidate)
                 {
                     Log.Information("Share with block candidate accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Id);

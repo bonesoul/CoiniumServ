@@ -20,10 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Coin.Algorithms
+
+using System;
+
+namespace Coinium.Persistance
 {
-    public static class AlgorithmNames
+    public interface IRedis
     {
-        public const string Scrypt = "scrypt";
+        string Host { get; }
+
+        Int32 Port { get; }
+
+        Int32 DatabaseId { get; }
     }
 }

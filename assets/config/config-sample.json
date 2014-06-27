@@ -35,9 +35,10 @@
     # database configuration.
 	"database": {
 		"redis": {
-			"enabled": false,
+			"enabled": true,
 			"host": "127.0.0.1",
-			"port": 6379
+			"port": 6379,
+            "databaseId": 0
 		}
 	}
 }

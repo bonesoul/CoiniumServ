@@ -89,6 +89,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Serilog.1.3.30\lib\net40\Serilog.FullNetFx.dll</HintPath>
     </Reference>
+    <Reference Include="StackExchange.Redis">
+      <HintPath>..\..\build\packages\StackExchange.Redis.1.0.312\lib\net40\StackExchange.Redis.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO">
@@ -117,6 +120,8 @@
     <Compile Include="Mining\Shares\IShare.cs" />
     <Compile Include="Mining\Shares\Share.cs" />
     <Compile Include="Mining\Shares\ShareError.cs" />
+    <Compile Include="Persistance\IRedis.cs" />
+    <Compile Include="Persistance\Storages.cs" />
     <Compile Include="Server\Stratum\Errors\AuthenticationError.cs" />
     <Compile Include="Server\Stratum\Errors\DuplicateShareError.cs" />
     <Compile Include="Server\Stratum\Errors\IStratumError.cs" />
@@ -125,6 +130,10 @@
     <Compile Include="Server\Stratum\Errors\NotSubscriberError.cs" />
     <Compile Include="Server\Stratum\Errors\OtherError.cs" />
     <Compile Include="Server\Stratum\Notifications\IJob.cs" />
+    <Compile Include="Persistance\IStorage.cs" />
+    <Compile Include="Persistance\IStorageFactory.cs" />
+    <Compile Include="Persistance\Redis.cs" />
+    <Compile Include="Persistance\StorageFactory.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
@@ -149,7 +158,7 @@
     <Compile Include="Common\Platform\Framework.cs" />
     <Compile Include="Common\Platform\PlatformManager.cs" />
     <Compile Include="Common\Versions\VersionInfo.cs" />
-    <Compile Include="Coin\Algorithms\AlgorithmNames.cs" />
+    <Compile Include="Coin\Algorithms\Algorithms.cs" />
     <Compile Include="Coin\Algorithms\IHashAlgorithmFactory.cs" />
     <Compile Include="Coin\Algorithms\HashAlgorithmFactory.cs" />
     <Compile Include="Coin\Algorithms\IHashAlgorithm.cs" />

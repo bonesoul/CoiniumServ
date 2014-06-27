@@ -26,11 +26,13 @@ using System.Security.Cryptography;
 using System.Threading;
 using Coinium.Coin.Algorithms;
 using Coinium.Coin.Daemon;
+using Coinium.Common.Configuration;
 using Coinium.Common.Helpers.Validation;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
+using Coinium.Persistance;
 using Coinium.Rpc.Service;
 using Coinium.Server;
 using Serilog;
@@ -51,9 +53,12 @@ namespace Coinium.Mining.Pools
         private readonly IShareManagerFactory _shareManagerFactory;
         private readonly IMinerManagerFactory _minerManagerFactory;
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
+        private readonly IStorageFactory _storageManagerFactory;
+        private readonly IGlobalConfigFactory _globalConfigFactory;
         private IMinerManager _minerManager;
         private IJobManager _jobManager;
         private IShareManager _shareManager;
+        private IStorage _storageManager;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
@@ -74,6 +79,7 @@ namespace Coinium.Mining.Pools
         /// <param name="minerManagerFactory">The miner manager factory.</param>
         /// <param name="jobManagerFactory">The job manager factory.</param>
         /// <param name="shareManagerFactory">The share manager factory.</param>
+        /// <param name="storageManagerFactory"></param>
         public Pool(
             IHashAlgorithmFactory hashAlgorithmFactory, 
             IServerFactory serverFactory, 
@@ -81,7 +87,9 @@ namespace Coinium.Mining.Pools
             IDaemonClient client, 
             IMinerManagerFactory minerManagerFactory, 
             IJobManagerFactory jobManagerFactory, 
-            IShareManagerFactory shareManagerFactory)
+            IShareManagerFactory shareManagerFactory,
+            IStorageFactory storageManagerFactory,
+            IGlobalConfigFactory globalConfigFactory)
         {
             Enforce.ArgumentNotNull(hashAlgorithmFactory, "IHashAlgorithmFactory");
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
@@ -90,6 +98,8 @@ namespace Coinium.Mining.Pools
             Enforce.ArgumentNotNull(minerManagerFactory, "IMinerManagerFactory");
             Enforce.ArgumentNotNull(jobManagerFactory, "IJobManagerFactory");
             Enforce.ArgumentNotNull(shareManagerFactory, "IShareManagerFactory");
+            Enforce.ArgumentNotNull(storageManagerFactory, "IStorageFactory");
+            Enforce.ArgumentNotNull(globalConfigFactory, "IGlobalConfigFactory");
 
             _daemonClient = client;
             _minerManagerFactory = minerManagerFactory;
@@ -98,6 +108,8 @@ namespace Coinium.Mining.Pools
             _serverFactory = serverFactory;
             _serviceFactory = serviceFactory;
             _hashAlgorithmFactory = hashAlgorithmFactory;
+            _storageManagerFactory = storageManagerFactory;
+            _globalConfigFactory = globalConfigFactory;
 
             GenerateInstanceId();
         }
@@ -126,12 +138,14 @@ namespace Coinium.Mining.Pools
 
         private void InitManagers()
         {
+            _storageManager = _storageManagerFactory.Get(Storages.Redis);
+
             _minerManager = _minerManagerFactory.Get(_daemonClient);
 
             _jobManager = _jobManagerFactory.Get(_daemonClient, _minerManager, _hashAlgorithmFactory.Get(Config.Coin.Algorithm));
             _jobManager.Initialize(InstanceId);
 
-            _shareManager = _shareManagerFactory.Get(_jobManager, _daemonClient);
+            _shareManager = _shareManagerFactory.Get(_daemonClient, _jobManager, _storageManager);
         }
 
         private void InitDaemon()
