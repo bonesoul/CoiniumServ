@@ -55,7 +55,7 @@ namespace Coinium.Persistance.Redis
 
         public void CommitShare(IShare share)
         {
-            if (!IsConnected)
+            if (!IsEnabled || !IsConnected)
                 return;
         }
 
