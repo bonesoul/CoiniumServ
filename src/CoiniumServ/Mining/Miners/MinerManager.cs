@@ -90,12 +90,12 @@ namespace Coinium.Mining.Miners
 
         public bool Authenticate(IMiner miner)
         {
-            var success = _daemonClient.ValidateAddress(miner.Username).IsValid;
+            var result = _daemonClient.ValidateAddress(miner.Username);
 
-            Log.ForContext<MinerManager>().Information(success ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
+            Log.ForContext<MinerManager>().Information(result.IsValid ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
-            return success;
+            return result.IsValid;
         }
     }
 }
