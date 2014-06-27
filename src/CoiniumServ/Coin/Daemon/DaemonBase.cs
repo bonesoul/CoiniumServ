@@ -102,7 +102,7 @@ namespace Coinium.Coin.Daemon
             webRequest.Method = "POST";
             webRequest.Timeout = 1000;
 
-            Log.Verbose("Daemon send: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
+            Log.ForContext<DaemonBase>().Verbose("Send: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
 
             byte[] byteArray = walletRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;
@@ -133,7 +133,7 @@ namespace Coinium.Coin.Daemon
         {
             string json = GetJsonResponse(httpWebRequest);
 
-            Log.Verbose("Daemon recv: {0}", json.PrettifyJson());
+            Log.ForContext<DaemonBase>().Verbose("Recv: {0}", json.PrettifyJson());
 
             try
             {
@@ -182,7 +182,7 @@ namespace Coinium.Coin.Daemon
                 {
                     string error = reader.ReadToEnd();
 
-                    Log.Verbose("Daemon error: {0}",  error.PrettifyJson());
+                    Log.ForContext<DaemonBase>().Error("Daemon error: {0}",  error.PrettifyJson());
 
                     throw new Exception(string.Format("{0} - {1}", response.StatusCode, error));
                 }

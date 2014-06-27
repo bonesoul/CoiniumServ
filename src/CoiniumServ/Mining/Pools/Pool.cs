@@ -151,7 +151,7 @@ namespace Coinium.Mining.Pools
         private void InitDaemon()
         {
             if (Config.Daemon == null || Config.Daemon.Valid == false)
-                Log.Error("Coin daemon configuration is not valid!");
+                Log.ForContext<Pool>().Error("Coin daemon configuration is not valid!");
 
             _daemonClient.Initialize(Config.Daemon);
         }
@@ -186,7 +186,7 @@ namespace Coinium.Mining.Pools
         {
             if (!Config.Valid)
             {
-                Log.Error("Can't start pool as configuration is not valid.");
+                Log.ForContext<Pool>().Error("Can't start pool as configuration is not valid.");
                 return;
             }                
 
@@ -214,7 +214,7 @@ namespace Coinium.Mining.Pools
             var randomBytes = new byte[4];
             rndGenerator.GetNonZeroBytes(randomBytes); // create cryptographically random array of bytes.
             InstanceId = BitConverter.ToUInt32(randomBytes, 0); // convert them to instance Id.
-            Log.Debug("Generated cryptographically random instance Id: {0}", InstanceId);
+            Log.ForContext<Pool>().Debug("Generated cryptographically random instance Id: {0}", InstanceId);
         }
     }
 }

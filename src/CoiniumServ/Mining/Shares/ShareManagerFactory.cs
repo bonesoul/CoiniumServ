@@ -42,7 +42,6 @@ namespace Coinium.Mining.Shares
         /// <param name="applicationContext">The application context.</param>
         public ShareManagerFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("ShareManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 

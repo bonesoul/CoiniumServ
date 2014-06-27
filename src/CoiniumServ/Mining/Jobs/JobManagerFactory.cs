@@ -42,7 +42,6 @@ namespace Coinium.Mining.Jobs
         /// <param name="applicationContext">The application context.</param>
         public JobManagerFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("JobManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 

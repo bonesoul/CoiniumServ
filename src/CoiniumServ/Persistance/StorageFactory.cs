@@ -40,7 +40,6 @@ namespace Coinium.Persistance
         /// <param name="applicationContext">The application context.</param>
         public StorageFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("StorageManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 

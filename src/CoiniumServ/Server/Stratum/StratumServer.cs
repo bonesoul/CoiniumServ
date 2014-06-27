@@ -74,7 +74,7 @@ namespace Coinium.Server.Stratum
             var success = Listen(BindIP, Port);
 
             if(success)
-                Log.Information("Stratum server listening on {0}:{1}", BindIP, Port);            
+                Log.ForContext<StratumServer>().Information("Stratum server listening on {0}:{1}", BindIP, Port);            
 
             return true;
         }
@@ -95,7 +95,7 @@ namespace Coinium.Server.Stratum
         /// <param name="e"></param>
         private void Stratum_OnConnect(object sender, ConnectionEventArgs e)
         {
-            Log.Information("Stratum client connected: {0}", e.Connection.ToString());
+            Log.ForContext<StratumServer>().Information("Stratum client connected: {0}", e.Connection.ToString());
 
             var miner = _minerManager.Create<StratumMiner>(e.Connection);
             e.Connection.Client = miner;           
@@ -108,7 +108,7 @@ namespace Coinium.Server.Stratum
         /// <param name="e"></param>
         private void Stratum_OnDisconnect(object sender, ConnectionEventArgs e)
         {
-            Log.Information("Stratum client disconnected: {0}", e.Connection.ToString());
+            Log.ForContext<StratumServer>().Information("Stratum client disconnected: {0}", e.Connection.ToString());
 
             _minerManager.Remove(e.Connection);
         }

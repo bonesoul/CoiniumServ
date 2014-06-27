@@ -88,7 +88,7 @@ namespace Coinium.Net.Server.Http
 
             IsListening = true;
 
-            Log.Information("Vanilla server listening on port {0}.", Port);
+            Log.ForContext<HttpServer>().Information("Vanilla server listening on port {0}.", Port);
 
             return true;
         }

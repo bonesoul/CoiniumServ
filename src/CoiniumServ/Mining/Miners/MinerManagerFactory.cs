@@ -40,7 +40,6 @@ namespace Coinium.Mining.Miners
         /// <param name="applicationContext">The application context.</param>
         public MinerManagerFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("MinerManagerFactory() init..");
             _applicationContext = applicationContext;
         }
 

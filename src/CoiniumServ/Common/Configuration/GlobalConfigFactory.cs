@@ -38,7 +38,6 @@ namespace Coinium.Common.Configuration
 
         public GlobalConfigFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("MainConfigFactory() init..");
             _applicationContext = applicationContext;            
         }
 

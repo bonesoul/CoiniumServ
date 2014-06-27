@@ -21,9 +21,11 @@
 // 
 #endregion
 using System;
+using System.Linq;
 using System.IO;
 using Microsoft.CSharp.RuntimeBinder;
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
 
 namespace Coinium.Common.Logging
@@ -33,6 +35,11 @@ namespace Coinium.Common.Logging
     /// </summary>
     public static class Logging
     {
+        // TODO: change to singleton.
+
+        public const string ConsoleLogFormat = "{Timestamp:HH:mm:ss} [{Level}] [{Component:l}] [{Pool:l}] {Message}{NewLine}{Exception}";
+        public const string FileLogFormat = "{Timestamp} [{Level}] [{Component:l}] [{Pool:l}] {Message}{NewLine}{Exception}";
+
         public static string RootFolder { get; private set; }
 
         public static void Init(dynamic globalConfig)
@@ -46,7 +53,11 @@ namespace Coinium.Common.Logging
                     Directory.CreateDirectory(RootFolder);
 
                 // create the global logger.
-                var loggerConfig = new LoggerConfiguration();
+                var config = new LoggerConfiguration();
+
+                // add enrichers
+                config.Enrich.With(new ComponentEnricher());
+                config.Enrich.With(new PoolEnricher());
 
                 // read log targets.
                 var targets = globalConfig.logs.targets;
@@ -59,19 +70,19 @@ namespace Coinium.Common.Logging
                     switch ((string) target.type)
                     {
                         case "console":
-                            AddConsoleLog(loggerConfig, target);
+                            AddConsoleLog(config, target);
                             break;
                         case "file":
-                            AddLogFile(loggerConfig, target);
+                            AddLogFile(config, target);
                             break;
                     }
                 }
 
                 // lower the default minimum level to verbose as sinks can only rise them but not lower.
-                loggerConfig.MinimumLevel.Verbose();
+                config.MinimumLevel.Verbose();
 
                 // bind the config to global log.
-                Log.Logger = loggerConfig.CreateLogger();
+                Log.Logger = config.CreateLogger();
             }
             catch (RuntimeBinderException e)
             {
@@ -82,13 +93,14 @@ namespace Coinium.Common.Logging
             }
         }
 
-        private static void AddConsoleLog(LoggerConfiguration configuration, dynamic target)
+        private static void AddConsoleLog(LoggerConfiguration config, dynamic target)
         {
             LogEventLevel level = GetLogLevel(target.level);
-            configuration.WriteTo.ColoredConsole(level, "{Timestamp:HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}");            
+
+            config.WriteTo.ColoredConsole(level, ConsoleLogFormat);        
         }
 
-        private static void AddLogFile(LoggerConfiguration configuration, dynamic target)
+        private static void AddLogFile(LoggerConfiguration config, dynamic target)
         {
             LogEventLevel level = GetLogLevel(target.level);
             bool rolling = target.rolling;
@@ -96,9 +108,9 @@ namespace Coinium.Common.Logging
             string filePath = String.Format("{0}/{1}", RootFolder, fileName);
 
             if (rolling)
-                configuration.WriteTo.RollingFile(filePath, level);
+                config.WriteTo.RollingFile(filePath, level, FileLogFormat);
             else
-                configuration.WriteTo.File(filePath, level);
+                config.WriteTo.File(filePath, level, FileLogFormat);
         }
 
         private static LogEventLevel GetLogLevel(dynamic level)
@@ -120,6 +132,24 @@ namespace Coinium.Common.Logging
                 default:
                     return LogEventLevel.Verbose;
             }
+        }
+    }
+
+    public class ComponentEnricher : ILogEventEnricher
+    {
+        public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
+        {
+            logEvent.AddPropertyIfAbsent(logEvent.Properties.Keys.Contains("SourceContext")
+                ? propertyFactory.CreateProperty("Component", logEvent.Properties["SourceContext"].ToString().Replace("\"","").Split('.').Last())
+                : propertyFactory.CreateProperty("Component", "global"));
+        }
+    }
+
+    public class PoolEnricher : ILogEventEnricher
+    {
+        public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
+        {
+            logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("Pool", "n/a"));
         }
     }
 }

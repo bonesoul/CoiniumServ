@@ -38,7 +38,6 @@ namespace Coinium.Crypto.Algorithms
         /// <param name="applicationContext">The application context.</param>
         public HashAlgorithmFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("HashAlgorithmFactory() init..");
             _applicationContext = applicationContext;
         }
 

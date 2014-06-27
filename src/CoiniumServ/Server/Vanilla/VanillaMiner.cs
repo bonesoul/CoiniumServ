@@ -107,9 +107,9 @@ namespace Coinium.Server.Vanilla
 
             using (var reader = new StreamReader(httpRequest.InputStream, Encoding.UTF8))
             {
-                var line = reader.ReadToEnd();  
-          
-                Log.Verbose(line.PrettifyJson());
+                var line = reader.ReadToEnd();
+
+                Log.ForContext<VanillaMiner>().Verbose(line.PrettifyJson());
 
                 var rpcRequest = new HttpServiceRequest(line, httpContext);
                 var rpcContext = new HttpServiceContext(this, rpcRequest);

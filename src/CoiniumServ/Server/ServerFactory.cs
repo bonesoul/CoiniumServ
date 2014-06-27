@@ -33,7 +33,6 @@ namespace Coinium.Server
 
         public ServerFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("ServerFactory() init..");
             _applicationContext = applicationContext;
         }
 

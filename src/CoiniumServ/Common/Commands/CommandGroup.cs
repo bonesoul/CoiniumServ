@@ -57,7 +57,7 @@ namespace Coinium.Common.Commands
                     _commands.Add(attribute, method);
 
                 else
-                    Log.Warning("There exists an already registered command '{0}'.", attribute.Name);
+                    Log.ForContext<CommandGroup>().Warning("There exists an already registered command '{0}'.", attribute.Name);
             }
         }
 

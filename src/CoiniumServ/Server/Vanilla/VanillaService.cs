@@ -65,7 +65,7 @@ namespace Coinium.Server.Vanilla
             {
                 var result = _daemonClient.Getwork(data);
                 if(result)
-                    Log.Verbose("Found block!: {0}", data);
+                    Log.ForContext<VanillaMiner>().Verbose("Found block!: {0}", data);
 
                 return null;
             }    

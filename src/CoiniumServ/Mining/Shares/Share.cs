@@ -65,7 +65,7 @@ namespace Coinium.Mining.Shares
             if (Job == null)
             {
                 Error = ShareError.JobNotFound;
-                Log.Warning("Job doesn't exist: {0}", jobId);
+                Log.ForContext<Share>().Warning("Job doesn't exist: {0}", jobId);
                 return;
             }
 
@@ -74,7 +74,7 @@ namespace Coinium.Mining.Shares
             if (nTimeString.Length != 8)
             {
                 Error = ShareError.IncorrectNTimeSize;
-                Log.Warning("Incorrect size of nTime");
+                Log.ForContext<Share>().Warning("Incorrect size of nTime");
                 return;
             }
 
@@ -85,7 +85,7 @@ namespace Coinium.Mining.Shares
             if (nonceString.Length != 8)
             {
                 Error = ShareError.IncorrectNonceSize;
-                Log.Warning("incorrect size of nonce");
+                Log.ForContext<Share>().Warning("incorrect size of nonce");
                 return;
             }
 

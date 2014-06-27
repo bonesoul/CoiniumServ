@@ -26,7 +26,7 @@ namespace Coinium.Persistance
 {
     public interface IStorage
     {
-        bool Enabled { get; }
+        bool IsEnabled { get; }
 
         void CommitShare(IShare share);
     }

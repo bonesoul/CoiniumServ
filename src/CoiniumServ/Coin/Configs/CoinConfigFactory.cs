@@ -22,7 +22,6 @@
 #endregion
 using Coinium.Common.Configuration;
 using Coinium.Common.Context;
-using Serilog;
 
 namespace Coinium.Coin.Configs
 {
@@ -35,7 +34,6 @@ namespace Coinium.Coin.Configs
 
         public CoinConfigFactory(IApplicationContext applicationContext)
         {
-            Log.Debug("CoinConfigFactory() init..");
             _applicationContext = applicationContext;
         }
 

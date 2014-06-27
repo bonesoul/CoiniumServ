@@ -38,8 +38,6 @@ namespace Coinium.Mining.Pools
 
         public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory)
         {
-            Log.Information("PoolManager initialized, reading pool configs..");
-
             _poolFactory = poolFactory;
             _poolConfigFactory = poolConfigFactory;
         }
@@ -68,7 +66,7 @@ namespace Coinium.Mining.Pools
                 AddPool(poolConfig);
             }
 
-            Log.Information("Discovered a total of {0} enabled pool configurations: {1}.", _pools.Count, enabledPools);
+            Log.ForContext<PoolManager>().Information("Discovered a total of {0} enabled pool configurations: {1}.", _pools.Count, enabledPools);
         }
 
         public IPool AddPool(IPoolConfig poolConfig)
