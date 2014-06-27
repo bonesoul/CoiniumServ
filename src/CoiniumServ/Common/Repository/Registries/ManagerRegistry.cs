@@ -25,6 +25,7 @@ using Coinium.Mining.Jobs;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Shares;
+using Coinium.Persistance;
 
 namespace Coinium.Common.Repository.Registries
 {

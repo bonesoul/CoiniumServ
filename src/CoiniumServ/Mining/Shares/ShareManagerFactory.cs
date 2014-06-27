@@ -1,4 +1,5 @@
-﻿#region License
+﻿
+#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -23,6 +24,7 @@
 using Coinium.Coin.Daemon;
 using Coinium.Common.Context;
 using Coinium.Mining.Jobs;
+using Coinium.Persistance;
 using Nancy.TinyIoc;
 using Serilog;
 
@@ -48,16 +50,17 @@ namespace Coinium.Mining.Shares
         /// <summary>
         /// Gets the specified daemon client.
         /// </summary>
-        /// <param name="hashAlgorithm">The hash algorithm.</param>
         /// <param name="jobManager">The job manager.</param>
         /// <param name="daemonClient"></param>
+        /// <param name="storage"></param>
         /// <returns></returns>
-        public IShareManager Get(IJobManager jobManager, IDaemonClient daemonClient)
+        public IShareManager Get(IDaemonClient daemonClient, IJobManager jobManager, IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
+                {"daemonClient", daemonClient},
                 {"jobManager", jobManager},
-                {"daemonClient", daemonClient}
+                {"storage", storage}
             };
 
             return _applicationContext.Container.Resolve<IShareManager>(@params);

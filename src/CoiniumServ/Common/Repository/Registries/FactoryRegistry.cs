@@ -29,6 +29,7 @@ using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
+using Coinium.Persistance;
 using Coinium.Rpc.Service;
 using Coinium.Server;
 
@@ -55,6 +56,7 @@ namespace Coinium.Common.Repository.Registries
             _applicationContext.Container.Register<ICoinConfigFactory, CoinConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfigFactory, PoolConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IGlobalConfigFactory, GlobalConfigFactory>().AsSingleton();
+            _applicationContext.Container.Register<IStorageFactory, StorageFactory>().AsSingleton();
         }
     }
 }

@@ -20,33 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Common.Context;
-using Serilog;
-
-namespace Coinium.Common.Configuration
+namespace Coinium.Persistance
 {
-    public class GlobalConfigFactory : IGlobalConfigFactory
+    public static class Storages
     {
-        private const string FileName = "config.json";
-
-        private dynamic _data = null;
-
-        /// <summary>
-        /// The _application context
-        /// </summary>
-        private IApplicationContext _applicationContext;
-
-        public GlobalConfigFactory(IApplicationContext applicationContext)
-        {
-            Log.Debug("MainConfigFactory() init..");
-            _applicationContext = applicationContext;            
-        }
-
-        public dynamic Get()
-        {
-            if (_data == null) // read the main config file, if we haven't so yet.
-                _data = JsonConfigReader.Read(FileName);
-            return _data ?? null;
-        }
+        public const string Redis = "redis";
     }
 }
