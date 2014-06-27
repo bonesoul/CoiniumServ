@@ -21,9 +21,9 @@
 // 
 #endregion
 using System.Collections.Generic;
-using Coinium.Common.Configuration;
-using Coinium.Common.Helpers.IO;
 using Coinium.Mining.Pools.Config;
+using Coinium.Utils.Configuration;
+using Coinium.Utils.Helpers.IO;
 using Serilog;
 
 namespace Coinium.Mining.Pools

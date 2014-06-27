@@ -20,8 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Daemon;
+
 using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
 using Coinium.Mining.Miners;
 
 namespace Coinium.Mining.Jobs

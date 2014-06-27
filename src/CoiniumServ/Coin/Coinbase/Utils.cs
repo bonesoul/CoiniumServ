@@ -23,10 +23,10 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using Coinium.Coin.Address;
-using Coinium.Common.Extensions;
 using Coinium.Crypto;
+using Coinium.Utils.Extensions;
+using Coinium.Utils.Numerics;
 using Gibbed.IO;
 using Serilog;
 

@@ -21,7 +21,7 @@
 // 
 #endregion
 using System;
-using System.Numerics;
+using Coinium.Utils.Numerics;
 
 namespace Coinium.Crypto.Algorithms
 {

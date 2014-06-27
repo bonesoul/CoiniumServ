@@ -21,7 +21,7 @@
 // 
 #endregion
 using System.Reflection;
-using Coinium.Common.Commands;
+using Coinium.Utils.Commands;
 
 namespace Coinium.Server.Commands
 {

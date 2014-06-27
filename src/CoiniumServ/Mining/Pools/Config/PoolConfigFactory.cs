@@ -21,7 +21,7 @@
 // 
 #endregion
 using Coinium.Coin.Configs;
-using Coinium.Common.Context;
+using Coinium.Repository.Context;
 using Nancy.TinyIoc;
 using Serilog;
 

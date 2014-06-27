@@ -21,9 +21,9 @@
 // 
 #endregion
 using System;
-using System.Numerics;
 using Coinium.Crypto;
 using Coinium.Server.Stratum.Notifications;
+using Coinium.Utils.Numerics;
 
 namespace Coinium.Mining.Shares
 {

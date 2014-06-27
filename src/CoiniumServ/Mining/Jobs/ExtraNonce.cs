@@ -21,7 +21,7 @@
 // 
 #endregion
 using System;
-using Coinium.Common.Extensions;
+using Coinium.Utils.Extensions;
 
 namespace Coinium.Mining.Jobs
 {

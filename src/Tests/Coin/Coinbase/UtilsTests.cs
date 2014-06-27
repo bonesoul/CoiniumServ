@@ -21,7 +21,6 @@
 // 
 #endregion
 using Coinium.Coin.Coinbase;
-using Coinium.Common.Extensions;
 using Should.Fluent;
 using Xunit;
 

@@ -23,8 +23,8 @@
 using System;
 using System.IO;
 using Coinium.Coin.Coinbase;
-using Coinium.Common.Extensions;
 using Coinium.Transactions.Utils;
+using Coinium.Utils.Extensions;
 using Gibbed.IO;
 
 namespace Coinium.Transactions.Script

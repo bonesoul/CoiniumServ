@@ -25,10 +25,10 @@ using System.IO;
 using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
-using Coinium.Common.Extensions;
 using Coinium.Mining.Miners;
-using Coinium.Rpc.Service.Http;
 using Coinium.Server.Stratum.Notifications;
+using Coinium.Services.Rpc.Http;
+using Coinium.Utils.Extensions;
 using Serilog;
 
 namespace Coinium.Server.Vanilla

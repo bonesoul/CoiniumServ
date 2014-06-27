@@ -23,7 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Coin.Daemon;
+using Coinium.Daemon;
 using Coinium.Net.Server.Sockets;
 using Serilog;
 

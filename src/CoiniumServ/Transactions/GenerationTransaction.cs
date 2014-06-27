@@ -25,12 +25,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Coinium.Coin.Coinbase;
-using Coinium.Coin.Daemon;
-using Coinium.Coin.Daemon.Responses;
-using Coinium.Common.Helpers.Time;
 using Coinium.Crypto;
+using Coinium.Daemon;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
 using Coinium.Transactions.Script;
+using Coinium.Utils.Helpers.Time;
 using Gibbed.IO;
 
 namespace Coinium.Transactions

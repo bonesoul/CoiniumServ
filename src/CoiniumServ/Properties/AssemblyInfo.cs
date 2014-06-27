@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-using Coinium.Common.Versions;
+using Coinium.Utils.Versions;
 
 [assembly: AssemblyTitle("CoiniumServ")]
 [assembly: AssemblyDescription("Crypto currency pool software")]

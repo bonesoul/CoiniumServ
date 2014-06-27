@@ -20,7 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Common.Context;
+
+using Coinium.Repository.Context;
 using Serilog;
 
 namespace Coinium.Crypto.Algorithms

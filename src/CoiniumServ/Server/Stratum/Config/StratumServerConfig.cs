@@ -21,7 +21,7 @@
 // 
 #endregion
 using System;
-using Coinium.Rpc.Service;
+using Coinium.Services.Rpc;
 
 namespace Coinium.Server.Stratum.Config
 {

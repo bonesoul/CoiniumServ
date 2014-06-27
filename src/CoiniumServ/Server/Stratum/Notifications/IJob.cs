@@ -22,11 +22,12 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Numerics;
-using Coinium.Coin.Daemon.Responses;
 using Coinium.Crypto;
 using Coinium.Crypto.Algorithms;
+using Coinium.Crypto.Merkle;
+using Coinium.Daemon.Responses;
 using Coinium.Transactions;
+using Coinium.Utils.Numerics;
 
 namespace Coinium.Server.Stratum.Notifications
 {

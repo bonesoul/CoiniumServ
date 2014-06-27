@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using Coinium.Common.Extensions;
+using Coinium.Utils.Extensions;
 using Serilog;
 
 namespace Coinium.Net.Server.Sockets
