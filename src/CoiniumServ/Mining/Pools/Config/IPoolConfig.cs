@@ -20,7 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Configs;
+
+using Coinium.Coin.Config;
 using Coinium.Daemon.Config;
 using Coinium.Server.Stratum.Config;
 using Coinium.Server.Vanilla.Config;

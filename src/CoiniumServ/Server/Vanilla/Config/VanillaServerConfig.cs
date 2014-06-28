@@ -45,7 +45,7 @@ namespace Coinium.Server.Vanilla.Config
                 return;
             }
 
-            Name = RpcServiceNames.Vanilla;
+            Name = RpcServices.Vanilla;
             Enabled = config.enabled;
             BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "localhost";
             Port = config.port;

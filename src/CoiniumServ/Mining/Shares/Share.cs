@@ -22,7 +22,9 @@
 #endregion
 using System;
 using Coinium.Coin.Coinbase;
+using Coinium.Coin.Config;
 using Coinium.Crypto;
+using Coinium.Mining.Miners;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Utils.Extensions;
 using Coinium.Utils.Numerics;
@@ -37,6 +39,7 @@ namespace Coinium.Mining.Shares
             get { return Error == ShareError.None; }
         }
         public bool Candidate { get; private set; }
+        public IMiner Miner { get; private set; }
         public ShareError Error { get; private set; }
         public IJob Job { get; private set; }
         public UInt32 NTime { get; private set; }
@@ -54,10 +57,11 @@ namespace Coinium.Mining.Shares
         public byte[] BlockHex { get; private set; }
         public byte[] BlockHash { get; private set; }
 
-        public Share(UInt64 jobId, IJob job, UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
+        public Share(IMiner miner, UInt64 jobId, IJob job, UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
         {
-            Error = ShareError.None;
+            Miner = miner;
             Job = job;
+            Error = ShareError.None;
 
             // TODO: add extranonce2 size check!.
 
@@ -98,7 +102,7 @@ namespace Coinium.Mining.Shares
 
             // construct the coinbase.
             CoinbaseBuffer = Serializers.SerializeCoinbase(Job, ExtraNonce1, ExtraNonce2); 
-            CoinbaseHash = Coin.Coinbase.Utils.HashCoinbase(CoinbaseBuffer);
+            CoinbaseHash = Coinium.Coin.Coinbase.Utils.HashCoinbase(CoinbaseBuffer);
 
             // create the merkle root.
             MerkleRoot = Job.MerkleTree.WithFirst(CoinbaseHash).ReverseBuffer();

@@ -21,7 +21,7 @@
 // 
 #endregion
 
-using Coinium.Coin.Configs;
+using Coinium.Coin.Config;
 using Coinium.Crypto.Algorithms;
 using Coinium.Mining.Jobs;
 using Coinium.Mining.Miners;

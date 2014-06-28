@@ -24,6 +24,7 @@ using System;
 using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools;
 using Coinium.Net.Server.Sockets;
 using Coinium.Server.Stratum.Errors;
 using Coinium.Server.Stratum.Notifications;
@@ -61,6 +62,8 @@ namespace Coinium.Server.Stratum
         /// </summary>
         public bool Authenticated { get; private set; }
 
+        public IPool Pool { get; private set; }
+
         /// <summary>
         /// Sends a new mining job to the miner.
         /// </summary>
@@ -73,12 +76,14 @@ namespace Coinium.Server.Stratum
         /// </summary>
         /// <param name="id"></param>
         /// <param name="connection"></param>
+        /// <param name="pool"></param>
         /// <param name="minerManager"></param>
-        public StratumMiner(int id, IConnection connection, IMinerManager minerManager)
+        public StratumMiner(int id, IConnection connection, IPool pool, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.
             Connection = connection; // the underlying connection.
             _minerManager = minerManager;
+            Pool = pool;
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.

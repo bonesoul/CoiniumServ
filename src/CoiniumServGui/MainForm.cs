@@ -22,11 +22,10 @@
 #endregion
 using System;
 using System.Windows.Forms;
-using MetroFramework.Forms;
 
 namespace CoiniumServGui
 {
-    public partial class MainForm : MetroForm
+    public partial class MainForm : Form
     {
         public MainForm()
         {

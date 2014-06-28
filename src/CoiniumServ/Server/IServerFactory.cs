@@ -21,11 +21,12 @@
 // 
 #endregion
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools;
 
 namespace Coinium.Server
 {
     public interface IServerFactory
     {
-        IMiningServer Get(string serviceName, IMinerManager minerManager);
+        IMiningServer Get(string serviceName, IPool pool, IMinerManager minerManager);
     }
 }

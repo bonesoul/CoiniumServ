@@ -20,28 +20,34 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Coin.Configs
+
+using Coinium.Repository.Context;
+using Coinium.Utils.Configuration;
+
+namespace Coinium.Coin.Config
 {
-    public class CoinConfig : ICoinConfig
+    public class CoinConfigFactory : ICoinConfigFactory
     {
-        public bool Valid { get; private set; }
-        public string Name { get; private set; }
-        public string Symbol { get; private set; }
-        public string Algorithm { get; private set; }
+        /// <summary>
+        /// The _application context
+        /// </summary>
+        private IApplicationContext _applicationContext;
 
-        public CoinConfig(dynamic config)
+        public CoinConfigFactory(IApplicationContext applicationContext)
         {
-            if (config == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Name = config.name;
-            Symbol = config.symbol;
-            Algorithm = config.algorithm;
-
-            Valid = true;
+            _applicationContext = applicationContext;
         }
+
+
+        public ICoinConfig GetConfig(string name)
+        {
+            var fileName = string.Format("config/coins/{0}.json", name);
+            var file = JsonConfigReader.Read(fileName);
+
+            if (file == null)
+                return null;
+
+            return new CoinConfig(file);
+        }        
     }
 }

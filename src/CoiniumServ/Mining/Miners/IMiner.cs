@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using Coinium.Mining.Pools;
 using Coinium.Server.Stratum.Notifications;
 
 namespace Coinium.Mining.Miners
@@ -48,6 +50,8 @@ namespace Coinium.Mining.Miners
         /// Is the miner authenticated.
         /// </summary>
         bool Authenticated { get; }
+
+        IPool Pool { get; }
 
         /// <summary>
         /// Authenticates the miner.

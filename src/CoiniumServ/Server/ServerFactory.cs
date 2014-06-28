@@ -22,6 +22,7 @@
 #endregion
 
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools;
 using Coinium.Repository.Context;
 using Nancy.TinyIoc;
 using Serilog;
@@ -40,13 +41,18 @@ namespace Coinium.Server
         /// <summary>
         /// Gets the specified service name.
         /// </summary>
-        /// <param name="serviceName">Name of the service.</param>
+        /// <param name="serverName">Name of the service.</param>
+        /// <param name="pool"></param>
         /// <param name="minerManager">The miner manager.</param>
         /// <returns></returns>
-        public IMiningServer Get(string serviceName, IMinerManager minerManager)
+        public IMiningServer Get(string serverName, IPool pool, IMinerManager minerManager)
         {
-            var @params = new NamedParameterOverloads {{"minerManager", minerManager}};
-            return _applicationContext.Container.Resolve<IMiningServer>(serviceName, @params);
+            var @params = new NamedParameterOverloads
+            {
+                {"pool", pool},
+                {"minerManager", minerManager}
+            };
+            return _applicationContext.Container.Resolve<IMiningServer>(serverName, @params);
         }
     }
 }

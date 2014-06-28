@@ -21,7 +21,9 @@
 // 
 #endregion
 using System;
+using Coinium.Coin.Config;
 using Coinium.Crypto;
+using Coinium.Mining.Miners;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Utils.Numerics;
 
@@ -31,6 +33,8 @@ namespace Coinium.Mining.Shares
     {
         bool Valid { get; }
         bool Candidate { get; }
+
+        IMiner Miner { get; }
 
         ShareError Error { get; }
 

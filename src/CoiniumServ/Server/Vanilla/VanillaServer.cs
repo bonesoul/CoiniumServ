@@ -22,6 +22,7 @@
 #endregion
 using System.Net;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools;
 using Coinium.Net.Server.Http;
 using Coinium.Server.Config;
 
@@ -31,10 +32,14 @@ namespace Coinium.Server.Vanilla
 {
     public class VanillaServer : HttpServer, IMiningServer
     {
-        private readonly IMinerManager _minerManager;
+        public IServerConfig Config { get; private set; }
 
-        public VanillaServer(IMinerManager minerManager)
+        private readonly IMinerManager _minerManager;
+        private readonly IPool _pool;
+
+        public VanillaServer(IPool pool, IMinerManager minerManager)
         {
+            _pool = pool;
             _minerManager = minerManager;
         }
 
@@ -45,11 +50,9 @@ namespace Coinium.Server.Vanilla
             ProcessRequest += ProcessHttpRequest;
         }
 
-        public IServerConfig Config { get; private set; }
-
         private void ProcessHttpRequest(HttpListenerContext context)
         {
-            var miner = _minerManager.Create<VanillaMiner>();
+            var miner = _minerManager.Create<VanillaMiner>(_pool);
             miner.Parse(context);                        
         }
     }

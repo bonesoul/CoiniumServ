@@ -20,17 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-using Coinium.Utils.Configuration;
-
-namespace Coinium.Coin.Configs
+namespace Coinium.Services.Rpc
 {
-    public interface ICoinConfig:IConfig
+    public static class RpcServices
     {
-        string Name { get; }
-
-        string Symbol { get; }
-
-        string Algorithm { get; }
+        public const string Vanilla = "Vanilla";
+        public const string Stratum = "Stratum";
     }
 }

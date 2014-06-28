@@ -20,15 +20,28 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Coin.Configs
+namespace Coinium.Coin.Config
 {
-    public interface ICoinConfigFactory
+    public class CoinConfig : ICoinConfig
     {
-        /// <summary>
-        /// Gets the configuration.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
-        ICoinConfig GetConfig(string name);
+        public bool Valid { get; private set; }
+        public string Name { get; private set; }
+        public string Symbol { get; private set; }
+        public string Algorithm { get; private set; }
+
+        public CoinConfig(dynamic config)
+        {
+            if (config == null)
+            {
+                Valid = false;
+                return;
+            }
+
+            Name = config.name;
+            Symbol = config.symbol;
+            Algorithm = config.algorithm;
+
+            Valid = true;
+        }
     }
 }

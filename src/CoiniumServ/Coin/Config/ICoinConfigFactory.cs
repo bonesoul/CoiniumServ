@@ -20,34 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-using Coinium.Repository.Context;
-using Coinium.Utils.Configuration;
-
-namespace Coinium.Coin.Configs
+namespace Coinium.Coin.Config
 {
-    public class CoinConfigFactory : ICoinConfigFactory
+    public interface ICoinConfigFactory
     {
         /// <summary>
-        /// The _application context
+        /// Gets the configuration.
         /// </summary>
-        private IApplicationContext _applicationContext;
-
-        public CoinConfigFactory(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
-
-
-        public ICoinConfig GetConfig(string name)
-        {
-            var fileName = string.Format("config/coins/{0}.json", name);
-            var file = JsonConfigReader.Read(fileName);
-
-            if (file == null)
-                return null;
-
-            return new CoinConfig(file);
-        }        
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        ICoinConfig GetConfig(string name);
     }
 }

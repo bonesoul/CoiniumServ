@@ -22,6 +22,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using Coinium.Mining.Pools;
 using Coinium.Net.Server.Sockets;
 
 namespace Coinium.Mining.Miners
@@ -34,9 +35,9 @@ namespace Coinium.Mining.Miners
 
         IMiner GetByConnection(IConnection connection);
 
-        T Create<T>() where T : IMiner;
+        T Create<T>(IPool pool) where T : IMiner;
 
-        T Create<T>(IConnection connection) where T : IMiner;
+        T Create<T>(IConnection connection, IPool pool) where T : IMiner;
 
         void Remove(IConnection connection);
 

@@ -68,7 +68,7 @@ namespace Coinium.Mining.Shares
             var job = _jobManager.GetJob(id);
 
             // create the share
-            var share = new Share(id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
+            var share = new Share(miner, id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
 
             if (share.Valid)

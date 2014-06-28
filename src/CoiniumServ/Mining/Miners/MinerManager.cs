@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Coinium.Daemon;
+using Coinium.Mining.Pools;
 using Coinium.Net.Server.Sockets;
 using Serilog;
 
@@ -59,18 +60,18 @@ namespace Coinium.Mining.Miners
                 select pair.Value).FirstOrDefault();
         }
 
-        public T Create<T>() where T : IMiner
+        public T Create<T>(IPool pool) where T : IMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, this }); // create an instance of the miner.
+            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, pool, this }); // create an instance of the miner.
             var miner = (IMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.
 
             return (T)miner;
         }
 
-        public T Create<T>(IConnection connection) where T : IMiner
+        public T Create<T>(IConnection connection, IPool pool) where T : IMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, connection, this });  // create an instance of the miner.
+            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, connection, pool, this });  // create an instance of the miner.
             var miner = (IMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.           
 
