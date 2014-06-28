@@ -36,12 +36,12 @@ namespace Coinium.Utils.Console
         public static void PrintBanner()
         {
             System.Console.ForegroundColor = ConsoleColor.Yellow;
-            System.Console.WriteLine(@"             .__       .__               ");
-            System.Console.WriteLine(@"  ____  ____ |__| ____ |__|__ __  _____  ");
-            System.Console.WriteLine(@"_/ ___\/  _ \|  |/    \|  |  |  \/     \ ");
-            System.Console.WriteLine(@"\  \__(  <_> )  |   |  \  |  |  /  Y Y  \");
-            System.Console.WriteLine(@" \___  >____/|__|___|  /__|____/|__|_|  /");
-            System.Console.WriteLine(@"     \/              \/               \/ ");
+            System.Console.WriteLine(@"             .__       .__                                         ");
+            System.Console.WriteLine(@"  ____  ____ |__| ____ |__|__ __  _____   ______ ______________  __");
+            System.Console.WriteLine(@"_/ ___\/  _ \|  |/    \|  |  |  \/     \ /  ___// __ \_  __ \  \/ /");
+            System.Console.WriteLine(@"\  \__(  <_> )  |   |  \  |  |  /  Y Y  \\___ \\  ___/|  | \/\   / ");
+            System.Console.WriteLine(@" \___  >____/|__|___|  /__|____/|__|_|  /____  >\___  >__|    \_/  ");
+            System.Console.WriteLine(@"     \/              \/               \/     \/     \/             ");
             System.Console.WriteLine();
         }
 
@@ -54,8 +54,7 @@ namespace Coinium.Utils.Console
             System.Console.WriteLine("Copyright (C) 2013 - 2014, Coinium project - http://www.coinium.org");
             System.Console.WriteLine();
             System.Console.ForegroundColor = ConsoleColor.DarkYellow;
-            System.Console.WriteLine("Coinium comes with ABSOLUTELY NO WARRANTY.");
-            System.Console.WriteLine("This is free software, and you are welcome to redistribute it under certain conditions; see the LICENSE file for details.");
+            System.Console.WriteLine("CoiniumServ comes with ABSOLUTELY NO WARRANTY.");
             System.Console.WriteLine();
             System.Console.ForegroundColor = ConsoleColor.Cyan;
             System.Console.WriteLine("You can contribute the development of the project by donating;");

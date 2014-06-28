@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.consoleControl1 = new ConsoleControl.ConsoleControl();
             this.SuspendLayout();
             // 
@@ -37,21 +38,21 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.consoleControl1.IsInputEnabled = true;
-            this.consoleControl1.Location = new System.Drawing.Point(13, 63);
+            this.consoleControl1.Location = new System.Drawing.Point(0, 0);
             this.consoleControl1.Name = "consoleControl1";
             this.consoleControl1.SendKeyboardCommandsToProcess = false;
             this.consoleControl1.ShowDiagnostics = false;
-            this.consoleControl1.Size = new System.Drawing.Size(804, 437);
+            this.consoleControl1.Size = new System.Drawing.Size(829, 512);
             this.consoleControl1.TabIndex = 0;
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(829, 512);
             this.Controls.Add(this.consoleControl1);
-            this.Location = new System.Drawing.Point(0, 0);
-            this.Name = "Form1";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "MainForm";
             this.Text = "CoiniumServ";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
