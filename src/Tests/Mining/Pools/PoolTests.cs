@@ -354,10 +354,10 @@ namespace Tests.Mining.Pools
             _daemonClient.Initialize(config.Daemon);
 
             // init server
-            _serverFactory.Get(RpcServiceNames.Stratum, _minerManager).Returns(_miningServer);
+            _serverFactory.Get(RpcServices.Stratum, pool, _minerManager).Returns(_miningServer);
 
             // init service
-            _serviceFactory.Get(RpcServiceNames.Stratum, _jobManager, _shareManager, _daemonClient).Returns(_rpcService);
+            _serviceFactory.Get(RpcServices.Stratum, _jobManager, _shareManager, _daemonClient).Returns(_rpcService);
 
             // initalize the server.
             _miningServer.Initialize(config.Stratum);

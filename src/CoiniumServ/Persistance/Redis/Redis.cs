@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using Coinium.Mining.Shares;
@@ -39,9 +40,11 @@ namespace Coinium.Persistance.Redis
         public Int32 Port { get; private set; }
         public int DatabaseId { get; private set; }
 
+        private readonly Version _requiredMinimumVersion = new Version(2, 6);
         private readonly IGlobalConfigFactory _globalConfigFactory;
         private ConnectionMultiplexer _connectionMultiplexer;
         private IDatabase _database;
+        private IServer _server;
 
         public Redis(IGlobalConfigFactory globalConfigFactory)
         {
@@ -49,7 +52,7 @@ namespace Coinium.Persistance.Redis
 
             ReadConfig();
 
-            if(IsEnabled)
+            if (IsEnabled)
                 Initialize();
         }
 
@@ -57,6 +60,10 @@ namespace Coinium.Persistance.Redis
         {
             if (!IsEnabled || !IsConnected)
                 return;
+
+            var key = string.Format("{0}:shares:round:current", share.Miner.Pool.Config.Coin.Name.ToLower());
+
+            _database.HashIncrement(key, share.Miner.Username, share.Difficulty ,CommandFlags.FireAndForget);
         }
 
         private void Initialize()
@@ -64,6 +71,7 @@ namespace Coinium.Persistance.Redis
             var options = new ConfigurationOptions();
             var endpoint = new DnsEndPoint(Host, Port, AddressFamily.InterNetwork);
             options.EndPoints.Add(endpoint);
+            options.AllowAdmin = true;
 
             try
             {
@@ -74,10 +82,28 @@ namespace Coinium.Persistance.Redis
                 // access to database.
                 _database = _connectionMultiplexer.GetDatabase(DatabaseId);
 
+                // get the configured server.
+                _server = _connectionMultiplexer.GetServer(endpoint);
+
+                // check the version
+                var info = _server.Info();
+                foreach (var pair in info[0])
+                {
+                    if (pair.Key == "redis_version")
+                    {
+                        var version = new Version(pair.Value);
+                        if (version < _requiredMinimumVersion)
+                            throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
+
+                        break;
+                    }
+                }
+                
                 Log.ForContext<Redis>().Information("Storage initialized: {0}", endpoint);
             }
             catch (Exception e)
             {
+                IsEnabled = false;
                 Log.ForContext<Redis>().Error(e, string.Format("Storage initialization failed: {0}", endpoint));
             }
         }

@@ -147,7 +147,7 @@
     <Compile Include="Utils\Helpers\Validation\Enforce.cs" />
     <Compile Include="Mining\Pools\Config\IPoolConfigFactory.cs" />
     <Compile Include="Mining\Pools\Config\PoolConfigFactory.cs" />
-    <Compile Include="Services\Rpc\RpcServiceNames.cs" />
+    <Compile Include="Services\Rpc\RpcServices.cs" />
     <Compile Include="Utils\Extensions\ArrayExtensions.cs" />
     <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Utils\Helpers\Arrays\ArrayHelpers.cs" />
@@ -164,10 +164,10 @@
     <Compile Include="Crypto\Algorithms\IHashAlgorithm.cs" />
     <Compile Include="Crypto\Algorithms\Scrypt.cs" />
     <Compile Include="Coin\Address\Base58.cs" />
-    <Compile Include="Coin\Configs\CoinConfig.cs" />
-    <Compile Include="Coin\Configs\CoinConfigFactory.cs" />
-    <Compile Include="Coin\Configs\ICoinConfig.cs" />
-    <Compile Include="Coin\Configs\ICoinConfigFactory.cs" />
+    <Compile Include="Coin\Config\CoinConfig.cs" />
+    <Compile Include="Coin\Config\CoinConfigFactory.cs" />
+    <Compile Include="Coin\Config\ICoinConfig.cs" />
+    <Compile Include="Coin\Config\ICoinConfigFactory.cs" />
     <Compile Include="Daemon\Config\DaemonConfig.cs" />
     <Compile Include="Daemon\IDaemonClient.cs" />
     <Compile Include="Daemon\Config\IDaemonConfig.cs" />

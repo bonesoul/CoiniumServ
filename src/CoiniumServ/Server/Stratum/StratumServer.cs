@@ -21,6 +21,7 @@
 // 
 #endregion
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools;
 using Coinium.Net.Server.Sockets;
 using Coinium.Server.Config;
 using Serilog;
@@ -37,15 +38,18 @@ namespace Coinium.Server.Stratum
     {
 
         public IServerConfig Config { get; private set; }
+        private readonly IPool _pool;
 
         private readonly IMinerManager _minerManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StratumServer"/> class.
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="minerManager">The miner manager.</param>
-        public StratumServer(IMinerManager minerManager)
+        public StratumServer(IPool pool, IMinerManager minerManager)
         {
+            _pool = pool;
             _minerManager = minerManager;
         }
 
@@ -97,7 +101,7 @@ namespace Coinium.Server.Stratum
         {
             Log.ForContext<StratumServer>().Information("Stratum client connected: {0}", e.Connection.ToString());
 
-            var miner = _minerManager.Create<StratumMiner>(e.Connection);
+            var miner = _minerManager.Create<StratumMiner>(e.Connection, _pool);
             e.Connection.Client = miner;           
         }
 

@@ -47,7 +47,7 @@ namespace Coinium.Server.Stratum.Config
                 return;
             }
 
-            Name = RpcServiceNames.Stratum;
+            Name = RpcServices.Stratum;
             Enabled = config.enabled;
             BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
             Port = config.port;

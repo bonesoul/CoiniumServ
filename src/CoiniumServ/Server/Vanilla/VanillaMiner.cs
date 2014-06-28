@@ -26,6 +26,7 @@ using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Services.Rpc.Http;
 using Coinium.Utils.Extensions;
@@ -54,6 +55,8 @@ namespace Coinium.Server.Vanilla
         /// Is the miner authenticated?
         /// </summary>
         public bool Authenticated { get; private set; }
+
+        public IPool Pool { get; private set; }
 
         /// <summary>
         /// Can we send new mining job's to miner?

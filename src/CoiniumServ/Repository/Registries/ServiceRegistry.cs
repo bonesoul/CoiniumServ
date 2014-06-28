@@ -39,8 +39,8 @@ namespace Coinium.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IRpcService, VanillaService>(RpcServiceNames.Vanilla).AsMultiInstance();
-            _applicationContext.Container.Register<IRpcService, StratumService>(RpcServiceNames.Stratum).AsMultiInstance();
+            _applicationContext.Container.Register<IRpcService, VanillaService>(RpcServices.Vanilla).AsMultiInstance();
+            _applicationContext.Container.Register<IRpcService, StratumService>(RpcServices.Stratum).AsMultiInstance();
         }
     }
 }
