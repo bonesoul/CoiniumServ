@@ -29,10 +29,6 @@ namespace Coinium.Persistance.Redis
     {
         bool IsConnected { get; }
 
-        string Host { get; }
-
-        Int32 Port { get; }
-
-        Int32 DatabaseId { get; }
+        IRedisConfig Config { get; }
     }
 }

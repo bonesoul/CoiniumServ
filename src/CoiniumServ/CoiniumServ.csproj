@@ -107,7 +107,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Daemon\DaemonError.cs" />
+    <Compile Include="Daemon\Exceptions\DaemonException.cs" />
     <Compile Include="Daemon\Responses\IBlockTemplate.cs" />
+    <Compile Include="Persistance\Redis\IRedisConfig.cs" />
+    <Compile Include="Persistance\Redis\RedisConfig.cs" />
     <Compile Include="Utils\Configuration\IGlobalConfigFactory.cs" />
     <Compile Include="Utils\Configuration\GlobalConfigFactory.cs" />
     <Compile Include="Utils\Extensions\StringExtensions.cs" />

@@ -26,6 +26,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using Coinium.Daemon.Config;
+using Coinium.Daemon.Exceptions;
 using Coinium.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
@@ -118,7 +119,7 @@ namespace Coinium.Daemon
             }
             catch (WebException exception)
             {
-                throw new Exception("There was a problem communicating with coin daemon.", exception);
+                throw new DaemonException(exception);
             }
 
             return webRequest;
@@ -169,7 +170,7 @@ namespace Coinium.Daemon
             }
             catch (ProtocolViolationException protocolException)
             {
-                throw new Exception("Unable to connect to the Bitcoin server.", protocolException);
+                throw new Exception("Unable to connect to the daemon.", protocolException);
             }
             catch (WebException webException)
             {
@@ -179,13 +180,14 @@ namespace Coinium.Daemon
                     throw new Exception("An unknown web exception occured while trying to read the JSON response.", webException);
 
                 using (var stream = response.GetResponseStream())
-                using (var reader = new StreamReader(stream))
                 {
-                    string error = reader.ReadToEnd();
+                    using (var reader = new StreamReader(stream))
+                    {
+                        string error = reader.ReadToEnd();
 
-                    Log.ForContext<DaemonBase>().Error("Daemon error: {0}",  error.PrettifyJson());
-
-                    throw new Exception(string.Format("{0} - {1}", response.StatusCode, error));
+                        var daemonError = JsonConvert.DeserializeObject<DaemonError>(error);
+                        throw new DaemonException(daemonError);
+                    }
                 }
             }
             catch (Exception exception)

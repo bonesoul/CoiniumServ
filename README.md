@@ -1,11 +1,12 @@
 ![Screenshot](http://coinium.org/assets/images/logo/coinium-icon.png)
 # CoiniumServ [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
  
-CoiniumServ is a high-performance pool-server implementation developed with C# that can host multiple pools together with their own wallet-daemon connections and ports. 
+CoiniumServ is a high-performance pool-server implementation that can host multiple pools together with their own wallet-daemon connections and ports. 
 
 #### Info
 
-* [http://www.coinium.org](http://www.coinium.org)
+* Official pools: [coinium.org](http://www.coinium.org)
+* Official site: [coiniumserv.com](http://www.coiniumserv.com)
 * [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
 * [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
 * [Documentation & Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)

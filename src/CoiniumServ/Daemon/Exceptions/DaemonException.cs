@@ -21,18 +21,18 @@
 // 
 #endregion
 
-using Coinium.Persistance.Redis;
+using System;
 
-namespace Coinium.Utils.Configuration
+namespace Coinium.Daemon.Exceptions
 {
-    public interface IGlobalConfigFactory
+    public class DaemonException : Exception
     {
-        /// <summary>
-        /// Gets the configuration.
-        /// </summary>
-        /// <returns></returns>
-        dynamic Get();
+        public DaemonException(Exception e):
+            base(e.Message)
+        { }
 
-        RedisConfig GetRedisConfig();
+        public DaemonException(DaemonError response):
+            base(response.Error.Message)
+        { }
     }
 }

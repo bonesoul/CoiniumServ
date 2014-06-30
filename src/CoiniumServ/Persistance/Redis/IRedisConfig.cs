@@ -21,18 +21,16 @@
 // 
 #endregion
 
-using Coinium.Persistance.Redis;
+using System;
 
-namespace Coinium.Utils.Configuration
+namespace Coinium.Persistance.Redis
 {
-    public interface IGlobalConfigFactory
+    public interface IRedisConfig
     {
-        /// <summary>
-        /// Gets the configuration.
-        /// </summary>
-        /// <returns></returns>
-        dynamic Get();
-
-        RedisConfig GetRedisConfig();
+        bool IsEnabled { get; }
+        string Host { get; }
+        Int32 Port { get;  }
+        string Password { get;  }
+        int DatabaseId { get;  }
     }
 }

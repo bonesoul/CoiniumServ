@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using Coinium.Persistance.Redis;
 using Coinium.Repository.Context;
 
 namespace Coinium.Utils.Configuration
@@ -30,6 +31,7 @@ namespace Coinium.Utils.Configuration
         private const string FileName = "config.json";
 
         private dynamic _data = null;
+        private RedisConfig _redisConfig = null;
 
         /// <summary>
         /// The _application context
@@ -43,9 +45,14 @@ namespace Coinium.Utils.Configuration
 
         public dynamic Get()
         {
-            if (_data == null) // read the main config file, if we haven't so yet.
-                _data = JsonConfigReader.Read(FileName);
-            return _data ?? null;
+            // return the global config, if we haven't read it yet, do so.
+            return _data ?? (_data = JsonConfigReader.Read(FileName));
+        }
+
+        public RedisConfig GetRedisConfig()
+        {
+            // return the redis config, if we haven't read it yet, do so.
+            return _redisConfig ?? (_redisConfig = new RedisConfig(Get().database.redis));
         }
     }
 }

@@ -48,15 +48,6 @@ namespace Coinium.Daemon
     public class DaemonClient : DaemonBase, IDaemonClient
     {
         /// <summary>
-        /// Initializes the specified URL.
-        /// </summary>
-        /// <param name="config">The configuration.</param>
-        public override void Initialize(IDaemonConfig config)
-        {
-            base.Initialize(config);
-        }
-
-        /// <summary>
         /// Version 0.8: Attempts add or remove node from the addnode list or try a connection to node once.
         /// </summary>
         /// <param name="nRquired">Number of required signatures to sign a transaction.</param>

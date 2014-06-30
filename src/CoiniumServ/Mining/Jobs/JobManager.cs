@@ -24,9 +24,12 @@ using System;
 using System.Collections.Generic;
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
+using Coinium.Daemon.Exceptions;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Miners;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
+using Serilog;
 
 namespace Coinium.Mining.Jobs
 {
@@ -80,35 +83,43 @@ namespace Coinium.Mining.Jobs
         /// </example>
         public void Broadcast()
         {
-            var blockTemplate = _daemonClient.GetBlockTemplate();
-            var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate);
-            generationTransaction.Create();
-
-            // create the difficulty notification.
-            var difficulty = new Difficulty(16);
-
-            // create the job notification.
-            var job = new Job(JobCounter.Next(), _hashAlgorithm, blockTemplate, generationTransaction)
+            try
             {
-                CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
-            };
+                var blockTemplate = _daemonClient.GetBlockTemplate();
 
-            Jobs.Add(job.Id, job);
-            LastJob = job;
+                var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate);
+                generationTransaction.Create();
 
-            foreach (var miner in _minerManager.GetAll())
+                // create the difficulty notification.
+                var difficulty = new Difficulty(16);
+
+                // create the job notification.
+                var job = new Job(JobCounter.Next(), _hashAlgorithm, blockTemplate, generationTransaction)
+                {
+                    CleanJobs = true // tell the miners to clean their existing jobs and start working on new one.
+                };
+
+                Jobs.Add(job.Id, job);
+                LastJob = job;
+
+                foreach (var miner in _minerManager.GetAll())
+                {
+                    if (!miner.Authenticated)
+                        continue;
+
+                    if (!miner.Subscribed)
+                        continue;
+
+                    if (!miner.SupportsJobNotifications)
+                        continue;
+
+                    miner.SendDifficulty(difficulty);
+                    miner.SendJob(job);
+                }
+            }
+            catch (DaemonException daemonException)
             {
-                if (!miner.Authenticated)
-                    continue;
-
-                if (!miner.Subscribed)
-                    continue;
-
-                if (!miner.SupportsJobNotifications)
-                    continue;
-
-                miner.SendDifficulty(difficulty);
-                miner.SendJob(job);
+                Log.Error(daemonException, "Can not read blocktemplate from daemon:");
             }
         }
     }

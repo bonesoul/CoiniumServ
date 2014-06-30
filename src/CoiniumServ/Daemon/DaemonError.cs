@@ -21,18 +21,42 @@
 // 
 #endregion
 
-using Coinium.Persistance.Redis;
+using Newtonsoft.Json;
 
-namespace Coinium.Utils.Configuration
+namespace Coinium.Daemon
 {
-    public interface IGlobalConfigFactory
+    public class DaemonError
     {
         /// <summary>
-        /// Gets the configuration.
+        /// The result object.
         /// </summary>
-        /// <returns></returns>
-        dynamic Get();
+        [JsonProperty(PropertyName = "result", Order = 0)]
+        public object Result { get; set; }
 
-        RedisConfig GetRedisConfig();
+        /// <summary>
+        /// The error returned by the wallet, if any.
+        /// </summary>
+        [JsonProperty(PropertyName = "error", Order = 1)]
+        public ErrorObject Error { get; set; }
+
+        /// <summary>
+        /// The id of the corresponding request.
+        /// </summary>
+        [JsonProperty(PropertyName = "id", Order = 2)]
+        public int Id { get; set; }
+
+        public DaemonError()
+        {
+
+        }
+    }
+
+    public class ErrorObject
+    {
+        [JsonProperty(PropertyName = "code", Order = 1)]
+        public int Code { get; set; }
+
+        [JsonProperty(PropertyName = "message", Order = 1)]
+        public string Message { get; set; }
     }
 }
