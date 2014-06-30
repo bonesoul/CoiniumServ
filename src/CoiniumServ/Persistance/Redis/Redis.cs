@@ -61,9 +61,15 @@ namespace Coinium.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return;
 
-            var key = string.Format("{0}:shares:round:current", share.Miner.Pool.Config.Coin.Name.ToLower());
+            var roundKey = string.Format("{0}:shares:round:current", share.Miner.Pool.Config.Coin.Name.ToLower());
+            var statsKey = string.Format("{0}:stats", share.Miner.Pool.Config.Coin.Name.ToLower());
 
-            _database.HashIncrement(key, share.Miner.Username, share.Difficulty ,CommandFlags.FireAndForget);
+            _database.HashIncrement(roundKey, share.Miner.Username, share.Difficulty ,CommandFlags.FireAndForget); // add the share to round.
+            
+            if(share.Valid)
+                _database.HashIncrement(statsKey, "validShares", 1);
+            else
+                _database.HashIncrement(statsKey, "invalidShares", 1);
         }
 
         private void Initialize()

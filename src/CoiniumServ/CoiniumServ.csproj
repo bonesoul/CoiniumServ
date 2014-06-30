@@ -107,6 +107,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Daemon\Exceptions\DaemonException.cs" />
+    <Compile Include="Daemon\Exceptions\IDaemonException.cs" />
     <Compile Include="Daemon\Responses\IBlockTemplate.cs" />
     <Compile Include="Utils\Configuration\IGlobalConfigFactory.cs" />
     <Compile Include="Utils\Configuration\GlobalConfigFactory.cs" />
