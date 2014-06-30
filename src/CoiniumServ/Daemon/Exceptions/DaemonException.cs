@@ -25,7 +25,7 @@ using System;
 
 namespace Coinium.Daemon.Exceptions
 {
-    public class DaemonException : Exception, IDaemonException
+    public class DaemonException : Exception
     {
         public DaemonException(Exception e):
             base(e.Message)
