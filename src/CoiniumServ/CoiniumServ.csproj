@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Daemon\DaemonError.cs" />
     <Compile Include="Daemon\Exceptions\DaemonException.cs" />
     <Compile Include="Daemon\Exceptions\IDaemonException.cs" />
     <Compile Include="Daemon\Responses\IBlockTemplate.cs" />

@@ -180,12 +180,14 @@ namespace Coinium.Daemon
                     throw new Exception("An unknown web exception occured while trying to read the JSON response.", webException);
 
                 using (var stream = response.GetResponseStream())
-                using (var reader = new StreamReader(stream))
                 {
-                    string error = reader.ReadToEnd();
+                    using (var reader = new StreamReader(stream))
+                    {
+                        string error = reader.ReadToEnd();
 
-                    dynamic errorResponse = JsonConvert.DeserializeObject(error);
-                    throw new DaemonException(errorResponse.error.message.ToString());
+                        var daemonError = JsonConvert.DeserializeObject<DaemonError>(error);
+                        throw new DaemonException(daemonError);
+                    }
                 }
             }
             catch (Exception exception)

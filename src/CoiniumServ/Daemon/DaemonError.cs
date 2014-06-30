@@ -21,18 +21,42 @@
 // 
 #endregion
 
-using System;
+using Newtonsoft.Json;
 
-namespace Coinium.Daemon.Exceptions
+namespace Coinium.Daemon
 {
-    public class DaemonException : Exception, IDaemonException
+    public class DaemonError
     {
-        public DaemonException(Exception e):
-            base(e.Message)
-        { }
+        /// <summary>
+        /// The result object.
+        /// </summary>
+        [JsonProperty(PropertyName = "result", Order = 0)]
+        public object Result { get; set; }
 
-        public DaemonException(DaemonError response):
-            base(response.Error.Message)
-        { }
+        /// <summary>
+        /// The error returned by the wallet, if any.
+        /// </summary>
+        [JsonProperty(PropertyName = "error", Order = 1)]
+        public ErrorObject Error { get; set; }
+
+        /// <summary>
+        /// The id of the corresponding request.
+        /// </summary>
+        [JsonProperty(PropertyName = "id", Order = 2)]
+        public int Id { get; set; }
+
+        public DaemonError()
+        {
+
+        }
+    }
+
+    public class ErrorObject
+    {
+        [JsonProperty(PropertyName = "code", Order = 1)]
+        public int Code { get; set; }
+
+        [JsonProperty(PropertyName = "message", Order = 1)]
+        public string Message { get; set; }
     }
 }
