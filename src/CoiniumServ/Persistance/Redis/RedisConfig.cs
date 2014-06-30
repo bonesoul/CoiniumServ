@@ -20,19 +20,25 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System;
 
-using Coinium.Persistance.Redis;
-
-namespace Coinium.Utils.Configuration
+namespace Coinium.Persistance.Redis
 {
-    public interface IGlobalConfigFactory
+    public class RedisConfig:IRedisConfig
     {
-        /// <summary>
-        /// Gets the configuration.
-        /// </summary>
-        /// <returns></returns>
-        dynamic Get();
+        public bool IsEnabled { get; private set; }
+        public string Host { get; private set; }
+        public Int32 Port { get; private set; }
+        public string Password { get; private set; }
+        public int DatabaseId { get; private set; }
 
-        RedisConfig GetRedisConfig();
+        public RedisConfig(dynamic config)
+        {
+            IsEnabled = config.enabled;
+            Host = config.host;
+            Port = config.port;
+            Password = config.password;
+            DatabaseId = config.databaseId;            
+        }
     }
 }

@@ -22,7 +22,6 @@
 #endregion
 
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using Coinium.Mining.Shares;
@@ -36,10 +35,7 @@ namespace Coinium.Persistance.Redis
     {
         public bool IsEnabled { get; private set; }
         public bool IsConnected { get { return _connectionMultiplexer.IsConnected; } }
-        public string Host { get; private set; }
-        public Int32 Port { get; private set; }
-        public string Password { get; private set; }
-        public int DatabaseId { get; private set; }
+        public IRedisConfig Config { get; private set; }
 
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
         private readonly IGlobalConfigFactory _globalConfigFactory;
@@ -51,7 +47,8 @@ namespace Coinium.Persistance.Redis
         {
             _globalConfigFactory = globalConfigFactory;
 
-            ReadConfig();
+            Config = _globalConfigFactory.GetRedisConfig(); // read the config.
+            IsEnabled = Config.IsEnabled;
 
             if (IsEnabled)
                 Initialize();
@@ -62,21 +59,23 @@ namespace Coinium.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return;
 
+            // add the share to round.
             var roundKey = string.Format("{0}:shares:round:current", share.Miner.Pool.Config.Coin.Name.ToLower());
-            var statsKey = string.Format("{0}:stats", share.Miner.Pool.Config.Coin.Name.ToLower());
+            _database.HashIncrement(roundKey, share.Miner.Username, share.Difficulty ,CommandFlags.FireAndForget);
 
-            _database.HashIncrement(roundKey, share.Miner.Username, share.Difficulty ,CommandFlags.FireAndForget); // add the share to round.
-            _database.HashIncrement(statsKey, share.Valid ? "validShares" : "invalidShares", 1 , CommandFlags.FireAndForget); // increment the valid shares.
+            // increment the valid shares.
+            var statsKey = string.Format("{0}:stats", share.Miner.Pool.Config.Coin.Name.ToLower());
+            _database.HashIncrement(statsKey, share.Valid ? "validShares" : "invalidShares", 1 , CommandFlags.FireAndForget);
         }
 
         private void Initialize()
         {
             var options = new ConfigurationOptions();
-            var endpoint = new DnsEndPoint(Host, Port, AddressFamily.InterNetwork);
+            var endpoint = new DnsEndPoint(Config.Host, Config.Port, AddressFamily.InterNetwork);
             options.EndPoints.Add(endpoint);
             options.AllowAdmin = true;
-            if (!string.IsNullOrEmpty(Password))
-                options.Password = Password;
+            if (!string.IsNullOrEmpty(Config.Password))
+                options.Password = Config.Password;
 
             try
             {
@@ -84,7 +83,7 @@ namespace Coinium.Persistance.Redis
                 _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options).Result;
 
                 // access to database.
-                _database = _connectionMultiplexer.GetDatabase(DatabaseId);
+                _database = _connectionMultiplexer.GetDatabase(Config.DatabaseId);
 
                 // get the configured server.
                 _server = _connectionMultiplexer.GetServer(endpoint);
@@ -111,17 +110,6 @@ namespace Coinium.Persistance.Redis
                 IsEnabled = false;
                 Log.ForContext<Redis>().Error(e, string.Format("Storage initialization failed: {0}", endpoint));
             }
-        }
-
-        private void ReadConfig()
-        {
-            var globalConfig = _globalConfigFactory.Get();
-            var redisConfig = globalConfig.database.redis;
-            IsEnabled = redisConfig.enabled;
-            Host = redisConfig.host;
-            Port = redisConfig.port;
-            Password = redisConfig.password;
-            DatabaseId = redisConfig.databaseId;
         }
     }
 }
