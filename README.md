@@ -5,7 +5,7 @@ CoiniumServ is a high-performance pool-server implementation developed with C# t
 
 #### Info
 
-* [http://www.coinium.org](http://www.coinium.org)
+* [coinium.org](http://www.coinium.org) & [coiniumserv.com](http://www.coiniumserv.com)
 * [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
 * [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
 * [Documentation & Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
