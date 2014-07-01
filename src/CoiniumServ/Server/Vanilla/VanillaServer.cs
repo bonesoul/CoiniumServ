@@ -21,6 +21,7 @@
 // 
 #endregion
 using System.Net;
+using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Net.Server.Http;
@@ -35,12 +36,16 @@ namespace Coinium.Server.Vanilla
         public IServerConfig Config { get; private set; }
 
         private readonly IMinerManager _minerManager;
+
+        private readonly IJobManager _jobManager;
+
         private readonly IPool _pool;
 
-        public VanillaServer(IPool pool, IMinerManager minerManager)
+        public VanillaServer(IPool pool, IMinerManager minerManager, IJobManager jobManager)
         {
             _pool = pool;
             _minerManager = minerManager;
+            _jobManager = jobManager;
         }
 
         public void Initialize(IServerConfig serverConfig)

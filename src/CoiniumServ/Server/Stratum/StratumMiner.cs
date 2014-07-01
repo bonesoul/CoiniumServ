@@ -28,14 +28,14 @@ using Coinium.Mining.Pools;
 using Coinium.Net.Server.Sockets;
 using Coinium.Server.Stratum.Errors;
 using Coinium.Server.Stratum.Notifications;
-using Coinium.Services.Rpc.Socket;
+using Coinium.Service.Stratum;
 using Coinium.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
 
 namespace Coinium.Server.Stratum
 {
-    public class StratumMiner : IClient, IMiner
+    public class StratumMiner : IClient, IStratumMiner
     {
         /// <summary>
         /// Miner's connection.
@@ -60,14 +60,20 @@ namespace Coinium.Server.Stratum
         /// <summary>
         /// Is the miner authenticated?
         /// </summary>
-        public bool Authenticated { get; private set; }
+        public bool Authenticated { get; set; }
 
         public IPool Pool { get; private set; }
+        public Difficulty Difficulty { get; private set; }
 
         /// <summary>
         /// Sends a new mining job to the miner.
         /// </summary>
         public bool SupportsJobNotifications { get; private set; }
+
+        /// <summary>
+        /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
+        /// </summary>
+        public uint ExtraNonce { get; private set; }
 
         private readonly IMinerManager _minerManager;
 
@@ -75,15 +81,18 @@ namespace Coinium.Server.Stratum
         /// Creates a new miner instance.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="extraNonce"></param>
         /// <param name="connection"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
-        public StratumMiner(int id, IConnection connection, IPool pool, IMinerManager minerManager)
+        public StratumMiner(int id, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.
+            ExtraNonce = extraNonce;
             Connection = connection; // the underlying connection.
             _minerManager = minerManager;
             Pool = pool;
+            Difficulty = new Difficulty(16); // set miner difficulty.
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
@@ -107,7 +116,7 @@ namespace Coinium.Server.Stratum
         public bool Authenticate(string user, string password)
         {
             Username = user;
-            Authenticated = _minerManager.Authenticate(this);
+            _minerManager.Authenticate(this);
 
             if(!Authenticated)
                 JsonRpcContext.SetException(new AuthenticationError(Username));
@@ -151,14 +160,13 @@ namespace Coinium.Server.Stratum
         /// <summary>
         /// Sends difficulty to the miner.
         /// </summary>
-        /// <param name="difficulty"></param>
-        public void SendDifficulty(Difficulty difficulty)
+        public void SendDifficulty()
         {
             var notification = new JsonRequest
             {
                 Id = null,
                 Method = "mining.set_difficulty",
-                Params = difficulty
+                Params = Difficulty
             };
 
             var json = JsonConvert.SerializeObject(notification) + "\n";
@@ -172,7 +180,7 @@ namespace Coinium.Server.Stratum
         /// <summary>
         /// Sends a mining-job to miner.
         /// </summary>
-        public void SendJob(Job job)
+        public void SendJob(IJob job)
         {
             var notification = new JsonRequest
             {

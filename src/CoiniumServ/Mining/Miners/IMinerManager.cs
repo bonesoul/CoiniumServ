@@ -37,10 +37,12 @@ namespace Coinium.Mining.Miners
 
         T Create<T>(IPool pool) where T : IMiner;
 
-        T Create<T>(IConnection connection, IPool pool) where T : IMiner;
+        T Create<T>(UInt32 extraNonce, IConnection connection, IPool pool) where T : IMiner;
 
         void Remove(IConnection connection);
 
-        bool Authenticate(IMiner miner);
+        void Authenticate(IMiner miner);
+
+        event EventHandler MinerAuthenticated;
     }
 }

@@ -21,27 +21,21 @@
 // 
 #endregion
 
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Responses;
+using Coinium.Daemon;
+using Coinium.Mining.Shares;
 
-namespace Coinium.Daemon
+namespace Coinium.Service
 {
-    public interface IDaemonClient
+    public interface IServiceFactory
     {
-        BlockTemplate GetBlockTemplate();
-
-        BlockTemplate GetBlockTemplate(string blockHex);
-
-        string SubmitBlock(string blockHex);
-
-        Block GetBlock(string hash);
-
-        Work Getwork();
-
-        bool Getwork(string data);
-
-        ValidateAddress ValidateAddress(string walletAddress);
-
-        void Initialize(IDaemonConfig daemonConfig);
+        /// <summary>
+        /// Gets the specified service name.
+        /// </summary>
+        /// <param name="serviceName">Name of the service.</param>
+        /// <param name="jobManager">The job manager.</param>
+        /// <param name="shareManager">The share manager.</param>
+        /// <param name="daemonClient">The daemon client.</param>
+        /// <returns></returns>
+        IRpcService Get(string serviceName, IShareManager shareManager, IDaemonClient daemonClient);
     }
 }

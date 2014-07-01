@@ -21,7 +21,7 @@
 // 
 #endregion
 using System;
-using Coinium.Services.Rpc;
+using Coinium.Service;
 
 namespace Coinium.Server.Vanilla.Config
 {
@@ -45,7 +45,7 @@ namespace Coinium.Server.Vanilla.Config
                 return;
             }
 
-            Name = RpcServices.Vanilla;
+            Name = Services.Vanilla;
             Enabled = config.enabled;
             BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "localhost";
             Port = config.port;

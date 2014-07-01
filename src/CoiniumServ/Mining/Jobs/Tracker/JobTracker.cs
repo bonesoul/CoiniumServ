@@ -21,27 +21,32 @@
 // 
 #endregion
 
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Responses;
+using System;
+using System.Collections.Generic;
+using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Daemon
+namespace Coinium.Mining.Jobs.Tracker
 {
-    public interface IDaemonClient
+    public class JobTracker:IJobTracker
     {
-        BlockTemplate GetBlockTemplate();
+        private readonly Dictionary<UInt64, IJob> _jobs;
 
-        BlockTemplate GetBlockTemplate(string blockHex);
+        public IJob LastJob { get; private set; }
 
-        string SubmitBlock(string blockHex);
+        public JobTracker()
+        {
+            _jobs = new Dictionary<UInt64, IJob>();
+        }
 
-        Block GetBlock(string hash);
+        public IJob Get(UInt64 id)
+        {
+            return _jobs.ContainsKey(id) ? _jobs[id] : null;
+        }
 
-        Work Getwork();
-
-        bool Getwork(string data);
-
-        ValidateAddress ValidateAddress(string walletAddress);
-
-        void Initialize(IDaemonConfig daemonConfig);
+        public void Add(IJob job)
+        {
+            _jobs.Add(job.Id, job);
+            LastJob = job;
+        }
     }
 }

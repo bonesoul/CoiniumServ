@@ -21,21 +21,20 @@
 // 
 #endregion
 
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
 using Coinium.Mining.Miners;
 
-namespace Coinium.Mining.Jobs
+namespace Coinium.Service.Stratum
 {
-    public interface IJobManagerFactory
+    public class SocketServiceContext
     {
-        /// <summary>
-        /// Gets the specified daemon client.
-        /// </summary>
-        /// <param name="daemonClient">The daemon client.</param>
-        /// <param name="minerManager">The miner manager.</param>
-        /// <param name="hashAlgorithm"></param>
-        /// <returns></returns>
-        IJobManager Get(IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
+        public IMiner Miner { get; private set; }
+
+        public SocketServiceRequest Request { get; private set; }
+
+        public SocketServiceContext(IMiner miner, SocketServiceRequest request)
+        {
+            Miner = miner;
+            Request = request;
+        }
     }
 }

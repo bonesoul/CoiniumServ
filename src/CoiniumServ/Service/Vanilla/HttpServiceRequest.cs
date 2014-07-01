@@ -21,20 +21,30 @@
 // 
 #endregion
 
-using Coinium.Mining.Miners;
+using System.Net;
+using Newtonsoft.Json;
 
-namespace Coinium.Services.Rpc.Http
+namespace Coinium.Service.Vanilla
 {
-    public class HttpServiceContext
+    /// <summary>
+    /// JsonRpc 1.0 over http request.
+    /// </summary>
+    public class HttpServiceRequest
     {
-        public IMiner Miner { get; private set; }
+        public string Text { get; private set; }
 
-        public HttpServiceRequest Request { get; private set; }
+        public dynamic Data { get; private set; }
 
-        public HttpServiceContext(IMiner miner, HttpServiceRequest request)
+        public HttpListenerContext Context { get; private set; }
+
+        public HttpListenerResponse Response { get; private set; }
+
+        public HttpServiceRequest(string text, HttpListenerContext context)
         {
-            Miner = miner;
-            Request = request;
+            Text = text;
+            Data = JsonConvert.DeserializeObject<dynamic>(Text);
+            Context = context;
+            Response = Context.Response;
         }
     }
 }

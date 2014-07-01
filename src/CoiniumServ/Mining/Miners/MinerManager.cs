@@ -37,6 +37,8 @@ namespace Coinium.Mining.Miners
 
         private readonly IDaemonClient _daemonClient;
 
+        public event EventHandler MinerAuthenticated;
+
         public MinerManager(IDaemonClient daemonClient)
         {
             _daemonClient = daemonClient;
@@ -69,9 +71,9 @@ namespace Coinium.Mining.Miners
             return (T)miner;
         }
 
-        public T Create<T>(IConnection connection, IPool pool) where T : IMiner
+        public T Create<T>(UInt32 extraNonce, IConnection connection, IPool pool) where T : IMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, connection, pool, this });  // create an instance of the miner.
+            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, extraNonce, connection, pool, this });  // create an instance of the miner.
             var miner = (IMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.           
 
@@ -89,14 +91,23 @@ namespace Coinium.Mining.Miners
                 _miners.Remove(miner.Id);
         }
 
-        public bool Authenticate(IMiner miner)
+        public void Authenticate(IMiner miner)
         {
-            var result = _daemonClient.ValidateAddress(miner.Username);
+            miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid;
 
-            Log.ForContext<MinerManager>().Information(result.IsValid ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
+            Log.ForContext<MinerManager>().Information(miner.Authenticated ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
-            return result.IsValid;
+            if(miner.Authenticated) // if miner authenticated successfully.
+                OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.
+        }
+
+        protected virtual void OnMinerAuthenticated(MinerEventArgs e)
+        {
+            var handler = MinerAuthenticated;
+
+            if (handler != null)
+                handler(this, e);
         }
     }
 }

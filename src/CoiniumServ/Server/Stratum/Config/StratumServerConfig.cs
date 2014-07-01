@@ -21,7 +21,7 @@
 // 
 #endregion
 using System;
-using Coinium.Services.Rpc;
+using Coinium.Service;
 
 namespace Coinium.Server.Stratum.Config
 {
@@ -47,7 +47,7 @@ namespace Coinium.Server.Stratum.Config
                 return;
             }
 
-            Name = RpcServices.Stratum;
+            Name = Services.Stratum;
             Enabled = config.enabled;
             BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
             Port = config.port;

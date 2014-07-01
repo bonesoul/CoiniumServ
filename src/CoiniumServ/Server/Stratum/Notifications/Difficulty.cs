@@ -23,6 +23,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Newtonsoft.Json;
 
 namespace Coinium.Server.Stratum.Notifications
@@ -34,7 +35,7 @@ namespace Coinium.Server.Stratum.Notifications
         /// Difficulty for jobs.
         /// </summary>
         [JsonIgnore]
-        public UInt32 Diff { get; private set; }
+        private readonly UInt32 _diff;
 
         /// <summary>
         /// Creates a new instance of JobNotification.
@@ -42,14 +43,14 @@ namespace Coinium.Server.Stratum.Notifications
         /// <param name="difficulty"></param>
         public Difficulty(UInt32 difficulty)
         {
-            Diff = difficulty;
+            _diff = difficulty;
         }
 
         public IEnumerator<object> GetEnumerator()
         {
             var data = new List<object>
             {
-                Diff
+                _diff
             };
 
             return data.GetEnumerator();
@@ -58,6 +59,11 @@ namespace Coinium.Server.Stratum.Notifications
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            return _diff.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

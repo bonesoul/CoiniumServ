@@ -21,8 +21,8 @@
 // 
 #endregion
 using System;
-using Coinium.Coin.Config;
 using Coinium.Crypto;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Miners;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Utils.Numerics;
@@ -31,14 +31,29 @@ namespace Coinium.Mining.Shares
 {
     public interface IShare
     {
-        bool Valid { get; }
-        bool Candidate { get; }
+        /// <summary>
+        /// Is a valid share.
+        /// </summary>
+        bool IsValid { get; }
+        /// <summary>
+        /// Does it contain a block candicate.
+        /// </summary>
+        bool IsBlockCandidate { get; }
+
+        Block Block { get; }
+
+        /// <summary>
+        /// Is the block data accepted by the coin daemon?
+        /// </summary>
+        bool IsBlockAccepted { get; }
 
         IMiner Miner { get; }
 
         ShareError Error { get; }
 
         IJob Job { get; }
+
+        int Height { get; }
 
         UInt32 NTime { get; }
 
@@ -67,5 +82,7 @@ namespace Coinium.Mining.Shares
         byte[] BlockHex { get; }
 
         byte[] BlockHash { get; }
+
+        void SetFoundBlock(Block block);
     }
 }

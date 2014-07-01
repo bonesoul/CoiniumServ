@@ -21,20 +21,18 @@
 // 
 #endregion
 
-using Coinium.Mining.Miners;
+using System;
 
-namespace Coinium.Services.Rpc.Socket
+namespace Coinium.Mining.Jobs.Manager
 {
-    public class SocketServiceContext
+    public interface IJobManager
     {
-        public IMiner Miner { get; private set; }
+        IExtraNonce ExtraNonce { get; }
 
-        public SocketServiceRequest Request { get; private set; }
-
-        public SocketServiceContext(IMiner miner, SocketServiceRequest request)
-        {
-            Miner = miner;
-            Request = request;
-        }
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="instanceId">The instance identifier.</param>
+        void Initialize(UInt32 instanceId);
     }
 }

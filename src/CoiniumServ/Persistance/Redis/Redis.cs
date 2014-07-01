@@ -26,6 +26,7 @@ using System.Net;
 using System.Net.Sockets;
 using Coinium.Mining.Shares;
 using Coinium.Utils.Configuration;
+using Coinium.Utils.Helpers.Time;
 using Serilog;
 using StackExchange.Redis;
 
@@ -59,13 +60,33 @@ namespace Coinium.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return;
 
+            var coin = share.Miner.Pool.Config.Coin.Name.ToLower();
+
             // add the share to round.
-            var roundKey = string.Format("{0}:shares:round:current", share.Miner.Pool.Config.Coin.Name.ToLower());
+            var roundKey = string.Format("{0}:shares:round:current", coin);
             _database.HashIncrement(roundKey, share.Miner.Username, share.Difficulty ,CommandFlags.FireAndForget);
 
             // increment the valid shares.
-            var statsKey = string.Format("{0}:stats", share.Miner.Pool.Config.Coin.Name.ToLower());
-            _database.HashIncrement(statsKey, share.Valid ? "validShares" : "invalidShares", 1 , CommandFlags.FireAndForget);
+            var statsKey = string.Format("{0}:stats", coin);
+            _database.HashIncrement(statsKey, share.IsValid ? "validShares" : "invalidShares", 1 , CommandFlags.FireAndForget);
+
+            // add to hashrate.
+            if (share.IsValid)
+            {
+                var hashrateKey = string.Format("{0}:hashrate", coin);
+                var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
+                _database.SortedSetAdd(hashrateKey, entry, TimeHelpers.NowInUnixTime(), CommandFlags.FireAndForget);
+            }
+        }
+
+        public void CommitBlock(IShare share)
+        {
+            var coin = share.Miner.Pool.Config.Coin.Name.ToLower();
+
+            // rename round:current to round:height.
+            var currentKey = string.Format("{0}:shares:round:current", coin);
+            var newKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
+            _database.KeyRenameAsync(currentKey, newKey, When.Always, CommandFlags.HighPriority);           
         }
 
         private void Initialize()

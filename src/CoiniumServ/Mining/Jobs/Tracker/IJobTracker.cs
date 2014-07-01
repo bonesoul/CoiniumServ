@@ -21,23 +21,17 @@
 // 
 #endregion
 
-using Newtonsoft.Json;
+using System;
+using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Services.Rpc.Socket
+namespace Coinium.Mining.Jobs.Tracker
 {
-    /// <summary>
-    /// JsonRpc 2.0 over sockets request.
-    /// </summary>
-    public class SocketServiceRequest
+    public interface IJobTracker
     {
-        public string Text { get; private set; }
+        IJob Get(UInt64 id);
 
-        public dynamic Data { get; private set; }
+        IJob LastJob { get; }
 
-        public SocketServiceRequest(string text)
-        {
-            Text = text;
-            Data = JsonConvert.DeserializeObject<dynamic>(Text);
-        }
+        void Add(IJob job);
     }
 }

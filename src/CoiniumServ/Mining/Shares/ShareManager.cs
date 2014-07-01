@@ -23,10 +23,11 @@
 using System;
 using AustinHarris.JsonRpc;
 using Coinium.Daemon;
-using Coinium.Mining.Jobs;
+using Coinium.Mining.Jobs.Tracker;
 using Coinium.Persistance;
 using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Errors;
+using Coinium.Server.Vanilla;
 using Coinium.Utils.Extensions;
 using Serilog;
 
@@ -34,7 +35,9 @@ namespace Coinium.Mining.Shares
 {
     public class ShareManager : IShareManager
     {
-        private readonly IJobManager _jobManager;
+        public event EventHandler BlockFound;
+
+        private readonly IJobTracker _jobTracker;
 
         private readonly IDaemonClient _daemonClient;
 
@@ -43,12 +46,13 @@ namespace Coinium.Mining.Shares
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareManager" /> class.
         /// </summary>
-        /// <param name="jobManager">The job manager.</param>
         /// <param name="daemonClient"></param>
-        public ShareManager(IJobManager jobManager, IDaemonClient daemonClient, IStorage storage)
+        /// <param name="jobTracker"></param>
+        /// <param name="storage"></param>
+        public ShareManager(IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
         {
-            _jobManager = jobManager;
             _daemonClient = daemonClient;
+            _jobTracker = jobTracker;
             _storage = storage;
         }
 
@@ -65,23 +69,28 @@ namespace Coinium.Mining.Shares
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
-            var job = _jobManager.GetJob(id);
+            var job = _jobTracker.Get(id);
 
             // create the share
-            var share = new Share(miner, id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
+            var share = new Share(miner, id, job, extraNonce2, nTimeString, nonceString);
 
-
-            if (share.Valid)
+            if (share.IsValid)
             {               
                 _storage.CommitShare(share);
 
-                if (share.Candidate)
+                if (share.IsBlockCandidate)
                 {
-                    Log.ForContext<ShareManager>().Information("Share with block candidate accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
-                    var result = SubmitBlock(share);
+                    Log.ForContext<ShareManager>().Information("Share with block candidate [{0}] accepted at {1:0.00}/{2} by miner {3}.", share.Height, share.Difficulty, miner.Difficulty, miner.Username);
+
+                    var success = SubmitBlock(share); // submit block to daemon
+
+                    if (success)
+                        _storage.CommitBlock(share);
+
+                    // TODO: notify back job manager using an event so he can create a new job.
                 }
                 else
-                    Log.ForContext<ShareManager>().Information("Share accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
+                    Log.ForContext<ShareManager>().Information("Share accepted at {0:0.00}/{1} by miner {2}.", share.Difficulty, miner.Difficulty, miner.Username);
             }
             else
             {
@@ -110,20 +119,65 @@ namespace Coinium.Mining.Shares
                         break;
                 }
 
-                Log.ForContext<ShareManager>().Information("Share rejected at {0}/{1} by miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
+                Log.ForContext<ShareManager>().Information("Share rejected at {0:0.00}/{1} by miner {2}.", share.Difficulty, miner.Difficulty, miner.Username);
             }
 
 
             return share;
         }
 
+        public IShare ProcessShare(VanillaMiner miner, string data)
+        {
+            throw new NotImplementedException();
+        }
+
         private bool SubmitBlock(Share share)
         {
-            var response = _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
+            try
+            {
+                _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
+                var isAccepted = CheckIfBlockAccepted(share);
 
-            Log.ForContext<ShareManager>().Information("Submitted block using submitblock: {0}.", share.BlockHash.ToHexString());
+                Log.ForContext<ShareManager>()
+                    .Information(
+                        isAccepted
+                            ? "Found block [{0}] with hash: {1}."
+                            : "Submitted block [{0}] but got denied: {1}.", 
+                            share.Height, share.BlockHash.ToHexString());
 
-            return response == "accepted";
+                if(isAccepted)
+                    OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
+
+                return isAccepted;
+            }
+            catch (Exception e)
+            {
+                Log.ForContext<ShareManager>().Error(e, "Submit block failed - height: {0}, hash: {1}", share.Height, share.BlockHash);
+                return false;
+            }
+        }
+
+        private bool CheckIfBlockAccepted(Share share)
+        {
+            try
+            {
+                var block = _daemonClient.GetBlock(share.BlockHash.ToHexString()); // query the block.
+                share.SetFoundBlock(block); // assign the block to share.
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log.ForContext<ShareManager>().Error(e, "Get block failed - height: {0}, hash: {1}", share.Height, share.BlockHash);
+                return false;
+            }
+        }
+
+        protected virtual void OnBlockFound(EventArgs e)
+        {
+            var handler = BlockFound;
+
+            if (handler != null)
+                handler(this, e);
         }
     }
 }

@@ -22,9 +22,9 @@
 #endregion
 
 using Coinium.Repository.Context;
-using Coinium.Server.Stratum;
-using Coinium.Server.Vanilla;
-using Coinium.Services.Rpc;
+using Coinium.Service;
+using Coinium.Service.Stratum;
+using Coinium.Service.Vanilla;
 
 namespace Coinium.Repository.Registries
 {
@@ -39,8 +39,8 @@ namespace Coinium.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IRpcService, VanillaService>(RpcServices.Vanilla).AsMultiInstance();
-            _applicationContext.Container.Register<IRpcService, StratumService>(RpcServices.Stratum).AsMultiInstance();
+            _applicationContext.Container.Register<IRpcService, VanillaService>(Services.Vanilla).AsMultiInstance();
+            _applicationContext.Container.Register<IRpcService, StratumService>(Services.Stratum).AsMultiInstance();
         }
     }
 }

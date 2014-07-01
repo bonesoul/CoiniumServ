@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
 
 namespace Coinium.Daemon.Responses
@@ -28,14 +29,14 @@ namespace Coinium.Daemon.Responses
     public class Block
     {
         public string Hash { get; set; }
-        public int Confirmations { get; set; }
-        public int Size { get; set; }
-        public int Height { get; set; }
-        public int Version { get; set; }
+        public Int32 Confirmations { get; set; }
+        public Int32 Size { get; set; }
+        public Int32 Height { get; set; }
+        public Int32 Version { get; set; }
         public string MerkleRoot { get; set; }
         public List<string> Tx { get; set; }
-        public int Time { get; set; }
-        public int Nonce { get; set; }
+        public Int32 Time { get; set; }
+        public UInt32 Nonce { get; set; }
         public string Bits { get; set; }
         public double Difficulty { get; set; }
         public string NextBlockHash { get; set; }

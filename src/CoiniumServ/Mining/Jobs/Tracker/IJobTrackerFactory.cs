@@ -20,28 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Responses;
-
-namespace Coinium.Daemon
+namespace Coinium.Mining.Jobs.Tracker
 {
-    public interface IDaemonClient
+    public interface IJobTrackerFactory
     {
-        BlockTemplate GetBlockTemplate();
-
-        BlockTemplate GetBlockTemplate(string blockHex);
-
-        string SubmitBlock(string blockHex);
-
-        Block GetBlock(string hash);
-
-        Work Getwork();
-
-        bool Getwork(string data);
-
-        ValidateAddress ValidateAddress(string walletAddress);
-
-        void Initialize(IDaemonConfig daemonConfig);
+        IJobTracker Get();
     }
 }

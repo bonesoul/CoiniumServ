@@ -21,27 +21,25 @@
 // 
 #endregion
 
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Responses;
+using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
+using Coinium.Mining.Jobs.Tracker;
+using Coinium.Mining.Miners;
+using Coinium.Mining.Shares;
 
-namespace Coinium.Daemon
+namespace Coinium.Mining.Jobs.Manager
 {
-    public interface IDaemonClient
+    public interface IJobManagerFactory
     {
-        BlockTemplate GetBlockTemplate();
-
-        BlockTemplate GetBlockTemplate(string blockHex);
-
-        string SubmitBlock(string blockHex);
-
-        Block GetBlock(string hash);
-
-        Work Getwork();
-
-        bool Getwork(string data);
-
-        ValidateAddress ValidateAddress(string walletAddress);
-
-        void Initialize(IDaemonConfig daemonConfig);
+        /// <summary>
+        /// Gets the specified daemon client.
+        /// </summary>
+        /// <param name="daemonClient">The daemon client.</param>
+        /// <param name="jobtracker"></param>
+        /// <param name="shareManager"></param>
+        /// <param name="minerManager">The miner manager.</param>
+        /// <param name="hashAlgorithm"></param>
+        /// <returns></returns>
+        IJobManager Get(IDaemonClient daemonClient, IJobTracker jobtracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
     }
 }

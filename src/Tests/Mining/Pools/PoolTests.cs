@@ -23,13 +23,14 @@
 using System;
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
-using Coinium.Mining.Jobs;
+using Coinium.Mining.Jobs.Manager;
+using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 using Coinium.Persistance;
 using Coinium.Server;
-using Coinium.Services.Rpc;
+using Coinium.Service;
 using Coinium.Utils.Configuration;
 using NSubstitute;
 using Should.Fluent;
@@ -43,6 +44,7 @@ namespace Tests.Mining.Pools
         private readonly IServerFactory _serverFactory;
         private readonly IServiceFactory _serviceFactory;
         private readonly IJobManagerFactory _jobManagerFactory;
+        private readonly IJobTrackerFactory _jobTrackerFactory;
         private readonly IShareManagerFactory _shareManagerFactory;
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
         private readonly IMinerManagerFactory _minerManagerFactory;
@@ -53,6 +55,7 @@ namespace Tests.Mining.Pools
         private readonly IDaemonClient _daemonClient;
         private readonly IMinerManager _minerManager;
         private readonly IJobManager _jobManager;
+        private readonly IJobTracker _jobTracker;
         private readonly IShareManager _shareManager;
         private readonly IStorage _storage;
         private readonly IMiningServer _miningServer;
@@ -64,6 +67,7 @@ namespace Tests.Mining.Pools
         public PoolTests()
         {
             _jobManagerFactory = Substitute.For<IJobManagerFactory>();
+            _jobTrackerFactory = Substitute.For<IJobTrackerFactory>();
             _hashAlgorithmFactory = Substitute.For<IHashAlgorithmFactory>();
             _shareManagerFactory = Substitute.For<IShareManagerFactory>();
             _minerManagerFactory = Substitute.For<IMinerManagerFactory>();
@@ -75,6 +79,7 @@ namespace Tests.Mining.Pools
             _daemonClient = Substitute.For<IDaemonClient>();
             _minerManager = Substitute.For<IMinerManager>();
             _jobManager = Substitute.For<IJobManager>();
+            _jobTracker = Substitute.For<IJobTracker>();
             _shareManager = Substitute.For<IShareManager>();
             _miningServer = Substitute.For<IMiningServer>();
             _rpcService = Substitute.For<IRpcService>();
@@ -93,6 +98,7 @@ namespace Tests.Mining.Pools
                 _serviceFactory,
                 _daemonClient,
                 _minerManagerFactory,
+                _jobTrackerFactory,
                 _jobManagerFactory,
                 _shareManagerFactory,
                 _storageManagerFactory,
@@ -116,6 +122,7 @@ namespace Tests.Mining.Pools
                     _serviceFactory,
                     _daemonClient,
                     _minerManagerFactory,
+                    _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
                     _storageManagerFactory,
@@ -139,6 +146,7 @@ namespace Tests.Mining.Pools
                     _serviceFactory,
                     _daemonClient,
                     _minerManagerFactory,
+                    _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
                     _storageManagerFactory,
@@ -162,6 +170,7 @@ namespace Tests.Mining.Pools
                     null,
                     _daemonClient,
                     _minerManagerFactory,
+                    _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
                     _storageManagerFactory,
@@ -185,6 +194,7 @@ namespace Tests.Mining.Pools
                     _serviceFactory,
                     null,
                     _minerManagerFactory,
+                    _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
                     _storageManagerFactory,
@@ -208,6 +218,7 @@ namespace Tests.Mining.Pools
                     _serviceFactory,
                     _daemonClient,
                     null,
+                    _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
                     _storageManagerFactory,
@@ -215,6 +226,30 @@ namespace Tests.Mining.Pools
             });
 
             ex.Message.Should().Contain("IMinerManagerFactory");
+        }
+
+        /// <summary>
+        /// Tests pool constructor with null JobManager, should trow exception.
+        /// </summary>
+        [Fact]
+        public void ConstructorTest_NullJobTrackerFactory_ShouldThrow()
+        {
+            Exception ex = Assert.Throws<ArgumentNullException>(() =>
+            {
+                var pool = new Coinium.Mining.Pools.Pool(
+                    _hashAlgorithmFactory,
+                    _serverFactory,
+                    _serviceFactory,
+                    _daemonClient,
+                    _minerManagerFactory,
+                    null,
+                    _jobManagerFactory,
+                    _shareManagerFactory,
+                    _storageManagerFactory,
+                    _globalConfigFactory);
+            });
+
+            ex.Message.Should().Contain("IJobTrackerFactory");
         }
 
         /// <summary>
@@ -231,6 +266,7 @@ namespace Tests.Mining.Pools
                     _serviceFactory,
                     _daemonClient,
                     _minerManagerFactory,
+                    _jobTrackerFactory,
                     null,
                     _shareManagerFactory,
                     _storageManagerFactory,
@@ -254,6 +290,7 @@ namespace Tests.Mining.Pools
                     _serviceFactory,
                     _daemonClient,
                     _minerManagerFactory,
+                    _jobTrackerFactory,
                     _jobManagerFactory,
                     null,
                     _storageManagerFactory,
@@ -277,6 +314,7 @@ namespace Tests.Mining.Pools
                     _serviceFactory,
                     _daemonClient,
                     _minerManagerFactory,
+                    _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
                     null,
@@ -300,6 +338,7 @@ namespace Tests.Mining.Pools
                     _serviceFactory,
                     _daemonClient,
                     _minerManagerFactory,
+                    _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
                     _storageManagerFactory,
@@ -320,7 +359,8 @@ namespace Tests.Mining.Pools
                 _serverFactory, 
                 _serviceFactory, 
                 _daemonClient,
-                _minerManagerFactory, 
+                _minerManagerFactory,
+                _jobTrackerFactory,
                 _jobManagerFactory, 
                 _shareManagerFactory,
                 _storageManagerFactory,
@@ -340,24 +380,27 @@ namespace Tests.Mining.Pools
             // initialize the miner manager.
             _minerManagerFactory.Get(_daemonClient);
 
-            // initalize job manager.
-            _jobManagerFactory.Get(_daemonClient, _minerManager, hashAlgorithm).Returns(_jobManager);
-            _jobManager.Initialize(pool.InstanceId);
-
             // initialize storage manager
             _storageManagerFactory.Get(Storages.Redis);
 
+            // initialize the job tracker
+            _jobTrackerFactory.Get();
+
             // initialize share manager.
-            _shareManagerFactory.Get(_daemonClient, _jobManager, _storage).Returns(_shareManager);
+            _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage).Returns(_shareManager);
+
+            // initalize job manager.
+            _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm).Returns(_jobManager);
+            _jobManager.Initialize(pool.InstanceId);
         
             // init daemon client
             _daemonClient.Initialize(config.Daemon);
 
             // init server
-            _serverFactory.Get(RpcServices.Stratum, pool, _minerManager).Returns(_miningServer);
+            _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager).Returns(_miningServer);
 
             // init service
-            _serviceFactory.Get(RpcServices.Stratum, _jobManager, _shareManager, _daemonClient).Returns(_rpcService);
+            _serviceFactory.Get(Services.Stratum, _shareManager, _daemonClient).Returns(_rpcService);
 
             // initalize the server.
             _miningServer.Initialize(config.Stratum);

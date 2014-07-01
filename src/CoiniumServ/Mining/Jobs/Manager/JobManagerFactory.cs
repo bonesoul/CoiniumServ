@@ -21,15 +21,17 @@
 // 
 #endregion
 
+using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
-using Coinium.Mining.Jobs;
+using Coinium.Mining.Jobs.Tracker;
+using Coinium.Mining.Miners;
 using Coinium.Mining.Shares;
 using Coinium.Repository.Context;
 using Nancy.TinyIoc;
 
-namespace Coinium.Services.Rpc
+namespace Coinium.Mining.Jobs.Manager
 {
-    public class ServiceFactory : IServiceFactory
+    public class JobManagerFactory : IJobManagerFactory
     {
         /// <summary>
         /// The _kernel
@@ -37,25 +39,35 @@ namespace Coinium.Services.Rpc
         private readonly IApplicationContext _applicationContext;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceFactory"/> class.
+        /// Initializes a new instance of the <see cref="JobManagerFactory"/> class.
         /// </summary>
-        public ServiceFactory(IApplicationContext applicationContext)
+        /// <param name="applicationContext">The application context.</param>
+        public JobManagerFactory(IApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
         }
 
         /// <summary>
-        /// Gets the specified service name.
+        /// Gets the specified daemon client.
         /// </summary>
-        /// <param name="serviceName">Name of the service.</param>
-        /// <param name="jobManager">The job manager.</param>
-        /// <param name="shareManager">The share manager.</param>
         /// <param name="daemonClient">The daemon client.</param>
+        /// <param name="jobTracker"></param>
+        /// <param name="shareManager"></param>
+        /// <param name="minerManager">The miner manager.</param>
+        /// <param name="hashAlgorithm"></param>
         /// <returns></returns>
-        public IRpcService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient)
+        public IJobManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
-            var @params = new NamedParameterOverloads { { "jobManager", jobManager }, { "shareManager", shareManager }, { "daemonClient", daemonClient } };
-            return _applicationContext.Container.Resolve<IRpcService>(serviceName, @params);
+            var @params = new NamedParameterOverloads
+            {
+                {"daemonClient", daemonClient},
+                {"jobTracker", jobTracker},
+                {"shareManager", shareManager},
+                {"minerManager", minerManager},
+                {"hashAlgorithm", hashAlgorithm}
+            };
+
+            return _applicationContext.Container.Resolve<IJobManager>(@params);
         }
     }
 }

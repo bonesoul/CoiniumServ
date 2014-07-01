@@ -20,31 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using System.Collections.Generic;
-using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Mining.Jobs
+namespace Coinium.Mining.Miners
 {
-    public interface IJobManager
+    public class MinerEventArgs:EventArgs
     {
-        Dictionary<UInt64, IJob> Jobs { get; }
-        IJobCounter JobCounter { get; }
+        public IMiner Miner { get; private set; }
 
-        IExtraNonce ExtraNonce { get; }
-
-        IJob LastJob { get; }
-
-        IJob GetJob(UInt64 id);
-
-        void AddJob(IJob job);
-
-        void Broadcast();
-
-        /// <summary>
-        /// Initializes the specified pool.
-        /// </summary>
-        /// <param name="instanceId">The instance identifier.</param>
-        void Initialize(UInt32 instanceId);
+        public MinerEventArgs(IMiner miner)
+        {
+            Miner = miner;
+        }
     }
 }

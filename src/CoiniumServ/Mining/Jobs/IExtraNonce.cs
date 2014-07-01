@@ -24,6 +24,7 @@ using System;
 
 namespace Coinium.Mining.Jobs
 {
+    // Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
     public interface IExtraNonce
     {
         UInt32 Current { get; }

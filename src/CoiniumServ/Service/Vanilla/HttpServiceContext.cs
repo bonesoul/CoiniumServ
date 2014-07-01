@@ -21,27 +21,20 @@
 // 
 #endregion
 
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Responses;
+using Coinium.Mining.Miners;
 
-namespace Coinium.Daemon
+namespace Coinium.Service.Vanilla
 {
-    public interface IDaemonClient
+    public class HttpServiceContext
     {
-        BlockTemplate GetBlockTemplate();
+        public IMiner Miner { get; private set; }
 
-        BlockTemplate GetBlockTemplate(string blockHex);
+        public HttpServiceRequest Request { get; private set; }
 
-        string SubmitBlock(string blockHex);
-
-        Block GetBlock(string hash);
-
-        Work Getwork();
-
-        bool Getwork(string data);
-
-        ValidateAddress ValidateAddress(string walletAddress);
-
-        void Initialize(IDaemonConfig daemonConfig);
+        public HttpServiceContext(IMiner miner, HttpServiceRequest request)
+        {
+            Miner = miner;
+            Request = request;
+        }
     }
 }

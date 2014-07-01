@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using Coinium.Mining.Pools;
 using Coinium.Net.Server;
 using Coinium.Server.Config;
 

@@ -27,6 +27,7 @@ namespace Coinium.Mining.Jobs
 {
     /// <summary>
     /// Counter for extra nonce.
+    /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
     /// </summary>
     public class ExtraNonce:IExtraNonce
     {

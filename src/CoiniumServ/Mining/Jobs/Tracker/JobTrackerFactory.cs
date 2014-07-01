@@ -21,16 +21,11 @@
 // 
 #endregion
 
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Mining.Miners;
 using Coinium.Repository.Context;
-using Nancy.TinyIoc;
-using Serilog;
 
-namespace Coinium.Mining.Jobs
+namespace Coinium.Mining.Jobs.Tracker
 {
-    public class JobManagerFactory : IJobManagerFactory
+    public class JobTrackerFactory:IJobTrackerFactory
     {
         /// <summary>
         /// The _kernel
@@ -38,31 +33,17 @@ namespace Coinium.Mining.Jobs
         private readonly IApplicationContext _applicationContext;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="JobManagerFactory"/> class.
+        /// Initializes a new instance of the <see cref="JobTrackerFactory"/> class.
         /// </summary>
         /// <param name="applicationContext">The application context.</param>
-        public JobManagerFactory(IApplicationContext applicationContext)
+        public JobTrackerFactory(IApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
         }
 
-        /// <summary>
-        /// Gets the specified daemon client.
-        /// </summary>
-        /// <param name="daemonClient">The daemon client.</param>
-        /// <param name="minerManager">The miner manager.</param>
-        /// <param name="hashAlgorithm"></param>
-        /// <returns></returns>
-        public IJobManager Get(IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
+        public IJobTracker Get()
         {
-            var @params = new NamedParameterOverloads
-            {
-                {"daemonClient", daemonClient}, 
-                {"minerManager", minerManager},
-                {"hashAlgorithm", hashAlgorithm}
-            };
-
-            return _applicationContext.Container.Resolve<IJobManager>(@params);
+            return _applicationContext.Container.Resolve<IJobTracker>();
         }
     }
 }

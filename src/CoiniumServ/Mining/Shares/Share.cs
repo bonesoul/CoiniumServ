@@ -22,9 +22,10 @@
 #endregion
 using System;
 using Coinium.Coin.Coinbase;
-using Coinium.Coin.Config;
 using Coinium.Crypto;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Miners;
+using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Utils.Extensions;
 using Coinium.Utils.Numerics;
@@ -34,14 +35,21 @@ namespace Coinium.Mining.Shares
 {
     public class Share : IShare
     {
-        public bool Valid
+        public bool IsValid
         {
             get { return Error == ShareError.None; }
         }
-        public bool Candidate { get; private set; }
+        public bool IsBlockCandidate { get; private set; }
+        public Block Block { get; private set; }
+
+        public bool IsBlockAccepted
+        {
+            get { return Block != null; }
+        }
         public IMiner Miner { get; private set; }
         public ShareError Error { get; private set; }
         public IJob Job { get; private set; }
+        public int Height { get; private set; }
         public UInt32 NTime { get; private set; }
         public UInt32 Nonce { get; private set; }
         public UInt32 ExtraNonce1 { get; private set; }
@@ -57,13 +65,15 @@ namespace Coinium.Mining.Shares
         public byte[] BlockHex { get; private set; }
         public byte[] BlockHash { get; private set; }
 
-        public Share(IMiner miner, UInt64 jobId, IJob job, UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
+        public Share(IStratumMiner miner, UInt64 jobId, IJob job, string extraNonce2, string nTimeString, string nonceString)
         {
             Miner = miner;
             Job = job;
             Error = ShareError.None;
 
             // TODO: add extranonce2 size check!.
+            // TODO: add duplicate share check.
+            // TODO: add nTime out of range check
 
             if (Job == null)
             {
@@ -72,8 +82,8 @@ namespace Coinium.Mining.Shares
                 return;
             }
 
-            // check miner supplied parameters
-
+            
+            // check miner supplied nTime.
             if (nTimeString.Length != 8)
             {
                 Error = ShareError.IncorrectNTimeSize;
@@ -83,8 +93,7 @@ namespace Coinium.Mining.Shares
 
             NTime = Convert.ToUInt32(nTimeString, 16); // ntime for the share
 
-            // TODO: add nTime out of range check
-
+            // check miner supplied nonce.
             if (nonceString.Length != 8)
             {
                 Error = ShareError.IncorrectNonceSize;
@@ -94,15 +103,16 @@ namespace Coinium.Mining.Shares
 
             Nonce = Convert.ToUInt32(nonceString, 16); // nonce supplied by the miner for the share.
 
-            // TODO: add duplicate share check.
+            // check miner supplied extraNonce2
+            ExtraNonce2 = Convert.ToUInt32(extraNonce2, 16);
 
-            // job supplied parameters.
-            ExtraNonce1 = extraNonce1; // extra nonce1 assigned to job.
-            ExtraNonce2 = Convert.ToUInt32(extraNonce2, 16); // extra nonce2 assigned to job.
+            // check job supplied parameters.
+            Height = job.BlockTemplate.Height;
+            ExtraNonce1 = miner.ExtraNonce; // extra nonce1 assigned to miner.
 
             // construct the coinbase.
             CoinbaseBuffer = Serializers.SerializeCoinbase(Job, ExtraNonce1, ExtraNonce2); 
-            CoinbaseHash = Coinium.Coin.Coinbase.Utils.HashCoinbase(CoinbaseBuffer);
+            CoinbaseHash = Coin.Coinbase.Utils.HashCoinbase(CoinbaseBuffer);
 
             // create the merkle root.
             MerkleRoot = Job.MerkleTree.WithFirst(CoinbaseHash).ReverseBuffer();
@@ -121,13 +131,13 @@ namespace Coinium.Mining.Shares
             // check if block candicate
             if (Job.Target >= HeaderValue)
             {
-                Candidate = true;
+                IsBlockCandidate = true;
                 BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer);
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer(); // TODO: make sure this is okay!
             }
             else
             {
-                Candidate = false;
+                IsBlockCandidate = false;
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
 
                 // Check if share difficulty reaches miner difficulty.
@@ -136,6 +146,11 @@ namespace Coinium.Mining.Shares
                     // todo: add low difficulty share check.
                 }
             }
+        }
+
+        public void SetFoundBlock(Block block)
+        {
+            Block = block;
         }
     }
 }

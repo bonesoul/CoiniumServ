@@ -20,9 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Services.Rpc
+namespace Coinium.Service
 {
-    public static class RpcServices
+    public static class Services
     {
         public const string Vanilla = "Vanilla";
         public const string Stratum = "Stratum";

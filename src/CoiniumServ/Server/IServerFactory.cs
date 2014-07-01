@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 
@@ -27,6 +29,6 @@ namespace Coinium.Server
 {
     public interface IServerFactory
     {
-        IMiningServer Get(string serviceName, IPool pool, IMinerManager minerManager);
+        IMiningServer Get(string serviceName, IPool pool, IMinerManager minerManager, IJobManager jobManager);
     }
 }

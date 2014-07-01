@@ -27,12 +27,14 @@ using System.Threading;
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
 using Coinium.Mining.Jobs;
+using Coinium.Mining.Jobs.Manager;
+using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 using Coinium.Persistance;
 using Coinium.Server;
-using Coinium.Services.Rpc;
+using Coinium.Service;
 using Coinium.Utils.Configuration;
 using Coinium.Utils.Helpers.Validation;
 using Serilog;
@@ -49,13 +51,16 @@ namespace Coinium.Mining.Pools
         private readonly IDaemonClient _daemonClient;
         private readonly IServerFactory _serverFactory;
         private readonly IServiceFactory _serviceFactory;
+        private readonly IJobTrackerFactory _jobTrackerFactory;
         private readonly IJobManagerFactory _jobManagerFactory;
         private readonly IShareManagerFactory _shareManagerFactory;
         private readonly IMinerManagerFactory _minerManagerFactory;
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
         private readonly IStorageFactory _storageManagerFactory;
         private readonly IGlobalConfigFactory _globalConfigFactory;
+
         private IMinerManager _minerManager;
+        private IJobTracker _jobTracker;
         private IJobManager _jobManager;
         private IShareManager _shareManager;
         private IStorage _storageManager;
@@ -67,8 +72,6 @@ namespace Coinium.Mining.Pools
         /// </summary>
         public UInt32 InstanceId { get; private set; }
 
-        private Timer _timer;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Pool" /> class.
         /// </summary>
@@ -77,15 +80,18 @@ namespace Coinium.Mining.Pools
         /// <param name="serviceFactory">The service factory.</param>
         /// <param name="client">The client.</param>
         /// <param name="minerManagerFactory">The miner manager factory.</param>
+        /// <param name="jobTrackerFactory"></param>
         /// <param name="jobManagerFactory">The job manager factory.</param>
         /// <param name="shareManagerFactory">The share manager factory.</param>
         /// <param name="storageManagerFactory"></param>
+        /// <param name="globalConfigFactory"></param>
         public Pool(
             IHashAlgorithmFactory hashAlgorithmFactory, 
             IServerFactory serverFactory, 
             IServiceFactory serviceFactory,
             IDaemonClient client, 
             IMinerManagerFactory minerManagerFactory, 
+            IJobTrackerFactory jobTrackerFactory,
             IJobManagerFactory jobManagerFactory, 
             IShareManagerFactory shareManagerFactory,
             IStorageFactory storageManagerFactory,
@@ -96,6 +102,7 @@ namespace Coinium.Mining.Pools
             Enforce.ArgumentNotNull(serviceFactory, "IServiceFactory");
             Enforce.ArgumentNotNull(client, "IDaemonClient");
             Enforce.ArgumentNotNull(minerManagerFactory, "IMinerManagerFactory");
+            Enforce.ArgumentNotNull(jobTrackerFactory, "IJobTrackerFactory");
             Enforce.ArgumentNotNull(jobManagerFactory, "IJobManagerFactory");
             Enforce.ArgumentNotNull(shareManagerFactory, "IShareManagerFactory");
             Enforce.ArgumentNotNull(storageManagerFactory, "IStorageFactory");
@@ -104,6 +111,7 @@ namespace Coinium.Mining.Pools
             _daemonClient = client;
             _minerManagerFactory = minerManagerFactory;
             _jobManagerFactory = jobManagerFactory;
+            _jobTrackerFactory = jobTrackerFactory;
             _shareManagerFactory = shareManagerFactory;
             _serverFactory = serverFactory;
             _serviceFactory = serviceFactory;
@@ -131,9 +139,6 @@ namespace Coinium.Mining.Pools
 
             // init servers
             InitServers();
-
-            // other stuff
-            _timer = new Timer(Timer, null, TimeSpan.Zero, new TimeSpan(0, 0, 0, 10)); // setup a timer to broadcast jobs.
         }
 
         private void InitManagers()
@@ -142,10 +147,12 @@ namespace Coinium.Mining.Pools
 
             _minerManager = _minerManagerFactory.Get(_daemonClient);
 
-            _jobManager = _jobManagerFactory.Get(_daemonClient, _minerManager, _hashAlgorithmFactory.Get(Config.Coin.Algorithm));
-            _jobManager.Initialize(InstanceId);
+            _jobTracker = _jobTrackerFactory.Get();
 
-            _shareManager = _shareManagerFactory.Get(_daemonClient, _jobManager, _storageManager);
+            _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storageManager);
+
+            _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithmFactory.Get(Config.Coin.Algorithm));
+            _jobManager.Initialize(InstanceId);
         }
 
         private void InitDaemon()
@@ -164,8 +171,8 @@ namespace Coinium.Mining.Pools
             // we must be dictative here, using a server list may cause situations we don't want (multiple stratum configs etc..)
             if (Config.Stratum != null)
             {
-                var stratumServer = _serverFactory.Get("Stratum", this, _minerManager);
-                var stratumService = _serviceFactory.Get("Stratum", _jobManager, _shareManager, _daemonClient);
+                var stratumServer = _serverFactory.Get("Stratum", this, _minerManager, _jobManager);
+                var stratumService = _serviceFactory.Get("Stratum", _shareManager, _daemonClient);
                 stratumServer.Initialize(Config.Stratum);
 
                 _servers.Add(stratumServer, stratumService);
@@ -173,8 +180,8 @@ namespace Coinium.Mining.Pools
 
             if (Config.Vanilla != null)
             {
-                var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager);
-                var vanillaService = _serviceFactory.Get("Vanilla", _jobManager, _shareManager, _daemonClient);
+                var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager, _jobManager);
+                var vanillaService = _serviceFactory.Get("Vanilla", _shareManager, _daemonClient);
 
                 vanillaServer.Initialize(Config.Vanilla);
 
@@ -199,10 +206,6 @@ namespace Coinium.Mining.Pools
         public void Stop()
         {
             throw new NotImplementedException();
-        }
-        private void Timer(object state)
-        {
-            _jobManager.Broadcast();
         }
 
         /// <summary>

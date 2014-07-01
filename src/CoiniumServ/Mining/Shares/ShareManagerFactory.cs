@@ -23,6 +23,8 @@
 
 using Coinium.Daemon;
 using Coinium.Mining.Jobs;
+using Coinium.Mining.Jobs.Manager;
+using Coinium.Mining.Jobs.Tracker;
 using Coinium.Persistance;
 using Coinium.Repository.Context;
 using Nancy.TinyIoc;
@@ -49,16 +51,16 @@ namespace Coinium.Mining.Shares
         /// <summary>
         /// Gets the specified daemon client.
         /// </summary>
-        /// <param name="jobManager">The job manager.</param>
+        /// <param name="jobTracker">The job manager.</param>
         /// <param name="daemonClient"></param>
         /// <param name="storage"></param>
         /// <returns></returns>
-        public IShareManager Get(IDaemonClient daemonClient, IJobManager jobManager, IStorage storage)
+        public IShareManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
                 {"daemonClient", daemonClient},
-                {"jobManager", jobManager},
+                {"jobTracker", jobTracker},
                 {"storage", storage}
             };
 

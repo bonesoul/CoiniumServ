@@ -20,28 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System;
+using Coinium.Mining.Miners;
 
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Responses;
-
-namespace Coinium.Daemon
+namespace Coinium.Server.Stratum
 {
-    public interface IDaemonClient
+    public interface IStratumMiner:IMiner
     {
-        BlockTemplate GetBlockTemplate();
-
-        BlockTemplate GetBlockTemplate(string blockHex);
-
-        string SubmitBlock(string blockHex);
-
-        Block GetBlock(string hash);
-
-        Work Getwork();
-
-        bool Getwork(string data);
-
-        ValidateAddress ValidateAddress(string walletAddress);
-
-        void Initialize(IDaemonConfig daemonConfig);
+        /// <summary>
+        /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
+        /// </summary>
+        UInt32 ExtraNonce { get; }
     }
 }
