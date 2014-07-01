@@ -21,39 +21,14 @@
 // 
 #endregion
 using System;
-using Coinium.Service;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Server.Stratum.Config
+namespace Coinium.Mining.Jobs.Tracker
 {
-    public class StratumServerConfig:IStratumServerConfig
+    public interface IJobTrackerFactory
     {
-        public bool Valid { get; private set; }
-
-        public string Name { get; private set; }
-
-        public bool Enabled { get; private set; }
-
-        public string BindInterface { get; private set; }
-
-        public Int32 Port { get; private set; }
-
-        public Int32 Diff { get; private set; }
-
-        public StratumServerConfig(dynamic config)
-        {
-            if (config == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Name = Services.Stratum;
-            Enabled = config.enabled;
-            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
-            Port = config.port;
-            Diff = config.diff;
-
-            Valid = true;
-        }
+        IJobTracker Get();
     }
 }

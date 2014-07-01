@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Services.Rpc
+namespace Coinium.Service
 {
     public interface IRpcService
     { }

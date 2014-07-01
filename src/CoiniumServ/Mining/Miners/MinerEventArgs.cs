@@ -21,20 +21,17 @@
 // 
 #endregion
 
-using Coinium.Mining.Miners;
+using System;
 
-namespace Coinium.Services.Rpc.Socket
+namespace Coinium.Mining.Miners
 {
-    public class SocketServiceContext
+    public class MinerEventArgs:EventArgs
     {
         public IMiner Miner { get; private set; }
 
-        public SocketServiceRequest Request { get; private set; }
-
-        public SocketServiceContext(IMiner miner, SocketServiceRequest request)
+        public MinerEventArgs(IMiner miner)
         {
             Miner = miner;
-            Request = request;
         }
     }
 }

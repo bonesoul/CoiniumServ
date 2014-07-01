@@ -27,9 +27,12 @@ using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
 using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
+using Coinium.Mining.Jobs.Manager;
+using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Shares;
+using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
@@ -48,13 +51,14 @@ namespace Tests.Mining.Shares
         private readonly IDaemonClient _daemonClient;
         private readonly IBlockTemplate _blockTemplate;
         private readonly IExtraNonce _extraNonce;
+        private readonly IJobTracker _jobTracker;
         private readonly IJobManager _jobManager;
         private readonly IHashAlgorithm _hashAlgorithm;
         private readonly ISignatureScript _signatureScript;
         private readonly IOutputs _outputs;
         private readonly IGenerationTransaction _generationTransaction;      
         private readonly IJob _job;
-        private readonly IMiner _miner;
+        private readonly IStratumMiner _miner;
 
         public ShareTests()
         {
@@ -143,13 +147,17 @@ namespace Tests.Mining.Shares
                 CleanJobs = true
             };
 
+            // the job tracker.
+            _jobTracker = Substitute.For<IJobTracker>();
+            _jobTracker.Get(2).Returns(_job);
+
             // the job manager.
             _jobManager = Substitute.For<IJobManager>();
             _jobManager.ExtraNonce.Current.Returns((UInt32)0x58000000);
-            _jobManager.GetJob(2).Returns(_job);
 
             // coin config
-            _miner = Substitute.For<IMiner>();
+            _miner = Substitute.For<IStratumMiner>();
+            _miner.ExtraNonce.Returns((UInt32)0x58000000);
         }
 
         [Fact]
@@ -196,9 +204,9 @@ namespace Tests.Mining.Shares
 
             // create the share
             var id = Convert.ToUInt64(jobId, 16);
-            var job = _jobManager.GetJob(id);
+            var job = _jobTracker.Get(id);
 
-            var share = new Share(_miner, id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
+            var share = new Share(_miner, id, job, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
             share.NTime.Should().Equal((UInt32)0x53aaa331);
@@ -283,9 +291,9 @@ namespace Tests.Mining.Shares
 
             // create the share
             var id = Convert.ToUInt64(jobId, 16);
-            var job = _jobManager.GetJob(id);
+            var job = _jobTracker.Get(id);
 
-            var share = new Share(_miner, id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTime, nonce);
+            var share = new Share(_miner, id, job, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
             share.NTime.Should().Equal((UInt32)0x53aaa331);

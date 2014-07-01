@@ -23,12 +23,15 @@
 
 using System;
 using Coinium.Server.Stratum;
+using Coinium.Server.Vanilla;
 
 namespace Coinium.Mining.Shares
 {
     public interface IShareManager
     {
         IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
+
+        IShare ProcessShare(VanillaMiner miner, string data);
 
         event EventHandler BlockFound;
     }

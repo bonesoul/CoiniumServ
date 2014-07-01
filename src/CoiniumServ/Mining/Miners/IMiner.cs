@@ -49,9 +49,11 @@ namespace Coinium.Mining.Miners
         /// <summary>
         /// Is the miner authenticated.
         /// </summary>
-        bool Authenticated { get; }
+        bool Authenticated { get; set; }
 
         IPool Pool { get; }
+
+        Difficulty Difficulty { get; }
 
         /// <summary>
         /// Authenticates the miner.
@@ -69,12 +71,11 @@ namespace Coinium.Mining.Miners
         /// <summary>
         /// Sends difficulty to the miner.
         /// </summary>
-        /// <param name="difficulty"></param>
-        void SendDifficulty(Difficulty difficulty);
+        void SendDifficulty();
 
         /// <summary>
         /// Sends a new mining job to the miner.
         /// </summary>
-        void SendJob(Job job);
+        void SendJob(IJob job);
     }
 }

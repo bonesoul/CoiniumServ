@@ -20,40 +20,21 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Service;
 
-namespace Coinium.Server.Stratum.Config
+using Coinium.Mining.Miners;
+
+namespace Coinium.Service.Vanilla
 {
-    public class StratumServerConfig:IStratumServerConfig
+    public class HttpServiceContext
     {
-        public bool Valid { get; private set; }
+        public IMiner Miner { get; private set; }
 
-        public string Name { get; private set; }
+        public HttpServiceRequest Request { get; private set; }
 
-        public bool Enabled { get; private set; }
-
-        public string BindInterface { get; private set; }
-
-        public Int32 Port { get; private set; }
-
-        public Int32 Diff { get; private set; }
-
-        public StratumServerConfig(dynamic config)
+        public HttpServiceContext(IMiner miner, HttpServiceRequest request)
         {
-            if (config == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Name = Services.Stratum;
-            Enabled = config.enabled;
-            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
-            Port = config.port;
-            Diff = config.diff;
-
-            Valid = true;
+            Miner = miner;
+            Request = request;
         }
     }
 }

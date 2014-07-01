@@ -21,30 +21,17 @@
 // 
 #endregion
 
-using System.Net;
-using Newtonsoft.Json;
+using System;
+using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Services.Rpc.Http
+namespace Coinium.Mining.Jobs.Tracker
 {
-    /// <summary>
-    /// JsonRpc 1.0 over http request.
-    /// </summary>
-    public class HttpServiceRequest
+    public interface IJobTracker
     {
-        public string Text { get; private set; }
+        IJob Get(UInt64 id);
 
-        public dynamic Data { get; private set; }
+        IJob LastJob { get; }
 
-        public HttpListenerContext Context { get; private set; }
-
-        public HttpListenerResponse Response { get; private set; }
-
-        public HttpServiceRequest(string text, HttpListenerContext context)
-        {
-            Text = text;
-            Data = JsonConvert.DeserializeObject<dynamic>(Text);
-            Context = context;
-            Response = Context.Response;
-        }
+        void Add(IJob job);
     }
 }

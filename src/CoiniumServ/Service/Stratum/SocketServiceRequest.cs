@@ -20,40 +20,24 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Service;
 
-namespace Coinium.Server.Stratum.Config
+using Newtonsoft.Json;
+
+namespace Coinium.Service.Stratum
 {
-    public class StratumServerConfig:IStratumServerConfig
+    /// <summary>
+    /// JsonRpc 2.0 over sockets request.
+    /// </summary>
+    public class SocketServiceRequest
     {
-        public bool Valid { get; private set; }
+        public string Text { get; private set; }
 
-        public string Name { get; private set; }
+        public dynamic Data { get; private set; }
 
-        public bool Enabled { get; private set; }
-
-        public string BindInterface { get; private set; }
-
-        public Int32 Port { get; private set; }
-
-        public Int32 Diff { get; private set; }
-
-        public StratumServerConfig(dynamic config)
+        public SocketServiceRequest(string text)
         {
-            if (config == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Name = Services.Stratum;
-            Enabled = config.enabled;
-            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
-            Port = config.port;
-            Diff = config.diff;
-
-            Valid = true;
+            Text = text;
+            Data = JsonConvert.DeserializeObject<dynamic>(Text);
         }
     }
 }

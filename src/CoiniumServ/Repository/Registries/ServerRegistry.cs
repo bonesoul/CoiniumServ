@@ -25,7 +25,7 @@ using Coinium.Repository.Context;
 using Coinium.Server;
 using Coinium.Server.Stratum;
 using Coinium.Server.Vanilla;
-using Coinium.Services.Rpc;
+using Coinium.Service;
 
 namespace Coinium.Repository.Registries
 {
@@ -40,8 +40,8 @@ namespace Coinium.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IMiningServer, VanillaServer>(RpcServices.Vanilla).AsMultiInstance();
-            _applicationContext.Container.Register<IMiningServer, StratumServer>(RpcServices.Stratum).AsMultiInstance();
+            _applicationContext.Container.Register<IMiningServer, VanillaServer>(Services.Vanilla).AsMultiInstance();
+            _applicationContext.Container.Register<IMiningServer, StratumServer>(Services.Stratum).AsMultiInstance();
         }
     }
 }

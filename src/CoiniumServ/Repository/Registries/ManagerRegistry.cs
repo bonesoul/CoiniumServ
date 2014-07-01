@@ -22,6 +22,7 @@
 #endregion
 
 using Coinium.Mining.Jobs;
+using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Shares;

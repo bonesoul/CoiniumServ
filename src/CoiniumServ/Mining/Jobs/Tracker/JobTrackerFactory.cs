@@ -21,20 +21,29 @@
 // 
 #endregion
 
-using Coinium.Mining.Miners;
+using Coinium.Repository.Context;
 
-namespace Coinium.Services.Rpc.Http
+namespace Coinium.Mining.Jobs.Tracker
 {
-    public class HttpServiceContext
+    public class JobTrackerFactory:IJobTrackerFactory
     {
-        public IMiner Miner { get; private set; }
+        /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
 
-        public HttpServiceRequest Request { get; private set; }
-
-        public HttpServiceContext(IMiner miner, HttpServiceRequest request)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JobTrackerFactory"/> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public JobTrackerFactory(IApplicationContext applicationContext)
         {
-            Miner = miner;
-            Request = request;
+            _applicationContext = applicationContext;
+        }
+
+        public IJobTracker Get()
+        {
+            return _applicationContext.Container.Resolve<IJobTracker>();
         }
     }
 }

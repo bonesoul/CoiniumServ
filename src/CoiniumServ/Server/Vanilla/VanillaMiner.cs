@@ -28,7 +28,7 @@ using AustinHarris.JsonRpc;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Server.Stratum.Notifications;
-using Coinium.Services.Rpc.Http;
+using Coinium.Service.Vanilla;
 using Coinium.Utils.Extensions;
 using Serilog;
 
@@ -54,9 +54,10 @@ namespace Coinium.Server.Vanilla
         /// <summary>
         /// Is the miner authenticated?
         /// </summary>
-        public bool Authenticated { get; private set; }
+        public bool Authenticated { get; set; }
 
         public IPool Pool { get; private set; }
+        public Difficulty Difficulty { get; private set; }
 
         /// <summary>
         /// Can we send new mining job's to miner?
@@ -74,6 +75,7 @@ namespace Coinium.Server.Vanilla
         {
             Id = id; // the id of the miner.
             _minerManager = minerManager;
+            Difficulty = new Difficulty(16);
 
             Subscribed = true; // vanilla miners are subscribed by default.
             Authenticated = false; // miner has to authenticate.
@@ -83,8 +85,7 @@ namespace Coinium.Server.Vanilla
         public bool Authenticate(string user, string password)
         {
             Username = user;
-
-            Authenticated = _minerManager.Authenticate(this);
+            _minerManager.Authenticate(this);
 
             return Authenticated;
         }
@@ -125,8 +126,7 @@ namespace Coinium.Server.Vanilla
         /// <summary>
         /// Sends difficulty to the miner.
         /// </summary>
-        /// <param name="difficulty"></param>
-        public void SendDifficulty(Difficulty difficulty)
+        public void SendDifficulty()
         {
             throw new NotSupportedException();
         }
@@ -134,7 +134,7 @@ namespace Coinium.Server.Vanilla
         /// <summary>
         /// Sends a new mining job to the miner.
         /// </summary>
-        public void SendJob(Job job)
+        public void SendJob(IJob job)
         {
             throw new NotSupportedException();
         }

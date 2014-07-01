@@ -20,27 +20,29 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using AustinHarris.JsonRpc;
 using Coinium.Daemon;
 using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
 using Coinium.Mining.Shares;
-using Coinium.Services.Rpc;
-using Coinium.Services.Rpc.Http;
+using Coinium.Server.Vanilla;
 using Serilog;
 
-namespace Coinium.Server.Vanilla
+namespace Coinium.Service.Vanilla
 {
     /// <summary>
     /// Stratum protocol implementation.
     /// </summary>
     public class VanillaService : JsonRpcService, IRpcService
     {
-        private readonly IDaemonClient _daemonClient;
+        private readonly IDaemonClient _daemonClient; // TODO: remove this!
 
-        public VanillaService(IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient)
+        private readonly IShareManager _shareManager;
+
+        public VanillaService(IShareManager shareManager, IDaemonClient daemonClient)
         {
             _daemonClient = daemonClient;
+            _shareManager = shareManager;
         }
 
         /// <summary>
@@ -56,8 +58,10 @@ namespace Coinium.Server.Vanilla
         [JsonRpcMethod("getwork")]
         public Work Getwork(string data = null)
         {
-             var context = (HttpServiceContext)JsonRpcContext.Current().Value;
-             var miner = (VanillaMiner)(context.Miner);
+            var context = (HttpServiceContext)JsonRpcContext.Current().Value;
+            var miner = (VanillaMiner)(context.Miner);
+
+            // TODO: fixme! instead use jobmanager and sharemanager.
 
             if (data == null)
                 _daemonClient.Getwork();

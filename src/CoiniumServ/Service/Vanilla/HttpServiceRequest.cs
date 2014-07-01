@@ -20,31 +20,31 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Mining.Jobs
+using System.Net;
+using Newtonsoft.Json;
+
+namespace Coinium.Service.Vanilla
 {
-    public interface IJobManager
+    /// <summary>
+    /// JsonRpc 1.0 over http request.
+    /// </summary>
+    public class HttpServiceRequest
     {
-        Dictionary<UInt64, IJob> Jobs { get; }
-        IJobCounter JobCounter { get; }
+        public string Text { get; private set; }
 
-        IExtraNonce ExtraNonce { get; }
+        public dynamic Data { get; private set; }
 
-        IJob LastJob { get; }
+        public HttpListenerContext Context { get; private set; }
 
-        IJob GetJob(UInt64 id);
+        public HttpListenerResponse Response { get; private set; }
 
-        void AddJob(IJob job);
-
-        void Broadcast();
-
-        /// <summary>
-        /// Initializes the specified pool.
-        /// </summary>
-        /// <param name="instanceId">The instance identifier.</param>
-        void Initialize(UInt32 instanceId);
+        public HttpServiceRequest(string text, HttpListenerContext context)
+        {
+            Text = text;
+            Data = JsonConvert.DeserializeObject<dynamic>(Text);
+            Context = context;
+            Response = Context.Response;
+        }
     }
 }

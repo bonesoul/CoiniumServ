@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Net.Server.Sockets;
@@ -38,19 +40,24 @@ namespace Coinium.Server.Stratum
     {
 
         public IServerConfig Config { get; private set; }
+        
         private readonly IPool _pool;
 
         private readonly IMinerManager _minerManager;
+
+        private readonly IJobManager _jobManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StratumServer"/> class.
         /// </summary>
         /// <param name="pool"></param>
         /// <param name="minerManager">The miner manager.</param>
-        public StratumServer(IPool pool, IMinerManager minerManager)
+        /// <param name="jobManager"></param>
+        public StratumServer(IPool pool, IMinerManager minerManager, IJobManager jobManager)
         {
             _pool = pool;
             _minerManager = minerManager;
+            _jobManager = jobManager;
         }
 
         /// <summary>
@@ -101,7 +108,8 @@ namespace Coinium.Server.Stratum
         {
             Log.ForContext<StratumServer>().Information("Stratum client connected: {0}", e.Connection.ToString());
 
-            var miner = _minerManager.Create<StratumMiner>(e.Connection, _pool);
+            // TODO: remove the jobManager dependency by instead injecting extranonce counter.
+            var miner = _minerManager.Create<StratumMiner>(_jobManager.ExtraNonce.NextExtraNonce(), e.Connection, _pool);
             e.Connection.Client = miner;           
         }
 

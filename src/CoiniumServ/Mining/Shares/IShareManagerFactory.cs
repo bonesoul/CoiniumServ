@@ -22,7 +22,7 @@
 #endregion
 
 using Coinium.Daemon;
-using Coinium.Mining.Jobs;
+using Coinium.Mining.Jobs.Tracker;
 using Coinium.Persistance;
 
 namespace Coinium.Mining.Shares
@@ -32,10 +32,10 @@ namespace Coinium.Mining.Shares
         /// <summary>
         /// Gets the specified daemon client.
         /// </summary>
-        /// <param name="jobManager">The job manager.</param>
         /// <param name="daemonClient">The daemon client.</param>
+        /// <param name="jobTracker"></param>
         /// <param name="storage"></param>
         /// <returns></returns>
-        IShareManager Get(IDaemonClient daemonClient, IJobManager jobManager, IStorage storage);
+        IShareManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage);
     }
 }

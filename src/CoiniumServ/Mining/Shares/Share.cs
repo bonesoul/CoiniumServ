@@ -25,6 +25,7 @@ using Coinium.Coin.Coinbase;
 using Coinium.Crypto;
 using Coinium.Daemon.Responses;
 using Coinium.Mining.Miners;
+using Coinium.Server.Stratum;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Utils.Extensions;
 using Coinium.Utils.Numerics;
@@ -64,7 +65,7 @@ namespace Coinium.Mining.Shares
         public byte[] BlockHex { get; private set; }
         public byte[] BlockHash { get; private set; }
 
-        public Share(IMiner miner, UInt64 jobId, IJob job, UInt32 extraNonce1, string extraNonce2, string nTimeString, string nonceString)
+        public Share(IStratumMiner miner, UInt64 jobId, IJob job, string extraNonce2, string nTimeString, string nonceString)
         {
             Miner = miner;
             Job = job;
@@ -81,8 +82,8 @@ namespace Coinium.Mining.Shares
                 return;
             }
 
-            // check miner supplied parameters
-
+            
+            // check miner supplied nTime.
             if (nTimeString.Length != 8)
             {
                 Error = ShareError.IncorrectNTimeSize;
@@ -92,6 +93,7 @@ namespace Coinium.Mining.Shares
 
             NTime = Convert.ToUInt32(nTimeString, 16); // ntime for the share
 
+            // check miner supplied nonce.
             if (nonceString.Length != 8)
             {
                 Error = ShareError.IncorrectNonceSize;
@@ -101,10 +103,12 @@ namespace Coinium.Mining.Shares
 
             Nonce = Convert.ToUInt32(nonceString, 16); // nonce supplied by the miner for the share.
 
+            // check miner supplied extraNonce2
+            ExtraNonce2 = Convert.ToUInt32(extraNonce2, 16);
+
             // check job supplied parameters.
             Height = job.BlockTemplate.Height;
-            ExtraNonce1 = extraNonce1; // extra nonce1 assigned to job.
-            ExtraNonce2 = Convert.ToUInt32(extraNonce2, 16); // extra nonce2 assigned to job.
+            ExtraNonce1 = miner.ExtraNonce; // extra nonce1 assigned to miner.
 
             // construct the coinbase.
             CoinbaseBuffer = Serializers.SerializeCoinbase(Job, ExtraNonce1, ExtraNonce2); 

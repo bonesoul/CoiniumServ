@@ -20,40 +20,33 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using Coinium.Service;
+using System.Collections.Generic;
+using Coinium.Server.Stratum.Notifications;
 
-namespace Coinium.Server.Stratum.Config
+namespace Coinium.Mining.Jobs.Tracker
 {
-    public class StratumServerConfig:IStratumServerConfig
+    public class JobTracker:IJobTracker
     {
-        public bool Valid { get; private set; }
+        private readonly Dictionary<UInt64, IJob> _jobs;
 
-        public string Name { get; private set; }
+        public IJob LastJob { get; private set; }
 
-        public bool Enabled { get; private set; }
-
-        public string BindInterface { get; private set; }
-
-        public Int32 Port { get; private set; }
-
-        public Int32 Diff { get; private set; }
-
-        public StratumServerConfig(dynamic config)
+        public JobTracker()
         {
-            if (config == null)
-            {
-                Valid = false;
-                return;
-            }
+            _jobs = new Dictionary<UInt64, IJob>();
+        }
 
-            Name = Services.Stratum;
-            Enabled = config.enabled;
-            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
-            Port = config.port;
-            Diff = config.diff;
+        public IJob Get(UInt64 id)
+        {
+            return _jobs.ContainsKey(id) ? _jobs[id] : null;
+        }
 
-            Valid = true;
+        public void Add(IJob job)
+        {
+            _jobs.Add(job.Id, job);
+            LastJob = job;
         }
     }
 }

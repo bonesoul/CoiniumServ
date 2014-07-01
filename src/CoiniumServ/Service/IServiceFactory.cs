@@ -22,28 +22,12 @@
 #endregion
 
 using Coinium.Daemon;
-using Coinium.Mining.Jobs;
 using Coinium.Mining.Shares;
-using Coinium.Repository.Context;
-using Nancy.TinyIoc;
 
-namespace Coinium.Services.Rpc
+namespace Coinium.Service
 {
-    public class ServiceFactory : IServiceFactory
+    public interface IServiceFactory
     {
-        /// <summary>
-        /// The _kernel
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceFactory"/> class.
-        /// </summary>
-        public ServiceFactory(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
-
         /// <summary>
         /// Gets the specified service name.
         /// </summary>
@@ -52,10 +36,6 @@ namespace Coinium.Services.Rpc
         /// <param name="shareManager">The share manager.</param>
         /// <param name="daemonClient">The daemon client.</param>
         /// <returns></returns>
-        public IRpcService Get(string serviceName, IJobManager jobManager, IShareManager shareManager, IDaemonClient daemonClient)
-        {
-            var @params = new NamedParameterOverloads { { "jobManager", jobManager }, { "shareManager", shareManager }, { "daemonClient", daemonClient } };
-            return _applicationContext.Container.Resolve<IRpcService>(serviceName, @params);
-        }
+        IRpcService Get(string serviceName, IShareManager shareManager, IDaemonClient daemonClient);
     }
 }

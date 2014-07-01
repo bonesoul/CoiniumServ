@@ -20,40 +20,26 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Service;
 
-namespace Coinium.Server.Stratum.Config
+using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
+using Coinium.Mining.Jobs.Tracker;
+using Coinium.Mining.Miners;
+using Coinium.Mining.Shares;
+
+namespace Coinium.Mining.Jobs.Manager
 {
-    public class StratumServerConfig:IStratumServerConfig
+    public interface IJobManagerFactory
     {
-        public bool Valid { get; private set; }
-
-        public string Name { get; private set; }
-
-        public bool Enabled { get; private set; }
-
-        public string BindInterface { get; private set; }
-
-        public Int32 Port { get; private set; }
-
-        public Int32 Diff { get; private set; }
-
-        public StratumServerConfig(dynamic config)
-        {
-            if (config == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Name = Services.Stratum;
-            Enabled = config.enabled;
-            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
-            Port = config.port;
-            Diff = config.diff;
-
-            Valid = true;
-        }
+        /// <summary>
+        /// Gets the specified daemon client.
+        /// </summary>
+        /// <param name="daemonClient">The daemon client.</param>
+        /// <param name="jobtracker"></param>
+        /// <param name="shareManager"></param>
+        /// <param name="minerManager">The miner manager.</param>
+        /// <param name="hashAlgorithm"></param>
+        /// <returns></returns>
+        IJobManager Get(IDaemonClient daemonClient, IJobTracker jobtracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
     }
 }

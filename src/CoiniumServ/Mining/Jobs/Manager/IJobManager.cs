@@ -21,23 +21,18 @@
 // 
 #endregion
 
-using Newtonsoft.Json;
+using System;
 
-namespace Coinium.Services.Rpc.Socket
+namespace Coinium.Mining.Jobs.Manager
 {
-    /// <summary>
-    /// JsonRpc 2.0 over sockets request.
-    /// </summary>
-    public class SocketServiceRequest
+    public interface IJobManager
     {
-        public string Text { get; private set; }
+        IExtraNonce ExtraNonce { get; }
 
-        public dynamic Data { get; private set; }
-
-        public SocketServiceRequest(string text)
-        {
-            Text = text;
-            Data = JsonConvert.DeserializeObject<dynamic>(Text);
-        }
+        /// <summary>
+        /// Initializes the specified pool.
+        /// </summary>
+        /// <param name="instanceId">The instance identifier.</param>
+        void Initialize(UInt32 instanceId);
     }
 }
