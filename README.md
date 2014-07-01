@@ -49,9 +49,15 @@ For more information about the motivation behind CoiniumServ, check [Master Plan
 * C# runtime (mono or dotnet)
 * Coin daemon
 
-### Building
+### Getting Started
 
-* Check [Building & Running](https://github.com/CoiniumServ/CoiniumServ/wiki/Building-&-Running).
+Make sure you check our [Getting Started](https://github.com/CoiniumServ/CoiniumServ/wiki/Getting-Started) guide for installation instructions for *nix and Windows.
+
+For Ubuntu, you can simply use our installer script;
+
+```
+wget -O - https://github.com/CoiniumServ/CoiniumServ/tree/develop/assets/installer/ubuntu.sh | bash
+```
 
 ### Screenshots
 
