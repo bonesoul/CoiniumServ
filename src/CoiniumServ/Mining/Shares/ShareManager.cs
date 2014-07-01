@@ -71,17 +71,21 @@ namespace Coinium.Mining.Shares
             var share = new Share(miner, id, job, _jobManager.ExtraNonce.Current, extraNonce2, nTimeString, nonceString);
 
 
-            if (share.Valid)
+            if (share.IsValid)
             {               
                 _storage.CommitShare(share);
 
-                if (share.Candidate)
+                if (share.IsCandidate)
                 {
-                    Log.ForContext<ShareManager>().Information("Share with block candidate accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
-                    var result = SubmitBlock(share);
+                    Log.ForContext<ShareManager>().Information("Share with block candidate [{0}] accepted at {1}/{2} by miner {3}.", share.Height, share.Job.Difficulty, share.Difficulty, miner.Username);
+
+                    var success = SubmitBlock(share); // submit block to daemon
+
+                    if (success)
+                        _storage.CommitBlock(share);
                 }
                 else
-                    Log.ForContext<ShareManager>().Information("Share accepted at {0}/{1} by  miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
+                    Log.ForContext<ShareManager>().Information("Share accepted at {0}/{1} by miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
             }
             else
             {
@@ -119,11 +123,16 @@ namespace Coinium.Mining.Shares
 
         private bool SubmitBlock(Share share)
         {
-            var response = _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
-
-            Log.ForContext<ShareManager>().Information("Submitted block using submitblock: {0}.", share.BlockHash.ToHexString());
-
-            return response == "accepted";
+            try
+            {
+                _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
+                Log.ForContext<ShareManager>().Information("Submitted block [{0}] using submitblock: {1}.", share.Height, share.BlockHash.ToHexString());
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }

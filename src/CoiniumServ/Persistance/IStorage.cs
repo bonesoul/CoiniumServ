@@ -29,5 +29,7 @@ namespace Coinium.Persistance
         bool IsEnabled { get; }
 
         void CommitShare(IShare share);
+
+        void CommitBlock(IShare share);
     }
 }

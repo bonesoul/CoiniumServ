@@ -235,8 +235,8 @@ namespace Tests.Mining.Shares
             share.BlockHash.ToHexString().Should().Equal("e242093d92f4c98bfd5dd1f9f6489652d1165f5ce4eed1f28747d2b8e3efd8b6");
 
             // check the share itself.
-            share.Valid.Should().Equal(true);
-            share.Candidate.Should().Equal(true);
+            share.IsValid.Should().Equal(true);
+            share.IsCandidate.Should().Equal(true);
         }
 
         [Fact]
@@ -322,8 +322,8 @@ namespace Tests.Mining.Shares
             share.BlockHash.ToHexString().Should().Equal("87776a72cedf7467ef78c0dc8a7181340342888e33bd19e6ff48d579299d38c1");
 
             // check the share itself.
-            share.Valid.Should().Equal(true);
-            share.Candidate.Should().Equal(false);
+            share.IsValid.Should().Equal(true);
+            share.IsCandidate.Should().Equal(false);
         }
     }
 }
