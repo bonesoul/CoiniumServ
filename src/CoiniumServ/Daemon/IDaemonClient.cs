@@ -34,6 +34,8 @@ namespace Coinium.Daemon
 
         string SubmitBlock(string blockHex);
 
+        Block GetBlock(string hash);
+
         Work Getwork();
 
         bool Getwork(string data);

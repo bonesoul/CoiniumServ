@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
 using Coinium.Server.Stratum;
 
 namespace Coinium.Mining.Shares
@@ -27,5 +29,7 @@ namespace Coinium.Mining.Shares
     public interface IShareManager
     {
         IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
+
+        event EventHandler BlockFound;
     }
 }

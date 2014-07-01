@@ -67,8 +67,8 @@ namespace Coinium.Net.Server.Sockets
         public delegate void ConnectionDataEventHandler(object sender, ConnectionDataEventArgs e);
 
         // connection events.
-        public event ConnectionEventHandler OnConnect;
-        public event ConnectionEventHandler OnDisconnect;
+        public event ConnectionEventHandler ClientConnected;
+        public event ConnectionEventHandler ClientDisconnected;
         public event ConnectionDataEventHandler DataReceived;
         public event ConnectionDataEventHandler DataSent;
 
@@ -157,7 +157,7 @@ namespace Coinium.Net.Server.Sockets
                 lock (ConnectionLock) 
                     Connections.Add(connection); // Add the new connection to the active connections list.
 
-                OnClientConnection(new ConnectionEventArgs(connection)); // Raise the OnConnect event.
+                OnClientConnection(new ConnectionEventArgs(connection)); // Raise the ClientConnected event.
 
                 connection.BeginReceive(ReceiveCallback, connection); // Begin receiving on the new connection connection.
                 Listener.BeginAccept(AcceptCallback, null); // Continue receiving other incoming connection asynchronously.
@@ -275,7 +275,7 @@ namespace Coinium.Net.Server.Sockets
             {
                 foreach (var connection in Connections.Cast<Connection>()) // Check if the connection is connected.
                 {
-                    // Disconnect and raise the OnDisconnect event.
+                    // Disconnect and raise the ClientDisconnected event.
 
                     connection.Disconnect();
                     OnClientDisconnect(new ConnectionEventArgs(connection));
@@ -300,7 +300,7 @@ namespace Coinium.Net.Server.Sockets
                     Connections.Remove(connection);
             }
 
-            OnClientDisconnect(new ConnectionEventArgs(connection)); // raise the OnDisconnect event.
+            OnClientDisconnect(new ConnectionEventArgs(connection)); // raise the ClientDisconnected event.
         }
 
         /// <summary>
@@ -349,7 +349,7 @@ namespace Coinium.Net.Server.Sockets
 
         protected virtual void OnClientConnection(ConnectionEventArgs e)
         {
-            var handler = OnConnect;
+            var handler = ClientConnected;
 
             if (handler != null) 
                 handler(this, e);
@@ -357,7 +357,7 @@ namespace Coinium.Net.Server.Sockets
 
         protected virtual void OnClientDisconnect(ConnectionEventArgs e)
         {
-            var handler = OnDisconnect;
+            var handler = ClientDisconnected;
 
             if (handler != null) 
                 handler(this, e);
@@ -388,6 +388,7 @@ namespace Coinium.Net.Server.Sockets
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed) return;

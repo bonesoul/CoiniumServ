@@ -24,6 +24,7 @@
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Shares;
 
 namespace Coinium.Mining.Jobs
 {
@@ -33,9 +34,10 @@ namespace Coinium.Mining.Jobs
         /// Gets the specified daemon client.
         /// </summary>
         /// <param name="daemonClient">The daemon client.</param>
+        /// <param name="shareManager"></param>
         /// <param name="minerManager">The miner manager.</param>
         /// <param name="hashAlgorithm"></param>
         /// <returns></returns>
-        IJobManager Get(IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
+        IJobManager Get(IDaemonClient daemonClient, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
     }
 }

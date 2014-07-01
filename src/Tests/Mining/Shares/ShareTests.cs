@@ -236,7 +236,7 @@ namespace Tests.Mining.Shares
 
             // check the share itself.
             share.IsValid.Should().Equal(true);
-            share.IsCandidate.Should().Equal(true);
+            share.IsBlockCandidate.Should().Equal(true);
         }
 
         [Fact]
@@ -323,7 +323,7 @@ namespace Tests.Mining.Shares
 
             // check the share itself.
             share.IsValid.Should().Equal(true);
-            share.IsCandidate.Should().Equal(false);
+            share.IsBlockCandidate.Should().Equal(false);
         }
     }
 }

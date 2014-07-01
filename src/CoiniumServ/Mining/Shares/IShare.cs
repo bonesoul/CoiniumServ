@@ -22,6 +22,7 @@
 #endregion
 using System;
 using Coinium.Crypto;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Miners;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Utils.Numerics;
@@ -37,7 +38,14 @@ namespace Coinium.Mining.Shares
         /// <summary>
         /// Does it contain a block candicate.
         /// </summary>
-        bool IsCandidate { get; }
+        bool IsBlockCandidate { get; }
+
+        Block Block { get; }
+
+        /// <summary>
+        /// Is the block data accepted by the coin daemon?
+        /// </summary>
+        bool IsBlockAccepted { get; }
 
         IMiner Miner { get; }
 
@@ -74,5 +82,7 @@ namespace Coinium.Mining.Shares
         byte[] BlockHex { get; }
 
         byte[] BlockHash { get; }
+
+        void SetFoundBlock(Block block);
     }
 }

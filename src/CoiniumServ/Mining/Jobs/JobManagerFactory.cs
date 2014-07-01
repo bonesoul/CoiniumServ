@@ -24,9 +24,9 @@
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Shares;
 using Coinium.Repository.Context;
 using Nancy.TinyIoc;
-using Serilog;
 
 namespace Coinium.Mining.Jobs
 {
@@ -50,14 +50,16 @@ namespace Coinium.Mining.Jobs
         /// Gets the specified daemon client.
         /// </summary>
         /// <param name="daemonClient">The daemon client.</param>
+        /// <param name="shareManager"></param>
         /// <param name="minerManager">The miner manager.</param>
         /// <param name="hashAlgorithm"></param>
         /// <returns></returns>
-        public IJobManager Get(IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
+        public IJobManager Get(IDaemonClient daemonClient, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             var @params = new NamedParameterOverloads
             {
                 {"daemonClient", daemonClient}, 
+                {"shareManager", shareManager},
                 {"minerManager", minerManager},
                 {"hashAlgorithm", hashAlgorithm}
             };

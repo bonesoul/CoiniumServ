@@ -25,8 +25,8 @@ using System.Collections.Generic;
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
 using Coinium.Daemon.Exceptions;
-using Coinium.Daemon.Responses;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Shares;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Transactions;
 using Serilog;
@@ -43,6 +43,8 @@ namespace Coinium.Mining.Jobs
 
         private readonly IMinerManager _minerManager;
 
+        private readonly IShareManager _shareManager;
+
         private readonly IHashAlgorithm _hashAlgorithm;
 
         private IExtraNonce _extraNonce;
@@ -51,9 +53,10 @@ namespace Coinium.Mining.Jobs
 
         public IJob LastJob { get; private set; }
 
-        public JobManager(IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
+        public JobManager(IDaemonClient daemonClient, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             _daemonClient = daemonClient;
+            _shareManager = shareManager;
             _minerManager = minerManager;
             _hashAlgorithm = hashAlgorithm;
             JobCounter = new JobCounter();
@@ -119,7 +122,7 @@ namespace Coinium.Mining.Jobs
             }
             catch (DaemonException daemonException)
             {
-                Log.Error(daemonException, "Can not read blocktemplate from daemon:");
+                Log.ForContext<JobManager>().Error(daemonException, "Can not read blocktemplate from daemon:");
             }
         }
     }

@@ -23,6 +23,7 @@
 using System;
 using Coinium.Coin.Coinbase;
 using Coinium.Crypto;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Miners;
 using Coinium.Server.Stratum.Notifications;
 using Coinium.Utils.Extensions;
@@ -37,7 +38,13 @@ namespace Coinium.Mining.Shares
         {
             get { return Error == ShareError.None; }
         }
-        public bool IsCandidate { get; private set; }
+        public bool IsBlockCandidate { get; private set; }
+        public Block Block { get; private set; }
+
+        public bool IsBlockAccepted
+        {
+            get { return Block != null; }
+        }
         public IMiner Miner { get; private set; }
         public ShareError Error { get; private set; }
         public IJob Job { get; private set; }
@@ -120,13 +127,13 @@ namespace Coinium.Mining.Shares
             // check if block candicate
             if (Job.Target >= HeaderValue)
             {
-                IsCandidate = true;
+                IsBlockCandidate = true;
                 BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer);
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer(); // TODO: make sure this is okay!
             }
             else
             {
-                IsCandidate = false;
+                IsBlockCandidate = false;
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
 
                 // Check if share difficulty reaches miner difficulty.
@@ -135,6 +142,11 @@ namespace Coinium.Mining.Shares
                     // todo: add low difficulty share check.
                 }
             }
+        }
+
+        public void SetFoundBlock(Block block)
+        {
+            Block = block;
         }
     }
 }

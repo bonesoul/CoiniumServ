@@ -34,6 +34,8 @@ namespace Coinium.Mining.Shares
 {
     public class ShareManager : IShareManager
     {
+        public event EventHandler BlockFound;
+
         private readonly IJobManager _jobManager;
 
         private readonly IDaemonClient _daemonClient;
@@ -75,7 +77,7 @@ namespace Coinium.Mining.Shares
             {               
                 _storage.CommitShare(share);
 
-                if (share.IsCandidate)
+                if (share.IsBlockCandidate)
                 {
                     Log.ForContext<ShareManager>().Information("Share with block candidate [{0}] accepted at {1}/{2} by miner {3}.", share.Height, share.Job.Difficulty, share.Difficulty, miner.Username);
 
@@ -83,6 +85,8 @@ namespace Coinium.Mining.Shares
 
                     if (success)
                         _storage.CommitBlock(share);
+
+                    // TODO: notify back job manager using an event so he can create a new job.
                 }
                 else
                     Log.ForContext<ShareManager>().Information("Share accepted at {0}/{1} by miner {2}.", share.Job.Difficulty, share.Difficulty, miner.Username);
@@ -126,13 +130,48 @@ namespace Coinium.Mining.Shares
             try
             {
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
-                Log.ForContext<ShareManager>().Information("Submitted block [{0}] using submitblock: {1}.", share.Height, share.BlockHash.ToHexString());
+                var isAccepted = CheckIfBlockAccepted(share);
+
+                Log.ForContext<ShareManager>()
+                    .Information(
+                        isAccepted
+                            ? "Found block [{0}] with hash: {1}."
+                            : "Submitted block [{0}] but got denied: {1}.", 
+                            share.Height, share.BlockHash.ToHexString());
+
+                if(isAccepted)
+                    OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
+
+                return isAccepted;
+            }
+            catch (Exception e)
+            {
+                Log.ForContext<ShareManager>().Error(e, "Submit block failed - height: {0}, hash: {1}", share.Height, share.BlockHash);
+                return false;
+            }
+        }
+
+        private bool CheckIfBlockAccepted(Share share)
+        {
+            try
+            {
+                var block = _daemonClient.GetBlock(share.BlockHash.ToHexString()); // query the block.
+                share.SetFoundBlock(block); // assign the block to share.
                 return true;
             }
             catch (Exception e)
             {
+                Log.ForContext<ShareManager>().Error(e, "Get block failed - height: {0}, hash: {1}", share.Height, share.BlockHash);
                 return false;
             }
+        }
+
+        protected virtual void OnBlockFound(EventArgs e)
+        {
+            var handler = BlockFound;
+
+            if (handler != null)
+                handler(this, e);
         }
     }
 }
