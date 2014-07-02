@@ -1,0 +1,5 @@
+{
+    "name": "Stablecoin",
+    "symbol": "SBC",
+    "algorithm": "scrypt"
+}

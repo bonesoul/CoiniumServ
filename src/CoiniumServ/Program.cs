@@ -1,33 +1,38 @@
-﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
- *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+﻿#region License
+// 
+//     CoiniumServ - Crypto Currency Mining Pool Server Software
+//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
+//     https://github.com/CoiniumServ/CoiniumServ
+// 
+//     This software is dual-licensed: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//    
+//     For the terms of this license, see licenses/gpl_v3.txt.
+// 
+//     Alternatively, you can license this software under a commercial
+//     license or white-label it as set out in licenses/commercial.txt.
+// 
+#endregion
 using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using Coinium.Common.Console;
-using Coinium.Common.Platform;
-using Coinium.Core.Coin.Daemon;
-using Coinium.Core.Commands;
-using Coinium.Core.Mining.Pool;
-using Coinium.Core.Server;
-using Coinium.Core.Server.Stratum;
+using Coinium.Mining.Pools;
+using Coinium.Repository;
+using Coinium.Utils.Commands;
+using Coinium.Utils.Configuration;
+using Coinium.Utils.Console;
+using Coinium.Utils.Logging;
+using Coinium.Utils.Platform;
 using Serilog;
+using Nancy.TinyIoc;
 
 namespace Coinium
 {
@@ -40,35 +45,48 @@ namespace Coinium
 
         static void Main(string[] args)
         {
-            #if !DEBUG
-                AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions.
+            #if !DEBUG  // Catch any unhandled exceptions if we are in release mode.
+                AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             #endif
 
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; // Use invariant culture - we have to set it explicitly for every thread we create to prevent any file-reading problems (mostly because of number formats).
+            // use invariant culture - we have to set it explicitly for every thread we create to 
+            // prevent any file-reading problems (mostly because of number formats).
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
+            // start the ioc kernel.
+            var kernel = TinyIoCContainer.Current;
+            new Bootstrapper(kernel).Run();
+
+            // print intro texts.
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
-            InitLogging();
-            Log.Information("Coinium {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+            // check if we have a valid config file.
+            var globalConfig = kernel.Resolve<IGlobalConfigFactory>().Get();
+            if (globalConfig == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Couldn't read config.json! Make sure you rename config-sample.json as config.json.");
+                Console.ResetColor();
+                return;
+            }
+
+            // init logging facilities.
+            Logging.Init(globalConfig);
+
+            // print a version banner.
+            Log.Information("CoiniumServ {0} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information(string.Format("Running over {0} {1}.", PlatformManager.Framework, PlatformManager.FrameworkVersion));
 
-            // start wallet manager.
-            DaemonManager.Instance.Run();
-
             // start pool manager.
-            PoolManager.Instance.Run();
+            var poolManager = kernel.Resolve<IPoolManager>();
+            poolManager.Run();
 
-            // stratum server.
-            var stratumServer = new StratumServer("0.0.0.0", 3333);
-            stratumServer.Start();
-
-            // getwork server.
-            //var getworkServer = new VanillaServer(8332);
-            //getworkServer.Start();
-
-            // Start the server manager.
-            ServerManager.Instance.Start();
+            // run pools.
+            foreach (var pool in poolManager.GetPools())
+            {
+                pool.Start();
+            }
 
             while (true) // idle loop & command parser
             {
@@ -76,19 +94,6 @@ namespace Coinium
                 CommandManager.Parse(line);
             }
         }
-
-        #region logging facility
-
-        private static void InitLogging()
-        {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.ColoredConsole()
-                .WriteTo.RollingFile("Debug.log")
-                .MinimumLevel.Verbose()
-                .CreateLogger();
-        }
-
-        #endregion
 
         #region unhandled exception emitter
 
@@ -104,11 +109,13 @@ namespace Coinium
             if (exception == null) // if we can't get the exception, whine about it.
                 throw new ArgumentNullException("e");
 
-            Console.WriteLine(
-                    e.IsTerminating ? "Terminating because of unhandled exception: {0}" : "Caught unhandled exception: {0}",
-                    exception);
-
-            Console.ReadLine();
+            if (e.IsTerminating)
+            {
+                Log.Fatal(exception, "Terminating program because of unhandled exception!");
+                Environment.Exit(-1);
+            }
+            else
+                Log.Error(exception, "Caught unhandled exception");
         }
 
         #endregion

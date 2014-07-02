@@ -1,6 +1,6 @@
-[submodule "deps/json-rpc.net"]
-	path = deps/json-rpc.net
-	url = https://github.com/CoiniumServ/JSON-RPC.NET.git
 [submodule "deps/gibbed.io"]
 	path = deps/gibbed.io
 	url = https://github.com/CoiniumServ/Gibbed.IO.git
+[submodule "deps/jsonconfig"]
+	path = deps/jsonconfig
+	url = https://github.com/CoiniumServ/JsonConfig.git

@@ -1,0 +1,1 @@
+CoiniumServ uses [nomp](https://github.com/zone117x/node-open-mining-portal/tree/master/coins) compatible format for coin configs.

@@ -1,39 +1,71 @@
-![Screenshot](http://coinium.org/assets/images/logo/coinium-icon.png)
-# CoiniumServ [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
+# ![Screenshot](http://coinium.org/assets/images/logo/coinium-icon-48.png) CoiniumServ [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
  
-CoiniumServ is a high-performance pool-server implementation developed with C# that can host multiple pools together with their own wallet-daemon connections and ports. 
+[CoiniumServ](https://github.com/CoiniumServ/CoiniumServ) is an high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features a stratum and vanilla services, reward / payment / share processors, user-friendly front-end website and a full-stack API.
 
-* http://www.coinium.org
-* Read the [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and check the [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/) before asking!
+CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) mining pool network at first hand. You can check [some of pools](https://github.com/CoiniumServ/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
+
+* Official pools: [coinium.org](http://www.coinium.org)
+* Official site: [coiniumserv.com](http://www.coiniumserv.com)
+
+![CoiniumServ running over mono & ubuntu](http://i.imgur.com/izIB5nq.png)
+
+### Features
+
+###### Platform Agnostic
+Can run on any platforms that C# can live in;
+* *nix (including Linux) over mono
+* Windows over DotNet.
+
+###### Multiplexed Structure
+* Multiple pools & ports.
+* Multi-pool (switched) mining support.
+* Multiple coin daemon connections.
+* Multiple database layers.
+
+###### Functionality
+* Stratum server (over sockets) support. [in-development]
+* Vanilla server (getwork & getblocktemplate over http server) support. [in-development]
+
+###### Development Model
+* Strictly [follows](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) the [Test Driven Development](http://en.wikipedia.org/wiki/Test-driven_development) model. We have implemented extensive tests for all important functionality and never merge in code that breaks tests and stuff. Yet again, when a new functionality is introduced we also expect proper tests to be implemented within the PR. In simple words, most probably you won't notice any functionality-breaking changes within the repository.
+* A strict ruleset for the [Development Model](https://github.com/CoiniumServ/CoiniumServ/wiki/Development-Model). You can follow our bleeding-edge [Develop](https://github.com/CoiniumServ/CoiniumServ) branch or stay with-in the stable [Master](https://github.com/CoiniumServ/CoiniumServ/tree/master) branch.
+   
+
+### Getting Started
+
+Make sure you check our [Getting Started](https://github.com/CoiniumServ/CoiniumServ/wiki/Getting-Started) guide for installation instructions for *nix and Windows.
+
+For Ubuntu, you can simply use our installer script;
+
+```
+wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/assets/installer/ubuntu.sh | bash
+```
+
+### Documentation
+
+* [Documentation & Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
+* [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
+* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan) ( & motivation)
+
+### Support
+
+Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coinium-serv@freenode](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde).
+
+You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
+
 * IRC (**irc.freenode.net**):
   - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
   - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
   - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
-* [@coinium](http://twitter.com/coinium)
+* [Twitter](http://twitter.com/coinium)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
-### Features
-* Stratum server (over socket server).
-* Vanilla (getwork) server (over http server).
-* getblocktemplate & job-manager support.
-* Coin wallet daemon rpc connection support.
-   
-### About
+### Contributing
 
-Coinium is an effort to bring crypto-coins to C# space and create a reference pool software implementation. It can be compiled with Microsoft .NET or Mono, which means you can run it on Windows, MacOS, and Linux. Please see the file LICENSE for license details.
+Start reading by these;
 
-### Requirements
-
-* C# runtime (mono or dotnet)
-* Coin daemon
-
-### Building
-
-* Check [Building & Running](https://github.com/CoiniumServ/CoiniumServ/wiki/Building-&-Running).
-
-### Screenshots
-
-![Screenshot](http://i.imgur.com/Pql7h0y.png)
+* [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
+* [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
 
 ### Donation
 
@@ -43,17 +75,34 @@ You can contribute the development of the project by donating;
 * LTC: `LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa`
 * DOGE: `D7mzHQtkWD9B1Xwnmjfg9x2DofbaZBg6Lc`
 
-### Developers
+###### Bounties
 
-* [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
+BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
 
- 
-### Continious Integration
+[![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1)
 
-Every build of CoiniumServ is built & tested over mono & dotnet.
-* Mono: using mono 2.x and 3.x: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
-* Dotnet: using dotnet 4.x: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
+###### Tips
 
+You can send tips and furher support the project or get tips for contributing by commiting.
+
+[![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)
 
 ### License
-Check the [License](https://github.com/CoiniumServ/CoiniumServ/blob/develop/LICENSE) file.
+
+Copyright (C) 2013 - 2014, Coinium & CoiniumServ Project - http://www.coinium.org
+
+This software is dual-licensed: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+For the terms of this license, see [licenses/gpl_v3.txt](https://github.com/CoiniumServ/CoiniumServ/blob/develop/licenses/gpl_v3.txt).
+
+Alternatively, you can license this software under a commercial
+license or white-label it as set out in [licenses/commercial.txt](https://github.com/CoiniumServ/CoiniumServ/blob/develop/licenses/commercial.txt).
+

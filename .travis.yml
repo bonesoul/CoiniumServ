@@ -1,24 +1,27 @@
 language: objective-c
-
 env:
- global:
-  - EnableNuGetPackageRestore=true 
- matrix:
-  - MONO_VER="2.10.12" Package="dmg"
+  global:
+  - secure: "jan4aHikK+XOsBfJrhbFnrFlhAJ7p31z2KiXxoviFmO+5gIsZuhaEIniA5Kx/27rakj0CphoXxGL77WAYiEuVGJKl5j2j55zCYxSrs3ux7OuDut7A3NmwFXD65XcU75Pj12O3YMN96FKSY1ESdf0SBnti+hvgGDgIM47MOFWxME="
+  - EnableNuGetPackageRestore=true
+  matrix:
   - MONO_VER="3.2.7" Package="pkg"
   - MONO_VER="3.4.0" Package="pkg"
-  
 before_install:
- - wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.${Package}"
- - chmod +x ./build/extra/travis-build.sh
- - ./build/extra/travis-build.sh
-
+- wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.${Package}"
+- chmod +x ./build/extra/travis-build.sh
+- ./build/extra/travis-build.sh
 script:
- - xbuild build/CoiniumServ.sln
-
+- xbuild build/CoiniumServ.sln
+- chmod +x ./build/extra/run-tests.sh
+- ./build/extra/run-tests.sh
 notifications:
+  irc: chat.freenode.net#coinium-dev
   email: false
-  
-notifications:
-  irc: "chat.freenode.net#coinium-dev"
-  email: false
+addons:
+  coverity_scan:
+    project:
+      name: CoiniumServ/CoiniumServ
+      description: C# Mono/.Net based crypto currency mining pool software
+    build_command_prepend: 
+    build_command: xbuild build/CoiniumServ.sln
+    branch_pattern: coverity_scan

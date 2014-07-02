@@ -1,21 +1,25 @@
-﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
- *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+﻿#region License
+// 
+//     CoiniumServ - Crypto Currency Mining Pool Server Software
+//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
+//     https://github.com/CoiniumServ/CoiniumServ
+// 
+//     This software is dual-licensed: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//    
+//     For the terms of this license, see licenses/gpl_v3.txt.
+// 
+//     Alternatively, you can license this software under a commercial
+//     license or white-label it as set out in licenses/commercial.txt.
+// 
+#endregion
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -90,8 +94,8 @@ namespace Coinium.Net.Server.Sockets
             if (socket == null)
                 throw new ArgumentNullException("socket");
 
-            this._server = server;
-            this.Socket = socket;
+            _server = server;
+            Socket = socket;
         }
 
         #region recieve methods
@@ -101,7 +105,7 @@ namespace Coinium.Net.Server.Sockets
         // Note that this method should only be called prior to encryption!
         public int Receive(int start, int count)
         {
-            return this.Socket.Receive(_recvBuffer, start, count, SocketFlags.None);
+            return Socket.Receive(_recvBuffer, start, count, SocketFlags.None);
         }
 
         /// <summary>
@@ -112,12 +116,12 @@ namespace Coinium.Net.Server.Sockets
         /// <returns>Returns <see cref="IAsyncResult"/></returns>
         public IAsyncResult BeginReceive(AsyncCallback callback, object state)
         {
-            return this.Socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);
+            return Socket.BeginReceive(_recvBuffer, 0, BufferSize, SocketFlags.None, callback, state);
         }
 
         public int EndReceive(IAsyncResult result)
         {
-            return this.Socket.EndReceive(result);
+            return Socket.EndReceive(result);
         }
 
         #endregion
@@ -202,7 +206,7 @@ namespace Coinium.Net.Server.Sockets
         /// <param name="start">Start index to read from buffer.</param>
         /// <param name="count">Count of bytes to send.</param>
         /// <param name="flags">Sockets flags to use.</param>
-        /// <returns
+        /// <returns></returns>
         public int Send(byte[] buffer, int start, int count, SocketFlags flags)
         {
             if (buffer == null) 
@@ -220,8 +224,10 @@ namespace Coinium.Net.Server.Sockets
 
         public void Disconnect()
         {
-            this.Socket.Disconnect(true);
-            this.Client = null;            
+            if(Socket.Connected)
+                Socket.Disconnect(true);
+
+            Client = null;            
         }
 
         #endregion
@@ -234,8 +240,8 @@ namespace Coinium.Net.Server.Sockets
         {
             if (Socket == null)
                 return "No Socket!";
-            else
-                return Socket.RemoteEndPoint != null ? Socket.RemoteEndPoint.ToString() : "Not Connected!";
+
+            return Socket.RemoteEndPoint != null ? Socket.RemoteEndPoint.ToString() : "Not Connected!";
         }
     }
 }

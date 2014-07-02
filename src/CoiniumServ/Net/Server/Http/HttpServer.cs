@@ -1,27 +1,32 @@
-﻿/*
- *   Coinium - Crypto Currency Pool Software - https://github.com/CoiniumServ/CoiniumServ
- *   Copyright (C) 2013 - 2014, Coinium Project - http://www.coinium.org
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-// source from: http://stackoverflow.com/a/4673210/170181
+﻿#region License
+// 
+//     CoiniumServ - Crypto Currency Mining Pool Server Software
+//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
+//     https://github.com/CoiniumServ/CoiniumServ
+// 
+//     This software is dual-licensed: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+//    
+//     For the terms of this license, see licenses/gpl_v3.txt.
+// 
+//     Alternatively, you can license this software under a commercial
+//     license or white-label it as set out in licenses/commercial.txt.
+// 
+#endregion
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using Serilog;
+
+// source from: http://stackoverflow.com/a/4673210/170181
 
 namespace Coinium.Net.Server.Http
 {
@@ -42,18 +47,24 @@ namespace Coinium.Net.Server.Http
         /// </summary>
         public bool IsListening { get; private set; }
 
-        private readonly HttpListener _listener;
-        private readonly Thread _listenerThread;
-        private readonly Thread[] _workers;
-        private readonly ManualResetEvent _stop, _ready;
+        private HttpListener _listener;
+        private Thread _listenerThread;
+        private Thread[] _workers;
+        private ManualResetEvent _stop, _ready;
         private Queue<HttpListenerContext> _queue;
 
-        public HttpServer(int port, int maxThreads = 5)
+        /// <summary>
+        /// Initializes the specified port.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        /// <param name="maxThreads">The maximum threads.</param>
+        /// <exception cref="System.NotSupportedException">HttpListener not supported. Switch to mono provided one.</exception>
+        public void Initialize(int port, int maxThreads = 5)
         {
             if (!HttpListener.IsSupported)
                 throw new NotSupportedException("HttpListener not supported. Switch to mono provided one.");
 
-            this.Port = port;
+            Port = port;
 
             _workers = new Thread[maxThreads];
             _queue = new Queue<HttpListenerContext>();
@@ -65,7 +76,7 @@ namespace Coinium.Net.Server.Http
 
         public bool Start()
         {
-            _listener.Prefixes.Add(String.Format(@"http://localhost:{0}/", this.Port));
+            _listener.Prefixes.Add(String.Format(@"http://localhost:{0}/", Port));
             _listener.Start();
             _listenerThread.Start();
 
@@ -75,9 +86,9 @@ namespace Coinium.Net.Server.Http
                 _workers[i].Start();
             }
 
-            this.IsListening = true;
+            IsListening = true;
 
-            Log.Information("Vanilla server listening on http://localhost::{0}", this.Port);      
+            Log.ForContext<HttpServer>().Information("Vanilla server listening on port {0}.", Port);
 
             return true;
         }
@@ -123,7 +134,7 @@ namespace Coinium.Net.Server.Http
 
         private void Worker()
         {
-            WaitHandle[] wait = new[] {_ready, _stop};
+            WaitHandle[] wait = {_ready, _stop};
             while (0 == WaitHandle.WaitAny(wait))
             {
                 HttpListenerContext context;
