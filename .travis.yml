@@ -3,7 +3,6 @@ env:
   global:
   - EnableNuGetPackageRestore=true
   matrix:
-  - MONO_VER="2.10.12" Package="dmg"   
   - MONO_VER="3.2.7" Package="pkg"
   - MONO_VER="3.4.0" Package="pkg"
 before_install:
