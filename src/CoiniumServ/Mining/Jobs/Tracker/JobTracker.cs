@@ -31,7 +31,7 @@ namespace Coinium.Mining.Jobs.Tracker
     {
         private readonly Dictionary<UInt64, IJob> _jobs;
 
-        public IJob LastJob { get; private set; }
+        public IJob Current { get; private set; }
 
         public JobTracker()
         {
@@ -46,7 +46,7 @@ namespace Coinium.Mining.Jobs.Tracker
         public void Add(IJob job)
         {
             _jobs.Add(job.Id, job);
-            LastJob = job;
+            Current = job;
         }
     }
 }

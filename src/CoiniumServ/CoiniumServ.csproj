@@ -108,6 +108,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Daemon\DaemonError.cs" />
     <Compile Include="Daemon\Exceptions\DaemonException.cs" />
     <Compile Include="Daemon\Responses\IBlockTemplate.cs" />

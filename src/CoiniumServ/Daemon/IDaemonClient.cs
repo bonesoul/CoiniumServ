@@ -40,6 +40,10 @@ namespace Coinium.Daemon
 
         bool Getwork(string data);
 
+        Info GetInfo();
+
+        MiningInfo GetMiningInfo();
+
         ValidateAddress ValidateAddress(string walletAddress);
 
         void Initialize(IDaemonConfig daemonConfig);

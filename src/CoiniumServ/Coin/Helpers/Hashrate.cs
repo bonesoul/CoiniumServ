@@ -20,18 +20,28 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
-using Coinium.Server.Stratum.Notifications;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Mining.Jobs.Tracker
+namespace Coinium.Coin.Helpers
 {
-    public interface IJobTracker
+    public static class Hashrate
     {
-        IJob Get(UInt64 id);
+        public static string GetReadableHashrate(this int hashrate)
+        {
+            var index = -1;
+            double rate = hashrate;
+            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
 
-        IJob Current { get; }
+            do
+            {
+                rate = rate/1024;
+                index++;
+            } while (rate > 1024);
 
-        void Add(IJob job);
+            return string.Format("{0:0.00} {1}", rate, units[index]);
+        }
     }
 }

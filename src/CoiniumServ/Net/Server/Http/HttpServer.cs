@@ -76,7 +76,8 @@ namespace Coinium.Net.Server.Http
 
         public bool Start()
         {
-            _listener.Prefixes.Add(String.Format(@"http://localhost:{0}/", Port));
+            BindIP = "localhost";
+            _listener.Prefixes.Add(String.Format(@"http://{0}:{1}/", BindIP, Port));
             _listener.Start();
             _listenerThread.Start();
 
@@ -87,8 +88,6 @@ namespace Coinium.Net.Server.Http
             }
 
             IsListening = true;
-
-            Log.ForContext<HttpServer>().Information("Vanilla server listening on port {0}.", Port);
 
             return true;
         }

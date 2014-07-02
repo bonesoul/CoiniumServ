@@ -83,11 +83,7 @@ namespace Coinium.Server.Stratum
         public override bool Start()
         {
             var success = Listen(BindIP, Port);
-
-            if(success)
-                Log.ForContext<StratumServer>().Information("Stratum server listening on {0}:{1}", BindIP, Port);            
-
-            return true;
+            return success;
         }
 
         /// <summary>
