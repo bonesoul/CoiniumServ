@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -22,11 +22,11 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
-using System.Threading;
+using Coinium.Coin.Helpers;
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
-using Coinium.Mining.Jobs;
 using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
@@ -37,6 +37,7 @@ using Coinium.Server;
 using Coinium.Service;
 using Coinium.Utils.Configuration;
 using Coinium.Utils.Helpers.Validation;
+using HashLib;
 using Serilog;
 
 namespace Coinium.Mining.Pools
@@ -64,6 +65,7 @@ namespace Coinium.Mining.Pools
         private IJobManager _jobManager;
         private IShareManager _shareManager;
         private IStorage _storageManager;
+        private IHashAlgorithm _hashAlgorithm;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
@@ -131,6 +133,9 @@ namespace Coinium.Mining.Pools
         {
             Config = config;
 
+            // init the algorithm
+            _hashAlgorithm = _hashAlgorithmFactory.Get(Config.Coin.Algorithm);
+
             // init coin daemon.
             InitDaemon();
 
@@ -139,6 +144,14 @@ namespace Coinium.Mining.Pools
 
             // init servers
             InitServers();
+        }
+
+        private void InitDaemon()
+        {
+            if (Config.Daemon == null || Config.Daemon.Valid == false)
+                Log.ForContext<Pool>().Error("Coin daemon configuration is not valid!");
+
+            _daemonClient.Initialize(Config.Daemon);
         }
 
         private void InitManagers()
@@ -151,16 +164,8 @@ namespace Coinium.Mining.Pools
 
             _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storageManager);
 
-            _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithmFactory.Get(Config.Coin.Algorithm));
+            _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm);
             _jobManager.Initialize(InstanceId);
-        }
-
-        private void InitDaemon()
-        {
-            if (Config.Daemon == null || Config.Daemon.Valid == false)
-                Log.ForContext<Pool>().Error("Coin daemon configuration is not valid!");
-
-            _daemonClient.Initialize(Config.Daemon);
         }
 
         private void InitServers()
@@ -201,6 +206,40 @@ namespace Coinium.Mining.Pools
             {
                 server.Key.Start();
             }
+
+            GetPoolInfo();
+        }
+
+        private void GetPoolInfo()
+        {
+            var info = _daemonClient.GetInfo();
+            var miningInfo = _daemonClient.GetMiningInfo();
+
+            Log.ForContext<Pool>().Information("Pool started for {0:l}\n" +
+                                               "Coin symbol: {1:l} algorithm: {2:l}\n" +
+                                               "Coin version: {3} protocol: {4} wallet: {5}\n" +
+                                               "Daemon network: {6:l} peers: {7} blocks: {8} errors: {9:l}\n" +
+                                               "Network difficulty: {10:0.0000} block difficulty: {11:0.00}\n" +
+                                               "Network hashrate: {12:l}\n" +
+                                               "{13:l}\n",
+                Config.Coin.Name,
+                Config.Coin.Symbol,
+                Config.Coin.Algorithm,
+                info.Version,
+                info.ProtocolVersion,
+                info.WalletVersion,
+                info.Testnet ? "testnet" : "mainnet",
+                info.Connections, info.Blocks,
+                string.IsNullOrEmpty(info.Errors) ? "none" : info.Errors,
+                _jobTracker.Current.Difficulty,
+                _jobTracker.Current.Difficulty*_hashAlgorithm.Multiplier,
+                miningInfo.NetworkHashps.GetReadableHashrate(),
+                "Services: " + _servers.Select(pair => pair.Key)
+                    .Aggregate(string.Empty,
+                        (current, server) =>
+                            current +
+                            string.Format("{0} @ {1}:{2}, ", server.Config.Name.ToLower(), server.BindIP, server.Port))
+                );
         }
 
         public void Stop()

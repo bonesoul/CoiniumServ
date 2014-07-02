@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -79,7 +78,8 @@ namespace Coinium.Mining.Jobs.Manager
             _shareManager.BlockFound += OnBlockFound;
             _minerManager.MinerAuthenticated += OnMinerAuthenticated;
 
-            _timer = new Timer(NewJobTimer, null, TimeSpan.Zero, _timeSpan); // setup a timer to broadcast jobs.
+            var job = GetNewJob(); // initially create a job.
+            _timer = new Timer(NewJobTimer, null, TimeSpan.Zero, _timeSpan); // setup a timer to broadcast jobs.           
         }
 
         private void OnBlockFound(object sender, EventArgs e)
@@ -89,19 +89,21 @@ namespace Coinium.Mining.Jobs.Manager
             Log.ForContext<JobManager>().Information("Broadcasted job 0x{0:x} to {1} subscribers as we have just found a new block.", job.Id, count);
         }
 
-        private void OnMinerAuthenticated(object sender, EventArgs e)
-        {
-            var miner = ((MinerEventArgs) e).Miner;
-
-            //if (miner != null)
-                var result = SendJobToMiner(miner, _jobTracker.LastJob);
-        }
-
         private void NewJobTimer(object state)
         {
             var job = GetNewJob(); // create a new job.
             var count = Broadcast(job); // broadcast to miners.  
             Log.ForContext<JobManager>().Information("Broadcasted job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds.", job.Id, count, TimerExpiration);
+        }
+
+        private void OnMinerAuthenticated(object sender, EventArgs e)
+        {
+            var miner = ((MinerEventArgs) e).Miner;
+
+            if (miner != null)
+            {
+                var result = SendJobToMiner(miner, _jobTracker.Current);
+            }
         }
 
         private IJob GetNewJob()

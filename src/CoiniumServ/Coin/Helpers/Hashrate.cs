@@ -21,16 +21,27 @@
 // 
 #endregion
 using System;
-using AustinHarris.JsonRpc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Server.Stratum.Errors
+namespace Coinium.Coin.Helpers
 {
-    // defined in: http://mining.bitcoin.cz/stratum-mining
-
-    public class DuplicateShareError : JsonRpcException, IStratumError
+    public static class Hashrate
     {
-        public DuplicateShareError(UInt32 id)
-            : base(22, string.Format("Duplicate share: {0:x}", id), null)
-        { }
+        public static string GetReadableHashrate(this int hashrate)
+        {
+            var index = -1;
+            double rate = hashrate;
+            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
+
+            do
+            {
+                rate = rate/1024;
+                index++;
+            } while (rate > 1024);
+
+            return string.Format("{0:0.00} {1}", rate, units[index]);
+        }
     }
 }

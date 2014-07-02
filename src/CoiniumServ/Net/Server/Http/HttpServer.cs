@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -76,7 +76,8 @@ namespace Coinium.Net.Server.Http
 
         public bool Start()
         {
-            _listener.Prefixes.Add(String.Format(@"http://localhost:{0}/", Port));
+            BindIP = "localhost";
+            _listener.Prefixes.Add(String.Format(@"http://{0}:{1}/", BindIP, Port));
             _listener.Start();
             _listenerThread.Start();
 
@@ -87,8 +88,6 @@ namespace Coinium.Net.Server.Http
             }
 
             IsListening = true;
-
-            Log.ForContext<HttpServer>().Information("Vanilla server listening on port {0}.", Port);
 
             return true;
         }

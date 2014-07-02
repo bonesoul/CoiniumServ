@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using Coinium.Server.Stratum.Notifications;
@@ -31,7 +30,7 @@ namespace Coinium.Mining.Jobs.Tracker
     {
         private readonly Dictionary<UInt64, IJob> _jobs;
 
-        public IJob LastJob { get; private set; }
+        public IJob Current { get; private set; }
 
         public JobTracker()
         {
@@ -46,7 +45,7 @@ namespace Coinium.Mining.Jobs.Tracker
         public void Add(IJob job)
         {
             _jobs.Add(job.Id, job);
-            LastJob = job;
+            Current = job;
         }
     }
 }

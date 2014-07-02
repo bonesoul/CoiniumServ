@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
@@ -83,11 +82,7 @@ namespace Coinium.Server.Stratum
         public override bool Start()
         {
             var success = Listen(BindIP, Port);
-
-            if(success)
-                Log.ForContext<StratumServer>().Information("Stratum server listening on {0}:{1}", BindIP, Port);            
-
-            return true;
+            return success;
         }
 
         /// <summary>

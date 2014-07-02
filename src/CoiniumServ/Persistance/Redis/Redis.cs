@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,12 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using Coinium.Mining.Shares;
 using Coinium.Utils.Configuration;
+using Coinium.Utils.Extensions;
 using Coinium.Utils.Helpers.Time;
 using Serilog;
 using StackExchange.Redis;
@@ -60,33 +63,63 @@ namespace Coinium.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return;
 
-            var coin = share.Miner.Pool.Config.Coin.Name.ToLower();
+            var coin = share.Miner.Pool.Config.Coin.Name.ToLower(); // the coin we are working on.
+            var batch = _database.CreateBatch(); // batch the commands.
 
-            // add the share to round.
+            // add the share to round 
+            // key: coin:shares:round:current
+            // field: username, value: difficulty.
             var roundKey = string.Format("{0}:shares:round:current", coin);
-            _database.HashIncrement(roundKey, share.Miner.Username, share.Difficulty ,CommandFlags.FireAndForget);
+            batch.HashIncrementAsync(roundKey, share.Miner.Username, share.Difficulty, CommandFlags.FireAndForget);
 
-            // increment the valid shares.
+            // increment shares stats.
+            // key: coin:stats
+            // fields: validShares, invalidShares.
             var statsKey = string.Format("{0}:stats", coin);
-            _database.HashIncrement(statsKey, share.IsValid ? "validShares" : "invalidShares", 1 , CommandFlags.FireAndForget);
+            batch.HashIncrementAsync(statsKey, share.IsValid ? "validShares" : "invalidShares", 1, CommandFlags.FireAndForget);
 
-            // add to hashrate.
+            // add to hashrate 
+            // key: coin:shares:hashrate
+            // score: unix-time
+            // value: difficulty:username
             if (share.IsValid)
             {
-                var hashrateKey = string.Format("{0}:hashrate", coin);
+                var hashrateKey = string.Format("{0}:shares:hashrate", coin);
                 var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
-                _database.SortedSetAdd(hashrateKey, entry, TimeHelpers.NowInUnixTime(), CommandFlags.FireAndForget);
+                batch.SortedSetAddAsync(hashrateKey, entry, TimeHelpers.NowInUnixTime(), CommandFlags.FireAndForget);
             }
+
+            batch.Execute(); // execute the batch commands.
         }
 
         public void CommitBlock(IShare share)
         {
-            var coin = share.Miner.Pool.Config.Coin.Name.ToLower();
+            var coin = share.Miner.Pool.Config.Coin.Name.ToLower(); // the coin we are working on.
+            var batch = _database.CreateBatch(); // batch the commands.
 
-            // rename round:current to round:height.
-            var currentKey = string.Format("{0}:shares:round:current", coin);
-            var newKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
-            _database.KeyRenameAsync(currentKey, newKey, When.Always, CommandFlags.HighPriority);           
+            if (share.IsBlockAccepted)
+            {
+                // rename round [coin:round:current -> coin:round:heigh]
+                var currentKey = string.Format("{0}:shares:round:current", coin);
+                var newKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
+                batch.KeyRenameAsync(currentKey, newKey, When.Always, CommandFlags.HighPriority);
+
+                // add block to pending 
+                // key: coin:blocks:pending
+                // score: block height:
+                // value: blockHash:generation-transaction-hash
+                var pendingKey = string.Format("{0}:blocks:pending", coin);
+                var entry = string.Format("{0}:{1}", share.BlockHash.ToHexString(), share.Block.Tx.First());
+                batch.SortedSetAddAsync(pendingKey, entry, share.Block.Height, CommandFlags.FireAndForget);
+            }
+
+            // increment block stats.
+            // key: coin:stats
+            // fields: validBlocks, invalidBlocks
+            var statsKey = string.Format("{0}:stats", coin);
+            batch.HashIncrementAsync(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1, CommandFlags.FireAndForget);
+
+            batch.Execute(); // execute the batch commands.
         }
 
         private void Initialize()
