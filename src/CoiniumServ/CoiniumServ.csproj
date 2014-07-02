@@ -46,9 +46,6 @@
     <ApplicationIcon>..\..\assets\Coinium.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AsyncBridge">
-      <HintPath>..\..\build\packages\AsyncBridge.0.1.1\lib\net40-Client\AsyncBridge.dll</HintPath>
-    </Reference>
     <Reference Include="AustinHarris.JsonRpc, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\AustinHarris.JsonRpc.1.0.4.18\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
