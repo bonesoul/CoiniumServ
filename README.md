@@ -1,22 +1,11 @@
 # ![Screenshot](http://coinium.org/assets/images/logo/coinium-icon-48.png) CoiniumServ [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
  
-CoiniumServ is a high-performance pool-server implementation that can host multiple pools together with their own [CoiniumServ](https://github.com/CoiniumServ/CoiniumServ) is an high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features a stratum and vanilla services, reward / payment / share processors, user-friendly front-end website and a full-stack API.
+[CoiniumServ](https://github.com/CoiniumServ/CoiniumServ) is an high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features a stratum and vanilla services, reward / payment / share processors, user-friendly front-end website and a full-stack API.
 
-#### Info
+CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) mining pool network at first hand. You can check [some of pools](https://github.com/CoiniumServ/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
 * Official pools: [coinium.org](http://www.coinium.org)
 * Official site: [coiniumserv.com](http://www.coiniumserv.com)
-* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
-* [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
-* [Documentation & Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
-
-#### More
-* IRC (**irc.freenode.net**):
-  - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
-  - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
-  - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
-* [Twitter](http://twitter.com/coinium)
-* [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
 ### Features
 
@@ -57,6 +46,21 @@ For Ubuntu, you can simply use our installer script;
 ```
 wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/assets/installer/ubuntu.sh | bash
 ```
+
+### Documentation
+
+* [Documentation & Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
+* [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
+* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
+
+### Support
+
+* IRC (**irc.freenode.net**):
+  - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
+  - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
+  - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
+* [Twitter](http://twitter.com/coinium)
+* [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
 ### Screenshots
 
