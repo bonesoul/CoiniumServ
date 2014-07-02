@@ -82,10 +82,8 @@ namespace Coinium.Mining.Shares
                 {
                     Log.ForContext<ShareManager>().Information("Share with block candidate [{0}] accepted at {1:0.00}/{2} by miner {3}.", share.Height, share.Difficulty, miner.Difficulty, miner.Username);
 
-                    var success = SubmitBlock(share); // submit block to daemon
-
-                    if (success)
-                        _storage.CommitBlock(share);
+                    var success = SubmitBlock(share); // submit block to daemon.
+                    _storage.CommitBlock(share); // commit the block.
 
                     // TODO: notify back job manager using an event so he can create a new job.
                 }
