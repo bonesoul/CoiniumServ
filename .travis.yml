@@ -1,7 +1,6 @@
 language: objective-c
 env:
   global:
-  - secure: "jan4aHikK+XOsBfJrhbFnrFlhAJ7p31z2KiXxoviFmO+5gIsZuhaEIniA5Kx/27rakj0CphoXxGL77WAYiEuVGJKl5j2j55zCYxSrs3ux7OuDut7A3NmwFXD65XcU75Pj12O3YMN96FKSY1ESdf0SBnti+hvgGDgIM47MOFWxME="
   - EnableNuGetPackageRestore=true
   matrix:
   - MONO_VER="2.10.12" Package="dmg"   
@@ -18,11 +17,3 @@ script:
 notifications:
   irc: chat.freenode.net#coinium-dev
   email: false
-addons:
-  coverity_scan:
-    project:
-      name: CoiniumServ/CoiniumServ
-      description: C# Mono/.Net based crypto currency mining pool software
-    build_command_prepend: 
-    build_command: xbuild build/CoiniumServ.sln
-    branch_pattern: coverity_scan
