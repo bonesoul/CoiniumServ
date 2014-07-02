@@ -9,18 +9,18 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 ### Features
 
-##### Platform Agnostic
+###### Platform Agnostic
 Can run on any platforms that C# can live in;
 * *nix (including Linux) over mono
 * Windows over DotNet.
 
-##### Multiplexed Structure
+###### Multiplexed Structure
 * Multiple pools & ports.
 * Multi-pool (switched) mining support.
 * Multiple coin daemon connections.
 * Multiple database layers.
 
-##### Functionality
+###### Functionality
 * Stratum server (over sockets) support. [in-development]
 * Vanilla server (getwork & getblocktemplate over http server) support. [in-development]
 
@@ -64,34 +64,16 @@ wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/asse
 
 ### Screenshots
 
-##### Running over mono & ubuntu
+###### Running over mono & ubuntu
 ![Screenshot](http://i.imgur.com/izIB5nq.png)
 
-##### Running over dotnet & windows
+###### Running over dotnet & windows
 ![Screenshot](http://i.imgur.com/kHyztQf.png)
 
 ### Developers
 
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
-
-#### Continious Integration
-
-Every build of CoiniumServ is built & tested;
-* Mono: [travis](https://travis-ci.org/CoiniumServ/CoiniumServ).
-* dotNet: [appveyor](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
- 
-#### Bounties
-
-BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
-
-[![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1)
-
-#### Tips
-
-You can send tips and furher support the project or get tips for contributing by commiting.
-
-[![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)
 
 ### Donation
 
@@ -100,6 +82,18 @@ You can contribute the development of the project by donating;
 * BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
 * LTC: `LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa`
 * DOGE: `D7mzHQtkWD9B1Xwnmjfg9x2DofbaZBg6Lc`
+
+###### Bounties
+
+BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
+
+[![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1)
+
+###### Tips
+
+You can send tips and furher support the project or get tips for contributing by commiting.
+
+[![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)
 
 ### License
 
