@@ -7,6 +7,8 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 * Official pools: [coinium.org](http://www.coinium.org)
 * Official site: [coiniumserv.com](http://www.coiniumserv.com)
 
+![CoiniumServ running over mono & ubuntu](http://i.imgur.com/izIB5nq.png)
+
 ### Features
 
 ###### Platform Agnostic
@@ -28,14 +30,6 @@ Can run on any platforms that C# can live in;
 * Strictly [follows](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) the [Test Driven Development](http://en.wikipedia.org/wiki/Test-driven_development) model. We have implemented extensive tests for all important functionality and never merge in code that breaks tests and stuff. Yet again, when a new functionality is introduced we also expect proper tests to be implemented within the PR. In simple words, most probably you won't notice any functionality-breaking changes within the repository.
 * A strict ruleset for the [Development Model](https://github.com/CoiniumServ/CoiniumServ/wiki/Development-Model). You can follow our bleeding-edge [Develop](https://github.com/CoiniumServ/CoiniumServ) branch or stay with-in the stable [Master](https://github.com/CoiniumServ/CoiniumServ/tree/master) branch.
    
-### Motivation
-
-For more information about the motivation behind CoiniumServ, check [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan).
-
-### Requirements
-
-* C# runtime (mono or dotnet)
-* Coin daemon
 
 ### Getting Started
 
@@ -51,9 +45,13 @@ wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/asse
 
 * [Documentation & Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
 * [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
-* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
+* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan) ( & motivation)
 
 ### Support
+
+Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coinium-serv@freenode](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde).
+
+You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
 
 * IRC (**irc.freenode.net**):
   - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
@@ -62,15 +60,9 @@ wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/asse
 * [Twitter](http://twitter.com/coinium)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
-### Screenshots
+### Contributing
 
-###### Running over mono & ubuntu
-![Screenshot](http://i.imgur.com/izIB5nq.png)
-
-###### Running over dotnet & windows
-![Screenshot](http://i.imgur.com/kHyztQf.png)
-
-### Developers
+Start reading by these;
 
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
