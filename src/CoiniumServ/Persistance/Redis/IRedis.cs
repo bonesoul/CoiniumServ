@@ -27,7 +27,5 @@ namespace Coinium.Persistance.Redis
     public interface IRedis
     {
         bool IsConnected { get; }
-
-        IRedisConfig Config { get; }
     }
 }

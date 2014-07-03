@@ -53,6 +53,7 @@ namespace Coinium.Server
                 {"minerManager", minerManager},
                 {"jobManager", jobManager}
             };
+
             return _applicationContext.Container.Resolve<IMiningServer>(serverName, @params);
         }
     }

@@ -31,5 +31,7 @@ namespace Coinium.Persistance
         void CommitShare(IShare share);
 
         void CommitBlock(IShare share);
+
+        string[] GetPendingBlocks();
     }
 }

@@ -62,7 +62,14 @@ namespace Coinium.Payments
         {            
             _timer.Change(_timeSpan, TimeSpan.Zero); // reset the idle-block timer.
 
+            GetPendingPayments();
+
             Log.ForContext<PaymentProcessor>().Information("Payment processor ran.");
+        }
+
+        private void GetPendingPayments()
+        {
+            var test = _storage.GetPendingBlocks();
         }
     }
 }

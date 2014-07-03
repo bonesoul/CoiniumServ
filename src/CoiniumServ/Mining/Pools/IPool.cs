@@ -26,8 +26,6 @@ namespace Coinium.Mining.Pools
 {
     public interface IPool
     {
-        IPoolConfig Config { get; }
-
         /// <summary>
         /// Initializes the specified bind ip.
         /// </summary>

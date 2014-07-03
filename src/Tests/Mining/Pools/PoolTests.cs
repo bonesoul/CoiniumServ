@@ -385,12 +385,12 @@ namespace Tests.Mining.Pools
             pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
 
             // pool-config mockup.
-            var config = Substitute.For<IPoolConfig>();
-            config.Daemon.Valid.Returns(true);
+            var poolConfig = Substitute.For<IPoolConfig>();
+            poolConfig.Daemon.Valid.Returns(true);
 
             // initialize hash algorithm
             var hashAlgorithm = Substitute.For<IHashAlgorithm>();
-            _hashAlgorithmFactory.Get(config.Coin.Algorithm).Returns(hashAlgorithm);
+            _hashAlgorithmFactory.Get(poolConfig.Coin.Algorithm).Returns(hashAlgorithm);
 
             // initialize the miner manager.
             _minerManagerFactory.Get(_daemonClient);
@@ -399,7 +399,7 @@ namespace Tests.Mining.Pools
             _paymentProcessorFactory.Get(_daemonClient, _storage);
 
             // initialize storage manager
-            _storageFactory.Get(Storages.Redis);
+            _storageFactory.Get(Storages.Redis, poolConfig);
 
             // initialize the job tracker
             _jobTrackerFactory.Get();
@@ -412,7 +412,7 @@ namespace Tests.Mining.Pools
             _jobManager.Initialize(pool.InstanceId);
         
             // init daemon client
-            _daemonClient.Initialize(config.Daemon);
+            _daemonClient.Initialize(poolConfig.Daemon);
 
             // init server
             _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager).Returns(_miningServer);
@@ -421,10 +421,10 @@ namespace Tests.Mining.Pools
             _serviceFactory.Get(Services.Stratum, _shareManager, _daemonClient).Returns(_rpcService);
 
             // initalize the server.
-            _miningServer.Initialize(config.Stratum);
+            _miningServer.Initialize(poolConfig.Stratum);
 
             // initialize the pool.
-            pool.Initialize(config);
+            pool.Initialize(poolConfig);
         }
     }
 }

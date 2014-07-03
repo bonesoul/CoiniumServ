@@ -20,7 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using Coinium.Mining.Pools.Config;
 using Coinium.Repository.Context;
+using Nancy.TinyIoc;
 
 namespace Coinium.Persistance
 {
@@ -41,13 +44,18 @@ namespace Coinium.Persistance
             _applicationContext = applicationContext;
         }
 
-        public IStorage Get(string storageName)
+        public IStorage Get(string storageName, IPoolConfig poolConfig)
         {
             // Default to redis
             if (string.IsNullOrWhiteSpace(storageName))
                 storageName = Storages.Redis;
 
-            return _applicationContext.Container.Resolve<IStorage>(storageName);
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig}
+            };
+
+            return _applicationContext.Container.Resolve<IStorage>(storageName, @params);
         }
     }
 }

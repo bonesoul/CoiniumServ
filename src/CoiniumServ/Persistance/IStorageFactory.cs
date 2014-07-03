@@ -20,6 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using Coinium.Mining.Pools.Config;
+
 namespace Coinium.Persistance
 {
     public interface IStorageFactory
@@ -28,6 +31,6 @@ namespace Coinium.Persistance
         /// Gets the specified daemon client.
         /// </summary>
         /// <returns></returns>
-        IStorage Get(string storageName);
+        IStorage Get(string storageName, IPoolConfig poolConfig);
     }
 }

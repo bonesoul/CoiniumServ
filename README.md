@@ -89,7 +89,8 @@ You can send tips and furher support the project or get tips for contributing by
 
 ### License
 
-Copyright (C) 2013 - 2014, Coinium & CoiniumServ Project - http://www.coinium.org
+Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
+http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 
 This software is dual-licensed: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
