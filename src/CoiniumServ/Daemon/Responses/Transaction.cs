@@ -49,8 +49,8 @@ namespace Coinium.Daemon.Responses
         public List<TransactionDetail> Details { get; set; }
         
         // not sure if fields below even exists / used
-        public double Fee { get; set; }
-        public string Comment { get; set; }
-        public string To { get; set; }        
+        //public double Fee { get; set; }
+        //public string Comment { get; set; }
+        //public string To { get; set; }        
     }
 }

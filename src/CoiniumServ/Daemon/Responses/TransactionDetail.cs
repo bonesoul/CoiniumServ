@@ -31,6 +31,6 @@ namespace Coinium.Daemon.Responses
         public string Category { get; set; }
         public double Amount { get; set; }
         // not sure if fields below even exists / used
-        public double Fee { get; set; }
+        //public double Fee { get; set; }
     }
 }
