@@ -20,34 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Repository.Context;
 
-namespace Coinium.Persistance
+using Coinium.Daemon;
+using Coinium.Persistance;
+
+namespace Coinium.Payments
 {
-    public class StorageFactory:IStorageFactory
+    public interface IPaymentProcessorFactory
     {
-
-        /// <summary>
-        /// The _kernel
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StorageFactory" /> class.
-        /// </summary>
-        /// <param name="applicationContext">The application context.</param>
-        public StorageFactory(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
-
-        public IStorage Get(string storageName)
-        {
-            // Default to redis
-            if (string.IsNullOrWhiteSpace(storageName))
-                storageName = Storages.Redis;
-
-            return _applicationContext.Container.Resolve<IStorage>(storageName);
-        }
+        IPaymentProcessor Get(IDaemonClient daemonClient, IStorage storage);
     }
 }

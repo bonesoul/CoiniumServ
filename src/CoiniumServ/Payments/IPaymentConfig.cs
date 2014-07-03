@@ -20,38 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Persistance.Redis;
-using Coinium.Repository.Context;
+using System;
+using Coinium.Utils.Configuration;
 
-namespace Coinium.Utils.Configuration
+namespace Coinium.Payments
 {
-    public class GlobalConfigFactory : IGlobalConfigFactory
+    public interface IPaymentConfig:IConfig
     {
-        private const string FileName = "config.json";
+        bool Enabled { get; }
 
-        private dynamic _data = null;
-        private RedisConfig _redisConfig = null;
+        Int32 Interval { get; }
 
-        /// <summary>
-        /// The _application context
-        /// </summary>
-        private IApplicationContext _applicationContext;
-
-        public GlobalConfigFactory(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;            
-        }
-
-        public dynamic Get()
-        {
-            // return the global config, if we haven't read it yet, do so.
-            return _data ?? (_data = JsonConfigReader.Read(FileName));
-        }
-
-        public RedisConfig GetRedisConfig()
-        {
-            // return the redis config, if we haven't read it yet, do so.
-            return _redisConfig ?? (_redisConfig = new RedisConfig(Get().storage.redis));
-        }
+        Int32 Minimum { get; }
     }
 }

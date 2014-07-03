@@ -32,12 +32,12 @@ using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
+using Coinium.Payments;
 using Coinium.Persistance;
 using Coinium.Server;
 using Coinium.Service;
 using Coinium.Utils.Configuration;
 using Coinium.Utils.Helpers.Validation;
-using HashLib;
 using Serilog;
 
 namespace Coinium.Mining.Pools
@@ -57,15 +57,16 @@ namespace Coinium.Mining.Pools
         private readonly IShareManagerFactory _shareManagerFactory;
         private readonly IMinerManagerFactory _minerManagerFactory;
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
-        private readonly IStorageFactory _storageManagerFactory;
-        private readonly IGlobalConfigFactory _globalConfigFactory;
+        private readonly IStorageFactory _storageFactory;
+        private readonly IPaymentProcessorFactory _paymentProcessorFactory;
 
         private IMinerManager _minerManager;
         private IJobTracker _jobTracker;
         private IJobManager _jobManager;
         private IShareManager _shareManager;
-        private IStorage _storageManager;
+        private IStorage _storage;
         private IHashAlgorithm _hashAlgorithm;
+        private IPaymentProcessor _paymentProcessor;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
@@ -85,8 +86,8 @@ namespace Coinium.Mining.Pools
         /// <param name="jobTrackerFactory"></param>
         /// <param name="jobManagerFactory">The job manager factory.</param>
         /// <param name="shareManagerFactory">The share manager factory.</param>
-        /// <param name="storageManagerFactory"></param>
-        /// <param name="globalConfigFactory"></param>
+        /// <param name="storageFactory"></param>
+        /// <param name="paymentProcessorFactory"></param>
         public Pool(
             IHashAlgorithmFactory hashAlgorithmFactory, 
             IServerFactory serverFactory, 
@@ -96,8 +97,8 @@ namespace Coinium.Mining.Pools
             IJobTrackerFactory jobTrackerFactory,
             IJobManagerFactory jobManagerFactory, 
             IShareManagerFactory shareManagerFactory,
-            IStorageFactory storageManagerFactory,
-            IGlobalConfigFactory globalConfigFactory)
+            IStorageFactory storageFactory,
+            IPaymentProcessorFactory paymentProcessorFactory)
         {
             Enforce.ArgumentNotNull(hashAlgorithmFactory, "IHashAlgorithmFactory");
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
@@ -107,8 +108,8 @@ namespace Coinium.Mining.Pools
             Enforce.ArgumentNotNull(jobTrackerFactory, "IJobTrackerFactory");
             Enforce.ArgumentNotNull(jobManagerFactory, "IJobManagerFactory");
             Enforce.ArgumentNotNull(shareManagerFactory, "IShareManagerFactory");
-            Enforce.ArgumentNotNull(storageManagerFactory, "IStorageFactory");
-            Enforce.ArgumentNotNull(globalConfigFactory, "IGlobalConfigFactory");
+            Enforce.ArgumentNotNull(storageFactory, "IStorageFactory");
+            Enforce.ArgumentNotNull(paymentProcessorFactory, "IPaymentProcessorFactory");
 
             _daemonClient = client;
             _minerManagerFactory = minerManagerFactory;
@@ -118,8 +119,8 @@ namespace Coinium.Mining.Pools
             _serverFactory = serverFactory;
             _serviceFactory = serviceFactory;
             _hashAlgorithmFactory = hashAlgorithmFactory;
-            _storageManagerFactory = storageManagerFactory;
-            _globalConfigFactory = globalConfigFactory;
+            _storageFactory = storageFactory;
+            _paymentProcessorFactory = paymentProcessorFactory;
 
             GenerateInstanceId();
         }
@@ -132,9 +133,6 @@ namespace Coinium.Mining.Pools
         public void Initialize(IPoolConfig config)
         {
             Config = config;
-
-            // init the algorithm
-            _hashAlgorithm = _hashAlgorithmFactory.Get(Config.Coin.Algorithm);
 
             // init coin daemon.
             InitDaemon();
@@ -156,13 +154,19 @@ namespace Coinium.Mining.Pools
 
         private void InitManagers()
         {
-            _storageManager = _storageManagerFactory.Get(Storages.Redis);
+            // init the algorithm
+            _hashAlgorithm = _hashAlgorithmFactory.Get(Config.Coin.Algorithm);
+
+            _storage = _storageFactory.Get(Storages.Redis);
+
+            _paymentProcessor = _paymentProcessorFactory.Get(_daemonClient, _storage);
+            _paymentProcessor.Initialize(Config.Payments);
 
             _minerManager = _minerManagerFactory.Get(_daemonClient);
 
             _jobTracker = _jobTrackerFactory.Get();
 
-            _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storageManager);
+            _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage);
 
             _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm);
             _jobManager.Initialize(InstanceId);
@@ -215,13 +219,13 @@ namespace Coinium.Mining.Pools
             var info = _daemonClient.GetInfo();
             var miningInfo = _daemonClient.GetMiningInfo();
 
-            Log.ForContext<Pool>().Information("Pool started for {0:l}\n" +
-                                               "Coin symbol: {1:l} algorithm: {2:l}\n" +
-                                               "Coin version: {3} protocol: {4} wallet: {5}\n" +
-                                               "Daemon network: {6:l} peers: {7} blocks: {8} errors: {9:l}\n" +
-                                               "Network difficulty: {10:0.0000} block difficulty: {11:0.00}\n" +
-                                               "Network hashrate: {12:l}\n" +
-                                               "{13:l}\n",
+            Log.ForContext<Pool>().Information("Pool started for {0:l}\r\n" +
+                                               "Coin symbol: {1:l} algorithm: {2:l}\r\n" +
+                                               "Coin version: {3} protocol: {4} wallet: {5}\r\n" +
+                                               "Daemon network: {6:l} peers: {7} blocks: {8} errors: {9:l}\r\n" +
+                                               "Network difficulty: {10:0.0000} block difficulty: {11:0.00}\r\n" +
+                                               "Network hashrate: {12:l}\r\n" +
+                                               "{13:l}\r\n",
                 Config.Coin.Name,
                 Config.Coin.Symbol,
                 Config.Coin.Algorithm,

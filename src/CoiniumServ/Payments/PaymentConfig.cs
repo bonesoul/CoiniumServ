@@ -20,38 +20,33 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Persistance.Redis;
-using Coinium.Repository.Context;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Coinium.Utils.Configuration
+namespace Coinium.Payments
 {
-    public class GlobalConfigFactory : IGlobalConfigFactory
+    public class PaymentConfig:IPaymentConfig
     {
-        private const string FileName = "config.json";
+        public bool Valid { get; private set; }
+        public bool Enabled { get; private set; }
+        public int Interval { get; private set; }
+        public int Minimum { get; private set; }
 
-        private dynamic _data = null;
-        private RedisConfig _redisConfig = null;
-
-        /// <summary>
-        /// The _application context
-        /// </summary>
-        private IApplicationContext _applicationContext;
-
-        public GlobalConfigFactory(IApplicationContext applicationContext)
+        public PaymentConfig(dynamic config)
         {
-            _applicationContext = applicationContext;            
-        }
+            if (config == null)
+            {
+                Valid = false;
+                return;
+            }
 
-        public dynamic Get()
-        {
-            // return the global config, if we haven't read it yet, do so.
-            return _data ?? (_data = JsonConfigReader.Read(FileName));
-        }
+            Enabled = config.enabled;
+            Interval = config.interval;
+            Minimum = config.minimum;
 
-        public RedisConfig GetRedisConfig()
-        {
-            // return the redis config, if we haven't read it yet, do so.
-            return _redisConfig ?? (_redisConfig = new RedisConfig(Get().storage.redis));
+            Valid = true;
         }
     }
 }

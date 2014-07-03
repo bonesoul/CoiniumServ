@@ -23,6 +23,7 @@
 using System.IO;
 using Coinium.Coin.Config;
 using Coinium.Daemon.Config;
+using Coinium.Payments;
 using Coinium.Server.Stratum.Config;
 using Coinium.Server.Vanilla.Config;
 
@@ -50,6 +51,8 @@ namespace Coinium.Mining.Pools.Config
         /// The daemon configuration.
         /// </value>
         public IDaemonConfig Daemon { get; private set; }
+
+        public IPaymentConfig Payments { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PoolConfig"/> class.
@@ -87,6 +90,13 @@ namespace Coinium.Mining.Pools.Config
             Daemon = new DaemonConfig(config.daemon);
 
             if (Daemon == null)
+            {
+                Valid = false;
+                return;
+            }
+
+            Payments = new PaymentConfig(config.payments);
+            if (Payments == null)
             {
                 Valid = false;
                 return;
