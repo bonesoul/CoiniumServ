@@ -40,8 +40,7 @@ namespace Coinium.Persistance.Redis
         public bool IsConnected { get { return _connectionMultiplexer.IsConnected; } }
 
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
-        private readonly IGlobalConfigFactory _globalConfigFactory;
-        private readonly IRedisConfig _config;
+        private readonly IRedisConfig _redisConfig;
         private readonly IPoolConfig _poolConfig;
 
         private ConnectionMultiplexer _connectionMultiplexer;
@@ -50,11 +49,9 @@ namespace Coinium.Persistance.Redis
 
         public Redis(IGlobalConfigFactory globalConfigFactory, IPoolConfig poolConfig)
         {
-            _globalConfigFactory = globalConfigFactory;
-
-            _poolConfig = poolConfig;
-            _config = _globalConfigFactory.GetRedisConfig(); // read the config.
-            IsEnabled = _config.IsEnabled;
+            _poolConfig = poolConfig; // the pool config.
+            _redisConfig = globalConfigFactory.GetRedisConfig(); // read the redis config.
+            IsEnabled = _redisConfig.IsEnabled;
 
             if (IsEnabled)
                 Initialize();
@@ -137,11 +134,11 @@ namespace Coinium.Persistance.Redis
         private void Initialize()
         {
             var options = new ConfigurationOptions();
-            var endpoint = new DnsEndPoint(_config.Host, _config.Port, AddressFamily.InterNetwork);
+            var endpoint = new DnsEndPoint(_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork);
             options.EndPoints.Add(endpoint);
             options.AllowAdmin = true;
-            if (!string.IsNullOrEmpty(_config.Password))
-                options.Password = _config.Password;
+            if (!string.IsNullOrEmpty(_redisConfig.Password))
+                options.Password = _redisConfig.Password;
 
             try
             {
@@ -149,7 +146,7 @@ namespace Coinium.Persistance.Redis
                 _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options).Result;
 
                 // access to database.
-                _database = _connectionMultiplexer.GetDatabase(_config.DatabaseId);
+                _database = _connectionMultiplexer.GetDatabase(_redisConfig.DatabaseId);
 
                 // get the configured server.
                 _server = _connectionMultiplexer.GetServer(endpoint);
