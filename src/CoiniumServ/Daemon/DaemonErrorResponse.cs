@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 
 namespace Coinium.Daemon
 {
-    public class DaemonError
+    public class DaemonErrorResponse
     {
         /// <summary>
         /// The result object.
@@ -36,21 +36,16 @@ namespace Coinium.Daemon
         /// The error returned by the wallet, if any.
         /// </summary>
         [JsonProperty(PropertyName = "error", Order = 1)]
-        public ErrorObject Error { get; set; }
+        public DaemonError Error { get; set; }
 
         /// <summary>
         /// The id of the corresponding request.
         /// </summary>
         [JsonProperty(PropertyName = "id", Order = 2)]
         public int Id { get; set; }
-
-        public DaemonError()
-        {
-
-        }
     }
 
-    public class ErrorObject
+    public class DaemonError
     {
         [JsonProperty(PropertyName = "code", Order = 1)]
         public int Code { get; set; }

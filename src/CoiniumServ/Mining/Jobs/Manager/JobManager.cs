@@ -57,9 +57,7 @@ namespace Coinium.Mining.Jobs.Manager
         /// </summary>
         private Timer _timer;
 
-        private const int TimerExpiration = 60;
-
-        private readonly TimeSpan _timeSpan = new TimeSpan(0, 0, 0, TimerExpiration);
+        private const int TimerExpiration = 10;
 
         public JobManager(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
@@ -77,8 +75,8 @@ namespace Coinium.Mining.Jobs.Manager
             _shareManager.BlockFound += OnBlockFound;
             _minerManager.MinerAuthenticated += OnMinerAuthenticated;
 
-            var job = GetNewJob(); // initially create a job.
-            _timer = new Timer(IdleJobTimer, null, TimeSpan.Zero, _timeSpan); // setup a timer to broadcast jobs.           
+            _timer = new Timer(IdleJobTimer, null,Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
+            BroadcastNewJob(true); // broadcast a new job initially - which will also setup the timer.
         }
 
         private void OnBlockFound(object sender, EventArgs e)
@@ -95,12 +93,13 @@ namespace Coinium.Mining.Jobs.Manager
         {
             var job = GetNewJob(); // create a new job.
             var count = Broadcast(job); // broadcast to miners.  
-            _timer.Change(_timeSpan, TimeSpan.Zero); // reset the idle-block timer.
 
             if (initiatedByTimer)
                 Log.ForContext<JobManager>().Information("Broadcasted job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds.",job.Id, count, TimerExpiration);
             else
                 Log.ForContext<JobManager>().Information("Broadcasted job 0x{0:x} to {1} subscribers as we have just found a new block.", job.Id,count);
+
+            _timer.Change(TimerExpiration * 1000, Timeout.Infinite); // reset the idle-block timer.
         }
 
         private void OnMinerAuthenticated(object sender, EventArgs e)

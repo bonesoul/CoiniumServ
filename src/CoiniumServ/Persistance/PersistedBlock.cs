@@ -20,22 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
 
-namespace Coinium.Daemon.Exceptions
+namespace Coinium.Persistance
 {
-    public class DaemonException : Exception
+    public class PersistedBlock : IPersistedBlock
     {
-        public DaemonError Error { get; private set; }
+        public uint Height { get; private set; }
+        public string BlockHash { get; private set; }
+        public string TransactionHash { get; private set; }
+        public PersistedBlockStatus Status { get; set; }
 
-        public DaemonException(Exception e):
-            base(e.Message)
-        { }
-
-        public DaemonException(DaemonErrorResponse response) :
-            base(response.Error.Message)
+        public PersistedBlock( PersistedBlockStatus status, uint height, string blockHash, string transactionHash)
         {
-            Error = response.Error;
+            Status = status;
+            Height = height;
+            BlockHash = blockHash;
+            TransactionHash = transactionHash;
         }
     }
 }

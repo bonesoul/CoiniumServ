@@ -184,7 +184,7 @@ namespace Coinium.Daemon
                     {
                         string error = reader.ReadToEnd();
 
-                        var daemonError = JsonConvert.DeserializeObject<DaemonError>(error);
+                        var daemonError = JsonConvert.DeserializeObject<DaemonErrorResponse>(error);
                         throw new DaemonException(daemonError);
                     }
                 }

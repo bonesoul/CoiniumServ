@@ -22,8 +22,10 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Coinium.Daemon;
+using Coinium.Daemon.Exceptions;
 using Coinium.Persistance;
 using Serilog;
 
@@ -37,7 +39,6 @@ namespace Coinium.Payments
         private readonly IStorage _storage;
         private IPaymentConfig _config;
         private Timer _timer;
-        private TimeSpan _timeSpan;
 
         public PaymentProcessor(IDaemonClient daemonClient, IStorage storage)
         {
@@ -53,23 +54,40 @@ namespace Coinium.Payments
 
             if (IsEnabled)
             {
-                _timeSpan = new TimeSpan(0, 0, 0, config.Interval);
-                _timer = new Timer(RunPayments, null, TimeSpan.Zero, _timeSpan); // setup the timer to run payments.  
+                _timer = new Timer(RunPayments, null, _config.Interval * 1000, Timeout.Infinite); // setup the timer to run payments.  
             }
         }
 
         private void RunPayments(object state)
-        {            
-            _timer.Change(_timeSpan, TimeSpan.Zero); // reset the idle-block timer.
-
-            GetPendingPayments();
+        {
+            var pendingBlocks = _storage.GetPendingBlocks();
+            QueryPendingBlocks(pendingBlocks);
 
             Log.ForContext<PaymentProcessor>().Information("Payment processor ran.");
+
+            _timer.Change(_config.Interval * 1000, Timeout.Infinite); // reset the payments timer.
         }
 
-        private void GetPendingPayments()
+        private void QueryPendingBlocks(IEnumerable<IPersistedBlock> blocks)
         {
-            var test = _storage.GetPendingBlocks();
+
+            foreach (var block in blocks)
+            {
+                try
+                {
+                    var test = _daemonClient.GetTransaction(block.TransactionHash + "a");
+                }
+                catch (DaemonException exception)
+                {
+                    if (exception.Error.Code == -5)
+                        Log.ForContext<PaymentProcessor>().Error("Kicking block {0} as daemon reported invalid generation transaction id: {1}.", block.Height, block.TransactionHash);
+                    else
+                        Log.ForContext<PaymentProcessor>().Error("Kicking block {0} as daemon reported an unknown error with generation transaction: {1:l} error: {2:l} [{3}].", block.Height, block.TransactionHash, exception.Error.Message, exception.Error.Code);
+                    
+                    block.Status=PersistedBlockStatus.Kicked; // kic the block.
+                }
+            }
+
         }
     }
 }

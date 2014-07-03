@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -121,14 +122,25 @@ namespace Coinium.Persistance.Redis
             batch.Execute(); // execute the batch commands.
         }
 
-        public string[] GetPendingBlocks()
+        public IList<IPersistedBlock> GetPendingBlocks()
         {
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            var key=string.Format("{0}:blocks:pending", coin);
 
-            //var test1=_database.SortedSetRangeByRank()
-            //var test2=_database.SortedSetRangeByRankWithScores()
+            var task = _database.SortedSetRangeByRankWithScoresAsync(key, 0, -1, Order.Ascending, CommandFlags.HighPriority);
+            var results = task.Result;
 
-            return null;
+            var list = new List<IPersistedBlock>();
+            foreach (var result in results)
+            {
+                var data = result.Element.ToString().Split(':');
+                var blockHash = data[0];
+                var transactionHash = data[1];
+                var persistedBlock = new PersistedBlock(PersistedBlockStatus.Pending, (UInt32)result.Score, blockHash, transactionHash);
+                list.Add(persistedBlock);
+            }
+
+            return list;
         }
 
         private void Initialize()

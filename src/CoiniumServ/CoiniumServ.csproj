@@ -109,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Helpers\Hashrate.cs" />
-    <Compile Include="Daemon\DaemonError.cs" />
+    <Compile Include="Daemon\DaemonErrorResponse.cs" />
     <Compile Include="Daemon\Exceptions\DaemonException.cs" />
     <Compile Include="Daemon\Responses\IBlockTemplate.cs" />
     <Compile Include="Mining\Jobs\Tracker\IJobTracker.cs" />
@@ -123,6 +123,8 @@
     <Compile Include="Payments\PaymentConfig.cs" />
     <Compile Include="Payments\PaymentProcessor.cs" />
     <Compile Include="Payments\PaymentProcessorFactory.cs" />
+    <Compile Include="Persistance\IPersistedBlock.cs" />
+    <Compile Include="Persistance\PersistedBlock.cs" />
     <Compile Include="Persistance\Redis\IRedisConfig.cs" />
     <Compile Include="Persistance\Redis\RedisConfig.cs" />
     <Compile Include="Server\Stratum\IStratumMiner.cs" />

@@ -45,6 +45,8 @@ namespace Coinium.Daemon
 
         ValidateAddress ValidateAddress(string walletAddress);
 
+        Transaction GetTransaction(string txId);
+
         void Initialize(IDaemonConfig daemonConfig);
     }
 }
