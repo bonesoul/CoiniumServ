@@ -46,6 +46,8 @@ namespace Coinium.Daemon
     /// </summary>
     public class DaemonClient : DaemonBase, IDaemonClient
     {
+        private static readonly object[] EmptyParams = {}; // used as empty parameter.
+
         /// <summary>
         /// Version 0.8: Attempts add or remove node from the addnode list or try a connection to node once.
         /// </summary>
@@ -185,7 +187,10 @@ namespace Coinium.Daemon
         /// <returns>The balance of the account or the total wallet.</returns>
         public decimal GetBalance(string account = "")
         {
-            return MakeRequest<decimal>("getbalance", account);
+            if (string.IsNullOrEmpty(account))
+                return MakeRequest<decimal>("getbalance", EmptyParams);
+            else
+                return MakeRequest<decimal>("getbalance", account);
         }
 
         /// <summary>

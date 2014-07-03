@@ -26,12 +26,16 @@ namespace Coinium.Daemon.Exceptions
 {
     public class DaemonException : Exception
     {
+        public DaemonError Error { get; private set; }
+
         public DaemonException(Exception e):
             base(e.Message)
         { }
 
-        public DaemonException(DaemonError response):
+        public DaemonException(DaemonErrorResponse response) :
             base(response.Error.Message)
-        { }
+        {
+            Error = response.Error;
+        }
     }
 }

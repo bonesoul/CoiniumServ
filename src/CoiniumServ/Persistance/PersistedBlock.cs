@@ -20,38 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Persistance.Redis;
-using Coinium.Repository.Context;
 
-namespace Coinium.Utils.Configuration
+namespace Coinium.Persistance
 {
-    public class GlobalConfigFactory : IGlobalConfigFactory
+    public class PersistedBlock : IPersistedBlock
     {
-        private const string FileName = "config.json";
+        public uint Height { get; private set; }
+        public string BlockHash { get; private set; }
+        public string TransactionHash { get; private set; }
+        public PersistedBlockStatus Status { get; set; }
 
-        private dynamic _data = null;
-        private RedisConfig _redisConfig = null;
-
-        /// <summary>
-        /// The _application context
-        /// </summary>
-        private IApplicationContext _applicationContext;
-
-        public GlobalConfigFactory(IApplicationContext applicationContext)
+        public PersistedBlock( PersistedBlockStatus status, uint height, string blockHash, string transactionHash)
         {
-            _applicationContext = applicationContext;            
-        }
-
-        public dynamic Get()
-        {
-            // return the global config, if we haven't read it yet, do so.
-            return _data ?? (_data = JsonConfigReader.Read(FileName));
-        }
-
-        public RedisConfig GetRedisConfig()
-        {
-            // return the redis config, if we haven't read it yet, do so.
-            return _redisConfig ?? (_redisConfig = new RedisConfig(Get().storage.redis));
+            Status = status;
+            Height = height;
+            BlockHash = blockHash;
+            TransactionHash = transactionHash;
         }
     }
 }

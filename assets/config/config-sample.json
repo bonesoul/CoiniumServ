@@ -32,8 +32,8 @@
 		"port": 80
 	},
     
-    # database configuration.
-	"database": {
+    # storage configuration.
+	"storage": {
 		"redis": {
 			"enabled": true,
 			"host": "127.0.0.1",

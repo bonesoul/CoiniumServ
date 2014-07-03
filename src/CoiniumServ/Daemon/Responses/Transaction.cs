@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
 using System.Collections.Generic;
 
 namespace Coinium.Daemon.Responses
@@ -27,13 +29,28 @@ namespace Coinium.Daemon.Responses
     public class Transaction
     {
         public double Amount { get; set; }
-        public double Fee { get; set; }
         public int Confirmations { get; set; }
+
+        public bool Generated { get; set; }
+
+        public string BlockHash { get; set; }
+
+        public int BlockIndex { get; set; }
+
+        public int BlockTime { get; set; }
+
         public string TxId { get; set; }
+
+        public string NormTxId { get; set; }
+
         public int Time { get; set; }
         public int TimeReceived { get; set; }
-        public string Comment { get; set; }
-        public string To { get; set; }
+
         public List<TransactionDetail> Details { get; set; }
+        
+        // not sure if fields below even exists / used
+        //public double Fee { get; set; }
+        //public string Comment { get; set; }
+        //public string To { get; set; }        
     }
 }

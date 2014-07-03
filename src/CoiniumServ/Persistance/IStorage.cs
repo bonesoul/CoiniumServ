@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System.Collections.Generic;
 using Coinium.Mining.Shares;
 
 namespace Coinium.Persistance
@@ -31,5 +33,6 @@ namespace Coinium.Persistance
         void CommitShare(IShare share);
 
         void CommitBlock(IShare share);
+        IList<IPersistedBlock> GetPendingBlocks();
     }
 }

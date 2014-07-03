@@ -45,6 +45,10 @@ namespace Coinium.Daemon
 
         ValidateAddress ValidateAddress(string walletAddress);
 
+        Transaction GetTransaction(string txId);
+
+        decimal GetBalance(string account = "");
+
         void Initialize(IDaemonConfig daemonConfig);
     }
 }

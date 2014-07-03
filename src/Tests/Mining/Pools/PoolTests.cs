@@ -28,6 +28,7 @@ using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
+using Coinium.Payments;
 using Coinium.Persistance;
 using Coinium.Server;
 using Coinium.Service;
@@ -48,8 +49,8 @@ namespace Tests.Mining.Pools
         private readonly IShareManagerFactory _shareManagerFactory;
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
         private readonly IMinerManagerFactory _minerManagerFactory;
-        private readonly IStorageFactory _storageManagerFactory;
-        private readonly IGlobalConfigFactory _globalConfigFactory;
+        private readonly IStorageFactory _storageFactory;
+        private readonly IPaymentProcessorFactory _paymentProcessorFactory;
 
         // object mocks.
         private readonly IDaemonClient _daemonClient;
@@ -60,6 +61,7 @@ namespace Tests.Mining.Pools
         private readonly IStorage _storage;
         private readonly IMiningServer _miningServer;
         private readonly IRpcService _rpcService;
+        private readonly IPaymentProcessor _paymentProcessor;
 
         /// <summary>
         /// Initialize mock objects.
@@ -73,8 +75,8 @@ namespace Tests.Mining.Pools
             _minerManagerFactory = Substitute.For<IMinerManagerFactory>();
             _serverFactory = Substitute.For<IServerFactory>();
             _serviceFactory = Substitute.For<IServiceFactory>();
-            _storageManagerFactory = Substitute.For<IStorageFactory>();
-            _globalConfigFactory = Substitute.For<IGlobalConfigFactory>();
+            _storageFactory = Substitute.For<IStorageFactory>();
+            _paymentProcessorFactory = Substitute.For<IPaymentProcessorFactory>();
 
             _daemonClient = Substitute.For<IDaemonClient>();
             _minerManager = Substitute.For<IMinerManager>();
@@ -84,6 +86,7 @@ namespace Tests.Mining.Pools
             _miningServer = Substitute.For<IMiningServer>();
             _rpcService = Substitute.For<IRpcService>();
             _storage = Substitute.For<IStorage>();
+            _paymentProcessor = Substitute.For<IPaymentProcessor>();
         }
 
         /// <summary>
@@ -101,8 +104,9 @@ namespace Tests.Mining.Pools
                 _jobTrackerFactory,
                 _jobManagerFactory,
                 _shareManagerFactory,
-                _storageManagerFactory,
-                _globalConfigFactory);
+                _storageFactory,
+                _paymentProcessorFactory
+                );
 
             pool.Should().Not.Be.Null();
             pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
@@ -125,8 +129,9 @@ namespace Tests.Mining.Pools
                     _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
-                    _storageManagerFactory,
-                    _globalConfigFactory);
+                    _storageFactory,
+                    _paymentProcessorFactory
+                    );
             });
 
             ex.Message.Should().Contain("IHashAlgorithmFactory");
@@ -149,8 +154,9 @@ namespace Tests.Mining.Pools
                     _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
-                    _storageManagerFactory,
-                    _globalConfigFactory);
+                    _storageFactory,
+                    _paymentProcessorFactory
+                    );
             });
 
             ex.Message.Should().Contain("IServerFactory");
@@ -173,8 +179,9 @@ namespace Tests.Mining.Pools
                     _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
-                    _storageManagerFactory,
-                    _globalConfigFactory);
+                    _storageFactory,
+                    _paymentProcessorFactory
+                    );
             });
 
             ex.Message.Should().Contain("IServiceFactory");
@@ -197,8 +204,9 @@ namespace Tests.Mining.Pools
                     _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
-                    _storageManagerFactory,
-                    _globalConfigFactory);
+                    _storageFactory,
+                    _paymentProcessorFactory
+                    );
             });
 
             ex.Message.Should().Contain("IDaemonClient");
@@ -221,8 +229,9 @@ namespace Tests.Mining.Pools
                     _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
-                    _storageManagerFactory,
-                    _globalConfigFactory);
+                    _storageFactory,
+                    _paymentProcessorFactory
+                    );
             });
 
             ex.Message.Should().Contain("IMinerManagerFactory");
@@ -245,8 +254,9 @@ namespace Tests.Mining.Pools
                     null,
                     _jobManagerFactory,
                     _shareManagerFactory,
-                    _storageManagerFactory,
-                    _globalConfigFactory);
+                    _storageFactory,
+                    _paymentProcessorFactory
+                    );
             });
 
             ex.Message.Should().Contain("IJobTrackerFactory");
@@ -269,8 +279,9 @@ namespace Tests.Mining.Pools
                     _jobTrackerFactory,
                     null,
                     _shareManagerFactory,
-                    _storageManagerFactory,
-                    _globalConfigFactory);
+                    _storageFactory,
+                    _paymentProcessorFactory
+                    );
             });
 
             ex.Message.Should().Contain("IJobManagerFactory");
@@ -293,8 +304,9 @@ namespace Tests.Mining.Pools
                     _jobTrackerFactory,
                     _jobManagerFactory,
                     null,
-                    _storageManagerFactory,
-                    _globalConfigFactory);
+                    _storageFactory,
+                    _paymentProcessorFactory
+                    );
             });
 
             ex.Message.Should().Contain("IShareManagerFactory");
@@ -318,17 +330,18 @@ namespace Tests.Mining.Pools
                     _jobManagerFactory,
                     _shareManagerFactory,
                     null,
-                    _globalConfigFactory);
+                    _paymentProcessorFactory
+                    );
             });
 
             ex.Message.Should().Contain("IStorageFactory");
         }
 
         /// <summary>
-        /// Tests pool constructor with null GlobalConfigFactory, should trow exception.
+        /// Tests pool constructor with null StorageFactory, should trow exception.
         /// </summary>
         [Fact]
-        public void ConstructorTest_NullStorageManagerFactory_ShouldThrow()
+        public void ConstructorTest_NullPaymentProcessorFactory_ShouldThrow()
         {
             Exception ex = Assert.Throws<ArgumentNullException>(() =>
             {
@@ -341,11 +354,12 @@ namespace Tests.Mining.Pools
                     _jobTrackerFactory,
                     _jobManagerFactory,
                     _shareManagerFactory,
-                    _storageManagerFactory,
-                    null);
+                    _storageFactory,
+                    null
+                    );
             });
 
-            ex.Message.Should().Contain("IGlobalConfigFactory");
+            ex.Message.Should().Contain("IPaymentProcessorFactory");
         }
 
         /// <summary>
@@ -363,25 +377,29 @@ namespace Tests.Mining.Pools
                 _jobTrackerFactory,
                 _jobManagerFactory, 
                 _shareManagerFactory,
-                _storageManagerFactory,
-                _globalConfigFactory);
+                _storageFactory,
+                _paymentProcessorFactory
+                );
 
             pool.Should().Not.Be.Null();
             pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
 
             // pool-config mockup.
-            var config = Substitute.For<IPoolConfig>();
-            config.Daemon.Valid.Returns(true);
+            var poolConfig = Substitute.For<IPoolConfig>();
+            poolConfig.Daemon.Valid.Returns(true);
 
             // initialize hash algorithm
             var hashAlgorithm = Substitute.For<IHashAlgorithm>();
-            _hashAlgorithmFactory.Get(config.Coin.Algorithm).Returns(hashAlgorithm);
+            _hashAlgorithmFactory.Get(poolConfig.Coin.Algorithm).Returns(hashAlgorithm);
 
             // initialize the miner manager.
             _minerManagerFactory.Get(_daemonClient);
 
+            // payment processor
+            _paymentProcessorFactory.Get(_daemonClient, _storage);
+
             // initialize storage manager
-            _storageManagerFactory.Get(Storages.Redis);
+            _storageFactory.Get(Storages.Redis, poolConfig);
 
             // initialize the job tracker
             _jobTrackerFactory.Get();
@@ -394,7 +412,7 @@ namespace Tests.Mining.Pools
             _jobManager.Initialize(pool.InstanceId);
         
             // init daemon client
-            _daemonClient.Initialize(config.Daemon);
+            _daemonClient.Initialize(poolConfig.Daemon);
 
             // init server
             _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager).Returns(_miningServer);
@@ -403,10 +421,10 @@ namespace Tests.Mining.Pools
             _serviceFactory.Get(Services.Stratum, _shareManager, _daemonClient).Returns(_rpcService);
 
             // initalize the server.
-            _miningServer.Initialize(config.Stratum);
+            _miningServer.Initialize(poolConfig.Stratum);
 
             // initialize the pool.
-            pool.Initialize(config);
+            pool.Initialize(poolConfig);
         }
     }
 }

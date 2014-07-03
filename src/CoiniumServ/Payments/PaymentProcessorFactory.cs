@@ -20,38 +20,39 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Persistance.Redis;
+
+using Coinium.Daemon;
+using Coinium.Persistance;
 using Coinium.Repository.Context;
+using Nancy.TinyIoc;
 
-namespace Coinium.Utils.Configuration
+namespace Coinium.Payments
 {
-    public class GlobalConfigFactory : IGlobalConfigFactory
+    public class PaymentProcessorFactory : IPaymentProcessorFactory
     {
-        private const string FileName = "config.json";
-
-        private dynamic _data = null;
-        private RedisConfig _redisConfig = null;
+                /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
 
         /// <summary>
-        /// The _application context
+        /// Initializes a new instance of the <see cref="PaymentProcessorFactory" /> class.
         /// </summary>
-        private IApplicationContext _applicationContext;
-
-        public GlobalConfigFactory(IApplicationContext applicationContext)
+        /// <param name="applicationContext">The application context.</param>
+        public PaymentProcessorFactory(IApplicationContext applicationContext)
         {
-            _applicationContext = applicationContext;            
+            _applicationContext = applicationContext;
         }
 
-        public dynamic Get()
+        public IPaymentProcessor Get(IDaemonClient daemonClient, IStorage storage)
         {
-            // return the global config, if we haven't read it yet, do so.
-            return _data ?? (_data = JsonConfigReader.Read(FileName));
-        }
+            var @params = new NamedParameterOverloads
+            {
+                {"daemonClient", daemonClient},
+                {"storage", storage}
+            };
 
-        public RedisConfig GetRedisConfig()
-        {
-            // return the redis config, if we haven't read it yet, do so.
-            return _redisConfig ?? (_redisConfig = new RedisConfig(Get().storage.redis));
+            return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
         }
     }
 }

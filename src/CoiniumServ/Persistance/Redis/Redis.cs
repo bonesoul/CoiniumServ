@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
+using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 using Coinium.Utils.Configuration;
 using Coinium.Utils.Extensions;
@@ -39,20 +39,20 @@ namespace Coinium.Persistance.Redis
     {
         public bool IsEnabled { get; private set; }
         public bool IsConnected { get { return _connectionMultiplexer.IsConnected; } }
-        public IRedisConfig Config { get; private set; }
 
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
-        private readonly IGlobalConfigFactory _globalConfigFactory;
+        private readonly IRedisConfig _redisConfig;
+        private readonly IPoolConfig _poolConfig;
+
         private ConnectionMultiplexer _connectionMultiplexer;
         private IDatabase _database;
         private IServer _server;
 
-        public Redis(IGlobalConfigFactory globalConfigFactory)
+        public Redis(IGlobalConfigFactory globalConfigFactory, IPoolConfig poolConfig)
         {
-            _globalConfigFactory = globalConfigFactory;
-
-            Config = _globalConfigFactory.GetRedisConfig(); // read the config.
-            IsEnabled = Config.IsEnabled;
+            _poolConfig = poolConfig; // the pool config.
+            _redisConfig = globalConfigFactory.GetRedisConfig(); // read the redis config.
+            IsEnabled = _redisConfig.IsEnabled;
 
             if (IsEnabled)
                 Initialize();
@@ -63,7 +63,7 @@ namespace Coinium.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return;
 
-            var coin = share.Miner.Pool.Config.Coin.Name.ToLower(); // the coin we are working on.
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var batch = _database.CreateBatch(); // batch the commands.
 
             // add the share to round 
@@ -94,7 +94,7 @@ namespace Coinium.Persistance.Redis
 
         public void CommitBlock(IShare share)
         {
-            var coin = share.Miner.Pool.Config.Coin.Name.ToLower(); // the coin we are working on.
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var batch = _database.CreateBatch(); // batch the commands.
 
             if (share.IsBlockAccepted)
@@ -122,14 +122,35 @@ namespace Coinium.Persistance.Redis
             batch.Execute(); // execute the batch commands.
         }
 
+        public IList<IPersistedBlock> GetPendingBlocks()
+        {
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            var key=string.Format("{0}:blocks:pending", coin);
+
+            var task = _database.SortedSetRangeByRankWithScoresAsync(key, 0, -1, Order.Ascending, CommandFlags.HighPriority);
+            var results = task.Result;
+
+            var list = new List<IPersistedBlock>();
+            foreach (var result in results)
+            {
+                var data = result.Element.ToString().Split(':');
+                var blockHash = data[0];
+                var transactionHash = data[1];
+                var persistedBlock = new PersistedBlock(PersistedBlockStatus.Pending, (UInt32)result.Score, blockHash, transactionHash);
+                list.Add(persistedBlock);
+            }
+
+            return list;
+        }
+
         private void Initialize()
         {
             var options = new ConfigurationOptions();
-            var endpoint = new DnsEndPoint(Config.Host, Config.Port, AddressFamily.InterNetwork);
+            var endpoint = new DnsEndPoint(_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork);
             options.EndPoints.Add(endpoint);
             options.AllowAdmin = true;
-            if (!string.IsNullOrEmpty(Config.Password))
-                options.Password = Config.Password;
+            if (!string.IsNullOrEmpty(_redisConfig.Password))
+                options.Password = _redisConfig.Password;
 
             try
             {
@@ -137,7 +158,7 @@ namespace Coinium.Persistance.Redis
                 _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options).Result;
 
                 // access to database.
-                _database = _connectionMultiplexer.GetDatabase(Config.DatabaseId);
+                _database = _connectionMultiplexer.GetDatabase(_redisConfig.DatabaseId);
 
                 // get the configured server.
                 _server = _connectionMultiplexer.GetServer(endpoint);

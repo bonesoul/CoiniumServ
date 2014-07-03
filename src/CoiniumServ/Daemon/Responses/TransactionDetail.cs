@@ -30,6 +30,7 @@ namespace Coinium.Daemon.Responses
         public string Address { get; set; }
         public string Category { get; set; }
         public double Amount { get; set; }
-        public double Fee { get; set; }
+        // not sure if fields below even exists / used
+        //public double Fee { get; set; }
     }
 }

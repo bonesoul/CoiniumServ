@@ -25,6 +25,7 @@ using Coinium.Daemon;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Pools.Config;
+using Coinium.Payments;
 using Coinium.Persistance;
 using Coinium.Persistance.Redis;
 using Coinium.Repository.Context;
@@ -46,8 +47,9 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsSingleton();
+            _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
         }
     }
 }

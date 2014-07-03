@@ -20,12 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
 
-namespace Coinium.Persistance.Redis
+using Coinium.Daemon;
+using Coinium.Persistance;
+
+namespace Coinium.Payments
 {
-    public interface IRedis
+    public interface IPaymentProcessorFactory
     {
-        bool IsConnected { get; }
+        IPaymentProcessor Get(IDaemonClient daemonClient, IStorage storage);
     }
 }
