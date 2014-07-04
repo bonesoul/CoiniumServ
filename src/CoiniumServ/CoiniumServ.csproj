@@ -117,9 +117,11 @@
     <Compile Include="Mining\Jobs\Tracker\JobTracker.cs" />
     <Compile Include="Mining\Jobs\Tracker\JobTrackerFactory.cs" />
     <Compile Include="Mining\Miners\MinerEventArgs.cs" />
+    <Compile Include="Payments\IPaymentRound.cs" />
     <Compile Include="Payments\IPaymentConfig.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />
     <Compile Include="Payments\IPaymentProcessorFactory.cs" />
+    <Compile Include="Payments\PaymentRound.cs" />
     <Compile Include="Payments\PaymentConfig.cs" />
     <Compile Include="Payments\PaymentProcessor.cs" />
     <Compile Include="Payments\PaymentProcessorFactory.cs" />

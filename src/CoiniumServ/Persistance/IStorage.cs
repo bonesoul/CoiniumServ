@@ -21,8 +21,10 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using Coinium.Mining.Shares;
+using Coinium.Payments;
 
 namespace Coinium.Persistance
 {
@@ -34,5 +36,7 @@ namespace Coinium.Persistance
 
         void CommitBlock(IShare share);
         IList<IPersistedBlock> GetPendingBlocks();
+
+        Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
     }
 }
