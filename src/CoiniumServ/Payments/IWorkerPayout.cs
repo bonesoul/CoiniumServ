@@ -20,37 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Responses;
 
-namespace Coinium.Daemon
+namespace Coinium.Payments
 {
-    public interface IDaemonClient
+    public interface IWorkerPayout
     {
-        BlockTemplate GetBlockTemplate();
+        string Worker { get; }
 
-        BlockTemplate GetBlockTemplate(string blockHex);
+        decimal Balance { get; }
 
-        string SubmitBlock(string blockHex);
+        bool Paid { get; set; }
 
-        Block GetBlock(string hash);
-
-        Work Getwork();
-
-        bool Getwork(string data);
-
-        Info GetInfo();
-
-        MiningInfo GetMiningInfo();
-
-        ValidateAddress ValidateAddress(string walletAddress);
-
-        Transaction GetTransaction(string txId);
-
-        decimal GetBalance(string account = "");
-
-        string MakeRawRequest(string method, params object[] parameters);
-
-        void Initialize(IDaemonConfig daemonConfig);
+        void AddPayment(decimal amount);
     }
 }

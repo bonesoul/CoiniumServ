@@ -25,8 +25,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using Coinium.Crypto;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
+using Coinium.Payments;
 using Coinium.Utils.Configuration;
 using Coinium.Utils.Extensions;
 using Coinium.Utils.Helpers.Time;
@@ -125,12 +127,13 @@ namespace Coinium.Persistance.Redis
         public IList<IPersistedBlock> GetPendingBlocks()
         {
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-            var key=string.Format("{0}:blocks:pending", coin);
+            var key = string.Format("{0}:blocks:pending", coin);
 
             var task = _database.SortedSetRangeByRankWithScoresAsync(key, 0, -1, Order.Ascending, CommandFlags.HighPriority);
             var results = task.Result;
 
             var list = new List<IPersistedBlock>();
+
             foreach (var result in results)
             {
                 var data = result.Element.ToString().Split(':');
@@ -141,6 +144,24 @@ namespace Coinium.Persistance.Redis
             }
 
             return list;
+        }
+
+        public Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)
+        {
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+            var sharesForRounds = new Dictionary<UInt32, Dictionary<string, double>>(); // dictionary of block-height <-> shares.
+
+            foreach (var round in rounds)
+            {
+                var key = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+                var hashes = _database.HashGetAllAsync(key, CommandFlags.HighPriority).Result;
+
+                var shares = hashes.ToDictionary<HashEntry, string, double>(pair => pair.Name, pair => (double)pair.Value);
+                sharesForRounds.Add(round.Block.Height, shares);
+            }
+
+            return sharesForRounds;
         }
 
         private void Initialize()

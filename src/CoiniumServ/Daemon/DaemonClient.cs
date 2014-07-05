@@ -23,7 +23,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Daemon.Config;
 using Coinium.Daemon.Requests;
 using Coinium.Daemon.Responses;
 
@@ -46,7 +45,7 @@ namespace Coinium.Daemon
     /// </summary>
     public class DaemonClient : DaemonBase, IDaemonClient
     {
-        private static readonly object[] EmptyParams = {}; // used as empty parameter.
+        public static readonly object[] EmptyParams = {}; // used as empty parameter.
 
         /// <summary>
         /// Version 0.8: Attempts add or remove node from the addnode list or try a connection to node once.

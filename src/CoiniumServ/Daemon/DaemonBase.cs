@@ -65,17 +65,6 @@ namespace Coinium.Daemon
         }
 
         /// <summary>
-        /// Make a raw JSON RPC request with the given request object. Returns raw JSON.
-        /// </summary>
-        /// <param name="walletRequest">The request object.</param>
-        /// <returns>The raw JSON string.</returns>
-        public string MakeRawRpcRequest(DaemonRequest walletRequest)
-        {
-            HttpWebRequest httpWebRequest = MakeHttpRequest(walletRequest);
-            return GetJsonResponse(httpWebRequest);
-        }
-
-        /// <summary>
         /// Make an JSON RPC request, and return a JSON RPC response object with the result 
         /// deserialized as the given type.
         /// </summary>
@@ -84,8 +73,31 @@ namespace Coinium.Daemon
         /// <returns>A JSON RPC response with the result deserialized as the given type.</returns>
         private DaemonResponse<T> MakeRpcRequest<T>(DaemonRequest walletRequest)
         {
-            HttpWebRequest httpWebRequest = MakeHttpRequest(walletRequest);
+            var httpWebRequest = MakeHttpRequest(walletRequest);
             return GetRpcResponse<T>(httpWebRequest);
+        }
+
+        /// <summary>
+        /// Make a raw JSON RPC request with the given request object. Returns raw JSON.
+        /// </summary>
+        /// <param name="method"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public string MakeRawRequest(string method, params object[] parameters)
+        {
+            var response = MakeRawRpcRequest(new DaemonRequest(RequestCounter++, method, parameters));
+            return response;
+        }
+
+        /// <summary>
+        /// Make a raw JSON RPC request with the given request object. Returns raw JSON.
+        /// </summary>
+        /// <param name="walletRequest">The request object.</param>
+        /// <returns>The raw JSON string.</returns>
+        private string MakeRawRpcRequest(DaemonRequest walletRequest)
+        {
+            var httpWebRequest = MakeHttpRequest(walletRequest);
+            return GetJsonResponse(httpWebRequest);
         }
 
         /// <summary>
