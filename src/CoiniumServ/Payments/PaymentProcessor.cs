@@ -104,7 +104,7 @@ namespace Coinium.Payments
             }
         }
 
-        private IDictionary<string, IWorkerPayout> CalculatePayments(IEnumerable<IPaymentRound> rounds)
+        private IEnumerable<KeyValuePair<string, IWorkerPayout>> CalculatePayments(IEnumerable<IPaymentRound> rounds)
         {
             var payments = new Dictionary<string, IWorkerPayout>();
 
