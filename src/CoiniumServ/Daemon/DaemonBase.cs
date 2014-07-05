@@ -32,7 +32,7 @@ using Serilog;
 
 namespace Coinium.Daemon
 {
-    public class DaemonBase
+    public class DaemonBase : IDaemonBase
     {
         public string RpcUrl { get; private set; }
         public string RpcUser { get; private set; }

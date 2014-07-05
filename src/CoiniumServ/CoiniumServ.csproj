@@ -111,6 +111,7 @@
     <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Daemon\DaemonErrorResponse.cs" />
     <Compile Include="Daemon\Exceptions\DaemonException.cs" />
+    <Compile Include="Daemon\IDaemonBase.cs" />
     <Compile Include="Daemon\Responses\IBlockTemplate.cs" />
     <Compile Include="Mining\Jobs\Tracker\IJobTracker.cs" />
     <Compile Include="Mining\Jobs\Tracker\IJobTrackerFactory.cs" />

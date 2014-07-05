@@ -21,16 +21,23 @@
 // 
 #endregion
 
-namespace Coinium.Payments
+using System;
+using Coinium.Daemon.Config;
+
+namespace Coinium.Daemon
 {
-    public interface IWorkerPayout
+    public interface IDaemonBase
     {
-        string Worker { get; }
+        string RpcUrl { get; }
 
-        decimal Amount { get; }
+        string RpcUser { get;}
+        string RpcPassword { get;}
+        Int32 RequestCounter { get; }
 
-        bool Paid { get; set; }
+        T MakeRequest<T>(string method, params object[] parameters);
 
-        void AddPayment(decimal amount);
+        string MakeRawRequest(string method, params object[] parameters);
+
+        void Initialize(IDaemonConfig daemonConfig);
     }
 }

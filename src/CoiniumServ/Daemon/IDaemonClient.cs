@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System.Collections.Generic;
 using Coinium.Daemon.Config;
 using Coinium.Daemon.Responses;
 
@@ -51,6 +53,8 @@ namespace Coinium.Daemon
 
         string MakeRawRequest(string method, params object[] parameters);
 
-        void Initialize(IDaemonConfig daemonConfig);
+        string SendMany(string fromAccount, Dictionary<string, decimal> toBitcoinAddress, int minConf = 1, string comment = "");
+
+        void Initialize(IDaemonConfig daemonConfig);        
     }
 }
