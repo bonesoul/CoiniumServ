@@ -44,6 +44,7 @@ namespace Coinium.Payments
 
         private Int32 _precision; // coin's precision.
         private UInt32 _magnitude; // coin's magnitude
+        private decimal _minPaymentInSatoshis; // minimum amount of satoshis to issue a payment.
 
         private readonly object _paymentsLock = new object();
         private readonly Stopwatch _stopWatch = new Stopwatch();
@@ -73,24 +74,62 @@ namespace Coinium.Payments
             if (!DeterminePrecision())
                 return;
 
+            // calculate the minimum amount of payments in satoshis.
+            _minPaymentInSatoshis = _magnitude*config.Minimum;
+
             // if we reached here, then we can just setup the timer to run payments.  
             _timer = new Timer(RunPayments, null, _config.Interval * 1000, Timeout.Infinite);
         }
 
         private void RunPayments(object state)
         {
+            if (!IsEnabled)
+                return;
+
             lock (_paymentsLock)
             {
                 _stopWatch.Start();
 
                 var pendingBlocks = _storage.GetPendingBlocks(); // get all the pending blocks.
                 var rounds = GetPaymentRounds(pendingBlocks); // get the list of rounds that should be paid.
-                ProcessRounds(rounds);
+                ProcessRounds(rounds); // process the rounds, calculate shares and payouts per rounds.
+                var payments = CalculatePayments(rounds); // calculate the payments.               
+                ExecutePayments(payments); // execute the payments.
 
                 Log.ForContext<PaymentProcessor>().Information("Payments processed - took {0:0.000} seconds.", (float)_stopWatch.ElapsedMilliseconds/1000);
+                
                 _stopWatch.Reset();
 
                 _timer.Change(_config.Interval*1000, Timeout.Infinite); // reset the payments timer.
+            }
+        }
+
+        private IDictionary<string, IWorkerPayout> CalculatePayments(IEnumerable<IPaymentRound> rounds)
+        {
+            var payments = new Dictionary<string, IWorkerPayout>();
+
+            foreach (var round in rounds) // loop through all rounds
+            {
+                foreach (var roundPayment in round.Payouts) // loop through all payouts for the rounds
+                {
+                    if (!payments.ContainsKey(roundPayment.Key)) // make sure a payout for worker already exists
+                        payments.Add(roundPayment.Key, new WorkerPayout(roundPayment.Key));
+
+                    payments[roundPayment.Key].AddPayment(roundPayment.Value);
+                }
+            }
+
+            return payments.ToDictionary(k => k.Key, v => v.Value);
+        }
+
+        private void ExecutePayments(IEnumerable<KeyValuePair<string, IWorkerPayout>> payments)
+        {
+            foreach (var pair in payments)
+            {
+                var worker = pair.Value;
+
+                if (worker.Balance < _minPaymentInSatoshis)
+                    worker.Paid = false;
             }
         }
 

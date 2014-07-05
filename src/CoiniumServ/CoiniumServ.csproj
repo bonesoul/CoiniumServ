@@ -121,10 +121,12 @@
     <Compile Include="Payments\IPaymentConfig.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />
     <Compile Include="Payments\IPaymentProcessorFactory.cs" />
+    <Compile Include="Payments\IWorkerPayout.cs" />
     <Compile Include="Payments\PaymentRound.cs" />
     <Compile Include="Payments\PaymentConfig.cs" />
     <Compile Include="Payments\PaymentProcessor.cs" />
     <Compile Include="Payments\PaymentProcessorFactory.cs" />
+    <Compile Include="Payments\WorkerPayout.cs" />
     <Compile Include="Persistance\IPersistedBlock.cs" />
     <Compile Include="Persistance\PersistedBlock.cs" />
     <Compile Include="Persistance\Redis\IRedisConfig.cs" />

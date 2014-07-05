@@ -55,18 +55,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="XDMessaging">
-      <HintPath>..\..\build\packages\XDMessaging.4.0.9\lib\net40-Client\XDMessaging.dll</HintPath>
-    </Reference>
-    <Reference Include="XDMessaging.Transport.Amazon">
-      <HintPath>..\..\build\packages\XDMessaging.4.0.9\lib\net40-Client\XDMessaging.Transport.Amazon.dll</HintPath>
-    </Reference>
-    <Reference Include="XDMessaging.Transport.IOStream">
-      <HintPath>..\..\build\packages\XDMessaging.4.0.9\lib\net40-Client\XDMessaging.Transport.IOStream.dll</HintPath>
-    </Reference>
-    <Reference Include="XDMessaging.Transport.WindowsMessaging">
-      <HintPath>..\..\build\packages\XDMessaging.4.0.9\lib\net40-Client\XDMessaging.Transport.WindowsMessaging.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainForm.cs">
