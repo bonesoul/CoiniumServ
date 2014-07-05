@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Coinium.Coin.Helpers;
 using Coinium.Daemon;
 using Coinium.Daemon.Exceptions;
 using Coinium.Persistance;
@@ -124,13 +125,21 @@ namespace Coinium.Payments
 
         private void ExecutePayments(IEnumerable<KeyValuePair<string, IWorkerPayout>> payments)
         {
-            foreach (var pair in payments)
-            {
-                var worker = pair.Value;
+            var a = _daemonClient.GetBalance();
+            var b = _daemonClient.GetBalance("");
+            var c = _daemonClient.GetBalance(string.Empty);
 
-                if (worker.Balance < _minPaymentInSatoshis)
-                    worker.Paid = false;
-            }
+            var payouts =
+                payments.Select(pair => pair.Value)
+                    .Where(workerPayment => workerPayment.Amount >= _minPaymentInSatoshis)
+                    .ToDictionary(workerPayment => workerPayment.Worker, workerPayment => SatoshiToCoins(workerPayment.Amount));
+
+            var result = _daemonClient.SendMany("", payouts); // fix account.
+        }
+
+        public decimal SatoshiToCoins(decimal satoshis)
+        {
+            return satoshis/_magnitude;
         }
 
         private void ProcessRounds(IList<IPaymentRound> rounds)
@@ -231,7 +240,7 @@ namespace Coinium.Payments
 
             try
             {
-                json = _daemonClient.MakeRawRequest("getbalance", DaemonClient.EmptyParams);
+                json = _daemonClient.MakeRawRequest("getbalance", DaemonClient.EmptyString);
 
                 // we want a raw request
                 var satoshis = json.Split(new[] { "result\":" }, StringSplitOptions.None)[1].Split(',')[0].Split('.')[1];

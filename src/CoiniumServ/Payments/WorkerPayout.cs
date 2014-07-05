@@ -26,19 +26,19 @@ namespace Coinium.Payments
     public class WorkerPayout:IWorkerPayout
     {
         public string Worker { get; private set; }
-        public decimal Balance { get; private set; }
+        public decimal Amount { get; private set; }
         public bool Paid { get; set; }
 
         public WorkerPayout(string worker)
         {
             Worker = worker;
-            Balance = 0;
+            Amount = 0;
             Paid = false;
         }
 
         public void AddPayment(decimal amount)
         {
-            Balance += amount;
+            Amount += amount;
         }
     }
 }

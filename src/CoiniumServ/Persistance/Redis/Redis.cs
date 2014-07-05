@@ -95,6 +95,9 @@ namespace Coinium.Persistance.Redis
 
         public void CommitBlock(IShare share)
         {
+            if (!IsEnabled || !IsConnected)
+                return;
+
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var batch = _database.CreateBatch(); // batch the commands.
 
@@ -125,13 +128,16 @@ namespace Coinium.Persistance.Redis
 
         public IList<IPersistedBlock> GetPendingBlocks()
         {
+            var list = new List<IPersistedBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return list;
+
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var key = string.Format("{0}:blocks:pending", coin);
 
             var task = _database.SortedSetRangeByRankWithScoresAsync(key, 0, -1, Order.Ascending, CommandFlags.HighPriority);
             var results = task.Result;
-
-            var list = new List<IPersistedBlock>();
 
             foreach (var result in results)
             {
@@ -147,9 +153,12 @@ namespace Coinium.Persistance.Redis
 
         public Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)
         {
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-
             var sharesForRounds = new Dictionary<UInt32, Dictionary<string, double>>(); // dictionary of block-height <-> shares.
+
+            if (!IsEnabled || !IsConnected)
+                return sharesForRounds;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
 
             foreach (var round in rounds)
             {
@@ -165,10 +174,14 @@ namespace Coinium.Persistance.Redis
 
         private void Initialize()
         {
-            var options = new ConfigurationOptions();
+            var options = new ConfigurationOptions()
+            {
+                AllowAdmin = true
+            };
+
             var endpoint = new DnsEndPoint(_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork);
             options.EndPoints.Add(endpoint);
-            options.AllowAdmin = true;
+
             if (!string.IsNullOrEmpty(_redisConfig.Password))
                 options.Password = _redisConfig.Password;
 
