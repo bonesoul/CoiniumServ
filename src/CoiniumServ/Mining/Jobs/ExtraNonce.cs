@@ -31,14 +31,7 @@ namespace Coinium.Mining.Jobs
     /// </summary>
     public class ExtraNonce:IExtraNonce
     {
-        /// <summary>
-        /// Extra nonce counter supplied to miners.
-        /// <remarks>Last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
-        /// Basically allows us to run more-than-one pool-nodes within the same database.
-        /// More: https://github.com/moopless/stratum-mining-litecoin/issues/23#issuecomment-22728564
-        /// </remarks>
-        /// </summary>
-        public UInt32 Current { get; private set; }
+        private UInt32 _counter;
 
         /// <summary>
         /// ExtraNonce placeholder to be used with coinbase transactions.
@@ -54,26 +47,29 @@ namespace Coinium.Mining.Jobs
         public ExtraNonce(UInt32 instanceId)
         {
             ExtraNoncePlaceholder = "f000000ff111111f".HexToByteArray();
-            InitExtraNonceCounter(instanceId); // init. the extra nonce counter.
+            InitCounter(instanceId); // init. the extra nonce counter.
         }
 
 
         /// <summary>
         /// Inits ExtraNonce counter based on current instance Id.
         /// </summary>
-        private void InitExtraNonceCounter(UInt32 instanceId)
+        private void InitCounter(UInt32 instanceId)
         {
-            Current = instanceId << 27;  // init the ExtraNonce counter - last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
+            _counter = instanceId << 27;  // init the ExtraNonce counter - last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
         }
 
         /// <summary>
         /// Returns the next extranonce.
         /// </summary>
         /// <returns></returns>
-        public UInt32 NextExtraNonce()
+        /// <remarks>Last 5 most-significant bits represents instanceId, the rest is just an iterator of jobs.
+        /// Basically allows us to run more-than-one pool-nodes within the same database.
+        /// More: https://github.com/moopless/stratum-mining-litecoin/issues/23#issuecomment-22728564
+        /// </remarks>
+        public UInt32 Next()
         {
-            Current++; // increment the extranonce.
-            return Current;
+            return ++_counter; // return the next extra-nonce.
         }
     }
 }

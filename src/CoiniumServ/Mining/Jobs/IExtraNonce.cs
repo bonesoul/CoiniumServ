@@ -27,10 +27,9 @@ namespace Coinium.Mining.Jobs
     // Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
     public interface IExtraNonce
     {
-        UInt32 Current { get; }
 
         byte[] ExtraNoncePlaceholder { get; }
 
-        UInt32 NextExtraNonce();
+        UInt32 Next();
     }
 }
