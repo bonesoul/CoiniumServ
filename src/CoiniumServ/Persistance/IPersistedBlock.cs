@@ -28,10 +28,8 @@ namespace Coinium.Persistance
     public interface IPersistedBlock
     {
         UInt32 Height { get; }
-
         string BlockHash { get; }
         string TransactionHash { get; }
-
         PersistedBlockStatus Status { get; set; }
     }
 
