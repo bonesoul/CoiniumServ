@@ -27,7 +27,8 @@ namespace Coinium.Payments
     {
         string Worker { get; }
 
-        decimal AmountInSatoshis { get; }
+        decimal Balance { get; }
+        decimal BalanceInSatoshis { get; }
 
         bool Paid { get; set; }
 

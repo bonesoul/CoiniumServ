@@ -35,6 +35,15 @@ namespace Coinium.Persistance
         void CommitShare(IShare share);
 
         void CommitBlock(IShare share);
+
+        void CommitRemainingBalances(IList<IWorkerBalance> workerBalances);
+
+        void DeleteShares(IPaymentRound round);
+
+        void MoveSharesToCurrentRound(IPaymentRound round);
+
+        void MovePendingBlock(IPaymentRound round);
+
         IList<IPersistedBlock> GetPendingBlocks();
 
         Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);

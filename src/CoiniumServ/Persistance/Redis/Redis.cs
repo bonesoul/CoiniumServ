@@ -68,21 +68,14 @@ namespace Coinium.Persistance.Redis
             var batch = _database.CreateBatch(); // batch the commands.
 
             // add the share to round 
-            // key: coin:shares:round:current
-            // field: username, value: difficulty.
-            var roundKey = string.Format("{0}:shares:round:current", coin);
-            batch.HashIncrementAsync(roundKey, share.Miner.Username, share.Difficulty, CommandFlags.FireAndForget);
+            var currentKey = string.Format("{0}:shares:round:current", coin);
+            batch.HashIncrementAsync(currentKey, share.Miner.Username, share.Difficulty, CommandFlags.FireAndForget);
 
             // increment shares stats.
-            // key: coin:stats
-            // fields: validShares, invalidShares.
             var statsKey = string.Format("{0}:stats", coin);
             batch.HashIncrementAsync(statsKey, share.IsValid ? "validShares" : "invalidShares", 1, CommandFlags.FireAndForget);
 
-            // add to hashrate 
-            // key: coin:shares:hashrate
-            // score: unix-time
-            // value: difficulty:username
+            // add to hashrate
             if (share.IsValid)
             {
                 var hashrateKey = string.Format("{0}:shares:hashrate", coin);
@@ -103,27 +96,104 @@ namespace Coinium.Persistance.Redis
 
             if (share.IsBlockAccepted)
             {
-                // rename round [coin:round:current -> coin:round:heigh]
+                // rename round.
                 var currentKey = string.Format("{0}:shares:round:current", coin);
-                var newKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
-                batch.KeyRenameAsync(currentKey, newKey, When.Always, CommandFlags.HighPriority);
+                var roundKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
+                batch.KeyRenameAsync(currentKey, roundKey, When.Always, CommandFlags.HighPriority);
 
-                // add block to pending 
-                // key: coin:blocks:pending
-                // score: block height:
-                // value: blockHash:generation-transaction-hash
+                // add block to pending.
                 var pendingKey = string.Format("{0}:blocks:pending", coin);
                 var entry = string.Format("{0}:{1}", share.BlockHash.ToHexString(), share.Block.Tx.First());
                 batch.SortedSetAddAsync(pendingKey, entry, share.Block.Height, CommandFlags.FireAndForget);
             }
 
             // increment block stats.
-            // key: coin:stats
-            // fields: validBlocks, invalidBlocks
             var statsKey = string.Format("{0}:stats", coin);
             batch.HashIncrementAsync(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1, CommandFlags.FireAndForget);
 
             batch.Execute(); // execute the batch commands.
+        }
+
+        public void CommitRemainingBalances(IList<IWorkerBalance> workerBalances)
+        {
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            var balancesKey = string.Format("{0}:balances", coin);
+            var batch = _database.CreateBatch(); // batch the commands.
+
+            foreach (var workerBalance in workerBalances)
+            {
+                if(workerBalance.Paid) // skip paid balances.
+                    continue;
+
+                batch.HashIncrementAsync(balancesKey, workerBalance.Worker, (double)workerBalance.Balance, CommandFlags.FireAndForget);
+            }            
+
+            batch.Execute(); // execute the batch commands.
+        }
+
+        public void DeleteShares(IPaymentRound round)
+        {
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+
+            _database.KeyDeleteAsync(roundKey, CommandFlags.FireAndForget); // delete the associated shares.
+        }
+
+        public void MoveSharesToCurrentRound(IPaymentRound round)
+        {
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            var currentRound = string.Format("{0}:shares:round:current", coin); // current round key.
+            var roundShares = string.Format("{0}:shares:round:{1}", coin, round.Block.Height); // rounds shares key.
+
+            // add shares to current round again.
+            foreach (var pair in round.Shares)
+            {
+                _database.HashIncrementAsync(currentRound, pair.Key, pair.Value, CommandFlags.FireAndForget);
+            }
+
+            // delete the associated shares.
+            _database.KeyDeleteAsync(roundShares, CommandFlags.FireAndForget); // delete the associated shares.
+        }
+
+        public void MovePendingBlock(IPaymentRound round)
+        {
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+            // re-flag the rounds.
+            var pendingKey = string.Format("{0}:blocks:pending", coin); // old key for the round.
+            var newKey = string.Empty; // new key for the round.
+
+            switch (round.Block.Status)
+            {
+                case PersistedBlockStatus.Kicked:
+                    newKey = string.Format("{0}:blocks:kicked", coin);
+                    break;
+                case PersistedBlockStatus.Orphan:
+                    newKey = string.Format("{0}:blocks:orphaned", coin);
+                    break;
+                case PersistedBlockStatus.Confirmed:
+                    newKey = string.Format("{0}:blocks:confirmed", coin);
+                    break;
+            }
+
+            if (string.IsNullOrEmpty(newKey)) // if the block is still pending
+                return; // just skip it.
+
+            var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);                    
+            _database.SortedSetRemoveRangeByScoreAsync(pendingKey, round.Block.Height, round.Block.Height, Exclude.None, CommandFlags.FireAndForget);
+            _database.SortedSetAddAsync(newKey, entry, round.Block.Height, CommandFlags.FireAndForget);
         }
 
         public IList<IPersistedBlock> GetPendingBlocks()
@@ -134,9 +204,9 @@ namespace Coinium.Persistance.Redis
                 return list;
 
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-            var key = string.Format("{0}:blocks:pending", coin);
+            var pendingKey = string.Format("{0}:blocks:pending", coin);
 
-            var task = _database.SortedSetRangeByRankWithScoresAsync(key, 0, -1, Order.Ascending, CommandFlags.HighPriority);
+            var task = _database.SortedSetRangeByRankWithScoresAsync(pendingKey, 0, -1, Order.Ascending, CommandFlags.HighPriority);
             var results = task.Result;
 
             foreach (var result in results)
@@ -162,8 +232,8 @@ namespace Coinium.Persistance.Redis
 
             foreach (var round in rounds)
             {
-                var key = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
-                var hashes = _database.HashGetAllAsync(key, CommandFlags.HighPriority).Result;
+                var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+                var hashes = _database.HashGetAllAsync(roundKey, CommandFlags.HighPriority).Result;
 
                 var shares = hashes.ToDictionary<HashEntry, string, double>(pair => pair.Name, pair => (double)pair.Value);
                 sharesForRounds.Add(round.Block.Height, shares);
@@ -211,7 +281,7 @@ namespace Coinium.Persistance.Redis
                     }
                 }
                 
-                Log.ForContext<Redis>().Information("Storage initialized: {0}, v{1}.", endpoint, version);
+                Log.ForContext<Redis>().Information("Storage initialized: {0:l}, v{1:l}.", endpoint, version);
             }
             catch (Exception e)
             {

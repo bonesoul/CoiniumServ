@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using Coinium.Persistance;
 
@@ -31,7 +30,7 @@ namespace Coinium.Payments
     {
         IPersistedBlock Block {get;}
 
-        decimal TotalRewardInSatoshis { get; }
+        decimal TotalAmount { get; }
 
         Dictionary<string, double> Shares { get; }
 

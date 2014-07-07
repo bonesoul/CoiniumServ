@@ -130,7 +130,7 @@ namespace Coinium.Daemon
             }
             catch (WebException exception)
             {
-                throw new DaemonException(exception);
+                throw new RpcException("An unknown web exception occured while trying to send the JSON request.", exception);
             }
 
             return webRequest;
@@ -181,14 +181,14 @@ namespace Coinium.Daemon
             }
             catch (ProtocolViolationException protocolException)
             {
-                throw new Exception("Unable to connect to the daemon.", protocolException);
+                throw new RpcException("Unable to connect to the daemon.", protocolException);
             }
             catch (WebException webException)
             {
                 var response = webException.Response as HttpWebResponse;
 
                 if(response == null)
-                    throw new Exception("An unknown web exception occured while trying to read the JSON response.", webException);
+                    throw new RpcException(string.Format("Error while reading the json response: {0}.", webException.Message), webException);
 
                 using (var stream = response.GetResponseStream())
                 {
@@ -196,14 +196,14 @@ namespace Coinium.Daemon
                     {
                         string error = reader.ReadToEnd();
 
-                        var daemonError = JsonConvert.DeserializeObject<DaemonErrorResponse>(error);
-                        throw new DaemonException(daemonError);
+                        var errorResponse = JsonConvert.DeserializeObject<DaemonErrorResponse>(error);
+                        throw new RpcException(errorResponse);
                     }
                 }
             }
             catch (Exception exception)
             {
-                throw new Exception("An unknown exception occured while trying to read the JSON response.", exception);
+                throw new RpcException("An unknown exception occured while trying to read the JSON response.", exception);
             }
         }
     }

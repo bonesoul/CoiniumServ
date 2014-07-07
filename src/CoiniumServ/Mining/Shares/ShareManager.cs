@@ -76,19 +76,22 @@ namespace Coinium.Mining.Shares
 
             if (share.IsValid)
             {               
-                _storage.CommitShare(share);
+                _storage.CommitShare(share); // commit the share.
 
-                if (share.IsBlockCandidate)
+                if (share.IsBlockCandidate) // if share contains a block candicate
                 {
-                    Log.ForContext<ShareManager>().Information("Share with block candidate [{0}] accepted at {1:0.00}/{2} by miner {3}.", share.Height, share.Difficulty, miner.Difficulty, miner.Username);
+                    Log.ForContext<ShareManager>().Debug("Share with block candidate [{0}] accepted at {1:0.00}/{2} by miner {3:l}.", share.Height, share.Difficulty, miner.Difficulty, miner.Username);
 
-                    var success = SubmitBlock(share); // submit block to daemon.
-                    _storage.CommitBlock(share); // commit the block.
-
-                    // TODO: notify back job manager using an event so he can create a new job.
+                    var accepted = SubmitBlock(share); // submit block to daemon.
+                                        
+                    if (accepted)
+                    {
+                        OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
+                        _storage.CommitBlock(share); // commit the block.
+                    }
                 }
                 else
-                    Log.ForContext<ShareManager>().Information("Share accepted at {0:0.00}/{1} by miner {2}.", share.Difficulty, miner.Difficulty, miner.Username);
+                    Log.ForContext<ShareManager>().Debug("Share accepted at {0:0.00}/{1} by miner {2:l}.", share.Difficulty, miner.Difficulty, miner.Username);
             }
             else
             {
@@ -117,7 +120,7 @@ namespace Coinium.Mining.Shares
                         break;
                 }
 
-                Log.ForContext<ShareManager>().Information("Share rejected at {0:0.00}/{1} by miner {2}.", share.Difficulty, miner.Difficulty, miner.Username);
+                Log.ForContext<ShareManager>().Debug("Share rejected at {0:0.00}/{1} by miner {2:l}.", share.Difficulty, miner.Difficulty, miner.Username);
             }
 
 
@@ -142,9 +145,6 @@ namespace Coinium.Mining.Shares
                             ? "Found block [{0}] with hash: {1}."
                             : "Submitted block [{0}] but got denied: {1}.", 
                             share.Height, share.BlockHash.ToHexString());
-
-                if(isAccepted)
-                    OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
 
                 return isAccepted;
             }

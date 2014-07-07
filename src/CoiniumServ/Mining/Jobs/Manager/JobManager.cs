@@ -131,9 +131,9 @@ namespace Coinium.Mining.Jobs.Manager
 
                 return job;
             }
-            catch (DaemonException daemonException)
+            catch (RpcException rpcException)
             {
-                Log.ForContext<JobManager>().Error(daemonException, "Can not read blocktemplate from daemon:");
+                Log.ForContext<JobManager>().Error(rpcException, "New job creation failed:");
                 return null;
             }
             catch (Exception e)

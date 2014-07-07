@@ -24,18 +24,20 @@ using System;
 
 namespace Coinium.Daemon.Exceptions
 {
-    public class DaemonException : Exception
+    public class RpcException : Exception
     {
-        public DaemonError Error { get; private set; }
+        public Int32 Code { get; private set; }
 
-        public DaemonException(Exception e):
-            base(e.Message)
-        { }
+        public RpcException(string message, Exception innerException) :
+            base(message, innerException)
+        {
+            Code = Int32.MinValue;
+        }
 
-        public DaemonException(DaemonErrorResponse response) :
+        public RpcException(DaemonErrorResponse response) :
             base(response.Error.Message)
         {
-            Error = response.Error;
+            Code = response.Error.Code;
         }
     }
 }

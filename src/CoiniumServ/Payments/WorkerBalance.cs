@@ -21,24 +21,36 @@
 // 
 #endregion
 
+using System;
+
 namespace Coinium.Payments
 {
     public class WorkerBalance:IWorkerBalance
     {
         public string Worker { get; private set; }
-        public decimal AmountInSatoshis { get; private set; }
-        public bool Paid { get; set; }                
+        public decimal Balance { get; private set; }
+        public decimal BalanceInSatoshis { get; private set; }
+        public bool Paid { get; set; }
 
-        public WorkerBalance(string worker)
+        private readonly UInt32 _satoshiMagnitude;
+
+        public WorkerBalance(string worker, UInt32 satoshiMagnitude)
         {
             Worker = worker;
-            AmountInSatoshis = 0;
+            Balance = 0;
             Paid = false;
+            _satoshiMagnitude = satoshiMagnitude;
         }
 
         public void AddPayment(decimal amount)
         {
-            AmountInSatoshis += amount;
+            Balance += amount;
+            BalanceInSatoshis = Balance*_satoshiMagnitude;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Worker: {0}, Balance: {1}", Worker, Balance);
         }
     }
 }

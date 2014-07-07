@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
 using Newtonsoft.Json;
 
 namespace Coinium.Daemon
@@ -48,7 +50,7 @@ namespace Coinium.Daemon
     public class DaemonError
     {
         [JsonProperty(PropertyName = "code", Order = 1)]
-        public int Code { get; set; }
+        public Int32 Code { get; set; }
 
         [JsonProperty(PropertyName = "message", Order = 1)]
         public string Message { get; set; }

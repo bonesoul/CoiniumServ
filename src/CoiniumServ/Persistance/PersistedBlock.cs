@@ -37,5 +37,10 @@ namespace Coinium.Persistance
             BlockHash = blockHash;
             TransactionHash = transactionHash;
         }
+
+        public override string ToString()
+        {
+            return string.Format("Height: {0}, Status: {1}, Block Hash: {2}, Generation Transaction: {3}", Height, Status, BlockHash, TransactionHash);
+        }
     }
 }
