@@ -23,14 +23,22 @@
 
 namespace Coinium.Payments
 {
-    public interface IWorkerPayout
+    public class WorkerBalance:IWorkerBalance
     {
-        string Worker { get; }
+        public string Worker { get; private set; }
+        public decimal AmountInSatoshis { get; private set; }
+        public bool Paid { get; set; }                
 
-        decimal Amount { get; }
+        public WorkerBalance(string worker)
+        {
+            Worker = worker;
+            AmountInSatoshis = 0;
+            Paid = false;
+        }
 
-        bool Paid { get; set; }
-
-        void AddPayment(decimal amount);
+        public void AddPayment(decimal amount)
+        {
+            AmountInSatoshis += amount;
+        }
     }
 }

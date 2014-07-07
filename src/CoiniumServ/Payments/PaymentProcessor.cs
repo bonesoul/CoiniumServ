@@ -29,6 +29,7 @@ using System.Threading;
 using Coinium.Coin.Helpers;
 using Coinium.Daemon;
 using Coinium.Daemon.Exceptions;
+using Coinium.Mining.Pools;
 using Coinium.Persistance;
 using Serilog;
 
@@ -45,12 +46,13 @@ namespace Coinium.Payments
 
         private Int32 _precision; // coin's precision.
         private UInt32 _magnitude; // coin's magnitude
-        private decimal _minPaymentInSatoshis; // minimum amount of satoshis to issue a payment.
+        private decimal _paymentThresholdInSatoshis; // minimum amount of satoshis to issue a payment.
 
         private readonly object _paymentsLock = new object();
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
-        private const string PoolWallet = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY";
+        private const string PoolAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY";
+        private string PoolAccount = string.Empty;
 
         public PaymentProcessor(IDaemonClient daemonClient, IStorage storage)
         {
@@ -71,12 +73,15 @@ namespace Coinium.Payments
             if (!ValidatePoolAddress())
                 return;
 
+            // get the pool's account name if any.
+            GetPoolAccount();
+
             // determine the satoshis in the coin.
             if (!DeterminePrecision())
                 return;
 
             // calculate the minimum amount of payments in satoshis.
-            _minPaymentInSatoshis = _magnitude*config.Minimum;
+            _paymentThresholdInSatoshis = _magnitude*config.Minimum;
 
             // if we reached here, then we can just setup the timer to run payments.  
             _timer = new Timer(RunPayments, null, _config.Interval * 1000, Timeout.Infinite);
@@ -95,7 +100,7 @@ namespace Coinium.Payments
                 var rounds = GetPaymentRounds(pendingBlocks); // get the list of rounds that should be paid.
                 ProcessRounds(rounds); // process the rounds, calculate shares and payouts per rounds.
                 var payments = CalculatePayments(rounds); // calculate the payments.               
-                ExecutePayments(payments); // execute the payments.
+                var success = ExecutePayments(payments); // execute the payments.
 
                 Log.ForContext<PaymentProcessor>().Information("Payments processed - took {0:0.000} seconds.", (float)_stopWatch.ElapsedMilliseconds/1000);
                 
@@ -105,39 +110,60 @@ namespace Coinium.Payments
             }
         }
 
-        private IEnumerable<KeyValuePair<string, IWorkerPayout>> CalculatePayments(IEnumerable<IPaymentRound> rounds)
+        private IList<IWorkerBalance> CalculatePayments(IEnumerable<IPaymentRound> rounds)
         {
-            var payments = new Dictionary<string, IWorkerPayout>();
+            var workerBalances = new Dictionary<string, IWorkerBalance>();
 
             foreach (var round in rounds) // loop through all rounds
             {
                 foreach (var roundPayment in round.Payouts) // loop through all payouts for the rounds
                 {
-                    if (!payments.ContainsKey(roundPayment.Key)) // make sure a payout for worker already exists
-                        payments.Add(roundPayment.Key, new WorkerPayout(roundPayment.Key));
+                    if (!workerBalances.ContainsKey(roundPayment.Key)) // make sure a payout for worker already exists
+                        workerBalances.Add(roundPayment.Key, new WorkerBalance(roundPayment.Key));
 
-                    payments[roundPayment.Key].AddPayment(roundPayment.Value);
+                    workerBalances[roundPayment.Key].AddPayment(roundPayment.Value);
                 }
             }
 
-            return payments.ToDictionary(k => k.Key, v => v.Value);
+            return workerBalances.Values.ToList();
         }
 
-        private void ExecutePayments(IEnumerable<KeyValuePair<string, IWorkerPayout>> payments)
+        private bool ExecutePayments(IList<IWorkerBalance> workerBalances)
         {
-            var a = _daemonClient.GetBalance();
-            var b = _daemonClient.GetBalance("");
-            var c = _daemonClient.GetBalance(string.Empty);
+            var payments = new Dictionary<string, decimal>();
 
-            var payouts =
-                payments.Select(pair => pair.Value)
-                    .Where(workerPayment => workerPayment.Amount >= _minPaymentInSatoshis)
-                    .ToDictionary(workerPayment => workerPayment.Worker, workerPayment => SatoshiToCoins(workerPayment.Amount));
+            try
+            {
+                decimal totalAmountToPay = 0;
+                foreach (var balance in workerBalances)
+                {
+                    if (balance.AmountInSatoshis >= _paymentThresholdInSatoshis) // if worker's balance exceed's threshold, add him to payment list.
+                    {
+                        totalAmountToPay += balance.AmountInSatoshis;
+                        payments.Add(balance.Worker, SatoshisToCoins(balance.AmountInSatoshis));
+                    }
+                }
 
-            var result = _daemonClient.SendMany("", payouts); // fix account.
+                var result = _daemonClient.SendMany(PoolAccount, payments); // send the payments
+
+                foreach (var balance in workerBalances)
+                {
+                    // we have paid workers with balance that exceeds the threshold.
+                    balance.Paid = balance.AmountInSatoshis >= _paymentThresholdInSatoshis;
+                }
+
+                Log.ForContext<PaymentProcessor>().Information("Paid a total of {0} coins to {1} workers.", SatoshisToCoins(totalAmountToPay), workerBalances.Count);
+
+                return true;
+            }
+            catch (DaemonException e)
+            {
+                Log.ForContext<PaymentProcessor>().Error("Payment failed: {0} [{1}] - payouts: {2}.", e.Error.Message, e.Error.Code, payments);
+                return false;
+            }
         }
 
-        public decimal SatoshiToCoins(decimal satoshis)
+        public decimal SatoshisToCoins(decimal satoshis)
         {
             return satoshis/_magnitude;
         }
@@ -170,7 +196,7 @@ namespace Coinium.Payments
                     var transaction = _daemonClient.GetTransaction(block.TransactionHash);
 
                     // get the output transaction that targets pools central wallet.
-                    var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == PoolWallet);
+                    var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == PoolAddress);
 
                     // make sure output for the pool central wallet exists
                     if (poolOutput == null)
@@ -222,15 +248,21 @@ namespace Coinium.Payments
             return rounds;
         }
 
+        private void GetPoolAccount()
+        {
+            var result = _daemonClient.GetAccount(PoolAddress);
+            PoolAccount = result;
+        }
+
         private bool ValidatePoolAddress()
         {
-            var result = _daemonClient.ValidateAddress(PoolWallet);
+            var result = _daemonClient.ValidateAddress(PoolAddress);
 
             // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
             if (result.IsValid && result.IsMine)
                 return true;
 
-            Log.ForContext<PaymentProcessor>().Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", PoolWallet);
+            Log.ForContext<PaymentProcessor>().Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", PoolAddress);
             return false;
         }
 

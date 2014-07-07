@@ -53,6 +53,10 @@ namespace Coinium.Daemon
 
         string MakeRawRequest(string method, params object[] parameters);
 
+        Dictionary<string, decimal> ListAccounts();
+
+        string GetAccount(string bitcoinAddress);
+
         string SendMany(string fromAccount, Dictionary<string, decimal> toBitcoinAddress, int minConf = 1, string comment = "");
 
         void Initialize(IDaemonConfig daemonConfig);        
