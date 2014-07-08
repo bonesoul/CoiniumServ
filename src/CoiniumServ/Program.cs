@@ -26,6 +26,7 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Mining.Pools;
 using Coinium.Repository;
+using Coinium.Server;
 using Coinium.Utils.Commands;
 using Coinium.Utils.Configuration;
 using Coinium.Utils.Console;
@@ -77,6 +78,8 @@ namespace Coinium
             // print a version banner.
             Log.Information("CoiniumServ {0:l} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             Log.Information("Running over {0:l} {1:l}.", PlatformManager.Framework.ToString(), PlatformManager.FrameworkVersion);
+
+            ServerManager.Instance.Start();
 
             // start pool manager.
             var poolManager = kernel.Resolve<IPoolManager>();

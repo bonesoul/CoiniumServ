@@ -41,8 +41,8 @@ namespace Coinium.Server.Web
         /// </summary>
         public WebServer()
         {
-            //this.Interface = Config.Instance.Interface;
-            //this.Port = Config.Instance.Port;
+            this.Interface = "127.0.0.1";
+            this.Port = 8082;
         }
 
         public void Start()
