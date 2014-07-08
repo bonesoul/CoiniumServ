@@ -30,15 +30,13 @@ namespace Coinium.Payments
     public class PaymentRound:IPaymentRound
     {
         public IPersistedBlock Block { get; private set; }
-        public decimal TotalAmount { get; private set; }
         public Dictionary<string, double> Shares { get; private set; }
         public Dictionary<string, decimal> Payouts { get; private set; }
 
 
-        public PaymentRound(IPersistedBlock block, decimal totalAmount)
+        public PaymentRound(IPersistedBlock block)
         {
             Block = block;
-            TotalAmount = totalAmount;
             Payouts = new Dictionary<string, decimal>();
             Shares = new Dictionary<string, double>();
         }
@@ -61,15 +59,15 @@ namespace Coinium.Payments
             foreach (var pair in Shares)
             {
                 var percent = pair.Value/totalShares;
-                var rewardInSatoshis = (decimal) percent*TotalAmount;
+                var workerRewardInSatoshis = (decimal) percent*Block.OutstandingHashes.Reward;
 
-                Payouts.Add(pair.Key, rewardInSatoshis);
+                Payouts.Add(pair.Key, workerRewardInSatoshis);
             }
         }
 
         public override string ToString()
         {
-            return string.Format("Amount: {0}, Block: {1}", TotalAmount, Block);
+            return string.Format("Amount: {0}, Block: {1}", Block.OutstandingHashes.Reward, Block);
         }
     }
 }

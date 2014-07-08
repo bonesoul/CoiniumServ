@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 using Coinium.Payments;
@@ -59,7 +60,7 @@ namespace Coinium.Persistance.Redis
                 Initialize();
         }
 
-        public void CommitShare(IShare share)
+        public void AddShare(IShare share)
         {
             if (!IsEnabled || !IsConnected)
                 return;
@@ -86,7 +87,7 @@ namespace Coinium.Persistance.Redis
             batch.Execute(); // execute the batch commands.
         }
 
-        public void CommitBlock(IShare share)
+        public void AddBlock(IShare share)
         {
             if (!IsEnabled || !IsConnected)
                 return;
@@ -114,21 +115,20 @@ namespace Coinium.Persistance.Redis
             batch.Execute(); // execute the batch commands.
         }
 
-        public void CommitRemainingBalances(IList<IWorkerBalance> workerBalances)
+        public void SetRemainingBalances(IList<IWorkerBalance> workerBalances)
         {
             if (!IsEnabled || !IsConnected)
                 return;
 
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-            var balancesKey = string.Format("{0}:balances", coin);
+            var balancesKey = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
             var batch = _database.CreateBatch(); // batch the commands.
 
             foreach (var workerBalance in workerBalances)
             {
-                if(workerBalance.Paid) // skip paid balances.
-                    continue;
+                batch.HashDeleteAsync(balancesKey, workerBalance.Worker, CommandFlags.FireAndForget); // first delete the existing key.
 
-                batch.HashIncrementAsync(balancesKey, workerBalance.Worker, (double)workerBalance.Balance, CommandFlags.FireAndForget);
+                if(!workerBalance.Paid) // if outstanding balance exists, commit it.
+                    batch.HashIncrementAsync(balancesKey, workerBalance.Worker, (double)workerBalance.Balance, CommandFlags.FireAndForget); // increment the value.
             }            
 
             batch.Execute(); // execute the batch commands.
@@ -164,7 +164,7 @@ namespace Coinium.Persistance.Redis
             _database.KeyDeleteAsync(roundShares, CommandFlags.FireAndForget); // delete the associated shares.
         }
 
-        public void MovePendingBlock(IPaymentRound round)
+        public void MoveBlock(IPaymentRound round)
         {
             if (!IsEnabled || !IsConnected)
                 return;
@@ -191,17 +191,17 @@ namespace Coinium.Persistance.Redis
             if (string.IsNullOrEmpty(newKey)) // if the block is still pending
                 return; // just skip it.
 
-            var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);                    
+            var entry = string.Format("{0}:{1}", round.Block.OutstandingHashes.BlockHash, round.Block.OutstandingHashes.TransactionHash);                    
             _database.SortedSetRemoveRangeByScoreAsync(pendingKey, round.Block.Height, round.Block.Height, Exclude.None, CommandFlags.FireAndForget);
             _database.SortedSetAddAsync(newKey, entry, round.Block.Height, CommandFlags.FireAndForget);
         }
 
         public IList<IPersistedBlock> GetPendingBlocks()
         {
-            var list = new List<IPersistedBlock>();
+            var blocks = new Dictionary<UInt32, IPersistedBlock>();
 
             if (!IsEnabled || !IsConnected)
-                return list;
+                return blocks.Values.ToList();
 
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var pendingKey = string.Format("{0}:blocks:pending", coin);
@@ -214,11 +214,16 @@ namespace Coinium.Persistance.Redis
                 var data = result.Element.ToString().Split(':');
                 var blockHash = data[0];
                 var transactionHash = data[1];
-                var persistedBlock = new PersistedBlock(PersistedBlockStatus.Pending, (UInt32)result.Score, blockHash, transactionHash);
-                list.Add(persistedBlock);
+                var hashes = new PersistedBlockHashes(blockHash, transactionHash);
+
+                if (!blocks.ContainsKey((UInt32) result.Score))
+                    blocks.Add((UInt32) result.Score, new PersistedBlock((UInt32) result.Score));
+
+                var persistedBlock = blocks[(UInt32) result.Score];
+                persistedBlock.AddHashes(hashes);
             }
 
-            return list;
+            return blocks.Values.ToList();
         }
 
         public Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)
@@ -240,6 +245,21 @@ namespace Coinium.Persistance.Redis
             }
 
             return sharesForRounds;
+        }
+
+        public Dictionary<string, double> GetPreviousBalances()
+        {
+            var previousBalances = new Dictionary<string, double>();
+
+            if (!IsEnabled || !IsConnected)
+                return previousBalances;
+
+            var key = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
+            var hashes = _database.HashGetAllAsync(key, CommandFlags.HighPriority).Result;
+
+            previousBalances = hashes.ToDictionary<HashEntry, string, double>(pair => pair.Name, pair => (double)pair.Value);
+
+            return previousBalances;
         }
 
         private void Initialize()

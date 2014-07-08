@@ -76,7 +76,7 @@ namespace Coinium.Mining.Shares
 
             if (share.IsValid)
             {               
-                _storage.CommitShare(share); // commit the share.
+                _storage.AddShare(share); // commit the share.
 
                 if (share.IsBlockCandidate) // if share contains a block candicate
                 {
@@ -87,7 +87,7 @@ namespace Coinium.Mining.Shares
                     if (accepted)
                     {
                         OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
-                        _storage.CommitBlock(share); // commit the block.
+                        _storage.AddBlock(share); // commit the block.
                     }
                 }
                 else
@@ -110,7 +110,7 @@ namespace Coinium.Mining.Shares
                         JsonRpcContext.SetException(new OtherError("Incorrect nonce size"));
                         break;
                     case ShareError.JobNotFound:
-                        JsonRpcContext.SetException(new JobNotFoundError(share.Job.Id));
+                        JsonRpcContext.SetException(new JobNotFoundError(id));
                         break;
                     case ShareError.LowDifficultyShare:
                         JsonRpcContext.SetException(new LowDifficultyShare(share.Difficulty));

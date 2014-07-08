@@ -22,18 +22,21 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 
 namespace Coinium.Persistance
 {
     public interface IPersistedBlock
     {
         UInt32 Height { get; }
-        string BlockHash { get; }
-        string TransactionHash { get; }
-        PersistedBlockStatus Status { get; set; }
+        List<IPersistedBlockHashes> Hashes { get; }
+        PersistedBlockStatus Status { get; }
+        IPersistedBlockHashes OutstandingHashes { get; }
+
+        void AddHashes(IPersistedBlockHashes hash);
     }
 
-    public enum PersistedBlockStatus
+        public enum PersistedBlockStatus
     {
         Pending,
         Kicked,

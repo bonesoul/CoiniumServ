@@ -30,8 +30,6 @@ namespace Coinium.Payments
     {
         IPersistedBlock Block {get;}
 
-        decimal TotalAmount { get; }
-
         Dictionary<string, double> Shares { get; }
 
         Dictionary<string, decimal> Payouts { get; }

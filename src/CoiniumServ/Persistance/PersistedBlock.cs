@@ -21,26 +21,66 @@
 // 
 #endregion
 
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Coinium.Persistance
 {
     public class PersistedBlock : IPersistedBlock
     {
         public uint Height { get; private set; }
-        public string BlockHash { get; private set; }
-        public string TransactionHash { get; private set; }
-        public PersistedBlockStatus Status { get; set; }
 
-        public PersistedBlock( PersistedBlockStatus status, uint height, string blockHash, string transactionHash)
+        public List<IPersistedBlockHashes> Hashes { get; private set; }
+
+        public IPersistedBlockHashes OutstandingHashes
         {
-            Status = status;
+            get
+            {
+                switch (Status)
+                {
+                    case PersistedBlockStatus.Pending:
+                        return Hashes.FirstOrDefault(hash => hash.Status == PersistedBlockStatus.Pending);
+                    case PersistedBlockStatus.Kicked:
+                        return Hashes.FirstOrDefault(hash => hash.Status == PersistedBlockStatus.Kicked);
+                    case PersistedBlockStatus.Orphan:
+                        return Hashes.FirstOrDefault(hash => hash.Status == PersistedBlockStatus.Orphan);
+                    case PersistedBlockStatus.Confirmed:
+                        return Hashes.FirstOrDefault(hash => hash.Status == PersistedBlockStatus.Confirmed);                    
+                }
+
+                return null;
+            }
+        }
+
+        public PersistedBlockStatus Status
+        {
+            get
+            {
+                if (Hashes.Any(hashes => hashes.Status == PersistedBlockStatus.Confirmed)) // if any hash is confirmed
+                    return PersistedBlockStatus.Confirmed; // block is confirmed
+                else if (Hashes.Any(hashes => hashes.Status == PersistedBlockStatus.Orphan)) // if any hash is orphaned
+                    return PersistedBlockStatus.Orphan; // block is orphaned
+                else if (Hashes.Any(hashes => hashes.Status == PersistedBlockStatus.Kicked)) // if any hash is kicked
+                    return PersistedBlockStatus.Kicked; // block is kicked
+                else
+                    return PersistedBlockStatus.Pending; // block is pending
+            }
+        }        
+
+        public PersistedBlock(uint height)
+        {
             Height = height;
-            BlockHash = blockHash;
-            TransactionHash = transactionHash;
+            Hashes = new List<IPersistedBlockHashes>();
+        }
+
+        public void AddHashes(IPersistedBlockHashes hash)
+        {
+            Hashes.Add(hash);
         }
 
         public override string ToString()
         {
-            return string.Format("Height: {0}, Status: {1}, Block Hash: {2}, Generation Transaction: {3}", Height, Status, BlockHash, TransactionHash);
+            return string.Format("Height: {0}, Status: {1}, Outstanding: {2}", Height, Status,OutstandingHashes);
         }
     }
 }

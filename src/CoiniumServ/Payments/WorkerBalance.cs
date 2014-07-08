@@ -30,6 +30,8 @@ namespace Coinium.Payments
         public string Worker { get; private set; }
         public decimal Balance { get; private set; }
         public decimal BalanceInSatoshis { get; private set; }
+        public decimal PreviousBalance { get; private set; }
+        public decimal Reward { get; private set; }
         public bool Paid { get; set; }
 
         private readonly UInt32 _satoshiMagnitude;
@@ -37,20 +39,35 @@ namespace Coinium.Payments
         public WorkerBalance(string worker, UInt32 satoshiMagnitude)
         {
             Worker = worker;
-            Balance = 0;
-            Paid = false;
             _satoshiMagnitude = satoshiMagnitude;
+            Balance = 0;
+            BalanceInSatoshis = 0;
+            PreviousBalance = 0;
+            Reward = 0;
+            Paid = false;
         }
 
-        public void AddPayment(decimal amount)
+        public void AddReward(decimal amount)
         {
-            Balance += amount;
-            BalanceInSatoshis = Balance*_satoshiMagnitude;
+            Reward += amount;
+            CalculateBalance();
+        }
+
+        public void SetPreviousBalance(double amount)
+        {
+            PreviousBalance = (decimal)amount;
+            CalculateBalance();
+        }
+
+        private void CalculateBalance()
+        {
+            Balance = PreviousBalance + Reward;
+            BalanceInSatoshis = Balance * _satoshiMagnitude;
         }
 
         public override string ToString()
         {
-            return string.Format("Worker: {0}, Balance: {1}", Worker, Balance);
+            return string.Format("Worker: {0}, Balance: {1} Previous: {2} Reward: {3}", Worker, Balance, PreviousBalance, Reward);
         }
     }
 }

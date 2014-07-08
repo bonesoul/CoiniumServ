@@ -129,7 +129,9 @@
     <Compile Include="Payments\PaymentProcessorFactory.cs" />
     <Compile Include="Payments\WorkerBalance.cs" />
     <Compile Include="Persistance\IPersistedBlock.cs" />
+    <Compile Include="Persistance\IPersistedBlockHashes.cs" />
     <Compile Include="Persistance\PersistedBlock.cs" />
+    <Compile Include="Persistance\PersistedBlockHashes.cs" />
     <Compile Include="Persistance\Redis\IRedisConfig.cs" />
     <Compile Include="Persistance\Redis\RedisConfig.cs" />
     <Compile Include="Server\Stratum\IStratumMiner.cs" />

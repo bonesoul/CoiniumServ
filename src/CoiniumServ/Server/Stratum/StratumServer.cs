@@ -104,7 +104,7 @@ namespace Coinium.Server.Stratum
             Log.ForContext<StratumServer>().Information("Stratum client connected: {0}", e.Connection.ToString());
 
             // TODO: remove the jobManager dependency by instead injecting extranonce counter.
-            var miner = _minerManager.Create<StratumMiner>(_jobManager.ExtraNonce.NextExtraNonce(), e.Connection, _pool);
+            var miner = _minerManager.Create<StratumMiner>(_jobManager.ExtraNonce.Next(), e.Connection, _pool);
             e.Connection.Client = miner;           
         }
 

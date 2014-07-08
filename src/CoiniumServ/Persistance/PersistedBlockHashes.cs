@@ -21,23 +21,25 @@
 // 
 #endregion
 
-namespace Coinium.Payments
+namespace Coinium.Persistance
 {
-    public interface IWorkerBalance
+    public class PersistedBlockHashes : IPersistedBlockHashes
     {
-        string Worker { get; }
+        public string BlockHash { get; private set; }
+        public string TransactionHash { get; private set; }
+        public PersistedBlockStatus Status { get; set; }
+        public decimal Reward { get; set; }
 
-        decimal Balance { get; }
-        decimal BalanceInSatoshis { get; }
+        public PersistedBlockHashes(string blockHash, string transactionHash)
+        {
+            BlockHash = blockHash;
+            TransactionHash = transactionHash;
+            Status=PersistedBlockStatus.Pending;
+        }
 
-        decimal PreviousBalance { get; }
-
-        decimal Reward { get; }
-
-        bool Paid { get; set; }
-
-        void AddReward(decimal amount);
-
-        void SetPreviousBalance(double amount);
+        public override string ToString()
+        {
+            return string.Format("Status: {0}, Block Hash: {1}, Transaction Hash: {2}", Status, BlockHash, TransactionHash);
+        }
     }
 }
