@@ -110,7 +110,7 @@ namespace Coinium.Mining.Shares
                         JsonRpcContext.SetException(new OtherError("Incorrect nonce size"));
                         break;
                     case ShareError.JobNotFound:
-                        JsonRpcContext.SetException(new JobNotFoundError(share.Job.Id));
+                        JsonRpcContext.SetException(new JobNotFoundError(id));
                         break;
                     case ShareError.LowDifficultyShare:
                         JsonRpcContext.SetException(new LowDifficultyShare(share.Difficulty));
