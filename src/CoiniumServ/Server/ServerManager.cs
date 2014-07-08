@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using Coinium.Net.Server.Web;
 using Coinium.Server.Web;
 using Serilog;
 

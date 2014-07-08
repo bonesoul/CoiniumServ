@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -28,7 +29,7 @@ using Nancy.Hosting.Self;
 using Nancy.TinyIoc;
 using Serilog;
 
-namespace Coinium.Server.Web
+namespace Coinium.Net.Server.Web
 {
     public class WebServer
     {

@@ -25,14 +25,14 @@ using Nancy;
 
 namespace Coinium.Server.Web.Modules
 {
-    public class Stats : NancyModule
+    public class HomeModule : NancyModule
     {
-        public Stats()
+        public HomeModule()
         {
-            var banner = string.Format("v{0}", Assembly.GetAssembly(typeof(Program)).GetName().Version);
-
-            Get["/"] = x => "coinium";
-            Get["/version"] = x => banner;
+            Get["/"] = parameters =>
+            {
+                return View["Index"];
+            };
         }
     }
 }
