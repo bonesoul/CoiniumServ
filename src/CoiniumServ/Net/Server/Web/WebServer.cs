@@ -22,11 +22,7 @@
 #endregion
 
 using System;
-using Nancy;
-using Nancy.Bootstrapper;
-using Nancy.Diagnostics;
 using Nancy.Hosting.Self;
-using Nancy.TinyIoc;
 using Serilog;
 
 namespace Coinium.Net.Server.Web
@@ -76,18 +72,5 @@ namespace Coinium.Net.Server.Web
         {
             Log.ForContext<WebServer>().Error("Web-server: {0}", exception);
         }
-    }
-
-    public class CustomBootstrapper : DefaultNancyBootstrapper
-    {
-        protected override DiagnosticsConfiguration DiagnosticsConfiguration
-        {
-            get { return new DiagnosticsConfiguration { Password = @"coinium" }; }
-        }
-
-        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
-        {
-            StaticConfiguration.EnableRequestTracing = true;
-        }
-    }
+    }    
 }

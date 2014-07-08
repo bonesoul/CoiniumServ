@@ -20,24 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System.IO;
 using System.Reflection;
 using Nancy;
 
-namespace Coinium.Server.Web.Modules
+namespace Coinium.Net.Server.Web
 {
-    public class HomeModule : NancyModule
+    public class CustomRootPathProvider : IRootPathProvider
     {
-        public HomeModule()
+        public string GetRootPath()
         {
-            Get["/"] = parameters =>
-            {
-                return View["Index"];
-            };
-
-            Get["/api/"] = parameters =>
-            {
-                return "test";
-            };
+            var path = string.Format("{0}\\web\\default", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            return path;
         }
     }
 }

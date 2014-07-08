@@ -118,6 +118,8 @@
     <Compile Include="Mining\Jobs\Tracker\JobTracker.cs" />
     <Compile Include="Mining\Jobs\Tracker\JobTrackerFactory.cs" />
     <Compile Include="Mining\Miners\MinerEventArgs.cs" />
+    <Compile Include="Net\Server\Web\Bootstrapper.cs" />
+    <Compile Include="Net\Server\Web\RootPathProvider.cs" />
     <Compile Include="Payments\IPaymentRound.cs" />
     <Compile Include="Payments\IPaymentConfig.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />
@@ -867,11 +869,128 @@
       <Link>config\pools\sample.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-    <None Include="views\Home\Index.cshtml">
+    <None Include="..\..\assets\web\default\font-awesome\fonts\fontawesome-webfont.eot">
+      <Link>Web\Default\font-awesome\fonts\fontawesome-webfont.eot</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\assets\web\default\font-awesome\fonts\fontawesome-webfont.ttf">
+      <Link>Web\Default\font-awesome\fonts\fontawesome-webfont.ttf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\fonts\fontawesome-webfont.woff">
+      <Link>Web\Default\font-awesome\fonts\fontawesome-webfont.woff</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\fonts\FontAwesome.otf">
+      <Link>Web\Default\font-awesome\fonts\FontAwesome.otf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\bordered-pulled.less">
+      <Link>Web\Default\font-awesome\less\bordered-pulled.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\core.less">
+      <Link>Web\Default\font-awesome\less\core.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\fixed-width.less">
+      <Link>Web\Default\font-awesome\less\fixed-width.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\font-awesome.less">
+      <Link>Web\Default\font-awesome\less\font-awesome.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\icons.less">
+      <Link>Web\Default\font-awesome\less\icons.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\larger.less">
+      <Link>Web\Default\font-awesome\less\larger.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\list.less">
+      <Link>Web\Default\font-awesome\less\list.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\mixins.less">
+      <Link>Web\Default\font-awesome\less\mixins.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\path.less">
+      <Link>Web\Default\font-awesome\less\path.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\rotated-flipped.less">
+      <Link>Web\Default\font-awesome\less\rotated-flipped.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\spinning.less">
+      <Link>Web\Default\font-awesome\less\spinning.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\stacked.less">
+      <Link>Web\Default\font-awesome\less\stacked.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\less\variables.less">
+      <Link>Web\Default\font-awesome\less\variables.less</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\font-awesome.scss">
+      <Link>Web\Default\font-awesome\scss\font-awesome.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_bordered-pulled.scss">
+      <Link>Web\Default\font-awesome\scss\_bordered-pulled.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_core.scss">
+      <Link>Web\Default\font-awesome\scss\_core.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_fixed-width.scss">
+      <Link>Web\Default\font-awesome\scss\_fixed-width.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_icons.scss">
+      <Link>Web\Default\font-awesome\scss\_icons.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_larger.scss">
+      <Link>Web\Default\font-awesome\scss\_larger.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_list.scss">
+      <Link>Web\Default\font-awesome\scss\_list.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_mixins.scss">
+      <Link>Web\Default\font-awesome\scss\_mixins.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_path.scss">
+      <Link>Web\Default\font-awesome\scss\_path.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_rotated-flipped.scss">
+      <Link>Web\Default\font-awesome\scss\_rotated-flipped.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_spinning.scss">
+      <Link>Web\Default\font-awesome\scss\_spinning.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_stacked.scss">
+      <Link>Web\Default\font-awesome\scss\_stacked.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\scss\_variables.scss">
+      <Link>Web\Default\font-awesome\scss\_variables.scss</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\deps\gibbed.io\Gibbed.IO.csproj">
@@ -885,6 +1004,111 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Server\Stratum\Config\StratumServerConfig.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="..\..\assets\web\default\blank-page.html">
+      <Link>Web\Default\blank-page.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\bootstrap-elements.html">
+      <Link>Web\Default\bootstrap-elements.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\bootstrap-grid.html">
+      <Link>Web\Default\bootstrap-grid.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\charts.html">
+      <Link>Web\Default\charts.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\css\bootstrap.css">
+      <Link>Web\Default\css\bootstrap.css</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\css\bootstrap.min.css">
+      <Link>Web\Default\css\bootstrap.min.css</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\css\sb-admin.css">
+      <Link>Web\Default\css\sb-admin.css</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\css\font-awesome.css">
+      <Link>Web\Default\font-awesome\css\font-awesome.css</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\css\font-awesome.min.css">
+      <Link>Web\Default\font-awesome\css\font-awesome.min.css</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\font-awesome\fonts\fontawesome-webfont.svg">
+      <Link>Web\Default\font-awesome\fonts\fontawesome-webfont.svg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\forms.html">
+      <Link>Web\Default\forms.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\index.html">
+      <Link>Web\Default\index.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\bootstrap.js">
+      <Link>Web\Default\js\bootstrap.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\bootstrap.min.js">
+      <Link>Web\Default\js\bootstrap.min.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\flot\chart-data-flot.js">
+      <Link>Web\Default\js\flot\chart-data-flot.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\flot\excanvas.min.js">
+      <Link>Web\Default\js\flot\excanvas.min.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\flot\jquery.flot.js">
+      <Link>Web\Default\js\flot\jquery.flot.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\flot\jquery.flot.pie.js">
+      <Link>Web\Default\js\flot\jquery.flot.pie.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\flot\jquery.flot.resize.js">
+      <Link>Web\Default\js\flot\jquery.flot.resize.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\flot\jquery.flot.tooltip.min.js">
+      <Link>Web\Default\js\flot\jquery.flot.tooltip.min.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\jquery-1.10.2.js">
+      <Link>Web\Default\js\jquery-1.10.2.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\js\morris\chart-data-morris.js">
+      <Link>Web\Default\js\morris\chart-data-morris.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="..\..\assets\web\default\js\tablesorter\jquery.tablesorter.js">
+      <Link>Web\Default\js\tablesorter\jquery.tablesorter.js</Link>
+    </Content>
+    <Content Include="..\..\assets\web\default\js\tablesorter\tables.js">
+      <Link>Web\Default\js\tablesorter\tables.js</Link>
+    </Content>
+    <None Include="..\..\assets\web\default\tables.html">
+      <Link>Web\Default\tables.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\assets\web\default\typography.html">
+      <Link>Web\Default\typography.html</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
