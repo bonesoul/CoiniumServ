@@ -56,6 +56,7 @@ namespace Coinium.Payments
         public void SetPreviousBalance(double amount)
         {
             PreviousBalance = (decimal)amount;
+            CalculateBalance();
         }
 
         private void CalculateBalance()

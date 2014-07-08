@@ -125,10 +125,10 @@ namespace Coinium.Persistance.Redis
 
             foreach (var workerBalance in workerBalances)
             {
-                if(workerBalance.Paid) // skip paid balances.
-                    continue;
+                batch.HashDeleteAsync(balancesKey, workerBalance.Worker, CommandFlags.FireAndForget); // first delete the existing key.
 
-                batch.HashIncrementAsync(balancesKey, workerBalance.Worker, (double)workerBalance.Balance, CommandFlags.FireAndForget);
+                if(!workerBalance.Paid) // if outstanding balance exists, commit it.
+                    batch.HashIncrementAsync(balancesKey, workerBalance.Worker, (double)workerBalance.Balance, CommandFlags.FireAndForget); // increment the value.
             }            
 
             batch.Execute(); // execute the batch commands.

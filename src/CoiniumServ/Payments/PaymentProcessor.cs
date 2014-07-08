@@ -100,7 +100,7 @@ namespace Coinium.Payments
                 AssignSharesToRounds(rounds); // process the rounds, calculate shares and payouts per rounds.
                 var previousBalances = GetPreviousBalances(); // get previous balances of workers.
                 var workerBalances = CalculateRewards(rounds, previousBalances); // calculate the payments.               
-                //ExecutePayments(workerBalances); // execute the payments.
+                ExecutePayments(workerBalances); // execute the payments.
 
                 ProcessRemainingBalances(workerBalances); // process the remaining balances.
 
@@ -120,7 +120,7 @@ namespace Coinium.Payments
             return previousBalances;
         }
 
-        private IEnumerable<IWorkerBalance> CalculateRewards(IEnumerable<IPaymentRound> rounds, IDictionary<string, double> previousBalances)
+        private IList<IWorkerBalance> CalculateRewards(IEnumerable<IPaymentRound> rounds, IDictionary<string, double> previousBalances)
         {
             var workerBalances = new Dictionary<string, IWorkerBalance>();
 
@@ -190,11 +190,9 @@ namespace Coinium.Payments
             }
         }
 
-        private void ProcessRemainingBalances(IEnumerable<IWorkerBalance> workerBalances)
+        private void ProcessRemainingBalances(IList<IWorkerBalance> workerBalances)
         {
-            // commit remaining balances to storage.
-            var remainingBalances = workerBalances.Where(balance => !balance.Paid).ToList(); // find workers with remaining balances.
-            _storage.SetRemainingBalances(remainingBalances);            
+            _storage.SetRemainingBalances(workerBalances); // commit remaining balances to storage.
         }
 
         private void ProcessRounds(IEnumerable<IPaymentRound> rounds)
