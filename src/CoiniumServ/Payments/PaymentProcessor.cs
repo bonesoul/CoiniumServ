@@ -28,7 +28,6 @@ using System.Linq;
 using System.Threading;
 using Coinium.Daemon;
 using Coinium.Daemon.Exceptions;
-using Coinium.Mining.Pools;
 using Coinium.Persistance;
 using Serilog;
 
@@ -95,16 +94,17 @@ namespace Coinium.Payments
             {
                 _stopWatch.Start();
 
-                var pendingBlocks = _storage.GetPendingBlocks(); // get all the pending blocks.
-                var paymentRounds = GetPaymentRounds(pendingBlocks); // get the list of rounds that should be paid.
-                AssignSharesToRounds(paymentRounds); // process the rounds, calculate shares and payouts per rounds.
-                var workerBalances = CalculatePayments(paymentRounds); // calculate the payments.               
-                var success = ExecutePayments(workerBalances); // execute the payments.
+                var blocks = _storage.GetPendingBlocks(); // get all the pending blocks.
+                CheckBlocks(blocks);
+                var rounds = GetPaymentRounds(blocks); // get the list of rounds that should be paid.
+                AssignSharesToRounds(rounds); // process the rounds, calculate shares and payouts per rounds.
+                var previousBalances = GetPreviousBalances(); // get previous balances of workers.
+                var workerBalances = CalculateRewards(rounds, previousBalances); // calculate the payments.               
+                //ExecutePayments(workerBalances); // execute the payments.
 
-                if (success) // if the payment executed succesfully, 
-                    ProcessRemainingBalances(workerBalances); // process the remaining balances.
+                ProcessRemainingBalances(workerBalances); // process the remaining balances.
 
-                ProcessRounds(paymentRounds, success); // process the rounds.
+                ProcessRounds(rounds); // process the rounds.
 
                 Log.ForContext<PaymentProcessor>().Information("Payments processed - took {0:0.000} seconds.", (float)_stopWatch.ElapsedMilliseconds/1000);
                 
@@ -114,28 +114,44 @@ namespace Coinium.Payments
             }
         }
 
-        private IList<IWorkerBalance> CalculatePayments(IEnumerable<IPaymentRound> rounds)
+        private Dictionary<string, double> GetPreviousBalances()
+        {
+            var previousBalances = _storage.GetPreviousBalances();
+            return previousBalances;
+        }
+
+        private IEnumerable<IWorkerBalance> CalculateRewards(IEnumerable<IPaymentRound> rounds, IDictionary<string, double> previousBalances)
         {
             var workerBalances = new Dictionary<string, IWorkerBalance>();
 
-            foreach (var round in rounds) // loop through all rounds
+            // set previous balances
+            foreach(var pair in previousBalances)
+            {
+                if (!workerBalances.ContainsKey(pair.Key))
+                    workerBalances.Add(pair.Key, new WorkerBalance(pair.Key, _magnitude));
+
+                workerBalances[pair.Key].SetPreviousBalance(pair.Value);
+            }
+
+            // add rewards by rounds
+            foreach (var round in rounds) 
             {
                 if (round.Block.Status != PersistedBlockStatus.Confirmed) // only pay to confirmed rounds.
                     continue;
 
-                foreach (var roundPayment in round.Payouts) // loop through all payouts for the rounds
+                foreach (var pair in round.Payouts) // loop through all payouts for the rounds
                 {
-                    if (!workerBalances.ContainsKey(roundPayment.Key)) // make sure a payout for worker already exists
-                        workerBalances.Add(roundPayment.Key, new WorkerBalance(roundPayment.Key, _magnitude));
+                    if (!workerBalances.ContainsKey(pair.Key)) // make sure a payout for worker already exists
+                        workerBalances.Add(pair.Key, new WorkerBalance(pair.Key, _magnitude));
 
-                    workerBalances[roundPayment.Key].AddPayment(roundPayment.Value);
+                    workerBalances[pair.Key].AddReward(pair.Value);
                 }
             }
 
             return workerBalances.Values.ToList();
         }
 
-        private bool ExecutePayments(IList<IWorkerBalance> workerBalances)
+        private void ExecutePayments(IList<IWorkerBalance> workerBalances)
         {
             var payments = new Dictionary<string, decimal>();
 
@@ -155,7 +171,7 @@ namespace Coinium.Payments
                 if (totalAmountToPay <= 0)
                 {
                     Log.ForContext<PaymentProcessor>().Information("No pending payments found.");
-                    return false;
+                    return;
                 }
 
                 var result = _daemonClient.SendMany(_poolAccount, payments); // send the payments
@@ -167,13 +183,10 @@ namespace Coinium.Payments
                 }
 
                 Log.ForContext<PaymentProcessor>().Information("Paid a total of {0} coins to {1} workers.", totalAmountToPay, workerBalances.Count);
-
-                return true;
             }
             catch (RpcException e)
             {
                 Log.ForContext<PaymentProcessor>().Error("Payment failed: {0} [{1}] - payouts: {2}.", e.Message, e.Code, payments);
-                return false;
             }
         }
 
@@ -181,28 +194,26 @@ namespace Coinium.Payments
         {
             // commit remaining balances to storage.
             var remainingBalances = workerBalances.Where(balance => !balance.Paid).ToList(); // find workers with remaining balances.
-            _storage.CommitRemainingBalances(remainingBalances);            
+            _storage.SetRemainingBalances(remainingBalances);            
         }
-        
-        private void ProcessRounds(IEnumerable<IPaymentRound> rounds, bool paymentSucceded)
+
+        private void ProcessRounds(IEnumerable<IPaymentRound> rounds)
         {
             foreach (var round in rounds)
             {
-                if (round.Block.Status == PersistedBlockStatus.Pending) // if the block is still pending,
+                if (round.Block.OutstandingHashes.Status == PersistedBlockStatus.Pending) // if the block is still pending,
                     continue; // just skip it.
 
-                switch (round.Block.Status)
+                switch (round.Block.OutstandingHashes.Status)
                 {
                     case PersistedBlockStatus.Confirmed:
-                        if (!paymentSucceded) // if the payment did not succeed,
-                            continue; // just let the round stay as is.
                         _storage.DeleteShares(round); // delete the associated shares.
-                        _storage.MovePendingBlock(round); // move pending block to appropriate place.  
+                        _storage.MoveBlock(round); // move pending block to appropriate place.  
                         break;
                     case PersistedBlockStatus.Kicked:
                     case PersistedBlockStatus.Orphan:
                         _storage.MoveSharesToCurrentRound(round); // move shares to current round so the work of miners aren't gone to void.
-                        _storage.MovePendingBlock(round); // move pending block to appropriate place.                      
+                        _storage.MoveBlock(round); // move pending block to appropriate place.                      
                         break;
                 }
             }
@@ -223,63 +234,72 @@ namespace Coinium.Payments
             }
         }
 
+        private void CheckBlockHashes(IPersistedBlockHashes hashes)
+        {
+            try
+            {
+                // get the transaction.
+                var transaction = _daemonClient.GetTransaction(hashes.TransactionHash);
+
+                // get the output transaction that targets pools central wallet.
+                var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == PoolAddress);
+
+                // make sure output for the pool central wallet exists
+                if (poolOutput == null)
+                {
+                    hashes.Status = PersistedBlockStatus.Kicked; // kick the hash.
+                    hashes.Reward = 0;
+                }
+                else
+                {
+                    switch (poolOutput.Category)
+                    {
+                        case "immature":
+                            hashes.Status = PersistedBlockStatus.Pending;
+                            break;
+                        case "orphan":
+                            hashes.Status = PersistedBlockStatus.Orphan;
+                            break;
+                        case "generate":
+                            hashes.Status = PersistedBlockStatus.Confirmed;
+                            break;
+                        default:
+                            hashes.Status = PersistedBlockStatus.Pending;
+                            break;
+                    }
+
+                    hashes.Reward = (decimal) poolOutput.Amount;
+                }
+            }
+            catch (RpcException)
+            {
+                hashes.Status = PersistedBlockStatus.Kicked; // kick the hash.
+                hashes.Reward = 0;
+            }            
+        }
+
+        private void CheckBlocks(IEnumerable<IPersistedBlock> blocks)
+        {
+            foreach (var block in blocks)
+            {
+                foreach (var hashes in block.Hashes)
+                {
+                    CheckBlockHashes(hashes);
+                }
+            }
+        }
+
         private IList<IPaymentRound> GetPaymentRounds(IEnumerable<IPersistedBlock> blocks)
         {
             var rounds = new List<IPaymentRound>();
 
             foreach (var block in blocks)
             {
-                try
-                {
-                    // get the transaction.
-                    var transaction = _daemonClient.GetTransaction(block.TransactionHash);
-
-                    // get the output transaction that targets pools central wallet.
-                    var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == PoolAddress);
-
-                    // make sure output for the pool central wallet exists
-                    if (poolOutput == null)
-                    {
-                        Log.ForContext<PaymentProcessor>().Error("Kicking block {0} as transaction doesn't contain output for the pool's central wallet.",block.Height);
-                        block.Status = PersistedBlockStatus.Kicked; // kick the block.
-                    }
-                    else
-                    {
-                        switch (poolOutput.Category)
-                        {
-                            case "immature":
-                                block.Status = PersistedBlockStatus.Pending;
-                                break;
-                            case "orphan":
-                                block.Status = PersistedBlockStatus.Orphan;
-                                break;
-                            case "generate":
-                                block.Status = PersistedBlockStatus.Confirmed;
-                                break;
-                            default:
-                                // send, recieve, move - TODO: we shouldn't be seing these categories! Implement an error message and kick it may be?
-                                block.Status = PersistedBlockStatus.Pending;
-                                break;
-                        }
-
-                        rounds.Add(new PaymentRound(block, (decimal)poolOutput.Amount));
-                    }                   
-                }
-                catch (RpcException exception)
-                {
-                    if (exception.Code == -5)
-                        Log.ForContext<PaymentProcessor>().Error("Kicking block {0} as daemon reported invalid generation transaction id: {1}.",block.Height, block.TransactionHash);
-                    else
-                        Log.ForContext<PaymentProcessor>().Error("Kicking block {0} as daemon reported an unknown error with generation transaction: {1:l} error: {2:l} [{3}].",block.Height, block.TransactionHash, exception.Message, exception.Code);
-
-                    block.Status = PersistedBlockStatus.Kicked; // kick the block.
-                    rounds.Add(new PaymentRound(block, 0));
-
-                    return rounds;
-                }
+                var round = new PaymentRound(block);
+                rounds.Add(round);
             }
 
-            return rounds;
+            return rounds;            
         }
 
         private void GetPoolAccount()

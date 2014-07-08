@@ -153,7 +153,7 @@ namespace Tests.Mining.Shares
 
             // the job manager.
             _jobManager = Substitute.For<IJobManager>();
-            _jobManager.ExtraNonce.Current.Returns((UInt32)0x58000000);
+            _jobManager.ExtraNonce.Next().Returns((UInt32)0x58000000);
 
             // coin config
             _miner = Substitute.For<IStratumMiner>();

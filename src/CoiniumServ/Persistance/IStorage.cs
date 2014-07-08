@@ -32,20 +32,22 @@ namespace Coinium.Persistance
     {
         bool IsEnabled { get; }
 
-        void CommitShare(IShare share);
+        void AddShare(IShare share);
 
-        void CommitBlock(IShare share);
+        void AddBlock(IShare share);
 
-        void CommitRemainingBalances(IList<IWorkerBalance> workerBalances);
+        void SetRemainingBalances(IList<IWorkerBalance> workerBalances);
 
         void DeleteShares(IPaymentRound round);
 
         void MoveSharesToCurrentRound(IPaymentRound round);
 
-        void MovePendingBlock(IPaymentRound round);
+        void MoveBlock(IPaymentRound round);
 
         IList<IPersistedBlock> GetPendingBlocks();
 
         Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
+
+        Dictionary<string, double> GetPreviousBalances();
     }
 }
