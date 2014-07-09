@@ -21,11 +21,11 @@
 // 
 #endregion
 
-using Coinium.Net.Server.Nancy;
+using Coinium.Net.Server.Http.Nancy;
 
 namespace Coinium.Server.Web
 {
-    public class WebServer : NancyServer
+    public class WebServer : HttpServer
     {
         public WebServer()
         {

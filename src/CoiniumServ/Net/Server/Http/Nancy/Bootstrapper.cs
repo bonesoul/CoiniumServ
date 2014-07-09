@@ -27,7 +27,7 @@ using Nancy.Conventions;
 using Nancy.Diagnostics;
 using Nancy.TinyIoc;
 
-namespace Coinium.Net.Server.Nancy
+namespace Coinium.Net.Server.Http.Nancy
 {
     public class Bootstrapper : DefaultNancyBootstrapper
     {

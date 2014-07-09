@@ -24,7 +24,7 @@ using System.Net;
 using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
-using Coinium.Net.Server.Http;
+using Coinium.Net.Server.Http.Basic;
 using Coinium.Server.Config;
 
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)

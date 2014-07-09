@@ -25,9 +25,9 @@ using System;
 using Nancy.Hosting.Self;
 using Serilog;
 
-namespace Coinium.Net.Server.Nancy
+namespace Coinium.Net.Server.Http.Nancy
 {
-    public class NancyServer : IServer, IDisposable
+    public class HttpServer : IServer, IDisposable
     {
         /// <summary>
         /// The IP address of the interface the server binded.
@@ -47,7 +47,7 @@ namespace Coinium.Net.Server.Nancy
         public bool Start()
         {
             var uri = new Uri(string.Format("http://{0}:{1}", BindIP, Port));
-            Log.ForContext<NancyServer>().Verbose("Web-server listening on: {0}", uri);
+            Log.ForContext<HttpServer>().Information("Web-server listening on: {0}", uri);
 
             var hostConfiguration = new HostConfiguration();
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
@@ -61,7 +61,7 @@ namespace Coinium.Net.Server.Nancy
             }
             catch (InvalidOperationException e) // nancy requires elevated privileges to run on port 80.
             {
-                Log.ForContext<NancyServer>().Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
+                Log.ForContext<HttpServer>().Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
                 return false;
             }
 
@@ -79,7 +79,7 @@ namespace Coinium.Net.Server.Nancy
         /// <param name="exception"></param>
         private void UnhandledExceptionHandler(Exception exception)
         {
-            Log.ForContext<NancyServer>().Error("Web-server: {0}", exception);
+            Log.ForContext<HttpServer>().Error("Web-server: {0}", exception);
         }
 
         public void Dispose()

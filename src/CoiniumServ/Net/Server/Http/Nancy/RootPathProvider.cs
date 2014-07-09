@@ -25,7 +25,7 @@ using System.IO;
 using System.Reflection;
 using Nancy;
 
-namespace Coinium.Net.Server.Nancy
+namespace Coinium.Net.Server.Http.Nancy
 {
     public class CustomRootPathProvider : IRootPathProvider
     {
