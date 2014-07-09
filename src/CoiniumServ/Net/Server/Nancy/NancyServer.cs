@@ -25,27 +25,29 @@ using System;
 using Nancy.Hosting.Self;
 using Serilog;
 
-namespace Coinium.Net.Server.Web
+namespace Coinium.Net.Server.Nancy
 {
-    public class WebServer
+    public class NancyServer : IServer, IDisposable
     {
-        public int Port { get; private set; }
-
-        public string Interface { get; private set; }
+        /// <summary>
+        /// The IP address of the interface the server binded.
+        /// </summary>
+        public string BindIP { get; protected set; }
 
         /// <summary>
-        /// Inits a new instance of embedded web-server.
+        /// The listening port for the server.
         /// </summary>
-        public WebServer()
-        {
-            this.Interface = "127.0.0.1";
-            this.Port = 8082;
-        }
+        public int Port { get; protected set; }
 
-        public void Start()
+        /// <summary>
+        /// Is server currently listening for connections?
+        /// </summary>
+        public bool IsListening { get; protected set; }
+
+        public bool Start()
         {
-            var uri = new Uri(string.Format("http://{0}:{1}", Interface, Port));
-            Log.ForContext<WebServer>().Verbose("Web-server listening on: {0}", uri);
+            var uri = new Uri(string.Format("http://{0}:{1}", BindIP, Port));
+            Log.ForContext<NancyServer>().Verbose("Web-server listening on: {0}", uri);
 
             var hostConfiguration = new HostConfiguration();
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
@@ -59,9 +61,16 @@ namespace Coinium.Net.Server.Web
             }
             catch (InvalidOperationException e) // nancy requires elevated privileges to run on port 80.
             {
-                Log.ForContext<WebServer>().Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
-                Environment.Exit(-1);
+                Log.ForContext<NancyServer>().Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
+                return false;
             }
+
+            return true;
+        }
+
+        public bool Stop()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -70,7 +79,12 @@ namespace Coinium.Net.Server.Web
         /// <param name="exception"></param>
         private void UnhandledExceptionHandler(Exception exception)
         {
-            Log.ForContext<WebServer>().Error("Web-server: {0}", exception);
+            Log.ForContext<NancyServer>().Error("Web-server: {0}", exception);
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
     }    
 }

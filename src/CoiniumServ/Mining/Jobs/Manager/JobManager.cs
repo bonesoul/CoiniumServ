@@ -94,6 +94,9 @@ namespace Coinium.Mining.Jobs.Manager
             var job = GetNewJob(); // create a new job.
             var count = Broadcast(job); // broadcast to miners.  
 
+            if (job == null)
+                return;
+
             if (initiatedByTimer)
                 Log.ForContext<JobManager>().Information("Broadcasted job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds.",job.Id, count, TimerExpiration);
             else

@@ -21,18 +21,16 @@
 // 
 #endregion
 
-using System.IO;
-using System.Reflection;
-using Nancy;
+using Coinium.Net.Server.Nancy;
 
-namespace Coinium.Net.Server.Web
+namespace Coinium.Server.Web
 {
-    public class CustomRootPathProvider : IRootPathProvider
-    {
-        public string GetRootPath()
+    public class WebServer : NancyServer
+    {       
+        public void Initialize(string bindIp, int port)
         {
-            var path = string.Format("{0}\\web\\default", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-            return path;
+            BindIP = bindIp;
+            Port = port;
         }
     }
 }

@@ -62,7 +62,7 @@ namespace Coinium.Net.Server.Http
         public void Initialize(int port, int maxThreads = 5)
         {
             if (!HttpListener.IsSupported)
-                throw new NotSupportedException("HttpListener not supported. Switch to mono provided one.");
+                throw new NotSupportedException("HttpListener not supported.");
 
             Port = port;
 

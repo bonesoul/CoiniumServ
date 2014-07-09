@@ -21,30 +21,18 @@
 // 
 #endregion
 
-using Coinium.Net.Server.Nancy;
-using Coinium.Server.Web;
-using Serilog;
+using System.IO;
+using System.Reflection;
+using Nancy;
 
-namespace Coinium.Server
+namespace Coinium.Net.Server.Nancy
 {
-    public class ServerManager
+    public class CustomRootPathProvider : IRootPathProvider
     {
-        public bool Start()
+        public string GetRootPath()
         {
-            Log.ForContext<ServerManager>().Information("ServerManager starting..");
-
-            var webServer = new WebServer();
-            webServer.Initialize("127.0.0.1", 8082);
-            webServer.Start();
-
-            return true;
+            var path = string.Format("{0}\\web\\default", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            return path;
         }
-
-        private static readonly ServerManager _instance = new ServerManager();
-
-        /// <summary>
-        /// Singleton instance of WalletManager.
-        /// </summary>
-        public static ServerManager Instance { get { return _instance; } }
     }
 }

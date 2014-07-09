@@ -118,8 +118,8 @@
     <Compile Include="Mining\Jobs\Tracker\JobTracker.cs" />
     <Compile Include="Mining\Jobs\Tracker\JobTrackerFactory.cs" />
     <Compile Include="Mining\Miners\MinerEventArgs.cs" />
-    <Compile Include="Net\Server\Web\Bootstrapper.cs" />
-    <Compile Include="Net\Server\Web\RootPathProvider.cs" />
+    <Compile Include="Net\Server\Nancy\Bootstrapper.cs" />
+    <Compile Include="Net\Server\Nancy\RootPathProvider.cs" />
     <Compile Include="Payments\IPaymentRound.cs" />
     <Compile Include="Payments\IPaymentConfig.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />
@@ -137,6 +137,7 @@
     <Compile Include="Persistance\Redis\IRedisConfig.cs" />
     <Compile Include="Persistance\Redis\RedisConfig.cs" />
     <Compile Include="Server\Stratum\IStratumMiner.cs" />
+    <Compile Include="Server\Web\WebServer.cs" />
     <Compile Include="Utils\Configuration\IGlobalConfigFactory.cs" />
     <Compile Include="Utils\Configuration\GlobalConfigFactory.cs" />
     <Compile Include="Utils\Extensions\StringExtensions.cs" />
@@ -312,7 +313,7 @@
     <Compile Include="Server\Stratum\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\Server\Sockets\SocketServer.cs" />
     <Compile Include="Server\Web\Modules\Home.cs" />
-    <Compile Include="Net\Server\Web\WebServer.cs" />
+    <Compile Include="Net\Server\Nancy\NancyServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Console\ConsoleWindow.cs" />
