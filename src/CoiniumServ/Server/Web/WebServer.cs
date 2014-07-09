@@ -26,11 +26,11 @@ using Coinium.Net.Server.Nancy;
 namespace Coinium.Server.Web
 {
     public class WebServer : NancyServer
-    {       
-        public void Initialize(string bindIp, int port)
+    {
+        public WebServer()
         {
-            BindIP = bindIp;
-            Port = port;
+            BindIP = "127.0.0.1";
+            Port = 91;
         }
     }
 }

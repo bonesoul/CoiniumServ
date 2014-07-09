@@ -20,10 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using Coinium.Net.Server;
 using Coinium.Repository.Context;
 using Coinium.Server;
 using Coinium.Server.Stratum;
 using Coinium.Server.Vanilla;
+using Coinium.Server.Web;
 using Coinium.Service;
 
 namespace Coinium.Repository.Registries
@@ -41,6 +44,7 @@ namespace Coinium.Repository.Registries
         {
             _applicationContext.Container.Register<IMiningServer, VanillaServer>(Services.Vanilla).AsMultiInstance();
             _applicationContext.Container.Register<IMiningServer, StratumServer>(Services.Stratum).AsMultiInstance();
+            _applicationContext.Container.Register<IServer, WebServer>(Services.Web).AsSingleton();
         }
     }
 }

@@ -267,7 +267,6 @@
     <Compile Include="Server\Commands\Stats.cs" />
     <Compile Include="Server\Commands\Uptime.cs" />
     <Compile Include="Server\Commands\Version.cs" />
-    <Compile Include="Server\ServerManager.cs" />
     <Compile Include="Server\Stratum\StratumMiner.cs" />
     <Compile Include="Service\Stratum\StratumService.cs" />
     <Compile Include="Daemon\Responses\Work.cs" />
