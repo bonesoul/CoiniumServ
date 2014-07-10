@@ -58,10 +58,12 @@ namespace Coinium.Net.Server.Http.Nancy
             try
             {
                 host.Start();
+                IsListening = true;
             }
             catch (InvalidOperationException e) // nancy requires elevated privileges to run on port 80.
             {
                 Log.ForContext<HttpServer>().Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
+                IsListening = false;
                 return false;
             }
 

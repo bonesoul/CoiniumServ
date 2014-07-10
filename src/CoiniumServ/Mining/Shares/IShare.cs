@@ -24,7 +24,7 @@ using System;
 using Coinium.Crypto;
 using Coinium.Daemon.Responses;
 using Coinium.Mining.Miners;
-using Coinium.Server.Stratum.Notifications;
+using Coinium.Server.Mining.Stratum.Notifications;
 using Coinium.Utils.Numerics;
 
 namespace Coinium.Mining.Shares

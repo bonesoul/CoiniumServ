@@ -21,16 +21,29 @@
 // 
 #endregion
 
+using Coinium.Mining.Pools;
 using Coinium.Net.Server.Http.Nancy;
+using Coinium.Utils.Configuration;
 
 namespace Coinium.Server.Web
 {
-    public class WebServer : HttpServer
+    public class WebServer : HttpServer, IWebServer
     {
-        public WebServer()
+        public IWebServerConfig Config { get; private set; }
+
+        private IPoolManager _poolManager;
+
+        public WebServer(IGlobalConfigFactory globalConfigFactory, IPoolManager poolManager)
         {
-            BindIP = "127.0.0.1";
-            Port = 91;
+            _poolManager = poolManager;
+            Config = globalConfigFactory.GetWebServerConfig();
+
+            BindIP = Config.BindInterface;
+            Port = Config.Port;
+
+            
+            if (Config.Enabled)
+                Start();
         }
     }
 }

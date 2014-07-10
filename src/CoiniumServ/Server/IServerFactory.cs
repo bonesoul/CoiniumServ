@@ -23,7 +23,8 @@
 using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
-using Coinium.Net.Server;
+using Coinium.Server.Mining;
+using Coinium.Server.Web;
 
 namespace Coinium.Server
 {
@@ -31,6 +32,6 @@ namespace Coinium.Server
     {
         IMiningServer Get(string serverName, IPool pool, IMinerManager minerManager, IJobManager jobManager);
 
-        IServer Get(string serverName);
+        IWebServer Get(string serverName, IPoolManager poolManager);
     }
 }

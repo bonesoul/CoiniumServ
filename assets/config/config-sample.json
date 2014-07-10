@@ -26,9 +26,9 @@
 	},
 
 	# website configuration
-	"website": {
-		"enabled": false,
-		"bind": "0.0.0.0",
+	"web": {
+		"enabled": true,
+		"bind": "127.0.0.1",
 		"port": 80
 	},
     

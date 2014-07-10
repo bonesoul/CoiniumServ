@@ -26,6 +26,5 @@ namespace Coinium.Service
     {
         public const string Vanilla = "Vanilla";
         public const string Stratum = "Stratum";
-        public const string Web = "Web";
     }
 }

@@ -27,7 +27,7 @@ using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
 using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
-using Coinium.Server.Stratum.Notifications;
+using Coinium.Server.Mining.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
 using Coinium.Utils.Extensions;

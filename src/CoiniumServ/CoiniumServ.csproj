@@ -120,8 +120,12 @@
     <Compile Include="Persistance\PersistedBlockHashes.cs" />
     <Compile Include="Persistance\Redis\IRedisConfig.cs" />
     <Compile Include="Persistance\Redis\RedisConfig.cs" />
-    <Compile Include="Server\Stratum\IStratumMiner.cs" />
+    <Compile Include="Server\Servers.cs" />
+    <Compile Include="Server\Web\IWebServer.cs" />
+    <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
+    <Compile Include="Server\Web\IWebServerConfig.cs" />
     <Compile Include="Server\Web\WebServer.cs" />
+    <Compile Include="Server\Web\WebServerConfig.cs" />
     <Compile Include="Utils\Configuration\IGlobalConfigFactory.cs" />
     <Compile Include="Utils\Configuration\GlobalConfigFactory.cs" />
     <Compile Include="Utils\Extensions\StringExtensions.cs" />
@@ -136,14 +140,14 @@
     <Compile Include="Mining\Shares\ShareError.cs" />
     <Compile Include="Persistance\Redis\IRedis.cs" />
     <Compile Include="Persistance\Storages.cs" />
-    <Compile Include="Server\Stratum\Errors\AuthenticationError.cs" />
-    <Compile Include="Server\Stratum\Errors\DuplicateShareError.cs" />
-    <Compile Include="Server\Stratum\Errors\IStratumError.cs" />
-    <Compile Include="Server\Stratum\Errors\JobNotFoundError.cs" />
-    <Compile Include="Server\Stratum\Errors\LowDifficultyShare.cs" />
-    <Compile Include="Server\Stratum\Errors\NotSubscriberError.cs" />
-    <Compile Include="Server\Stratum\Errors\OtherError.cs" />
-    <Compile Include="Server\Stratum\Notifications\IJob.cs" />
+    <Compile Include="Server\Mining\Stratum\Errors\AuthenticationError.cs" />
+    <Compile Include="Server\Mining\Stratum\Errors\DuplicateShareError.cs" />
+    <Compile Include="Server\Mining\Stratum\Errors\IStratumError.cs" />
+    <Compile Include="Server\Mining\Stratum\Errors\JobNotFoundError.cs" />
+    <Compile Include="Server\Mining\Stratum\Errors\LowDifficultyShare.cs" />
+    <Compile Include="Server\Mining\Stratum\Errors\NotSubscriberError.cs" />
+    <Compile Include="Server\Mining\Stratum\Errors\OtherError.cs" />
+    <Compile Include="Server\Mining\Stratum\Notifications\IJob.cs" />
     <Compile Include="Persistance\IStorage.cs" />
     <Compile Include="Persistance\IStorageFactory.cs" />
     <Compile Include="Persistance\Redis\Redis.cs" />
@@ -227,22 +231,22 @@
     <Compile Include="Mining\Shares\ShareManagerFactory.cs" />
     <Compile Include="Mining\Shares\ShareManager.cs" />
     <Compile Include="Service\IRpcService.cs" />
-    <Compile Include="Server\IMiningServer.cs" />
-    <Compile Include="Server\Config\IServerConfig.cs" />
+    <Compile Include="Server\Mining\IMiningServer.cs" />
+    <Compile Include="Server\Mining\IMiningServerConfig.cs" />
     <Compile Include="Server\IServerFactory.cs" />
     <Compile Include="Service\IServiceFactory.cs" />
     <Compile Include="Service\ServiceFactory.cs" />
     <Compile Include="Server\ServerFactory.cs" />
-    <Compile Include="Server\Stratum\Config\IStratumServerConfig.cs" />
-    <Compile Include="Server\Stratum\Notifications\Difficulty.cs" />
-    <Compile Include="Server\Vanilla\Config\IVanillaServerConfig.cs" />
-    <Compile Include="Server\Vanilla\VanillaMiner.cs" />
+    <Compile Include="Server\Mining\Stratum\Config\IStratumServerConfig.cs" />
+    <Compile Include="Server\Mining\Stratum\Notifications\Difficulty.cs" />
+    <Compile Include="Server\Mining\Vanilla\Config\IVanillaServerConfig.cs" />
+    <Compile Include="Server\Mining\Vanilla\VanillaMiner.cs" />
     <Compile Include="Mining\Pools\Config\PoolConfig.cs" />
     <Compile Include="Mining\Pools\PoolManager.cs" />
     <Compile Include="Service\Vanilla\HttpServiceContext.cs" />
     <Compile Include="Service\Vanilla\HttpServiceRequest.cs" />
-    <Compile Include="Server\Vanilla\VanillaServer.cs" />
-    <Compile Include="Server\Vanilla\Config\VanillaServerConfig.cs" />
+    <Compile Include="Server\Mining\Vanilla\VanillaServer.cs" />
+    <Compile Include="Server\Mining\Vanilla\Config\VanillaServerConfig.cs" />
     <Compile Include="Service\Vanilla\VanillaService.cs" />
     <Compile Include="Mining\Miners\IMiner.cs" />
     <Compile Include="Service\Stratum\SocketServiceContext.cs" />
@@ -251,7 +255,7 @@
     <Compile Include="Server\Commands\Stats.cs" />
     <Compile Include="Server\Commands\Uptime.cs" />
     <Compile Include="Server\Commands\Version.cs" />
-    <Compile Include="Server\Stratum\StratumMiner.cs" />
+    <Compile Include="Server\Mining\Stratum\StratumMiner.cs" />
     <Compile Include="Service\Stratum\StratumService.cs" />
     <Compile Include="Daemon\Responses\Work.cs" />
     <Compile Include="Repository\Context\IApplicationContext.cs" />
@@ -262,8 +266,8 @@
     <Compile Include="Net\Server\Sockets\ConnectionDataEventArgs.cs" />
     <Compile Include="Net\Server\Sockets\IClient.cs" />
     <Compile Include="Net\Server\Sockets\IConnection.cs" />
-    <Compile Include="Server\Stratum\Notifications\Job.cs" />
-    <Compile Include="Server\Stratum\StratumServer.cs" />
+    <Compile Include="Server\Mining\Stratum\Notifications\Job.cs" />
+    <Compile Include="Server\Mining\Stratum\StratumServer.cs" />
     <Compile Include="Utils\Extensions\JsonExtensions.cs" />
     <Compile Include="Daemon\Requests\CreateRawTransaction.cs" />
     <Compile Include="Daemon\Requests\CreateRawTransactionInput.cs" />
@@ -293,7 +297,7 @@
     <Compile Include="Daemon\DaemonBase.cs" />
     <Compile Include="Daemon\DaemonRequest.cs" />
     <Compile Include="Daemon\DaemonResponse.cs" />
-    <Compile Include="Server\Stratum\Responses\SubscribeResponse.cs" />
+    <Compile Include="Server\Mining\Stratum\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\Server\Sockets\SocketServer.cs" />
     <Compile Include="Server\Web\Modules\Home.cs" />
     <Compile Include="Net\Server\Http\Nancy\HttpServer.cs" />
@@ -855,7 +859,6 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="web.config" />
     <None Include="web\default\font-awesome\fonts\fontawesome-webfont.eot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -961,7 +964,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Server\Stratum\Config\StratumServerConfig.cs" />
+    <Compile Include="Server\Mining\Stratum\Config\StratumServerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Coinium.ico" />

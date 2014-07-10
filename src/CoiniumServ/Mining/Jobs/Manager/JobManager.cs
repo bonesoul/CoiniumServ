@@ -28,7 +28,7 @@ using Coinium.Daemon.Exceptions;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Shares;
-using Coinium.Server.Stratum.Notifications;
+using Coinium.Server.Mining.Stratum.Notifications;
 using Coinium.Transactions;
 using Serilog;
 

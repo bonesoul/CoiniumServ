@@ -21,6 +21,7 @@
 // 
 #endregion
 using Coinium.Persistance.Redis;
+using Coinium.Server.Web;
 
 namespace Coinium.Utils.Configuration
 {
@@ -32,6 +33,9 @@ namespace Coinium.Utils.Configuration
         /// <returns></returns>
         dynamic Get();
 
-        RedisConfig GetRedisConfig();
+        IRedisConfig GetRedisConfig();
+
+        IWebServerConfig GetWebServerConfig();
+
     }
 }

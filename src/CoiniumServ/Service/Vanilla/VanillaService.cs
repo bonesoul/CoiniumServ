@@ -24,7 +24,7 @@ using AustinHarris.JsonRpc;
 using Coinium.Daemon;
 using Coinium.Daemon.Responses;
 using Coinium.Mining.Shares;
-using Coinium.Server.Vanilla;
+using Coinium.Server.Mining.Vanilla;
 using Serilog;
 
 namespace Coinium.Service.Vanilla
