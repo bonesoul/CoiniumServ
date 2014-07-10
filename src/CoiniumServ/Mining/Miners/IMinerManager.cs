@@ -29,7 +29,7 @@ namespace Coinium.Mining.Miners
 {
     public interface IMinerManager
     {
-        IList<IMiner> GetAll();
+        IList<IMiner> Miners { get; }
 
         IMiner GetMiner(Int32 id);
 

@@ -27,6 +27,7 @@ using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.Diagnostics;
 using Nancy.TinyIoc;
+using Newtonsoft.Json.Serialization;
 
 namespace Coinium.Net.Server.Http.Nancy
 {
@@ -74,6 +75,11 @@ namespace Coinium.Net.Server.Http.Nancy
         protected override TinyIoCContainer GetApplicationContainer()
         {
             return _applicationContext.Container;
+        }
+
+        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
+        {
+            // prevents nancy from autoregistering it's own set of resolvers.
         }
     }
 }

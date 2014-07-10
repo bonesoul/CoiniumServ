@@ -1,9 +1,62 @@
 ﻿@Master['layout.sshtml']
 
 @Section['Content']
-   This is content on the index page
 
-   @Each.pools
-   dfdf
-   @EndEach
+	<div class="row">
+
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-money"></i> Per Algorithm Statistics</h3>
+				</div>
+				<div class="panel-body">
+					<div class="table-responsive">
+					<table class="table table-bordered table-hover table-striped tablesorter">
+						<thead>
+						<tr>
+							<th>Algorithm <i class="fa fa-sort"></i></th>
+							<th>Workers <i class="fa fa-sort"></i></th>
+							<th>Hashrate <i class="fa fa-sort"></i></th>
+						</tr>
+						</thead>
+						<tbody>						
+						</tbody>
+					</table>
+                </div>
+              </div>
+            </div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-money"></i> Per Pool Statistics</h3>
+				</div>
+				<div class="panel-body">
+					<div class="table-responsive">
+					<table class="table table-bordered table-hover table-striped tablesorter">
+						<thead>
+						<tr>
+							<th>Pool <i class="fa fa-sort"></i></th>
+							<th>Algorithm <i class="fa fa-sort"></i></th>
+							<th>Workers <i class="fa fa-sort"></i></th>
+							<th>Hashrate <i class="fa fa-sort"></i></th>
+						</tr>
+						</thead>
+						<tbody>						
+							@Each.Model
+								<tr>
+									<td>@Current.Config.Coin.Name</td>
+									<td>@Current.Config.Coin.Algorithm</td>
+									<td>@Current.Miners.Count</td>
+								</tr>                    
+							@EndEach  
+						</tbody>
+					</table>
+                </div>
+              </div>
+            </div>
+		</div>
+	</div>
+
 @EndSection

@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Repository.Context;
+
 using Coinium.Repository.Registries;
 using Nancy.TinyIoc;
 
@@ -37,15 +37,13 @@ namespace Coinium.Repository
         public Bootstrapper(TinyIoCContainer container)
         {
             _container = container;
+            Run();
         }
 
         public void Run()
         {
             var masterRegistry = new Registry(_container);
             masterRegistry.RegisterInstances();
-
-            var applicationContext = _container.Resolve<IApplicationContext>();
-            applicationContext.Initialize(_container);
 
             foreach (var registry in _container.ResolveAll<IRegistry>())
             {

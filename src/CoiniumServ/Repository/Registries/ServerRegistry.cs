@@ -21,14 +21,12 @@
 // 
 #endregion
 
-using Coinium.Net.Server;
 using Coinium.Repository.Context;
 using Coinium.Server;
 using Coinium.Server.Mining;
 using Coinium.Server.Mining.Stratum;
 using Coinium.Server.Mining.Vanilla;
 using Coinium.Server.Web;
-using Coinium.Service;
 
 namespace Coinium.Repository.Registries
 {

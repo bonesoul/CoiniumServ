@@ -26,6 +26,7 @@ using System.Reflection;
 using System.Threading;
 using Coinium.Mining.Pools;
 using Coinium.Repository;
+using Coinium.Repository.Context;
 using Coinium.Server.Web;
 using Coinium.Utils.Commands;
 using Coinium.Utils.Configuration;
@@ -56,7 +57,7 @@ namespace Coinium
 
             // start the ioc kernel.
             var kernel = TinyIoCContainer.Current;
-            new Bootstrapper(kernel).Run();
+            new Bootstrapper(kernel);
 
             // print intro texts.
             ConsoleWindow.PrintBanner();

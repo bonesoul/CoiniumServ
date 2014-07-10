@@ -32,7 +32,13 @@ namespace Coinium.Mining.Miners
 {
     public class MinerManager : IMinerManager
     {
-        private readonly Dictionary<Int32, IMiner> _miners = new Dictionary<Int32, IMiner>();
+        private readonly Dictionary<int, IMiner> _miners;
+
+        public IList<IMiner> Miners
+        {
+            get { return _miners.Values.ToList(); }
+        }
+
         private int _counter = 0; // counter for assigining unique id's to miners.
 
         private readonly IDaemonClient _daemonClient;
@@ -42,11 +48,7 @@ namespace Coinium.Mining.Miners
         public MinerManager(IDaemonClient daemonClient)
         {
             _daemonClient = daemonClient;
-        }
-
-        public IList<IMiner> GetAll()
-        {
-            return _miners.Values.ToList();
+            _miners = new Dictionary<int, IMiner>();
         }
 
         public IMiner GetMiner(Int32 id)

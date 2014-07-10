@@ -158,7 +158,7 @@ namespace Coinium.Mining.Jobs.Manager
             {
                 var count = 0; // number of subscribers to job is sent.
 
-                foreach (var miner in _minerManager.GetAll())
+                foreach (var miner in _minerManager.Miners)
                 {
                     var success = SendJobToMiner(miner, job);
 

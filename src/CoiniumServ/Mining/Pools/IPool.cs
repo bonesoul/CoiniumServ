@@ -20,12 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System.Collections.Generic;
+using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 
 namespace Coinium.Mining.Pools
 {
     public interface IPool
     {
+        IPoolConfig Config { get; }
+
+        IList<IMiner> Miners { get; }
+
         /// <summary>
         /// Initializes the specified bind ip.
         /// </summary>

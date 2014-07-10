@@ -29,17 +29,16 @@ namespace Coinium.Server.Web.Modules
 {
     public class IndexModule : NancyModule
     {
-        public IndexModule(IPoolManagerFactory factory)
+        public class Model
         {
+            public IList<IPool> Pools { get; set; } 
+        }
 
-            var _factory = factory;
-            var test = _factory.Get();
-
+        public IndexModule(IPoolManager poolManager)
+        {      
             Get["/"] = parameters =>
             {
-                List<object> pools = null;
-
-                return View["index", pools];
+                return View["index", poolManager.GetPools()];
             };
 
             Get["/api/"] = parameters =>
