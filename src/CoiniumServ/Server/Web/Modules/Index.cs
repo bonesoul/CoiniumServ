@@ -20,18 +20,26 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Reflection;
+
+using System.Collections.Generic;
+using Coinium.Mining.Pools;
 using Nancy;
 
 namespace Coinium.Server.Web.Modules
 {
-    public class HomeModule : NancyModule
+    public class IndexModule : NancyModule
     {
-        public HomeModule()
+        public IndexModule(IPoolManagerFactory factory)
         {
+
+            var _factory = factory;
+            var test = _factory.Get();
+
             Get["/"] = parameters =>
             {
-                return View["Index"];
+                List<object> pools = null;
+
+                return View["index", pools];
             };
 
             Get["/api/"] = parameters =>

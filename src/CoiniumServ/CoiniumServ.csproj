@@ -102,7 +102,9 @@
     <Compile Include="Mining\Jobs\Tracker\JobTracker.cs" />
     <Compile Include="Mining\Jobs\Tracker\JobTrackerFactory.cs" />
     <Compile Include="Mining\Miners\MinerEventArgs.cs" />
-    <Compile Include="Net\Server\Http\Nancy\Bootstrapper.cs" />
+    <Compile Include="Mining\Pools\IPoolManagerFactory.cs" />
+    <Compile Include="Mining\Pools\PoolManagerFactory.cs" />
+    <Compile Include="Net\Server\Http\Nancy\NancyBootstrapper.cs" />
     <Compile Include="Net\Server\Http\Nancy\RootPathProvider.cs" />
     <Compile Include="Payments\IPaymentRound.cs" />
     <Compile Include="Payments\IPaymentConfig.cs" />
@@ -299,7 +301,7 @@
     <Compile Include="Daemon\DaemonResponse.cs" />
     <Compile Include="Server\Mining\Stratum\Responses\SubscribeResponse.cs" />
     <Compile Include="Net\Server\Sockets\SocketServer.cs" />
-    <Compile Include="Server\Web\Modules\Home.cs" />
+    <Compile Include="Server\Web\Modules\Index.cs" />
     <Compile Include="Net\Server\Http\Nancy\HttpServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

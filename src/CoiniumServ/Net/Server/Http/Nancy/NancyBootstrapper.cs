@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using Coinium.Repository.Context;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
@@ -29,15 +30,25 @@ using Nancy.TinyIoc;
 
 namespace Coinium.Net.Server.Http.Nancy
 {
-    public class Bootstrapper : DefaultNancyBootstrapper
+    public class NancyBootstrapper : DefaultNancyBootstrapper
     {
+        /// <summary>
+        /// The _application context
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
+
+        public NancyBootstrapper(IApplicationContext applicationContext)
+        {            
+            _applicationContext = applicationContext;            
+        }
+
         protected override DiagnosticsConfiguration DiagnosticsConfiguration
         {
             get { return new DiagnosticsConfiguration { Password = @"coinium" }; }
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
-        {
+        {            
             StaticConfiguration.EnableRequestTracing = true;
         }
 
@@ -58,6 +69,11 @@ namespace Coinium.Net.Server.Http.Nancy
             nancyConventions.ViewLocationConventions.Clear();
             nancyConventions.ViewLocationConventions.Add((viewName, model, context) => string.Concat("/", viewName));
             nancyConventions.ViewLocationConventions.Add((viewName, model, context) => string.Concat("/", context.ModuleName, "/", viewName));
+        }
+
+        protected override TinyIoCContainer GetApplicationContainer()
+        {
+            return _applicationContext.Container;
         }
     }
 }

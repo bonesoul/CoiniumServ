@@ -22,6 +22,8 @@
 #endregion
 
 using System;
+using Coinium.Repository.Context;
+using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
 using Serilog;
 
@@ -29,6 +31,11 @@ namespace Coinium.Net.Server.Http.Nancy
 {
     public class HttpServer : IServer, IDisposable
     {
+        /// <summary>
+        /// The _application context
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
+
         /// <summary>
         /// The IP address of the interface the server binded.
         /// </summary>
@@ -44,6 +51,11 @@ namespace Coinium.Net.Server.Http.Nancy
         /// </summary>
         public bool IsListening { get; protected set; }
 
+        public HttpServer(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
+
         public bool Start()
         {
             var uri = new Uri(string.Format("http://{0}:{1}", BindIP, Port));
@@ -53,7 +65,8 @@ namespace Coinium.Net.Server.Http.Nancy
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
             hostConfiguration.UrlReservations.CreateAutomatically = true;
 
-            var host = new NancyHost(hostConfiguration, uri);
+            var bootstrapper = _applicationContext.Container.Resolve<INancyBootstrapper>();
+            var host = new NancyHost(bootstrapper, hostConfiguration, uri);            
 
             try
             {

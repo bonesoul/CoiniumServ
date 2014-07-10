@@ -49,6 +49,7 @@ namespace Coinium.Repository.Registries
 
         public void RegisterInstances()
         {
+            _applicationContext.Container.Register<IPoolManagerFactory, PoolManagerFactory>().AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithmFactory, HashAlgorithmFactory>().AsSingleton();
             _applicationContext.Container.Register<IPoolFactory, PoolFactory>().AsSingleton();
             _applicationContext.Container.Register<IServerFactory, ServerFactory>().AsSingleton();

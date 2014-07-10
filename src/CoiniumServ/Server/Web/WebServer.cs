@@ -23,6 +23,7 @@
 
 using Coinium.Mining.Pools;
 using Coinium.Net.Server.Http.Nancy;
+using Coinium.Repository.Context;
 using Coinium.Utils.Configuration;
 
 namespace Coinium.Server.Web
@@ -33,7 +34,8 @@ namespace Coinium.Server.Web
 
         private IPoolManager _poolManager;
 
-        public WebServer(IGlobalConfigFactory globalConfigFactory, IPoolManager poolManager)
+        public WebServer(IApplicationContext applicationContext, IGlobalConfigFactory globalConfigFactory, IPoolManager poolManager)
+            :base(applicationContext)
         {
             _poolManager = poolManager;
             Config = globalConfigFactory.GetWebServerConfig();

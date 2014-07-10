@@ -2,4 +2,8 @@
 
 @Section['Content']
    This is content on the index page
+
+   @Each.pools
+   dfdf
+   @EndEach
 @EndSection

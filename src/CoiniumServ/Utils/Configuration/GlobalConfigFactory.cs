@@ -22,7 +22,6 @@
 #endregion
 using Coinium.Persistance.Redis;
 using Coinium.Repository.Context;
-using Coinium.Server.Mining;
 using Coinium.Server.Web;
 
 namespace Coinium.Utils.Configuration

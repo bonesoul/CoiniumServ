@@ -20,39 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using Coinium.Net.Server.Http.Nancy;
-using Coinium.Repository.Context;
-using Nancy.Bootstrapper;
-using Nancy.TinyIoc;
 
-namespace Coinium.Repository.Registries
+namespace Coinium.Mining.Pools
 {
-    public class Registry : IRegistry
+    public interface IPoolManagerFactory
     {
-        private readonly TinyIoCContainer _kernel;
-
-        public Registry(TinyIoCContainer kernel)
-        {
-            _kernel = kernel;
-        }
-
-        public void RegisterInstances()
-        {
-            _kernel.Register<IApplicationContext, ApplicationContext>().AsSingleton();
-
-            _kernel.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();
-
-            _kernel.RegisterMultiple<IRegistry>(
-                new List<Type>
-                {
-                    typeof(ManagerRegistry),
-                    typeof(ServerRegistry),
-                    typeof(ServiceRegistry),
-                    typeof(ClassRegistry),
-                    typeof(FactoryRegistry),
-                });
-        }
+        IPoolManager Get();
     }
 }
