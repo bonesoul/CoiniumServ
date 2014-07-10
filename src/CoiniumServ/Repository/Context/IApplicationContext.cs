@@ -27,7 +27,5 @@ namespace Coinium.Repository.Context
     public interface IApplicationContext
     {
         TinyIoCContainer Container { get; }
-
-        void Initialize(TinyIoCContainer container);
     }
 }

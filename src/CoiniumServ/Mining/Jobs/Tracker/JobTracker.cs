@@ -22,7 +22,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using Coinium.Server.Stratum.Notifications;
+using Coinium.Server.Mining.Stratum.Notifications;
 
 namespace Coinium.Mining.Jobs.Tracker
 {

@@ -28,7 +28,7 @@ using Coinium.Daemon.Exceptions;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Shares;
-using Coinium.Server.Stratum.Notifications;
+using Coinium.Server.Mining.Stratum.Notifications;
 using Coinium.Transactions;
 using Serilog;
 
@@ -94,6 +94,9 @@ namespace Coinium.Mining.Jobs.Manager
             var job = GetNewJob(); // create a new job.
             var count = Broadcast(job); // broadcast to miners.  
 
+            if (job == null)
+                return;
+
             if (initiatedByTimer)
                 Log.ForContext<JobManager>().Information("Broadcasted job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds.",job.Id, count, TimerExpiration);
             else
@@ -155,7 +158,7 @@ namespace Coinium.Mining.Jobs.Manager
             {
                 var count = 0; // number of subscribers to job is sent.
 
-                foreach (var miner in _minerManager.GetAll())
+                foreach (var miner in _minerManager.Miners)
                 {
                     var success = SendJobToMiner(miner, job);
 

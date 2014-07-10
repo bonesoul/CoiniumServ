@@ -22,7 +22,9 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using Coinium.Net.Server.Http.Nancy;
 using Coinium.Repository.Context;
+using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
 
 namespace Coinium.Repository.Registries
@@ -39,6 +41,8 @@ namespace Coinium.Repository.Registries
         public void RegisterInstances()
         {
             _kernel.Register<IApplicationContext, ApplicationContext>().AsSingleton();
+
+            _kernel.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();
 
             _kernel.RegisterMultiple<IRegistry>(
                 new List<Type>

@@ -23,7 +23,7 @@
 using System;
 using System.IO;
 using System.Text;
-using Coinium.Server.Stratum.Notifications;
+using Coinium.Server.Mining.Stratum.Notifications;
 using Coinium.Utils.Extensions;
 using Coinium.Utils.Helpers.Arrays;
 using Gibbed.IO;

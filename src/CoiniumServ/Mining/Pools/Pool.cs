@@ -35,8 +35,8 @@ using Coinium.Mining.Shares;
 using Coinium.Payments;
 using Coinium.Persistance;
 using Coinium.Server;
+using Coinium.Server.Mining;
 using Coinium.Service;
-using Coinium.Utils.Configuration;
 using Coinium.Utils.Helpers.Validation;
 using Serilog;
 
@@ -47,6 +47,13 @@ namespace Coinium.Mining.Pools
     /// </summary>
     public class Pool : IPool
     {
+        public IPoolConfig Config { get; private set; }
+
+        public IList<IMiner> Miners
+        {
+            get { return _minerManager.Miners; }
+        }
+
         private readonly IDaemonClient _daemonClient;
         private readonly IServerFactory _serverFactory;
         private readonly IServiceFactory _serviceFactory;
@@ -65,7 +72,6 @@ namespace Coinium.Mining.Pools
         private IStorage _storage;
         private IHashAlgorithm _hashAlgorithm;
         private IPaymentProcessor _paymentProcessor;
-        private IPoolConfig _config;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
@@ -131,7 +137,7 @@ namespace Coinium.Mining.Pools
         /// <exception cref="System.ArgumentNullException">config;config.Daemon can not be null!</exception>
         public void Initialize(IPoolConfig config)
         {
-            _config = config;
+            Config = config;
 
             // init coin daemon.
             InitDaemon();
@@ -145,21 +151,21 @@ namespace Coinium.Mining.Pools
 
         private void InitDaemon()
         {
-            if (_config.Daemon == null || _config.Daemon.Valid == false)
+            if (Config.Daemon == null || Config.Daemon.Valid == false)
                 Log.ForContext<Pool>().Error("Coin daemon configuration is not valid!");
 
-            _daemonClient.Initialize(_config.Daemon);
+            _daemonClient.Initialize(Config.Daemon);
         }
 
         private void InitManagers()
         {
             // init the algorithm
-            _hashAlgorithm = _hashAlgorithmFactory.Get(_config.Coin.Algorithm);
+            _hashAlgorithm = _hashAlgorithmFactory.Get(Config.Coin.Algorithm);
 
-            _storage = _storageFactory.Get(Storages.Redis, _config);
+            _storage = _storageFactory.Get(Storages.Redis, Config);
 
             _paymentProcessor = _paymentProcessorFactory.Get(_daemonClient, _storage);
-            _paymentProcessor.Initialize(_config.Payments);
+            _paymentProcessor.Initialize(Config.Payments);
 
             _minerManager = _minerManagerFactory.Get(_daemonClient);
 
@@ -177,21 +183,21 @@ namespace Coinium.Mining.Pools
 
             // we don't need here a server config list as a pool can host only one instance of stratum and one vanilla server.
             // we must be dictative here, using a server list may cause situations we don't want (multiple stratum configs etc..)
-            if (_config.Stratum != null)
+            if (Config.Stratum != null)
             {
                 var stratumServer = _serverFactory.Get("Stratum", this, _minerManager, _jobManager);
                 var stratumService = _serviceFactory.Get("Stratum", _shareManager, _daemonClient);
-                stratumServer.Initialize(_config.Stratum);
+                stratumServer.Initialize(Config.Stratum);
 
                 _servers.Add(stratumServer, stratumService);
             }
 
-            if (_config.Vanilla != null)
+            if (Config.Vanilla != null)
             {
                 var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager, _jobManager);
                 var vanillaService = _serviceFactory.Get("Vanilla", _shareManager, _daemonClient);
 
-                vanillaServer.Initialize(_config.Vanilla);
+                vanillaServer.Initialize(Config.Vanilla);
 
                 _servers.Add(vanillaServer, vanillaService);
             }
@@ -199,7 +205,7 @@ namespace Coinium.Mining.Pools
 
         public void Start()
         {
-            if (!_config.Valid)
+            if (!Config.Valid)
             {
                 Log.ForContext<Pool>().Error("Can't start pool as configuration is not valid.");
                 return;
@@ -225,9 +231,9 @@ namespace Coinium.Mining.Pools
                                                "Network difficulty: {10:0.0000} block difficulty: {11:0.00}\r\n" +
                                                "Network hashrate: {12:l}\r\n" +
                                                "{13:l}\r\n",
-                _config.Coin.Name,
-                _config.Coin.Symbol,
-                _config.Coin.Algorithm,
+                Config.Coin.Name,
+                Config.Coin.Symbol,
+                Config.Coin.Algorithm,
                 info.Version,
                 info.ProtocolVersion,
                 info.WalletVersion,

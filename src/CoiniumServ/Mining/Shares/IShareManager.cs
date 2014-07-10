@@ -21,8 +21,8 @@
 // 
 #endregion
 using System;
-using Coinium.Server.Stratum;
-using Coinium.Server.Vanilla;
+using Coinium.Server.Mining.Stratum;
+using Coinium.Server.Mining.Vanilla;
 
 namespace Coinium.Mining.Shares
 {

@@ -23,7 +23,10 @@
 using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
+using Coinium.Net.Server;
 using Coinium.Repository.Context;
+using Coinium.Server.Mining;
+using Coinium.Server.Web;
 using Nancy.TinyIoc;
 using Serilog;
 
@@ -55,6 +58,16 @@ namespace Coinium.Server
             };
 
             return _applicationContext.Container.Resolve<IMiningServer>(serverName, @params);
+        }
+
+        public IWebServer Get(string serverName, IPoolManager poolManager)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolManager", poolManager},
+            };
+
+            return _applicationContext.Container.Resolve<IWebServer>(serverName, @params);
         }
     }
 }

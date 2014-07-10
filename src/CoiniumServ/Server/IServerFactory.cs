@@ -23,11 +23,15 @@
 using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
+using Coinium.Server.Mining;
+using Coinium.Server.Web;
 
 namespace Coinium.Server
 {
     public interface IServerFactory
     {
-        IMiningServer Get(string serviceName, IPool pool, IMinerManager minerManager, IJobManager jobManager);
+        IMiningServer Get(string serverName, IPool pool, IMinerManager minerManager, IJobManager jobManager);
+
+        IWebServer Get(string serverName, IPoolManager poolManager);
     }
 }

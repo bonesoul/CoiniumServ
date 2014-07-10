@@ -22,6 +22,7 @@
 #endregion
 using Coinium.Persistance.Redis;
 using Coinium.Repository.Context;
+using Coinium.Server.Web;
 
 namespace Coinium.Utils.Configuration
 {
@@ -29,8 +30,9 @@ namespace Coinium.Utils.Configuration
     {
         private const string FileName = "config.json";
 
-        private dynamic _data = null;
-        private RedisConfig _redisConfig = null;
+        private dynamic _data;
+        private IRedisConfig _redisConfig;
+        private IWebServerConfig _webServerConfig;
 
         /// <summary>
         /// The _application context
@@ -48,10 +50,15 @@ namespace Coinium.Utils.Configuration
             return _data ?? (_data = JsonConfigReader.Read(FileName));
         }
 
-        public RedisConfig GetRedisConfig()
+        public IRedisConfig GetRedisConfig()
         {
             // return the redis config, if we haven't read it yet, do so.
             return _redisConfig ?? (_redisConfig = new RedisConfig(Get().storage.redis));
+        }
+
+        public IWebServerConfig GetWebServerConfig()
+        {
+            return _webServerConfig ?? (_webServerConfig = new WebServerConfig(Get().web));
         }
     }
 }

@@ -31,6 +31,7 @@ using Coinium.Mining.Shares;
 using Coinium.Payments;
 using Coinium.Persistance;
 using Coinium.Server;
+using Coinium.Server.Mining;
 using Coinium.Service;
 using Coinium.Utils.Configuration;
 using NSubstitute;

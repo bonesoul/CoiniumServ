@@ -25,9 +25,9 @@ using AustinHarris.JsonRpc;
 using Coinium.Daemon;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Persistance;
-using Coinium.Server.Stratum;
-using Coinium.Server.Stratum.Errors;
-using Coinium.Server.Vanilla;
+using Coinium.Server.Mining.Stratum;
+using Coinium.Server.Mining.Stratum.Errors;
+using Coinium.Server.Mining.Vanilla;
 using Coinium.Utils.Extensions;
 using Serilog;
 

@@ -24,8 +24,8 @@ using System.IO;
 using Coinium.Coin.Config;
 using Coinium.Daemon.Config;
 using Coinium.Payments;
-using Coinium.Server.Stratum.Config;
-using Coinium.Server.Vanilla.Config;
+using Coinium.Server.Mining.Stratum.Config;
+using Coinium.Server.Mining.Vanilla.Config;
 
 namespace Coinium.Mining.Pools.Config
 {

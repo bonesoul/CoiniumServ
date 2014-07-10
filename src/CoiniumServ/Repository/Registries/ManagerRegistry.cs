@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Mining.Jobs;
+
 using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
@@ -44,7 +44,7 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
             _applicationContext.Container.Register<IJobManager, JobManager>().AsMultiInstance();
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IPoolManager, PoolManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IPoolManager, PoolManager>().AsSingleton();
         }
     }
 }
