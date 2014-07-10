@@ -32,7 +32,7 @@ namespace Coinium.Net.Server.Http.Nancy
     public class HttpServer : IServer, IDisposable
     {
         /// <summary>
-        /// The _application context
+        /// The application context
         /// </summary>
         private readonly IApplicationContext _applicationContext;
 

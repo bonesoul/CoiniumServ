@@ -35,7 +35,7 @@ namespace Coinium.Server.Web
         private IPoolManager _poolManager;
 
         public WebServer(IApplicationContext applicationContext, IGlobalConfigFactory globalConfigFactory, IPoolManager poolManager)
-            :base(applicationContext)
+            : base(applicationContext)
         {
             _poolManager = poolManager;
             Config = globalConfigFactory.GetWebServerConfig();

@@ -25,10 +25,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using Coinium.Mining.Pools;
-using Coinium.Net.Server;
-using Coinium.Net.Server.Http.Nancy;
 using Coinium.Repository;
-using Coinium.Repository.Context;
 using Coinium.Server.Web;
 using Coinium.Utils.Commands;
 using Coinium.Utils.Configuration;
@@ -83,7 +80,7 @@ namespace Coinium
             Log.Information("Running over {0:l} {1:l}.", PlatformManager.Framework.ToString(), PlatformManager.FrameworkVersion);
 
             // start pool manager.
-            var poolManager = kernel.Resolve<IPoolManager>();
+            var poolManager = kernel.Resolve<IPoolManagerFactory>().Get();
             poolManager.Run();
 
             // run pools.

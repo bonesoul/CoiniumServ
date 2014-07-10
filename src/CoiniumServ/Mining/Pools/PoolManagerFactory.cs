@@ -32,12 +32,12 @@ namespace Coinium.Mining.Pools
         /// </summary>
         private readonly IApplicationContext _applicationContext;
 
+        private IPoolManager _poolManager;
+
         public PoolManagerFactory(IApplicationContext applicationContext)
         {
-            _applicationContext = applicationContext;            
+            _applicationContext = applicationContext;
         }
-
-        private IPoolManager _poolManager;
 
         public IPoolManager Get()
         {
