@@ -20,6 +20,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonConfig", "..\deps\jsonc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoiniumServGui", "..\src\CoiniumServGui\CoiniumServGui.csproj", "{1E2AF218-156A-40A0-8DA3-95DD13D93810}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6DB1BE05-DEC0-43D6-8CD8-908F5C44B09A}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTests", "..\src\WebTests\WebTests.csproj", "{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +127,21 @@ Global
 		{1E2AF218-156A-40A0-8DA3-95DD13D93810}.Testing|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1E2AF218-156A-40A0-8DA3-95DD13D93810}.Testing|Mixed Platforms.Build.0 = Release|Any CPU
 		{1E2AF218-156A-40A0-8DA3-95DD13D93810}.Testing|x86.ActiveCfg = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Release|x86.ActiveCfg = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Testing|Any CPU.ActiveCfg = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Testing|Any CPU.Build.0 = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Testing|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Testing|Mixed Platforms.Build.0 = Release|Any CPU
+		{A23B4A18-B8F5-43A2-84B1-3181C80CCD50}.Testing|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

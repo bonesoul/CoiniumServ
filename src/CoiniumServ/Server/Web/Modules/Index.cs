@@ -23,20 +23,26 @@
 
 using System.Collections.Generic;
 using Coinium.Mining.Pools;
+using Coinium.Mining.Pools.Statistics;
 using Nancy;
 
 namespace Coinium.Server.Web.Modules
 {
     public class IndexModule : NancyModule
     {
-        public class Model
-        {
-            public IList<IPool> Pools { get; set; } 
-        }
-
         public IndexModule(IPoolManager poolManager)
-        {      
-            Get["/"] = _ => View["index", poolManager.GetPools()];
+        {
+            Get["/"] = _ => View["index", new IndexModel
+            {
+                Global = poolManager.Statistics,
+                Pools = poolManager.GetPools()
+            }];
         }
+    }
+
+    public class IndexModel
+    {
+        public IGlobalStatistics Global { get; set; }
+        public IList<IPool> Pools { get; set; }
     }
 }

@@ -22,7 +22,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using Coinium.Net.Server.Http.Nancy;
+using Coinium.Net.Server.Http.Web;
 using Coinium.Repository.Context;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;

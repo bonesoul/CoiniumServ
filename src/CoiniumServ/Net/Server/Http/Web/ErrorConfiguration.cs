@@ -21,31 +21,19 @@
 // 
 #endregion
 
-using Coinium.Mining.Pools;
-using Coinium.Net.Server.Http.Web;
-using Coinium.Repository.Context;
-using Coinium.Utils.Configuration;
+using Nancy;
+using Nancy.CustomErrors;
 
-namespace Coinium.Server.Web
+namespace Coinium.Net.Server.Http.Web
 {
-    public class WebServer : HttpServer, IWebServer
+    public class ErrorConfiguration : CustomErrorsConfiguration
     {
-        public IWebServerConfig Config { get; private set; }
-
-        private IPoolManager _poolManager;
-
-        public WebServer(IApplicationContext applicationContext, IGlobalConfigFactory globalConfigFactory, IPoolManager poolManager)
-            : base(applicationContext)
+        public ErrorConfiguration()
         {
-            _poolManager = poolManager;
-            Config = globalConfigFactory.GetWebServerConfig();
-
-            BindIP = Config.BindInterface;
-            Port = Config.Port;
-
-            
-            if (Config.Enabled)
-                Start();
+            // Map error status codes to custom view names
+            ErrorViews[HttpStatusCode.NotFound] = "notfound";
+            ErrorViews[HttpStatusCode.InternalServerError] = "error";
+            ErrorViews[HttpStatusCode.Forbidden] = "forbidden";
         }
     }
 }

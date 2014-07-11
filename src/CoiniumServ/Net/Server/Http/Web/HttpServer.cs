@@ -27,7 +27,7 @@ using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
 using Serilog;
 
-namespace Coinium.Net.Server.Http.Nancy
+namespace Coinium.Net.Server.Http.Web
 {
     public class HttpServer : IServer, IDisposable
     {

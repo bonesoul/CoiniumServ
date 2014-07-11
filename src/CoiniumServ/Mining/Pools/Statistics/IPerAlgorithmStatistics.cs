@@ -21,31 +21,20 @@
 // 
 #endregion
 
-using Coinium.Mining.Pools;
-using Coinium.Net.Server.Http.Web;
-using Coinium.Repository.Context;
-using Coinium.Utils.Configuration;
+using System;
 
-namespace Coinium.Server.Web
+namespace Coinium.Mining.Pools.Statistics
 {
-    public class WebServer : HttpServer, IWebServer
+    public interface IPerAlgorithmStatistics
     {
-        public IWebServerConfig Config { get; private set; }
+        string Name { get; }
 
-        private IPoolManager _poolManager;
+        Int32 Workers { get; set; }
 
-        public WebServer(IApplicationContext applicationContext, IGlobalConfigFactory globalConfigFactory, IPoolManager poolManager)
-            : base(applicationContext)
-        {
-            _poolManager = poolManager;
-            Config = globalConfigFactory.GetWebServerConfig();
+        UInt64 Hashrate { get; set; }
 
-            BindIP = Config.BindInterface;
-            Port = Config.Port;
+        string ReadableHashrate { get; set; }
 
-            
-            if (Config.Enabled)
-                Start();
-        }
+        void Reset();
     }
 }

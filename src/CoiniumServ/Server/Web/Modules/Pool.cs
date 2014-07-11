@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System.Collections.Generic;
 using Coinium.Mining.Pools;
 using Nancy;
 
@@ -29,11 +28,6 @@ namespace Coinium.Server.Web.Modules
 {
     public class PoolModule : NancyModule
     {
-        public class Model
-        {
-            public IList<IPool> Pools { get; set; }
-        }
-
         public PoolModule(IPoolManager poolManager)
         {
             Get["/pool/{slug}"] = _ =>

@@ -23,16 +23,17 @@
 
 using System.IO;
 using System.Reflection;
+using Coinium.Utils.Platform;
 using Nancy;
 
-namespace Coinium.Net.Server.Http.Nancy
+namespace Coinium.Net.Server.Http.Web
 {
     public class CustomRootPathProvider : IRootPathProvider
     {
         public string GetRootPath()
         {
-            var path = string.Format("{0}/web/default", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-            return path;
+            return string.Format(PlatformManager.IsRunningOnMono() ? "{0}/web/default" : "{0}\\web\\default",
+                Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
         }
     }
 }

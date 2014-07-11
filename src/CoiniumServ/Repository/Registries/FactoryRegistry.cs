@@ -65,6 +65,7 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IPaymentProcessorFactory, PaymentProcessorFactory>().AsSingleton();
             _applicationContext.Container.Register<IPoolStatisticsFactory, PoolStatisticsFactory>().AsSingleton();
             _applicationContext.Container.Register<IBlockStatisticsFactory, BlockStatisticsFactory>().AsSingleton();
+            _applicationContext.Container.Register<IGlobalStatisticsFactory, GlobalStatisticsFactory>().AsSingleton();
         }
     }
 }

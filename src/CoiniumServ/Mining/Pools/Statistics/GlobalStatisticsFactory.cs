@@ -21,31 +21,29 @@
 // 
 #endregion
 
-using Coinium.Mining.Pools;
-using Coinium.Net.Server.Http.Web;
 using Coinium.Repository.Context;
-using Coinium.Utils.Configuration;
 
-namespace Coinium.Server.Web
+namespace Coinium.Mining.Pools.Statistics
 {
-    public class WebServer : HttpServer, IWebServer
+    public class GlobalStatisticsFactory:IGlobalStatisticsFactory
     {
-        public IWebServerConfig Config { get; private set; }
+        /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
 
-        private IPoolManager _poolManager;
-
-        public WebServer(IApplicationContext applicationContext, IGlobalConfigFactory globalConfigFactory, IPoolManager poolManager)
-            : base(applicationContext)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IBlockStatisticsFactory" /> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public GlobalStatisticsFactory(IApplicationContext applicationContext)
         {
-            _poolManager = poolManager;
-            Config = globalConfigFactory.GetWebServerConfig();
+            _applicationContext = applicationContext;
+        }
 
-            BindIP = Config.BindInterface;
-            Port = Config.Port;
-
-            
-            if (Config.Enabled)
-                Start();
+        public IGlobalStatistics Get(IPoolManager poolManager)
+        {
+            return _applicationContext.Container.Resolve<IGlobalStatistics>();
         }
     }
 }

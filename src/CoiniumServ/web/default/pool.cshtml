@@ -1,6 +1,9 @@
-﻿@Master['layout.sshtml']
+﻿@using System
+@using System.Linq
+@using Coinium.Persistance
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Coinium.Mining.Pools.IPool>
 
-@Section['Content']
+@{ Layout = "layout.cshtml"; }
 
 	<div class="row">
 		<div class="col-md-4">
@@ -56,7 +59,7 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-6">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title"><i class="fa fa-money"></i> Latest Blocks</h3>
@@ -74,15 +77,29 @@
 							</tr>
 							</thead>
 							<tbody>						
-								@Each.Model.Statistics.Blocks.Latest
-									<tr>										
-										<td><a href="https://chain.so/block/LTCTEST/@Current.Height" target="_blank">@Current.Height</a></td>
-										<td>@Current.Status</td>
-										<td>@Current.OutstandingHashes.Total</td>
-										<td><a href="https://chain.so/block/LTCTEST/@Current.OutstandingHashes.BlockHash" target="_blank">@Current.OutstandingHashes.BlockHash</a></td>
-										<td><a href="https://chain.so/tx/LTCTEST/@Current.OutstandingHashes.TransactionHash" target="_blank">@Current.OutstandingHashes.TransactionHash</a></td>
-									</tr>                    
-								@EndEach  
+								@foreach (var block in Model.Statistics.Blocks.Latest)
+								{
+								    <tr>										
+								        <td><a href="https://chain.so/block/LTCTEST/@block.Height" target="_blank">@block.Height</a></td>
+								        <td>
+								            @switch (block.Status)
+								            {
+								                case PersistedBlockStatus.Pending:
+                                                    <span class="label label-warning">@block.Status</span>
+								                    break;
+								                case PersistedBlockStatus.Orphan:
+                                                    <span class="label label-danger">@block.Status</span>
+								                    break;
+								                case PersistedBlockStatus.Confirmed:
+                                                    <span class="label label-primary">@block.Status</span>
+								                    break;
+								            }
+								        </td>
+								        <td>@block.OutstandingHashes.Total</td>
+								        <td><a href="https://chain.so/block/LTCTEST/@block.OutstandingHashes.BlockHash" target="_blank">@block.OutstandingHashes.BlockHash.Substring(0,10)..</a></td>
+								        <td><a href="https://chain.so/tx/LTCTEST/@block.OutstandingHashes.TransactionHash" target="_blank">@block.OutstandingHashes.TransactionHash.Substring(0, 10)..</a></td>
+								    </tr>
+								}
 							</tbody>
 						</table>
 					</div>																			
@@ -92,4 +109,3 @@
 	</div>
 
 
-@EndSection
