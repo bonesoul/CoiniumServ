@@ -22,24 +22,18 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 
-namespace Coinium.Coin.Helpers
+namespace Coinium.Mining.Pools.Statistics
 {
-    public static class Hashrate
+    public interface IGlobalStatistics
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
-        {
-            var index = -1;
-            double rate = hashrate;
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
+        Int32 Workers { get; }
 
-            do
-            {
-                rate = rate/1024;
-                index++;
-            } while (rate > 1024);
+        UInt64 Hashrate { get; }
 
-            return string.Format("{0:0.00} {1}", rate, units[index]);
-        }
+        string ReadableHashrate { get; }
+
+        IList<IPerAlgorithmStatistics> Algorithms { get; }
     }
 }

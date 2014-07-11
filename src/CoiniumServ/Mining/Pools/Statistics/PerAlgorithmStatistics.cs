@@ -21,25 +21,24 @@
 // 
 #endregion
 
-using System;
-
-namespace Coinium.Coin.Helpers
+namespace Coinium.Mining.Pools.Statistics
 {
-    public static class Hashrate
+    public class PerAlgorithmStatistics:IPerAlgorithmStatistics
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
+        public string Name { get; private set; }
+        public int Workers { get; set; }
+        public ulong Hashrate { get; set; }
+        public string ReadableHashrate { get; set; }
+
+        public PerAlgorithmStatistics(string algorithm)
         {
-            var index = -1;
-            double rate = hashrate;
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
+            Name = algorithm;
+        }
 
-            do
-            {
-                rate = rate/1024;
-                index++;
-            } while (rate > 1024);
-
-            return string.Format("{0:0.00} {1}", rate, units[index]);
+        public void Reset()
+        {
+            Hashrate = 0;
+            Workers = 0;
         }
     }
 }

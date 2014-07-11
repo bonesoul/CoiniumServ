@@ -1,0 +1,12 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+
+@{ Layout = "layout.cshtml"; }
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-dismissable alert-danger">
+            <strong>Oh snap!</strong> - @Model.Summary
+            <p>@Model.Details</p>
+        </div>
+    </div>
+</div>

@@ -21,25 +21,29 @@
 // 
 #endregion
 
-using System;
+using Coinium.Repository.Context;
 
-namespace Coinium.Coin.Helpers
+namespace Coinium.Mining.Pools.Statistics
 {
-    public static class Hashrate
+    public class GlobalStatisticsFactory:IGlobalStatisticsFactory
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
+        /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IBlockStatisticsFactory" /> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public GlobalStatisticsFactory(IApplicationContext applicationContext)
         {
-            var index = -1;
-            double rate = hashrate;
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
+            _applicationContext = applicationContext;
+        }
 
-            do
-            {
-                rate = rate/1024;
-                index++;
-            } while (rate > 1024);
-
-            return string.Format("{0:0.00} {1}", rate, units[index]);
+        public IGlobalStatistics Get(IPoolManager poolManager)
+        {
+            return _applicationContext.Container.Resolve<IGlobalStatistics>();
         }
     }
 }

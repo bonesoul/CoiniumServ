@@ -21,25 +21,19 @@
 // 
 #endregion
 
-using System;
+using System.IO;
+using System.Reflection;
+using Coinium.Utils.Platform;
+using Nancy;
 
-namespace Coinium.Coin.Helpers
+namespace Coinium.Net.Server.Http.Web
 {
-    public static class Hashrate
+    public class CustomRootPathProvider : IRootPathProvider
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
+        public string GetRootPath()
         {
-            var index = -1;
-            double rate = hashrate;
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
-
-            do
-            {
-                rate = rate/1024;
-                index++;
-            } while (rate > 1024);
-
-            return string.Format("{0:0.00} {1}", rate, units[index]);
+            return string.Format(PlatformManager.IsRunningOnMono() ? "{0}/web/default" : "{0}\\web\\default",
+                Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
         }
     }
 }

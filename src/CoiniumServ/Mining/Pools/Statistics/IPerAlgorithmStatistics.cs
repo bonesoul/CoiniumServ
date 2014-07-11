@@ -23,23 +23,18 @@
 
 using System;
 
-namespace Coinium.Coin.Helpers
+namespace Coinium.Mining.Pools.Statistics
 {
-    public static class Hashrate
+    public interface IPerAlgorithmStatistics
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
-        {
-            var index = -1;
-            double rate = hashrate;
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
+        string Name { get; }
 
-            do
-            {
-                rate = rate/1024;
-                index++;
-            } while (rate > 1024);
+        Int32 Workers { get; set; }
 
-            return string.Format("{0:0.00} {1}", rate, units[index]);
-        }
+        UInt64 Hashrate { get; set; }
+
+        string ReadableHashrate { get; set; }
+
+        void Reset();
     }
 }

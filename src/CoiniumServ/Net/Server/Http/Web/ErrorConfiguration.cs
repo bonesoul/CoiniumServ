@@ -21,25 +21,19 @@
 // 
 #endregion
 
-using System;
+using Nancy;
+using Nancy.CustomErrors;
 
-namespace Coinium.Coin.Helpers
+namespace Coinium.Net.Server.Http.Web
 {
-    public static class Hashrate
+    public class ErrorConfiguration : CustomErrorsConfiguration
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
+        public ErrorConfiguration()
         {
-            var index = -1;
-            double rate = hashrate;
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
-
-            do
-            {
-                rate = rate/1024;
-                index++;
-            } while (rate > 1024);
-
-            return string.Format("{0:0.00} {1}", rate, units[index]);
+            // Map error status codes to custom view names
+            ErrorViews[HttpStatusCode.NotFound] = "error";
+            ErrorViews[HttpStatusCode.InternalServerError] = "error";
+            ErrorViews[HttpStatusCode.Forbidden] = "error";
         }
     }
 }

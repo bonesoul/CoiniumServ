@@ -44,7 +44,15 @@ namespace Coinium.Persistance
 
         void MoveBlock(IPaymentRound round);
 
+        IDictionary<string, int> GetBlockCounts();
+
+        void DeleteExpiredHashrateData(int until);
+
+        IDictionary<string, double> GetHashrateData(int since);
+
         IList<IPersistedBlock> GetPendingBlocks();
+
+        IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
 
         Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
 

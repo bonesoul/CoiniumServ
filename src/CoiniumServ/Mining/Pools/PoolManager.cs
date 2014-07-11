@@ -20,8 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Coinium.Mining.Pools.Config;
+using Coinium.Mining.Pools.Statistics;
 using Coinium.Utils.Configuration;
 using Coinium.Utils.Helpers.IO;
 using Serilog;
@@ -30,20 +34,27 @@ namespace Coinium.Mining.Pools
 {
     public class PoolManager : IPoolManager
     {
+        public IGlobalStatistics Statistics { get; private set; }
+
         private readonly List<IPool> _pools = new List<IPool>();
 
         private readonly IPoolFactory _poolFactory;
 
         private readonly IPoolConfigFactory _poolConfigFactory;
 
-        public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory)
+        private readonly IGlobalStatisticsFactory _algorithmStatisticsFactory;
+
+        public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory, IGlobalStatisticsFactory algorithmStatisticsFactory)
         {
             _poolFactory = poolFactory;
             _poolConfigFactory = poolConfigFactory;
+            _algorithmStatisticsFactory = algorithmStatisticsFactory;
         }
 
         public void Run()
         {
+            Statistics = _algorithmStatisticsFactory.Get(this);
+
             LoadConfigs();            
         }
 
@@ -73,6 +84,11 @@ namespace Coinium.Mining.Pools
             {
                 AddPool(config);
             }
+        }
+
+        public IPool GetBySymbol(string symbol)
+        {
+            return _pools.FirstOrDefault(pool => pool.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
         }
 
         public IPool AddPool(IPoolConfig poolConfig)

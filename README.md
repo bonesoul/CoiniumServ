@@ -38,7 +38,7 @@ Make sure you check our [Getting Started](https://github.com/CoiniumServ/Coinium
 For Ubuntu, you can simply use our installer script;
 
 ```
-wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/assets/installer/ubuntu.sh | bash
+wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/contrib/installers/ubuntu.sh | bash
 ```
 
 ### Documentation

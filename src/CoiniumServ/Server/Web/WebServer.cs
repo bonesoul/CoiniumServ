@@ -22,7 +22,7 @@
 #endregion
 
 using Coinium.Mining.Pools;
-using Coinium.Net.Server.Http.Nancy;
+using Coinium.Net.Server.Http.Web;
 using Coinium.Repository.Context;
 using Coinium.Utils.Configuration;
 

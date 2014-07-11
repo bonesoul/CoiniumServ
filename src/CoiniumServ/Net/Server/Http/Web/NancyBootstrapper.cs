@@ -25,11 +25,11 @@ using Coinium.Repository.Context;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
+using Nancy.CustomErrors;
 using Nancy.Diagnostics;
 using Nancy.TinyIoc;
-using Newtonsoft.Json.Serialization;
 
-namespace Coinium.Net.Server.Http.Nancy
+namespace Coinium.Net.Server.Http.Web
 {
     public class NancyBootstrapper : DefaultNancyBootstrapper
     {
@@ -49,8 +49,9 @@ namespace Coinium.Net.Server.Http.Nancy
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
-        {            
+        {
             StaticConfiguration.EnableRequestTracing = true;
+            CustomErrors.Enable(pipelines, new ErrorConfiguration());
         }
 
         protected override IRootPathProvider RootPathProvider

@@ -1,0 +1,100 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Coinium.Server.Web.Modules.IndexModel>
+
+@{ Layout = "layout.cshtml"; }
+
+<div class="row">
+    
+    <!-- overall stats -->
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-money"></i> Overall Statistics</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped tablesorter">
+                        <thead>
+                            <tr>
+                                <th>Workers <i class="fa fa-sort"></i></th>
+                                <th>Hashrate <i class="fa fa-sort"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr>
+                                    <td>@Model.Global.Workers</td>
+                                    <td>@Model.Global.ReadableHashrate</td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+    <!-- algorithms -->
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-money"></i> Per Algorithm Statistics</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped tablesorter">
+                        <thead>
+                            <tr>
+                                <th>Algorithm <i class="fa fa-sort"></i></th>
+                                <th>Workers <i class="fa fa-sort"></i></th>
+                                <th>Hashrate <i class="fa fa-sort"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var algorithm in Model.Global.Algorithms)
+                            {
+                                <tr>
+                                    <td>@algorithm.Name</td>
+                                    <td>@algorithm.Workers</td>
+                                    <td>@algorithm.ReadableHashrate</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- pools -->
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-money"></i> Per Pool Statistics</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped tablesorter">
+                        <thead>
+                            <tr>
+                                <th>Pool <i class="fa fa-sort"></i></th>
+                                <th>Algorithm <i class="fa fa-sort"></i></th>
+                                <th>Workers <i class="fa fa-sort"></i></th>
+                                <th>Hashrate <i class="fa fa-sort"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var pool in Model.Pools)
+                            {
+                                <tr>
+                                    <td><a href="/pool/@pool.Config.Coin.Symbol">@pool.Config.Coin.Name</a></td>
+                                    <td>@pool.Config.Coin.Algorithm</td>
+                                    <td>@pool.Statistics.Miners.Count</td>
+                                    <td>@pool.Statistics.ReadableHashrate</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

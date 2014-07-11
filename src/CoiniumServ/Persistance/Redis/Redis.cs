@@ -22,6 +22,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -78,7 +79,7 @@ namespace Coinium.Persistance.Redis
             // add to hashrate
             if (share.IsValid)
             {
-                var hashrateKey = string.Format("{0}:shares:hashrate", coin);
+                var hashrateKey = string.Format("{0}:hashrate", coin);
                 var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
                 batch.SortedSetAddAsync(hashrateKey, entry, TimeHelpers.NowInUnixTime(), CommandFlags.FireAndForget);
             }
@@ -195,15 +196,76 @@ namespace Coinium.Persistance.Redis
             _database.SortedSetAddAsync(newKey, entry, round.Block.Height, CommandFlags.FireAndForget);
         }
 
-        public IList<IPersistedBlock> GetPendingBlocks()
+        public IDictionary<string, int> GetBlockCounts()
+        {
+            var blocks = new Dictionary<string, int>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks;
+
+            var batch = _database.CreateBatch(); // batch the commands.
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+            var pendingKey = string.Format("{0}:blocks:pending", coin);
+            var confirmedKey = string.Format("{0}:blocks:confirmed", coin);
+            var oprhanedKey = string.Format("{0}:blocks:orphaned", coin);
+
+            var pendingTask = batch.SortedSetLengthAsync(pendingKey);
+            var confirmedTask = batch.SortedSetLengthAsync(confirmedKey);
+            var orphanedTask = batch.SortedSetLengthAsync(oprhanedKey);
+
+            batch.Execute(); // execute the batch commands.
+
+            blocks["pending"] = (int)pendingTask.Result;
+            blocks["confirmed"] = (int)confirmedTask.Result;
+            blocks["orphaned"] = (int)orphanedTask.Result;
+
+            return blocks;
+        }
+
+        public void DeleteExpiredHashrateData(int until)
+        {
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
+
+            _database.SortedSetRemoveRangeByScore(key, double.NegativeInfinity, until, Exclude.Stop);
+        }
+
+        public IDictionary<string, double> GetHashrateData(int since)
+        {
+            var hashrates = new Dictionary<string, double>();
+
+            if (!IsEnabled || !IsConnected)
+                return hashrates;
+
+            var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
+
+            var results = _database.SortedSetRangeByScore(key, since);
+
+            foreach (var result in results)
+            {
+                var data = result.ToString().Split(':');
+                var share = double.Parse(data[0].Replace(',','.'), CultureInfo.InvariantCulture);
+                var worker = data[1];
+
+                if (!hashrates.ContainsKey(worker))
+                    hashrates.Add(worker, 0);
+
+                hashrates[worker] += share;
+            }
+
+            return hashrates;
+        }
+
+        private IDictionary<UInt32, IPersistedBlock> GetBlocks(string key)
         {
             var blocks = new Dictionary<UInt32, IPersistedBlock>();
 
-            if (!IsEnabled || !IsConnected)
-                return blocks.Values.ToList();
-
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-            var pendingKey = string.Format("{0}:blocks:pending", coin);
+            var pendingKey = string.Format("{0}:blocks:{1}", coin, key);
 
             var task = _database.SortedSetRangeByRankWithScoresAsync(pendingKey, 0, -1, Order.Ascending, CommandFlags.HighPriority);
             var results = task.Result;
@@ -215,14 +277,49 @@ namespace Coinium.Persistance.Redis
                 var transactionHash = data[1];
                 var hashes = new PersistedBlockHashes(blockHash, transactionHash);
 
-                if (!blocks.ContainsKey((UInt32) result.Score))
-                    blocks.Add((UInt32) result.Score, new PersistedBlock((UInt32) result.Score));
+                if (!blocks.ContainsKey((UInt32)result.Score))
+                    blocks.Add((UInt32)result.Score, new PersistedBlock((UInt32)result.Score));
 
-                var persistedBlock = blocks[(UInt32) result.Score];
+                var persistedBlock = blocks[(UInt32)result.Score];
                 persistedBlock.AddHashes(hashes);
             }
 
-            return blocks.Values.ToList();
+            return blocks;
+        }
+
+        public IList<IPersistedBlock> GetPendingBlocks()
+        {
+            var blocks = new List<IPersistedBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks;
+
+            return GetBlocks("pending").Values.ToList();
+        }
+
+        public IDictionary<UInt32, IPersistedBlock> GetAllBlocks()
+        {
+            var blocks = new Dictionary<uint, IPersistedBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks;
+
+            foreach (var pair in GetBlocks("pending"))
+            {
+                blocks.Add(pair.Key, pair.Value);
+            }
+
+            foreach (var pair in GetBlocks("confirmed"))
+            {
+                blocks.Add(pair.Key, pair.Value);
+            }
+
+            foreach (var pair in GetBlocks("orphaned"))
+            {
+                blocks.Add(pair.Key, pair.Value);
+            }
+
+            return blocks;
         }
 
         public Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)

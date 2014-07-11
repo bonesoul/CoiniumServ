@@ -29,12 +29,13 @@ namespace Coinium.Persistance
         public string TransactionHash { get; private set; }
         public PersistedBlockStatus Status { get; set; }
         public decimal Reward { get; set; }
+        public decimal Total { get; set; }
 
         public PersistedBlockHashes(string blockHash, string transactionHash)
         {
             BlockHash = blockHash;
             TransactionHash = transactionHash;
-            Status=PersistedBlockStatus.Pending;
+            Status = PersistedBlockStatus.Pending;
         }
 
         public override string ToString()

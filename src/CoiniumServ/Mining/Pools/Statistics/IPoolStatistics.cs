@@ -21,18 +21,20 @@
 // 
 #endregion
 
-using System.IO;
-using System.Reflection;
-using Nancy;
+using System;
+using System.Collections.Generic;
+using Coinium.Mining.Miners;
 
-namespace Coinium.Net.Server.Http.Nancy
+namespace Coinium.Mining.Pools.Statistics
 {
-    public class CustomRootPathProvider : IRootPathProvider
+    public interface IPoolStatistics
     {
-        public string GetRootPath()
-        {
-            var path = string.Format("{0}\\web\\default", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-            return path;
-        }
+        IBlockStatistics Blocks { get; }
+
+        UInt64 Hashrate { get; }
+
+        string ReadableHashrate { get; }
+
+        IList<IMiner> Miners { get; }
     }
 }

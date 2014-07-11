@@ -1,0 +1,111 @@
+﻿@using System
+@using System.Linq
+@using Coinium.Persistance
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Coinium.Mining.Pools.IPool>
+
+@{ Layout = "layout.cshtml"; }
+
+	<div class="row">
+		<div class="col-md-4">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-money"></i> @Model.Config.Coin.Name Statistics</h3>
+				</div>
+				<div class="panel-body">
+					<div class="list-group">
+					  <a href="#" class="list-group-item">
+						<span class="badge">@Model.Config.Coin.Symbol</span>
+						<i class="fa fa-calendar"></i> Symbol
+					  </a>
+					  <a href="#" class="list-group-item">
+						<span class="badge">@Model.Statistics.Miners.Count</span>
+						<i class="fa fa-calendar"></i> Workers
+					  </a>
+					  <a href="#" class="list-group-item">
+						<span class="badge">@Model.Statistics.ReadableHashrate</span>
+						<i class="fa fa-calendar"></i> Hashrate
+					  </a>
+					</div>															
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-money"></i> Block Stats</h3>
+				</div>
+				<div class="panel-body">
+					<div class="list-group">
+					  <a href="#" class="list-group-item">
+						<span class="badge">@Model.Statistics.Blocks.Total</span>
+						<i class="fa fa-refresh"></i> Total
+					  </a>
+					  <a href="#" class="list-group-item">
+						<span class="badge">@Model.Statistics.Blocks.Pending</span>
+						<i class="fa fa-refresh fa-spin"></i> Pending
+					  </a>
+					  <a href="#" class="list-group-item">
+						<span class="badge">@Model.Statistics.Blocks.Confirmed</span>
+						<i class="fa fa-check"></i> Confirmed
+					  </a>
+					  <a href="#" class="list-group-item">
+						<span class="badge">@Model.Statistics.Blocks.Orphaned</span>
+						<i class="fa fa-question"></i> Orphaned
+					  </a>
+					</div>															
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-money"></i> Latest Blocks</h3>
+				</div>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover table-striped tablesorter">
+							<thead>
+							<tr>
+								<th>Block <i class="fa fa-sort"></i></th>
+								<th>Status <i class="fa fa-sort"></i></th>
+								<th>Amount <i class="fa fa-sort"></i></th>
+								<th>Hash <i class="fa fa-sort"></i></th>
+								<th>TxHash <i class="fa fa-sort"></i></th>
+							</tr>
+							</thead>
+							<tbody>						
+								@foreach (var block in Model.Statistics.Blocks.Latest)
+								{
+								    <tr>										
+								        <td><a href="https://chain.so/block/LTCTEST/@block.Height" target="_blank">@block.Height</a></td>
+								        <td>
+								            @switch (block.Status)
+								            {
+								                case PersistedBlockStatus.Pending:
+                                                    <span class="label label-warning">@block.Status</span>
+								                    break;
+								                case PersistedBlockStatus.Orphan:
+                                                    <span class="label label-danger">@block.Status</span>
+								                    break;
+								                case PersistedBlockStatus.Confirmed:
+                                                    <span class="label label-primary">@block.Status</span>
+								                    break;
+								            }
+								        </td>
+								        <td>@block.OutstandingHashes.Total</td>
+								        <td><a href="https://chain.so/block/LTCTEST/@block.OutstandingHashes.BlockHash" target="_blank">@block.OutstandingHashes.BlockHash.Substring(0,10)..</a></td>
+								        <td><a href="https://chain.so/tx/LTCTEST/@block.OutstandingHashes.TransactionHash" target="_blank">@block.OutstandingHashes.TransactionHash.Substring(0, 10)..</a></td>
+								    </tr>
+								}
+							</tbody>
+						</table>
+					</div>																			
+				</div>
+			</div>
+		</div>
+	</div>
+
+

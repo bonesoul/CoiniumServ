@@ -20,45 +20,42 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Persistance.Redis;
+
+using Coinium.Crypto.Algorithms;
+using Coinium.Mining.Miners;
+using Coinium.Persistance;
 using Coinium.Repository.Context;
-using Coinium.Server.Web;
+using Nancy.TinyIoc;
 
-namespace Coinium.Utils.Configuration
+namespace Coinium.Mining.Pools.Statistics
 {
-    public class GlobalConfigFactory : IGlobalConfigFactory
+    public class PoolStatisticsFactory:IPoolStatisticsFactory
     {
-        private const string FileName = "config/config.json";
-
-        private dynamic _data;
-        private IRedisConfig _redisConfig;
-        private IWebServerConfig _webServerConfig;
+        /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
 
         /// <summary>
-        /// The _application context
+        /// Initializes a new instance of the <see cref="IPoolStatistics" /> class.
         /// </summary>
-        private IApplicationContext _applicationContext;
-
-        public GlobalConfigFactory(IApplicationContext applicationContext)
+        /// <param name="applicationContext">The application context.</param>
+        public PoolStatisticsFactory(IApplicationContext applicationContext)
         {
-            _applicationContext = applicationContext;            
+            _applicationContext = applicationContext;
         }
 
-        public dynamic Get()
+        public IPoolStatistics Get(IBlockStatistics blockStatistics, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IStorage storage)
         {
-            // return the global config, if we haven't read it yet, do so.
-            return _data ?? (_data = JsonConfigReader.Read(FileName));
-        }
+            var @params = new NamedParameterOverloads
+            {
+                {"blockStatistics", blockStatistics},
+                {"minerManager", minerManager},
+                {"hashAlgorithm", hashAlgorithm},
+                {"storage", storage},
+            };
 
-        public IRedisConfig GetRedisConfig()
-        {
-            // return the redis config, if we haven't read it yet, do so.
-            return _redisConfig ?? (_redisConfig = new RedisConfig(Get().storage.redis));
-        }
-
-        public IWebServerConfig GetWebServerConfig()
-        {
-            return _webServerConfig ?? (_webServerConfig = new WebServerConfig(Get().web));
+            return _applicationContext.Container.Resolve<IPoolStatistics>(@params);
         }
     }
 }

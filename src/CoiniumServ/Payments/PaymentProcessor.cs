@@ -232,12 +232,26 @@ namespace Coinium.Payments
             }
         }
 
+        private void CheckBlocks(IEnumerable<IPersistedBlock> blocks)
+        {
+            foreach (var block in blocks)
+            {
+                foreach (var hashes in block.Hashes)
+                {
+                    CheckBlockHashes(hashes);
+                }
+            }
+        }
+
         private void CheckBlockHashes(IPersistedBlockHashes hashes)
         {
             try
             {
                 // get the transaction.
                 var transaction = _daemonClient.GetTransaction(hashes.TransactionHash);
+
+                // total amount of coins contained in the block.
+                hashes.Total = transaction.Details.Sum(output => (decimal)output.Amount);
 
                 // get the output transaction that targets pools central wallet.
                 var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == PoolAddress);
@@ -274,17 +288,6 @@ namespace Coinium.Payments
                 hashes.Status = PersistedBlockStatus.Kicked; // kick the hash.
                 hashes.Reward = 0;
             }            
-        }
-
-        private void CheckBlocks(IEnumerable<IPersistedBlock> blocks)
-        {
-            foreach (var block in blocks)
-            {
-                foreach (var hashes in block.Hashes)
-                {
-                    CheckBlockHashes(hashes);
-                }
-            }
         }
 
         private IList<IPaymentRound> GetPaymentRounds(IEnumerable<IPersistedBlock> blocks)

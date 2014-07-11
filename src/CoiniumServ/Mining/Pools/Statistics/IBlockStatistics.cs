@@ -21,25 +21,19 @@
 // 
 #endregion
 
-using System;
+using System.Collections.Generic;
+using Coinium.Persistance;
 
-namespace Coinium.Coin.Helpers
+namespace Coinium.Mining.Pools.Statistics
 {
-    public static class Hashrate
+    public interface IBlockStatistics
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
-        {
-            var index = -1;
-            double rate = hashrate;
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
+        int Pending { get; }
+        int Confirmed { get; }
+        int Orphaned { get; }
 
-            do
-            {
-                rate = rate/1024;
-                index++;
-            } while (rate > 1024);
+        int Total { get; }
 
-            return string.Format("{0:0.00} {1}", rate, units[index]);
-        }
+        IEnumerable<IPersistedBlock> Latest { get; }
     }
 }
