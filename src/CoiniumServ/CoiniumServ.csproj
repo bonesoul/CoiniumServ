@@ -1084,7 +1084,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <CustomCommands>
+      <!-- Custom commands for Xamarin -->
+      <CustomCommands>
+        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.17.1/BuildProviders/Nancy.ViewEngines.Razor.BuildProviders.dll&quot; &quot;$(ProjectDir)/bin/&quot;" />
+        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.17.1/lib/Net40/Nancy.ViewEngines.Razor.dll&quot; &quot;$(ProjectDir)/bin/&quot;" />
+      </CustomCommands>
+    </CustomCommands>
+  </PropertyGroup>  
+  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
     <PostBuildEvent>
 if $(ConfigurationName) == Debug (
 xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.0\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
