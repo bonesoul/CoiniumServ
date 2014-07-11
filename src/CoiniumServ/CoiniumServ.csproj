@@ -854,7 +854,7 @@
     <None Include="web\default\layout.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\notfound.cshtml">
+    <None Include="web\default\error.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\pool.cshtml">
@@ -957,7 +957,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="web\default\errors\" />
     <Folder Include="web\default\images\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -31,9 +31,9 @@ namespace Coinium.Net.Server.Http.Web
         public ErrorConfiguration()
         {
             // Map error status codes to custom view names
-            ErrorViews[HttpStatusCode.NotFound] = "notfound";
+            ErrorViews[HttpStatusCode.NotFound] = "error";
             ErrorViews[HttpStatusCode.InternalServerError] = "error";
-            ErrorViews[HttpStatusCode.Forbidden] = "forbidden";
+            ErrorViews[HttpStatusCode.Forbidden] = "error";
         }
     }
 }

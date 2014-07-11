@@ -35,7 +35,7 @@ namespace Coinium.Server.Web.Modules
                 var pool = poolManager.GetBySymbol(_.slug);
 
                 if (pool == null)
-                    return "Requested pool not found!";
+                    return View["error"];
 
                 return View["pool", pool];
             };
