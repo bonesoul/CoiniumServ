@@ -28,7 +28,7 @@ namespace Coinium.Utils.Configuration
 {
     public class GlobalConfigFactory : IGlobalConfigFactory
     {
-        private const string FileName = "config.json";
+        private const string FileName = "config/config.json";
 
         private dynamic _data;
         private IRedisConfig _redisConfig;

@@ -65,10 +65,11 @@ namespace Coinium
 
             // check if we have a valid config file.
             var globalConfig = kernel.Resolve<IGlobalConfigFactory>().Get();
+
             if (globalConfig == null)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Couldn't read config.json! Make sure you rename config-sample.json as config.json.");
+                Console.WriteLine("Couldn't read config/config.json! Make sure you rename config/config-sample.json as config/config.json.");
                 Console.ResetColor();
                 return;
             }
