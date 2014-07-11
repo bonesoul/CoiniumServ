@@ -11,19 +11,19 @@
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive">
-					<table class="table table-bordered table-hover table-striped tablesorter">
-						<thead>
-						<tr>
-							<th>Algorithm <i class="fa fa-sort"></i></th>
-							<th>Workers <i class="fa fa-sort"></i></th>
-							<th>Hashrate <i class="fa fa-sort"></i></th>
-						</tr>
-						</thead>
-						<tbody>						
-						</tbody>
-					</table>
-                </div>
-              </div>
+						<table class="table table-bordered table-hover table-striped tablesorter">
+							<thead>
+							<tr>
+								<th>Algorithm <i class="fa fa-sort"></i></th>
+								<th>Workers <i class="fa fa-sort"></i></th>
+								<th>Hashrate <i class="fa fa-sort"></i></th>
+							</tr>
+							</thead>
+							<tbody>						
+							</tbody>
+						</table>
+					</div>
+				</div>
             </div>
 		</div>
 
@@ -34,29 +34,29 @@
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive">
-					<table class="table table-bordered table-hover table-striped tablesorter">
-						<thead>
-						<tr>
-							<th>Pool <i class="fa fa-sort"></i></th>
-							<th>Algorithm <i class="fa fa-sort"></i></th>
-							<th>Workers <i class="fa fa-sort"></i></th>
-							<th>Hashrate <i class="fa fa-sort"></i></th>
-						</tr>
-						</thead>
-						<tbody>						
-							@Each.Model
-								<tr>
-									<td>@Current.Config.Coin.Name</td>
-									<td>@Current.Config.Coin.Algorithm</td>
-									<td>@Current.Miners.Count</td>
-								</tr>                    
-							@EndEach  
-						</tbody>
-					</table>
-                </div>
-              </div>
-            </div>
+						<table class="table table-bordered table-hover table-striped tablesorter">
+							<thead>
+							<tr>
+								<th>Pool <i class="fa fa-sort"></i></th>
+								<th>Algorithm <i class="fa fa-sort"></i></th>
+								<th>Workers <i class="fa fa-sort"></i></th>
+								<th>Hashrate <i class="fa fa-sort"></i></th>
+							</tr>
+							</thead>
+							<tbody>						
+								@Each.Model
+									<tr>
+										<td><a href="/pool/@Current.Config.Coin.Symbol">@Current.Config.Coin.Name</a></td>
+										<td>@Current.Config.Coin.Algorithm</td>
+										<td>@Current.Statistics.Miners.Count</td>
+										<td>@Current.Statistics.ReadableHashrate</td>
+									</tr>                    
+								@EndEach  
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
 
 @EndSection

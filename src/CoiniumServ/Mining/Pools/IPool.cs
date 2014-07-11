@@ -21,9 +21,8 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
+using Coinium.Mining.Pools.Statistics;
 
 namespace Coinium.Mining.Pools
 {
@@ -31,7 +30,7 @@ namespace Coinium.Mining.Pools
     {
         IPoolConfig Config { get; }
 
-        IList<IMiner> Miners { get; }
+        IPoolStatistics Statistics { get; }
 
         /// <summary>
         /// Initializes the specified bind ip.

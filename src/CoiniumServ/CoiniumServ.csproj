@@ -103,7 +103,15 @@
     <Compile Include="Mining\Jobs\Tracker\JobTrackerFactory.cs" />
     <Compile Include="Mining\Miners\MinerEventArgs.cs" />
     <Compile Include="Mining\Pools\IPoolManagerFactory.cs" />
+    <Compile Include="Mining\Pools\Statistics\BlockStatisticsFactory.cs" />
+    <Compile Include="Mining\Pools\Statistics\IBlockStatisticsFactory.cs" />
+    <Compile Include="Mining\Pools\Statistics\IPoolStatistics.cs" />
+    <Compile Include="Mining\Pools\Statistics\IPoolStatisticsFactory.cs" />
     <Compile Include="Mining\Pools\PoolManagerFactory.cs" />
+    <Compile Include="Mining\Pools\Statistics\PoolStatistics.cs" />
+    <Compile Include="Mining\Pools\Statistics\PoolStatisticsFactory.cs" />
+    <Compile Include="Mining\Pools\Statistics\BlockStatistics.cs" />
+    <Compile Include="Mining\Pools\Statistics\IBlockStatistics.cs" />
     <Compile Include="Net\Server\Http\Nancy\NancyBootstrapper.cs" />
     <Compile Include="Net\Server\Http\Nancy\RootPathProvider.cs" />
     <Compile Include="Payments\IPaymentRound.cs" />
@@ -126,6 +134,7 @@
     <Compile Include="Server\Web\IWebServer.cs" />
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
     <Compile Include="Server\Web\IWebServerConfig.cs" />
+    <Compile Include="Server\Web\Modules\Pool.cs" />
     <Compile Include="Server\Web\WebServer.cs" />
     <Compile Include="Server\Web\WebServerConfig.cs" />
     <Compile Include="Utils\Configuration\IGlobalConfigFactory.cs" />
@@ -954,6 +963,9 @@
     <None Include="web\default\layout.sshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="web\default\pool.sshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\deps\gibbed.io\Gibbed.IO.csproj">
@@ -982,6 +994,9 @@
     <Content Include="web\default\charts.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="web\default\favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="web\default\index.html" />
     <None Include="web\default\css\bootstrap.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

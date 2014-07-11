@@ -21,25 +21,30 @@
 // 
 #endregion
 
-using System;
+using System.Collections.Generic;
+using Coinium.Mining.Pools;
+using Nancy;
 
-namespace Coinium.Coin.Helpers
+namespace Coinium.Server.Web.Modules
 {
-    public static class Hashrate
+    public class PoolModule : NancyModule
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
+        public class Model
         {
-            var index = -1;
-            double rate = hashrate;
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
+            public IList<IPool> Pools { get; set; }
+        }
 
-            do
+        public PoolModule(IPoolManager poolManager)
+        {
+            Get["/pool/{slug}"] = _ =>
             {
-                rate = rate/1024;
-                index++;
-            } while (rate > 1024);
+                var pool = poolManager.GetBySymbol(_.slug);
 
-            return string.Format("{0:0.00} {1}", rate, units[index]);
+                if (pool == null)
+                    return "Requested pool not found!";
+
+                return View["pool", pool];
+            };
         }
     }
 }

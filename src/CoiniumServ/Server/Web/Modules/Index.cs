@@ -36,15 +36,7 @@ namespace Coinium.Server.Web.Modules
 
         public IndexModule(IPoolManager poolManager)
         {      
-            Get["/"] = parameters =>
-            {
-                return View["index", poolManager.GetPools()];
-            };
-
-            Get["/api/"] = parameters =>
-            {
-                return "test";
-            };
+            Get["/"] = _ => View["index", poolManager.GetPools()];
         }
     }
 }

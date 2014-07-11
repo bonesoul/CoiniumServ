@@ -52,11 +52,8 @@ namespace Coinium.Mining.Jobs.Manager
 
         public IExtraNonce ExtraNonce { get { return _extraNonce; } }
 
-        /// <summary>
-        /// timer for creating new jobs.
-        /// </summary>
-        private Timer _timer;
 
+        private Timer _timer;
         private const int TimerExpiration = 10;
 
         public JobManager(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)

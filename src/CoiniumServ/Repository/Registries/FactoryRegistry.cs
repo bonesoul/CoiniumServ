@@ -22,12 +22,12 @@
 #endregion
 using Coinium.Coin.Config;
 using Coinium.Crypto.Algorithms;
-using Coinium.Mining.Jobs;
 using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Pools.Config;
+using Coinium.Mining.Pools.Statistics;
 using Coinium.Mining.Shares;
 using Coinium.Payments;
 using Coinium.Persistance;
@@ -63,6 +63,8 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IGlobalConfigFactory, GlobalConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IStorageFactory, StorageFactory>().AsSingleton();
             _applicationContext.Container.Register<IPaymentProcessorFactory, PaymentProcessorFactory>().AsSingleton();
+            _applicationContext.Container.Register<IPoolStatisticsFactory, PoolStatisticsFactory>().AsSingleton();
+            _applicationContext.Container.Register<IBlockStatisticsFactory, BlockStatisticsFactory>().AsSingleton();
         }
     }
 }

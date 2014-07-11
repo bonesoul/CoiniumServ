@@ -20,7 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Coinium.Mining.Pools.Config;
 using Coinium.Utils.Configuration;
 using Coinium.Utils.Helpers.IO;
@@ -73,6 +76,11 @@ namespace Coinium.Mining.Pools
             {
                 AddPool(config);
             }
+        }
+
+        public IPool GetBySymbol(string symbol)
+        {
+            return _pools.FirstOrDefault(pool => pool.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
         }
 
         public IPool AddPool(IPoolConfig poolConfig)

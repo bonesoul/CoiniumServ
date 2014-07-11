@@ -29,5 +29,7 @@ namespace Coinium.Persistance
         string TransactionHash { get; }
         PersistedBlockStatus Status { get; set; }
         decimal Reward { get; set; }
+
+        decimal Total { get; set; }
     }
 }

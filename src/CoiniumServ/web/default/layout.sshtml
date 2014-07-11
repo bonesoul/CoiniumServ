@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
 
-    <title>Dashboard - SB Admin</title>
+    <title>CoiniumServ</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
 
     <!-- Add custom CSS here -->
-    <link href="css/sb-admin.css" rel="stylesheet">
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
     <!-- Page Specific CSS -->
     <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
   </head>
@@ -125,26 +126,36 @@
 
       </div><!-- /#page-wrapper -->
 
-      <div id="footer" class="hidden-print">
-        <div style="text-align: center;" >
-            Pool-name powered by <a href="https://github.com/CoiniumServ/CoiniumServ" target="_blank">CoiniumServ</a> |
-            <a href="/api/">API</a> |
-            <a href="/donate/">Donate</a>
-        </div>
-      </div>
+		<div class="row">
+			<div id="footer" class="hidden-print">
+				<div style="text-align: center;">
+					Pool-name is powered by open source <a href="https://github.com/CoiniumServ/CoiniumServ" target="_blank">CoiniumServ</a> project created by <a href="http://www.coinium.org" target="_blank">coinium.org</a>
+				</div>
+				<div style="text-align: center;">
+					<i class="fa fa-heart"></i>&nbsp; Support by <a href='/donate/'>donating</a> <i class="fa fa-btc"></i>: 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D
+				</div>
+				<div style="text-align: center;">
+					<i class="fa fa-comment"></i>: <a target="_blank" href="http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde">#coinium-serv</a>					
+					| <a href="http://forum.coinium.org/forum/19-support/" target="_blank">Forums</a>
+					| <a href="/api/">API</a>
+					| <a href="/donate/">Donate</a>
+					<iframe src="http://ghbtns.com/github-btn.html?user=CoiniumServ&amp;repo=CoiniumServ&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="140" height="20"></iframe>
+				</div>
+			</div>
+		</div>
 
     </div><!-- /#wrapper -->
 
     <!-- JavaScript -->
-    <script src="js/jquery-1.10.2.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="/js/jquery-1.10.2.js"></script>
+    <script src="/js/bootstrap.js"></script>
 
     <!-- Page Specific Plugins -->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
-    <script src="js/morris/chart-data-morris.js"></script>
-    <script src="js/tablesorter/jquery.tablesorter.js"></script>
-    <script src="js/tablesorter/tables.js"></script>
+    <script src="/js/morris/chart-data-morris.js"></script>
+    <script src="/js/tablesorter/jquery.tablesorter.js"></script>
+    <script src="/js/tablesorter/tables.js"></script>
 
   </body>
 </html>
