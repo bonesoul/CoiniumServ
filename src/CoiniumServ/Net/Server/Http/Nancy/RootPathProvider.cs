@@ -31,7 +31,7 @@ namespace Coinium.Net.Server.Http.Nancy
     {
         public string GetRootPath()
         {
-            var path = string.Format("{0}\\web\\default", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            var path = string.Format("{0}/web/default", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
             return path;
         }
     }
