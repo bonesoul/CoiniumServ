@@ -54,6 +54,10 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
+            _applicationContext.Container.Register<IStatistics, Statistics>().AsSingleton();
+            _applicationContext.Container.Register<IPoolStats, PoolStats>().AsSingleton();            
+            _applicationContext.Container.Register<IPerPoolStats, PerPoolStats>().AsMultiInstance();
+            _applicationContext.Container.Register<IBlockStats, BlockStats>().AsMultiInstance();
         }
     }
 }

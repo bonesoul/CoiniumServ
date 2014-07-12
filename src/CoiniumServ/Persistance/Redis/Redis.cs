@@ -26,9 +26,11 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 using Coinium.Payments;
+using Coinium.Persistance.Blocks;
 using Coinium.Utils.Configuration;
 using Coinium.Utils.Extensions;
 using Coinium.Utils.Helpers.Time;
@@ -150,6 +152,9 @@ namespace Coinium.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return;
 
+            if (round.Block.Status == BlockStatus.Confirmed || round.Block.Status == BlockStatus.Pending)
+                return;
+
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var currentRound = string.Format("{0}:shares:round:current", coin); // current round key.
             var roundShares = string.Format("{0}:shares:round:{1}", coin, round.Block.Height); // rounds shares key.
@@ -169,6 +174,9 @@ namespace Coinium.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return;
 
+            if (round.Block.Status == BlockStatus.Pending)
+                return;
+
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
 
             // re-flag the rounds.
@@ -177,21 +185,19 @@ namespace Coinium.Persistance.Redis
 
             switch (round.Block.Status)
             {
-                case PersistedBlockStatus.Kicked:
+                case BlockStatus.Kicked:
                     newKey = string.Format("{0}:blocks:kicked", coin);
                     break;
-                case PersistedBlockStatus.Orphan:
+                case BlockStatus.Orphaned:
                     newKey = string.Format("{0}:blocks:orphaned", coin);
                     break;
-                case PersistedBlockStatus.Confirmed:
+                case BlockStatus.Confirmed:
                     newKey = string.Format("{0}:blocks:confirmed", coin);
                     break;
             }
-
-            if (string.IsNullOrEmpty(newKey)) // if the block is still pending
-                return; // just skip it.
-
-            var entry = string.Format("{0}:{1}", round.Block.OutstandingHashes.BlockHash, round.Block.OutstandingHashes.TransactionHash);                    
+            
+            var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);   
+                 
             _database.SortedSetRemoveRangeByScoreAsync(pendingKey, round.Block.Height, round.Block.Height, Exclude.None, CommandFlags.FireAndForget);
             _database.SortedSetAddAsync(newKey, entry, round.Block.Height, CommandFlags.FireAndForget);
         }
@@ -260,12 +266,15 @@ namespace Coinium.Persistance.Redis
             return hashrates;
         }
 
-        private IDictionary<UInt32, IPersistedBlock> GetBlocks(string key)
+        public IList<IPendingBlock> GetPendingBlocks()
         {
-            var blocks = new Dictionary<UInt32, IPersistedBlock>();
+            var blocks = new Dictionary<UInt32, IPendingBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks.Values.ToList();
 
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-            var pendingKey = string.Format("{0}:blocks:{1}", coin, key);
+            var pendingKey = string.Format("{0}:blocks:pending", coin);
 
             var task = _database.SortedSetRangeByRankWithScoresAsync(pendingKey, 0, -1, Order.Ascending, CommandFlags.HighPriority);
             var results = task.Result;
@@ -275,48 +284,96 @@ namespace Coinium.Persistance.Redis
                 var data = result.Element.ToString().Split(':');
                 var blockHash = data[0];
                 var transactionHash = data[1];
-                var hashes = new PersistedBlockHashes(blockHash, transactionHash);
+                var hashCandidate = new HashCandidate(blockHash, transactionHash);
 
                 if (!blocks.ContainsKey((UInt32)result.Score))
-                    blocks.Add((UInt32)result.Score, new PersistedBlock((UInt32)result.Score));
+                    blocks.Add((UInt32)result.Score, new PendingBlock((UInt32)result.Score));
 
                 var persistedBlock = blocks[(UInt32)result.Score];
-                persistedBlock.AddHashes(hashes);
+                persistedBlock.AddHashCandidate(hashCandidate);
             }
 
-            return blocks;
+            return blocks.Values.ToList();
         }
 
-        public IList<IPersistedBlock> GetPendingBlocks()
+        private IEnumerable<IFinalizedBlock> GetFinalizedBlocks(BlockStatus status)
         {
-            var blocks = new List<IPersistedBlock>();
+            var blocks = new Dictionary<UInt32, IFinalizedBlock>();
 
             if (!IsEnabled || !IsConnected)
-                return blocks;
+                return blocks.Values.ToList();
 
-            return GetBlocks("pending").Values.ToList();
+            if (status == BlockStatus.Pending)
+                throw new Exception("Pending is not a valid finalized block status");
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            string key = string.Empty;
+
+            switch (status)
+            {
+                case BlockStatus.Kicked:
+                    key = string.Format("{0}:blocks:kicked", coin);
+                    break;
+                case BlockStatus.Orphaned:
+                    key = string.Format("{0}:blocks:orphaned", coin);
+                    break;
+                case BlockStatus.Confirmed:
+                    key = string.Format("{0}:blocks:confirmed", coin);
+                    break;
+            }
+
+            var task = _database.SortedSetRangeByRankWithScoresAsync(key, 0, -1, Order.Ascending, CommandFlags.HighPriority);
+            var results = task.Result;
+
+            foreach (var result in results)
+            {
+                var data = result.Element.ToString().Split(':');
+                var blockHash = data[0];
+                var transactionHash = data[1];
+
+                switch (status)
+                {
+                    case BlockStatus.Kicked:
+                        blocks.Add((UInt32) result.Score, new KickedBlock((UInt32) result.Score, blockHash, transactionHash, 0, 0));
+                        break;
+                    case BlockStatus.Orphaned:
+                        blocks.Add((UInt32)result.Score, new OrphanedBlock((UInt32)result.Score, blockHash, transactionHash, 0, 0));
+                        break;
+                    case BlockStatus.Confirmed:
+                        blocks.Add((UInt32)result.Score, new ConfirmedBlock((UInt32)result.Score, blockHash, transactionHash, 0, 0));
+                        break;
+                }
+            }
+
+            return blocks.Values.ToList();
         }
 
         public IDictionary<UInt32, IPersistedBlock> GetAllBlocks()
         {
+
             var blocks = new Dictionary<uint, IPersistedBlock>();
 
             if (!IsEnabled || !IsConnected)
                 return blocks;
 
-            foreach (var pair in GetBlocks("pending"))
+            foreach (var block in GetFinalizedBlocks(BlockStatus.Confirmed))
             {
-                blocks.Add(pair.Key, pair.Value);
+                blocks.Add(block.Height, block);
             }
 
-            foreach (var pair in GetBlocks("confirmed"))
+            foreach (var block in GetFinalizedBlocks(BlockStatus.Orphaned))
             {
-                blocks.Add(pair.Key, pair.Value);
+                blocks.Add(block.Height, block);
             }
 
-            foreach (var pair in GetBlocks("orphaned"))
+            foreach (var block in GetFinalizedBlocks(BlockStatus.Kicked))
             {
-                blocks.Add(pair.Key, pair.Value);
+                blocks.Add(block.Height, block);
+            }
+
+            foreach (var block in GetPendingBlocks())
+            {
+                blocks.Add(block.Height, block);
             }
 
             return blocks;

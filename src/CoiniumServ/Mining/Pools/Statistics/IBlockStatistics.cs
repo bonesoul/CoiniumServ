@@ -23,6 +23,7 @@
 
 using System.Collections.Generic;
 using Coinium.Persistance;
+using Coinium.Persistance.Blocks;
 
 namespace Coinium.Mining.Pools.Statistics
 {

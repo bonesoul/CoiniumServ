@@ -35,6 +35,7 @@ namespace Coinium.Mining.Pools
     public class PoolManager : IPoolManager
     {
         public IGlobalStatistics Statistics { get; private set; }
+        public IStatistics NewStatistics { get; private set; }
 
         private readonly List<IPool> _pools = new List<IPool>();
 
@@ -44,18 +45,22 @@ namespace Coinium.Mining.Pools
 
         private readonly IGlobalStatisticsFactory _algorithmStatisticsFactory;
 
-        public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory, IGlobalStatisticsFactory algorithmStatisticsFactory)
+        private readonly IStatisticsObjectFactory _objectFactory;
+
+        public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory, IStatisticsObjectFactory objectFactory, IGlobalStatisticsFactory algorithmStatisticsFactory)
         {
             _poolFactory = poolFactory;
             _poolConfigFactory = poolConfigFactory;
+            _objectFactory = objectFactory;
             _algorithmStatisticsFactory = algorithmStatisticsFactory;
         }
 
         public void Run()
         {
-            Statistics = _algorithmStatisticsFactory.Get(this);
+            LoadConfigs();
 
-            LoadConfigs();            
+            Statistics = _algorithmStatisticsFactory.Get(this);
+            NewStatistics = _objectFactory.GetStatistics();
         }
 
         public void LoadConfigs()

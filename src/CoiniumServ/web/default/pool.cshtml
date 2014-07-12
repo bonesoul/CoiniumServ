@@ -1,7 +1,9 @@
 ﻿@using System
 @using System.Linq
 @using Coinium.Coin.Helpers
+@using Coinium.Daemon.Responses
 @using Coinium.Persistance
+@using Coinium.Persistance.Blocks
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Coinium.Mining.Pools.IPool>
 
 @{ Layout = "layout.cshtml"; }
@@ -101,20 +103,21 @@
                                     <td>
                                         @switch (block.Status)
                                         {
-                                            case PersistedBlockStatus.Pending:
+                                            case BlockStatus.Pending:
                                                 <span class="label label-warning">@block.Status</span>
                                                 break;
-                                            case PersistedBlockStatus.Orphan:
+                                            case BlockStatus.Orphaned:
+                                            case BlockStatus.Kicked:
                                             <span class="label label-danger">@block.Status</span>
                                                 break;
-                                            case PersistedBlockStatus.Confirmed:
+                                            case BlockStatus.Confirmed:
                                             <span class="label label-primary">@block.Status</span>
                                                 break;
                                         }
                                     </td>
-                                    <td>@block.OutstandingHashes.Total</td>
-                                    <td><a href="https://chain.so/block/LTCTEST/@block.OutstandingHashes.BlockHash" target="_blank">@block.OutstandingHashes.BlockHash.Substring(0, 10)..</a></td>
-                                    <td><a href="https://chain.so/tx/LTCTEST/@block.OutstandingHashes.TransactionHash" target="_blank">@block.OutstandingHashes.TransactionHash.Substring(0, 10)..</a></td>
+                                    <td>@block.Amount</td>
+                                    <td><a href="https://chain.so/block/LTCTEST/@block.BlockHash" target="_blank">@block.BlockHash.Substring(0, 10)..</a></td>
+                                    <td><a href="https://chain.so/tx/LTCTEST/@block.TransactionHash" target="_blank">@block.TransactionHash.Substring(0, 10)..</a></td>
                                 </tr>
                             }
                         </tbody>

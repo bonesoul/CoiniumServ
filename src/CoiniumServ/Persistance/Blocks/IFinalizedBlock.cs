@@ -21,26 +21,9 @@
 // 
 #endregion
 
-using System;
-using System.Collections.Generic;
-
-namespace Coinium.Persistance
+namespace Coinium.Persistance.Blocks
 {
-    public interface IPersistedBlock
+    public interface IFinalizedBlock:IPersistedBlock
     {
-        UInt32 Height { get; }
-        List<IPersistedBlockHashes> Hashes { get; }
-        PersistedBlockStatus Status { get; }
-        IPersistedBlockHashes OutstandingHashes { get; }
-
-        void AddHashes(IPersistedBlockHashes hash);
-    }
-
-        public enum PersistedBlockStatus
-    {
-        Pending,
-        Kicked,
-        Orphan,
-        Confirmed
     }
 }

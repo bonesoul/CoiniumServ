@@ -29,6 +29,7 @@ using System.Threading;
 using Coinium.Daemon;
 using Coinium.Daemon.Exceptions;
 using Coinium.Persistance;
+using Coinium.Persistance.Blocks;
 using Serilog;
 
 namespace Coinium.Payments
@@ -94,16 +95,16 @@ namespace Coinium.Payments
             {
                 _stopWatch.Start();
 
-                var blocks = _storage.GetPendingBlocks(); // get all the pending blocks.
-                CheckBlocks(blocks);
-                var rounds = GetPaymentRounds(blocks); // get the list of rounds that should be paid.
+
+                var pendingBlocks = _storage.GetPendingBlocks(); // get all the pending blocks.
+                var finalizedBlocks = GetFinalizedBlocks(pendingBlocks);
+
+                var rounds = GetPaymentRounds(finalizedBlocks); // get the list of rounds that should be paid.
                 AssignSharesToRounds(rounds); // process the rounds, calculate shares and payouts per rounds.
                 var previousBalances = GetPreviousBalances(); // get previous balances of workers.
                 var workerBalances = CalculateRewards(rounds, previousBalances); // calculate the payments.               
                 ExecutePayments(workerBalances); // execute the payments.
-
                 ProcessRemainingBalances(workerBalances); // process the remaining balances.
-
                 ProcessRounds(rounds); // process the rounds.
 
                 Log.ForContext<PaymentProcessor>().Information("Payments processed - took {0:0.000} seconds.", (float)_stopWatch.ElapsedMilliseconds/1000);
@@ -136,7 +137,7 @@ namespace Coinium.Payments
             // add rewards by rounds
             foreach (var round in rounds) 
             {
-                if (round.Block.Status != PersistedBlockStatus.Confirmed) // only pay to confirmed rounds.
+                if (round.Block.Status != BlockStatus.Confirmed) // only pay to confirmed rounds.
                     continue;
 
                 foreach (var pair in round.Payouts) // loop through all payouts for the rounds
@@ -199,17 +200,17 @@ namespace Coinium.Payments
         {
             foreach (var round in rounds)
             {
-                if (round.Block.OutstandingHashes.Status == PersistedBlockStatus.Pending) // if the block is still pending,
+                if (round.Block.Status == BlockStatus.Pending) // if the block is still pending,
                     continue; // just skip it.
 
-                switch (round.Block.OutstandingHashes.Status)
+                switch (round.Block.Status)
                 {
-                    case PersistedBlockStatus.Confirmed:
+                    case BlockStatus.Confirmed:
                         _storage.DeleteShares(round); // delete the associated shares.
                         _storage.MoveBlock(round); // move pending block to appropriate place.  
                         break;
-                    case PersistedBlockStatus.Kicked:
-                    case PersistedBlockStatus.Orphan:
+                    case BlockStatus.Kicked:
+                    case BlockStatus.Orphaned:
                         _storage.MoveSharesToCurrentRound(round); // move shares to current round so the work of miners aren't gone to void.
                         _storage.MoveBlock(round); // move pending block to appropriate place.                      
                         break;
@@ -232,26 +233,40 @@ namespace Coinium.Payments
             }
         }
 
-        private void CheckBlocks(IEnumerable<IPersistedBlock> blocks)
+        private IList<IFinalizedBlock> GetFinalizedBlocks(IEnumerable<IPendingBlock> blocks)
         {
+            var finalizedBlocks = new List<IFinalizedBlock>();
+
             foreach (var block in blocks)
             {
-                foreach (var hashes in block.Hashes)
+                foreach (var candidate in block.Candidates)
                 {
-                    CheckBlockHashes(hashes);
+                    CheckCandidates(candidate);
                 }
+
+                block.Check();
+
+                if(block.IsFinalized)
+                    finalizedBlocks.Add(block.Finalized);
             }
+
+            return finalizedBlocks;
         }
 
-        private void CheckBlockHashes(IPersistedBlockHashes hashes)
+        private IEnumerable<IConfirmedBlock> GetConfirmedBlocks(IEnumerable<IFinalizedBlock> blocks)
+        {
+            return blocks.OfType<IConfirmedBlock>().ToList();
+        }
+
+        private void CheckCandidates(IHashCandidate candidate)
         {
             try
             {
                 // get the transaction.
-                var transaction = _daemonClient.GetTransaction(hashes.TransactionHash);
+                var transaction = _daemonClient.GetTransaction(candidate.TransactionHash);
 
                 // total amount of coins contained in the block.
-                hashes.Total = transaction.Details.Sum(output => (decimal)output.Amount);
+                candidate.Amount = transaction.Details.Sum(output => (decimal)output.Amount);
 
                 // get the output transaction that targets pools central wallet.
                 var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == PoolAddress);
@@ -259,38 +274,38 @@ namespace Coinium.Payments
                 // make sure output for the pool central wallet exists
                 if (poolOutput == null)
                 {
-                    hashes.Status = PersistedBlockStatus.Kicked; // kick the hash.
-                    hashes.Reward = 0;
+                    candidate.Status = BlockStatus.Kicked; // kick the hash.
+                    candidate.Reward = 0;
                 }
                 else
                 {
                     switch (poolOutput.Category)
                     {
                         case "immature":
-                            hashes.Status = PersistedBlockStatus.Pending;
+                            candidate.Status = BlockStatus.Pending;
                             break;
                         case "orphan":
-                            hashes.Status = PersistedBlockStatus.Orphan;
+                            candidate.Status = BlockStatus.Orphaned;
                             break;
                         case "generate":
-                            hashes.Status = PersistedBlockStatus.Confirmed;
+                            candidate.Status = BlockStatus.Confirmed;
                             break;
                         default:
-                            hashes.Status = PersistedBlockStatus.Pending;
+                            candidate.Status = BlockStatus.Pending;
                             break;
                     }
 
-                    hashes.Reward = (decimal) poolOutput.Amount;
+                    candidate.Reward = (decimal) poolOutput.Amount;
                 }
             }
             catch (RpcException)
             {
-                hashes.Status = PersistedBlockStatus.Kicked; // kick the hash.
-                hashes.Reward = 0;
+                candidate.Status = BlockStatus.Kicked; // kick the hash.
+                candidate.Reward = 0;
             }            
         }
 
-        private IList<IPaymentRound> GetPaymentRounds(IEnumerable<IPersistedBlock> blocks)
+        private IList<IPaymentRound> GetPaymentRounds(IEnumerable<IFinalizedBlock> blocks)
         {
             var rounds = new List<IPaymentRound>();
 

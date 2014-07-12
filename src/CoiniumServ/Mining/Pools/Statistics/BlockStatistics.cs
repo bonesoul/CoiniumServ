@@ -27,6 +27,7 @@ using System.Threading;
 using Coinium.Daemon;
 using Coinium.Daemon.Exceptions;
 using Coinium.Persistance;
+using Coinium.Persistance.Blocks;
 
 namespace Coinium.Mining.Pools.Statistics
 {
@@ -81,25 +82,25 @@ namespace Coinium.Mining.Pools.Statistics
         // TODO: duplicate code from payment processor.
         private void CheckBlocks(IEnumerable <IPersistedBlock> blocks)
         {
-            foreach (var block in blocks)
-            {
-                foreach (var hashes in block.Hashes)
-                {
-                    CheckBlockHashes(hashes);
-                }
-            }
+            //foreach (var block in blocks)
+            //{
+            //    foreach (var hashes in block)
+            //    {
+            //        CheckBlockHashes(hashes);
+            //    }
+            //}
         }
 
         // TODO: duplicate code from payment processor.
-        private void CheckBlockHashes(IPersistedBlockHashes hashes)
+        private void CheckBlockHashes(IHashCandidate candidate)
         {
             try
             {
                 // get the transaction.
-                var transaction = _daemonClient.GetTransaction(hashes.TransactionHash);
+                var transaction = _daemonClient.GetTransaction(candidate.TransactionHash);
 
                 // total amount of coins contained in the block.
-                hashes.Total = transaction.Details.Sum(output => (decimal)output.Amount);
+                candidate.Amount = transaction.Details.Sum(output => (decimal)output.Amount);
 
                 // get the output transaction that targets pools central wallet.
                 var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == PoolAddress);
@@ -107,34 +108,34 @@ namespace Coinium.Mining.Pools.Statistics
                 // make sure output for the pool central wallet exists
                 if (poolOutput == null)
                 {
-                    hashes.Status = PersistedBlockStatus.Kicked; // kick the hash.
-                    hashes.Reward = 0;
+                    candidate.Status = BlockStatus.Kicked; // kick the hash.
+                    candidate.Reward = 0;
                 }
                 else
                 {
                     switch (poolOutput.Category)
                     {
                         case "immature":
-                            hashes.Status = PersistedBlockStatus.Pending;
+                            candidate.Status = BlockStatus.Pending;
                             break;
                         case "orphan":
-                            hashes.Status = PersistedBlockStatus.Orphan;
+                            candidate.Status = BlockStatus.Orphaned;
                             break;
                         case "generate":
-                            hashes.Status = PersistedBlockStatus.Confirmed;
+                            candidate.Status = BlockStatus.Confirmed;
                             break;
                         default:
-                            hashes.Status = PersistedBlockStatus.Pending;
+                            candidate.Status = BlockStatus.Pending;
                             break;
                     }
 
-                    hashes.Reward = (decimal)poolOutput.Amount;
+                    candidate.Reward = (decimal)poolOutput.Amount;
                 }
             }
             catch (RpcException)
             {
-                hashes.Status = PersistedBlockStatus.Kicked; // kick the hash.
-                hashes.Reward = 0;
+                candidate.Status = BlockStatus.Kicked; // kick the candidate.
+                candidate.Reward = 0;
             }
         }
     }

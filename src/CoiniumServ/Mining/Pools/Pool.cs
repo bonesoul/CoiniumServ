@@ -51,6 +51,7 @@ namespace Coinium.Mining.Pools
         public IPoolConfig Config { get; private set; }
 
         public IPoolStatistics Statistics { get; private set; }
+        public IPerPoolStats Stats { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
         private readonly IServerFactory _serverFactory;
@@ -64,6 +65,7 @@ namespace Coinium.Mining.Pools
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IPoolStatisticsFactory _poolStatisticsFactory;
         private readonly IBlockStatisticsFactory _blockStatisticsFactory;
+        private readonly IStatisticsObjectFactory _statisticsObjectFactory;
 
         private IMinerManager _minerManager;
         private IJobTracker _jobTracker;
@@ -105,7 +107,8 @@ namespace Coinium.Mining.Pools
             IStorageFactory storageFactory,
             IPaymentProcessorFactory paymentProcessorFactory,
             IPoolStatisticsFactory poolStatisticsFactory,
-            IBlockStatisticsFactory blockStatisticsFactory)
+            IBlockStatisticsFactory blockStatisticsFactory,
+            IStatisticsObjectFactory statisticsObjectFactory)
         {
             Enforce.ArgumentNotNull(hashAlgorithmFactory, "IHashAlgorithmFactory");
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
@@ -132,6 +135,7 @@ namespace Coinium.Mining.Pools
             _paymentProcessorFactory = paymentProcessorFactory;
             _poolStatisticsFactory = poolStatisticsFactory;
             _blockStatisticsFactory = blockStatisticsFactory;
+            _statisticsObjectFactory = statisticsObjectFactory;
 
             GenerateInstanceId();
         }
@@ -185,6 +189,10 @@ namespace Coinium.Mining.Pools
             var blockStatistics = _blockStatisticsFactory.Get(_daemonClient, _storage);
             
             Statistics = _poolStatisticsFactory.Get(_daemonClient, blockStatistics, _minerManager, _hashAlgorithm, _storage);
+
+
+            var blockStats = _statisticsObjectFactory.GetBlockStats(_storage);
+            Stats = _statisticsObjectFactory.GetPerPoolStats(_daemonClient, _hashAlgorithm, blockStats, _storage);
         }
 
         private void InitServers()

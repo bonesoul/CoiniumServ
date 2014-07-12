@@ -21,42 +21,13 @@
 // 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using Coinium.Mining.Shares;
-using Coinium.Payments;
-using Coinium.Persistance.Blocks;
-
-namespace Coinium.Persistance
+namespace Coinium.Persistance.Blocks
 {
-    public interface IStorage
+    public enum BlockStatus
     {
-        bool IsEnabled { get; }
-
-        void AddShare(IShare share);
-
-        void AddBlock(IShare share);
-
-        void SetRemainingBalances(IList<IWorkerBalance> workerBalances);
-
-        void DeleteShares(IPaymentRound round);
-
-        void MoveSharesToCurrentRound(IPaymentRound round);
-
-        void MoveBlock(IPaymentRound round);
-
-        IDictionary<string, int> GetBlockCounts();
-
-        void DeleteExpiredHashrateData(int until);
-
-        IDictionary<string, double> GetHashrateData(int since);
-
-        IList<IPendingBlock> GetPendingBlocks();
-
-        IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
-
-        Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
-
-        Dictionary<string, double> GetPreviousBalances();
+        Pending,
+        Kicked,
+        Orphaned,
+        Confirmed
     }
 }

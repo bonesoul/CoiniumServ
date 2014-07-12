@@ -54,6 +54,7 @@ namespace Tests.Mining.Pools
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IPoolStatisticsFactory _poolStatisticsFactory;
         private readonly IBlockStatisticsFactory _blockStatisticsFactory;
+        private readonly IStatisticsObjectFactory _statisticsObjectFactory;
 
         // object mocks.
         private readonly IDaemonClient _daemonClient;
@@ -67,6 +68,7 @@ namespace Tests.Mining.Pools
         private readonly IPaymentProcessor _paymentProcessor;
         private readonly IPoolStatistics _poolStatistics;
         private readonly IBlockStatistics _blockStatistics;
+        private readonly IStatistics _statistics;
 
         /// <summary>
         /// Initialize mock objects.
@@ -84,6 +86,7 @@ namespace Tests.Mining.Pools
             _paymentProcessorFactory = Substitute.For<IPaymentProcessorFactory>();
             _poolStatisticsFactory = Substitute.For<IPoolStatisticsFactory>();
             _blockStatisticsFactory = Substitute.For<IBlockStatisticsFactory>();
+            _statisticsObjectFactory = Substitute.For<IStatisticsObjectFactory>();
 
             _daemonClient = Substitute.For<IDaemonClient>();
             _minerManager = Substitute.For<IMinerManager>();
@@ -96,6 +99,7 @@ namespace Tests.Mining.Pools
             _paymentProcessor = Substitute.For<IPaymentProcessor>();
             _poolStatistics = Substitute.For<IPoolStatistics>();
             _blockStatistics = Substitute.For<IBlockStatistics>();
+            _statistics = Substitute.For<IStatistics>();
         }
 
         /// <summary>
@@ -116,7 +120,8 @@ namespace Tests.Mining.Pools
                 _storageFactory,
                 _paymentProcessorFactory,
                 _poolStatisticsFactory,
-                _blockStatisticsFactory
+                _blockStatisticsFactory,
+                _statisticsObjectFactory
                 );
 
             pool.Should().Not.Be.Null();
@@ -141,7 +146,8 @@ namespace Tests.Mining.Pools
                 _storageFactory,
                 _paymentProcessorFactory,
                 _poolStatisticsFactory,
-                _blockStatisticsFactory
+                _blockStatisticsFactory,
+                _statisticsObjectFactory
                 );
 
             pool.Should().Not.Be.Null();

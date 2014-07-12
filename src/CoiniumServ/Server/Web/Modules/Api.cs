@@ -24,19 +24,20 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using Coinium.Mining.Pools;
+using Coinium.Mining.Pools.Statistics;
 using Nancy;
+using Newtonsoft.Json;
 
 namespace Coinium.Server.Web.Modules
 {
     public class ApiModule: NancyModule
     {
-        public ApiModule(IPoolManager poolManager)
+        public ApiModule(IPoolManager poolManager, IStatistics statistics)
         {
-            Get["/api"] = _ => View["api", new IndexModel
+            Get["/api"] = _ =>
             {
-                Global = poolManager.Statistics,
-                Pools = poolManager.GetPools()
-            }];
+                return "Not implemented yet";
+            };
 
             Get["/api/global"] = _ =>
             {
@@ -58,6 +59,11 @@ namespace Coinium.Server.Web.Modules
                 };
 
                 return Response.AsJson(globalStats);
+            };
+
+            Get["/api/pools"] = _ =>
+            {
+                return Response.AsJson(statistics);
             };
         }
     }

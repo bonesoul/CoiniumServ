@@ -22,41 +22,25 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using Coinium.Mining.Shares;
-using Coinium.Payments;
-using Coinium.Persistance.Blocks;
 
-namespace Coinium.Persistance
+namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IStorage
+    public class Statistics:IStatistics, IStatisticsProvider
     {
-        bool IsEnabled { get; }
+        public IGlobalStats Global { get; private set; }
+        public IAlgoStats Algorithms { get; private set; }
+        public IPoolStats Pools { get; private set; }
 
-        void AddShare(IShare share);
+        public Statistics(IPoolManager poolManager, IStatisticsObjectFactory statisticsObjectFactory)
+        {
+            Pools = statisticsObjectFactory.GetPoolStats(poolManager);
+            Global = new GlobalStats();
+            Algorithms = new AlgoStats();            
+        }
 
-        void AddBlock(IShare share);
-
-        void SetRemainingBalances(IList<IWorkerBalance> workerBalances);
-
-        void DeleteShares(IPaymentRound round);
-
-        void MoveSharesToCurrentRound(IPaymentRound round);
-
-        void MoveBlock(IPaymentRound round);
-
-        IDictionary<string, int> GetBlockCounts();
-
-        void DeleteExpiredHashrateData(int until);
-
-        IDictionary<string, double> GetHashrateData(int since);
-
-        IList<IPendingBlock> GetPendingBlocks();
-
-        IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
-
-        Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
-
-        Dictionary<string, double> GetPreviousBalances();
+        public void Recache()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

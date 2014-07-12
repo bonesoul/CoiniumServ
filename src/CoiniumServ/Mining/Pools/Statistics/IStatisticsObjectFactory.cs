@@ -21,26 +21,20 @@
 // 
 #endregion
 
-namespace Coinium.Persistance
+using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
+using Coinium.Persistance;
+
+namespace Coinium.Mining.Pools.Statistics
 {
-    public class PersistedBlockHashes : IPersistedBlockHashes
+    public interface IStatisticsObjectFactory
     {
-        public string BlockHash { get; private set; }
-        public string TransactionHash { get; private set; }
-        public PersistedBlockStatus Status { get; set; }
-        public decimal Reward { get; set; }
-        public decimal Total { get; set; }
+        IStatistics GetStatistics();
 
-        public PersistedBlockHashes(string blockHash, string transactionHash)
-        {
-            BlockHash = blockHash;
-            TransactionHash = transactionHash;
-            Status = PersistedBlockStatus.Pending;
-        }
+        IPoolStats GetPoolStats(IPoolManager poolManager);
 
-        public override string ToString()
-        {
-            return string.Format("Status: {0}, Block Hash: {1}, Transaction Hash: {2}", Status, BlockHash, TransactionHash);
-        }
+        IPerPoolStats GetPerPoolStats(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage);
+
+        IBlockStats GetBlockStats(IStorage storage);
     }
 }

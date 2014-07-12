@@ -21,42 +21,26 @@
 // 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using Coinium.Mining.Shares;
-using Coinium.Payments;
-using Coinium.Persistance.Blocks;
-
-namespace Coinium.Persistance
+namespace Coinium.Persistance.Blocks
 {
-    public interface IStorage
+    public class HashCandidate : IHashCandidate
     {
-        bool IsEnabled { get; }
+        public string BlockHash { get; private set; }
+        public string TransactionHash { get; private set; }
+        public decimal Amount { get; set; }
+        public decimal Reward { get; set; }
+        public BlockStatus Status { get; set; }
 
-        void AddShare(IShare share);
+        public HashCandidate(string blockHash, string transactionHash)
+        {
+            BlockHash = blockHash;
+            TransactionHash = transactionHash;
+            Status = BlockStatus.Pending;
+        }
 
-        void AddBlock(IShare share);
-
-        void SetRemainingBalances(IList<IWorkerBalance> workerBalances);
-
-        void DeleteShares(IPaymentRound round);
-
-        void MoveSharesToCurrentRound(IPaymentRound round);
-
-        void MoveBlock(IPaymentRound round);
-
-        IDictionary<string, int> GetBlockCounts();
-
-        void DeleteExpiredHashrateData(int until);
-
-        IDictionary<string, double> GetHashrateData(int since);
-
-        IList<IPendingBlock> GetPendingBlocks();
-
-        IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
-
-        Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
-
-        Dictionary<string, double> GetPreviousBalances();
+        public override string ToString()
+        {
+            return string.Format("Status: {0}, Block Hash: {1}, Transaction Hash: {2}", Status, BlockHash, TransactionHash);
+        }
     }
 }

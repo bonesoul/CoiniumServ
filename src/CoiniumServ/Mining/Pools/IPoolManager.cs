@@ -30,6 +30,8 @@ namespace Coinium.Mining.Pools
     {
         IGlobalStatistics Statistics { get; }
 
+        IStatistics NewStatistics { get; }
+
         IList<IPool> GetPools();
 
         IPool GetBySymbol(string symbol);

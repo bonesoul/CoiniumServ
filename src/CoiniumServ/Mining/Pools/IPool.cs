@@ -32,6 +32,8 @@ namespace Coinium.Mining.Pools
 
         IPoolStatistics Statistics { get; }
 
+        IPerPoolStats Stats { get; }
+
         /// <summary>
         /// Initializes the specified bind ip.
         /// </summary>

@@ -22,13 +22,13 @@
 #endregion
 
 using System.Collections.Generic;
-using Coinium.Persistance;
+using Coinium.Persistance.Blocks;
 
 namespace Coinium.Payments
 {
     public interface IPaymentRound
     {
-        IPersistedBlock Block {get;}
+        IFinalizedBlock Block { get; }
 
         Dictionary<string, double> Shares { get; }
 
