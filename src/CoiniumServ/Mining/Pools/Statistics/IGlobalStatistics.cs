@@ -28,11 +28,9 @@ namespace Coinium.Mining.Pools.Statistics
 {
     public interface IGlobalStatistics
     {
-        Int32 Workers { get; }
-
         UInt64 Hashrate { get; }
 
-        string ReadableHashrate { get; }
+        Int32 Workers { get; }
 
         IList<IPerAlgorithmStatistics> Algorithms { get; }
     }

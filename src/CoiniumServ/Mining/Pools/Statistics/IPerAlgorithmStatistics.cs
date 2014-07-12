@@ -33,8 +33,6 @@ namespace Coinium.Mining.Pools.Statistics
 
         UInt64 Hashrate { get; set; }
 
-        string ReadableHashrate { get; set; }
-
         void Reset();
     }
 }

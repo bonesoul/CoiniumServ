@@ -184,7 +184,7 @@ namespace Coinium.Mining.Pools
 
             var blockStatistics = _blockStatisticsFactory.Get(_daemonClient, _storage);
             
-            Statistics = _poolStatisticsFactory.Get(blockStatistics, _minerManager, _hashAlgorithm, _storage);
+            Statistics = _poolStatisticsFactory.Get(_daemonClient, blockStatistics, _minerManager, _hashAlgorithm, _storage);
         }
 
         private void InitServers()

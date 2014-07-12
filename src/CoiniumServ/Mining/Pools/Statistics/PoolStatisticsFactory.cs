@@ -22,6 +22,7 @@
 #endregion
 
 using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
 using Coinium.Mining.Miners;
 using Coinium.Persistance;
 using Coinium.Repository.Context;
@@ -45,10 +46,11 @@ namespace Coinium.Mining.Pools.Statistics
             _applicationContext = applicationContext;
         }
 
-        public IPoolStatistics Get(IBlockStatistics blockStatistics, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IStorage storage)
+        public IPoolStatistics Get(IDaemonClient daemonClient, IBlockStatistics blockStatistics, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
+                {"daemonClient", daemonClient},
                 {"blockStatistics", blockStatistics},
                 {"minerManager", minerManager},
                 {"hashAlgorithm", hashAlgorithm},

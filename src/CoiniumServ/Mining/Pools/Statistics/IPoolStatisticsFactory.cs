@@ -22,6 +22,7 @@
 #endregion
 
 using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
 using Coinium.Mining.Miners;
 using Coinium.Persistance;
 
@@ -29,6 +30,6 @@ namespace Coinium.Mining.Pools.Statistics
 {
     public interface IPoolStatisticsFactory
     {
-        IPoolStatistics Get(IBlockStatistics blockStatistics, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IStorage storage);
+        IPoolStatistics Get(IDaemonClient daemonClient, IBlockStatistics blockStatistics, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IStorage storage);
     }
 }

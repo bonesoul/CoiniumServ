@@ -33,7 +33,6 @@ namespace Coinium.Mining.Pools.Statistics
     {
         public Int32 Workers { get; private set; }
         public UInt64 Hashrate { get; private set; }
-        public string ReadableHashrate { get; private set; }
         public IList<IPerAlgorithmStatistics> Algorithms { get; private set; }
 
         private readonly IDictionary<string, IPerAlgorithmStatistics> _algorithms;
@@ -74,13 +73,6 @@ namespace Coinium.Mining.Pools.Statistics
                 _algorithms[pool.Config.Coin.Algorithm].Hashrate += pool.Statistics.Hashrate;
                 _algorithms[pool.Config.Coin.Algorithm].Workers += pool.Statistics.Miners.Count;
             }
-
-            foreach (var pair in _algorithms)
-            {
-                pair.Value.ReadableHashrate = pair.Value.Hashrate.GetReadableHashrate();
-            }
-
-            ReadableHashrate = Hashrate.GetReadableHashrate();
 
             Algorithms = _algorithms.Values.ToList();
 

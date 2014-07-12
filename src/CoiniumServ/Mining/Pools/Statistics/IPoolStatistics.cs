@@ -33,7 +33,11 @@ namespace Coinium.Mining.Pools.Statistics
 
         UInt64 Hashrate { get; }
 
-        string ReadableHashrate { get; }
+        UInt64 NetworkHashrate { get; }
+
+        double Difficulty { get; }
+
+        int CurrentBlockHeight { get; }
 
         IList<IMiner> Miners { get; }
     }

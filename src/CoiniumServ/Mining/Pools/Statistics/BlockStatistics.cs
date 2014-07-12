@@ -24,7 +24,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Coinium.Coin.Helpers;
 using Coinium.Daemon;
 using Coinium.Daemon.Exceptions;
 using Coinium.Persistance;

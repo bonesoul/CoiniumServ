@@ -158,6 +158,7 @@
     <Compile Include="Server\Web\IWebServer.cs" />
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
     <Compile Include="Server\Web\IWebServerConfig.cs" />
+    <Compile Include="Server\Web\Modules\Api.cs" />
     <Compile Include="Server\Web\Modules\Pool.cs" />
     <Compile Include="Server\Web\WebServer.cs" />
     <Compile Include="Server\Web\WebServerConfig.cs" />
@@ -758,6 +759,9 @@
     </None>
     <None Include="packages.config" />
     <None Include="web.config" />
+    <None Include="web\default\api.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\font-awesome\fonts\fontawesome-webfont.eot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

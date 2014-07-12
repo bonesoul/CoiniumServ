@@ -28,7 +28,6 @@ namespace Coinium.Mining.Pools.Statistics
         public string Name { get; private set; }
         public int Workers { get; set; }
         public ulong Hashrate { get; set; }
-        public string ReadableHashrate { get; set; }
 
         public PerAlgorithmStatistics(string algorithm)
         {

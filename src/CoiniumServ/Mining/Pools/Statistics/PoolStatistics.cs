@@ -25,8 +25,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Coinium.Coin.Helpers;
 using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
 using Coinium.Mining.Miners;
 using Coinium.Persistance;
 using Coinium.Utils.Helpers.Time;
@@ -38,13 +38,16 @@ namespace Coinium.Mining.Pools.Statistics
         public IBlockStatistics Blocks { get; private set; }
 
         public UInt64 Hashrate { get; private set; }
-        public string ReadableHashrate { get; private set; }
+        public UInt64 NetworkHashrate { get; private set; }
+        public double Difficulty { get; private set; }
+        public int CurrentBlockHeight { get; private set; }
 
         public IList<IMiner> Miners
         {
             get { return _minerManager.Miners; }
         }
 
+        private readonly IDaemonClient _daemonClient;
         private readonly IMinerManager _minerManager;
         private readonly IStorage _storage;
         private readonly IHashAlgorithm _hashAlgorithm;
@@ -55,8 +58,9 @@ namespace Coinium.Mining.Pools.Statistics
 
         private readonly double _shareMultiplier;
 
-        public PoolStatistics(IBlockStatistics blockStatistics, IMinerManager minerManager, IStorage storage, IHashAlgorithm hashAlgorithm)
+        public PoolStatistics(IDaemonClient daemonClient, IBlockStatistics blockStatistics, IMinerManager minerManager, IStorage storage, IHashAlgorithm hashAlgorithm)
         {
+            _daemonClient = daemonClient;
             _minerManager = minerManager;
             _storage = storage;
             _hashAlgorithm = hashAlgorithm;
@@ -78,7 +82,12 @@ namespace Coinium.Mining.Pools.Statistics
 
             double total = hashrates.Sum(pair => pair.Value);
             Hashrate = Convert.ToUInt64(_shareMultiplier*total/HashrateWindow);
-            ReadableHashrate = Hashrate.GetReadableHashrate();
+
+            // read data from daemon
+            var miningInfo = _daemonClient.GetMiningInfo();
+            NetworkHashrate = miningInfo.NetworkHashps;
+            Difficulty = miningInfo.Difficulty;
+            CurrentBlockHeight = miningInfo.Blocks;
 
             // reset the recache timer.
             _timer.Change(TimerExpiration * 1000, Timeout.Infinite);
