@@ -31,10 +31,10 @@ namespace Coinium.Mining.Pools.Statistics
         public IAlgoStats Algorithms { get; private set; }
         public IPoolStats Pools { get; private set; }
 
-        public Statistics(IPoolManager poolManager, IStatisticsObjectFactory statisticsObjectFactory)
+        public Statistics(IStatisticsObjectFactory statisticsObjectFactory)
         {
-            Pools = statisticsObjectFactory.GetPoolStats(poolManager);
-            Global = new GlobalStats();
+            Pools = statisticsObjectFactory.GetPoolStats();
+            Global = statisticsObjectFactory.GetGlobalStatistics();
             Algorithms = new AlgoStats();            
         }
 

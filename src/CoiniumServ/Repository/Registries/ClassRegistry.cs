@@ -58,6 +58,8 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IPoolStats, PoolStats>().AsSingleton();            
             _applicationContext.Container.Register<IPerPoolStats, PerPoolStats>().AsMultiInstance();
             _applicationContext.Container.Register<IBlockStats, BlockStats>().AsMultiInstance();
+            _applicationContext.Container.Register<IGlobalStats, GlobalStats>().AsSingleton();
+            _applicationContext.Container.Register<IAlgoStats, AlgoStats>().AsSingleton();
         }
     }
 }

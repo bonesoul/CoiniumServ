@@ -31,7 +31,9 @@ namespace Coinium.Mining.Pools.Statistics
     {
         IStatistics GetStatistics();
 
-        IPoolStats GetPoolStats(IPoolManager poolManager);
+        IGlobalStats GetGlobalStatistics();
+
+        IPoolStats GetPoolStats();
 
         IPerPoolStats GetPerPoolStats(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage);
 

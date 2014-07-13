@@ -21,6 +21,8 @@
 // 
 #endregion
 
+using System;
+
 namespace Coinium.Mining.Pools.Statistics
 {
     public interface IStatisticsProvider

@@ -116,8 +116,8 @@
                                         }
                                     </td>
                                     <td>@block.Amount</td>
-                                    <td><a href="https://chain.so/block/LTCTEST/@block.BlockHash" target="_blank">@block.BlockHash.Substring(0, 10)..</a></td>
-                                    <td><a href="https://chain.so/tx/LTCTEST/@block.TransactionHash" target="_blank">@block.TransactionHash.Substring(0, 10)..</a></td>
+                                    <td><a href="https://chain.so/block/LTCTEST/@block.BlockHash" target="_blank">@block.BlockHash.Substring(0, block.BlockHash.Length > 10 ? 10 : block.BlockHash.Length)..</a></td>
+                                    <td><a href="https://chain.so/tx/LTCTEST/@block.TransactionHash" target="_blank">@block.TransactionHash.Substring(0, block.TransactionHash.Length > 10 ? 10 : block.TransactionHash.Length)..</a></td>
                                 </tr>
                             }
                         </tbody>

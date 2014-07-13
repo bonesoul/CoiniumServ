@@ -47,13 +47,15 @@ namespace Coinium.Mining.Pools.Statistics
 
         public IStatistics GetStatistics()
         {
-            var @params = new NamedParameterOverloads
-            { };
-
-            return _applicationContext.Container.Resolve<IStatistics>(@params);
+            return _applicationContext.Container.Resolve<IStatistics>();
         }
 
-        public IPoolStats GetPoolStats(IPoolManager poolManager)
+        public IGlobalStats GetGlobalStatistics()
+        {            
+            return _applicationContext.Container.Resolve<IGlobalStats>();       
+        }
+
+        public IPoolStats GetPoolStats()
         {
             return _applicationContext.Container.Resolve<IPoolStats>();
         }
