@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Threading;
 
 namespace Coinium.Mining.Pools.Statistics
 {
@@ -31,16 +32,27 @@ namespace Coinium.Mining.Pools.Statistics
         public IAlgoStats Algorithms { get; private set; }
         public IPoolStats Pools { get; private set; }
 
+        private readonly Timer _timer;
+        private const int TimerExpiration = 10;
+
         public Statistics(IStatisticsObjectFactory statisticsObjectFactory)
         {
             Pools = statisticsObjectFactory.GetPoolStats();
             Global = statisticsObjectFactory.GetGlobalStatistics();
-            Algorithms = new AlgoStats();            
+            Algorithms = statisticsObjectFactory.GetAlgorithmStatistics();
+
+            _timer = new Timer(Recache, null, Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
+            Recache(null); // recache data initially.
         }
 
-        public void Recache()
+        public void Recache(object state)
         {
-            throw new NotImplementedException();
+            Global.Recache(state);
+            Pools.Recache(state);
+            Algorithms.Recache(state);
+
+            // reset the recache timer.
+            _timer.Change(TimerExpiration * 1000, Timeout.Infinite);
         }
     }
 }

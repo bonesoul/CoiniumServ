@@ -26,19 +26,28 @@ using System;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public class GlobalStats : IGlobalStats, IStatisticsProvider
+    public class GlobalStats : IGlobalStats
     {
         public UInt64 Hashrate { get; private set; }
-        public UInt32 WorkerCount { get; private set; }
+        public Int32 WorkerCount { get; private set; }
+
+        private readonly IPoolStats _poolStatistics;
 
         public GlobalStats(IPoolStats poolStatistics)
         {
-            
+            _poolStatistics = poolStatistics;
         }
 
-        public void Recache()
+        public void Recache(object state)
         {
-            throw new NotImplementedException();
+            Hashrate = 0;
+            WorkerCount = 0;
+
+            foreach (var pair in _poolStatistics)
+            {
+                Hashrate += pair.Value.Hashrate;
+                WorkerCount += pair.Value.WorkerCount;
+            }
         }
     }
 }

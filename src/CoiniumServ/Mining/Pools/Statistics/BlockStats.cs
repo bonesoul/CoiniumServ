@@ -18,7 +18,7 @@ namespace Coinium.Mining.Pools.Statistics
             _storage = storage;
         }
 
-        public void Recache()
+        public void Recache(object state)
         {
             _blocks = _storage.GetAllBlocks().OrderByDescending(x => x.Key).Take(20).Select(item => item.Value).ToList();
         }

@@ -12,10 +12,14 @@ namespace Coinium.Mining.Pools.Statistics
 
         UInt64 NetworkHashrate { get; }
 
+        Int32 WorkerCount { get; }
+
         double Difficulty { get; }
 
         int CurrentBlock { get; }
 
         IBlockStats LatestBlocks { get; }
+
+        string Algorithm { get; }
     }
 }

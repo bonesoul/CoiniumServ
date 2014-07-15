@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
+using Coinium.Mining.Miners;
+using Coinium.Mining.Pools.Config;
 using Coinium.Persistance;
 using Coinium.Utils.Helpers.Time;
 using HashLib;
@@ -15,33 +17,42 @@ namespace Coinium.Mining.Pools.Statistics
     {       
         public ulong Hashrate { get; private set; }
         public ulong NetworkHashrate { get; private set; }
+        public int WorkerCount { get; private set; }
         public double Difficulty { get; private set; }
         public int CurrentBlock { get; private set; }
         public IBlockStats LatestBlocks { get; private set; }
+        public string Algorithm { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
         private readonly IStorage _storage;
         private readonly IHashAlgorithm _hashAlgorithm;
+        private readonly IMinerManager _minerManager;
+        private readonly IPoolConfig _poolConfig;
 
         private readonly double _shareMultiplier;
         private const int HashrateWindow = 300; /* How many seconds worth of shares should be gathered to generate hashrate. */
 
-        public PerPoolStats(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage )
+        public PerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage)
         {
+            _poolConfig = poolConfig;
             _daemonClient = daemonClient;            
             _hashAlgorithm = hashAlgorithm;
+            _minerManager = minerManager;
             LatestBlocks = blockStatistics;
             _storage = storage;
 
             _shareMultiplier = Math.Pow(2, 32) / _hashAlgorithm.Multiplier;
         }
 
-        public void Recache()
+        public void Recache(object state)
         {
             ReadCoinData();
             ReadHashrate();
 
-            LatestBlocks.Recache();
+            WorkerCount = _minerManager.Miners.Count;
+            Algorithm = _poolConfig.Coin.Algorithm;
+
+            LatestBlocks.Recache(state);
         }
 
         private void ReadHashrate()

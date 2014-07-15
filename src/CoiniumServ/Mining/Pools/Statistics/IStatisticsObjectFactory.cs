@@ -23,6 +23,8 @@
 
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
+using Coinium.Mining.Miners;
+using Coinium.Mining.Pools.Config;
 using Coinium.Persistance;
 
 namespace Coinium.Mining.Pools.Statistics
@@ -33,9 +35,11 @@ namespace Coinium.Mining.Pools.Statistics
 
         IGlobalStats GetGlobalStatistics();
 
+        IAlgoStats GetAlgorithmStatistics();
+
         IPoolStats GetPoolStats();
 
-        IPerPoolStats GetPerPoolStats(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage);
+        IPerPoolStats GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage);
 
         IBlockStats GetBlockStats(IStorage storage);
     }

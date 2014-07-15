@@ -23,6 +23,8 @@
 
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
+using Coinium.Mining.Miners;
+using Coinium.Mining.Pools.Config;
 using Coinium.Persistance;
 using Coinium.Repository.Context;
 using Nancy.TinyIoc;
@@ -55,16 +57,23 @@ namespace Coinium.Mining.Pools.Statistics
             return _applicationContext.Container.Resolve<IGlobalStats>();       
         }
 
+        public IAlgoStats GetAlgorithmStatistics()
+        {
+            return _applicationContext.Container.Resolve<IAlgoStats>();
+        }
+
         public IPoolStats GetPoolStats()
         {
             return _applicationContext.Container.Resolve<IPoolStats>();
         }
 
-        public IPerPoolStats GetPerPoolStats(IDaemonClient daemonClient,  IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage)
+        public IPerPoolStats GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
+                {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
+                {"minerManager",minerManager},
                 {"hashAlgorithm", hashAlgorithm},
                 {"blockStatistics", blockStatistics},
                 {"storage", storage},

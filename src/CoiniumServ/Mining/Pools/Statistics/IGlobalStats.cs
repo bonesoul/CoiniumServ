@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IGlobalStats
+    public interface IGlobalStats: IStatisticsProvider
     {
         UInt64 Hashrate { get; }
 
-        UInt32 WorkerCount { get; }
+        Int32 WorkerCount { get; }
     }
 }

@@ -27,6 +27,6 @@ namespace Coinium.Mining.Pools.Statistics
 {
     public interface IStatisticsProvider
     {
-        void Recache();
+        void Recache(object state);
     }
 }

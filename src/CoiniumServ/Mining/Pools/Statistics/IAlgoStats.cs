@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IAlgoStats: IEnumerable<KeyValuePair<string, IPerAlgorithmStats>>
+    public interface IAlgoStats: IEnumerable<KeyValuePair<string, IPerAlgorithmStats>>, IStatisticsProvider
     {
     }
 }
