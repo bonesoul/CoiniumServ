@@ -28,7 +28,7 @@ namespace Coinium.Mining.Pools
 {
     public interface IPoolManager
     {
-        IGlobalStatistics Statistics { get; }
+        IStatistics NewStatistics { get; }
 
         IList<IPool> GetPools();
 

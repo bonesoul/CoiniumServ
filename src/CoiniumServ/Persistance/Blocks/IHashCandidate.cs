@@ -20,21 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-using System;
-
-namespace Coinium.Mining.Pools.Statistics
+namespace Coinium.Persistance.Blocks
 {
-    public interface IPerAlgorithmStatistics
+    public interface IHashCandidate
     {
-        string Name { get; }
-
-        Int32 Workers { get; set; }
-
-        UInt64 Hashrate { get; set; }
-
-        string ReadableHashrate { get; set; }
-
-        void Reset();
+        string BlockHash { get; }
+        string TransactionHash { get; }
+        decimal Amount { get; set; }
+        decimal Reward { get; set; }
+        BlockStatus Status { get; set; }
     }
 }

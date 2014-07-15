@@ -20,14 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-using Coinium.Daemon;
-using Coinium.Persistance;
-
-namespace Coinium.Mining.Pools.Statistics
+namespace Coinium.Persistance.Blocks
 {
-    public interface IBlockStatisticsFactory
+    public enum BlockStatus
     {
-        IBlockStatistics Get(IDaemonClient daemonClient, IStorage storage);
+        Pending,
+        Kicked,
+        Orphaned,
+        Confirmed
     }
 }

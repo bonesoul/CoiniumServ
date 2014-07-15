@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using Coinium.Repository.Context;
 using Coinium.Server;
 using Coinium.Server.Mining;

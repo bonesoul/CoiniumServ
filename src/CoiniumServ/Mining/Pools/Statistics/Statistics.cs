@@ -20,25 +20,37 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System.Threading;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public class PerAlgorithmStatistics:IPerAlgorithmStatistics
+    public class Statistics:IStatistics, IStatisticsProvider
     {
-        public string Name { get; private set; }
-        public int Workers { get; set; }
-        public ulong Hashrate { get; set; }
-        public string ReadableHashrate { get; set; }
+        public IGlobal Global { get; private set; }
+        public IAlgorithms Algorithms { get; private set; }
+        public IPools Pools { get; private set; }
 
-        public PerAlgorithmStatistics(string algorithm)
+        private readonly Timer _timer;
+        private const int TimerExpiration = 10;
+
+        public Statistics(IStatisticsObjectFactory statisticsObjectFactory)
         {
-            Name = algorithm;
+            Pools = statisticsObjectFactory.GetPoolStats();
+            Global = statisticsObjectFactory.GetGlobalStatistics();
+            Algorithms = statisticsObjectFactory.GetAlgorithmStatistics();
+
+            _timer = new Timer(Recache, null, Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
+            Recache(null); // recache data initially.
         }
 
-        public void Reset()
+        public void Recache(object state)
         {
-            Hashrate = 0;
-            Workers = 0;
+            Pools.Recache(state);
+            Algorithms.Recache(state);
+            Global.Recache(state);
+
+            // reset the recache timer.
+            _timer.Change(TimerExpiration * 1000, Timeout.Infinite);
         }
     }
 }

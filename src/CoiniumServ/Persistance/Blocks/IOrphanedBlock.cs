@@ -20,27 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Coinium.Persistance
+namespace Coinium.Persistance.Blocks
 {
-    public interface IPersistedBlock
+    public interface IOrphanedBlock:IFinalizedBlock
     {
-        UInt32 Height { get; }
-        List<IPersistedBlockHashes> Hashes { get; }
-        PersistedBlockStatus Status { get; }
-        IPersistedBlockHashes OutstandingHashes { get; }
-
-        void AddHashes(IPersistedBlockHashes hash);
-    }
-
-        public enum PersistedBlockStatus
-    {
-        Pending,
-        Kicked,
-        Orphan,
-        Confirmed
     }
 }

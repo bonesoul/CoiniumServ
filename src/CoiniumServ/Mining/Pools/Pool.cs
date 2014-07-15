@@ -50,7 +50,7 @@ namespace Coinium.Mining.Pools
     {
         public IPoolConfig Config { get; private set; }
 
-        public IPoolStatistics Statistics { get; private set; }
+        public IPerPool Statistics { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
         private readonly IServerFactory _serverFactory;
@@ -62,8 +62,7 @@ namespace Coinium.Mining.Pools
         private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
         private readonly IStorageFactory _storageFactory;
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
-        private readonly IPoolStatisticsFactory _poolStatisticsFactory;
-        private readonly IBlockStatisticsFactory _blockStatisticsFactory;
+        private readonly IStatisticsObjectFactory _statisticsObjectFactory;
 
         private IMinerManager _minerManager;
         private IJobTracker _jobTracker;
@@ -93,6 +92,7 @@ namespace Coinium.Mining.Pools
         /// <param name="shareManagerFactory">The share manager factory.</param>
         /// <param name="storageFactory"></param>
         /// <param name="paymentProcessorFactory"></param>
+        /// <param name="statisticsObjectFactory"></param>
         public Pool(
             IHashAlgorithmFactory hashAlgorithmFactory, 
             IServerFactory serverFactory, 
@@ -104,8 +104,7 @@ namespace Coinium.Mining.Pools
             IShareManagerFactory shareManagerFactory,
             IStorageFactory storageFactory,
             IPaymentProcessorFactory paymentProcessorFactory,
-            IPoolStatisticsFactory poolStatisticsFactory,
-            IBlockStatisticsFactory blockStatisticsFactory)
+            IStatisticsObjectFactory statisticsObjectFactory)
         {
             Enforce.ArgumentNotNull(hashAlgorithmFactory, "IHashAlgorithmFactory");
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
@@ -117,8 +116,6 @@ namespace Coinium.Mining.Pools
             Enforce.ArgumentNotNull(shareManagerFactory, "IShareManagerFactory");
             Enforce.ArgumentNotNull(storageFactory, "IStorageFactory");
             Enforce.ArgumentNotNull(paymentProcessorFactory, "IPaymentProcessorFactory");
-            Enforce.ArgumentNotNull(poolStatisticsFactory, "IPoolStatisticsFactory");
-            Enforce.ArgumentNotNull(blockStatisticsFactory, "IBlockStatisticsFactory");
 
             _daemonClient = client;
             _minerManagerFactory = minerManagerFactory;
@@ -130,8 +127,7 @@ namespace Coinium.Mining.Pools
             _hashAlgorithmFactory = hashAlgorithmFactory;
             _storageFactory = storageFactory;
             _paymentProcessorFactory = paymentProcessorFactory;
-            _poolStatisticsFactory = poolStatisticsFactory;
-            _blockStatisticsFactory = blockStatisticsFactory;
+            _statisticsObjectFactory = statisticsObjectFactory;
 
             GenerateInstanceId();
         }
@@ -182,9 +178,10 @@ namespace Coinium.Mining.Pools
             _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm);
             _jobManager.Initialize(InstanceId);
 
-            var blockStatistics = _blockStatisticsFactory.Get(_daemonClient, _storage);
-            
-            Statistics = _poolStatisticsFactory.Get(blockStatistics, _minerManager, _hashAlgorithm, _storage);
+
+            var latestBlocks = _statisticsObjectFactory.GetLatestBlocks(_storage);
+            var blockStats = _statisticsObjectFactory.GetBlockStats(latestBlocks, _storage);
+            Statistics = _statisticsObjectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, _storage);
         }
 
         private void InitServers()

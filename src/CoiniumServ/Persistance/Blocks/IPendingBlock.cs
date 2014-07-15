@@ -20,27 +20,20 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System.Collections.Generic;
 
-namespace Coinium.Persistance
+namespace Coinium.Persistance.Blocks
 {
-    public class PersistedBlockHashes : IPersistedBlockHashes
+    public interface IPendingBlock: IPersistedBlock
     {
-        public string BlockHash { get; private set; }
-        public string TransactionHash { get; private set; }
-        public PersistedBlockStatus Status { get; set; }
-        public decimal Reward { get; set; }
-        public decimal Total { get; set; }
+        bool IsFinalized { get; }
 
-        public PersistedBlockHashes(string blockHash, string transactionHash)
-        {
-            BlockHash = blockHash;
-            TransactionHash = transactionHash;
-            Status = PersistedBlockStatus.Pending;
-        }
+        IFinalizedBlock Finalized { get; }
 
-        public override string ToString()
-        {
-            return string.Format("Status: {0}, Block Hash: {1}, Transaction Hash: {2}", Status, BlockHash, TransactionHash);
-        }
+        List<IHashCandidate> Candidates { get; }
+
+        void AddHashCandidate(IHashCandidate hash);
+
+        void Check();
     }
 }

@@ -20,11 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System;
 
-namespace Coinium.Mining.Pools.Statistics
+namespace Coinium.Persistance.Blocks
 {
-    public interface IGlobalStatisticsFactory
+    public interface IPersistedBlock
     {
-        IGlobalStatistics Get(IPoolManager poolManager);
+        UInt32 Height { get; }
+        BlockStatus Status { get; }
+        string BlockHash { get; }
+        string TransactionHash { get; }
+        decimal Reward { get; }
+        decimal Amount { get; }
     }
 }

@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Pools.Statistics;
 
@@ -30,7 +29,7 @@ namespace Coinium.Mining.Pools
     {
         IPoolConfig Config { get; }
 
-        IPoolStatistics Statistics { get; }
+        IPerPool Statistics { get; }
 
         /// <summary>
         /// Initializes the specified bind ip.

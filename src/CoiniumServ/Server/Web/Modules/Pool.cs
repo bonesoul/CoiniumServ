@@ -20,8 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using Coinium.Mining.Pools;
+using Coinium.Server.Web.Modules.Models;
 using Nancy;
 
 namespace Coinium.Server.Web.Modules
@@ -38,7 +38,7 @@ namespace Coinium.Server.Web.Modules
                     return View["pool", pool];
 
 
-                var error = new ErrorModel
+                var error = new Error
                 {
                     Summary = "Pool not found",
                     Details = string.Format("The request pool does not exist: {0}", _.slug)
@@ -46,12 +46,6 @@ namespace Coinium.Server.Web.Modules
 
                 return View["error", error];
             };
-        }
-
-        public class ErrorModel
-        {
-            public string Summary { get; set; }
-            public string Details { get; set; }
         }
     }
 }

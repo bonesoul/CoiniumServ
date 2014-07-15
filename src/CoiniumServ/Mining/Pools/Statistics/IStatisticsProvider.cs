@@ -20,30 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-using Coinium.Repository.Context;
-
 namespace Coinium.Mining.Pools.Statistics
 {
-    public class GlobalStatisticsFactory:IGlobalStatisticsFactory
+    public interface IStatisticsProvider
     {
-        /// <summary>
-        /// The _kernel
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IBlockStatisticsFactory" /> class.
-        /// </summary>
-        /// <param name="applicationContext">The application context.</param>
-        public GlobalStatisticsFactory(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
-
-        public IGlobalStatistics Get(IPoolManager poolManager)
-        {
-            return _applicationContext.Container.Resolve<IGlobalStatistics>();
-        }
+        void Recache(object state);
     }
 }

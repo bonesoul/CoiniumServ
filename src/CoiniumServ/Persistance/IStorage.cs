@@ -20,11 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using Coinium.Mining.Shares;
 using Coinium.Payments;
+using Coinium.Persistance.Blocks;
 
 namespace Coinium.Persistance
 {
@@ -50,7 +50,7 @@ namespace Coinium.Persistance
 
         IDictionary<string, double> GetHashrateData(int since);
 
-        IList<IPersistedBlock> GetPendingBlocks();
+        IList<IPendingBlock> GetPendingBlocks();
 
         IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
 

@@ -21,19 +21,12 @@
 // 
 #endregion
 
-using System;
 using System.Collections.Generic;
+using Coinium.Persistance.Blocks;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IGlobalStatistics
+    public interface ILatestBlocks: IEnumerable<IPersistedBlock>, IStatisticsProvider
     {
-        Int32 Workers { get; }
-
-        UInt64 Hashrate { get; }
-
-        string ReadableHashrate { get; }
-
-        IList<IPerAlgorithmStatistics> Algorithms { get; }
     }
 }

@@ -21,15 +21,15 @@
 // 
 #endregion
 
-namespace Coinium.Persistance
+namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IPersistedBlockHashes
+    public interface IBlocks : IStatisticsProvider
     {
-        string BlockHash { get; }
-        string TransactionHash { get; }
-        PersistedBlockStatus Status { get; set; }
-        decimal Reward { get; set; }
+        int Pending { get; }
+        int Confirmed { get; }
+        int Orphaned { get; }
+        int Total { get; }
 
-        decimal Total { get; set; }
+        ILatestBlocks Latest { get; }
     }
 }

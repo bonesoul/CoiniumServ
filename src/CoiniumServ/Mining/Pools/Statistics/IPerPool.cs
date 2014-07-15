@@ -20,39 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-using Coinium.Daemon;
-using Coinium.Persistance;
-using Coinium.Repository.Context;
-using Nancy.TinyIoc;
+using System;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public class BlockStatisticsFactory:IBlockStatisticsFactory
+    public interface IPerPool:IJsonResponse, IStatisticsProvider
     {
-        /// <summary>
-        /// The _kernel
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
+        UInt64 Hashrate { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IBlockStatisticsFactory" /> class.
-        /// </summary>
-        /// <param name="applicationContext">The application context.</param>
-        public BlockStatisticsFactory(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
+        UInt64 NetworkHashrate { get; }
 
-        public IBlockStatistics Get(IDaemonClient daemonClient, IStorage storage)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"daemonClient", daemonClient},
-                {"storage", storage},
-            };
+        Int32 WorkerCount { get; }
 
-            return _applicationContext.Container.Resolve<IBlockStatistics>(@params);
-        }
+        double Difficulty { get; }
+
+        int CurrentBlock { get; }
+
+        IBlocks Blocks { get; }
     }
 }

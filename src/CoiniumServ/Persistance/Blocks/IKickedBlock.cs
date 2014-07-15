@@ -20,15 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-using Coinium.Crypto.Algorithms;
-using Coinium.Mining.Miners;
-using Coinium.Persistance;
-
-namespace Coinium.Mining.Pools.Statistics
+namespace Coinium.Persistance.Blocks
 {
-    public interface IPoolStatisticsFactory
+    public interface IKickedBlock:IFinalizedBlock
     {
-        IPoolStatistics Get(IBlockStatistics blockStatistics, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IStorage storage);
     }
 }

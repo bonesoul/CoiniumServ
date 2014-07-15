@@ -20,42 +20,28 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using Coinium.Crypto.Algorithms;
+using Coinium.Daemon;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools.Config;
 using Coinium.Persistance;
-using Coinium.Repository.Context;
-using Nancy.TinyIoc;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public class PoolStatisticsFactory:IPoolStatisticsFactory
+    public interface IStatisticsObjectFactory
     {
-        /// <summary>
-        /// The _kernel
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
+        IStatistics GetStatistics();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IPoolStatistics" /> class.
-        /// </summary>
-        /// <param name="applicationContext">The application context.</param>
-        public PoolStatisticsFactory(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
+        IGlobal GetGlobalStatistics();
 
-        public IPoolStatistics Get(IBlockStatistics blockStatistics, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IStorage storage)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"blockStatistics", blockStatistics},
-                {"minerManager", minerManager},
-                {"hashAlgorithm", hashAlgorithm},
-                {"storage", storage},
-            };
+        IAlgorithms GetAlgorithmStatistics();
 
-            return _applicationContext.Container.Resolve<IPoolStatistics>(@params);
-        }
+        IPools GetPoolStats();
+
+        IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage);
+
+        IBlocks GetBlockStats(ILatestBlocks latestBlocks, IStorage storage);
+
+        ILatestBlocks GetLatestBlocks(IStorage storage);
     }
 }

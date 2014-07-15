@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System.Collections.Generic;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Pools.Statistics;
@@ -30,19 +29,20 @@ namespace Coinium.Server.Web.Modules
 {
     public class IndexModule : NancyModule
     {
-        public IndexModule(IPoolManager poolManager)
+        public IndexModule(IPoolManager poolManager, IStatistics statistics)
         {
             Get["/"] = _ => View["index", new IndexModel
             {
-                Global = poolManager.Statistics,
-                Pools = poolManager.GetPools()
+                Pools = poolManager.GetPools(),
+                Statistics = statistics,
             }];
         }
     }
 
     public class IndexModel
     {
-        public IGlobalStatistics Global { get; set; }
         public IList<IPool> Pools { get; set; }
+
+        public IStatistics Statistics { get; set; }
     }
 }
