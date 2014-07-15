@@ -112,6 +112,7 @@
     <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Mining\Pools\Statistics\Blocks.cs" />
     <Compile Include="Mining\Pools\Statistics\IBlocks.cs" />
+    <Compile Include="Mining\Pools\Statistics\IJsonResponse.cs" />
     <Compile Include="Mining\Pools\Statistics\ILatestBlocks.cs" />
     <Compile Include="Mining\Pools\Statistics\IStatisticsObjectFactory.cs" />
     <Compile Include="Mining\Pools\Statistics\LatestBlocks.cs" />
@@ -173,6 +174,8 @@
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
     <Compile Include="Server\Web\IWebServerConfig.cs" />
     <Compile Include="Server\Web\Modules\Api.cs" />
+    <Compile Include="Server\Web\Modules\Models\Error.cs" />
+    <Compile Include="Server\Web\Modules\Models\JsonError.cs" />
     <Compile Include="Server\Web\Modules\Pool.cs" />
     <Compile Include="Server\Web\WebServer.cs" />
     <Compile Include="Server\Web\WebServerConfig.cs" />

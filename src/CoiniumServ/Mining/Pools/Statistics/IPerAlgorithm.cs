@@ -24,14 +24,16 @@ using System;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IPerAlgorithm
+    public interface IPerAlgorithm:IJsonResponse
     {
         string Name { get; }
 
-        Int32 WorkerCount { get; set; }
+        Int32 WorkerCount { get; }
 
-        UInt64 Hashrate { get; set; }
+        UInt64 Hashrate { get; }
 
         void Reset();
+
+        void Recache(UInt64 hashrate, int workerCount);
     }
 }

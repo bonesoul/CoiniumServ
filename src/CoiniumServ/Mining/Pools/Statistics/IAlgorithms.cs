@@ -24,7 +24,8 @@ using System.Collections.Generic;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IAlgorithms: IEnumerable<KeyValuePair<string, IPerAlgorithm>>, IStatisticsProvider
+    public interface IAlgorithms: IEnumerable<KeyValuePair<string, IPerAlgorithm>>, IJsonResponse, IStatisticsProvider
     {
+        IPerAlgorithm GetByName(string name);
     }
 }

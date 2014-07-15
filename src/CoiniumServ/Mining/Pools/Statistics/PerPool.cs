@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using System.Dynamic;
 using System.Linq;
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
@@ -28,6 +29,7 @@ using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 using Coinium.Persistance;
 using Coinium.Utils.Helpers.Time;
+using Newtonsoft.Json;
 
 namespace Coinium.Mining.Pools.Statistics
 {
@@ -39,13 +41,15 @@ namespace Coinium.Mining.Pools.Statistics
         public double Difficulty { get; private set; }
         public int CurrentBlock { get; private set; }
         public IBlocks Blocks { get; private set; }
-        public string Algorithm { get; private set; }
+
+        public string Json { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
         private readonly IStorage _storage;
         private readonly IHashAlgorithm _hashAlgorithm;
         private readonly IMinerManager _minerManager;
         private readonly IPoolConfig _poolConfig;
+        private readonly dynamic _response;
 
         private readonly double _shareMultiplier;
         private const int HashrateWindow = 300; /* How many seconds worth of shares should be gathered to generate hashrate. */
@@ -59,18 +63,34 @@ namespace Coinium.Mining.Pools.Statistics
             Blocks = blockStatistics;
             _storage = storage;
 
+            _response = new ExpandoObject();
             _shareMultiplier = Math.Pow(2, 32) / _hashAlgorithm.Multiplier;
         }
 
         public void Recache(object state)
         {
+            // recache data.
+            WorkerCount = _minerManager.Miners.Count;
+
             ReadCoinData();
             ReadHashrate();
-
-            WorkerCount = _minerManager.Miners.Count;
-            Algorithm = _poolConfig.Coin.Algorithm;
-
             Blocks.Recache(state);
+
+            // recache json response.
+            _response.workers = WorkerCount;
+            _response.hashrate = Hashrate;
+
+            _response.coin = new ExpandoObject();
+            _response.coin.symbol = _poolConfig.Coin.Symbol;
+            _response.coin.name = _poolConfig.Coin.Name;
+            _response.coin.algorithm = _poolConfig.Coin.Algorithm;
+
+            _response.network = new ExpandoObject();
+            _response.network.currentBlock = CurrentBlock;
+            _response.network.difficulty = Difficulty;
+            _response.network.hashrate = NetworkHashrate;
+
+            Json = JsonConvert.SerializeObject(_response);
         }
 
         private void ReadHashrate()
@@ -90,6 +110,11 @@ namespace Coinium.Mining.Pools.Statistics
             NetworkHashrate = miningInfo.NetworkHashps;
             Difficulty = miningInfo.Difficulty;
             CurrentBlock = miningInfo.Blocks;            
+        }
+
+        public object GetResponseObject()
+        {
+            return _response;
         }
     }
 }

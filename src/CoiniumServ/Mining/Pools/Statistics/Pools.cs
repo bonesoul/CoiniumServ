@@ -22,19 +22,24 @@
 #endregion
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
+using Newtonsoft.Json;
 
 namespace Coinium.Mining.Pools.Statistics
 {
     public class Pools:IPools
     {
+        public string Json { get; private set; }
+
         private readonly Dictionary<string, IPerPool> _pools;
         private readonly IPoolManager _poolManager;
+        private readonly Dictionary<string, ExpandoObject> _response;
 
         public Pools(IPoolManager poolManager)
         {
             _poolManager = poolManager;
             _pools = new Dictionary<string, IPerPool>();
-
+            _response = new Dictionary<string, ExpandoObject>();
 
             foreach (var pool in poolManager.GetPools())
             {
@@ -54,10 +59,26 @@ namespace Coinium.Mining.Pools.Statistics
 
         public void Recache(object state)
         {
+            // recache data.
             foreach (var pool in _poolManager.GetPools())
             {
                 pool.Statistics.Recache(state);
             }
+
+            // recache response.
+            _response.Clear();
+
+            foreach (var pool in _poolManager.GetPools())
+            {
+                _response.Add(pool.Config.Coin.Symbol.ToLower(), (ExpandoObject)pool.Statistics.GetResponseObject());
+            }
+
+            Json = JsonConvert.SerializeObject(_response);
+        }
+
+        public object GetResponseObject()
+        {
+            return _response;
         }
     }
 }

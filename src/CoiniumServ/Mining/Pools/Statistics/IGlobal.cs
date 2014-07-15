@@ -24,7 +24,7 @@ using System;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IGlobal: IStatisticsProvider
+    public interface IGlobal:  IJsonResponse, IStatisticsProvider
     {
         UInt64 Hashrate { get; }
 

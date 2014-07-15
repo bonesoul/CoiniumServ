@@ -21,6 +21,8 @@
 // 
 #endregion
 using System;
+using System.Dynamic;
+using Newtonsoft.Json;
 
 namespace Coinium.Mining.Pools.Statistics
 {
@@ -28,24 +30,43 @@ namespace Coinium.Mining.Pools.Statistics
     {
         public UInt64 Hashrate { get; private set; }
         public Int32 WorkerCount { get; private set; }
+        public string Json { get; private set; }
 
-        private readonly IPools _poolStatistics;
+        private readonly dynamic _response;
+        private readonly IPools _pools;
+        private readonly IAlgorithms _algorithms;
 
-        public Global(IPools poolStatistics)
+
+        public Global(IPools pools, IAlgorithms algorithms)
         {
-            _poolStatistics = poolStatistics;
+            _pools = pools;
+            _algorithms = algorithms;
+            _response = new ExpandoObject();
         }
 
         public void Recache(object state)
         {
+            // recache data.
             Hashrate = 0;
             WorkerCount = 0;
 
-            foreach (var pair in _poolStatistics)
+            foreach (var pair in _pools)
             {
                 Hashrate += pair.Value.Hashrate;
                 WorkerCount += pair.Value.WorkerCount;
             }
+
+            // recache response.
+            _response.hashrate = Hashrate;
+            _response.workers = WorkerCount;
+            _response.algorithms = _algorithms.GetResponseObject();
+
+            Json = JsonConvert.SerializeObject(_response);
+        }
+
+        public object GetResponseObject()
+        {
+            return _response;
         }
     }
 }

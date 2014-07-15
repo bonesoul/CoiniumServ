@@ -22,35 +22,58 @@
 #endregion
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
+using Coinium.Coin.Helpers;
+using Newtonsoft.Json;
 
 namespace Coinium.Mining.Pools.Statistics
 {
     public class Algorithms : IAlgorithms
     {
-        private readonly Dictionary<string, IPerAlgorithm> _algorithms;
-        private readonly IPools _poolStatistics;
+        public string Json { get; private set; }
 
-        public Algorithms(IPools poolStatistics)
+        private readonly Dictionary<string, IPerAlgorithm> _algorithms;
+        private readonly Dictionary<string, object> _response;
+        private readonly IPoolManager _poolManager;
+
+        public Algorithms(IPoolManager poolManager)
         {
-            _poolStatistics = poolStatistics;
+            _poolManager = poolManager;
             _algorithms = new Dictionary<string, IPerAlgorithm>();
+            _response = new Dictionary<string, object>();
         }
 
         public void Recache(object state)
         {
+            // recache data.
             foreach (var pair in _algorithms)
             {
                 pair.Value.Reset();
             }
 
-            foreach (var pair in _poolStatistics)
+            foreach (var pool in _poolManager.GetPools())
             {
-                if (!_algorithms.ContainsKey(pair.Value.Algorithm))
-                    _algorithms.Add(pair.Value.Algorithm, new PerAlgorithm(pair.Value.Algorithm));
+                if (!_algorithms.ContainsKey(pool.Config.Coin.Algorithm))
+                    _algorithms.Add(pool.Config.Coin.Algorithm, new PerAlgorithm(pool.Config.Coin.Algorithm));
 
-                _algorithms[pair.Value.Algorithm].Hashrate = pair.Value.Hashrate;
-                _algorithms[pair.Value.Algorithm].WorkerCount = pair.Value.WorkerCount;
+                _algorithms[pool.Config.Coin.Algorithm].Recache(pool.Statistics.Hashrate, pool.Statistics.WorkerCount);                
             }
+
+            // recache response.
+            _response.Clear();
+
+            foreach (var pair in _algorithms)
+            {
+                var algorithm = pair.Value;
+                _response.Add(algorithm.Name, algorithm.GetResponseObject());
+            }
+
+            Json = JsonConvert.SerializeObject(_response);
+        }
+
+        public IPerAlgorithm GetByName(string name)
+        {
+            return !_algorithms.ContainsKey(name) ? null : _algorithms[name];
         }
 
         public IEnumerator<KeyValuePair<string, IPerAlgorithm>> GetEnumerator()
@@ -61,6 +84,11 @@ namespace Coinium.Mining.Pools.Statistics
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public object GetResponseObject()
+        {
+            return _response;
         }
     }
 }

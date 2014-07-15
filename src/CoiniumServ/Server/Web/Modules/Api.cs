@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
+
 using System.Dynamic;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Pools.Statistics;
+using Coinium.Server.Web.Modules.Models;
 using Nancy;
 using Newtonsoft.Json;
 
@@ -33,38 +34,41 @@ namespace Coinium.Server.Web.Modules
     {
         public ApiModule(IPoolManager poolManager, IStatistics statistics)
         {
-            Get["/api"] = _ =>
+            Get["/api"] = _ => View["api"];
+
+            Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());
+            
+            Get["/api/pools"] = _ => Response.AsJson(statistics.Pools.GetResponseObject());
+            Get["/api/pool/{slug}"] = _ =>
             {
-                return "Not implemented yet";
+                var pool = poolManager.GetBySymbol(_.slug);
+
+                Response response;
+
+                if (pool == null)
+                    response = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
+                else
+                    response = (Response)pool.Json;
+
+                response.ContentType = "application/json";
+                return response; 
             };
 
-            Get["/api/global"] = _ =>
+            Get["/api/algorithms"] = _ => Response.AsJson(statistics.Algorithms.GetResponseObject());
+
+            Get["/api/algorithm/{slug}"] = _ =>
             {
-                var algorithms = new Dictionary<string, ExpandoObject>();
-                
-                //foreach (var algo in poolManager.Statistics.Algorithms)
-                //{
-                //    dynamic @obj = new ExpandoObject();
-                //    algorithms.Add(algo.Name, @obj);
-                //    @obj.hashrate = algo.Hashrate;
-                //    @obj.workers = algo.Workers;
-                //}                
+                var algorithm = statistics.Algorithms.GetByName(_.slug);
 
-                //var globalStats = new
-                //{
-                //    hashrate = poolManager.Statistics.Hashrate,
-                //    workers = poolManager.Statistics.Workers,
-                //    algorithms = algorithms,
-                //};
+                Response response;
 
-                //return Response.AsJson(globalStats);
-
-                return null;
-            };
-
-            Get["/api/pools"] = _ =>
-            {
-                return Response.AsJson(statistics);
+                if (algorithm == null)
+                    response = JsonConvert.SerializeObject(new JsonError("Algorithm not found!"));
+                else
+                    response = (Response)algorithm.Json;                                      
+                    
+                response.ContentType = "application/json";
+                return response;                
             };
         }
     }

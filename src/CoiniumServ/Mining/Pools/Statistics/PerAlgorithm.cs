@@ -20,23 +20,51 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
+using System.Dynamic;
+using Newtonsoft.Json;
+
 namespace Coinium.Mining.Pools.Statistics
 {
     public class PerAlgorithm:IPerAlgorithm
     {
+        public string Json { get; private set; }
         public string Name { get; private set; }
-        public int WorkerCount { get; set; }
-        public ulong Hashrate { get; set; }
+        public int WorkerCount { get; private set; }
+        public ulong Hashrate { get; private set; }
+
+        private readonly dynamic _response;
 
         public PerAlgorithm(string algorithm)
         {
             Name = algorithm;
+
+            _response = new ExpandoObject();
         }
 
         public void Reset()
         {
             Hashrate = 0;
             WorkerCount = 0;
+        }
+
+        public void Recache(UInt64 hashrate, int workerCount)
+        {
+            // recache data.
+            Hashrate = hashrate;
+            WorkerCount = workerCount;
+
+            // recache json response.
+            _response.hashrate = Hashrate;
+            _response.workers = WorkerCount;
+
+            Json = JsonConvert.SerializeObject(_response);
+        }
+
+        public object GetResponseObject()
+        {
+            return _response;
         }
     }
 }

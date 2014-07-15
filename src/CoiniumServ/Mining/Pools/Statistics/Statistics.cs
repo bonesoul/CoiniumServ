@@ -45,9 +45,9 @@ namespace Coinium.Mining.Pools.Statistics
 
         public void Recache(object state)
         {
-            Global.Recache(state);
             Pools.Recache(state);
             Algorithms.Recache(state);
+            Global.Recache(state);
 
             // reset the recache timer.
             _timer.Change(TimerExpiration * 1000, Timeout.Infinite);
