@@ -31,14 +31,14 @@ using Coinium.Utils.Helpers.Time;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public class PerPoolStats:IPerPoolStats
+    public class PerPool:IPerPool
     {       
         public ulong Hashrate { get; private set; }
         public ulong NetworkHashrate { get; private set; }
         public int WorkerCount { get; private set; }
         public double Difficulty { get; private set; }
         public int CurrentBlock { get; private set; }
-        public IBlockStats LatestBlocks { get; private set; }
+        public IBlocks Blocks { get; private set; }
         public string Algorithm { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
@@ -50,13 +50,13 @@ namespace Coinium.Mining.Pools.Statistics
         private readonly double _shareMultiplier;
         private const int HashrateWindow = 300; /* How many seconds worth of shares should be gathered to generate hashrate. */
 
-        public PerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage)
+        public PerPool(IPoolConfig poolConfig, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage)
         {
             _poolConfig = poolConfig;
             _daemonClient = daemonClient;            
             _hashAlgorithm = hashAlgorithm;
             _minerManager = minerManager;
-            LatestBlocks = blockStatistics;
+            Blocks = blockStatistics;
             _storage = storage;
 
             _shareMultiplier = Math.Pow(2, 32) / _hashAlgorithm.Multiplier;
@@ -70,7 +70,7 @@ namespace Coinium.Mining.Pools.Statistics
             WorkerCount = _minerManager.Miners.Count;
             Algorithm = _poolConfig.Coin.Algorithm;
 
-            LatestBlocks.Recache(state);
+            Blocks.Recache(state);
         }
 
         private void ReadHashrate()

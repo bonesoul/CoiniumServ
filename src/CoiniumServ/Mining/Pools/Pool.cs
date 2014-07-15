@@ -50,7 +50,7 @@ namespace Coinium.Mining.Pools
     {
         public IPoolConfig Config { get; private set; }
 
-        public IPerPoolStats Stats { get; private set; }
+        public IPerPool Statistics { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
         private readonly IServerFactory _serverFactory;
@@ -92,6 +92,7 @@ namespace Coinium.Mining.Pools
         /// <param name="shareManagerFactory">The share manager factory.</param>
         /// <param name="storageFactory"></param>
         /// <param name="paymentProcessorFactory"></param>
+        /// <param name="statisticsObjectFactory"></param>
         public Pool(
             IHashAlgorithmFactory hashAlgorithmFactory, 
             IServerFactory serverFactory, 
@@ -177,8 +178,10 @@ namespace Coinium.Mining.Pools
             _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm);
             _jobManager.Initialize(InstanceId);
 
-            var blockStats = _statisticsObjectFactory.GetBlockStats(_storage);
-            Stats = _statisticsObjectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, _storage);
+
+            var latestBlocks = _statisticsObjectFactory.GetLatestBlocks(_storage);
+            var blockStats = _statisticsObjectFactory.GetBlockStats(latestBlocks, _storage);
+            Statistics = _statisticsObjectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, _storage);
         }
 
         private void InitServers()

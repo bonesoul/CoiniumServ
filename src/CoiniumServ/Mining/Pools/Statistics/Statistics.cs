@@ -26,9 +26,9 @@ namespace Coinium.Mining.Pools.Statistics
 {
     public class Statistics:IStatistics, IStatisticsProvider
     {
-        public IGlobalStats Global { get; private set; }
-        public IAlgoStats Algorithms { get; private set; }
-        public IPoolStats Pools { get; private set; }
+        public IGlobal Global { get; private set; }
+        public IAlgorithms Algorithms { get; private set; }
+        public IPools Pools { get; private set; }
 
         private readonly Timer _timer;
         private const int TimerExpiration = 10;

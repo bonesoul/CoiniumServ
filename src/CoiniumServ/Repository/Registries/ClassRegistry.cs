@@ -44,7 +44,7 @@ namespace Coinium.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(Algorithms.Scrypt).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(Crypto.Algorithms.Algorithms.Scrypt).AsSingleton();
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
@@ -52,11 +52,12 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<IStatistics, Statistics>().AsSingleton();
-            _applicationContext.Container.Register<IPoolStats, PoolStats>().AsSingleton();            
-            _applicationContext.Container.Register<IPerPoolStats, PerPoolStats>().AsMultiInstance();
-            _applicationContext.Container.Register<IBlockStats, BlockStats>().AsMultiInstance();
-            _applicationContext.Container.Register<IGlobalStats, GlobalStats>().AsSingleton();
-            _applicationContext.Container.Register<IAlgoStats, AlgoStats>().AsSingleton();
+            _applicationContext.Container.Register<IPools, Pools>().AsSingleton();            
+            _applicationContext.Container.Register<IPerPool, PerPool>().AsMultiInstance();
+            _applicationContext.Container.Register<IBlocks, Blocks>().AsMultiInstance();
+            _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();
+            _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
+            _applicationContext.Container.Register<IAlgorithms, Mining.Pools.Statistics.Algorithms>().AsSingleton();
         }
     }
 }

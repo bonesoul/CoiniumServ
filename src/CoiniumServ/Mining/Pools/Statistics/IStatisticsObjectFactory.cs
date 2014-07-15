@@ -32,14 +32,16 @@ namespace Coinium.Mining.Pools.Statistics
     {
         IStatistics GetStatistics();
 
-        IGlobalStats GetGlobalStatistics();
+        IGlobal GetGlobalStatistics();
 
-        IAlgoStats GetAlgorithmStatistics();
+        IAlgorithms GetAlgorithmStatistics();
 
-        IPoolStats GetPoolStats();
+        IPools GetPoolStats();
 
-        IPerPoolStats GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage);
+        IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage);
 
-        IBlockStats GetBlockStats(IStorage storage);
+        IBlocks GetBlockStats(ILatestBlocks latestBlocks, IStorage storage);
+
+        ILatestBlocks GetLatestBlocks(IStorage storage);
     }
 }

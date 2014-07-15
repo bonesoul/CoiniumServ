@@ -20,11 +20,32 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
+using System;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IPoolStats : IEnumerable<KeyValuePair<string, IPerPoolStats>>, IStatisticsProvider
+    public class Global : IGlobal
     {
+        public UInt64 Hashrate { get; private set; }
+        public Int32 WorkerCount { get; private set; }
+
+        private readonly IPools _poolStatistics;
+
+        public Global(IPools poolStatistics)
+        {
+            _poolStatistics = poolStatistics;
+        }
+
+        public void Recache(object state)
+        {
+            Hashrate = 0;
+            WorkerCount = 0;
+
+            foreach (var pair in _poolStatistics)
+            {
+                Hashrate += pair.Value.Hashrate;
+                WorkerCount += pair.Value.WorkerCount;
+            }
+        }
     }
 }

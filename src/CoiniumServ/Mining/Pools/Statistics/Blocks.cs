@@ -20,14 +20,38 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using Coinium.Persistance;
+
 namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IStatistics
+    public class Blocks:IBlocks
     {
-        IGlobal Global { get; }
+        public int Pending { get; private set; }
+        public int Confirmed { get; private set; }
+        public int Orphaned { get; private set; }
+        public int Total { get; private set; }
+        public ILatestBlocks Latest { get; private set; }
 
-        IAlgorithms Algorithms { get; }
+        private readonly IStorage _storage;
 
-        IPools Pools { get; }
+        public Blocks(ILatestBlocks latestBlocks, IStorage storage)
+        {
+            _storage = storage;
+            Latest = latestBlocks;
+        }
+
+        public void Recache(object state)
+        {
+            // get block statistics.
+            var blockCounts = _storage.GetBlockCounts();
+
+            // read block stats.
+            Pending = blockCounts.ContainsKey("pending") ? blockCounts["pending"] : 0;
+            Confirmed = blockCounts.ContainsKey("confirmed") ? blockCounts["confirmed"] : 0;
+            Orphaned = blockCounts.ContainsKey("orphaned") ? blockCounts["orphaned"] : 0;
+
+            Latest.Recache(state);
+        }
     }
 }

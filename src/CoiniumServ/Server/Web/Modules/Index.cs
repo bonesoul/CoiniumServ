@@ -29,11 +29,12 @@ namespace Coinium.Server.Web.Modules
 {
     public class IndexModule : NancyModule
     {
-        public IndexModule(IPoolManager poolManager)
+        public IndexModule(IPoolManager poolManager, IStatistics statistics)
         {
             Get["/"] = _ => View["index", new IndexModel
             {
-                Pools = poolManager.GetPools()
+                Pools = poolManager.GetPools(),
+                Statistics = statistics,
             }];
         }
     }
@@ -41,5 +42,7 @@ namespace Coinium.Server.Web.Modules
     public class IndexModel
     {
         public IList<IPool> Pools { get; set; }
+
+        public IStatistics Statistics { get; set; }
     }
 }

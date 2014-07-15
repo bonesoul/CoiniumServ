@@ -25,15 +25,15 @@ using System.Collections.Generic;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public class AlgoStats : IAlgoStats
+    public class Algorithms : IAlgorithms
     {
-        private readonly Dictionary<string, IPerAlgorithmStats> _algorithms;
-        private readonly IPoolStats _poolStatistics;
+        private readonly Dictionary<string, IPerAlgorithm> _algorithms;
+        private readonly IPools _poolStatistics;
 
-        public AlgoStats(IPoolStats poolStatistics)
+        public Algorithms(IPools poolStatistics)
         {
             _poolStatistics = poolStatistics;
-            _algorithms = new Dictionary<string, IPerAlgorithmStats>();
+            _algorithms = new Dictionary<string, IPerAlgorithm>();
         }
 
         public void Recache(object state)
@@ -46,14 +46,14 @@ namespace Coinium.Mining.Pools.Statistics
             foreach (var pair in _poolStatistics)
             {
                 if (!_algorithms.ContainsKey(pair.Value.Algorithm))
-                    _algorithms.Add(pair.Value.Algorithm, new PerAlgorithmStats(pair.Value.Algorithm));
+                    _algorithms.Add(pair.Value.Algorithm, new PerAlgorithm(pair.Value.Algorithm));
 
                 _algorithms[pair.Value.Algorithm].Hashrate = pair.Value.Hashrate;
                 _algorithms[pair.Value.Algorithm].WorkerCount = pair.Value.WorkerCount;
             }
         }
 
-        public IEnumerator<KeyValuePair<string, IPerAlgorithmStats>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, IPerAlgorithm>> GetEnumerator()
         {
             return _algorithms.GetEnumerator();
         }

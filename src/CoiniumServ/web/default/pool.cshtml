@@ -33,7 +33,7 @@
                         <i class="fa fa-calendar"></i> Difficulty
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.Miners.Count</span>
+                        <span class="badge">@Model.Statistics.WorkerCount</span>
                         <i class="fa fa-calendar"></i> Workers
                     </a>
                     <a href="#" class="list-group-item">
@@ -41,7 +41,7 @@
                         <i class="fa fa-calendar"></i> Algorithm
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.CurrentBlockHeight</span>
+                        <span class="badge">@Model.Statistics.CurrentBlock</span>
                         <i class="fa fa-calendar"></i> Current Block
                     </a>
                 </div>
@@ -116,8 +116,8 @@
                                         }
                                     </td>
                                     <td>@block.Amount</td>
-                                    <td><a href="https://chain.so/block/LTCTEST/@block.BlockHash" target="_blank">@block.BlockHash.Substring(0, block.BlockHash.Length > 10 ? 10 : block.BlockHash.Length)..</a></td>
-                                    <td><a href="https://chain.so/tx/LTCTEST/@block.TransactionHash" target="_blank">@block.TransactionHash.Substring(0, block.TransactionHash.Length > 10 ? 10 : block.TransactionHash.Length)..</a></td>
+                                    <td>@block.BlockHash.Substring(0, block.BlockHash.Length > 10 ? 10 : block.BlockHash.Length)..</td>
+                                    <td>@block.TransactionHash.Substring(0, block.TransactionHash.Length > 10 ? 10 : block.TransactionHash.Length)..</td>
                                 </tr>
                             }
                         </tbody>

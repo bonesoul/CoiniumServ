@@ -20,14 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System;
+
 namespace Coinium.Mining.Pools.Statistics
 {
-    public interface IStatistics
+    public interface IPerAlgorithm
     {
-        IGlobal Global { get; }
+        string Name { get; }
 
-        IAlgorithms Algorithms { get; }
+        Int32 WorkerCount { get; set; }
 
-        IPools Pools { get; }
+        UInt64 Hashrate { get; set; }
+
+        void Reset();
     }
 }

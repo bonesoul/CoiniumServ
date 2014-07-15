@@ -51,22 +51,22 @@ namespace Coinium.Mining.Pools.Statistics
             return _applicationContext.Container.Resolve<IStatistics>();
         }
 
-        public IGlobalStats GetGlobalStatistics()
+        public IGlobal GetGlobalStatistics()
         {            
-            return _applicationContext.Container.Resolve<IGlobalStats>();       
+            return _applicationContext.Container.Resolve<IGlobal>();       
         }
 
-        public IAlgoStats GetAlgorithmStatistics()
+        public IAlgorithms GetAlgorithmStatistics()
         {
-            return _applicationContext.Container.Resolve<IAlgoStats>();
+            return _applicationContext.Container.Resolve<IAlgorithms>();
         }
 
-        public IPoolStats GetPoolStats()
+        public IPools GetPoolStats()
         {
-            return _applicationContext.Container.Resolve<IPoolStats>();
+            return _applicationContext.Container.Resolve<IPools>();
         }
 
-        public IPerPoolStats GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlockStats blockStatistics, IStorage storage)
+        public IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
@@ -78,17 +78,28 @@ namespace Coinium.Mining.Pools.Statistics
                 {"storage", storage},
             };
 
-            return _applicationContext.Container.Resolve<IPerPoolStats>(@params);            
+            return _applicationContext.Container.Resolve<IPerPool>(@params);            
         }
 
-        public IBlockStats GetBlockStats(IStorage storage)
+        public ILatestBlocks GetLatestBlocks(IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
+                {"storage", storage}
+            };
+
+            return _applicationContext.Container.Resolve<ILatestBlocks>(@params);   
+        }
+
+        public IBlocks GetBlockStats(ILatestBlocks latestBlocks, IStorage storage)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"latestBlocks", latestBlocks},
                 {"storage", storage},
             };
 
-            return _applicationContext.Container.Resolve<IBlockStats>(@params);   
+            return _applicationContext.Container.Resolve<IBlocks>(@params);   
         }
     }
 }

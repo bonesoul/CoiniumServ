@@ -20,23 +20,44 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System.Collections;
+using System.Collections.Generic;
+
 namespace Coinium.Mining.Pools.Statistics
 {
-    public class PerAlgorithmStats:IPerAlgorithmStats
+    public class Pools:IPools
     {
-        public string Name { get; private set; }
-        public int WorkerCount { get; set; }
-        public ulong Hashrate { get; set; }
+        private readonly Dictionary<string, IPerPool> _pools;
+        private readonly IPoolManager _poolManager;
 
-        public PerAlgorithmStats(string algorithm)
+        public Pools(IPoolManager poolManager)
         {
-            Name = algorithm;
+            _poolManager = poolManager;
+            _pools = new Dictionary<string, IPerPool>();
+
+
+            foreach (var pool in poolManager.GetPools())
+            {
+                _pools.Add(pool.Config.Coin.Name, pool.Statistics);
+            }
         }
 
-        public void Reset()
+        public IEnumerator<KeyValuePair<string, IPerPool>> GetEnumerator()
         {
-            Hashrate = 0;
-            WorkerCount = 0;
+            return _pools.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Recache(object state)
+        {
+            foreach (var pool in _poolManager.GetPools())
+            {
+                pool.Statistics.Recache(state);
+            }
         }
     }
 }

@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,20 +29,15 @@ using Coinium.Persistance.Blocks;
 
 namespace Coinium.Mining.Pools.Statistics
 {
-    public class BlockStats:IBlockStats
+    public class LatestBlocks:ILatestBlocks
     {
         private IEnumerable<IPersistedBlock> _blocks;
 
         private readonly IStorage _storage;
 
-        public BlockStats(IStorage storage)
+        public LatestBlocks(IStorage storage)
         {
             _storage = storage;
-        }
-
-        public void Recache(object state)
-        {
-            _blocks = _storage.GetAllBlocks().OrderByDescending(x => x.Key).Take(20).Select(item => item.Value).ToList();
         }
 
         public IEnumerator<IPersistedBlock> GetEnumerator()
@@ -52,6 +48,12 @@ namespace Coinium.Mining.Pools.Statistics
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public void Recache(object state)
+        {
+            // read latest blocks            
+            _blocks = _storage.GetAllBlocks().OrderByDescending(x => x.Key).Take(20).Select(item => item.Value).ToList();
         }
     }
 }
