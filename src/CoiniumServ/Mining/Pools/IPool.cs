@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Pools.Statistics;
 
@@ -29,8 +28,6 @@ namespace Coinium.Mining.Pools
     public interface IPool
     {
         IPoolConfig Config { get; }
-
-        IPoolStatistics Statistics { get; }
 
         IPerPoolStats Stats { get; }
 

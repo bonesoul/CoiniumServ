@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System.Collections.Generic;
 using System.Dynamic;
 using Coinium.Mining.Pools;
@@ -43,22 +42,24 @@ namespace Coinium.Server.Web.Modules
             {
                 var algorithms = new Dictionary<string, ExpandoObject>();
                 
-                foreach (var algo in poolManager.Statistics.Algorithms)
-                {
-                    dynamic @obj = new ExpandoObject();
-                    algorithms.Add(algo.Name, @obj);
-                    @obj.hashrate = algo.Hashrate;
-                    @obj.workers = algo.Workers;
-                }                
+                //foreach (var algo in poolManager.Statistics.Algorithms)
+                //{
+                //    dynamic @obj = new ExpandoObject();
+                //    algorithms.Add(algo.Name, @obj);
+                //    @obj.hashrate = algo.Hashrate;
+                //    @obj.workers = algo.Workers;
+                //}                
 
-                var globalStats = new
-                {
-                    hashrate = poolManager.Statistics.Hashrate,
-                    workers = poolManager.Statistics.Workers,
-                    algorithms = algorithms,
-                };
+                //var globalStats = new
+                //{
+                //    hashrate = poolManager.Statistics.Hashrate,
+                //    workers = poolManager.Statistics.Workers,
+                //    algorithms = algorithms,
+                //};
 
-                return Response.AsJson(globalStats);
+                //return Response.AsJson(globalStats);
+
+                return null;
             };
 
             Get["/api/pools"] = _ =>

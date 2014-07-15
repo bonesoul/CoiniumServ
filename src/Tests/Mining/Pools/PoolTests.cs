@@ -52,8 +52,6 @@ namespace Tests.Mining.Pools
         private readonly IMinerManagerFactory _minerManagerFactory;
         private readonly IStorageFactory _storageFactory;
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
-        private readonly IPoolStatisticsFactory _poolStatisticsFactory;
-        private readonly IBlockStatisticsFactory _blockStatisticsFactory;
         private readonly IStatisticsObjectFactory _statisticsObjectFactory;
 
         // object mocks.
@@ -66,8 +64,6 @@ namespace Tests.Mining.Pools
         private readonly IMiningServer _miningServer;
         private readonly IRpcService _rpcService;
         private readonly IPaymentProcessor _paymentProcessor;
-        private readonly IPoolStatistics _poolStatistics;
-        private readonly IBlockStatistics _blockStatistics;
         private readonly IStatistics _statistics;
 
         /// <summary>
@@ -84,8 +80,6 @@ namespace Tests.Mining.Pools
             _serviceFactory = Substitute.For<IServiceFactory>();
             _storageFactory = Substitute.For<IStorageFactory>();
             _paymentProcessorFactory = Substitute.For<IPaymentProcessorFactory>();
-            _poolStatisticsFactory = Substitute.For<IPoolStatisticsFactory>();
-            _blockStatisticsFactory = Substitute.For<IBlockStatisticsFactory>();
             _statisticsObjectFactory = Substitute.For<IStatisticsObjectFactory>();
 
             _daemonClient = Substitute.For<IDaemonClient>();
@@ -97,8 +91,6 @@ namespace Tests.Mining.Pools
             _rpcService = Substitute.For<IRpcService>();
             _storage = Substitute.For<IStorage>();
             _paymentProcessor = Substitute.For<IPaymentProcessor>();
-            _poolStatistics = Substitute.For<IPoolStatistics>();
-            _blockStatistics = Substitute.For<IBlockStatistics>();
             _statistics = Substitute.For<IStatistics>();
         }
 
@@ -119,8 +111,6 @@ namespace Tests.Mining.Pools
                 _shareManagerFactory,
                 _storageFactory,
                 _paymentProcessorFactory,
-                _poolStatisticsFactory,
-                _blockStatisticsFactory,
                 _statisticsObjectFactory
                 );
 
@@ -145,8 +135,6 @@ namespace Tests.Mining.Pools
                 _shareManagerFactory,
                 _storageFactory,
                 _paymentProcessorFactory,
-                _poolStatisticsFactory,
-                _blockStatisticsFactory,
                 _statisticsObjectFactory
                 );
 

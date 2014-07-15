@@ -47,9 +47,6 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(Algorithms.Scrypt).AsSingleton();
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
-            _applicationContext.Container.Register<IPoolStatistics, PoolStatistics>().AsMultiInstance();
-            _applicationContext.Container.Register<IBlockStatistics, BlockStatistics>().AsMultiInstance();
-            _applicationContext.Container.Register<IGlobalStatistics, GlobalStatistics>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
             _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();

@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +33,6 @@ namespace Coinium.Mining.Pools
 {
     public class PoolManager : IPoolManager
     {
-        public IGlobalStatistics Statistics { get; private set; }
         public IStatistics NewStatistics { get; private set; }
 
         private readonly List<IPool> _pools = new List<IPool>();
@@ -43,23 +41,19 @@ namespace Coinium.Mining.Pools
 
         private readonly IPoolConfigFactory _poolConfigFactory;
 
-        private readonly IGlobalStatisticsFactory _algorithmStatisticsFactory;
-
         private readonly IStatisticsObjectFactory _objectFactory;
 
-        public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory, IStatisticsObjectFactory objectFactory, IGlobalStatisticsFactory algorithmStatisticsFactory)
+        public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory, IStatisticsObjectFactory objectFactory)
         {
             _poolFactory = poolFactory;
             _poolConfigFactory = poolConfigFactory;
             _objectFactory = objectFactory;
-            _algorithmStatisticsFactory = algorithmStatisticsFactory;
         }
 
         public void Run()
         {
             LoadConfigs();
 
-            Statistics = _algorithmStatisticsFactory.Get(this);
             NewStatistics = _objectFactory.GetStatistics();
         }
 
