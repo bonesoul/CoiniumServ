@@ -61,6 +61,7 @@ You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues)
 * [Twitter](http://twitter.com/coinium)
 * [Support forums](http://forum.coinium.org/forum/19-support/)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
+* [Bitcoin wiki](https://en.bitcoin.it/wiki/CoiniumServ)
 
 ### Contributing
 
