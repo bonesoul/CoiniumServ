@@ -3,7 +3,12 @@
 	
 	"coin": "litecoin.json",
 
-	# coin daemon config
+    # pool configuration
+    "pool" : {
+        "address":  "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"
+    },
+
+	# coin daemon connection configuration
 	"daemon": {
 		"host": "127.0.0.1",
 		"port": 9333,
@@ -11,29 +16,40 @@
 		"password": "password"
 	},
 
-	# stratum server config
+	# payment processing configuration
+	"payments": {
+		"enabled": false,
+		"interval": 60,
+		"minimum": 1,
+        "rewards":  {
+            "myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1
+        }
+	},
+
+	# stratum server configuration
 	"stratum": {
 		"enabled": true,
 		"bind": "0.0.0.0",
 		"port": 3333,
-		"diff": 16
+		"diff": 16,
+        "vardiff": {
+            "enabled": true,
+            "minDiff": 8,
+            "maxDiff": 512,
+            "targetTime": 15,
+            "retargetTime": 90,
+            "variancePercent": 30
+        }
 	},
 
-	# vanilla server config
+	# vanilla server configuration
 	"vanilla": {
 		"enabled": true,
 		"bind": "localhost",
 		"port": 3334			
 	},
 
-	# payment processing
-	"payments": {
-		"enabled": false,
-		"interval": 60,
-		"minimum": 1
-	},
-
-	# mpos compat mode
+	# mpos compat mode configuration - not implemented yet!
 	"mpos": {
 		"enabled": false,
 		"database": {

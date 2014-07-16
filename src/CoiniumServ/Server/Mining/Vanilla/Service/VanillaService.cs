@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using AustinHarris.JsonRpc;
 using Coinium.Daemon;
 using Coinium.Daemon.Responses;
 using Coinium.Mining.Shares;
-using Coinium.Server.Mining.Vanilla;
+using Coinium.Server.Mining.Service;
 using Serilog;
 
-namespace Coinium.Service.Vanilla
+namespace Coinium.Server.Mining.Vanilla.Service
 {
     /// <summary>
     /// Stratum protocol implementation.

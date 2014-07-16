@@ -28,7 +28,8 @@ using Coinium.Mining.Pools;
 using Coinium.Net.Server.Sockets;
 using Coinium.Server.Mining.Stratum.Errors;
 using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Service.Stratum;
+using Coinium.Server.Mining.Stratum.Service;
+using Coinium.Utils.Buffers;
 using Coinium.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
@@ -63,7 +64,8 @@ namespace Coinium.Server.Mining.Stratum
         public bool Authenticated { get; set; }
 
         public IPool Pool { get; private set; }
-        public Difficulty Difficulty { get; private set; }
+
+        public float Difficulty { get; set; }
 
         /// <summary>
         /// Sends a new mining job to the miner.
@@ -74,6 +76,10 @@ namespace Coinium.Server.Mining.Stratum
         /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
         /// </summary>
         public uint ExtraNonce { get; private set; }
+
+        public int LastVardiffTimestamp { get; set; }
+        public int LastVardiffRetarget { get; set; }
+        public IRingBuffer VardiffBuffer { get; set; }
 
         private readonly IMinerManager _minerManager;
 
@@ -92,7 +98,7 @@ namespace Coinium.Server.Mining.Stratum
             Connection = connection; // the underlying connection.
             _minerManager = minerManager;
             Pool = pool;
-            Difficulty = new Difficulty(16); // set miner difficulty.
+            Difficulty = 16; // set miner difficulty.
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
@@ -166,7 +172,7 @@ namespace Coinium.Server.Mining.Stratum
             {
                 Id = null,
                 Method = "mining.set_difficulty",
-                Params = Difficulty
+                Params = new Difficulty(Difficulty)
             };
 
             var json = JsonConvert.SerializeObject(notification) + "\n";
@@ -174,6 +180,7 @@ namespace Coinium.Server.Mining.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             Connection.Send(data);
 
+            Log.ForContext<StratumMiner>().Debug("Difficulty updated to {0} for miner: {1:l}", Difficulty, Username);
             Log.ForContext<StratumMiner>().Verbose("Send:\n{0}", data.ToEncodedString().PrettifyJson());
         }
 

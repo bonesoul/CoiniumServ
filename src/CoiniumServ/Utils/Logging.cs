@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Linq;
@@ -28,7 +29,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace Coinium.Utils.Logging
+namespace Coinium.Utils
 {
     /// <summary>
     /// Controls the logging facilities.

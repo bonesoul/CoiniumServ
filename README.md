@@ -12,9 +12,10 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 ### Features
 
 ###### Platform Agnostic
-Can run on any platforms that C# can live in;
-* *nix (including Linux) over mono
-* Windows over DotNet.
+Can run on these platforms;
+* Linux/Unix over [mono](http://www.mono-project.com/).
+* MacOS over [mono](http://www.mono-project.com/).
+* Windows over [.Net](http://www.microsoft.com/net).
 
 ###### Multiplexed Structure
 * Multiple pools & ports.

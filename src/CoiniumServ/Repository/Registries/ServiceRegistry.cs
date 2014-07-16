@@ -21,9 +21,9 @@
 // 
 #endregion
 using Coinium.Repository.Context;
-using Coinium.Service;
-using Coinium.Service.Stratum;
-using Coinium.Service.Vanilla;
+using Coinium.Server.Mining.Service;
+using Coinium.Server.Mining.Stratum.Service;
+using Coinium.Server.Mining.Vanilla.Service;
 
 namespace Coinium.Repository.Registries
 {

@@ -24,6 +24,7 @@ using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Miners;
 using Coinium.Mining.Pools;
 using Coinium.Mining.Shares;
+using Coinium.Mining.Vardiff;
 using Coinium.Repository.Context;
 
 namespace Coinium.Repository.Registries
@@ -44,6 +45,7 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IJobManager, JobManager>().AsMultiInstance();
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
             _applicationContext.Container.Register<IPoolManager, PoolManager>().AsSingleton();
+            _applicationContext.Container.Register<IVardiffManager, VardiffManager>().AsMultiInstance();
         }
     }
 }

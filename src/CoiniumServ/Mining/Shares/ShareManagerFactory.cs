@@ -21,13 +21,10 @@
 // 
 #endregion
 using Coinium.Daemon;
-using Coinium.Mining.Jobs;
-using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Persistance;
 using Coinium.Repository.Context;
 using Nancy.TinyIoc;
-using Serilog;
 
 namespace Coinium.Mining.Shares
 {

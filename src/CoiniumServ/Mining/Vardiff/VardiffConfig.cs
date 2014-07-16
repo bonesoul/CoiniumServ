@@ -20,20 +20,26 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Mining.Miners;
 
-namespace Coinium.Service.Vanilla
+namespace Coinium.Mining.Vardiff
 {
-    public class HttpServiceContext
+    public class VardiffConfig:IVardiffConfig
     {
-        public IMiner Miner { get; private set; }
+        public bool Enabled { get; private set; }
+        public int MinimumDifficulty { get; private set; }
+        public int MaximumDifficulty { get; private set; }
+        public int TargetTime { get; private set; }
+        public int RetargetTime { get; private set; }
+        public int VariancePercent { get; private set; }
 
-        public HttpServiceRequest Request { get; private set; }
-
-        public HttpServiceContext(IMiner miner, HttpServiceRequest request)
+        public VardiffConfig(dynamic config)
         {
-            Miner = miner;
-            Request = request;
+            Enabled = config.enabled;
+            MinimumDifficulty = config.minDiff;
+            MaximumDifficulty = config.maxDiff;
+            TargetTime = config.targetTime;
+            RetargetTime = config.retargetTime;
+            VariancePercent = config.variancePercent;            
         }
     }
 }

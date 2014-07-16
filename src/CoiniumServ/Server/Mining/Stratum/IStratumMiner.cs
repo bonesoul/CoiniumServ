@@ -22,10 +22,11 @@
 #endregion
 using System;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Vardiff;
 
 namespace Coinium.Server.Mining.Stratum
 {
-    public interface IStratumMiner:IMiner
+    public interface IStratumMiner:IMiner, IVardiffMiner
     {
         /// <summary>
         /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)

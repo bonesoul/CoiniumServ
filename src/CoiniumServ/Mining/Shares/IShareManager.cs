@@ -33,5 +33,7 @@ namespace Coinium.Mining.Shares
         IShare ProcessShare(VanillaMiner miner, string data);
 
         event EventHandler BlockFound;
+
+        event EventHandler ShareSubmitted;
     }
 }

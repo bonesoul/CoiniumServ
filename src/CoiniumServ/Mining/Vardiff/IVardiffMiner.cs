@@ -20,16 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
 
-namespace Coinium.Persistance.Redis
+using Coinium.Utils.Buffers;
+
+namespace Coinium.Mining.Vardiff
 {
-    public interface IRedisConfig
+    public interface IVardiffMiner
     {
-        bool Enabled { get; }
-        string Host { get; }
-        Int32 Port { get;  }
-        string Password { get;  }
-        int DatabaseId { get;  }
+        int LastVardiffTimestamp { get; set; }
+
+        int LastVardiffRetarget { get; set; }
+
+        IRingBuffer VardiffBuffer { get; set; }
     }
 }

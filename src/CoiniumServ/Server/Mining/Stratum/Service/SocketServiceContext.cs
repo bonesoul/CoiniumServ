@@ -20,16 +20,21 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
 
-namespace Coinium.Persistance.Redis
+using Coinium.Mining.Miners;
+
+namespace Coinium.Server.Mining.Stratum.Service
 {
-    public interface IRedisConfig
+    public class SocketServiceContext
     {
-        bool Enabled { get; }
-        string Host { get; }
-        Int32 Port { get;  }
-        string Password { get;  }
-        int DatabaseId { get;  }
+        public IMiner Miner { get; private set; }
+
+        public SocketServiceRequest Request { get; private set; }
+
+        public SocketServiceContext(IMiner miner, SocketServiceRequest request)
+        {
+            Miner = miner;
+            Request = request;
+        }
     }
 }

@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using Coinium.Mining.Vardiff;
 using Coinium.Persistance.Redis;
 using Coinium.Server.Web;
 
@@ -36,6 +38,5 @@ namespace Coinium.Utils.Configuration
         IRedisConfig GetRedisConfig();
 
         IWebServerConfig GetWebServerConfig();
-
     }
 }

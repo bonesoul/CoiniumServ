@@ -37,6 +37,8 @@ namespace Coinium.Mining.Shares
     {
         public event EventHandler BlockFound;
 
+        public event EventHandler ShareSubmitted;
+
         private readonly IJobTracker _jobTracker;
 
         private readonly IDaemonClient _daemonClient;
@@ -123,6 +125,7 @@ namespace Coinium.Mining.Shares
                 Log.ForContext<ShareManager>().Debug("Share rejected at {0:0.00}/{1} by miner {2:l}.", share.Difficulty, miner.Difficulty, miner.Username);
             }
 
+            OnShareSubmitted(new ShareEventArgs(miner));  // notify the listeners about the share.
 
             return share;
         }
@@ -170,9 +173,17 @@ namespace Coinium.Mining.Shares
             }
         }
 
-        protected virtual void OnBlockFound(EventArgs e)
+        private void OnBlockFound(EventArgs e)
         {
             var handler = BlockFound;
+
+            if (handler != null)
+                handler(this, e);
+        }
+
+        private void OnShareSubmitted(EventArgs e)
+        {
+            var handler = ShareSubmitted;
 
             if (handler != null)
                 handler(this, e);

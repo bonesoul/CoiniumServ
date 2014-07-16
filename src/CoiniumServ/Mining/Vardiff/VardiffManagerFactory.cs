@@ -20,37 +20,38 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Server.Mining.Service;
 
-namespace Coinium.Server.Mining.Vanilla.Config
+using Coinium.Mining.Shares;
+using Coinium.Repository.Context;
+using Nancy.TinyIoc;
+
+namespace Coinium.Mining.Vardiff
 {
-    public class VanillaServerConfig : IVanillaServerConfig 
+    public class VardiffManagerFactory : IVardiffManagerFactory
     {
-        public bool Valid { get; private set; }
+        /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
 
-        public string Name { get; private set; }
-
-        public bool Enabled { get; private set; }
-
-        public string BindInterface { get; private set; }
-
-        public Int32 Port { get; private set; }
-
-        public VanillaServerConfig(dynamic config)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShareManagerFactory" /> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public VardiffManagerFactory(IApplicationContext applicationContext)
         {
-            if (config == null)
+            _applicationContext = applicationContext;
+        }
+
+        public IVardiffManager Get(IVardiffConfig vardiffConfig, IShareManager shareManager)
+        {
+            var @params = new NamedParameterOverloads
             {
-                Valid = false;
-                return;
-            }
+                {"vardiffConfig", vardiffConfig},
+                {"shareManager", shareManager},
+            };
 
-            Name = Services.Vanilla;
-            Enabled = config.enabled;
-            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "localhost";
-            Port = config.port;
-
-            Valid = true;
+            return _applicationContext.Container.Resolve<IVardiffManager>(@params);
         }
     }
 }

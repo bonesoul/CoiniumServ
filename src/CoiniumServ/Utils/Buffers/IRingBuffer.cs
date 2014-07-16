@@ -20,21 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Daemon;
-using Coinium.Mining.Shares;
 
-namespace Coinium.Service
+namespace Coinium.Utils.Buffers
 {
-    public interface IServiceFactory
+    public interface IRingBuffer
     {
-        /// <summary>
-        /// Gets the specified service name.
-        /// </summary>
-        /// <param name="serviceName">Name of the service.</param>
-        /// <param name="jobManager">The job manager.</param>
-        /// <param name="shareManager">The share manager.</param>
-        /// <param name="daemonClient">The daemon client.</param>
-        /// <returns></returns>
-        IRpcService Get(string serviceName, IShareManager shareManager, IDaemonClient daemonClient);
+        int Size { get; }
+
+        void Clear();
+
+        void Append(int item);
+
+        float Average { get; }
     }
 }

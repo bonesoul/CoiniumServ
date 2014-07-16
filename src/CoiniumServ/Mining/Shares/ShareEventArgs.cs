@@ -20,23 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Newtonsoft.Json;
 
-namespace Coinium.Service.Stratum
+using System;
+using Coinium.Server.Mining.Stratum;
+
+namespace Coinium.Mining.Shares
 {
-    /// <summary>
-    /// JsonRpc 2.0 over sockets request.
-    /// </summary>
-    public class SocketServiceRequest
+    public class ShareEventArgs:EventArgs
     {
-        public string Text { get; private set; }
+        public StratumMiner Miner { get; private set; }
 
-        public dynamic Data { get; private set; }
-
-        public SocketServiceRequest(string text)
+        public ShareEventArgs(StratumMiner miner)
         {
-            Text = text;
-            Data = JsonConvert.DeserializeObject<dynamic>(Text);
+            Miner = miner;
         }
     }
 }
