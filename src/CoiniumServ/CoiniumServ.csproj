@@ -142,8 +142,10 @@
     <Compile Include="Mining\Pools\Statistics\Pools.cs" />
     <Compile Include="Mining\Pools\Statistics\Statistics.cs" />
     <Compile Include="Mining\Shares\ShareEventArgs.cs" />
+    <Compile Include="Mining\Vardiff\IVardiffConfig.cs" />
     <Compile Include="Mining\Vardiff\IVardiffManager.cs" />
     <Compile Include="Mining\Vardiff\IVardiffManagerFactory.cs" />
+    <Compile Include="Mining\Vardiff\VardiffConfig.cs" />
     <Compile Include="Mining\Vardiff\VardiffManager.cs" />
     <Compile Include="Mining\Vardiff\VardiffManagerFactory.cs" />
     <Compile Include="Net\Server\Http\Web\ErrorConfiguration.cs" />
@@ -230,10 +232,11 @@
     <Compile Include="Utils\Helpers\IO\FileHelpers.cs" />
     <Compile Include="Utils\Helpers\Misc\Range.cs" />
     <Compile Include="Utils\Helpers\Time\TimeHelpers.cs" />
+    <Compile Include="Utils\Buffers\IRingBuffer.cs" />
     <Compile Include="Utils\Logging.cs" />
     <Compile Include="Utils\Platform\Framework.cs" />
     <Compile Include="Utils\Platform\PlatformManager.cs" />
-    <Compile Include="Utils\RingBuffer.cs" />
+    <Compile Include="Utils\Buffers\RingBuffer.cs" />
     <Compile Include="Utils\Versions\VersionInfo.cs" />
     <Compile Include="Crypto\Algorithms\Algorithms.cs" />
     <Compile Include="Crypto\Algorithms\IHashAlgorithmFactory.cs" />

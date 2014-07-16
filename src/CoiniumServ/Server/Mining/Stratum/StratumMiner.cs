@@ -29,6 +29,7 @@ using Coinium.Net.Server.Sockets;
 using Coinium.Server.Mining.Stratum.Errors;
 using Coinium.Server.Mining.Stratum.Notifications;
 using Coinium.Server.Mining.Stratum.Service;
+using Coinium.Utils.Buffers;
 using Coinium.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
@@ -74,6 +75,8 @@ namespace Coinium.Server.Mining.Stratum
         /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
         /// </summary>
         public uint ExtraNonce { get; private set; }
+
+        public IRingBuffer VardiffBuffer { get; set; }
 
         private readonly IMinerManager _minerManager;
 

@@ -28,8 +28,11 @@ namespace Coinium.Mining.Vardiff
 {
     public class VardiffManager:IVardiffManager
     {
-        public VardiffManager(IShareManager shareManager)
+        public IVardiffConfig Config { get; private set; }
+
+        public VardiffManager(IVardiffConfig vardiffConfig, IShareManager shareManager)
         {
+            Config = vardiffConfig;
             shareManager.ShareSubmitted += OnShare;
         }
 
@@ -38,7 +41,7 @@ namespace Coinium.Mining.Vardiff
             var shareArgs = (ShareEventArgs) e;
             var miner = shareArgs.Miner;
 
-            // TODO: implement vardiff.
+            
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Coinium.Persistance.Redis
         {
             _poolConfig = poolConfig; // the pool config.
             _redisConfig = globalConfigFactory.GetRedisConfig(); // read the redis config.
-            IsEnabled = _redisConfig.IsEnabled;
+            IsEnabled = _redisConfig.Enabled;
 
             if (IsEnabled)
                 Initialize();

@@ -26,7 +26,7 @@ namespace Coinium.Persistance.Redis
 {
     public class RedisConfig:IRedisConfig
     {
-        public bool IsEnabled { get; private set; }
+        public bool Enabled { get; private set; }
         public string Host { get; private set; }
         public Int32 Port { get; private set; }
         public string Password { get; private set; }
@@ -34,7 +34,7 @@ namespace Coinium.Persistance.Redis
 
         public RedisConfig(dynamic config)
         {
-            IsEnabled = config.enabled;
+            Enabled = config.enabled;
             Host = config.host;
             Port = config.port;
             Password = config.password;

@@ -26,7 +26,7 @@ namespace Coinium.Persistance.Redis
 {
     public interface IRedisConfig
     {
-        bool IsEnabled { get; }
+        bool Enabled { get; }
         string Host { get; }
         Int32 Port { get;  }
         string Password { get;  }

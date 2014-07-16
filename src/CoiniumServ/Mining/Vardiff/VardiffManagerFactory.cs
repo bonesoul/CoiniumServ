@@ -43,10 +43,11 @@ namespace Coinium.Mining.Vardiff
             _applicationContext = applicationContext;
         }
 
-        public IVardiffManager Get(IShareManager shareManager)
+        public IVardiffManager Get(IVardiffConfig vardiffConfig, IShareManager shareManager)
         {
             var @params = new NamedParameterOverloads
             {
+                {"vardiffConfig", vardiffConfig},
                 {"shareManager", shareManager},
             };
 

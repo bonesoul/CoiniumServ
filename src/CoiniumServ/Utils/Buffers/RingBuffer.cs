@@ -23,11 +23,13 @@
 
 using System.Linq;
 
-namespace Coinium.Utils
+namespace Coinium.Utils.Buffers
 {
-    public class RingBuffer
+    public class RingBuffer:IRingBuffer
     {
         public int Size { get { return _isFull ? Capacity : _cursor; } }
+
+        public float Average { get { return _buffer.Sum() / (_isFull ? Capacity : _cursor); } }
 
         private readonly int[] _buffer;
 
@@ -70,11 +72,6 @@ namespace Coinium.Utils
                     _isFull = true;
                 }
             }
-        }
-
-        public float Average()
-        {
-            return _buffer.Sum()/(_isFull ? Capacity : _cursor);
         }
     }
 }

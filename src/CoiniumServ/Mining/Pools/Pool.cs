@@ -181,7 +181,7 @@ namespace Coinium.Mining.Pools
 
             _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage);
 
-            _vardiffManager = _varddManagerFactory.Get(_shareManager);
+            _vardiffManager = _varddManagerFactory.Get(Config.Stratum.Vardiff, _shareManager);
 
             _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm);
             _jobManager.Initialize(InstanceId);

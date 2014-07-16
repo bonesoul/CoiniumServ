@@ -25,5 +25,6 @@ namespace Coinium.Mining.Vardiff
 {
     public interface IVardiffManager
     {
+        IVardiffConfig Config { get; }
     }
 }

@@ -21,11 +21,14 @@
 // 
 #endregion
 using System;
+using Coinium.Mining.Vardiff;
 
 namespace Coinium.Server.Mining.Stratum.Config
 {
     public interface IStratumServerConfig : IServerConfig
     {
         Int32 Diff { get; }
+
+        IVardiffConfig Vardiff { get; }
     }
 }

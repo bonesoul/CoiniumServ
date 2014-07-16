@@ -20,19 +20,21 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Mining.Miners;
-using Coinium.Utils.Buffers;
 
-namespace Coinium.Server.Mining.Stratum
+namespace Coinium.Mining.Vardiff
 {
-    public interface IStratumMiner:IMiner
+    public interface IVardiffConfig
     {
-        /// <summary>
-        /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
-        /// </summary>
-        UInt32 ExtraNonce { get; }
+        bool Enabled { get; }
 
-        IRingBuffer VardiffBuffer { get; set; }
+        int MinimumDifficulty { get; }
+
+        int MaximumDifficulty { get; }
+
+        int TargetTime { get; }
+
+        int RetargetTime { get; }
+
+        int VariancePercent { get; }
     }
 }

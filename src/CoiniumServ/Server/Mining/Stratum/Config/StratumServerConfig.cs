@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using Coinium.Mining.Vardiff;
 using Coinium.Server.Mining.Service;
 
 namespace Coinium.Server.Mining.Stratum.Config
@@ -38,6 +39,7 @@ namespace Coinium.Server.Mining.Stratum.Config
         public Int32 Port { get; private set; }
 
         public Int32 Diff { get; private set; }
+        public IVardiffConfig Vardiff { get; private set; }
 
         public StratumServerConfig(dynamic config)
         {
@@ -52,6 +54,8 @@ namespace Coinium.Server.Mining.Stratum.Config
             BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
             Port = config.port;
             Diff = config.diff;
+
+            Vardiff = new VardiffConfig(config.vardiff);
 
             Valid = true;
         }
