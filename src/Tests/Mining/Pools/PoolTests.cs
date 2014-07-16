@@ -159,8 +159,11 @@ namespace Tests.Mining.Pools
             // initialize the miner manager.
             _minerManagerFactory.Get(_daemonClient);
 
-            // payment processor
-            _paymentProcessorFactory.Get(_daemonClient, _storage);
+            var walletConfig = Substitute.For<IWalletConfig>();
+            var rewardsConfig = Substitute.For<IRewardsConfig>();
+
+            // payment processor            
+            _paymentProcessorFactory.Get(_daemonClient, _storage, walletConfig);
 
             // initialize storage manager
             _storageFactory.Get(Storages.Redis, poolConfig);
@@ -176,7 +179,7 @@ namespace Tests.Mining.Pools
             _vardiffManagerFactory.Get(vardiffConfig, _shareManager);
 
             // initalize job manager.
-            _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm).Returns(_jobManager);
+            _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm, walletConfig,rewardsConfig).Returns(_jobManager);
             _jobManager.Initialize(pool.InstanceId);
         
             // init daemon client

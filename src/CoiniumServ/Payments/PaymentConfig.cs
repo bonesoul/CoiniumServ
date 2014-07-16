@@ -20,10 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using JsonConfig;
 
 namespace Coinium.Payments
 {
@@ -41,7 +40,7 @@ namespace Coinium.Payments
                 Valid = false;
                 return;
             }
-
+            
             Enabled = config.enabled;
             Interval = config.interval;
             Minimum = config.minimum;

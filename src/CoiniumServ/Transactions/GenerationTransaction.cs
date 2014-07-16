@@ -29,6 +29,7 @@ using Coinium.Crypto;
 using Coinium.Daemon;
 using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
+using Coinium.Mining.Pools.Config;
 using Coinium.Transactions.Script;
 using Coinium.Utils.Helpers.Time;
 using Gibbed.IO;
@@ -112,13 +113,14 @@ namespace Coinium.Transactions
         /// <param name="extraNonce">The extra nonce.</param>
         /// <param name="daemonClient">The daemon client.</param>
         /// <param name="blockTemplate">The block template.</param>
+        /// <param name="rewardsConfig"></param>
         /// <param name="supportTxMessages">if set to <c>true</c> [support tx messages].</param>
         /// <remarks>
         /// Reference implementations:
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
         /// </remarks>
-        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, bool supportTxMessages = false)
+        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, IWalletConfig walletConfig, IRewardsConfig rewardsConfig, bool supportTxMessages = false)
         {
             DaemonClient = daemonClient;
             BlockTemplate = blockTemplate;
@@ -155,15 +157,8 @@ namespace Coinium.Transactions
 
             double blockReward = BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
 
-            const string poolWallet = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
-
-            var rewardRecipients = new Dictionary<string, double> // reward recipients addresses.
-            {
-                {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t", 1} // pool fee
-            };
-
             // generate output transactions for recipients (set in config).
-            foreach (var pair in rewardRecipients)
+            foreach (var pair in rewardsConfig)
             {
                 var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
                 blockReward -= amount;
@@ -172,7 +167,7 @@ namespace Coinium.Transactions
             }
 
             // send the remaining coins to pool's central wallet.
-            Outputs.AddPool(poolWallet, blockReward); 
+            Outputs.AddPool(walletConfig.Adress, blockReward); 
         }
 
         public void Create()

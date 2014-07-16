@@ -25,6 +25,7 @@ using System.Linq;
 using Coinium.Daemon;
 using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
+using Coinium.Mining.Pools.Config;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
 using Coinium.Utils.Extensions;
@@ -118,7 +119,9 @@ namespace Tests.Transactions
         public void CreateGenerationTransactionTest()
         {
             // create the test object.
-            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate);
+            var walletConfig = Substitute.For<IWalletConfig>();
+            var rewardsConfig = Substitute.For<IRewardsConfig>();
+            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, walletConfig, rewardsConfig);
 
             // use the exactly same input script data within our sample data.
             generationTransaction.Inputs.First().SignatureScript = _signatureScript;

@@ -20,34 +20,38 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Config;
-using Coinium.Daemon.Config;
-using Coinium.Payments;
-using Coinium.Server.Mining.Stratum.Config;
-using Coinium.Server.Mining.Vanilla.Config;
-using Coinium.Utils.Configuration;
+
+using System.Collections;
+using System.Collections.Generic;
+using JsonConfig;
 
 namespace Coinium.Mining.Pools.Config
 {
-    public interface IPoolConfig:IConfig
+    public class RewardsConfig:IRewardsConfig
     {
-        /// <summary>
-        /// Is the configuration enabled?
-        /// </summary>
-        bool Enabled { get; }
+        public bool Valid { get; private set; }
+        private readonly Dictionary<string, float> _rewards;
 
-        IWalletConfig Wallet { get; }
+        public RewardsConfig(dynamic config)
+        {
+            _rewards = new Dictionary<string, float>();
 
-        ICoinConfig Coin { get; }
+            // weird stuff going below because of JsonConfig libraries handling of dictionaries.            
+            foreach (ConfigObject kvp in config)
+                foreach (KeyValuePair<string, object> pair in kvp)
+                    _rewards.Add(pair.Key, float.Parse(pair.Value.ToString()));   
 
-        IStratumServerConfig Stratum { get; }
+            Valid = true;
+        }
 
-        IVanillaServerConfig Vanilla { get; }
+        public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
+        {
+            return _rewards.GetEnumerator();
+        }
 
-        IDaemonConfig Daemon { get; }
-
-        IRewardsConfig Rewards { get; }
-
-        IPaymentConfig Payments { get; }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

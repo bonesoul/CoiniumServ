@@ -27,6 +27,7 @@ using Coinium.Daemon;
 using Coinium.Daemon.Exceptions;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 using Coinium.Server.Mining.Stratum.Notifications;
 using Coinium.Transactions;
@@ -48,6 +49,10 @@ namespace Coinium.Mining.Jobs.Manager
 
         private readonly IJobCounter _jobCounter;
 
+        private readonly IWalletConfig _walletConfig;
+
+        private readonly IRewardsConfig _rewardsConfig;
+
         private IExtraNonce _extraNonce;
 
         public IExtraNonce ExtraNonce { get { return _extraNonce; } }
@@ -56,13 +61,15 @@ namespace Coinium.Mining.Jobs.Manager
         private Timer _timer;
         private const int TimerExpiration = 10;
 
-        public JobManager(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
+        public JobManager(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig)
         {
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _shareManager = shareManager;
             _minerManager = minerManager;
             _hashAlgorithm = hashAlgorithm;
+            _walletConfig = walletConfig;
+            _rewardsConfig = rewardsConfig;
             _jobCounter = new JobCounter();
         }
 
@@ -116,9 +123,13 @@ namespace Coinium.Mining.Jobs.Manager
         {
             try
             {
+                // TODO: fix the error for [Error] [JobManager] [n/a] New job creation failed:
+                // Coinium.Daemon.Exceptions.RpcException: Dogecoin is downloading blocks...
+
                 var blockTemplate = _daemonClient.GetBlockTemplate();
 
-                var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate);
+                // TODO: convert generation transaction to ioc based.
+                var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate,_walletConfig, _rewardsConfig);
                 generationTransaction.Create();
 
                 // create the job notification.

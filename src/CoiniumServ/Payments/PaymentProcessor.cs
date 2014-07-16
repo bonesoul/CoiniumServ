@@ -27,6 +27,7 @@ using System.Linq;
 using System.Threading;
 using Coinium.Daemon;
 using Coinium.Daemon.Exceptions;
+using Coinium.Mining.Pools.Config;
 using Coinium.Persistance;
 using Coinium.Persistance.Blocks;
 using Serilog;
@@ -49,13 +50,14 @@ namespace Coinium.Payments
         private readonly object _paymentsLock = new object();
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
-        private const string PoolAddress = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY";
+        private readonly IWalletConfig _walletConfig;
         private string _poolAccount = string.Empty;
 
-        public PaymentProcessor(IDaemonClient daemonClient, IStorage storage)
+        public PaymentProcessor(IDaemonClient daemonClient, IStorage storage , IWalletConfig walletConfig)
         {
             _daemonClient = daemonClient;
             _storage = storage;
+            _walletConfig = walletConfig;
         }
 
         public void Initialize(IPaymentConfig config)
@@ -268,7 +270,7 @@ namespace Coinium.Payments
                 candidate.Amount = transaction.Details.Sum(output => (decimal)output.Amount);
 
                 // get the output transaction that targets pools central wallet.
-                var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == PoolAddress);
+                var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == _walletConfig.Adress);
 
                 // make sure output for the pool central wallet exists
                 if (poolOutput == null)
@@ -319,19 +321,19 @@ namespace Coinium.Payments
 
         private void GetPoolAccount()
         {
-            var result = _daemonClient.GetAccount(PoolAddress);
+            var result = _daemonClient.GetAccount(_walletConfig.Adress);
             _poolAccount = result;
         }
 
         private bool ValidatePoolAddress()
         {
-            var result = _daemonClient.ValidateAddress(PoolAddress);
+            var result = _daemonClient.ValidateAddress(_walletConfig.Adress);
 
             // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
             if (result.IsValid && result.IsMine)
                 return true;
 
-            Log.ForContext<PaymentProcessor>().Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", PoolAddress);
+            Log.ForContext<PaymentProcessor>().Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _walletConfig.Adress);
             return false;
         }
 

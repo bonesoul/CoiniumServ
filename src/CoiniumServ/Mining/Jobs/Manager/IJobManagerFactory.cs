@@ -24,6 +24,7 @@ using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 
 namespace Coinium.Mining.Jobs.Manager
@@ -38,7 +39,9 @@ namespace Coinium.Mining.Jobs.Manager
         /// <param name="shareManager"></param>
         /// <param name="minerManager">The miner manager.</param>
         /// <param name="hashAlgorithm"></param>
+        /// <param name="walletConfig"></param>
+        /// <param name="rewardsConfig"></param>
         /// <returns></returns>
-        IJobManager Get(IDaemonClient daemonClient, IJobTracker jobtracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
+        IJobManager Get(IDaemonClient daemonClient, IJobTracker jobtracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig);
     }
 }

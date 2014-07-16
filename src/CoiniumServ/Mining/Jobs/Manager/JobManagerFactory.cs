@@ -24,6 +24,7 @@ using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
+using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Shares;
 using Coinium.Repository.Context;
 using Nancy.TinyIoc;
@@ -54,8 +55,10 @@ namespace Coinium.Mining.Jobs.Manager
         /// <param name="shareManager"></param>
         /// <param name="minerManager">The miner manager.</param>
         /// <param name="hashAlgorithm"></param>
+        /// <param name="walletConfig"></param>
+        /// <param name="rewardsConfig"></param>
         /// <returns></returns>
-        public IJobManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
+        public IJobManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig)
         {
             var @params = new NamedParameterOverloads
             {
@@ -63,7 +66,9 @@ namespace Coinium.Mining.Jobs.Manager
                 {"jobTracker", jobTracker},
                 {"shareManager", shareManager},
                 {"minerManager", minerManager},
-                {"hashAlgorithm", hashAlgorithm}
+                {"hashAlgorithm", hashAlgorithm},
+                {"walletConfig", walletConfig},
+                {"rewardsConfig", rewardsConfig}
             };
 
             return _applicationContext.Container.Resolve<IJobManager>(@params);

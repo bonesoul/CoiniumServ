@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using System.Collections.Generic;
 using Coinium.Utils.Configuration;
 
 namespace Coinium.Payments

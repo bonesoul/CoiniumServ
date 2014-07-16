@@ -22,8 +22,6 @@
 #endregion
 using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
-using Coinium.Coin.Helpers;
 using Newtonsoft.Json;
 
 namespace Coinium.Mining.Pools.Statistics

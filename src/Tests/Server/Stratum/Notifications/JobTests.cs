@@ -26,6 +26,7 @@ using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
 using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs;
+using Coinium.Mining.Pools.Config;
 using Coinium.Server.Mining.Stratum.Notifications;
 using Coinium.Transactions;
 using Coinium.Transactions.Script;
@@ -134,7 +135,9 @@ namespace Tests.Server.Stratum.Notifications
             _jobCounter = Substitute.For<JobCounter>();
 
             // generation transaction.
-            _generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate);
+            var walletConfig = Substitute.For<IWalletConfig>();
+            var rewardsConfig = Substitute.For<IRewardsConfig>();
+            _generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, walletConfig, rewardsConfig);
             _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
             _generationTransaction.Outputs = _outputs;
             _generationTransaction.Create();     

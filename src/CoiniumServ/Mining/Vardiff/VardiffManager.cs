@@ -32,10 +32,9 @@ namespace Coinium.Mining.Vardiff
     {
         public IVardiffConfig Config { get; private set; }
 
-        private float _variance;
-        private int _bufferSize;
-        private float _tMin;
-        private float _tMax;
+        private readonly int _bufferSize;
+        private readonly float _tMin;
+        private readonly float _tMax;
 
         public VardiffManager(IVardiffConfig vardiffConfig, IShareManager shareManager)
         {
@@ -46,10 +45,10 @@ namespace Coinium.Mining.Vardiff
 
             shareManager.ShareSubmitted += OnShare;
             
-            _variance = vardiffConfig.TargetTime*((float)vardiffConfig.VariancePercent/100);
+            var variance = vardiffConfig.TargetTime*((float)vardiffConfig.VariancePercent/100);
             _bufferSize = vardiffConfig.RetargetTime/vardiffConfig.TargetTime*4;
-            _tMin = vardiffConfig.TargetTime - _variance;
-            _tMax = vardiffConfig.TargetTime + _variance;
+            _tMin = vardiffConfig.TargetTime - variance;
+            _tMax = vardiffConfig.TargetTime + variance;
         }
 
         private void OnShare(object sender, EventArgs e)
