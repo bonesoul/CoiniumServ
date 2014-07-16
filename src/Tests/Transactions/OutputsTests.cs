@@ -72,7 +72,7 @@ namespace Tests.Transactions
 
             // sample pool wallet
             const string poolWallet = "mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq";
-            outputs.AddPool(poolWallet, blockReward);
+            outputs.AddPoolWallet(poolWallet, blockReward);
 
             // test the recipient rewards
             outputs.List.Last().Value.Should().Equal((UInt64)0x0000000002faf080); // packInt64LE: 80f0fa0200000000

@@ -110,6 +110,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Helpers\Hashrate.cs" />
+    <Compile Include="Mining\Pools\Config\IRewardsConfig.cs" />
+    <Compile Include="Mining\Pools\Config\IWalletConfig.cs" />
+    <Compile Include="Mining\Pools\Config\RewardsConfig.cs" />
+    <Compile Include="Mining\Pools\Config\WalletConfig.cs" />
     <Compile Include="Mining\Pools\Statistics\Blocks.cs" />
     <Compile Include="Mining\Pools\Statistics\IBlocks.cs" />
     <Compile Include="Mining\Pools\Statistics\IJsonResponse.cs" />

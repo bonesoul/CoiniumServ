@@ -21,6 +21,7 @@
 // 
 #endregion
 using Coinium.Daemon;
+using Coinium.Mining.Pools.Config;
 using Coinium.Persistance;
 using Coinium.Repository.Context;
 using Nancy.TinyIoc;
@@ -43,12 +44,13 @@ namespace Coinium.Payments
             _applicationContext = applicationContext;
         }
 
-        public IPaymentProcessor Get(IDaemonClient daemonClient, IStorage storage)
+        public IPaymentProcessor Get(IDaemonClient daemonClient, IStorage storage, IWalletConfig walletConfig)
         {
             var @params = new NamedParameterOverloads
             {
                 {"daemonClient", daemonClient},
-                {"storage", storage}
+                {"storage", storage},
+                {"walletConfig", walletConfig}
             };
 
             return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);

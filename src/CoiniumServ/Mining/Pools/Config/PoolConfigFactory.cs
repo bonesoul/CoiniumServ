@@ -54,6 +54,7 @@ namespace Coinium.Mining.Pools.Config
                 { "coinConfigFactory", _applicationContext.Container.Resolve<ICoinConfigFactory>() },
                 { "config", readConfig }
             };
+
             return _applicationContext.Container.Resolve<IPoolConfig>(@params);
         }
     }

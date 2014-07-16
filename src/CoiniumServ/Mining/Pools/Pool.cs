@@ -147,15 +147,13 @@ namespace Coinium.Mining.Pools
         public void Initialize(IPoolConfig config)
         {
             Config = config;
+            
+            // TODO: validate pool central wallet & rewards within the startup.
 
-            // init coin daemon.
-            InitDaemon();
-
-            // init managers.
+            InitDaemon();            
             InitManagers();
-
-            // init servers
             InitServers();
+            PrintPoolInfo();
         }
 
         private void InitDaemon()
@@ -173,7 +171,7 @@ namespace Coinium.Mining.Pools
 
             _storage = _storageFactory.Get(Storages.Redis, Config);
 
-            _paymentProcessor = _paymentProcessorFactory.Get(_daemonClient, _storage);
+            _paymentProcessor = _paymentProcessorFactory.Get(_daemonClient, _storage, Config.Wallet);
             _paymentProcessor.Initialize(Config.Payments);
 
             _minerManager = _minerManagerFactory.Get(_daemonClient);
@@ -184,9 +182,8 @@ namespace Coinium.Mining.Pools
 
             _vardiffManager = _varddManagerFactory.Get(Config.Stratum.Vardiff, _shareManager);
 
-            _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm);
+            _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm, Config.Wallet, Config.Rewards);
             _jobManager.Initialize(InstanceId);
-
 
             var latestBlocks = _statisticsObjectFactory.GetLatestBlocks(_storage);
             var blockStats = _statisticsObjectFactory.GetBlockStats(latestBlocks, _storage);
@@ -231,20 +228,21 @@ namespace Coinium.Mining.Pools
             {
                 server.Key.Start();
             }
-
-            GetPoolInfo();
         }
 
-        private void GetPoolInfo()
+        private void PrintPoolInfo()
         {
             var info = _daemonClient.GetInfo();
             var miningInfo = _daemonClient.GetMiningInfo();
 
+            // TODO: add downloading blocks information from getblocktemplate().
+            // TODO: make this multi-line & readable.
+            // TODO: read services from config so that we can print pool info even before starting the servers.
             Log.ForContext<Pool>().Information("Pool started for {0:l}\r\n" +
                                                "Coin symbol: {1:l} algorithm: {2:l}\r\n" +
                                                "Coin version: {3} protocol: {4} wallet: {5}\r\n" +
                                                "Daemon network: {6:l} peers: {7} blocks: {8} errors: {9:l}\r\n" +
-                                               "Network difficulty: {10:0.0000} block difficulty: {11:0.00}\r\n" +
+                                               "Network difficulty: {10:0.00000000} block difficulty: {11:0.00}\r\n" +
                                                "Network hashrate: {12:l}\r\n" +
                                                "{13:l}\r\n",
                 Config.Coin.Name,
@@ -256,15 +254,15 @@ namespace Coinium.Mining.Pools
                 info.Testnet ? "testnet" : "mainnet",
                 info.Connections, info.Blocks,
                 string.IsNullOrEmpty(info.Errors) ? "none" : info.Errors,
-                _jobTracker.Current.Difficulty,
-                _jobTracker.Current.Difficulty*_hashAlgorithm.Multiplier,
+                miningInfo.Difficulty,
+                miningInfo.Difficulty * _hashAlgorithm.Multiplier,
                 miningInfo.NetworkHashps.GetReadableHashrate(),
                 "Services: " + _servers.Select(pair => pair.Key)
                     .Aggregate(string.Empty,
                         (current, server) =>
                             current +
                             string.Format("{0} @ {1}:{2}, ", server.Config.Name.ToLower(), server.BindIP, server.Port))
-                );
+                );                
         }
 
         public void Stop()

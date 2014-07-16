@@ -20,34 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Config;
-using Coinium.Daemon.Config;
-using Coinium.Payments;
-using Coinium.Server.Mining.Stratum.Config;
-using Coinium.Server.Mining.Vanilla.Config;
-using Coinium.Utils.Configuration;
 
 namespace Coinium.Mining.Pools.Config
 {
-    public interface IPoolConfig:IConfig
+    public interface IWalletConfig
     {
-        /// <summary>
-        /// Is the configuration enabled?
-        /// </summary>
-        bool Enabled { get; }
-
-        IWalletConfig Wallet { get; }
-
-        ICoinConfig Coin { get; }
-
-        IStratumServerConfig Stratum { get; }
-
-        IVanillaServerConfig Vanilla { get; }
-
-        IDaemonConfig Daemon { get; }
-
-        IRewardsConfig Rewards { get; }
-
-        IPaymentConfig Payments { get; }
+        string Adress { get; }
     }
 }

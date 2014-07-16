@@ -37,6 +37,7 @@ namespace Coinium.Mining.Pools.Config
         public bool Valid { get; private set; }
 
         public bool Enabled { get; private set; }
+        public IWalletConfig Wallet { get; private set; }
 
         public ICoinConfig Coin { get; private set; }
 
@@ -47,10 +48,9 @@ namespace Coinium.Mining.Pools.Config
         /// <summary>
         /// Gets the daemon configuration.
         /// </summary>
-        /// <value>
-        /// The daemon configuration.
-        /// </value>
         public IDaemonConfig Daemon { get; private set; }
+
+        public IRewardsConfig Rewards { get; private set; }
 
         public IPaymentConfig Payments { get; private set; }
 
@@ -68,6 +68,12 @@ namespace Coinium.Mining.Pools.Config
             }
 
             Enabled = config.enabled ? config.enabled : false;
+
+            if (Enabled == false)
+                return;
+
+            Wallet = new WalletConfig(config.wallet);
+            Rewards = new RewardsConfig(config.rewards);
 
             var coinName = Path.GetFileNameWithoutExtension(config.coin);
             Coin = coinConfigFactory.GetConfig(coinName);
