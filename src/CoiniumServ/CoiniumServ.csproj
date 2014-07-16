@@ -142,6 +142,7 @@
     <Compile Include="Mining\Pools\Statistics\Pools.cs" />
     <Compile Include="Mining\Pools\Statistics\Statistics.cs" />
     <Compile Include="Mining\Shares\ShareEventArgs.cs" />
+    <Compile Include="Mining\Vardiff\IVardiffMiner.cs" />
     <Compile Include="Mining\Vardiff\IVardiffConfig.cs" />
     <Compile Include="Mining\Vardiff\IVardiffManager.cs" />
     <Compile Include="Mining\Vardiff\IVardiffManagerFactory.cs" />

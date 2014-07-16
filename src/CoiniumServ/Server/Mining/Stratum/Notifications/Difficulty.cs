@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using Newtonsoft.Json;
 
 namespace Coinium.Server.Mining.Stratum.Notifications
 {
+    // TODO: can we get rid of this?
+
     [JsonArray]
     public class Difficulty : IEnumerable<object>
     {
@@ -35,13 +36,13 @@ namespace Coinium.Server.Mining.Stratum.Notifications
         /// Difficulty for jobs.
         /// </summary>
         [JsonIgnore]
-        private readonly UInt32 _diff;
+        private readonly float _diff;
 
         /// <summary>
         /// Creates a new instance of JobNotification.
         /// </summary>
         /// <param name="difficulty"></param>
-        public Difficulty(UInt32 difficulty)
+        public Difficulty(float difficulty)
         {
             _diff = difficulty;
         }
@@ -59,11 +60,6 @@ namespace Coinium.Server.Mining.Stratum.Notifications
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-        public override string ToString()
-        {
-            return _diff.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

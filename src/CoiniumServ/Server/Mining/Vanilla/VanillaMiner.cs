@@ -57,7 +57,8 @@ namespace Coinium.Server.Mining.Vanilla
         public bool Authenticated { get; set; }
 
         public IPool Pool { get; private set; }
-        public Difficulty Difficulty { get; private set; }
+
+        public float Difficulty { get; set; }
 
         /// <summary>
         /// Can we send new mining job's to miner?
@@ -75,7 +76,7 @@ namespace Coinium.Server.Mining.Vanilla
         {
             Id = id; // the id of the miner.
             _minerManager = minerManager;
-            Difficulty = new Difficulty(16);
+            Difficulty = 16;
 
             Subscribed = true; // vanilla miners are subscribed by default.
             Authenticated = false; // miner has to authenticate.

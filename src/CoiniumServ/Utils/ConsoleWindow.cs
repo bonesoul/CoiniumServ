@@ -56,10 +56,9 @@ namespace Coinium.Utils
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("CoiniumServ comes with ABSOLUTELY NO WARRANTY.");
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("You can contribute the development of the project by donating;");
             Console.ForegroundColor = ConsoleColor.Yellow;
-            //Console.BackgroundColor=ConsoleColor.DarkGray;
             Console.WriteLine("BTC : 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D.");
             Console.WriteLine("LTC : LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa.");
             Console.WriteLine("DOGE: D7mzHQtkWD9B1Xwnmjfg9x2DofbaZBg6Lc.");

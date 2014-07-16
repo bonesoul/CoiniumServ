@@ -172,7 +172,8 @@ namespace Tests.Mining.Pools
             _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage).Returns(_shareManager);
 
             // vardiff manager
-            _vardiffManagerFactory.Get(_shareManager);
+            var vardiffConfig = Substitute.For<IVardiffConfig>();
+            _vardiffManagerFactory.Get(vardiffConfig, _shareManager);
 
             // initalize job manager.
             _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm).Returns(_jobManager);

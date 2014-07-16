@@ -100,8 +100,11 @@ namespace Coinium.Mining.Miners
             Log.ForContext<MinerManager>().Information(miner.Authenticated ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
-            if(miner.Authenticated) // if miner authenticated successfully.
+            if (miner.Authenticated) // if miner authenticated successfully.
+            {
+                miner.SendDifficulty(); // send the initial difficulty.
                 OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.
+            }
         }
 
         protected virtual void OnMinerAuthenticated(MinerEventArgs e)

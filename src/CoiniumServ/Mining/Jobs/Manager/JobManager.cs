@@ -183,7 +183,6 @@ namespace Coinium.Mining.Jobs.Manager
             if (!miner.SupportsJobNotifications)
                 return false;
 
-            miner.SendDifficulty();
             miner.SendJob(job);
 
             return true;

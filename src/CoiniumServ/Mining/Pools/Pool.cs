@@ -96,6 +96,7 @@ namespace Coinium.Mining.Pools
         /// <param name="storageFactory"></param>
         /// <param name="paymentProcessorFactory"></param>
         /// <param name="statisticsObjectFactory"></param>
+        /// <param name="vardiffManagerFactory"></param>
         public Pool(
             IHashAlgorithmFactory hashAlgorithmFactory, 
             IServerFactory serverFactory, 

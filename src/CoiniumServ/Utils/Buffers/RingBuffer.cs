@@ -29,7 +29,7 @@ namespace Coinium.Utils.Buffers
     {
         public int Size { get { return _isFull ? Capacity : _cursor; } }
 
-        public float Average { get { return _buffer.Sum() / (_isFull ? Capacity : _cursor); } }
+        public float Average { get { return (float)_buffer.Sum() / (float)(_isFull ? Capacity : _cursor); } }
 
         private readonly int[] _buffer;
 
