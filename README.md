@@ -13,9 +13,9 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 ###### Platform Agnostic
 Can run on these platforms;
-* Linux/Unix over mono.
-* MacOS over mono.
-* Windows over dotNet.
+* Linux/Unix over [mono](http://www.mono-project.com/).
+* MacOS over [mono](http://www.mono-project.com/).
+* Windows over [.Net](http://www.microsoft.com/net).
 
 ###### Multiplexed Structure
 * Multiple pools & ports.
