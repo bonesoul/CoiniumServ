@@ -59,6 +59,7 @@ You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues)
   - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
   - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
 * [Twitter](http://twitter.com/coinium)
+* [Support forums](http://forum.coinium.org/forum/19-support/)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
 ### Contributing
