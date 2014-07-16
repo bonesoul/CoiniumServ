@@ -20,37 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Server.Mining.Service;
-
-namespace Coinium.Server.Mining.Vanilla.Config
+namespace Coinium.Server.Mining.Service
 {
-    public class VanillaServerConfig : IVanillaServerConfig 
-    {
-        public bool Valid { get; private set; }
-
-        public string Name { get; private set; }
-
-        public bool Enabled { get; private set; }
-
-        public string BindInterface { get; private set; }
-
-        public Int32 Port { get; private set; }
-
-        public VanillaServerConfig(dynamic config)
-        {
-            if (config == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Name = Services.Vanilla;
-            Enabled = config.enabled;
-            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "localhost";
-            Port = config.port;
-
-            Valid = true;
-        }
-    }
+    public interface IRpcService
+    { }
 }

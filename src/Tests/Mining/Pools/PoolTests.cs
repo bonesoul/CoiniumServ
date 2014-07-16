@@ -33,7 +33,7 @@ using Coinium.Payments;
 using Coinium.Persistance;
 using Coinium.Server;
 using Coinium.Server.Mining;
-using Coinium.Service;
+using Coinium.Server.Mining.Service;
 using NSubstitute;
 using Should.Fluent;
 using Xunit;

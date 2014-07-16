@@ -20,21 +20,44 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using Coinium.Daemon;
 using Coinium.Mining.Shares;
+using Coinium.Repository.Context;
+using Nancy.TinyIoc;
 
-namespace Coinium.Service
+namespace Coinium.Server.Mining.Service
 {
-    public interface IServiceFactory
+    public class ServiceFactory : IServiceFactory
     {
+        /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceFactory"/> class.
+        /// </summary>
+        public ServiceFactory(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
+
         /// <summary>
         /// Gets the specified service name.
         /// </summary>
         /// <param name="serviceName">Name of the service.</param>
-        /// <param name="jobManager">The job manager.</param>
         /// <param name="shareManager">The share manager.</param>
         /// <param name="daemonClient">The daemon client.</param>
         /// <returns></returns>
-        IRpcService Get(string serviceName, IShareManager shareManager, IDaemonClient daemonClient);
+        public IRpcService Get(string serviceName, IShareManager shareManager, IDaemonClient daemonClient)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"shareManager", shareManager}, 
+                {"daemonClient", daemonClient}
+            };
+            return _applicationContext.Container.Resolve<IRpcService>(serviceName, @params);
+        }
     }
 }

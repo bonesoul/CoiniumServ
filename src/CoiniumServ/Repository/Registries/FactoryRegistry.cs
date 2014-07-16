@@ -34,7 +34,7 @@ using Coinium.Payments;
 using Coinium.Persistance;
 using Coinium.Repository.Context;
 using Coinium.Server;
-using Coinium.Service;
+using Coinium.Server.Mining.Service;
 using Coinium.Utils.Configuration;
 
 namespace Coinium.Repository.Registries

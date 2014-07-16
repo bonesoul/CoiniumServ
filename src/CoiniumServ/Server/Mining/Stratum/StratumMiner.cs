@@ -28,7 +28,7 @@ using Coinium.Mining.Pools;
 using Coinium.Net.Server.Sockets;
 using Coinium.Server.Mining.Stratum.Errors;
 using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Service.Stratum;
+using Coinium.Server.Mining.Stratum.Service;
 using Coinium.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;

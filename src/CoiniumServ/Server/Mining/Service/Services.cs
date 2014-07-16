@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Service
+namespace Coinium.Server.Mining.Service
 {
     public static class Services
     {

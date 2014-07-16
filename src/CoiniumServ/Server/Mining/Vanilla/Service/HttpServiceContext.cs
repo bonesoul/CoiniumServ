@@ -20,30 +20,21 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Net;
-using Newtonsoft.Json;
 
-namespace Coinium.Service.Vanilla
+using Coinium.Mining.Miners;
+
+namespace Coinium.Server.Mining.Vanilla.Service
 {
-    /// <summary>
-    /// JsonRpc 1.0 over http request.
-    /// </summary>
-    public class HttpServiceRequest
+    public class HttpServiceContext
     {
-        public string Text { get; private set; }
+        public IMiner Miner { get; private set; }
 
-        public dynamic Data { get; private set; }
+        public HttpServiceRequest Request { get; private set; }
 
-        public HttpListenerContext Context { get; private set; }
-
-        public HttpListenerResponse Response { get; private set; }
-
-        public HttpServiceRequest(string text, HttpListenerContext context)
+        public HttpServiceContext(IMiner miner, HttpServiceRequest request)
         {
-            Text = text;
-            Data = JsonConvert.DeserializeObject<dynamic>(Text);
-            Context = context;
-            Response = Context.Response;
+            Miner = miner;
+            Request = request;
         }
     }
 }
