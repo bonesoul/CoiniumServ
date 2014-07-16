@@ -233,6 +233,7 @@
     <Compile Include="Utils\Logging.cs" />
     <Compile Include="Utils\Platform\Framework.cs" />
     <Compile Include="Utils\Platform\PlatformManager.cs" />
+    <Compile Include="Utils\RingBuffer.cs" />
     <Compile Include="Utils\Versions\VersionInfo.cs" />
     <Compile Include="Crypto\Algorithms\Algorithms.cs" />
     <Compile Include="Crypto\Algorithms\IHashAlgorithmFactory.cs" />

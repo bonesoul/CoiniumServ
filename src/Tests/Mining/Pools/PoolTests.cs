@@ -29,6 +29,7 @@ using Coinium.Mining.Miners;
 using Coinium.Mining.Pools.Config;
 using Coinium.Mining.Pools.Statistics;
 using Coinium.Mining.Shares;
+using Coinium.Mining.Vardiff;
 using Coinium.Payments;
 using Coinium.Persistance;
 using Coinium.Server;
@@ -53,6 +54,7 @@ namespace Tests.Mining.Pools
         private readonly IStorageFactory _storageFactory;
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IStatisticsObjectFactory _statisticsObjectFactory;
+        private readonly IVardiffManagerFactory _vardiffManagerFactory;
 
         // object mocks.
         private readonly IDaemonClient _daemonClient;
@@ -65,6 +67,7 @@ namespace Tests.Mining.Pools
         private readonly IRpcService _rpcService;
         private readonly IPaymentProcessor _paymentProcessor;
         private readonly IStatistics _statistics;
+        private readonly IVardiffManager _vardiffManager;
 
         /// <summary>
         /// Initialize mock objects.
@@ -81,6 +84,7 @@ namespace Tests.Mining.Pools
             _storageFactory = Substitute.For<IStorageFactory>();
             _paymentProcessorFactory = Substitute.For<IPaymentProcessorFactory>();
             _statisticsObjectFactory = Substitute.For<IStatisticsObjectFactory>();
+            _vardiffManagerFactory = Substitute.For<IVardiffManagerFactory>();
 
             _daemonClient = Substitute.For<IDaemonClient>();
             _minerManager = Substitute.For<IMinerManager>();
@@ -92,6 +96,7 @@ namespace Tests.Mining.Pools
             _storage = Substitute.For<IStorage>();
             _paymentProcessor = Substitute.For<IPaymentProcessor>();
             _statistics = Substitute.For<IStatistics>();
+            _vardiffManager = Substitute.For<IVardiffManager>();
         }
 
         /// <summary>
@@ -111,7 +116,8 @@ namespace Tests.Mining.Pools
                 _shareManagerFactory,
                 _storageFactory,
                 _paymentProcessorFactory,
-                _statisticsObjectFactory
+                _statisticsObjectFactory,
+                _vardiffManagerFactory
                 );
 
             pool.Should().Not.Be.Null();
@@ -135,7 +141,8 @@ namespace Tests.Mining.Pools
                 _shareManagerFactory,
                 _storageFactory,
                 _paymentProcessorFactory,
-                _statisticsObjectFactory
+                _statisticsObjectFactory,
+                _vardiffManagerFactory
                 );
 
             pool.Should().Not.Be.Null();
@@ -163,6 +170,9 @@ namespace Tests.Mining.Pools
 
             // initialize share manager.
             _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage).Returns(_shareManager);
+
+            // vardiff manager
+            _vardiffManagerFactory.Get(_shareManager);
 
             // initalize job manager.
             _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm).Returns(_jobManager);
