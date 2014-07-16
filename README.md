@@ -59,7 +59,9 @@ You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues)
   - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
   - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
 * [Twitter](http://twitter.com/coinium)
+* [Support forums](http://forum.coinium.org/forum/19-support/)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
+* [Bitcoin wiki](https://en.bitcoin.it/wiki/CoiniumServ)
 
 ### Contributing
 
@@ -90,7 +92,7 @@ You can send tips and furher support the project or get tips for contributing by
 
 ### License
 
-Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
+Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org - 
 http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 
 This software is dual-licensed: you can redistribute it and/or modify
