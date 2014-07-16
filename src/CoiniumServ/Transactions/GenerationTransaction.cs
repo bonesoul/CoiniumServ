@@ -167,7 +167,7 @@ namespace Coinium.Transactions
             }
 
             // send the remaining coins to pool's central wallet.
-            Outputs.AddPool(walletConfig.Adress, blockReward); 
+            Outputs.AddPoolWallet(walletConfig.Adress, blockReward); 
         }
 
         public void Create()

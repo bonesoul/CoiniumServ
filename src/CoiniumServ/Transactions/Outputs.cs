@@ -44,7 +44,7 @@ namespace Coinium.Transactions
             List = new List<TxOut>();
         }
 
-        public void AddPool(string address, double amount)
+        public void AddPoolWallet(string address, double amount)
         {
             Add(address, amount, true);
         }

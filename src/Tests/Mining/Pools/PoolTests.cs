@@ -23,6 +23,7 @@
 using System;
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
+using Coinium.Daemon.Responses;
 using Coinium.Mining.Jobs.Manager;
 using Coinium.Mining.Jobs.Tracker;
 using Coinium.Mining.Miners;
@@ -184,6 +185,8 @@ namespace Tests.Mining.Pools
         
             // init daemon client
             _daemonClient.Initialize(poolConfig.Daemon);
+            _daemonClient.GetInfo().Returns(new Info());
+            _daemonClient.GetMiningInfo().Returns(new MiningInfo());
 
             // init server
             _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager).Returns(_miningServer);

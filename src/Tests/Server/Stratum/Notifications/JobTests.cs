@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Coinium.Crypto.Algorithms;
 using Coinium.Daemon;
@@ -118,25 +119,30 @@ namespace Tests.Server.Stratum.Notifications
                 "/nodeStratum/");
 
             // outputs
-            _outputs = new Outputs(_daemonClient);
+            _outputs = Substitute.For<Outputs>(_daemonClient);
             double blockReward = 5000000000; // the amount rewarded by the block.
 
-            // sample recipient
-            const string recipient = "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji";
+            // sample reward recipient
+            var rewardsConfig = Substitute.For<IRewardsConfig>();
             var amount = blockReward * 0.01;
             blockReward -= amount;
-            _outputs.AddRecipient(recipient, amount);
+            var rewards = new Dictionary<string, float> { {"mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji", (float) amount} };
+
+            rewardsConfig.GetEnumerator().Returns(rewards.GetEnumerator());
+            foreach (var pair in rewards)
+            {
+                _outputs.AddRecipient(pair.Key, pair.Value);
+            }
 
             // sample pool wallet
-            const string poolWallet = "mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq";
-            _outputs.AddPool(poolWallet, blockReward);
+            var walletConfig = Substitute.For<IWalletConfig>();
+            walletConfig.Adress.Returns("mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq");
+            _outputs.AddPoolWallet(walletConfig.Adress, blockReward);
 
             // job counter
             _jobCounter = Substitute.For<JobCounter>();
 
             // generation transaction.
-            var walletConfig = Substitute.For<IWalletConfig>();
-            var rewardsConfig = Substitute.For<IRewardsConfig>();
             _generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, walletConfig, rewardsConfig);
             _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
             _generationTransaction.Outputs = _outputs;

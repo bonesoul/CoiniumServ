@@ -28,7 +28,7 @@ namespace Coinium.Transactions
     {
         List<TxOut> List { get; }
 
-        void AddPool(string address, double amount);
+        void AddPoolWallet(string address, double amount);
 
         void AddRecipient(string address, double amount);
 
