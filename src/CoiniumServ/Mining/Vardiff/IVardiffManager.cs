@@ -20,20 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Server.Mining.Stratum;
-using Coinium.Server.Mining.Vanilla;
 
-namespace Coinium.Mining.Shares
+namespace Coinium.Mining.Vardiff
 {
-    public interface IShareManager
+    public interface IVardiffManager
     {
-        IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
-
-        IShare ProcessShare(VanillaMiner miner, string data);
-
-        event EventHandler BlockFound;
-
-        event EventHandler ShareSubmitted;
     }
 }

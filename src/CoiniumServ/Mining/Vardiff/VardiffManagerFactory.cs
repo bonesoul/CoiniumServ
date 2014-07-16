@@ -20,20 +20,37 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Server.Mining.Stratum;
-using Coinium.Server.Mining.Vanilla;
 
-namespace Coinium.Mining.Shares
+using Coinium.Mining.Shares;
+using Coinium.Repository.Context;
+using Nancy.TinyIoc;
+
+namespace Coinium.Mining.Vardiff
 {
-    public interface IShareManager
+    public class VardiffManagerFactory : IVardiffManagerFactory
     {
-        IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
+        /// <summary>
+        /// The _kernel
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
 
-        IShare ProcessShare(VanillaMiner miner, string data);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShareManagerFactory" /> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public VardiffManagerFactory(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
 
-        event EventHandler BlockFound;
+        public IVardiffManager Get(IShareManager shareManager)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"shareManager", shareManager},
+            };
 
-        event EventHandler ShareSubmitted;
+            return _applicationContext.Container.Resolve<IVardiffManager>(@params);
+        }
     }
 }

@@ -20,20 +20,25 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using Coinium.Server.Mining.Stratum;
-using Coinium.Server.Mining.Vanilla;
+using Coinium.Mining.Shares;
 
-namespace Coinium.Mining.Shares
+namespace Coinium.Mining.Vardiff
 {
-    public interface IShareManager
+    public class VardiffManager:IVardiffManager
     {
-        IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
+        public VardiffManager(IShareManager shareManager)
+        {
+            shareManager.ShareSubmitted += OnShare;
+        }
 
-        IShare ProcessShare(VanillaMiner miner, string data);
+        private void OnShare(object sender, EventArgs e)
+        {
+            var shareArgs = (ShareEventArgs) e;
+            var miner = shareArgs.Miner;
 
-        event EventHandler BlockFound;
-
-        event EventHandler ShareSubmitted;
+            // TODO: implement vardiff.
+        }
     }
 }
