@@ -324,7 +324,7 @@
     <Compile Include="Server\Commands\Version.cs" />
     <Compile Include="Server\Mining\Stratum\StratumMiner.cs" />
     <Compile Include="Server\Mining\Stratum\Service\StratumService.cs" />
-    <Compile Include="Daemon\Responses\Work.cs" />
+    <Compile Include="Daemon\Responses\Getwork.cs" />
     <Compile Include="Repository\Context\IApplicationContext.cs" />
     <Compile Include="Net\Server\Http\Basic\HttpServer.cs" />
     <Compile Include="Net\Server\IServer.cs" />

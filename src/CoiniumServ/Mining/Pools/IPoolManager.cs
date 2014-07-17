@@ -23,13 +23,11 @@
 
 using System.Collections.Generic;
 using CoiniumServ.Mining.Pools.Config;
-using CoiniumServ.Mining.Pools.Statistics;
 
 namespace CoiniumServ.Mining.Pools
 {
     public interface IPoolManager
     {
-        IStatistics NewStatistics { get; }
 
         IList<IPool> GetPools();
 

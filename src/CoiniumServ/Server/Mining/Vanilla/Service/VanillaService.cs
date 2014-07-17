@@ -32,7 +32,7 @@ using Serilog;
 namespace CoiniumServ.Server.Mining.Vanilla.Service
 {
     /// <summary>
-    /// Stratum protocol implementation.
+    /// Vanilla protocol implementation.
     /// </summary>
     public class VanillaService : JsonRpcService, IRpcService
     {
@@ -41,7 +41,7 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
         private readonly IShareManager _shareManager;
 
         public VanillaService(ICoinConfig coinConfig, IShareManager shareManager, IDaemonClient daemonClient):
-            base(string.Format("vanilla-{0}", coinConfig.Name))
+            base(coinConfig.Name)
         {
             _daemonClient = daemonClient;
             _shareManager = shareManager;
@@ -58,25 +58,23 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
         /// https://bitcointalk.org/index.php?topic=51281.0
         /// </remarks>
         [JsonRpcMethod("getwork")]
-        public Work Getwork(string data = null)
+        public Getwork Getwork(string data = null)
         {
-            var context = (HttpServiceContext)JsonRpcContext.Current().Value;
-            var miner = (VanillaMiner)(context.Miner);
+            var context = (HttpServiceContext) JsonRpcContext.Current().Value;
+            var miner = (VanillaMiner) (context.Miner);
 
             // TODO: fixme! instead use jobmanager and sharemanager.
 
-            if (data == null)
-                _daemonClient.Getwork();
-            else
-            {
-                var result = _daemonClient.Getwork(data);
-                if(result)
-                    Log.ForContext<VanillaMiner>().Verbose("Found block!: {0}", data);
+            if (data == null) // if miner supplied no data
+                return _daemonClient.Getwork();  // that means he just wants work.               
 
-                return null;
-            }    
+            var result = _daemonClient.Getwork(data); // if he supplied a data
+            //TODO: fix this according https://bitcointalk.org/index.php?topic=51281.msg611897#msg611897
+
+            if (result) // check his work.
+                Log.ForContext<VanillaMiner>().Verbose("Found block!: {0}", data);
 
             return null;
-        }     
+        }
     }
 }

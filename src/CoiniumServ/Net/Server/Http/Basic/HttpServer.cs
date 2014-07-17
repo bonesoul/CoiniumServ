@@ -35,17 +35,19 @@ namespace CoiniumServ.Net.Server.Http.Basic
         /// <summary>
         /// The IP address of the interface the server binded.
         /// </summary>
-        public string BindIP { get; private set; }
+        public string BindIP { get; protected set; }
 
         /// <summary>
         /// The listening port for the server.
         /// </summary>
-        public int Port { get; private set; }
+        public int Port { get; protected set; }
 
         /// <summary>
         /// Is server currently listening for connections?
         /// </summary>
         public bool IsListening { get; private set; }
+
+        public event Action<HttpListenerContext> ProcessRequest;
 
         private HttpListener _listener;
         private Thread _listenerThread;
@@ -59,12 +61,10 @@ namespace CoiniumServ.Net.Server.Http.Basic
         /// <param name="port">The port.</param>
         /// <param name="maxThreads">The maximum threads.</param>
         /// <exception cref="System.NotSupportedException">HttpListener not supported. Switch to mono provided one.</exception>
-        public void Initialize(int port, int maxThreads = 5)
+        public void Initialize(int maxThreads = 5)
         {
             if (!HttpListener.IsSupported)
                 throw new NotSupportedException("HttpListener not supported.");
-
-            Port = port;
 
             _workers = new Thread[maxThreads];
             _queue = new Queue<HttpListenerContext>();
@@ -76,7 +76,6 @@ namespace CoiniumServ.Net.Server.Http.Basic
 
         public bool Start()
         {
-            BindIP = "localhost";
             _listener.Prefixes.Add(String.Format(@"http://{0}:{1}/", BindIP, Port));
             _listener.Start();
             _listenerThread.Start();
@@ -158,8 +157,6 @@ namespace CoiniumServ.Net.Server.Http.Basic
                 }
             }
         }
-
-        public event Action<HttpListenerContext> ProcessRequest;
 
         public void Dispose()
         {

@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 namespace CoiniumServ.Daemon.Responses
 {
     // Documentation: 
@@ -27,28 +28,30 @@ namespace CoiniumServ.Daemon.Responses
     // https://github.com/sinisterchipmunk/bitpool/wiki/Bitcoin-Mining-Pool-Developer's-Reference
     // https://bitcointalk.org/index.php?topic=51281.0
 
-    public class Work
-    {
+    // Note: Do not rename member field names with uppercase ones as it will break getwork protocol @ json-rpc 1.0.
+
+    public class Getwork
+    {        
         /// <summary>
         /// This should be advertised iff the miner supports generating its own midstates. In this case, the pool may decide to omit the now-deprecated "midstate" and "hash1" fields in the work response.
         /// </summary>
-        public string MidState { get; set; }
+        public string midstate { get; set; }
 
         /// <summary>
         /// Pre-processed SHA-2 input chunks, in little-endian order, as a hexadecimal-encoded string
         /// </summary>
-        public string Data { get; set; }
+        public string data { get; set; }
 
-        public string Hash1 { get; set; }
+        public string hash1 { get; set; }
 
         /// <summary>
         /// Proof-of-work hash target as a hexadecimal-encoded string
         /// </summary>
-        public string Target { get; set; }
+        public string target { get; set; }
 
         /// <summary>
         /// Brief specification of proof-of-work algorithm. Not provided by bitcoind or most poolservers.
         /// </summary>
-        public string Algorithm { get; set; }
+        public string algorithm { get; set; }
     }
 }

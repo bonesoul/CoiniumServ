@@ -66,7 +66,6 @@ namespace CoiniumServ.Server.Mining.Stratum
         public void Initialize(IServerConfig config)
         {
             Config = config;
-
             BindIP = config.BindInterface;
             Port = config.Port;
 

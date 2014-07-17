@@ -195,9 +195,10 @@ namespace CoiniumServ.Mining.Pools
         {
             _servers = new Dictionary<IMiningServer, IRpcService>();
 
-            // we don't need here a server config list as a pool can host only one instance of stratum and one vanilla server.
+            // TODO: we don't need here a server config list as a pool can host only one instance of stratum and one vanilla server.
             // we must be dictative here, using a server list may cause situations we don't want (multiple stratum configs etc..)
-            if (Config.Stratum != null)
+
+            if (Config.Stratum != null && Config.Stratum.Enabled)
             {
                 var stratumServer = _serverFactory.Get("Stratum", this, _minerManager, _jobManager);
                 var stratumService = _serviceFactory.Get("Stratum", Config.Coin, _shareManager, _daemonClient);
@@ -206,7 +207,7 @@ namespace CoiniumServ.Mining.Pools
                 _servers.Add(stratumServer, stratumService);
             }
 
-            if (Config.Vanilla != null)
+            if (Config.Vanilla != null && Config.Vanilla.Enabled)
             {
                 var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager, _jobManager);
                 var vanillaService = _serviceFactory.Get("Vanilla", Config.Coin, _shareManager, _daemonClient);

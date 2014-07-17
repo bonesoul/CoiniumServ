@@ -50,7 +50,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Service
         [JsonRpcMethod("mining.subscribe")]
         public SubscribeResponse SubscribeMiner(string signature)
         {
-            var context = (SocketServiceContext)JsonRpcContext.Current().Value;
+            var context = (SocketServiceContext) JsonRpcContext.Current().Value;
             var miner = (StratumMiner)(context.Miner);            
 
             var response = new SubscribeResponse

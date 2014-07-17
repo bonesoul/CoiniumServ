@@ -99,6 +99,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             Connection = connection; // the underlying connection.
             _minerManager = minerManager;
             Pool = pool;
+
             Difficulty = 16; // set miner difficulty.
 
             Subscribed = false; // miner has to subscribe.
@@ -143,7 +144,7 @@ namespace CoiniumServ.Server.Mining.Stratum
                 callback =>
                 {
                     var asyncData = ((JsonRpcStateAsync)callback);
-                    var result = asyncData.Result + "\n"; // quick hack.
+                    var result = asyncData.Result + "\n";
                     var response = Encoding.UTF8.GetBytes(result);
 
                     var context = (SocketServiceContext) asyncData.AsyncState;
@@ -155,7 +156,7 @@ namespace CoiniumServ.Server.Mining.Stratum
                 });
 
             var line = e.Data.ToEncodedString();
-            line = line.Replace("\n", ""); // quick hack!
+            line = line.Replace("\n", "");
 
             var rpcRequest = new SocketServiceRequest(line);
             var rpcContext = new SocketServiceContext(this, rpcRequest);

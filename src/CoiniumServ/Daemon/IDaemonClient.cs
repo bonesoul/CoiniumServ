@@ -37,7 +37,7 @@ namespace CoiniumServ.Daemon
 
         Block GetBlock(string hash);
 
-        Work Getwork();
+        Getwork Getwork();
 
         bool Getwork(string data);
 
