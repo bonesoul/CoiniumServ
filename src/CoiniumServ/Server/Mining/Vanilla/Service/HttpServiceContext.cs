@@ -29,7 +29,7 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
     {
         public IMiner Miner { get; private set; }
 
-        public HttpServiceRequest Request { get; private set; }
+        public HttpServiceRequest Request { get; private set; } // todo - do we really need this?
 
         public HttpServiceContext(IMiner miner, HttpServiceRequest request)
         {

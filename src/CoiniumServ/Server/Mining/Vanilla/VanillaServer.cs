@@ -48,10 +48,13 @@ namespace CoiniumServ.Server.Mining.Vanilla
             _jobManager = jobManager;
         }
 
-        public void Initialize(IServerConfig serverConfig)
+        public void Initialize(IServerConfig config)
         {
-            Initialize(serverConfig.Port);
-            Config = serverConfig;
+            Config = config;
+            BindIP = config.BindInterface;
+            Port = config.Port;
+
+            Initialize();
             ProcessRequest += ProcessHttpRequest;
         }
 

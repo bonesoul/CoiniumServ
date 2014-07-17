@@ -84,12 +84,6 @@ namespace CoiniumServ
             var poolManager = kernel.Resolve<IPoolManagerFactory>().Get();
             poolManager.Run();
 
-            // run pools.
-            foreach (var pool in poolManager.GetPools())
-            {
-                pool.Start();
-            }
-
             // start web server.
             var webServer = kernel.Resolve<IWebServer>("Web");
 

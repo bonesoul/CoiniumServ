@@ -467,9 +467,9 @@ namespace CoiniumServ.Daemon
         /// "target" : little endian hash target
         /// If [data] is specified, tries to solve the block and returns true if it was successful.
         /// </summary>
-        public Work Getwork()
+        public Getwork Getwork()
         {
-            return MakeRequest<Work>("getwork", null);   
+            return MakeRequest<Getwork>("getwork", null);   
         }
 
         /// <summary>

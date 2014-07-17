@@ -72,10 +72,12 @@ namespace CoiniumServ.Server.Mining.Vanilla
         /// 
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="pool"></param>
         /// <param name="minerManager"></param>
-        public VanillaMiner(int id, IMinerManager minerManager)
+        public VanillaMiner(int id, IPool pool, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.
+            Pool = pool;
             _minerManager = minerManager;
             Difficulty = 16;
 
@@ -108,20 +110,21 @@ namespace CoiniumServ.Server.Mining.Vanilla
                     context.Request.Response.ContentType = "application/json";
                     context.Request.Response.ContentEncoding = Encoding.UTF8;
                     context.Request.Response.ContentLength64 = response.Length;
-                    context.Request.Response.OutputStream.Write(response, 0, response.Length);                    
+                    context.Request.Response.OutputStream.Write(response, 0, response.Length);
+
+                    Log.ForContext<VanillaMiner>().Verbose("Reply:\n{0}", result.PrettifyJson());
                 });
 
             using (var reader = new StreamReader(httpRequest.InputStream, Encoding.UTF8))
             {
                 var line = reader.ReadToEnd();
-
-                Log.ForContext<VanillaMiner>().Verbose(line.PrettifyJson());
+                Log.ForContext<VanillaMiner>().Verbose("Recv:\n{0}", line.PrettifyJson());
 
                 var rpcRequest = new HttpServiceRequest(line, httpContext);
                 var rpcContext = new HttpServiceContext(this, rpcRequest);
 
                 var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
-                JsonRpcProcessor.Process(async, rpcContext);
+                JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
             }        
         }
 

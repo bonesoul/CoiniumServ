@@ -47,7 +47,14 @@ namespace CoiniumServ.Mining.Pools
 
         public void Run()
         {
+            // load pool configs.
             LoadConfigs();
+
+            // run pools.
+            foreach (var pool in _pools)
+            {
+                pool.Start();
+            }
         }
 
         public void LoadConfigs()
