@@ -25,7 +25,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Mining.Pools.Config;
-using CoiniumServ.Mining.Pools.Statistics;
 using CoiniumServ.Utils.Configuration;
 using CoiniumServ.Utils.Helpers.IO;
 using Serilog;
@@ -34,28 +33,21 @@ namespace CoiniumServ.Mining.Pools
 {
     public class PoolManager : IPoolManager
     {
-        public IStatistics NewStatistics { get; private set; }
-
         private readonly List<IPool> _pools = new List<IPool>();
 
         private readonly IPoolFactory _poolFactory;
 
         private readonly IPoolConfigFactory _poolConfigFactory;
 
-        private readonly IStatisticsObjectFactory _objectFactory;
-
-        public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory, IStatisticsObjectFactory objectFactory)
+        public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory)
         {
             _poolFactory = poolFactory;
             _poolConfigFactory = poolConfigFactory;
-            _objectFactory = objectFactory;
         }
 
         public void Run()
         {
             LoadConfigs();
-
-            NewStatistics = _objectFactory.GetStatistics();
         }
 
         public void LoadConfigs()
