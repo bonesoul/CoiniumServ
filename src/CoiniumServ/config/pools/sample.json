@@ -44,7 +44,7 @@
         }
 	},
 
-	# vanilla server configuration
+	# vanilla server configuration - experimental!
 	"vanilla": {
 		"enabled": false,
 		"bind": "localhost",
@@ -55,9 +55,9 @@
     "banning": {
         "enabled": true,
         "duration": 600,
-        "percent": 50,
-        "threshold": 500,
-        "purge": 300
+        "invalidPercent": 50,
+        "checkThreshold": 500,
+        "purgeInterval": 300
     },
 
 	# mpos compat mode configuration - not implemented yet!

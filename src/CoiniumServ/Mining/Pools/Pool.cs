@@ -65,7 +65,7 @@ namespace CoiniumServ.Mining.Pools
         private readonly IStorageFactory _storageFactory;
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IStatisticsObjectFactory _statisticsObjectFactory;
-        private readonly IVardiffManagerFactory _varddManagerFactory;
+        private readonly IVardiffManagerFactory _vardiffManagerFactory;
 
         private IMinerManager _minerManager;
         private IJobTracker _jobTracker;
@@ -135,7 +135,7 @@ namespace CoiniumServ.Mining.Pools
             _storageFactory = storageFactory;
             _paymentProcessorFactory = paymentProcessorFactory;
             _statisticsObjectFactory = statisticsObjectFactory;
-            _varddManagerFactory = vardiffManagerFactory;
+            _vardiffManagerFactory = vardiffManagerFactory;
 
             GenerateInstanceId();
         }
@@ -181,7 +181,7 @@ namespace CoiniumServ.Mining.Pools
 
             _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage);
 
-            _vardiffManager = _varddManagerFactory.Get(Config.Stratum.Vardiff, _shareManager);
+            _vardiffManager = _vardiffManagerFactory.Get(Config.Stratum.Vardiff, _shareManager);
 
             _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm, Config.Wallet, Config.Rewards);
             _jobManager.Initialize(InstanceId);

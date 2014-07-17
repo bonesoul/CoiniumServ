@@ -55,6 +55,8 @@ namespace CoiniumServ.Mining.Pools.Config
 
         public IPaymentConfig Payments { get; private set; }
 
+        public IBanningConfig Banning { get; private set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PoolConfig"/> class.
         /// </summary>
@@ -108,6 +110,8 @@ namespace CoiniumServ.Mining.Pools.Config
                 Valid = false;
                 return;
             }
+
+            Banning = new BanningConfig(config.banning);
 
             Valid = true;
         }
