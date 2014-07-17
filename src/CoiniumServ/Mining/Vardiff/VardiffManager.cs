@@ -22,11 +22,11 @@
 #endregion
 
 using System;
-using Coinium.Mining.Shares;
-using Coinium.Utils.Buffers;
-using Coinium.Utils.Helpers.Time;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Utils.Buffers;
+using CoiniumServ.Utils.Helpers.Time;
 
-namespace Coinium.Mining.Vardiff
+namespace CoiniumServ.Mining.Vardiff
 {
     public class VardiffManager:IVardiffManager
     {

@@ -20,16 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Coinium.Coin.Address.Exceptions;
-using Coinium.Coin.Coinbase;
-using Coinium.Daemon;
+using CoiniumServ.Coin.Address.Exceptions;
+using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Daemon;
 using Gibbed.IO;
 
-namespace Coinium.Transactions
+namespace CoiniumServ.Transactions
 {
     public class Outputs : IOutputs
     {

@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Coinium.Utils.Helpers.Misc
+namespace CoiniumServ.Utils.Helpers.Misc
 {
     /// <summary>
     /// Port of python's range from

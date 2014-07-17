@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Crypto.Algorithms
+namespace CoiniumServ.Crypto.Algorithms
 {
     public interface IHashAlgorithmFactory
     {

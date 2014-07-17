@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Transactions.Script;
 
-namespace Coinium.Transactions
+using System;
+using CoiniumServ.Transactions.Script;
+
+namespace CoiniumServ.Transactions
 {
     /// <summary>
     /// Inputs for transaction.

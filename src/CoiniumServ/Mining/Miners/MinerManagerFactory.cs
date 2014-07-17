@@ -20,12 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Daemon;
-using Coinium.Repository.Context;
-using Nancy.TinyIoc;
-using Serilog;
 
-namespace Coinium.Mining.Miners
+using CoiniumServ.Daemon;
+using CoiniumServ.Repository.Context;
+using Nancy.TinyIoc;
+
+namespace CoiniumServ.Mining.Miners
 {
     public class MinerManagerFactory : IMinerManagerFactory
     {

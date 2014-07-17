@@ -23,7 +23,7 @@
 
 using Newtonsoft.Json;
 
-namespace Coinium.Server.Mining.Stratum.Service
+namespace CoiniumServ.Server.Mining.Stratum.Service
 {
     /// <summary>
     /// JsonRpc 2.0 over sockets request.

@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Repository.Context;
 
-namespace Coinium.Mining.Jobs.Tracker
+using CoiniumServ.Repository.Context;
+
+namespace CoiniumServ.Mining.Jobs.Tracker
 {
     public class JobTrackerFactory:IJobTrackerFactory
     {

@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Daemon;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Persistance;
 
-namespace Coinium.Mining.Shares
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Persistance;
+
+namespace CoiniumServ.Mining.Shares
 {
     public interface IShareManagerFactory
     {

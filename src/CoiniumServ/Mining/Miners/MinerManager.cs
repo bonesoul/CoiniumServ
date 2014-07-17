@@ -20,15 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Daemon;
-using Coinium.Mining.Pools;
-using Coinium.Net.Server.Sockets;
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Net.Server.Sockets;
 using Serilog;
 
-namespace Coinium.Mining.Miners
+namespace CoiniumServ.Mining.Miners
 {
     public class MinerManager : IMinerManager
     {
@@ -97,7 +98,7 @@ namespace Coinium.Mining.Miners
         {
             miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid;
 
-            Log.ForContext<MinerManager>().Information(miner.Authenticated ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
+            Log.ForContext<MinerManager>().Information(miner.Authenticated ? "Authenticated miner: {0:l} [{1:l}]" : "Unauthenticated miner: {0:l} [{1:l}]", 
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
             if (miner.Authenticated) // if miner authenticated successfully.

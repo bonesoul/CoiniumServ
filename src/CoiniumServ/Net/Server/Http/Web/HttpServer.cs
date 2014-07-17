@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using Coinium.Repository.Context;
+using CoiniumServ.Repository.Context;
 using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
 using Serilog;
 
-namespace Coinium.Net.Server.Http.Web
+namespace CoiniumServ.Net.Server.Http.Web
 {
     public class HttpServer : IServer, IDisposable
     {
@@ -58,7 +59,7 @@ namespace Coinium.Net.Server.Http.Web
         public bool Start()
         {
             var uri = new Uri(string.Format("http://{0}:{1}", BindIP, Port));
-            Log.ForContext<HttpServer>().Information("Web-server listening on: {0}", uri);
+            Log.ForContext<HttpServer>().Information("Web-server listening on: {0:l}", uri);
 
             var hostConfiguration = new HostConfiguration();
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;

@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Coinium.Utils.Helpers.IO
+namespace CoiniumServ.Utils.Helpers.IO
 {
     public static class FileHelpers
     {

@@ -20,19 +20,20 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Server.Mining.Vanilla.Service;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Server.Mining.Vanilla.Service;
+using CoiniumServ.Utils.Extensions;
 using Serilog;
 
-namespace Coinium.Server.Mining.Vanilla
+namespace CoiniumServ.Server.Mining.Vanilla
 {
     public class VanillaMiner : IMiner
     {

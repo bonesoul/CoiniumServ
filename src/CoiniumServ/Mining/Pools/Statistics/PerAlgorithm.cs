@@ -25,7 +25,7 @@ using System;
 using System.Dynamic;
 using Newtonsoft.Json;
 
-namespace Coinium.Mining.Pools.Statistics
+namespace CoiniumServ.Mining.Pools.Statistics
 {
     public class PerAlgorithm:IPerAlgorithm
     {

@@ -20,11 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using Coinium.Utils.Configuration;
 
-namespace Coinium.Payments
+using System;
+using CoiniumServ.Utils.Configuration;
+
+namespace CoiniumServ.Payments
 {
     public interface IPaymentConfig:IConfig
     {

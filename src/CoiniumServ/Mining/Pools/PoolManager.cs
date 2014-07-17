@@ -20,16 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Pools.Statistics;
-using Coinium.Utils.Configuration;
-using Coinium.Utils.Helpers.IO;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Pools.Statistics;
+using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Utils.Helpers.IO;
 using Serilog;
 
-namespace Coinium.Mining.Pools
+namespace CoiniumServ.Mining.Pools
 {
     public class PoolManager : IPoolManager
     {

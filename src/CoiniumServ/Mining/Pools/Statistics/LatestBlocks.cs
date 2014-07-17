@@ -24,10 +24,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Persistance;
-using Coinium.Persistance.Blocks;
+using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Blocks;
 
-namespace Coinium.Mining.Pools.Statistics
+namespace CoiniumServ.Mining.Pools.Statistics
 {
     public class LatestBlocks:ILatestBlocks
     {

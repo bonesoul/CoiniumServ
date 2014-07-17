@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Config;
-using Coinium.Daemon.Config;
-using Coinium.Payments;
-using Coinium.Server.Mining.Stratum.Config;
-using Coinium.Server.Mining.Vanilla.Config;
-using Coinium.Utils.Configuration;
 
-namespace Coinium.Mining.Pools.Config
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Payments;
+using CoiniumServ.Server.Mining.Stratum.Config;
+using CoiniumServ.Server.Mining.Vanilla.Config;
+using CoiniumServ.Utils.Configuration;
+
+namespace CoiniumServ.Mining.Pools.Config
 {
     public interface IPoolConfig:IConfig
     {

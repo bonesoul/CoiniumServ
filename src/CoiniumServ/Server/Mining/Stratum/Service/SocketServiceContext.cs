@@ -21,9 +21,9 @@
 // 
 #endregion
 
-using Coinium.Mining.Miners;
+using CoiniumServ.Mining.Miners;
 
-namespace Coinium.Server.Mining.Stratum.Service
+namespace CoiniumServ.Server.Mining.Stratum.Service
 {
     public class SocketServiceContext
     {

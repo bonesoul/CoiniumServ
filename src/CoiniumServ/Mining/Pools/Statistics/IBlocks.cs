@@ -21,7 +21,7 @@
 // 
 #endregion
 
-namespace Coinium.Mining.Pools.Statistics
+namespace CoiniumServ.Mining.Pools.Statistics
 {
     public interface IBlocks : IStatisticsProvider
     {

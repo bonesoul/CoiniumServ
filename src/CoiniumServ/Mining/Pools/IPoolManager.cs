@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Pools.Statistics;
 
-namespace Coinium.Mining.Pools
+using System.Collections.Generic;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Pools.Statistics;
+
+namespace CoiniumServ.Mining.Pools
 {
     public interface IPoolManager
     {

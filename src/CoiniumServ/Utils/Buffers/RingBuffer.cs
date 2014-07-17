@@ -23,7 +23,7 @@
 
 using System.Linq;
 
-namespace Coinium.Utils.Buffers
+namespace CoiniumServ.Utils.Buffers
 {
     public class RingBuffer:IRingBuffer
     {

@@ -20,17 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Linq;
-using Coinium.Crypto.Merkle;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Transactions.Utils;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Crypto.Merkle;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Transactions.Utils;
+using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Should.Fluent;
 using Xunit;
 
-namespace Tests.Crypto.Merkle
+namespace CoiniumServ.Tests.Crypto.Merkle
 {
     public class MerkleTreeTests
     {

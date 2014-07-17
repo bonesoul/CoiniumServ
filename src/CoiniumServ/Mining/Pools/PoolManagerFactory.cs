@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Repository.Context;
 
-namespace Coinium.Mining.Pools
+using CoiniumServ.Repository.Context;
+
+namespace CoiniumServ.Mining.Pools
 {
     public class PoolManagerFactory:IPoolManagerFactory
     {

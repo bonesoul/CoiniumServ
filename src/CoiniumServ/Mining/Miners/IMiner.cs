@@ -21,11 +21,10 @@
 // 
 #endregion
 
-using System;
-using Coinium.Mining.Pools;
-using Coinium.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
 
-namespace Coinium.Mining.Miners
+namespace CoiniumServ.Mining.Miners
 {
     /// <summary>
     /// Miner interface that any implementations should extend.

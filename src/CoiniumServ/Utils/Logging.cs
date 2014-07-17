@@ -29,7 +29,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace Coinium.Utils
+namespace CoiniumServ.Utils
 {
     /// <summary>
     /// Controls the logging facilities.

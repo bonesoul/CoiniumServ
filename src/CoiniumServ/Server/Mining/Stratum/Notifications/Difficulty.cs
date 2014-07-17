@@ -25,7 +25,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Coinium.Server.Mining.Stratum.Notifications
+namespace CoiniumServ.Server.Mining.Stratum.Notifications
 {
     // TODO: can we get rid of this?
 

@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Mining.Jobs.Manager;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Mining.Shares;
-using Coinium.Mining.Vardiff;
-using Coinium.Repository.Context;
 
-namespace Coinium.Repository.Registries
+using CoiniumServ.Mining.Jobs.Manager;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Repository.Context;
+
+namespace CoiniumServ.Repository.Registries
 {
     public class ManagerRegistry : IRegistry
     {

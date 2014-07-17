@@ -21,9 +21,9 @@
 // 
 #endregion
 
-using Coinium.Mining.Miners;
+using CoiniumServ.Mining.Miners;
 
-namespace Coinium.Server.Mining.Vanilla.Service
+namespace CoiniumServ.Server.Mining.Vanilla.Service
 {
     public class HttpServiceContext
     {

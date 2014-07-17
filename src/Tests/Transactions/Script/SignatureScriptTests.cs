@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
-using Coinium.Transactions.Script;
-using Coinium.Utils.Extensions;
+
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Jobs;
+using CoiniumServ.Transactions.Script;
+using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Should.Fluent;
 using Xunit;
@@ -40,7 +41,7 @@ using Xunit;
     scriptSigPart2: /nodeStratum/ serialized: 0d2f6e6f64655374726174756d2f 
  */
 
-namespace Tests.Transactions.Script
+namespace CoiniumServ.Tests.Transactions.Script
 {
     public class SignatureScriptTests
     {

@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Utils.Platform
+namespace CoiniumServ.Utils.Platform
 {
     /// <summary>
     /// Platform Manager that identifies platforms & manages them.

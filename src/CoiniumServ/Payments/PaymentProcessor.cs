@@ -20,19 +20,20 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Coinium.Daemon;
-using Coinium.Daemon.Exceptions;
-using Coinium.Mining.Pools.Config;
-using Coinium.Persistance;
-using Coinium.Persistance.Blocks;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Blocks;
 using Serilog;
 
-namespace Coinium.Payments
+namespace CoiniumServ.Payments
 {
     public class PaymentProcessor : IPaymentProcessor
     {

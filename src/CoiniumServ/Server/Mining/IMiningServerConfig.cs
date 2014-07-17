@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Utils.Configuration;
 
-namespace Coinium.Server.Mining
+using System;
+using CoiniumServ.Utils.Configuration;
+
+namespace CoiniumServ.Server.Mining
 {
     public interface IServerConfig:IConfig 
     {

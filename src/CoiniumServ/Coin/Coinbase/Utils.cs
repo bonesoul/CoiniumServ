@@ -20,17 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Linq;
-using Coinium.Coin.Address;
-using Coinium.Crypto;
-using Coinium.Utils.Extensions;
-using Coinium.Utils.Numerics;
+using CoiniumServ.Coin.Address;
+using CoiniumServ.Crypto;
+using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Numerics;
 using Gibbed.IO;
 using Serilog;
 
-namespace Coinium.Coin.Coinbase
+namespace CoiniumServ.Coin.Coinbase
 {
     /// <summary>
     /// Provides helper functions for "serialized CSscript formatting" as defined here: https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification

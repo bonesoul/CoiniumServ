@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using AustinHarris.JsonRpc;
 
-namespace Coinium.Server.Mining.Stratum.Errors
+namespace CoiniumServ.Server.Mining.Stratum.Errors
 {
     // defined in: http://mining.bitcoin.cz/stratum-mining
 

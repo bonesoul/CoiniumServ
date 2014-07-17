@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using Nancy;
 using Nancy.CustomErrors;
 
-namespace Coinium.Net.Server.Http.Web
+namespace CoiniumServ.Net.Server.Http.Web
 {
     public class ErrorConfiguration : CustomErrorsConfiguration
     {

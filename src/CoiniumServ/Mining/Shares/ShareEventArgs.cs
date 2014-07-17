@@ -22,9 +22,9 @@
 #endregion
 
 using System;
-using Coinium.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Stratum;
 
-namespace Coinium.Mining.Shares
+namespace CoiniumServ.Mining.Shares
 {
     public class ShareEventArgs:EventArgs
     {

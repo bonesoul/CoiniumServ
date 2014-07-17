@@ -20,21 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Text;
 using AustinHarris.JsonRpc;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Net.Server.Sockets;
-using Coinium.Server.Mining.Stratum.Errors;
-using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Server.Mining.Stratum.Service;
-using Coinium.Utils.Buffers;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Net.Server.Sockets;
+using CoiniumServ.Server.Mining.Stratum.Errors;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Server.Mining.Stratum.Service;
+using CoiniumServ.Utils.Buffers;
+using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace Coinium.Server.Mining.Stratum
+namespace CoiniumServ.Server.Mining.Stratum
 {
     public class StratumMiner : IClient, IStratumMiner
     {
@@ -160,7 +161,7 @@ namespace Coinium.Server.Mining.Stratum
             var rpcContext = new SocketServiceContext(this, rpcRequest);
 
             var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
-            JsonRpcProcessor.Process(async, rpcContext);
+            JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
         }
 
         /// <summary>

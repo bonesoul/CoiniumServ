@@ -21,9 +21,9 @@
 // 
 #endregion
 
-using Coinium.Persistance;
+using CoiniumServ.Persistance;
 
-namespace Coinium.Mining.Pools.Statistics
+namespace CoiniumServ.Mining.Pools.Statistics
 {
     public class Blocks:IBlocks
     {

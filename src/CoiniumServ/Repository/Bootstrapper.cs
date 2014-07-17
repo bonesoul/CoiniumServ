@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Repository.Registries;
+
+using CoiniumServ.Repository.Registries;
 using Nancy.TinyIoc;
 
-namespace Coinium.Repository
+namespace CoiniumServ.Repository
 {
     /// <summary>
     /// IOC & DI registry.

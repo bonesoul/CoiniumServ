@@ -22,9 +22,9 @@
 #endregion
 
 using System.Collections.Generic;
-using Coinium.Persistance.Blocks;
+using CoiniumServ.Persistance.Blocks;
 
-namespace Coinium.Mining.Pools.Statistics
+namespace CoiniumServ.Mining.Pools.Statistics
 {
     public interface ILatestBlocks: IEnumerable<IPersistedBlock>, IStatisticsProvider
     {

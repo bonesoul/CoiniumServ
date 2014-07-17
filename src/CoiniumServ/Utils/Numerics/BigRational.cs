@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -27,7 +28,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text;
 
-namespace Coinium.Utils.Numerics
+namespace CoiniumServ.Utils.Numerics
 {
 
     /* Most mono versions doesn't include a proper BigInteger implementation, so we just include one that's complete from the latest mono repository

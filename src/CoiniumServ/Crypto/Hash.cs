@@ -20,16 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Diagnostics;
 using System.Linq;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Utils.Extensions;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Utilities.Encoders;
 
 // originally from: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Sha256Hash.cs
 
-namespace Coinium.Crypto
+namespace CoiniumServ.Crypto
 {
     /// <summary>
     /// A Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a

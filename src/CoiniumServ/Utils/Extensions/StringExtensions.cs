@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Utils.Extensions
+namespace CoiniumServ.Utils.Extensions
 {
     public static class StringExtensions
     {

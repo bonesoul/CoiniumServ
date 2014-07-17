@@ -21,11 +21,11 @@
 // 
 #endregion
 
-using Coinium.Mining.Shares;
-using Coinium.Repository.Context;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Repository.Context;
 using Nancy.TinyIoc;
 
-namespace Coinium.Mining.Vardiff
+namespace CoiniumServ.Mining.Vardiff
 {
     public class VardiffManagerFactory : IVardiffManagerFactory
     {

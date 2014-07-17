@@ -7,7 +7,7 @@
     <ProjectGuid>{5FCA1E48-0751-4625-9532-CB804DF55DB5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Coinium</RootNamespace>
+    <RootNamespace>CoiniumServ</RootNamespace>
     <AssemblyName>CoiniumServ</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,7 +40,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Coinium.Program</StartupObject>
+    <StartupObject>CoiniumServ.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Coinium.ico</ApplicationIcon>

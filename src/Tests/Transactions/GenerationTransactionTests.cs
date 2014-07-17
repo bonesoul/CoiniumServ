@@ -20,16 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
-using Coinium.Mining.Pools.Config;
-using Coinium.Transactions;
-using Coinium.Transactions.Script;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Jobs;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Transactions;
+using CoiniumServ.Transactions.Script;
+using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
@@ -68,7 +69,7 @@ using Xunit;
     p2: 0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000
 */
 
-namespace Tests.Transactions
+namespace CoiniumServ.Tests.Transactions
 {
     public class GenerationTransactionTests
     {

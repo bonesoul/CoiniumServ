@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Coin.Helpers
+namespace CoiniumServ.Coin.Helpers
 {
     public static class Hashrate
     {

@@ -24,7 +24,7 @@
 using System.Net;
 using Newtonsoft.Json;
 
-namespace Coinium.Server.Mining.Vanilla.Service
+namespace CoiniumServ.Server.Mining.Vanilla.Service
 {
     /// <summary>
     /// JsonRpc 1.0 over http request.

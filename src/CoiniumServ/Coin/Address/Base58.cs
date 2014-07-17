@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Linq;
 using System.Text;
-using Coinium.Coin.Address.Exceptions;
-using Coinium.Crypto;
+using CoiniumServ.Coin.Address.Exceptions;
+using CoiniumServ.Crypto;
 using Org.BouncyCastle.Math;
 
-namespace Coinium.Coin.Address
+namespace CoiniumServ.Coin.Address
 {
 
     /// <summary>

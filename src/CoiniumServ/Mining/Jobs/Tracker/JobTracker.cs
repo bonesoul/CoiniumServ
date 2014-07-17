@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
-using Coinium.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
 
-namespace Coinium.Mining.Jobs.Tracker
+namespace CoiniumServ.Mining.Jobs.Tracker
 {
     public class JobTracker:IJobTracker
     {

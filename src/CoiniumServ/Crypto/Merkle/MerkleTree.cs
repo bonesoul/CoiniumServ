@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Utils.Extensions;
-using Coinium.Utils.Helpers.Misc;
+using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Helpers.Misc;
 
-namespace Coinium.Crypto.Merkle
+namespace CoiniumServ.Crypto.Merkle
 {
     /// <summary>
     /// Merkle tree builder.

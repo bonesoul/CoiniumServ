@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Utils.Commands;
 
-namespace Coinium.Server.Commands
+using System;
+using CoiniumServ.Utils.Commands;
+
+namespace CoiniumServ.Server.Commands
 {
     [CommandGroup("server", "Allows you to control servers and start/stop them.")]
     public class ServerCommand : CommandGroup

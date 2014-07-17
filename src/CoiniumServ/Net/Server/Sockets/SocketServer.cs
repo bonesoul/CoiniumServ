@@ -20,15 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Utils.Extensions;
 using Serilog;
 
-namespace Coinium.Net.Server.Sockets
+namespace CoiniumServ.Net.Server.Sockets
 {
     public class SocketServer : IServer, IDisposable
     {

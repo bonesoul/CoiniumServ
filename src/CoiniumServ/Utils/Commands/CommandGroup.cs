@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Serilog;
 
-namespace Coinium.Utils.Commands
+namespace CoiniumServ.Utils.Commands
 {
     public class CommandGroup
     {

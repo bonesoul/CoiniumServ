@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Mining.Pools
+namespace CoiniumServ.Mining.Pools
 {
     public interface IPoolManagerFactory
     {

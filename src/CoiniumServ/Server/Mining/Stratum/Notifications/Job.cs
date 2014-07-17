@@ -20,22 +20,23 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using Coinium.Coin.Coinbase;
-using Coinium.Crypto.Algorithms;
-using Coinium.Crypto.Merkle;
-using Coinium.Daemon.Responses;
-using Coinium.Transactions;
-using Coinium.Transactions.Utils;
-using Coinium.Utils.Extensions;
-using Coinium.Utils.Numerics;
+using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Crypto.Merkle;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Transactions;
+using CoiniumServ.Transactions.Utils;
+using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Numerics;
 using Gibbed.IO;
 using Newtonsoft.Json;
 
-namespace Coinium.Server.Mining.Stratum.Notifications
+namespace CoiniumServ.Server.Mining.Stratum.Notifications
 {
     [JsonArray]
     public class Job : IJob

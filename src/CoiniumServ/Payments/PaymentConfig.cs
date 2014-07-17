@@ -21,10 +21,7 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using JsonConfig;
-
-namespace Coinium.Payments
+namespace CoiniumServ.Payments
 {
     public class PaymentConfig:IPaymentConfig
     {

@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.IO;
 using System.Reflection;
-using Coinium.Utils.Platform;
+using CoiniumServ.Utils.Platform;
 using Nancy;
 
-namespace Coinium.Net.Server.Http.Web
+namespace CoiniumServ.Net.Server.Http.Web
 {
     public class CustomRootPathProvider : IRootPathProvider
     {

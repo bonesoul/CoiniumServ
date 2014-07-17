@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Daemon;
-using Coinium.Mining.Pools.Config;
-using Coinium.Persistance;
 
-namespace Coinium.Payments
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Persistance;
+
+namespace CoiniumServ.Payments
 {
     public interface IPaymentProcessorFactory
     {

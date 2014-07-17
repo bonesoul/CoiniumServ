@@ -20,22 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using Coinium.Mining.Pools;
-using Coinium.Repository;
-using Coinium.Repository.Context;
-using Coinium.Server.Web;
-using Coinium.Utils;
-using Coinium.Utils.Commands;
-using Coinium.Utils.Configuration;
-using Coinium.Utils.Platform;
-using Serilog;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Repository;
+using CoiniumServ.Server.Web;
+using CoiniumServ.Utils;
+using CoiniumServ.Utils.Commands;
+using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Utils.Platform;
 using Nancy.TinyIoc;
+using Serilog;
 
-namespace Coinium
+namespace CoiniumServ
 {
     class Program
     {

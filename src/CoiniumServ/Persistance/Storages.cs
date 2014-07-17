@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Persistance
+namespace CoiniumServ.Persistance
 {
     public static class Storages
     {

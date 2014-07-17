@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Mining.Jobs.Manager
+namespace CoiniumServ.Mining.Jobs.Manager
 {
     public interface IJobManager
     {

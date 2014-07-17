@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Reflection;
-using Coinium.Utils.Commands;
 
-namespace Coinium.Server.Commands
+using System.Reflection;
+using CoiniumServ.Utils.Commands;
+
+namespace CoiniumServ.Server.Commands
 {
     [CommandGroup("version", "Renders software version.")]
     public class VersionCommand : CommandGroup

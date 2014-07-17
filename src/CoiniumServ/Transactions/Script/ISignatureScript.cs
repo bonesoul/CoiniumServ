@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Transactions.Script
+namespace CoiniumServ.Transactions.Script
 {
     public interface ISignatureScript
     {

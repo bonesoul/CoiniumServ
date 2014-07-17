@@ -7,7 +7,7 @@
     <ProjectGuid>{73CE2C0A-12E6-42FD-8021-C75827D014E3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tests</RootNamespace>
+    <RootNamespace>CoiniumServ.Tests</RootNamespace>
     <AssemblyName>CoiniumServ.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Daemon;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Persistance;
-using Coinium.Repository.Context;
+
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Persistance;
+using CoiniumServ.Repository.Context;
 using Nancy.TinyIoc;
 
-namespace Coinium.Mining.Shares
+namespace CoiniumServ.Mining.Shares
 {
     public class ShareManagerFactory : IShareManagerFactory
     {

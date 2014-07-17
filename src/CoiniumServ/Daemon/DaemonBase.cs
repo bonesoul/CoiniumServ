@@ -20,17 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Exceptions;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace Coinium.Daemon
+namespace CoiniumServ.Daemon
 {
     public class DaemonBase : IDaemonBase
     {

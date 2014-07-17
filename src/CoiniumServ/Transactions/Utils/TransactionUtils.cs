@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Coin.Coinbase;
-using Coinium.Daemon.Responses;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Utils.Extensions;
 
-namespace Coinium.Transactions.Utils
+namespace CoiniumServ.Transactions.Utils
 {
     public static class TransactionUtils
     {

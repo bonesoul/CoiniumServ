@@ -21,7 +21,7 @@
 // 
 #endregion
 
-namespace Coinium.Utils.Buffers
+namespace CoiniumServ.Utils.Buffers
 {
     public interface IRingBuffer
     {

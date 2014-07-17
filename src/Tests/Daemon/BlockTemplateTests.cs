@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
 using Newtonsoft.Json;
 using Should.Fluent;
 using Xunit;
@@ -71,7 +72,7 @@ using Xunit;
     }
  */
 
-namespace Tests.Daemon
+namespace CoiniumServ.Tests.Daemon
 {
     public class BlockTemplateTests
     {

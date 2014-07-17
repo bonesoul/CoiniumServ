@@ -20,11 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Coinium.Persistance.Blocks
+namespace CoiniumServ.Persistance.Blocks
 {
     public class PendingBlock : IPendingBlock
     {

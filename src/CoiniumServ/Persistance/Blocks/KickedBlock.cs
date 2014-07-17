@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Persistance.Blocks
+namespace CoiniumServ.Persistance.Blocks
 {
     public class KickedBlock:IKickedBlock
     {

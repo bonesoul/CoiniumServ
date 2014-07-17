@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Utils.Helpers.Arrays
+namespace CoiniumServ.Utils.Helpers.Arrays
 {
     public static class ArrayHelpers
     {

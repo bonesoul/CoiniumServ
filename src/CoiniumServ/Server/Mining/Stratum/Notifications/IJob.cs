@@ -20,15 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
-using Coinium.Crypto.Algorithms;
-using Coinium.Crypto.Merkle;
-using Coinium.Daemon.Responses;
-using Coinium.Transactions;
-using Coinium.Utils.Numerics;
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Crypto.Merkle;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Transactions;
+using CoiniumServ.Utils.Numerics;
 
-namespace Coinium.Server.Mining.Stratum.Notifications
+namespace CoiniumServ.Server.Mining.Stratum.Notifications
 {
     public interface IJob : IEnumerable<object>
     {

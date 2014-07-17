@@ -20,18 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using Coinium.Coin.Coinbase;
-using Coinium.Crypto;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Miners;
-using Coinium.Server.Mining.Stratum;
-using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Utils.Extensions;
-using Coinium.Utils.Numerics;
+using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Crypto;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Numerics;
 using Serilog;
 
-namespace Coinium.Mining.Shares
+namespace CoiniumServ.Mining.Shares
 {
     public class Share : IShare
     {
