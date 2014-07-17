@@ -51,6 +51,15 @@
 		"port": 2223			
 	},
 
+    # banning support
+    "banning": {
+        "enabled": true,
+        "duration": 600,
+        "percent": 50,
+        "threshold": 500,
+        "purge": 300
+    },
+
 	# mpos compat mode configuration - not implemented yet!
 	"mpos": {
 		"enabled": false,

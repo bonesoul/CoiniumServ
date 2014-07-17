@@ -42,6 +42,8 @@ using System.Threading;
 	Schoolbook multiply is O(n^2), use Karatsuba /Toom-3 for large numbers
 */
 
+#pragma warning disable 3021 // disable CLSCompliant attribute warnings - http://msdn.microsoft.com/en-us/library/1x9049cy(v=vs.90).aspx
+
 namespace CoiniumServ.Utils.Numerics
 {
     //

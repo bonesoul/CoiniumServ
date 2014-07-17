@@ -256,17 +256,17 @@ namespace CoiniumServ.Coin.Coinbase
                 if (input.Length < 0x10000)
                 {
                     stream.WriteValueU8(253);
-                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed lenght.
+                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed length.
                 }
                 else if (input.Length < 0x100000000)
                 {
                     stream.WriteValueU8(254);
-                    stream.WriteValueU32(((UInt32)input.Length).LittleEndian()); // write packed lenght.
+                    stream.WriteValueU32(((UInt32)input.Length).LittleEndian()); // write packed length.
                 }
                 else
                 {
                     stream.WriteValueU8(255);
-                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed lenght.
+                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed length.
                 }
 
                 stream.WriteString(input);
