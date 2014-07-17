@@ -38,7 +38,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Service
         private readonly IShareManager _shareManager;
 
         public StratumService(ICoinConfig coinConfig, IShareManager shareManager):
-            base(string.Format("stratum-{0}", coinConfig.Name))
+            base(coinConfig.Name)
         {
             _shareManager = shareManager;
         }

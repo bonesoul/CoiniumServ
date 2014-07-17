@@ -98,7 +98,7 @@ namespace CoiniumServ.Mining.Miners
         {
             miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid;
 
-            Log.ForContext<MinerManager>().Information(miner.Authenticated ? "Authenticated miner: {0} [{1}]" : "Unauthenticated miner: {0} [{1}]",
+            Log.ForContext<MinerManager>().Information(miner.Authenticated ? "Authenticated miner: {0:l} [{1:l}]" : "Unauthenticated miner: {0:l} [{1:l}]", 
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
             if (miner.Authenticated) // if miner authenticated successfully.

@@ -59,7 +59,7 @@ namespace CoiniumServ.Net.Server.Http.Web
         public bool Start()
         {
             var uri = new Uri(string.Format("http://{0}:{1}", BindIP, Port));
-            Log.ForContext<HttpServer>().Information("Web-server listening on: {0}", uri);
+            Log.ForContext<HttpServer>().Information("Web-server listening on: {0:l}", uri);
 
             var hostConfiguration = new HostConfiguration();
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;

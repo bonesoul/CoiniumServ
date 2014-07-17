@@ -146,15 +146,15 @@ namespace CoiniumServ.Mining.Shares
                 Log.ForContext<ShareManager>()
                     .Information(
                         isAccepted
-                            ? "Found block [{0}] with hash: {1}."
-                            : "Submitted block [{0}] but got denied: {1}.", 
+                            ? "Found block [{0}] with hash: {1:l}."
+                            : "Submitted block [{0}] but got denied: {1:l}.", 
                             share.Height, share.BlockHash.ToHexString());
 
                 return isAccepted;
             }
             catch (Exception e)
             {
-                Log.ForContext<ShareManager>().Error(e, "Submit block failed - height: {0}, hash: {1}", share.Height, share.BlockHash);
+                Log.ForContext<ShareManager>().Error(e, "Submit block failed - height: {0}, hash: {1:l}", share.Height, share.BlockHash);
                 return false;
             }
         }
@@ -169,7 +169,7 @@ namespace CoiniumServ.Mining.Shares
             }
             catch (Exception e)
             {
-                Log.ForContext<ShareManager>().Error(e, "Get block failed - height: {0}, hash: {1}", share.Height, share.BlockHash);
+                Log.ForContext<ShareManager>().Error(e, "Get block failed - height: {0}, hash: {1:l}", share.Height, share.BlockHash);
                 return false;
             }
         }

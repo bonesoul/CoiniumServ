@@ -161,7 +161,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             var rpcContext = new SocketServiceContext(this, rpcRequest);
 
             var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
-            JsonRpcProcessor.Process(async, rpcContext);
+            JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
         }
 
         /// <summary>
