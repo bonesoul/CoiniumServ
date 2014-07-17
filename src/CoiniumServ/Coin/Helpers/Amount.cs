@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Coin.Helpers
+namespace CoiniumServ.Coin.Helpers
 {
     /// <summary>
     /// Amount helper class.

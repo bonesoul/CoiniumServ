@@ -25,7 +25,7 @@ using System.Collections;
 using System.Collections.Generic;
 using JsonConfig;
 
-namespace Coinium.Mining.Pools.Config
+namespace CoiniumServ.Mining.Pools.Config
 {
     public class RewardsConfig:IRewardsConfig
     {

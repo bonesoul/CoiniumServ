@@ -20,12 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Coinium.Mining.Jobs
+using System;
+
+namespace CoiniumServ.Mining.Jobs
 {
     public interface IJobCounter
     {

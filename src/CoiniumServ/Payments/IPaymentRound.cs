@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using Coinium.Persistance.Blocks;
 
-namespace Coinium.Payments
+using System.Collections.Generic;
+using CoiniumServ.Persistance.Blocks;
+
+namespace CoiniumServ.Payments
 {
     public interface IPaymentRound
     {

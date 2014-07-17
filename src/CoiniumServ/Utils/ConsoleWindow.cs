@@ -23,7 +23,7 @@
 
 using System;
 
-namespace Coinium.Utils
+namespace CoiniumServ.Utils
 {
     /// <summary>
     /// Utility class to handle console window stuff.

@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Server.Mining.Stratum.Errors
+namespace CoiniumServ.Server.Mining.Stratum.Errors
 {
     public interface IStratumError
     {

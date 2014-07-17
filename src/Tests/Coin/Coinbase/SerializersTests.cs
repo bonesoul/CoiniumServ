@@ -20,19 +20,20 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Coin.Coinbase;
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
-using Coinium.Mining.Pools.Config;
-using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Transactions;
-using Coinium.Transactions.Script;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Jobs;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Transactions;
+using CoiniumServ.Transactions.Script;
+using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
@@ -95,7 +96,7 @@ using Xunit;
     2014-06-25 13:24:04 [Pool]	[litecoin] (Thread 1) Block found: e242093d92f4c98bfd5dd1f9f6489652d1165f5ce4eed1f28747d2b8e3efd8b6
  */
 
-namespace Tests.Coin.Coinbase
+namespace CoiniumServ.Tests.Coin.Coinbase
 {
     public class SerializerTests
     {
@@ -190,7 +191,7 @@ namespace Tests.Coin.Coinbase
 
             // create the coinbase.
             var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
-            var coinbaseHash = Coinium.Coin.Coinbase.Utils.HashCoinbase(coinbase);
+            var coinbaseHash = CoiniumServ.Coin.Coinbase.Utils.HashCoinbase(coinbase);
 
             // create the merkle root.
             var merkleRoot = _job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
@@ -212,7 +213,7 @@ namespace Tests.Coin.Coinbase
 
             // create the coinbase.
             var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
-            var coinbaseHash = Coinium.Coin.Coinbase.Utils.HashCoinbase(coinbase);
+            var coinbaseHash = CoiniumServ.Coin.Coinbase.Utils.HashCoinbase(coinbase);
 
             // create the merkle root.
             var merkleRoot = _job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();

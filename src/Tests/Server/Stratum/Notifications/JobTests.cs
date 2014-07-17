@@ -20,21 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
-using Coinium.Mining.Pools.Config;
-using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Transactions;
-using Coinium.Transactions.Script;
-using Should.Fluent;
-using Xunit;
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Jobs;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Transactions;
+using CoiniumServ.Transactions.Script;
 using Newtonsoft.Json;
 using NSubstitute;
+using Should.Fluent;
+using Xunit;
 
 /* sample data
     previousblockhash: 22a9174d9db64f1919febc9577167764c301b755768b675291f7d34454561e9e previousblockhashreversed: 54561e9e91f7d344768b6752c301b7557716776419febc959db64f1922a9174d
@@ -82,7 +83,7 @@ using NSubstitute;
     ]
  */
 
-namespace Tests.Server.Stratum.Notifications
+namespace CoiniumServ.Tests.Server.Stratum.Notifications
 {
     public class JobTests
     {

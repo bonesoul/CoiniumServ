@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Utils.Extensions;
+
+using CoiniumServ.Utils.Extensions;
 using Should.Fluent;
 using Xunit;
 
-namespace Tests.Utils.Extensions
+namespace CoiniumServ.Tests.Utils.Extensions
 {
     public class StringExtensionsTests
     {

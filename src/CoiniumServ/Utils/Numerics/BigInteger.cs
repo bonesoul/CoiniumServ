@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -41,7 +42,7 @@ using System.Threading;
 	Schoolbook multiply is O(n^2), use Karatsuba /Toom-3 for large numbers
 */
 
-namespace Coinium.Utils.Numerics
+namespace CoiniumServ.Utils.Numerics
 {
     //
     // System.Numerics.BigInteger

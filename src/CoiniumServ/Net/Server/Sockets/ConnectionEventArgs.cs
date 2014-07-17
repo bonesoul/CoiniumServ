@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Net.Server.Sockets
+namespace CoiniumServ.Net.Server.Sockets
 {
     public class ConnectionEventArgs : EventArgs
     {

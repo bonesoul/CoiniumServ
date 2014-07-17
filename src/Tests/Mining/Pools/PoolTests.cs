@@ -20,27 +20,29 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs.Manager;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Pools.Statistics;
-using Coinium.Mining.Shares;
-using Coinium.Mining.Vardiff;
-using Coinium.Payments;
-using Coinium.Persistance;
-using Coinium.Server;
-using Coinium.Server.Mining;
-using Coinium.Server.Mining.Service;
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Jobs.Manager;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Pools.Statistics;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance;
+using CoiniumServ.Server;
+using CoiniumServ.Server.Mining;
+using CoiniumServ.Server.Mining.Service;
 using NSubstitute;
 using Should.Fluent;
 using Xunit;
 
-namespace Tests.Mining.Pools
+namespace CoiniumServ.Tests.Mining.Pools
 {
     public class PoolTests
     {
@@ -106,7 +108,7 @@ namespace Tests.Mining.Pools
         [Fact]
         public void ConstructorTest_NonNullParams_ShouldSucceed()
         {
-            var pool = new Coinium.Mining.Pools.Pool(
+            var pool = new Pool(
                 _hashAlgorithmFactory,
                 _serverFactory,
                 _serviceFactory,
@@ -131,7 +133,7 @@ namespace Tests.Mining.Pools
         [Fact]
         public void InitializationTest_NonNullParams_ShouldSuccess()
         {
-            var pool = new Coinium.Mining.Pools.Pool(
+            var pool = new Pool(
                 _hashAlgorithmFactory, 
                 _serverFactory, 
                 _serviceFactory, 

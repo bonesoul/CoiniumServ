@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Crypto;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Miners;
-using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Utils.Numerics;
 
-namespace Coinium.Mining.Shares
+using System;
+using CoiniumServ.Crypto;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Utils.Numerics;
+
+namespace CoiniumServ.Mining.Shares
 {
     public interface IShare
     {

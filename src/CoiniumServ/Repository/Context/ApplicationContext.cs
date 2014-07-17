@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using Nancy.TinyIoc;
 
-namespace Coinium.Repository.Context
+namespace CoiniumServ.Repository.Context
 {
     public class ApplicationContext : IApplicationContext
     {

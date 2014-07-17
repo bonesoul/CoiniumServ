@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Coin.Address.Exceptions
+namespace CoiniumServ.Coin.Address.Exceptions
 {
     public class InvalidWalletAddressException : Exception
     {

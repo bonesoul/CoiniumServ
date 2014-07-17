@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using Coinium.Transactions.Utils;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Transactions.Utils;
+using CoiniumServ.Utils.Extensions;
 using Should.Fluent;
 using Xunit;
 
-namespace Tests.Transactions.Utils
+namespace CoiniumServ.Tests.Transactions.Utils
 {
     public class TransactionUtilsTests
     {

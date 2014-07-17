@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Text;
 
-namespace Coinium.Utils.Extensions
+namespace CoiniumServ.Utils.Extensions
 {
     /// <summary>
     /// Utility class to format a given JSON string so it is more readable and nicely indented.

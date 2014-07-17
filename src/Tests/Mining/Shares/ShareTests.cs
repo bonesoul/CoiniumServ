@@ -20,32 +20,30 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Coin.Config;
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
-using Coinium.Mining.Jobs.Manager;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Shares;
-using Coinium.Server.Mining.Stratum;
-using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Transactions;
-using Coinium.Transactions.Script;
-using Coinium.Utils.Extensions;
-using Coinium.Utils.Numerics;
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Jobs;
+using CoiniumServ.Mining.Jobs.Manager;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Transactions;
+using CoiniumServ.Transactions.Script;
+using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Numerics;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
 using Xunit;
 
-namespace Tests.Mining.Shares
+namespace CoiniumServ.Tests.Mining.Shares
 {
     public class ShareTests
     {

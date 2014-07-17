@@ -22,13 +22,13 @@
 #endregion
 
 using AustinHarris.JsonRpc;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Shares;
-using Coinium.Server.Mining.Service;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Server.Mining.Service;
 using Serilog;
 
-namespace Coinium.Server.Mining.Vanilla.Service
+namespace CoiniumServ.Server.Mining.Vanilla.Service
 {
     /// <summary>
     /// Stratum protocol implementation.

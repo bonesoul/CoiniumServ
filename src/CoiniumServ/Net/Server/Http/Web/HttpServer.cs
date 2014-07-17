@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using Coinium.Repository.Context;
+using CoiniumServ.Repository.Context;
 using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
 using Serilog;
 
-namespace Coinium.Net.Server.Http.Web
+namespace CoiniumServ.Net.Server.Http.Web
 {
     public class HttpServer : IServer, IDisposable
     {

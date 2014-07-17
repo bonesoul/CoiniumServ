@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Crypto;
 
-namespace Coinium.Transactions
+using System;
+using CoiniumServ.Crypto;
+
+namespace CoiniumServ.Transactions
 {
     /// <summary>
     /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx

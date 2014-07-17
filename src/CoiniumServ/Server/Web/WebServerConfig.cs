@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Server.Web
+namespace CoiniumServ.Server.Web
 {
     public class WebServerConfig : IWebServerConfig
     {

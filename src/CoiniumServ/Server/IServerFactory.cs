@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Mining.Jobs.Manager;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Server.Mining;
-using Coinium.Server.Web;
 
-namespace Coinium.Server
+using CoiniumServ.Mining.Jobs.Manager;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Server.Mining;
+using CoiniumServ.Server.Web;
+
+namespace CoiniumServ.Server
 {
     public interface IServerFactory
     {

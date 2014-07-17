@@ -21,7 +21,7 @@
 // 
 #endregion
 
-namespace Coinium.Mining.Pools.Config
+namespace CoiniumServ.Mining.Pools.Config
 {
     public class WalletConfig:IWalletConfig
     {

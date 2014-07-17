@@ -22,9 +22,9 @@
 #endregion
 
 using System.Collections.Generic;
-using Coinium.Utils.Configuration;
+using CoiniumServ.Utils.Configuration;
 
-namespace Coinium.Mining.Pools.Config
+namespace CoiniumServ.Mining.Pools.Config
 {
     public interface IRewardsConfig :IEnumerable<KeyValuePair<string, float>>,  IConfig 
     {

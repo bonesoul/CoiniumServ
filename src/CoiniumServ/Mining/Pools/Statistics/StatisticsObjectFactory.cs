@@ -20,15 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools.Config;
-using Coinium.Persistance;
-using Coinium.Repository.Context;
+
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Persistance;
+using CoiniumServ.Repository.Context;
 using Nancy.TinyIoc;
 
-namespace Coinium.Mining.Pools.Statistics
+namespace CoiniumServ.Mining.Pools.Statistics
 {
     public class StatististicsObjectFactory : IStatisticsObjectFactory
     {

@@ -20,18 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Mining.Pools;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Pools.Statistics;
-using Coinium.Payments;
-using Coinium.Persistance;
-using Coinium.Persistance.Redis;
-using Coinium.Repository.Context;
 
-namespace Coinium.Repository.Registries
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Pools.Statistics;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Repository.Context;
+
+namespace CoiniumServ.Repository.Registries
 {
     public class ClassRegistry : IRegistry
     {

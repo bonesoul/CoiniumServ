@@ -21,9 +21,9 @@
 // 
 #endregion
 
-using Coinium.Utils.Buffers;
+using CoiniumServ.Utils.Buffers;
 
-namespace Coinium.Mining.Vardiff
+namespace CoiniumServ.Mining.Vardiff
 {
     public interface IVardiffMiner
     {

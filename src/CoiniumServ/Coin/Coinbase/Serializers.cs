@@ -20,15 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Text;
-using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Utils.Extensions;
-using Coinium.Utils.Helpers.Arrays;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Helpers.Arrays;
 using Gibbed.IO;
 
-namespace Coinium.Coin.Coinbase
+namespace CoiniumServ.Coin.Coinbase
 {
     public static class Serializers
     {

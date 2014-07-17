@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Mining.Vardiff;
-using Coinium.Server.Mining.Service;
 
-namespace Coinium.Server.Mining.Stratum.Config
+using System;
+using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Server.Mining.Service;
+
+namespace CoiniumServ.Server.Mining.Stratum.Config
 {
     public class StratumServerConfig:IStratumServerConfig
     {

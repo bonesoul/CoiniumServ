@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
-using Coinium.Crypto.Merkle;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Crypto.Merkle;
+using CoiniumServ.Utils.Extensions;
 using Should.Fluent;
 using Xunit;
 
-namespace Tests.Crypto.Merkle
+namespace CoiniumServ.Tests.Crypto.Merkle
 {
     public class MerkleRootTests
     {

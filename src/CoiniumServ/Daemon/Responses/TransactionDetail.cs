@@ -22,7 +22,7 @@
 #endregion
 /* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
-namespace Coinium.Daemon.Responses
+namespace CoiniumServ.Daemon.Responses
 {
     public class TransactionDetail
     {

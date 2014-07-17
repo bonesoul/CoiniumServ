@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Utils.Extensions;
 
-namespace Coinium.Mining.Jobs
+using System;
+using CoiniumServ.Utils.Extensions;
+
+namespace CoiniumServ.Mining.Jobs
 {
     /// <summary>
     /// Counter for extra nonce.

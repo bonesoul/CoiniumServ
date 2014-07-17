@@ -20,16 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Mining.Jobs.Manager;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Net.Server.Sockets;
+
+using CoiniumServ.Mining.Jobs.Manager;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Net.Server.Sockets;
 using Serilog;
 
 // stratum server uses json-rpc 2.0 (over raw sockets) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 // classic server handles getwork & getblocktemplate miners over http.
 
-namespace Coinium.Server.Mining.Stratum
+namespace CoiniumServ.Server.Mining.Stratum
 {
     /// <summary>
     /// Stratum protocol server implementation.

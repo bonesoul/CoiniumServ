@@ -20,24 +20,24 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Shares;
-using Coinium.Payments;
-using Coinium.Persistance.Blocks;
-using Coinium.Utils.Configuration;
-using Coinium.Utils.Extensions;
-using Coinium.Utils.Helpers.Time;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Helpers.Time;
 using Serilog;
 using StackExchange.Redis;
 
-namespace Coinium.Persistance.Redis
+namespace CoiniumServ.Persistance.Redis
 {
     public class Redis:IStorage, IRedis
     {

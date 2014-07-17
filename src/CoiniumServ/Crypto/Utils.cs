@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Security.Cryptography;
 
-namespace Coinium.Crypto
+namespace CoiniumServ.Crypto
 {
     public static class Utils
     {

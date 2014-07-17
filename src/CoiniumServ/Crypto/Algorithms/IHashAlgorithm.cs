@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Utils.Numerics;
 
-namespace Coinium.Crypto.Algorithms
+using System;
+using CoiniumServ.Utils.Numerics;
+
+namespace CoiniumServ.Crypto.Algorithms
 {
     public interface IHashAlgorithm
     {

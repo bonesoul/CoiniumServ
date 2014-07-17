@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Coinium.Net.Server.Sockets
+namespace CoiniumServ.Net.Server.Sockets
 {
     /// <summary>
     /// Connection interface.

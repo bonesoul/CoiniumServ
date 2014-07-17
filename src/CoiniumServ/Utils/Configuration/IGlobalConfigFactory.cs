@@ -21,11 +21,10 @@
 // 
 #endregion
 
-using Coinium.Mining.Vardiff;
-using Coinium.Persistance.Redis;
-using Coinium.Server.Web;
+using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Server.Web;
 
-namespace Coinium.Utils.Configuration
+namespace CoiniumServ.Utils.Configuration
 {
     public interface IGlobalConfigFactory
     {

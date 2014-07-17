@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using Newtonsoft.Json;
 
-namespace Coinium.Daemon.Requests
+namespace CoiniumServ.Daemon.Requests
 {
     public class CreateRawTransactionInput
     {

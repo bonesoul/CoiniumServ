@@ -20,18 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Dynamic;
 using System.Linq;
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools.Config;
-using Coinium.Persistance;
-using Coinium.Utils.Helpers.Time;
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Persistance;
+using CoiniumServ.Utils.Helpers.Time;
 using Newtonsoft.Json;
 
-namespace Coinium.Mining.Pools.Statistics
+namespace CoiniumServ.Mining.Pools.Statistics
 {
     public class PerPool:IPerPool
     {       

@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Diagnostics;
 using System.Text;
-using Coinium.Utils.Commands;
+using CoiniumServ.Utils.Commands;
 
-namespace Coinium.Server.Commands
+namespace CoiniumServ.Server.Commands
 {
     [CommandGroup("stats", "Renders statistics.\nUsage: stats [system].")]
     public class StatsCommand : CommandGroup

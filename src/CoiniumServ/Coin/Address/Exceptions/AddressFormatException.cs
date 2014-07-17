@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Coin.Address.Exceptions
+namespace CoiniumServ.Coin.Address.Exceptions
 {
     /// <summary>
     /// Original implementation: https://github.com/CoiniumServ/BitcoinSharp/blob/55ca27107d200ede9896c1064de76b04d4daf9ef/src/Core/AddressFormatException.cs

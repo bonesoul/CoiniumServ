@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Coin.Helpers;
+
+using CoiniumServ.Coin.Helpers;
 using Should.Fluent;
 using Xunit;
 
-namespace Tests.Coin
+namespace CoiniumServ.Tests.Coin
 {
     public class AmountTests
     {

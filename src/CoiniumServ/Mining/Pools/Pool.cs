@@ -20,29 +20,30 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using Coinium.Coin.Helpers;
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Mining.Jobs.Manager;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Pools.Statistics;
-using Coinium.Mining.Shares;
-using Coinium.Mining.Vardiff;
-using Coinium.Payments;
-using Coinium.Persistance;
-using Coinium.Server;
-using Coinium.Server.Mining;
-using Coinium.Server.Mining.Service;
-using Coinium.Utils.Helpers.Validation;
+using CoiniumServ.Coin.Helpers;
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Jobs.Manager;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Pools.Statistics;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance;
+using CoiniumServ.Server;
+using CoiniumServ.Server.Mining;
+using CoiniumServ.Server.Mining.Service;
+using CoiniumServ.Utils.Helpers.Validation;
 using Serilog;
 
-namespace Coinium.Mining.Pools
+namespace CoiniumServ.Mining.Pools
 {
     /// <summary>
     /// Contains pool services and server.

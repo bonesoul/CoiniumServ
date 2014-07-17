@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Utils.Platform
+namespace CoiniumServ.Utils.Platform
 {
     /// <summary>
     /// .Net frameworks.

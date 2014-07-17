@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Persistance.Redis;
-using Coinium.Repository.Context;
-using Coinium.Server.Web;
 
-namespace Coinium.Utils.Configuration
+using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Repository.Context;
+using CoiniumServ.Server.Web;
+
+namespace CoiniumServ.Utils.Configuration
 {
     public class GlobalConfigFactory : IGlobalConfigFactory
     {

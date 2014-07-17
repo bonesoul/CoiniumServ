@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Net.Server;
 
-namespace Coinium.Server.Mining
+using CoiniumServ.Net.Server;
+
+namespace CoiniumServ.Server.Mining
 {
     /// <summary>
     /// 

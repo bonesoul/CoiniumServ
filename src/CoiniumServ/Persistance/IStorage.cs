@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
-using Coinium.Mining.Shares;
-using Coinium.Payments;
-using Coinium.Persistance.Blocks;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
 
-namespace Coinium.Persistance
+namespace CoiniumServ.Persistance
 {
     public interface IStorage
     {

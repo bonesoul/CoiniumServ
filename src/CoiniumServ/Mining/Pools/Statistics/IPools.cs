@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 
-namespace Coinium.Mining.Pools.Statistics
+namespace CoiniumServ.Mining.Pools.Statistics
 {
     public interface IPools : IEnumerable<KeyValuePair<string, IPerPool>>,IJsonResponse, IStatisticsProvider
     {

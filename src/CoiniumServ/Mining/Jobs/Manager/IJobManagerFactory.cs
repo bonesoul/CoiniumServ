@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Shares;
 
-namespace Coinium.Mining.Jobs.Manager
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Shares;
+
+namespace CoiniumServ.Mining.Jobs.Manager
 {
     public interface IJobManagerFactory
     {

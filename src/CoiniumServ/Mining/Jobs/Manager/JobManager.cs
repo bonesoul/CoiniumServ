@@ -20,20 +20,21 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Threading;
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Daemon.Exceptions;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Shares;
-using Coinium.Server.Mining.Stratum.Notifications;
-using Coinium.Transactions;
+using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Transactions;
 using Serilog;
 
-namespace Coinium.Mining.Jobs.Manager
+namespace CoiniumServ.Mining.Jobs.Manager
 {
     public class JobManager : IJobManager
     {

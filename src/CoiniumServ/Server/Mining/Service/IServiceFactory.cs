@@ -21,10 +21,10 @@
 // 
 #endregion
 
-using Coinium.Daemon;
-using Coinium.Mining.Shares;
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Shares;
 
-namespace Coinium.Server.Mining.Service
+namespace CoiniumServ.Server.Mining.Service
 {
     public interface IServiceFactory
     {

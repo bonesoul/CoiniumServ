@@ -21,14 +21,13 @@
 // 
 #endregion
 
-using System.Dynamic;
-using Coinium.Mining.Pools;
-using Coinium.Mining.Pools.Statistics;
-using Coinium.Server.Web.Modules.Models;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Mining.Pools.Statistics;
+using CoiniumServ.Server.Web.Modules.Models;
 using Nancy;
 using Newtonsoft.Json;
 
-namespace Coinium.Server.Web.Modules
+namespace CoiniumServ.Server.Web.Modules
 {
     public class ApiModule: NancyModule
     {

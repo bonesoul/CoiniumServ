@@ -21,7 +21,7 @@
 // 
 #endregion
 
-namespace Coinium.Mining.Vardiff
+namespace CoiniumServ.Mining.Vardiff
 {
     public interface IVardiffConfig
     {

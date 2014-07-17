@@ -21,12 +21,12 @@
 // 
 #endregion
 
-using Coinium.Daemon;
-using Coinium.Mining.Shares;
-using Coinium.Repository.Context;
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Repository.Context;
 using Nancy.TinyIoc;
 
-namespace Coinium.Server.Mining.Service
+namespace CoiniumServ.Server.Mining.Service
 {
     public class ServiceFactory : IServiceFactory
     {

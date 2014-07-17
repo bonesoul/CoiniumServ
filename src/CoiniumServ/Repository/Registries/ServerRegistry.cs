@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Repository.Context;
-using Coinium.Server;
-using Coinium.Server.Mining;
-using Coinium.Server.Mining.Stratum;
-using Coinium.Server.Mining.Vanilla;
-using Coinium.Server.Web;
 
-namespace Coinium.Repository.Registries
+using CoiniumServ.Repository.Context;
+using CoiniumServ.Server;
+using CoiniumServ.Server.Mining;
+using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Vanilla;
+using CoiniumServ.Server.Web;
+
+namespace CoiniumServ.Repository.Registries
 {
     public class ServerRegistry : IRegistry
     {

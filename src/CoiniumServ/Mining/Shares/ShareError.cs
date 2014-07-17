@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Mining.Shares
+namespace CoiniumServ.Mining.Shares
 {
     public enum ShareError
     {

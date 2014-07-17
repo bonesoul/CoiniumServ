@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Net.Server.Sockets
+namespace CoiniumServ.Net.Server.Sockets
 {
     /// <summary>
     /// Client interface.

@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Server.Mining.Vanilla.Config
+namespace CoiniumServ.Server.Mining.Vanilla.Config
 {
     public interface IVanillaServerConfig : IServerConfig
     {

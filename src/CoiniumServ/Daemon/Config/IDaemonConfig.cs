@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Coinium.Utils.Configuration;
 
-namespace Coinium.Daemon.Config
+using System;
+using CoiniumServ.Utils.Configuration;
+
+namespace CoiniumServ.Daemon.Config
 {
     public interface IDaemonConfig:IConfig
     {

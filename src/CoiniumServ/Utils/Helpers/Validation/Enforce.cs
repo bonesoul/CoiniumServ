@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Coinium.Utils.Helpers.Validation
+namespace CoiniumServ.Utils.Helpers.Validation
 {
     /// <summary>
     /// The enforce.

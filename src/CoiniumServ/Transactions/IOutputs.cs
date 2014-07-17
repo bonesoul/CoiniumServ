@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 
-namespace Coinium.Transactions
+namespace CoiniumServ.Transactions
 {
     public interface IOutputs
     {

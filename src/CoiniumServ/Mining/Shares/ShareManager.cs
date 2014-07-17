@@ -20,18 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using AustinHarris.JsonRpc;
-using Coinium.Daemon;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Persistance;
-using Coinium.Server.Mining.Stratum;
-using Coinium.Server.Mining.Stratum.Errors;
-using Coinium.Server.Mining.Vanilla;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Persistance;
+using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Stratum.Errors;
+using CoiniumServ.Server.Mining.Vanilla;
+using CoiniumServ.Utils.Extensions;
 using Serilog;
 
-namespace Coinium.Mining.Shares
+namespace CoiniumServ.Mining.Shares
 {
     public class ShareManager : IShareManager
     {

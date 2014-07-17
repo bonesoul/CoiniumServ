@@ -20,15 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Net;
-using Coinium.Mining.Jobs.Manager;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Net.Server.Http.Basic;
 
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
+using CoiniumServ.Mining.Jobs.Manager;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Net.Server.Http.Basic;
 
-namespace Coinium.Server.Mining.Vanilla
+namespace CoiniumServ.Server.Mining.Vanilla
 {
     public class VanillaServer : HttpServer, IMiningServer
     {

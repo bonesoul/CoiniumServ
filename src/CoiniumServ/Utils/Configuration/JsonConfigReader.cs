@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using JsonConfig;
 using Serilog;
 
-namespace Coinium.Utils.Configuration
+namespace CoiniumServ.Utils.Configuration
 {
     public static class JsonConfigReader
     {

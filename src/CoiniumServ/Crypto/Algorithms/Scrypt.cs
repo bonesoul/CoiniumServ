@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Globalization;
-using Coinium.Utils.Numerics;
+using CoiniumServ.Utils.Numerics;
 using CryptSharp.Utility;
 
-namespace Coinium.Crypto.Algorithms
+namespace CoiniumServ.Crypto.Algorithms
 {
     public class Scrypt : IHashAlgorithm
     {

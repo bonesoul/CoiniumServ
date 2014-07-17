@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Mining.Pools.Config
+namespace CoiniumServ.Mining.Pools.Config
 {
     /// <summary>
     /// Returns an instance of IPoolConfig based on the parsed config file

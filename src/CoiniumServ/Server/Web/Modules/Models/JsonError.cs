@@ -21,7 +21,7 @@
 // 
 #endregion
 
-namespace Coinium.Server.Web.Modules.Models
+namespace CoiniumServ.Server.Web.Modules.Models
 {
     public class JsonError
     {

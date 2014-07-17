@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
 
-namespace Coinium.Server.Mining.Stratum.Responses
+namespace CoiniumServ.Server.Mining.Stratum.Responses
 {
     [JsonArray]
     public class SubscribeResponse:IEnumerable<object>

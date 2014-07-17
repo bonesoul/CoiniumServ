@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Mining.Pools;
-using Coinium.Server.Web.Modules.Models;
+
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Server.Web.Modules.Models;
 using Nancy;
 
-namespace Coinium.Server.Web.Modules
+namespace CoiniumServ.Server.Web.Modules
 {
     public class PoolModule : NancyModule
     {

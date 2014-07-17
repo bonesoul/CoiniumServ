@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using Newtonsoft.Json;
 
-namespace Coinium.Daemon
+namespace CoiniumServ.Daemon
 {
     /// <summary>
     /// Class containing the information contained in a JSON RPC response received from

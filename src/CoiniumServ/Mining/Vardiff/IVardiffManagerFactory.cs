@@ -21,9 +21,9 @@
 // 
 #endregion
 
-using Coinium.Mining.Shares;
+using CoiniumServ.Mining.Shares;
 
-namespace Coinium.Mining.Vardiff
+namespace CoiniumServ.Mining.Vardiff
 {
     public interface IVardiffManagerFactory
     {

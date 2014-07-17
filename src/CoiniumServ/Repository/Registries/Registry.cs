@@ -20,14 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
-using Coinium.Net.Server.Http.Web;
-using Coinium.Repository.Context;
+using CoiniumServ.Net.Server.Http.Web;
+using CoiniumServ.Repository.Context;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
 
-namespace Coinium.Repository.Registries
+namespace CoiniumServ.Repository.Registries
 {
     public class Registry : IRegistry
     {

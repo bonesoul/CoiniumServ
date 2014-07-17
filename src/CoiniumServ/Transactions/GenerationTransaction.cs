@@ -20,21 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Coinium.Coin.Coinbase;
-using Coinium.Crypto;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
-using Coinium.Mining.Pools.Config;
-using Coinium.Transactions.Script;
-using Coinium.Utils.Helpers.Time;
+using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Crypto;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Mining.Jobs;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Transactions.Script;
+using CoiniumServ.Utils.Helpers.Time;
 using Gibbed.IO;
 
-namespace Coinium.Transactions
+namespace CoiniumServ.Transactions
 {
     /// <summary>
     /// A generation transaction.

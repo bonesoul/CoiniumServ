@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Utils.Commands
+namespace CoiniumServ.Utils.Commands
 {
     /// <summary>
     /// Marks a class as an command group.

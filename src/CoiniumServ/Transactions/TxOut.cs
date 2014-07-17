@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace Coinium.Transactions
+namespace CoiniumServ.Transactions
 {
     /// <summary>
     /// Outpus for transaction.
