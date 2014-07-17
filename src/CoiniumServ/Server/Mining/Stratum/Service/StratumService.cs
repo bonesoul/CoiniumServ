@@ -22,6 +22,7 @@
 #endregion
 
 using AustinHarris.JsonRpc;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Jobs;
 using CoiniumServ.Mining.Shares;
 using CoiniumServ.Server.Mining.Service;
@@ -36,7 +37,8 @@ namespace CoiniumServ.Server.Mining.Stratum.Service
     {
         private readonly IShareManager _shareManager;
 
-        public StratumService(IShareManager shareManager)
+        public StratumService(ICoinConfig coinConfig, IShareManager shareManager):
+            base(string.Format("stratum-{0}", coinConfig.Name))
         {
             _shareManager = shareManager;
         }

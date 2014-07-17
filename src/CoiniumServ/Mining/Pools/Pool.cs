@@ -200,7 +200,7 @@ namespace CoiniumServ.Mining.Pools
             if (Config.Stratum != null)
             {
                 var stratumServer = _serverFactory.Get("Stratum", this, _minerManager, _jobManager);
-                var stratumService = _serviceFactory.Get("Stratum", _shareManager, _daemonClient);
+                var stratumService = _serviceFactory.Get("Stratum", Config.Coin, _shareManager, _daemonClient);
                 stratumServer.Initialize(Config.Stratum);
 
                 _servers.Add(stratumServer, stratumService);
@@ -209,7 +209,7 @@ namespace CoiniumServ.Mining.Pools
             if (Config.Vanilla != null)
             {
                 var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager, _jobManager);
-                var vanillaService = _serviceFactory.Get("Vanilla", _shareManager, _daemonClient);
+                var vanillaService = _serviceFactory.Get("Vanilla", Config.Coin, _shareManager, _daemonClient);
 
                 vanillaServer.Initialize(Config.Vanilla);
 

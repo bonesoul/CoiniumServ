@@ -194,7 +194,7 @@ namespace CoiniumServ.Tests.Mining.Pools
             _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager).Returns(_miningServer);
 
             // init service
-            _serviceFactory.Get(Services.Stratum, _shareManager, _daemonClient).Returns(_rpcService);
+            _serviceFactory.Get(Services.Stratum, poolConfig.Coin, _shareManager, _daemonClient).Returns(_rpcService);
 
             // initalize the server.
             _miningServer.Initialize(poolConfig.Stratum);

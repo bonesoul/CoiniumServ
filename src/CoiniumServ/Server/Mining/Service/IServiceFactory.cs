@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Shares;
 
@@ -32,10 +33,10 @@ namespace CoiniumServ.Server.Mining.Service
         /// Gets the specified service name.
         /// </summary>
         /// <param name="serviceName">Name of the service.</param>
-        /// <param name="jobManager">The job manager.</param>
+        /// <param name="coinConfig"></param>
         /// <param name="shareManager">The share manager.</param>
         /// <param name="daemonClient">The daemon client.</param>
         /// <returns></returns>
-        IRpcService Get(string serviceName, IShareManager shareManager, IDaemonClient daemonClient);
+        IRpcService Get(string serviceName, ICoinConfig coinConfig, IShareManager shareManager, IDaemonClient daemonClient);
     }
 }

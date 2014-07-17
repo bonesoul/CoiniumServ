@@ -22,6 +22,7 @@
 #endregion
 
 using AustinHarris.JsonRpc;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Mining.Shares;
@@ -39,7 +40,8 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
 
         private readonly IShareManager _shareManager;
 
-        public VanillaService(IShareManager shareManager, IDaemonClient daemonClient)
+        public VanillaService(ICoinConfig coinConfig, IShareManager shareManager, IDaemonClient daemonClient):
+            base(string.Format("vanilla-{0}", coinConfig.Name))
         {
             _daemonClient = daemonClient;
             _shareManager = shareManager;
