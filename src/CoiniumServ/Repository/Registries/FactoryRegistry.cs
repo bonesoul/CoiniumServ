@@ -68,7 +68,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IPaymentProcessorFactory, PaymentProcessorFactory>().AsSingleton();
             _applicationContext.Container.Register<IStatisticsObjectFactory, StatististicsObjectFactory>().AsSingleton();
             _applicationContext.Container.Register<IVardiffManagerFactory, VardiffManagerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IBanningManagerFactory, BanningManagerFactory>().AsSingleton();
+            _applicationContext.Container.Register<IBanManagerFactory, BanManagerFactory>().AsSingleton();
         }
     }
 }

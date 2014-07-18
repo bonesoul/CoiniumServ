@@ -65,11 +65,13 @@ namespace CoiniumServ.Net.Server.Sockets
 
         // connection event handlers.
         public delegate void ConnectionEventHandler(object sender, ConnectionEventArgs e);
+        public delegate void BannedConnectionEventHandler(object sender, BannedConnectionEventArgs e);
         public delegate void ConnectionDataEventHandler(object sender, ConnectionDataEventArgs e);
 
         // connection events.
         public event ConnectionEventHandler ClientConnected;
         public event ConnectionEventHandler ClientDisconnected;
+        public event BannedConnectionEventHandler BannedConnection;
         public event ConnectionDataEventHandler DataReceived;
         public event ConnectionDataEventHandler DataSent;
 
@@ -77,19 +79,6 @@ namespace CoiniumServ.Net.Server.Sockets
         /// Is the instance disposed?
         /// </summary>
         private bool _disposed;
-
-        #region server control
-        public virtual bool Start()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual bool Stop()
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
         #region listener & accept callbacks.
 
@@ -153,14 +142,25 @@ namespace CoiniumServ.Net.Server.Sockets
             try
             {
                 var socket = Listener.EndAccept(result); // Finish accepting the incoming connection.
-                var connection = new Connection(this, socket); // Track the connection.
+                var banned = IsBanned(socket);
 
-                lock (ConnectionLock) 
-                    Connections.Add(connection); // Add the new connection to the active connections list.
+                if (banned)
+                {
+                    var endpoint = socket.RemoteEndPoint;
+                    socket.Disconnect(true);
+                    OnBannedConnection(new BannedConnectionEventArgs(endpoint));
+                }
+                else
+                {
+                    var connection = new Connection(this, socket); // Track the connection.
 
-                OnClientConnection(new ConnectionEventArgs(connection)); // Raise the ClientConnected event.
+                    lock (ConnectionLock)
+                        Connections.Add(connection); // Add the new connection to the active connections list.
 
-                connection.BeginReceive(ReceiveCallback, connection); // Begin receiving on the new connection connection.
+                    OnClientConnection(new ConnectionEventArgs(connection)); // Raise the ClientConnected event.
+                    connection.BeginReceive(ReceiveCallback, connection); // Begin receiving on the new connection connection.
+                }
+
                 Listener.BeginAccept(AcceptCallback, null); // Continue receiving other incoming connection asynchronously.
             }
             catch (NullReferenceException) { } // we recive this after issuing server-shutdown, just ignore it.
@@ -168,6 +168,11 @@ namespace CoiniumServ.Net.Server.Sockets
             //{
             //    Log.Error("Can not accept connection: {0}", exception);
             //}
+        }
+
+        public virtual bool IsBanned(Socket socket)
+        {
+            return false;
         }
 
         #endregion
@@ -348,9 +353,22 @@ namespace CoiniumServ.Net.Server.Sockets
 
         #endregion
 
+        #region server control
+        public virtual bool Start()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool Stop()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         #region events
 
-        protected virtual void OnClientConnection(ConnectionEventArgs e)
+        private void OnClientConnection(ConnectionEventArgs e)
         {
             var handler = ClientConnected;
 
@@ -358,7 +376,7 @@ namespace CoiniumServ.Net.Server.Sockets
                 handler(this, e);
         }
 
-        protected virtual void OnClientDisconnect(ConnectionEventArgs e)
+        private void OnClientDisconnect(ConnectionEventArgs e)
         {
             var handler = ClientDisconnected;
 
@@ -366,7 +384,15 @@ namespace CoiniumServ.Net.Server.Sockets
                 handler(this, e);
         }
 
-        protected virtual void OnDataReceived(ConnectionDataEventArgs e)
+        private void OnBannedConnection(BannedConnectionEventArgs e)
+        {
+            var handler = BannedConnection;
+
+            if (handler != null)
+                handler(this, e);
+        }
+
+        private void OnDataReceived(ConnectionDataEventArgs e)
         {
             var handler = DataReceived;
 
@@ -374,7 +400,7 @@ namespace CoiniumServ.Net.Server.Sockets
                 handler(this, e);
         }
 
-        protected virtual void OnDataSent(ConnectionDataEventArgs e)
+        private void OnDataSent(ConnectionDataEventArgs e)
         {
             var handler = DataSent;
 

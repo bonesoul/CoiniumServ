@@ -26,8 +26,8 @@ using CoiniumServ.Mining.Shares;
 
 namespace CoiniumServ.Mining.Banning
 {
-    public interface IBanningManagerFactory
+    public interface IBanManagerFactory
     {
-        IBanningManager Get(IBanningConfig banningConfig, IShareManager shareManager);
+        IBanManager Get(IBanConfig banConfig, IShareManager shareManager);
     }
 }

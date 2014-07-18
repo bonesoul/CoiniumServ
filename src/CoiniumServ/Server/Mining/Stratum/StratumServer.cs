@@ -21,6 +21,10 @@
 // 
 #endregion
 
+using System;
+using System.Net;
+using System.Net.Sockets;
+using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools;
@@ -37,7 +41,6 @@ namespace CoiniumServ.Server.Mining.Stratum
     /// </summary>
     public class StratumServer : SocketServer, IMiningServer
     {
-
         public IServerConfig Config { get; private set; }
         
         private readonly IPool _pool;
@@ -46,17 +49,20 @@ namespace CoiniumServ.Server.Mining.Stratum
 
         private readonly IJobManager _jobManager;
 
+        private readonly IBanManager _banManager;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StratumServer"/> class.
         /// </summary>
         /// <param name="pool"></param>
         /// <param name="minerManager">The miner manager.</param>
         /// <param name="jobManager"></param>
-        public StratumServer(IPool pool, IMinerManager minerManager, IJobManager jobManager)
+        public StratumServer(IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager)
         {
             _pool = pool;
             _minerManager = minerManager;
             _jobManager = jobManager;
+            _banManager = banManager;
         }
 
         /// <summary>
@@ -70,8 +76,9 @@ namespace CoiniumServ.Server.Mining.Stratum
             Port = config.Port;
 
             ClientConnected += OnClientConnection;
-            ClientDisconnected += OnClientDisconnection;
-            DataReceived += OnClientRecieveData;
+            ClientDisconnected += OnClientDisconnect;
+            BannedConnection += OnBannedConnection;
+            DataReceived += OnDataReceived;
         }
 
         /// <summary>
@@ -90,7 +97,13 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <returns></returns>
         public override bool Stop()
         {
-            return true;
+            throw new NotImplementedException();
+        }
+
+        public override bool IsBanned(Socket socket)
+        {
+            var endpoint = (IPEndPoint) socket.RemoteEndPoint;
+            return _banManager.IsBanned(endpoint.Address);
         }
 
         /// <summary>
@@ -112,11 +125,16 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnClientDisconnection(object sender, ConnectionEventArgs e)
+        private void OnClientDisconnect(object sender, ConnectionEventArgs e)
         {
             Log.ForContext<StratumServer>().Information("Stratum client disconnected: {0}", e.Connection.ToString());
 
             _minerManager.Remove(e.Connection);
+        }
+
+        private void OnBannedConnection(object sender, BannedConnectionEventArgs e)
+        {
+            Log.ForContext<StratumServer>().Information("Rejected connection from banned ip: {0:l}", e.Endpoint.Address.ToString());
         }
 
         /// <summary>
@@ -124,10 +142,10 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnClientRecieveData(object sender, ConnectionDataEventArgs e)
+        private void OnDataReceived(object sender, ConnectionDataEventArgs e)
         {
             var connection = (Connection)e.Connection;
             ((StratumMiner)connection.Client).Parse(e);
-        }        
+        }
     }
 }
