@@ -155,7 +155,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Notifications
                 : BigInteger.Parse(blockTemplate.Target, NumberStyles.HexNumber);
 
             // set the block diff
-            Difficulty = ((double)new BigRational(HashAlgorithm.Difficulty, Target));
+            Difficulty = ((double)new BigRational(Algorithms.Diff1, Target));
 
             // set the ntime
             nTime = BitConverter.GetBytes(blockTemplate.CurTime.BigEndian()).ToHexString();

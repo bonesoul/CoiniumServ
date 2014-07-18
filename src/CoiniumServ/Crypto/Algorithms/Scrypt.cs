@@ -39,42 +39,33 @@ namespace CoiniumServ.Crypto.Algorithms
         public UInt32 Multiplier { get; private set; }
 
         /// <summary>
-        /// Gets the difficulty.
-        /// </summary>
-        /// <value>
-        /// The difficulty.
-        /// </value>
-        public BigInteger Difficulty { get; private set; }
-
-        /// <summary>
         /// N parameter - CPU/memory cost parameter.
         /// </summary>
-        public int N { get; private set; }
+        private readonly int _n;
 
         /// <summary>
         /// R parameter - block size.
         /// </summary>
-        public int R { get; private set; }
+        private readonly int _r;
 
         /// <summary>
         /// P - parallelization parameter -  a large value of p can increase computational 
         /// cost of scrypt without increasing the memory usage.
         /// </summary>
-        public int P { get; private set; }
+        private readonly int _p;
 
         public Scrypt()
         {
-            N = 1024;
-            R = 1;
-            P = 1;
-            Multiplier = (UInt32) Math.Pow(2, 16);
+            _n = 1024;
+            _r = 1;
+            _p = 1;
 
-            Difficulty = BigInteger.Parse("00000000ffff0000000000000000000000000000000000000000000000000000", NumberStyles.HexNumber);
+            Multiplier = (UInt32) Math.Pow(2, 16);
         }
 
         public byte[] Hash(byte[] input)
         {
-            var result = SCrypt.ComputeDerivedKey(input, input, N, R, P, null, 32);
+            var result = SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
             return result;
         }
     }

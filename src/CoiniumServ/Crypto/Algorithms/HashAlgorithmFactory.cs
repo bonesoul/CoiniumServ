@@ -48,7 +48,7 @@ namespace CoiniumServ.Crypto.Algorithms
         /// <returns></returns>
         public IHashAlgorithm Get(string algorithmName)
         {
-            // Default to Scrypt
+            // Default to scrypt
             if (string.IsNullOrWhiteSpace(algorithmName)) 
                 algorithmName = Algorithms.Scrypt;
 

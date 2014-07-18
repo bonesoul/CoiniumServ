@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -22,13 +22,25 @@
 #endregion
 
 using System;
+using HashLib;
 
 namespace CoiniumServ.Crypto.Algorithms
 {
-    public interface IHashAlgorithm
+    public class Blake : IHashAlgorithm
     {
-        UInt32 Multiplier { get; }
+        public uint Multiplier { get; private set; }
 
-        byte[] Hash(byte[] input);
+        private readonly IHash _hasher;
+
+        public Blake()
+        {
+            _hasher = HashFactory.Crypto.SHA3.CreateBlake256();
+            Multiplier = (UInt32) Math.Pow(2, 8);
+        }
+
+        public byte[] Hash(byte[] input)
+        {
+            return _hasher.ComputeBytes(input).GetBytes();
+        }
     }
 }

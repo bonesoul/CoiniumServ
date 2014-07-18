@@ -110,6 +110,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Helpers\Hashrate.cs" />
+    <Compile Include="Crypto\Algorithms\Blake.cs" />
+    <Compile Include="Crypto\Algorithms\Sha256.cs" />
     <Compile Include="Mining\Banning\BanManager.cs" />
     <Compile Include="Mining\Banning\BanManagerFactory.cs" />
     <Compile Include="Mining\Banning\IBanManager.cs" />

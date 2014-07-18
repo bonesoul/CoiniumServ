@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -21,14 +21,31 @@
 // 
 #endregion
 
-using System;
+using System.Security.Cryptography;
 
 namespace CoiniumServ.Crypto.Algorithms
 {
-    public interface IHashAlgorithm
+    public class Sha256:IHashAlgorithm
     {
-        UInt32 Multiplier { get; }
+        public uint Multiplier { get; private set; }
 
-        byte[] Hash(byte[] input);
+        private readonly SHA256Managed _algorithm;
+
+        public Sha256()
+        {
+            _algorithm = new SHA256Managed();
+            Multiplier = 1;           
+        }
+
+        public byte[] Hash(byte[] input)
+        {
+            return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
+        }
+
+        public byte[] DoubleDigest(byte[] input)
+        {
+            var first = _algorithm.ComputeHash(input);
+            return _algorithm.ComputeHash(first);
+        }
     }
 }

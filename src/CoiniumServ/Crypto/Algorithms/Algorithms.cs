@@ -20,10 +20,25 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System.Globalization;
+using CoiniumServ.Utils.Numerics;
+
 namespace CoiniumServ.Crypto.Algorithms
 {
     public static class Algorithms
     {
         public const string Scrypt = "scrypt";
+        public const string Sha256 = "sha256";
+
+        /// <summary>
+        /// Global diff1
+        /// </summary>
+        public static BigInteger Diff1 { get; private set; }
+
+        static Algorithms()
+        {
+            Diff1 = BigInteger.Parse("00000000ffff0000000000000000000000000000000000000000000000000000", NumberStyles.HexNumber);                                    
+        }
     }
 }

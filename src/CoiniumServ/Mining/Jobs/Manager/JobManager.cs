@@ -62,7 +62,7 @@ namespace CoiniumServ.Mining.Jobs.Manager
 
 
         private Timer _timer;
-        private const int TimerExpiration = 10;
+        private const int TimerExpiration = 60;
 
         public JobManager(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig)
         {

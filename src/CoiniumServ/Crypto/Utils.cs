@@ -33,6 +33,7 @@ namespace CoiniumServ.Crypto
         /// </summary>
         public static byte[] DoubleDigest(this byte[] input)
         {
+            // TODO: instead use SHA256.cs.
             return DoubleDigest(input, 0, input.Length);
         }
 
