@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -21,34 +21,32 @@
 // 
 #endregion
 
-using CoiniumServ.Repository.Context;
+using System.Security.Cryptography;
 
 namespace CoiniumServ.Crypto.Algorithms
 {
-    public class HashAlgorithmFactory : IHashAlgorithmFactory
+    public class Sha256:IHashAlgorithm
     {
-        /// <summary>
-        /// The application context.
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
+        public uint Multiplier { get; private set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HashAlgorithmFactory" /> class.
-        /// </summary>
-        /// <param name="applicationContext">The application context.</param>
-        public HashAlgorithmFactory(IApplicationContext applicationContext)
+        private readonly SHA256Managed _algorithm;
+
+        public Sha256()
         {
-            _applicationContext = applicationContext;
+            _algorithm = new SHA256Managed();
+
+            Multiplier = 1;           
         }
 
-        /// <summary>
-        /// Gets the specified algorithm name.
-        /// </summary>
-        /// <param name="algorithm">Name of the algorithm.</param>
-        /// <returns></returns>
-        public IHashAlgorithm Get(string algorithm)
+        public byte[] Hash(byte[] input, dynamic config)
         {
-            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
+            return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
+        }
+
+        public byte[] DoubleDigest(byte[] input)
+        {
+            var first = _algorithm.ComputeHash(input);
+            return _algorithm.ComputeHash(first);
         }
     }
 }

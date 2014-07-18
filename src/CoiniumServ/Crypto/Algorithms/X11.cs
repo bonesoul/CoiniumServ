@@ -21,51 +21,47 @@
 // 
 #endregion
 
-using System;
-using System.Globalization;
-using CoiniumServ.Utils.Numerics;
-using CryptSharp.Utility;
+using System.Collections.Generic;
+using HashLib;
 
 namespace CoiniumServ.Crypto.Algorithms
 {
-    public class Scrypt : IHashAlgorithm
+    public class X11 : IHashAlgorithm
     {
-        /// <summary>
-        /// Gets the multiplier.
-        /// </summary>
-        /// <value>
-        /// The multiplier.
-        /// </value>
-        public UInt32 Multiplier { get; private set; }
+        public uint Multiplier { get; private set; }
 
-        /// <summary>
-        /// N parameter - CPU/memory cost parameter.
-        /// </summary>
-        private readonly int _n;
+        private readonly List<IHash> _hashers;
 
-        /// <summary>
-        /// R parameter - block size.
-        /// </summary>
-        private readonly int _r;
-
-        /// <summary>
-        /// P - parallelization parameter -  a large value of p can increase computational 
-        /// cost of scrypt without increasing the memory usage.
-        /// </summary>
-        private readonly int _p;
-
-        public Scrypt()
+        public X11()
         {
-            _n = 1024;
-            _r = 1;
-            _p = 1;
+            _hashers = new List<IHash>
+            {
+                HashFactory.Crypto.SHA3.CreateBlake512(),
+                HashFactory.Crypto.SHA3.CreateBlueMidnightWish512(),
+                HashFactory.Crypto.SHA3.CreateGroestl512(),
+                HashFactory.Crypto.SHA3.CreateSkein512(),
+                HashFactory.Crypto.SHA3.CreateJH512(),
+                HashFactory.Crypto.SHA3.CreateKeccak512(),
+                HashFactory.Crypto.SHA3.CreateLuffa512(),
+                HashFactory.Crypto.SHA3.CreateCubeHash512(),
+                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
+                HashFactory.Crypto.SHA3.CreateSIMD512(),
+                HashFactory.Crypto.SHA3.CreateEcho512(),
+            };
 
-            Multiplier = (UInt32) Math.Pow(2, 16);
+            Multiplier = 1;
         }
 
         public byte[] Hash(byte[] input, dynamic config)
         {
-            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
+            var buffer = input;
+
+            foreach (var hasher in _hashers)
+            {
+                buffer = hasher.ComputeBytes(buffer).GetBytes();
+            }
+
+            return buffer;
         }
     }
 }

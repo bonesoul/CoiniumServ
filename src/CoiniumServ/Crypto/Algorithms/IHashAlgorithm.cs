@@ -22,7 +22,6 @@
 #endregion
 
 using System;
-using CoiniumServ.Utils.Numerics;
 
 namespace CoiniumServ.Crypto.Algorithms
 {
@@ -30,8 +29,6 @@ namespace CoiniumServ.Crypto.Algorithms
     {
         UInt32 Multiplier { get; }
 
-        byte[] Hash(byte[] input);
-
-        BigInteger Difficulty { get; }
+        byte[] Hash(byte[] input, dynamic config);
     }
 }

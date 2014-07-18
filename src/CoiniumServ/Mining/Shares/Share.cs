@@ -24,6 +24,7 @@
 using System;
 using CoiniumServ.Coin.Coinbase;
 using CoiniumServ.Crypto;
+using CoiniumServ.Crypto.Algorithms;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Server.Mining.Stratum;
@@ -114,12 +115,11 @@ namespace CoiniumServ.Mining.Shares
 
             // create the block headers
             HeaderBuffer = Serializers.SerializeHeader(Job, MerkleRoot, NTime, Nonce);
-            // TODO: add sha256 and others support!
-            HeaderHash = Job.HashAlgorithm.Hash(HeaderBuffer);
+            HeaderHash = Job.HashAlgorithm.Hash(HeaderBuffer, miner.Pool.Config.Coin.Options);
             HeaderValue = new BigInteger(HeaderHash);
 
             // calculate the share difficulty
-            Difficulty = ((double)new BigRational(Job.HashAlgorithm.Difficulty, HeaderValue)) * Job.HashAlgorithm.Multiplier;
+            Difficulty = ((double)new BigRational(Algorithms.Diff1, HeaderValue)) * Job.HashAlgorithm.Multiplier;
 
             // calculate the block difficulty
             BlockDiffAdjusted = Job.Difficulty * Job.HashAlgorithm.Multiplier;

@@ -78,10 +78,13 @@ namespace CoiniumServ.Coin.Coinbase
         /// Hashes the coinbase.
         /// </summary>
         /// <param name="coinbase"></param>
+        /// <param name="doubleDigest"></param>
         /// <returns></returns>
-        public static Hash HashCoinbase(byte[] coinbase)
+        public static Hash HashCoinbase(byte[] coinbase, bool doubleDigest = true)
         {
-            return coinbase.DoubleDigest();
+            return doubleDigest ? coinbase.DoubleDigest() : coinbase.Digest();
+
+            // TODO: fix this according - https://github.com/zone117x/node-stratum-pool/blob/eb4b62e9c4de8a8cde83c2b3756ca1a45f02b957/lib/jobManager.js#L69
         }
 
         /// <summary>

@@ -32,5 +32,7 @@ namespace CoiniumServ.Coin.Config
         string Symbol { get; }
 
         string Algorithm { get; }
+
+        dynamic Options { get; }
     }
 }

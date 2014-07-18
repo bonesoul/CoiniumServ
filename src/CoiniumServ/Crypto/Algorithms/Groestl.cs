@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -21,34 +21,27 @@
 // 
 #endregion
 
-using CoiniumServ.Repository.Context;
+using System;
+using HashLib;
 
 namespace CoiniumServ.Crypto.Algorithms
 {
-    public class HashAlgorithmFactory : IHashAlgorithmFactory
+    public class Groestl : IHashAlgorithm
     {
-        /// <summary>
-        /// The application context.
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
+        public uint Multiplier { get; private set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HashAlgorithmFactory" /> class.
-        /// </summary>
-        /// <param name="applicationContext">The application context.</param>
-        public HashAlgorithmFactory(IApplicationContext applicationContext)
+        private readonly IHash _hasher;
+
+        public Groestl()
         {
-            _applicationContext = applicationContext;
+            _hasher = HashFactory.Crypto.SHA3.CreateGroestl512();
+
+            Multiplier = (UInt32)Math.Pow(2, 8);
         }
 
-        /// <summary>
-        /// Gets the specified algorithm name.
-        /// </summary>
-        /// <param name="algorithm">Name of the algorithm.</param>
-        /// <returns></returns>
-        public IHashAlgorithm Get(string algorithm)
+        public byte[] Hash(byte[] input, dynamic config)
         {
-            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
+            return _hasher.ComputeBytes(input).GetBytes();
         }
     }
 }
