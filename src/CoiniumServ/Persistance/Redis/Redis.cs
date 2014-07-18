@@ -419,7 +419,8 @@ namespace CoiniumServ.Persistance.Redis
         {
             var options = new ConfigurationOptions()
             {
-                AllowAdmin = true
+                AllowAdmin = true,
+                ConnectTimeout = 1000,
             };
 
             var endpoint = new DnsEndPoint(_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork);
@@ -440,27 +441,34 @@ namespace CoiniumServ.Persistance.Redis
                 _server = _connectionMultiplexer.GetServer(endpoint);
 
                 // check the version
-                var info = _server.Info();
-                Version version = null;
-                foreach (var pair in info[0])
-                {
-                    if (pair.Key == "redis_version")
-                    {
-                        version = new Version(pair.Value);
-                        if (version < _requiredMinimumVersion)
-                            throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
+                var version = GetVersion();
+                if (version < _requiredMinimumVersion)
+                    throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
 
-                        break;
-                    }
-                }
-                
-                Log.ForContext<Redis>().Information("Storage initialized: {0:l}, v{1:l}.", endpoint, version);
+                Log.ForContext<Redis>().Information("Storage initialized: {0:l}:{1}, v{2:l}.", endpoint.Host, endpoint.Port, version);
             }
             catch (Exception e)
             {
                 IsEnabled = false;
-                Log.ForContext<Redis>().Error(e, string.Format("Storage initialization failed: {0}", endpoint));
+                Log.ForContext<Redis>().Error(string.Format("Storage initialization failed: {0:l}:{1}.", endpoint.Host, endpoint.Port));
             }
+        }
+
+        private Version GetVersion()
+        {
+            Version version = null;
+            var info = _server.Info();
+
+            foreach (var pair in info[0])
+            {
+                if (pair.Key != "redis_version")
+                    continue;
+
+                version = new Version(pair.Value);
+                break;
+            }
+
+            return version;
         }
     }
 }
