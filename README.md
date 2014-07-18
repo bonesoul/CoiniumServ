@@ -19,13 +19,50 @@ Can run on these platforms;
 
 ###### Multiplexed Structure
 * Multiple pools & ports.
-* Multi-pool (switched) mining support.
-* Multiple coin daemon connections.
+* Multiple coin daemon connection support.
 * Multiple database layers.
 
 ###### Functionality
-* Stratum server (over sockets) support. [in-development]
-* Vanilla server (getwork & getblocktemplate over http server) support. [in-development]
+* Stratum server (over TCP sockets).
+* Vanilla server (getwork over http server). [experimental]
+* Daemon RPC interface.
+* Block template / job managment.
+* Generation transaction builder.
+* Share processor.
+* Payment processor.
+* Proof of Work (PoW) and Proof of Stake (PoS) [in-development] support.
+* Transaction messages support [in-development].
+* Vardiff support.
+* Ban manager support that can handles miners flooding with invalid shares.
+* 
+
+###### Hashing Algorithms
+
+######  Working
+* ✓ __Scrypt__ 
+
+######  Needs Testing
+
+* ✓ __SHA256__ 
+* ✓ __Blake__
+* ✓ __Fugue__
+* ✓ __Groestl__
+* ✓ __Keccak__ 
+* ✓ __SHAvite3__
+* ✓ __Skein__ 
+* ✓ __X11__ 
+* ✓ __X13__ 
+* ✓ __X15__ 
+* ✓ __X17__
+
+######  Under Development
+
+* ✓ __Scrypt-Jane__ 
+* ✓ __Scrypt-N__ 
+* ✓ __Quark__ 
+* ✓ __NIST5__
+* ✓ __Qubit__
+* ✓ __Hefty1__
 
 ###### Development Model
 * Strictly [follows](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) the [Test Driven Development](http://en.wikipedia.org/wiki/Test-driven_development) model. We have implemented extensive tests for all important functionality and never merge in code that breaks tests and stuff. Yet again, when a new functionality is introduced we also expect proper tests to be implemented within the PR. In simple words, most probably you won't notice any functionality-breaking changes within the repository.
