@@ -23,21 +23,16 @@
 
 namespace CoiniumServ.Mining.Pools.Config
 {
-    public class BanningConfig : IBanningConfig
+    public interface IBanConfig
     {
-        public bool Enabled { get; private set; }
-        public int Duration { get; private set; }
-        public int InvalidPercent { get; private set; }
-        public int CheckThreshold { get; private set; }
-        public int PurgeInterval { get; private set; }
+        bool Enabled { get; }
 
-        public BanningConfig(dynamic config)
-        {
-            Enabled = config.enabled;
-            Duration = config.duration;
-            InvalidPercent = config.invalidPercent;
-            CheckThreshold = config.checkThreshold;
-            PurgeInterval = config.purgeInterval;
-        }
+        int Duration { get; }
+
+        int InvalidPercent { get; }
+
+        int CheckThreshold { get; }
+
+        int PurgeInterval { get; }
     }
 }

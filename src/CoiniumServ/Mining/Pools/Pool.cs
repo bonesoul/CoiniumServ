@@ -67,7 +67,7 @@ namespace CoiniumServ.Mining.Pools
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IStatisticsObjectFactory _statisticsObjectFactory;
         private readonly IVardiffManagerFactory _vardiffManagerFactory;
-        private readonly IBanningManagerFactory _banningManagerFactory;
+        private readonly IBanManagerFactory _banningManagerFactory;
 
         private IMinerManager _minerManager;
         private IJobTracker _jobTracker;
@@ -77,7 +77,7 @@ namespace CoiniumServ.Mining.Pools
         private IHashAlgorithm _hashAlgorithm;
         private IPaymentProcessor _paymentProcessor;
         private IVardiffManager _vardiffManager;
-        private IBanningManager _banningManager;
+        private IBanManager _banningManager;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
@@ -115,7 +115,7 @@ namespace CoiniumServ.Mining.Pools
             IPaymentProcessorFactory paymentProcessorFactory,
             IStatisticsObjectFactory statisticsObjectFactory, 
             IVardiffManagerFactory vardiffManagerFactory,
-            IBanningManagerFactory banningManagerFactory)
+            IBanManagerFactory banningManagerFactory)
         {
             Enforce.ArgumentNotNull(hashAlgorithmFactory, "IHashAlgorithmFactory");
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
@@ -209,7 +209,7 @@ namespace CoiniumServ.Mining.Pools
 
             if (Config.Stratum != null && Config.Stratum.Enabled)
             {
-                var stratumServer = _serverFactory.Get("Stratum", this, _minerManager, _jobManager);
+                var stratumServer = _serverFactory.Get("Stratum", this, _minerManager, _jobManager, _banningManager);
                 var stratumService = _serviceFactory.Get("Stratum", Config.Coin, _shareManager, _daemonClient);
                 stratumServer.Initialize(Config.Stratum);
 
@@ -218,7 +218,7 @@ namespace CoiniumServ.Mining.Pools
 
             if (Config.Vanilla != null && Config.Vanilla.Enabled)
             {
-                var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager, _jobManager);
+                var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager, _jobManager, _banningManager);
                 var vanillaService = _serviceFactory.Get("Vanilla", Config.Coin, _shareManager, _daemonClient);
 
                 vanillaServer.Initialize(Config.Vanilla);

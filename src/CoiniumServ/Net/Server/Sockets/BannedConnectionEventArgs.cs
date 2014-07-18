@@ -21,12 +21,18 @@
 // 
 #endregion
 
-using CoiniumServ.Mining.Pools.Config;
+using System;
+using System.Net;
 
-namespace CoiniumServ.Mining.Banning
+namespace CoiniumServ.Net.Server.Sockets
 {
-    public interface IBanningManager
+    public class BannedConnectionEventArgs:EventArgs
     {
-        IBanningConfig Config { get; }
+        public IPEndPoint Endpoint { get; private set; }
+
+        public BannedConnectionEventArgs(EndPoint endpoint)
+        {
+            Endpoint = (IPEndPoint)endpoint;
+        }
     }
 }

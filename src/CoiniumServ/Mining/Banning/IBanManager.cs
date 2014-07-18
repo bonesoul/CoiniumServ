@@ -21,18 +21,15 @@
 // 
 #endregion
 
-namespace CoiniumServ.Mining.Pools.Config
+using System.Net;
+using CoiniumServ.Mining.Pools.Config;
+
+namespace CoiniumServ.Mining.Banning
 {
-    public interface IBanningConfig
+    public interface IBanManager
     {
-        bool Enabled { get; }
+        IBanConfig Config { get; }
 
-        int Duration { get; }
-
-        int InvalidPercent { get; }
-
-        int CheckThreshold { get; }
-
-        int PurgeInterval { get; }
+        bool IsBanned(IPAddress ip);
     }
 }

@@ -59,7 +59,7 @@ namespace CoiniumServ.Tests.Mining.Pools
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IStatisticsObjectFactory _statisticsObjectFactory;
         private readonly IVardiffManagerFactory _vardiffManagerFactory;
-        private readonly IBanningManagerFactory _banningManagerFactory;
+        private readonly IBanManagerFactory _banManagerFactory;
 
         // object mocks.
         private readonly IDaemonClient _daemonClient;
@@ -73,7 +73,7 @@ namespace CoiniumServ.Tests.Mining.Pools
         private readonly IPaymentProcessor _paymentProcessor;
         private readonly IStatistics _statistics;
         private readonly IVardiffManager _vardiffManager;
-        private readonly IBanningManager _banningManager;
+        private readonly IBanManager _banManager;
 
         /// <summary>
         /// Initialize mock objects.
@@ -91,7 +91,7 @@ namespace CoiniumServ.Tests.Mining.Pools
             _paymentProcessorFactory = Substitute.For<IPaymentProcessorFactory>();
             _statisticsObjectFactory = Substitute.For<IStatisticsObjectFactory>();
             _vardiffManagerFactory = Substitute.For<IVardiffManagerFactory>();
-            _banningManagerFactory = Substitute.For<IBanningManagerFactory>();
+            _banManagerFactory = Substitute.For<IBanManagerFactory>();
 
             _daemonClient = Substitute.For<IDaemonClient>();
             _minerManager = Substitute.For<IMinerManager>();
@@ -104,7 +104,7 @@ namespace CoiniumServ.Tests.Mining.Pools
             _paymentProcessor = Substitute.For<IPaymentProcessor>();
             _statistics = Substitute.For<IStatistics>();
             _vardiffManager = Substitute.For<IVardiffManager>();
-            _banningManager = Substitute.For<IBanningManager>();
+            _banManager = Substitute.For<IBanManager>();
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace CoiniumServ.Tests.Mining.Pools
                 _paymentProcessorFactory,
                 _statisticsObjectFactory,
                 _vardiffManagerFactory,
-                _banningManagerFactory);
+                _banManagerFactory);
 
             pool.Should().Not.Be.Null();
             pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
@@ -151,7 +151,7 @@ namespace CoiniumServ.Tests.Mining.Pools
                 _paymentProcessorFactory,
                 _statisticsObjectFactory,
                 _vardiffManagerFactory,
-                _banningManagerFactory);
+                _banManagerFactory);
 
             pool.Should().Not.Be.Null();
             pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
@@ -187,8 +187,8 @@ namespace CoiniumServ.Tests.Mining.Pools
             _vardiffManagerFactory.Get(vardiffConfig, _shareManager);
 
             // banning manager
-            var banningConfig = Substitute.For<IBanningConfig>();
-            _banningManagerFactory.Get(banningConfig, _shareManager);
+            var banConfig = Substitute.For<IBanConfig>();
+            _banManagerFactory.Get(banConfig, _shareManager);
 
             // initalize job manager.
             _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm, walletConfig,rewardsConfig).Returns(_jobManager);
@@ -200,7 +200,7 @@ namespace CoiniumServ.Tests.Mining.Pools
             _daemonClient.GetMiningInfo().Returns(new MiningInfo());
 
             // init server
-            _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager).Returns(_miningServer);
+            _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager,_banManager).Returns(_miningServer);
 
             // init service
             _serviceFactory.Get(Services.Stratum, poolConfig.Coin, _shareManager, _daemonClient).Returns(_rpcService);

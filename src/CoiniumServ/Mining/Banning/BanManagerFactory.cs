@@ -28,7 +28,7 @@ using Nancy.TinyIoc;
 
 namespace CoiniumServ.Mining.Banning
 {
-    public class BanningManagerFactory : IBanningManagerFactory
+    public class BanManagerFactory : IBanManagerFactory
     {
         /// <summary>
         /// The _kernel
@@ -39,20 +39,20 @@ namespace CoiniumServ.Mining.Banning
         /// Initializes a new instance of the <see cref="ShareManagerFactory" /> class.
         /// </summary>
         /// <param name="applicationContext">The application context.</param>
-        public BanningManagerFactory(IApplicationContext applicationContext)
+        public BanManagerFactory(IApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
         }
 
-        public IBanningManager Get(IBanningConfig banningConfig, IShareManager shareManager)
+        public IBanManager Get(IBanConfig banConfig, IShareManager shareManager)
         {
             var @params = new NamedParameterOverloads
             {
-                {"banningConfig", banningConfig},
+                {"banConfig", banConfig},
                 {"shareManager", shareManager},
             };
 
-            return _applicationContext.Container.Resolve<IBanningManager>(@params);
+            return _applicationContext.Container.Resolve<IBanManager>(@params);
         }
     }
 }

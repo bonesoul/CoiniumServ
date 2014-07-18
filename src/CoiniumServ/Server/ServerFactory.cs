@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools;
@@ -46,14 +47,17 @@ namespace CoiniumServ.Server
         /// <param name="serverName">Name of the service.</param>
         /// <param name="pool"></param>
         /// <param name="minerManager">The miner manager.</param>
+        /// <param name="jobManager"></param>
+        /// <param name="banManager"></param>
         /// <returns></returns>
-        public IMiningServer Get(string serverName, IPool pool, IMinerManager minerManager, IJobManager jobManager)
+        public IMiningServer Get(string serverName, IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager)
         {
             var @params = new NamedParameterOverloads
             {
                 {"pool", pool},
                 {"minerManager", minerManager},
-                {"jobManager", jobManager}
+                {"jobManager", jobManager},
+                {"banManager", banManager}
             };
 
             return _applicationContext.Container.Resolve<IMiningServer>(serverName, @params);
