@@ -21,18 +21,13 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Shares;
 
-namespace CoiniumServ.Mining.Shares
+namespace CoiniumServ.Mining.Banning
 {
-    public class ShareEventArgs:EventArgs
+    public interface IBanningManagerFactory
     {
-        public IStratumMiner Miner { get; private set; }
-
-        public ShareEventArgs(IStratumMiner miner)
-        {
-            Miner = miner;
-        }
+        IBanningManager Get(IBanningConfig banningConfig, IShareManager shareManager);
     }
 }

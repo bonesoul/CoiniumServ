@@ -21,18 +21,11 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Mining.Miners;
 
-namespace CoiniumServ.Mining.Shares
+namespace CoiniumServ.Server.Mining.Vanilla
 {
-    public class ShareEventArgs:EventArgs
+    public interface IVanillaMiner : IMiner
     {
-        public IStratumMiner Miner { get; private set; }
-
-        public ShareEventArgs(IStratumMiner miner)
-        {
-            Miner = miner;
-        }
     }
 }

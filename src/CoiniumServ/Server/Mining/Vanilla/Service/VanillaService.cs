@@ -61,7 +61,7 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
         public Getwork Getwork(string data = null)
         {
             var context = (HttpServiceContext) JsonRpcContext.Current().Value;
-            var miner = (VanillaMiner) (context.Miner);
+            var miner = (IVanillaMiner) (context.Miner);
 
             // TODO: fixme! instead use jobmanager and sharemanager.
 

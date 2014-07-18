@@ -36,19 +36,13 @@ namespace CoiniumServ.Mining.Shares
 {
     public class Share : IShare
     {
-        public bool IsValid
-        {
-            get { return Error == ShareError.None; }
-        }
+        public bool IsValid { get { return Error == ShareError.None; } }
         public bool IsBlockCandidate { get; private set; }
         public Block Block { get; private set; }
-
-        public bool IsBlockAccepted
-        {
-            get { return Block != null; }
-        }
+        public bool IsBlockAccepted { get { return Block != null; } }
         public IMiner Miner { get; private set; }
         public ShareError Error { get; private set; }
+        public UInt64 JobId { get; private set; }
         public IJob Job { get; private set; }
         public int Height { get; private set; }
         public UInt32 NTime { get; private set; }
@@ -69,6 +63,7 @@ namespace CoiniumServ.Mining.Shares
         public Share(IStratumMiner miner, UInt64 jobId, IJob job, string extraNonce2, string nTimeString, string nonceString)
         {
             Miner = miner;
+            JobId = jobId;
             Job = job;
             Error = ShareError.None;
 
@@ -79,10 +74,9 @@ namespace CoiniumServ.Mining.Shares
             if (Job == null)
             {
                 Error = ShareError.JobNotFound;
-                Log.ForContext<Share>().Warning("Job doesn't exist: {0}", jobId);
+                Log.ForContext<Share>().Warning("Job doesn't exist: {0}", JobId);
                 return;
             }
-
             
             // check miner supplied nTime.
             if (nTimeString.Length != 8)

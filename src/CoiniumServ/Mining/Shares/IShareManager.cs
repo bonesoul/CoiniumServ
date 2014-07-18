@@ -29,9 +29,9 @@ namespace CoiniumServ.Mining.Shares
 {
     public interface IShareManager
     {
-        IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
+        IShare ProcessShare(IStratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
 
-        IShare ProcessShare(VanillaMiner miner, string data);
+        IShare ProcessShare(IVanillaMiner miner, string data);
 
         event EventHandler BlockFound;
 

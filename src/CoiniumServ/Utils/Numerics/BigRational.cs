@@ -28,6 +28,8 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text;
 
+#pragma warning disable 3021 // disable CLSCompliant attribute warnings - http://msdn.microsoft.com/en-us/library/1x9049cy(v=vs.90).aspx
+
 namespace CoiniumServ.Utils.Numerics
 {
 

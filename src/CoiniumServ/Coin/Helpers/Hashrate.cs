@@ -31,13 +31,14 @@ namespace CoiniumServ.Coin.Helpers
         {
             var index = -1;
             double rate = hashrate;
+
             var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
 
             do
             {
-                rate = rate/1024;
+                rate = rate/1000;
                 index++;
-            } while (rate > 1024);
+            } while (rate > 1000);
 
             return string.Format("{0:0.00} {1}", rate, units[index]);
         }

@@ -21,18 +21,18 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Server.Mining.Stratum;
+using System.Collections.Generic;
 
-namespace CoiniumServ.Mining.Shares
+namespace CoiniumServ.Net.Server.Sockets
 {
-    public class ShareEventArgs:EventArgs
+    public interface ISocketServer:IServer
     {
-        public IStratumMiner Miner { get; private set; }
+        void RemoveConnection(IConnection connection);
 
-        public ShareEventArgs(IStratumMiner miner)
-        {
-            Miner = miner;
-        }
+        void Shutdown();
+
+        void DisconnectAll();
+
+        IEnumerable<IConnection> GetConnections();
     }
 }

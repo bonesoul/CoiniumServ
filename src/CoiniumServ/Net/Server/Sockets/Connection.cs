@@ -67,7 +67,7 @@ namespace CoiniumServ.Net.Server.Sockets
         /// <summary>
         /// The server instance that connection is bound to.
         /// </summary>
-        private SocketServer _server;
+        private readonly SocketServer _server;
 
         /// <summary>
         /// Default buffer size.
@@ -177,11 +177,12 @@ namespace CoiniumServ.Net.Server.Sockets
         /// <returns>Returns count of sent bytes.</returns>
         public int Send(IEnumerable<byte> data, SocketFlags flags)
         {
-            if (data == null) throw new ArgumentNullException("data");
+            if (data == null) 
+                throw new ArgumentNullException("data");
+
             if (_server == null)
-            {
                 throw new Exception("[Connection] _server is null in Send");
-            }
+
             return _server.Send(this, data, flags);
         }
 
@@ -225,10 +226,7 @@ namespace CoiniumServ.Net.Server.Sockets
 
         public void Disconnect()
         {
-            if(Socket.Connected)
-                Socket.Disconnect(true);
-
-            Client = null;            
+            _server.RemoveConnection(this);
         }
 
         #endregion

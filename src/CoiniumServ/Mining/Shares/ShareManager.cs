@@ -68,7 +68,7 @@ namespace CoiniumServ.Mining.Shares
         /// <param name="nTimeString">The n time string.</param>
         /// <param name="nonceString">The nonce string.</param>
         /// <returns></returns>
-        public IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
+        public IShare ProcessShare(IStratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
@@ -78,74 +78,88 @@ namespace CoiniumServ.Mining.Shares
             var share = new Share(miner, id, job, extraNonce2, nTimeString, nonceString);
 
             if (share.IsValid)
-            {               
-                _storage.AddShare(share); // commit the share.
-
-                if (share.IsBlockCandidate) // if share contains a block candicate
-                {
-                    Log.ForContext<ShareManager>().Debug("Share with block candidate [{0}] accepted at {1:0.00}/{2} by miner {3:l}.", share.Height, share.Difficulty, miner.Difficulty, miner.Username);
-
-                    var accepted = SubmitBlock(share); // submit block to daemon.
-                                        
-                    if (accepted)
-                    {
-                        OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
-                        _storage.AddBlock(share); // commit the block.
-                    }
-                }
-                else
-                    Log.ForContext<ShareManager>().Debug("Share accepted at {0:0.00}/{1} by miner {2:l}.", share.Difficulty, miner.Difficulty, miner.Username);
-            }
+                HandleValidShare(share);
             else
-            {
-                switch (share.Error)
-                {
-                    case ShareError.DuplicateShare:
-                        JsonRpcContext.SetException(new DuplicateShareError(share.Nonce));
-                        break;
-                    case ShareError.IncorrectExtraNonce2Size:
-                        JsonRpcContext.SetException(new OtherError("Incorrect extranonce2 size"));
-                        break;
-                    case ShareError.IncorrectNTimeSize:
-                        JsonRpcContext.SetException(new OtherError("Incorrect nTime size"));
-                        break;
-                    case ShareError.IncorrectNonceSize:
-                        JsonRpcContext.SetException(new OtherError("Incorrect nonce size"));
-                        break;
-                    case ShareError.JobNotFound:
-                        JsonRpcContext.SetException(new JobNotFoundError(id));
-                        break;
-                    case ShareError.LowDifficultyShare:
-                        JsonRpcContext.SetException(new LowDifficultyShare(share.Difficulty));
-                        break;
-                    case ShareError.NTimeOutOfRange:
-                        JsonRpcContext.SetException(new OtherError("nTime out of range"));
-                        break;
-                }
-
-                Log.ForContext<ShareManager>().Debug("Share rejected at {0:0.00}/{1} by miner {2:l}.", share.Difficulty, miner.Difficulty, miner.Username);
-            }
+                HandleInvalidShare(share);
 
             OnShareSubmitted(new ShareEventArgs(miner));  // notify the listeners about the share.
 
             return share;
         }
 
-        public IShare ProcessShare(VanillaMiner miner, string data)
+        public IShare ProcessShare(IVanillaMiner miner, string data)
         {
             throw new NotImplementedException();
         }
 
-        private bool SubmitBlock(Share share)
+        private void HandleValidShare(IShare share)
+        {
+            var miner = (IStratumMiner) share.Miner;
+            miner.ValidShares++;
+
+            _storage.AddShare(share); // commit the share.
+
+            if (!share.IsBlockCandidate)
+            {
+                Log.ForContext<ShareManager>().Debug("Share accepted at {0:0.00}/{1} by miner {2:l}.", share.Difficulty, miner.Difficulty, miner.Username);
+                return;
+            }
+
+            // if share contains a block candicate
+            Log.ForContext<ShareManager>().Debug("Share with block candidate [{0}] accepted at {1:0.00}/{2} by miner {3:l}.", share.Height, share.Difficulty, miner.Difficulty, miner.Username);
+
+            var accepted = SubmitBlock(share); // submit block to daemon.
+
+            if (!accepted) 
+                return;
+
+            OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
+
+            _storage.AddBlock(share); // commit the block.
+        }
+
+        private void HandleInvalidShare(IShare share)
+        {
+            var miner = (IStratumMiner)share.Miner;
+            miner.InvalidShares++;
+
+            switch (share.Error)
+            {
+                case ShareError.DuplicateShare:
+                    JsonRpcContext.SetException(new DuplicateShareError(share.Nonce));
+                    break;
+                case ShareError.IncorrectExtraNonce2Size:
+                    JsonRpcContext.SetException(new OtherError("Incorrect extranonce2 size"));
+                    break;
+                case ShareError.IncorrectNTimeSize:
+                    JsonRpcContext.SetException(new OtherError("Incorrect nTime size"));
+                    break;
+                case ShareError.IncorrectNonceSize:
+                    JsonRpcContext.SetException(new OtherError("Incorrect nonce size"));
+                    break;
+                case ShareError.JobNotFound:
+                    JsonRpcContext.SetException(new JobNotFoundError(share.JobId));
+                    break;
+                case ShareError.LowDifficultyShare:
+                    JsonRpcContext.SetException(new LowDifficultyShare(share.Difficulty));
+                    break;
+                case ShareError.NTimeOutOfRange:
+                    JsonRpcContext.SetException(new OtherError("nTime out of range"));
+                    break;
+            }
+
+            Log.ForContext<ShareManager>().Debug("Share rejected at {0:0.00}/{1} by miner {2:l}.", share.Difficulty, miner.Difficulty, miner.Username);            
+        }
+
+        private bool SubmitBlock(IShare share)
         {
             try
             {
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
                 var isAccepted = CheckIfBlockAccepted(share);
 
-                Log.ForContext<ShareManager>()
-                    .Information(
-                        isAccepted
+                Log.ForContext<ShareManager>().Information(
+                    isAccepted
                             ? "Found block [{0}] with hash: {1:l}."
                             : "Submitted block [{0}] but got denied: {1:l}.", 
                             share.Height, share.BlockHash.ToHexString());
@@ -159,7 +173,7 @@ namespace CoiniumServ.Mining.Shares
             }
         }
 
-        private bool CheckIfBlockAccepted(Share share)
+        private bool CheckIfBlockAccepted(IShare share)
         {
             try
             {

@@ -44,12 +44,21 @@
         }
 	},
 
-	# vanilla server configuration
+	# vanilla server configuration - experimental!
 	"vanilla": {
 		"enabled": false,
 		"bind": "localhost",
 		"port": 2223			
 	},
+
+    # banning support
+    "banning": {
+        "enabled": true,
+        "duration": 600,
+        "invalidPercent": 50,
+        "checkThreshold": 500,
+        "purgeInterval": 300
+    },
 
 	# mpos compat mode configuration - not implemented yet!
 	"mpos": {

@@ -30,7 +30,9 @@ using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Mining.Shares;
+using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Transactions;
 using Serilog;
 
@@ -114,10 +116,10 @@ namespace CoiniumServ.Mining.Jobs.Manager
         {
             var miner = ((MinerEventArgs) e).Miner;
 
-            if (miner != null)
-            {
-                var result = SendJobToMiner(miner, _jobTracker.Current);
-            }
+            if (miner == null) 
+                return;
+
+            var result = SendJobToMiner(miner, _jobTracker.Current);
         }
 
         private IJob GetNewJob()
@@ -186,16 +188,18 @@ namespace CoiniumServ.Mining.Jobs.Manager
 
         private bool SendJobToMiner(IMiner miner, IJob job)
         {
-            if (!miner.Authenticated)
+            if (miner is IVanillaMiner) // only stratum miners needs to be submitted new jobs.
                 return false;
 
-            if (!miner.Subscribed)
+            var stratumMiner = (IStratumMiner) miner;
+
+            if (!stratumMiner.Authenticated)
                 return false;
 
-            if (!miner.SupportsJobNotifications)
+            if (!stratumMiner.Subscribed)
                 return false;
 
-            miner.SendJob(job);
+            stratumMiner.SendJob(job);
 
             return true;
         }

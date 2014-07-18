@@ -28,6 +28,7 @@ using System.Security.Cryptography;
 using CoiniumServ.Coin.Helpers;
 using CoiniumServ.Crypto.Algorithms;
 using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Miners;
@@ -65,7 +66,8 @@ namespace CoiniumServ.Mining.Pools
         private readonly IStorageFactory _storageFactory;
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IStatisticsObjectFactory _statisticsObjectFactory;
-        private readonly IVardiffManagerFactory _varddManagerFactory;
+        private readonly IVardiffManagerFactory _vardiffManagerFactory;
+        private readonly IBanningManagerFactory _banningManagerFactory;
 
         private IMinerManager _minerManager;
         private IJobTracker _jobTracker;
@@ -75,6 +77,7 @@ namespace CoiniumServ.Mining.Pools
         private IHashAlgorithm _hashAlgorithm;
         private IPaymentProcessor _paymentProcessor;
         private IVardiffManager _vardiffManager;
+        private IBanningManager _banningManager;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
@@ -98,6 +101,7 @@ namespace CoiniumServ.Mining.Pools
         /// <param name="paymentProcessorFactory"></param>
         /// <param name="statisticsObjectFactory"></param>
         /// <param name="vardiffManagerFactory"></param>
+        /// <param name="banningManagerFactory"></param>
         public Pool(
             IHashAlgorithmFactory hashAlgorithmFactory, 
             IServerFactory serverFactory, 
@@ -110,7 +114,8 @@ namespace CoiniumServ.Mining.Pools
             IStorageFactory storageFactory,
             IPaymentProcessorFactory paymentProcessorFactory,
             IStatisticsObjectFactory statisticsObjectFactory, 
-            IVardiffManagerFactory vardiffManagerFactory)
+            IVardiffManagerFactory vardiffManagerFactory,
+            IBanningManagerFactory banningManagerFactory)
         {
             Enforce.ArgumentNotNull(hashAlgorithmFactory, "IHashAlgorithmFactory");
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
@@ -123,6 +128,7 @@ namespace CoiniumServ.Mining.Pools
             Enforce.ArgumentNotNull(storageFactory, "IStorageFactory");
             Enforce.ArgumentNotNull(paymentProcessorFactory, "IPaymentProcessorFactory");
             Enforce.ArgumentNotNull(vardiffManagerFactory, "IVardiffManagerFactory");
+            Enforce.ArgumentNotNull(banningManagerFactory, "IBanningManagerFactory");
 
             _daemonClient = client;
             _minerManagerFactory = minerManagerFactory;
@@ -135,7 +141,8 @@ namespace CoiniumServ.Mining.Pools
             _storageFactory = storageFactory;
             _paymentProcessorFactory = paymentProcessorFactory;
             _statisticsObjectFactory = statisticsObjectFactory;
-            _varddManagerFactory = vardiffManagerFactory;
+            _vardiffManagerFactory = vardiffManagerFactory;
+            _banningManagerFactory = banningManagerFactory;
 
             GenerateInstanceId();
         }
@@ -181,7 +188,9 @@ namespace CoiniumServ.Mining.Pools
 
             _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage);
 
-            _vardiffManager = _varddManagerFactory.Get(Config.Stratum.Vardiff, _shareManager);
+            _vardiffManager = _vardiffManagerFactory.Get(Config.Stratum.Vardiff, _shareManager);
+
+            _banningManager = _banningManagerFactory.Get(Config.Banning, _shareManager);
 
             _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm, Config.Wallet, Config.Rewards);
             _jobManager.Initialize(InstanceId);
@@ -218,20 +227,6 @@ namespace CoiniumServ.Mining.Pools
             }
         }
 
-        public void Start()
-        {
-            if (!Config.Valid)
-            {
-                Log.ForContext<Pool>().Error("Can't start pool as configuration is not valid.");
-                return;
-            }                
-
-            foreach (var server in _servers)
-            {
-                server.Key.Start();
-            }
-        }
-
         private void PrintPoolInfo()
         {
             var info = _daemonClient.GetInfo();
@@ -265,6 +260,20 @@ namespace CoiniumServ.Mining.Pools
                             current +
                             string.Format("{0} @ {1}:{2}, ", server.Config.Name.ToLower(), server.BindIP, server.Port))
                 );                
+        }
+
+        public void Start()
+        {
+            if (!Config.Valid)
+            {
+                Log.ForContext<Pool>().Error("Can't start pool as configuration is not valid.");
+                return;
+            }
+
+            foreach (var server in _servers)
+            {
+                server.Key.Start();
+            }
         }
 
         public void Stop()

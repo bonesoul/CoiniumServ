@@ -22,7 +22,6 @@
 #endregion
 
 using CoiniumServ.Mining.Pools;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
 
 namespace CoiniumServ.Mining.Miners
 {
@@ -42,18 +41,18 @@ namespace CoiniumServ.Mining.Miners
         string Username { get; }
 
         /// <summary>
-        /// Is the miner subscribed?
+        /// The pool miner is connected to.
         /// </summary>
-        bool Subscribed { get; }
+        IPool Pool { get; }
 
         /// <summary>
         /// Is the miner authenticated.
         /// </summary>
         bool Authenticated { get; set; }
 
-        IPool Pool { get; }
+        int ValidShares { get; set; }
 
-        float Difficulty { get; set; }
+        int InvalidShares { get; set; }
 
         /// <summary>
         /// Authenticates the miner.
@@ -62,20 +61,5 @@ namespace CoiniumServ.Mining.Miners
         /// <param name="password"></param>
         /// <returns></returns>
         bool Authenticate(string user, string password);
-
-        /// <summary>
-        /// Can we send new mining job's to miner?
-        /// </summary>
-        bool SupportsJobNotifications { get; }
-
-        /// <summary>
-        /// Sends difficulty to the miner.
-        /// </summary>
-        void SendDifficulty();
-
-        /// <summary>
-        /// Sends a new mining job to the miner.
-        /// </summary>
-        void SendJob(IJob job);
     }
 }

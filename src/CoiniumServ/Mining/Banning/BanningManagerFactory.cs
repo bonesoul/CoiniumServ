@@ -21,36 +21,38 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon.Config;
-using CoiniumServ.Payments;
-using CoiniumServ.Server.Mining.Stratum.Config;
-using CoiniumServ.Server.Mining.Vanilla.Config;
-using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Repository.Context;
+using Nancy.TinyIoc;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Mining.Banning
 {
-    public interface IPoolConfig:IConfig
+    public class BanningManagerFactory : IBanningManagerFactory
     {
         /// <summary>
-        /// Is the configuration enabled?
+        /// The _kernel
         /// </summary>
-        bool Enabled { get; }
+        private readonly IApplicationContext _applicationContext;
 
-        IWalletConfig Wallet { get; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShareManagerFactory" /> class.
+        /// </summary>
+        /// <param name="applicationContext">The application context.</param>
+        public BanningManagerFactory(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
 
-        ICoinConfig Coin { get; }
+        public IBanningManager Get(IBanningConfig banningConfig, IShareManager shareManager)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"banningConfig", banningConfig},
+                {"shareManager", shareManager},
+            };
 
-        IStratumServerConfig Stratum { get; }
-
-        IVanillaServerConfig Vanilla { get; }
-
-        IDaemonConfig Daemon { get; }
-
-        IRewardsConfig Rewards { get; }
-
-        IPaymentConfig Payments { get; }
-
-        IBanningConfig Banning { get; }
+            return _applicationContext.Container.Resolve<IBanningManager>(@params);
+        }
     }
 }

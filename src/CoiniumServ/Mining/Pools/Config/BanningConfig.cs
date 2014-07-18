@@ -21,18 +21,23 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Server.Mining.Stratum;
-
-namespace CoiniumServ.Mining.Shares
+namespace CoiniumServ.Mining.Pools.Config
 {
-    public class ShareEventArgs:EventArgs
+    public class BanningConfig : IBanningConfig
     {
-        public IStratumMiner Miner { get; private set; }
+        public bool Enabled { get; private set; }
+        public int Duration { get; private set; }
+        public int InvalidPercent { get; private set; }
+        public int CheckThreshold { get; private set; }
+        public int PurgeInterval { get; private set; }
 
-        public ShareEventArgs(IStratumMiner miner)
+        public BanningConfig(dynamic config)
         {
-            Miner = miner;
+            Enabled = config.enabled;
+            Duration = config.duration;
+            InvalidPercent = config.invalidPercent;
+            CheckThreshold = config.checkThreshold;
+            PurgeInterval = config.purgeInterval;
         }
     }
 }

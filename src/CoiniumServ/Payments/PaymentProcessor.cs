@@ -364,7 +364,7 @@ namespace CoiniumServ.Payments
                 Log.ForContext<PaymentProcessor>().Error("Halted as getbalance call failed: {0}.", e.Message);
                 return false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Log.ForContext<PaymentProcessor>().Error("Halted as we can not determine satoshis in a coin - failed parsing: {0}", json);
                 return false;

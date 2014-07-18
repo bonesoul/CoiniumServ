@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools;
@@ -47,6 +48,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
             _applicationContext.Container.Register<IPoolManager, PoolManager>().AsSingleton();
             _applicationContext.Container.Register<IVardiffManager, VardiffManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IBanningManager, BanningManager>().AsMultiInstance();
         }
     }
 }
