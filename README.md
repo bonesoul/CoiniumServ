@@ -34,14 +34,13 @@ Can run on these platforms;
 * Transaction messages support [in-development].
 * Vardiff support.
 * Ban manager support that can handles miners flooding with invalid shares.
-* 
 
 ###### Hashing Algorithms
 
-######  Working
+_Working_
 * ✓ __Scrypt__ 
 
-######  Needs Testing
+_Needs Testing_
 
 * ✓ __SHA256__ 
 * ✓ __Blake__
@@ -55,7 +54,7 @@ Can run on these platforms;
 * ✓ __X15__ 
 * ✓ __X17__
 
-######  Under Development
+_Under Development_
 
 * ✓ __Scrypt-Jane__ 
 * ✓ __Scrypt-N__ 
