@@ -111,7 +111,12 @@
   <ItemGroup>
     <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Crypto\Algorithms\Blake.cs" />
+    <Compile Include="Crypto\Algorithms\Fugue.cs" />
+    <Compile Include="Crypto\Algorithms\Groestl.cs" />
+    <Compile Include="Crypto\Algorithms\Keccak.cs" />
     <Compile Include="Crypto\Algorithms\Sha256.cs" />
+    <Compile Include="Crypto\Algorithms\Shavite3.cs" />
+    <Compile Include="Crypto\Algorithms\Skein.cs" />
     <Compile Include="Mining\Banning\BanManager.cs" />
     <Compile Include="Mining\Banning\BanManagerFactory.cs" />
     <Compile Include="Mining\Banning\IBanManager.cs" />

@@ -29,6 +29,6 @@ namespace CoiniumServ.Crypto.Algorithms
     {
         UInt32 Multiplier { get; }
 
-        byte[] Hash(byte[] input);
+        byte[] Hash(byte[] input, dynamic config);
     }
 }

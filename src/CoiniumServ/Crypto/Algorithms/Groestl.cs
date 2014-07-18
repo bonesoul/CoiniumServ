@@ -26,17 +26,17 @@ using HashLib;
 
 namespace CoiniumServ.Crypto.Algorithms
 {
-    public class Blake : IHashAlgorithm
+    public class Groestl : IHashAlgorithm
     {
         public uint Multiplier { get; private set; }
 
         private readonly IHash _hasher;
 
-        public Blake()
+        public Groestl()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateBlake256();
+            _hasher = HashFactory.Crypto.SHA3.CreateGroestl512();
 
-            Multiplier = (UInt32) Math.Pow(2, 8);
+            Multiplier = (UInt32)Math.Pow(2, 8);
         }
 
         public byte[] Hash(byte[] input, dynamic config)

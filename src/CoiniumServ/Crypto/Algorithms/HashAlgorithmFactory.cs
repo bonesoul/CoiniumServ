@@ -44,15 +44,11 @@ namespace CoiniumServ.Crypto.Algorithms
         /// <summary>
         /// Gets the specified algorithm name.
         /// </summary>
-        /// <param name="algorithmName">Name of the algorithm.</param>
+        /// <param name="algorithm">Name of the algorithm.</param>
         /// <returns></returns>
-        public IHashAlgorithm Get(string algorithmName)
+        public IHashAlgorithm Get(string algorithm)
         {
-            // Default to scrypt
-            if (string.IsNullOrWhiteSpace(algorithmName)) 
-                algorithmName = Algorithms.Scrypt;
-
-            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithmName);
+            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
         }
     }
 }

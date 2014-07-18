@@ -34,10 +34,11 @@ namespace CoiniumServ.Crypto.Algorithms
         public Sha256()
         {
             _algorithm = new SHA256Managed();
+
             Multiplier = 1;           
         }
 
-        public byte[] Hash(byte[] input)
+        public byte[] Hash(byte[] input, dynamic config)
         {
             return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
         }

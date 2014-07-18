@@ -28,8 +28,14 @@ namespace CoiniumServ.Crypto.Algorithms
 {
     public static class Algorithms
     {
+        public const string Blake = "blake";
+        public const string Fugue = "fugue";
+        public const string Groestl = "groestl";
+        public const string Keccak = "keccak";
         public const string Scrypt = "scrypt";
         public const string Sha256 = "sha256";
+        public const string Shavite3 = "shavite3";
+        public const string Skein = "skein";
 
         /// <summary>
         /// Global diff1

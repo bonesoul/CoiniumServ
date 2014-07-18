@@ -28,6 +28,7 @@ namespace CoiniumServ.Coin.Config
         public string Name { get; private set; }
         public string Symbol { get; private set; }
         public string Algorithm { get; private set; }
+        public dynamic Options { get; private set; }
 
         public CoinConfig(dynamic config)
         {
@@ -40,6 +41,7 @@ namespace CoiniumServ.Coin.Config
             Name = config.name;
             Symbol = config.symbol;
             Algorithm = config.algorithm;
+            Options = config;
 
             Valid = true;
         }

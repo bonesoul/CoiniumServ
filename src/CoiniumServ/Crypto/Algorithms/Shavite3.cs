@@ -21,22 +21,21 @@
 // 
 #endregion
 
-using System;
 using HashLib;
 
 namespace CoiniumServ.Crypto.Algorithms
 {
-    public class Blake : IHashAlgorithm
+    public class Shavite3 : IHashAlgorithm
     {
         public uint Multiplier { get; private set; }
 
         private readonly IHash _hasher;
 
-        public Blake()
+        public Shavite3()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateBlake256();
+            _hasher = HashFactory.Crypto.SHA3.CreateSHAvite3_512();
 
-            Multiplier = (UInt32) Math.Pow(2, 8);
+            Multiplier = 1;
         }
 
         public byte[] Hash(byte[] input, dynamic config)

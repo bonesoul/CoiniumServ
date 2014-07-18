@@ -115,8 +115,7 @@ namespace CoiniumServ.Mining.Shares
 
             // create the block headers
             HeaderBuffer = Serializers.SerializeHeader(Job, MerkleRoot, NTime, Nonce);
-            // TODO: add sha256 and others support!
-            HeaderHash = Job.HashAlgorithm.Hash(HeaderBuffer);
+            HeaderHash = Job.HashAlgorithm.Hash(HeaderBuffer, miner.Pool.Config.Coin.Options);
             HeaderValue = new BigInteger(HeaderHash);
 
             // calculate the share difficulty

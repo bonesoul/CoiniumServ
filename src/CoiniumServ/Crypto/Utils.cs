@@ -28,24 +28,26 @@ namespace CoiniumServ.Crypto
 {
     public static class Utils
     {
-        /// <summary>
-        /// See <see cref="DoubleDigest(byte[], int, int)"/>.
-        /// </summary>
-        public static byte[] DoubleDigest(this byte[] input)
+        private static readonly SHA256Managed Sha256Managed;
+
+        static Utils()
         {
-            // TODO: instead use SHA256.cs.
-            return DoubleDigest(input, 0, input.Length);
+            Sha256Managed = new SHA256Managed();
+        }
+
+        public static byte[] Digest(this byte[] input)
+        {
+            return Sha256Managed.ComputeHash(input, 0, input.Length);
         }
 
         /// <summary>
         /// Calculates the SHA-256 hash of the given byte range, and then hashes the resulting hash again. This is
         /// standard procedure in BitCoin. The resulting hash is in big endian form.
         /// </summary>
-        public static byte[] DoubleDigest(this byte[] input, int offset, int length)
+        public static byte[] DoubleDigest(this byte[] input)
         {
-            var algorithm = new SHA256Managed();
-            var first = algorithm.ComputeHash(input, offset, length);
-            return algorithm.ComputeHash(first);
+            var first = Sha256Managed.ComputeHash(input, 0, input.Length);
+            return Sha256Managed.ComputeHash(first);
         }
 
         /// <summary>
@@ -53,12 +55,12 @@ namespace CoiniumServ.Crypto
         /// </summary>
         public static byte[] DoubleDigestTwoBuffers(byte[] input1, int offset1, int length1, byte[] input2, int offset2, int length2)
         {
-            var algorithm = new SHA256Managed();
             var buffer = new byte[length1 + length2];
             Array.Copy(input1, offset1, buffer, 0, length1);
             Array.Copy(input2, offset2, buffer, length1, length2);
-            var first = algorithm.ComputeHash(buffer, 0, buffer.Length);
-            return algorithm.ComputeHash(first);
+
+            var first = Sha256Managed.ComputeHash(buffer, 0, buffer.Length);
+            return Sha256Managed.ComputeHash(first);
         }
     }
 }
