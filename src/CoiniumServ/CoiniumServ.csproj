@@ -183,6 +183,7 @@
     <Compile Include="Persistance\Blocks\OrphanedBlock.cs" />
     <Compile Include="Persistance\Redis\IRedisConfig.cs" />
     <Compile Include="Persistance\Redis\RedisConfig.cs" />
+    <Compile Include="Server\Mining\Vanilla\IVanillaMiner.cs" />
     <Compile Include="Server\Servers.cs" />
     <Compile Include="Server\Web\IWebServer.cs" />
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />

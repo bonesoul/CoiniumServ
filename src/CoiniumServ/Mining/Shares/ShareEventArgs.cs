@@ -28,9 +28,9 @@ namespace CoiniumServ.Mining.Shares
 {
     public class ShareEventArgs:EventArgs
     {
-        public StratumMiner Miner { get; private set; }
+        public IStratumMiner Miner { get; private set; }
 
-        public ShareEventArgs(StratumMiner miner)
+        public ShareEventArgs(IStratumMiner miner)
         {
             Miner = miner;
         }

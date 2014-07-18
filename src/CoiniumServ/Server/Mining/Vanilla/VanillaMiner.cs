@@ -35,7 +35,7 @@ using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla
 {
-    public class VanillaMiner : IMiner
+    public class VanillaMiner : IVanillaMiner
     {
         /// <summary>
         /// Unique subscription id for identifying the miner.
@@ -48,23 +48,11 @@ namespace CoiniumServ.Server.Mining.Vanilla
         public string Username { get; private set; }
 
         /// <summary>
-        /// Is the miner subscribed?
-        /// </summary>
-        public bool Subscribed { get; private set; }
-
-        /// <summary>
         /// Is the miner authenticated?
         /// </summary>
         public bool Authenticated { get; set; }
 
         public IPool Pool { get; private set; }
-
-        public float Difficulty { get; set; }
-
-        /// <summary>
-        /// Can we send new mining job's to miner?
-        /// </summary>
-        public bool SupportsJobNotifications { get; private set; }
 
         private readonly IMinerManager _minerManager;
 
@@ -79,11 +67,8 @@ namespace CoiniumServ.Server.Mining.Vanilla
             Id = id; // the id of the miner.
             Pool = pool;
             _minerManager = minerManager;
-            Difficulty = 16;
 
-            Subscribed = true; // vanilla miners are subscribed by default.
             Authenticated = false; // miner has to authenticate.
-            SupportsJobNotifications = false; // vanilla miner's doesn't support new mining job notifications.
         }
 
         public bool Authenticate(string user, string password)
@@ -126,22 +111,6 @@ namespace CoiniumServ.Server.Mining.Vanilla
                 var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
                 JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
             }        
-        }
-
-        /// <summary>
-        /// Sends difficulty to the miner.
-        /// </summary>
-        public void SendDifficulty()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Sends a new mining job to the miner.
-        /// </summary>
-        public void SendJob(IJob job)
-        {
-            throw new NotSupportedException();
         }
     }
 }

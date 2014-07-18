@@ -69,11 +69,6 @@ namespace CoiniumServ.Server.Mining.Stratum
         public float Difficulty { get; set; }
 
         /// <summary>
-        /// Sends a new mining job to the miner.
-        /// </summary>
-        public bool SupportsJobNotifications { get; private set; }
-
-        /// <summary>
         /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
         /// </summary>
         public uint ExtraNonce { get; private set; }
@@ -104,7 +99,6 @@ namespace CoiniumServ.Server.Mining.Stratum
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
-            SupportsJobNotifications = true; // stratum miner'ssupports new mining job notifications.
         }
 
         /// <summary>

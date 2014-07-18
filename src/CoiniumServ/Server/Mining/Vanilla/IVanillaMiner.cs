@@ -21,41 +21,11 @@
 // 
 #endregion
 
-using CoiniumServ.Mining.Pools;
+using CoiniumServ.Mining.Miners;
 
-namespace CoiniumServ.Mining.Miners
+namespace CoiniumServ.Server.Mining.Vanilla
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public interface IVanillaMiner : IMiner
     {
-        /// <summary>
-        /// Unique subscription id for identifying the miner.
-        /// </summary>
-        int Id { get; }
-
-        /// <summary>
-        /// Username of the miner.
-        /// </summary>
-        string Username { get; }
-
-        /// <summary>
-        /// The pool miner is connected to.
-        /// </summary>
-        IPool Pool { get; }
-
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; set; }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
     }
 }

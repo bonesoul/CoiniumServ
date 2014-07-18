@@ -51,7 +51,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Service
         public SubscribeResponse SubscribeMiner(string signature)
         {
             var context = (SocketServiceContext) JsonRpcContext.Current().Value;
-            var miner = (StratumMiner)(context.Miner);            
+            var miner = (IStratumMiner)(context.Miner);            
 
             var response = new SubscribeResponse
             {
@@ -73,7 +73,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Service
         public bool AuthorizeMiner(string user, string password)
         {
             var context = (SocketServiceContext)JsonRpcContext.Current().Value;
-            var miner = (StratumMiner)(context.Miner);
+            var miner = (IStratumMiner)(context.Miner);
 
             return miner.Authenticate(user, password);
         }
@@ -90,7 +90,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Service
         public bool SubmitWork(string user, string jobId, string extraNonce2, string nTime, string nonce)
         {
             var context = (SocketServiceContext)JsonRpcContext.Current().Value;
-            var miner = (StratumMiner)(context.Miner);
+            var miner = (IStratumMiner)(context.Miner);
 
             return _shareManager.ProcessShare(miner, jobId, extraNonce2, nTime, nonce).IsValid;
         }

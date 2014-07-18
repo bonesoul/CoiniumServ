@@ -68,7 +68,7 @@ namespace CoiniumServ.Mining.Shares
         /// <param name="nTimeString">The n time string.</param>
         /// <param name="nonceString">The nonce string.</param>
         /// <returns></returns>
-        public IShare ProcessShare(StratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
+        public IShare ProcessShare(IStratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
@@ -131,7 +131,7 @@ namespace CoiniumServ.Mining.Shares
             return share;
         }
 
-        public IShare ProcessShare(VanillaMiner miner, string data)
+        public IShare ProcessShare(IVanillaMiner miner, string data)
         {
             throw new NotImplementedException();
         }

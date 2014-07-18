@@ -24,6 +24,7 @@
 using System;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Server.Mining.Stratum.Notifications;
 
 namespace CoiniumServ.Server.Mining.Stratum
 {
@@ -33,5 +34,24 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
         /// </summary>
         UInt32 ExtraNonce { get; }
+
+        /// <summary>
+        /// Is the miner subscribed?
+        /// </summary>
+        bool Subscribed { get; }
+
+        float Difficulty { get; set; }
+
+        /// <summary>
+        /// Sends difficulty to the miner.
+        /// </summary>
+        void SendDifficulty();
+
+        /// <summary>
+        /// Sends a new mining job to the miner.
+        /// </summary>
+        void SendJob(IJob job);
+
+        void Subscribe();
     }
 }

@@ -27,6 +27,7 @@ using System.Linq;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Pools;
 using CoiniumServ.Net.Server.Sockets;
+using CoiniumServ.Server.Mining.Stratum;
 using Serilog;
 
 namespace CoiniumServ.Mining.Miners
@@ -101,11 +102,13 @@ namespace CoiniumServ.Mining.Miners
             Log.ForContext<MinerManager>().Information(miner.Authenticated ? "Authenticated miner: {0:l} [{1:l}]" : "Unauthenticated miner: {0:l} [{1:l}]", 
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
-            if (miner.Authenticated) // if miner authenticated successfully.
-            {
-                miner.SendDifficulty(); // send the initial difficulty.
-                OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.
-            }
+            if (!miner.Authenticated) 
+                return;
+            
+            if(miner is IStratumMiner)
+                (miner as IStratumMiner).SendDifficulty(); // send the initial difficulty.
+
+            OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.            
         }
 
         protected virtual void OnMinerAuthenticated(MinerEventArgs e)
