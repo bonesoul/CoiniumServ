@@ -52,6 +52,8 @@ namespace CoiniumServ.Mining.Shares
 
         ShareError Error { get; }
 
+        UInt64 JobId { get; }
+
         IJob Job { get; }
 
         int Height { get; }

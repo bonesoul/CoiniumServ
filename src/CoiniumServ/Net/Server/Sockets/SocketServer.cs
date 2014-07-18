@@ -31,7 +31,7 @@ using Serilog;
 
 namespace CoiniumServ.Net.Server.Sockets
 {
-    public class SocketServer : IServer, IDisposable
+    public class SocketServer : ISocketServer, IDisposable
     {
         /// <summary>
         /// The IP address of the interface the server binded.
@@ -196,9 +196,7 @@ namespace CoiniumServ.Net.Server.Sockets
                         Log.ForContext<SocketServer>().Debug("Connection closed:" + connection.Client);
                 }
                 else
-                {
                     RemoveConnection(connection); // Connection was lost.
-                }
             }
             catch (SocketException e)
             {
@@ -223,6 +221,9 @@ namespace CoiniumServ.Net.Server.Sockets
 
             if (buffer == null) 
                 throw new ArgumentNullException("buffer");
+
+            if (!connection.IsConnected)
+                return 0;
 
             var totalBytesSent = 0;
             var bytesRemaining = buffer.Length;
@@ -270,29 +271,18 @@ namespace CoiniumServ.Net.Server.Sockets
 
         #region disconnect & shutdown handlers
 
-        public virtual void DisconnectAll()
-        {
-            lock (ConnectionLock)
-            {
-                foreach (var connection in Connections.Cast<Connection>()) // Check if the connection is connected.
-                {
-                    // Disconnect and raise the ClientDisconnected event.
-
-                    connection.Disconnect();
-                    OnClientDisconnect(new ConnectionEventArgs(connection));
-                }
-
-                Connections.Clear();
-            }
-        }
-
-        private void RemoveConnection(Connection connection)
+        public void RemoveConnection(IConnection connection)
         {
             if (connection == null)
                 return;
 
-            // disconnect the client
-            connection.Disconnect();
+            lock (connection)
+            {
+                if (connection.IsConnected) // disconnect the client
+                    connection.Socket.Disconnect(true);
+            }
+
+            connection.Client = null;
 
             // Remove the connection from the dictionary and raise the OnDisconnection event.
             lock (ConnectionLock)
@@ -314,7 +304,8 @@ namespace CoiniumServ.Net.Server.Sockets
                 throw new ObjectDisposedException(GetType().Name, "Server has been already disposed.");
 
             // Check if the server is actually listening.
-            if (!IsListening) return;
+            if (!IsListening) 
+                return;
 
             // Close the listener socket.
             if (Listener != null)
@@ -324,14 +315,25 @@ namespace CoiniumServ.Net.Server.Sockets
             }
 
             // Disconnect the clients.
-            foreach (var connection in Connections.ToList()) // use ToList() so we don't get collection modified exception there
-            {
-                connection.Disconnect();
-            }
+            DisconnectAll();
 
             Listener = null;
             IsListening = false;
         }
+
+        public virtual void DisconnectAll()
+        {
+            lock (ConnectionLock)
+            {
+                foreach (var connection in Connections.ToList()) // using ToList() to get a copy in order to prevent any modified collection exceptions.
+                {
+                    RemoveConnection(connection);
+                }
+
+                Connections.Clear();
+            }
+        }
+
 
         #endregion
 

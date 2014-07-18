@@ -28,7 +28,6 @@ using System.Text;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Server.Mining.Vanilla.Service;
 using CoiniumServ.Utils.Extensions;
 using Serilog;
@@ -51,6 +50,9 @@ namespace CoiniumServ.Server.Mining.Vanilla
         /// Is the miner authenticated?
         /// </summary>
         public bool Authenticated { get; set; }
+
+        public int ValidShares { get; set; }
+        public int InvalidShares { get; set; }
 
         public IPool Pool { get; private set; }
 

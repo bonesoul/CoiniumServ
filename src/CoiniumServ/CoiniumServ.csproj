@@ -110,6 +110,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Helpers\Hashrate.cs" />
+    <Compile Include="Mining\Banning\BanningManager.cs" />
+    <Compile Include="Mining\Banning\BanningManagerFactory.cs" />
+    <Compile Include="Mining\Banning\IBanningManager.cs" />
+    <Compile Include="Mining\Banning\IBanningManagerFactory.cs" />
     <Compile Include="Mining\Pools\Config\BanningConfig.cs" />
     <Compile Include="Mining\Pools\Config\IBanningConfig.cs" />
     <Compile Include="Mining\Pools\Config\IRewardsConfig.cs" />
@@ -158,6 +162,7 @@
     <Compile Include="Net\Server\Http\Web\ErrorConfiguration.cs" />
     <Compile Include="Net\Server\Http\Web\NancyBootstrapper.cs" />
     <Compile Include="Net\Server\Http\Web\RootPathProvider.cs" />
+    <Compile Include="Net\Server\Sockets\ISocketServer.cs" />
     <Compile Include="Payments\IPaymentRound.cs" />
     <Compile Include="Payments\IPaymentConfig.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />

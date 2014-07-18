@@ -23,6 +23,7 @@
 
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Miners;
@@ -67,6 +68,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IPaymentProcessorFactory, PaymentProcessorFactory>().AsSingleton();
             _applicationContext.Container.Register<IStatisticsObjectFactory, StatististicsObjectFactory>().AsSingleton();
             _applicationContext.Container.Register<IVardiffManagerFactory, VardiffManagerFactory>().AsSingleton();
+            _applicationContext.Container.Register<IBanningManagerFactory, BanningManagerFactory>().AsSingleton();
         }
     }
 }

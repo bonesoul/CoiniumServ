@@ -21,26 +21,12 @@
 // 
 #endregion
 
-using System;
+using CoiniumServ.Mining.Pools.Config;
 
-namespace CoiniumServ.Coin.Helpers
+namespace CoiniumServ.Mining.Banning
 {
-    public static class Hashrate
+    public interface IBanningManager
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
-        {
-            var index = -1;
-            double rate = hashrate;
-
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
-
-            do
-            {
-                rate = rate/1000;
-                index++;
-            } while (rate > 1000);
-
-            return string.Format("{0:0.00} {1}", rate, units[index]);
-        }
+        IBanningConfig Config { get; }
     }
 }

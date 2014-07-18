@@ -21,26 +21,18 @@
 // 
 #endregion
 
-using System;
+using System.Collections.Generic;
 
-namespace CoiniumServ.Coin.Helpers
+namespace CoiniumServ.Net.Server.Sockets
 {
-    public static class Hashrate
+    public interface ISocketServer:IServer
     {
-        public static string GetReadableHashrate(this UInt64 hashrate)
-        {
-            var index = -1;
-            double rate = hashrate;
+        void RemoveConnection(IConnection connection);
 
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
+        void Shutdown();
 
-            do
-            {
-                rate = rate/1000;
-                index++;
-            } while (rate > 1000);
+        void DisconnectAll();
 
-            return string.Format("{0:0.00} {1}", rate, units[index]);
-        }
+        IEnumerable<IConnection> GetConnections();
     }
 }

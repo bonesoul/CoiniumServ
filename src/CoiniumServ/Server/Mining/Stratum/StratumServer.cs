@@ -69,9 +69,9 @@ namespace CoiniumServ.Server.Mining.Stratum
             BindIP = config.BindInterface;
             Port = config.Port;
 
-            ClientConnected += StratumServer_ClientConnected;
-            ClientDisconnected += StratumServer_ClientDisconnected;
-            DataReceived += StratumServer_DataReceived;
+            ClientConnected += OnClientConnection;
+            ClientDisconnected += OnClientDisconnection;
+            DataReceived += OnClientRecieveData;
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void StratumServer_ClientConnected(object sender, ConnectionEventArgs e)
+        private void OnClientConnection(object sender, ConnectionEventArgs e)
         {
             Log.ForContext<StratumServer>().Information("Stratum client connected: {0}", e.Connection.ToString());
 
@@ -112,7 +112,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void StratumServer_ClientDisconnected(object sender, ConnectionEventArgs e)
+        private void OnClientDisconnection(object sender, ConnectionEventArgs e)
         {
             Log.ForContext<StratumServer>().Information("Stratum client disconnected: {0}", e.Connection.ToString());
 
@@ -124,7 +124,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void StratumServer_DataReceived(object sender, ConnectionDataEventArgs e)
+        private void OnClientRecieveData(object sender, ConnectionDataEventArgs e)
         {
             var connection = (Connection)e.Connection;
             ((StratumMiner)connection.Client).Parse(e);

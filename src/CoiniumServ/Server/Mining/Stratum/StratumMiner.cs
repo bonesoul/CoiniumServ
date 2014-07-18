@@ -64,6 +64,9 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         public bool Authenticated { get; set; }
 
+        public int ValidShares { get; set; }
+        public int InvalidShares { get; set; }
+
         public IPool Pool { get; private set; }
 
         public float Difficulty { get; set; }

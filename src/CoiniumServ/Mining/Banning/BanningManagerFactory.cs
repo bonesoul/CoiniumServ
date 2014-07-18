@@ -21,45 +21,38 @@
 // 
 #endregion
 
-using CoiniumServ.Mining.Pools;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Repository.Context;
+using Nancy.TinyIoc;
 
-namespace CoiniumServ.Mining.Miners
+namespace CoiniumServ.Mining.Banning
 {
-    /// <summary>
-    /// Miner interface that any implementations should extend.
-    /// </summary>
-    public interface IMiner
+    public class BanningManagerFactory : IBanningManagerFactory
     {
         /// <summary>
-        /// Unique subscription id for identifying the miner.
+        /// The _kernel
         /// </summary>
-        int Id { get; }
+        private readonly IApplicationContext _applicationContext;
 
         /// <summary>
-        /// Username of the miner.
+        /// Initializes a new instance of the <see cref="ShareManagerFactory" /> class.
         /// </summary>
-        string Username { get; }
+        /// <param name="applicationContext">The application context.</param>
+        public BanningManagerFactory(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
 
-        /// <summary>
-        /// The pool miner is connected to.
-        /// </summary>
-        IPool Pool { get; }
+        public IBanningManager Get(IBanningConfig banningConfig, IShareManager shareManager)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"banningConfig", banningConfig},
+                {"shareManager", shareManager},
+            };
 
-        /// <summary>
-        /// Is the miner authenticated.
-        /// </summary>
-        bool Authenticated { get; set; }
-
-        int ValidShares { get; set; }
-
-        int InvalidShares { get; set; }
-
-        /// <summary>
-        /// Authenticates the miner.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        bool Authenticate(string user, string password);
+            return _applicationContext.Container.Resolve<IBanningManager>(@params);
+        }
     }
 }

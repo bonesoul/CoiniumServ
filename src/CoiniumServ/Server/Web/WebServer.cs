@@ -42,7 +42,6 @@ namespace CoiniumServ.Server.Web
 
             BindIP = Config.BindInterface;
             Port = Config.Port;
-
             
             if (Config.Enabled)
                 Start();
