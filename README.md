@@ -5,7 +5,6 @@
 CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) mining pool network at first hand. You can check [some of pools](https://github.com/CoiniumServ/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
 * Official pools: [coinium.org](http://www.coinium.org)
-* Official site: [coiniumserv.com](http://www.coiniumserv.com)
 
 ![CoiniumServ running over mono & ubuntu](http://i.imgur.com/izIB5nq.png)
 
@@ -94,6 +93,7 @@ You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues)
   - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
   - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
   - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
+* Official site: [coiniumserv.com](http://www.coiniumserv.com)
 * [Twitter](http://twitter.com/coinium)
 * [Support forums](http://forum.coinium.org/forum/19-support/)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
