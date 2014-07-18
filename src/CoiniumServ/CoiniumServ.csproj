@@ -117,6 +117,10 @@
     <Compile Include="Crypto\Algorithms\Sha256.cs" />
     <Compile Include="Crypto\Algorithms\Shavite3.cs" />
     <Compile Include="Crypto\Algorithms\Skein.cs" />
+    <Compile Include="Crypto\Algorithms\X11.cs" />
+    <Compile Include="Crypto\Algorithms\X13.cs" />
+    <Compile Include="Crypto\Algorithms\X15.cs" />
+    <Compile Include="Crypto\Algorithms\X17.cs" />
     <Compile Include="Mining\Banning\BanManager.cs" />
     <Compile Include="Mining\Banning\BanManagerFactory.cs" />
     <Compile Include="Mining\Banning\IBanManager.cs" />
