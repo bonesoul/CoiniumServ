@@ -1,4 +1,22 @@
 {
+	# website configuration
+	"web": {
+		"enabled": true,
+		"bind": "127.0.0.1",
+		"port": 91
+	},
+    
+    # storage configuration.
+	"storage": {
+		"redis": {
+			"enabled": true,
+			"host": "10.0.0.13",
+			"port": 6379,
+            "password": "",
+            "databaseId": 0
+		}
+	},
+
     # log configuration
 	"logs": {
 		"root": "logs",
@@ -21,25 +39,14 @@
 				"filename": "debug.log",
 				"rolling": true,
 				"level": "verbose"
-			}
+			},
+			{
+				"enabled": true,
+				"type": "packet",
+				"filename": "packet.log",
+				"rolling": true,
+				"level": "verbose"
+			}			
         ]	
-	},
-
-	# website configuration
-	"web": {
-		"enabled": true,
-		"bind": "127.0.0.1",
-		"port": 80
-	},
-    
-    # storage configuration.
-	"storage": {
-		"redis": {
-			"enabled": true,
-			"host": "127.0.0.1",
-			"port": 6379,
-            "password": "",
-            "databaseId": 0
-		}
 	}
 }

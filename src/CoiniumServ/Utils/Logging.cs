@@ -38,58 +38,71 @@ namespace CoiniumServ.Utils
     {
         // TODO: change to singleton.
 
-        public const string ConsoleLogFormat = "{Timestamp:HH:mm:ss} [{Level}] [{Component:l}] [{Pool:l}] {Message}{NewLine}{Exception}";
-        public const string FileLogFormat = "{Timestamp} [{Level}] [{Component:l}] [{Pool:l}] {Message}{NewLine}{Exception}";
+        public static ILogger PacketLogger { get; private set; }
 
-        public static string RootFolder { get; private set; }
+        private const string ConsoleLogFormat = "{Timestamp:HH:mm:ss} [{Level}] [{Source:l}] [{Pool:l}] {Message}{NewLine}{Exception}";
+        private const string FileLogFormat = "{Timestamp} [{Level}] [{Source:l}] [{Pool:l}] {Message}{NewLine}{Exception}";
 
-        public static void Init(dynamic globalConfig)
+        private static string _rootFolder;
+
+        public static void Init(dynamic config)
         {
+            //Serilog.Debugging.SelfLog.Out = Console.Out; // comment out this line to see serilog's debug messages.
+
             try
             {
                 // read the root folder for logs.
-                RootFolder = !string.IsNullOrEmpty(globalConfig.logs.root) ? globalConfig.logs.root : "logs";
+                _rootFolder = !string.IsNullOrEmpty(config.logs.root) ? config.logs.root : "logs";
 
-                if (!Directory.Exists(RootFolder)) // make sure log root exists.
-                    Directory.CreateDirectory(RootFolder);
+                if (!Directory.Exists(_rootFolder)) // make sure log root exists.
+                    Directory.CreateDirectory(_rootFolder);
 
                 // create the global logger.
-                var config = new LoggerConfiguration();
-
+                var globalConfig = new LoggerConfiguration();
+                var packetLoggerConfig = new LoggerConfiguration();
+                
                 // add enrichers
-                config.Enrich.With(new ComponentEnricher());
-                config.Enrich.With(new PoolEnricher());
+                globalConfig.Enrich.With(new SourceEnricher());
+                globalConfig.Enrich.With(new PoolEnricher());
+
+                packetLoggerConfig.Enrich.With(new SourceEnricher());
+                packetLoggerConfig.Enrich.With(new PoolEnricher());
 
                 // read log targets.
-                var targets = globalConfig.logs.targets;
+                var targets = config.logs.targets;
                 foreach (dynamic target in targets)
                 {
                     var enabled = target.enabled;
+
                     if (!enabled)
                         continue;
 
                     switch ((string) target.type)
                     {
                         case "console":
-                            AddConsoleLog(config, target);
+                            AddConsoleLog(globalConfig, target);
                             break;
                         case "file":
-                            AddLogFile(config, target);
+                            AddLogFile(globalConfig, target);
+                            break;
+                        case "packet":
+                            AddPacketLog(packetLoggerConfig, target);
                             break;
                     }
                 }
 
                 // lower the default minimum level to verbose as sinks can only rise them but not lower.
-                config.MinimumLevel.Verbose();
+                globalConfig.MinimumLevel.Verbose();
+                packetLoggerConfig.MinimumLevel.Verbose();
 
-                // bind the config to global log.
-                Log.Logger = config.CreateLogger();
+                Log.Logger = globalConfig.CreateLogger(); // bind the config to global log.
+                PacketLogger = packetLoggerConfig.CreateLogger();
             }
             catch (RuntimeBinderException e)
             {
-                System.Console.ForegroundColor = ConsoleColor.Red;
-                System.Console.WriteLine("Couldn't read log targets in config.json! [{0}]", e);
-                System.Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Couldn't read log targets in config.json! [{0}]", e);
+                Console.ResetColor();
                 Environment.Exit(-1);
             }
         }
@@ -104,9 +117,26 @@ namespace CoiniumServ.Utils
         private static void AddLogFile(LoggerConfiguration config, dynamic target)
         {
             LogEventLevel level = GetLogLevel(target.level);
+
             bool rolling = target.rolling;
             var fileName = target.filename;
-            string filePath = String.Format("{0}/{1}", RootFolder, fileName);
+
+            string filePath = String.Format("{0}/{1}", _rootFolder, fileName);
+
+            if (rolling)
+                config.WriteTo.RollingFile(filePath, level, FileLogFormat);
+            else
+                config.WriteTo.File(filePath, level, FileLogFormat);
+        }
+
+        private static void AddPacketLog(LoggerConfiguration config, dynamic target)
+        {
+            LogEventLevel level = GetLogLevel(target.level);
+
+            bool rolling = target.rolling;
+            var fileName = target.filename;            
+
+            string filePath = String.Format("{0}/{1}", _rootFolder, fileName);
 
             if (rolling)
                 config.WriteTo.RollingFile(filePath, level, FileLogFormat);
@@ -136,13 +166,13 @@ namespace CoiniumServ.Utils
         }
     }
 
-    public class ComponentEnricher : ILogEventEnricher
+    public class SourceEnricher : ILogEventEnricher
     {
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
             logEvent.AddPropertyIfAbsent(logEvent.Properties.Keys.Contains("SourceContext")
-                ? propertyFactory.CreateProperty("Component", logEvent.Properties["SourceContext"].ToString().Replace("\"","").Split('.').Last())
-                : propertyFactory.CreateProperty("Component", "global"));
+                ? propertyFactory.CreateProperty("Source", logEvent.Properties["SourceContext"].ToString().Replace("\"","").Split('.').Last())
+                : propertyFactory.CreateProperty("Source", "global"));
         }
     }
 

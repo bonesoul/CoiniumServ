@@ -130,10 +130,10 @@ namespace CoiniumServ.Mining.Banning
 
             var remainingBans = _bannedIps.Count;
 
-            Log.ForContext<BanManager>().Information(
-                    expiredBans > 0
-                        ? "Cleared {0} expired bans [remaining bans: {1}]."
-                        : "No expired bans found to be cleared [remaining bans: {1}].", expiredBans, remainingBans);
+            if(expiredBans > 0)
+                Log.ForContext<BanManager>().Information("Cleared {0} expired bans [remaining bans: {1}].", expiredBans, remainingBans);
+            else
+                Log.ForContext<BanManager>().Information("No expired bans found to be cleared [remaining bans: {0}].", remainingBans);
 
             // reset the recache timer.
             _timer.Change(Config.PurgeInterval * 1000, Timeout.Infinite);

@@ -27,6 +27,7 @@ using System.Net;
 using System.Text;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Utils;
 using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
@@ -87,6 +88,8 @@ namespace CoiniumServ.Daemon
         public string MakeRawRequest(string method, params object[] parameters)
         {
             var response = MakeRawRpcRequest(new DaemonRequest(RequestCounter++, method, parameters));
+            Logging.PacketLogger.ForContext<DaemonBase>().Verbose("rx: {0}", response.PrettifyJson());
+
             return response;
         }
 
@@ -116,7 +119,7 @@ namespace CoiniumServ.Daemon
             webRequest.Method = "POST";
             webRequest.Timeout = 1000;
 
-            Log.ForContext<DaemonBase>().Verbose("Send: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
+            Logging.PacketLogger.ForContext<DaemonBase>().Verbose("tx: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
 
             byte[] byteArray = walletRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;
@@ -147,7 +150,7 @@ namespace CoiniumServ.Daemon
         {
             string json = GetJsonResponse(httpWebRequest);
 
-            Log.ForContext<DaemonBase>().Verbose("Recv: {0}", json.PrettifyJson());
+            Logging.PacketLogger.ForContext<DaemonBase>().Verbose("rx: {0}", json.PrettifyJson());
 
             try
             {

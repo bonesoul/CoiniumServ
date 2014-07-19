@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Configuration;
 using System.Text;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Mining.Miners;
@@ -30,10 +31,12 @@ using CoiniumServ.Net.Server.Sockets;
 using CoiniumServ.Server.Mining.Stratum.Errors;
 using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Server.Mining.Stratum.Service;
+using CoiniumServ.Utils;
 using CoiniumServ.Utils.Buffers;
 using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
+using Serilog.Context;
 
 namespace CoiniumServ.Server.Mining.Stratum
 {
@@ -135,7 +138,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="e"></param>
         public void Parse(ConnectionDataEventArgs e)
         {
-            Log.ForContext<StratumMiner>().Verbose("Recv:\n{0}", e.Data.ToEncodedString().PrettifyJson());
+            Logging.PacketLogger.ForContext<StratumMiner>().Verbose("rx: {0}", e.Data.ToEncodedString().PrettifyJson());
 
             var rpcResultHandler = new AsyncCallback(
                 callback =>
@@ -149,7 +152,7 @@ namespace CoiniumServ.Server.Mining.Stratum
                     var miner = (StratumMiner)context.Miner;
                     miner.Connection.Send(response);
 
-                    Log.ForContext<StratumMiner>().Verbose("Reply:\n{0}", result.PrettifyJson());
+                    Logging.PacketLogger.ForContext<StratumMiner>().Verbose("tx: {0}", result.PrettifyJson());
                 });
 
             var line = e.Data.ToEncodedString();
@@ -180,7 +183,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             Connection.Send(data);
 
             Log.ForContext<StratumMiner>().Debug("Difficulty updated to {0} for miner: {1:l}", Difficulty, Username);
-            Log.ForContext<StratumMiner>().Verbose("Send:\n{0}", data.ToEncodedString().PrettifyJson());
+            Logging.PacketLogger.ForContext<StratumMiner>().Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
         }
 
         /// <summary>
@@ -200,7 +203,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             Connection.Send(data);
 
-            Log.ForContext<StratumMiner>().Verbose("Send:\n{0}", data.ToEncodedString().PrettifyJson());
+            Logging.PacketLogger.ForContext<StratumMiner>().Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
         }
     }
 }
