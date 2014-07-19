@@ -25,8 +25,10 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Mining.Pools;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
@@ -41,12 +43,16 @@ namespace CoiniumServ.Daemon
         public string RpcPassword { get; private set; }
         public Int32 RequestCounter { get; private set; }
 
-        public virtual void Initialize(IDaemonConfig config)
+        private ILogger _logger;
+
+        public virtual void Initialize(IDaemonConfig daemonConfig, ICoinConfig coinConfig)
         {
-            var url = string.Format("{0}", config.Url);
+            _logger = Logging.PacketLogger.ForContext<Pool>().ForContext("Component", coinConfig.Name);
+
+            var url = string.Format("{0}", daemonConfig.Url);
             RpcUrl = url;
-            RpcUser = config.Username;
-            RpcPassword = config.Password;
+            RpcUser = daemonConfig.Username;
+            RpcPassword = daemonConfig.Password;
             RequestCounter = 0;
         }
 
@@ -88,7 +94,7 @@ namespace CoiniumServ.Daemon
         public string MakeRawRequest(string method, params object[] parameters)
         {
             var response = MakeRawRpcRequest(new DaemonRequest(RequestCounter++, method, parameters));
-            Logging.PacketLogger.ForContext<DaemonBase>().Verbose("rx: {0}", response.PrettifyJson());
+            _logger.Verbose("rx: {0}", response.PrettifyJson());
 
             return response;
         }
@@ -119,7 +125,7 @@ namespace CoiniumServ.Daemon
             webRequest.Method = "POST";
             webRequest.Timeout = 1000;
 
-            Logging.PacketLogger.ForContext<DaemonBase>().Verbose("tx: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
+            _logger.Verbose("tx: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
 
             byte[] byteArray = walletRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;
@@ -150,7 +156,7 @@ namespace CoiniumServ.Daemon
         {
             string json = GetJsonResponse(httpWebRequest);
 
-            Logging.PacketLogger.ForContext<DaemonBase>().Verbose("rx: {0}", json.PrettifyJson());
+            _logger.Verbose("rx: {0}", json.PrettifyJson());
 
             try
             {

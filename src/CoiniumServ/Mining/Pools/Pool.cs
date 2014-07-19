@@ -172,7 +172,7 @@ namespace CoiniumServ.Mining.Pools
             if (Config.Daemon == null || Config.Daemon.Valid == false)
                 _logger.Error("Coin daemon configuration is not valid!");
 
-            _daemonClient.Initialize(Config.Daemon);
+            _daemonClient.Initialize(Config.Daemon, Config.Coin);
         }
 
         private void InitManagers()

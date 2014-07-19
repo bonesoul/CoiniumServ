@@ -197,7 +197,7 @@ namespace CoiniumServ.Tests.Mining.Pools
             _jobManager.Initialize(pool.InstanceId);
         
             // init daemon client
-            _daemonClient.Initialize(_config.Daemon);
+            _daemonClient.Initialize(_config.Daemon, _config.Coin);
             _daemonClient.GetInfo().Returns(new Info());
             _daemonClient.GetMiningInfo().Returns(new MiningInfo());
 

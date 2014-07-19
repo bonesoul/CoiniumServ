@@ -22,6 +22,7 @@
 #endregion
 
 using System.Collections.Generic;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Responses;
 
@@ -59,6 +60,6 @@ namespace CoiniumServ.Daemon
 
         string SendMany(string fromAccount, Dictionary<string, decimal> toBitcoinAddress, int minConf = 1, string comment = "");
 
-        void Initialize(IDaemonConfig daemonConfig);        
+        void Initialize(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
     }
 }
