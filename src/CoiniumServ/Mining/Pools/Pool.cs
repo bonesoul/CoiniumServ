@@ -243,7 +243,7 @@ namespace CoiniumServ.Mining.Pools
             var miningInfo = _daemonClient.GetMiningInfo();
 
             // TODO: add downloading blocks information from getblocktemplate().
-            // TODO: make this multi-line & readable.
+            // TODO: somecoins like namecoin do not have the method getmininginfo(), so divide this information and handle exceptions.
             // TODO: read services from config so that we can print pool info even before starting the servers.
             _logger.Information("Coin symbol: {0:l} algorithm: {1:l} " +
                                                "Coin version: {2} protocol: {3} wallet: {4} " +

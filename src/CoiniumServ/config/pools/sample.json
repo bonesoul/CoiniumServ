@@ -23,7 +23,7 @@
 
 	# payment processing configuration
 	"payments": {
-		"enabled": false,
+		"enabled": true,
 		"interval": 60,
 		"minimum": 1
 	},
