@@ -182,7 +182,6 @@ namespace CoiniumServ.Server.Mining.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             Connection.Send(data);
 
-            Log.ForContext<StratumMiner>().Debug("Difficulty updated to {0} for miner: {1:l}", Difficulty, Username);
             Logging.PacketLogger.ForContext<StratumMiner>().Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
         }
 

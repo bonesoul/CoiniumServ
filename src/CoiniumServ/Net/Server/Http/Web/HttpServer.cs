@@ -32,11 +32,6 @@ namespace CoiniumServ.Net.Server.Http.Web
     public class HttpServer : IServer, IDisposable
     {
         /// <summary>
-        /// The application context
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
-
-        /// <summary>
         /// The IP address of the interface the server binded.
         /// </summary>
         public string BindIP { get; protected set; }
@@ -51,15 +46,23 @@ namespace CoiniumServ.Net.Server.Http.Web
         /// </summary>
         public bool IsListening { get; protected set; }
 
+        /// <summary>
+        /// The application context
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
+
+        private readonly ILogger _logger;
+
         public HttpServer(IApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
+            _logger = Log.ForContext<HttpServer>();
         }
 
         public bool Start()
         {
             var uri = new Uri(string.Format("http://{0}:{1}", BindIP, Port));
-            Log.ForContext<HttpServer>().Information("Web-server listening on: {0:l}", uri);
+            _logger.Information("Web-server listening on: {0:l}", uri);
 
             var hostConfiguration = new HostConfiguration();
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
@@ -75,7 +78,7 @@ namespace CoiniumServ.Net.Server.Http.Web
             }
             catch (InvalidOperationException e) // nancy requires elevated privileges to run on port 80.
             {
-                Log.ForContext<HttpServer>().Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
+                _logger.Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
                 IsListening = false;
                 return false;
             }
@@ -94,7 +97,7 @@ namespace CoiniumServ.Net.Server.Http.Web
         /// <param name="exception"></param>
         private void UnhandledExceptionHandler(Exception exception)
         {
-            Log.ForContext<HttpServer>().Error("Web-server: {0}", exception);
+            _logger.Error("Web-server: {0}", exception);
         }
 
         public void Dispose()

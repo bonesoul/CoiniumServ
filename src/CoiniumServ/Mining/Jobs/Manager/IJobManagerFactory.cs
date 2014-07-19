@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Crypto.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Jobs.Tracker;
@@ -36,13 +37,16 @@ namespace CoiniumServ.Mining.Jobs.Manager
         /// Gets the specified daemon client.
         /// </summary>
         /// <param name="daemonClient">The daemon client.</param>
-        /// <param name="jobtracker"></param>
+        /// <param name="jobTracker"></param>
         /// <param name="shareManager"></param>
         /// <param name="minerManager">The miner manager.</param>
         /// <param name="hashAlgorithm"></param>
         /// <param name="walletConfig"></param>
         /// <param name="rewardsConfig"></param>
+        /// <param name="coinConfig"></param>
         /// <returns></returns>
-        IJobManager Get(IDaemonClient daemonClient, IJobTracker jobtracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig);
+        IJobManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
+            IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig,
+            IRewardsConfig rewardsConfig, ICoinConfig coinConfig);
     }
 }

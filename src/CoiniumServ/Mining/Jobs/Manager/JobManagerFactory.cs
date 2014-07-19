@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Crypto.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Jobs.Tracker;
@@ -59,7 +60,7 @@ namespace CoiniumServ.Mining.Jobs.Manager
         /// <param name="walletConfig"></param>
         /// <param name="rewardsConfig"></param>
         /// <returns></returns>
-        public IJobManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig)
+        public IJobManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig, ICoinConfig coinConfig)
         {
             var @params = new NamedParameterOverloads
             {
@@ -69,7 +70,8 @@ namespace CoiniumServ.Mining.Jobs.Manager
                 {"minerManager", minerManager},
                 {"hashAlgorithm", hashAlgorithm},
                 {"walletConfig", walletConfig},
-                {"rewardsConfig", rewardsConfig}
+                {"rewardsConfig", rewardsConfig},
+                {"coinConfig", coinConfig}
             };
 
             return _applicationContext.Container.Resolve<IJobManager>(@params);

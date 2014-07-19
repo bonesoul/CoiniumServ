@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Persistance;
@@ -29,6 +30,6 @@ namespace CoiniumServ.Payments
 {
     public interface IPaymentProcessorFactory
     {
-        IPaymentProcessor Get(IDaemonClient daemonClient, IStorage storage, IWalletConfig walletConfig);
+        IPaymentProcessor Get(IDaemonClient daemonClient, IStorage storage, IWalletConfig walletConfig, ICoinConfig coinConfig);
     }
 }

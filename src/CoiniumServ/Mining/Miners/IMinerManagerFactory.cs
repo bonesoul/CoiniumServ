@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 
 namespace CoiniumServ.Mining.Miners
@@ -31,7 +32,8 @@ namespace CoiniumServ.Mining.Miners
         /// Gets the specified daemon client.
         /// </summary>
         /// <param name="daemonClient">The daemon client.</param>
+        /// <param name="coinConfig"></param>
         /// <returns></returns>
-        IMinerManager Get(IDaemonClient daemonClient);
+        IMinerManager Get(IDaemonClient daemonClient, ICoinConfig coinConfig);
     }
 }

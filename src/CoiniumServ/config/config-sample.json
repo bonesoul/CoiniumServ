@@ -30,21 +30,21 @@
 				"enabled": true,
 				"type": "file",
 				"filename": "server.log",
-				"rolling": true,
+				"rolling": false,
 				"level": "information"
 			},
 			{
 				"enabled": true,
 				"type": "file",
 				"filename": "debug.log",
-				"rolling": true,
+				"rolling": false,
 				"level": "verbose"
 			},
 			{
 				"enabled": true,
 				"type": "packet",
 				"filename": "packet.log",
-				"rolling": true,
+				"rolling": false,
 				"level": "verbose"
 			}			
         ]	

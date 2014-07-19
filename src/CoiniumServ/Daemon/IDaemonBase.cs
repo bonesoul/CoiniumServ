@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 
 namespace CoiniumServ.Daemon
@@ -38,6 +39,6 @@ namespace CoiniumServ.Daemon
 
         string MakeRawRequest(string method, params object[] parameters);
 
-        void Initialize(IDaemonConfig daemonConfig);
+        void Initialize(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
     }
 }

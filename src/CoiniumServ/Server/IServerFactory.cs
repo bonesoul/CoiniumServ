@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Miners;
@@ -32,7 +33,8 @@ namespace CoiniumServ.Server
 {
     public interface IServerFactory
     {
-        IMiningServer Get(string serverName, IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager);
+        IMiningServer Get(string serverName, IPool pool, IMinerManager minerManager, IJobManager jobManager,
+            IBanManager banManager, ICoinConfig coinConfig);
 
         IWebServer Get(string serverName, IPoolManager poolManager);
     }

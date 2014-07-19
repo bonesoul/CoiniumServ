@@ -22,9 +22,11 @@
 #endregion
 
 using System;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Shares;
 using CoiniumServ.Utils.Buffers;
 using CoiniumServ.Utils.Helpers.Time;
+using Serilog;
 
 namespace CoiniumServ.Mining.Vardiff
 {
@@ -35,9 +37,12 @@ namespace CoiniumServ.Mining.Vardiff
         private readonly int _bufferSize;
         private readonly float _tMin;
         private readonly float _tMax;
+        private readonly ILogger _logger;
 
-        public VardiffManager(IVardiffConfig vardiffConfig, IShareManager shareManager)
+        public VardiffManager(IShareManager shareManager, IVardiffConfig vardiffConfig, ICoinConfig coinConfig )
         {
+            _logger = Log.ForContext<VardiffManager>().ForContext("Component", coinConfig.Name);
+
             Config = vardiffConfig;
 
             if (!Config.Enabled)
@@ -94,8 +99,10 @@ namespace CoiniumServ.Mining.Vardiff
                 return;
 
             miner.Difficulty = miner.Difficulty*deltaDiff;
+            _logger.Debug("Difficulty updated to {0} for miner: {1:l}", miner.Difficulty, miner.Username);
+
             miner.SendDifficulty();
-            miner.VardiffBuffer.Clear();
+            miner.VardiffBuffer.Clear();            
         }
     }
 }

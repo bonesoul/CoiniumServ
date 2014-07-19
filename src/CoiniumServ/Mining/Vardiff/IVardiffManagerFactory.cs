@@ -21,12 +21,13 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Shares;
 
 namespace CoiniumServ.Mining.Vardiff
 {
     public interface IVardiffManagerFactory
     {
-        IVardiffManager Get(IVardiffConfig vardiffConfig, IShareManager shareManager);
+        IVardiffManager Get(IShareManager shareManager, IVardiffConfig vardiffConfig, ICoinConfig coinConfig);
     }
 }

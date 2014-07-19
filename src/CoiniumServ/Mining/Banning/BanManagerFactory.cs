@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Mining.Shares;
 using CoiniumServ.Repository.Context;
@@ -44,12 +45,13 @@ namespace CoiniumServ.Mining.Banning
             _applicationContext = applicationContext;
         }
 
-        public IBanManager Get(IBanConfig banConfig, IShareManager shareManager)
+        public IBanManager Get(IShareManager shareManager, IBanConfig banConfig,  ICoinConfig coinConfig)
         {
             var @params = new NamedParameterOverloads
             {
-                {"banConfig", banConfig},
                 {"shareManager", shareManager},
+                {"banConfig", banConfig},
+                {"coinConfig", coinConfig}
             };
 
             return _applicationContext.Container.Resolve<IBanManager>(@params);

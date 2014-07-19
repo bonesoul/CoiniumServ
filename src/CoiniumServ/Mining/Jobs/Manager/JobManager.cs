@@ -23,6 +23,7 @@
 
 using System;
 using System.Threading;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Crypto.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
@@ -56,7 +57,9 @@ namespace CoiniumServ.Mining.Jobs.Manager
 
         private readonly IRewardsConfig _rewardsConfig;
 
-        private IExtraNonce _extraNonce;
+        private IExtraNonce _extraNonce; // todo: check this.
+
+        private readonly ILogger _logger;
 
         public IExtraNonce ExtraNonce { get { return _extraNonce; } }
 
@@ -64,7 +67,7 @@ namespace CoiniumServ.Mining.Jobs.Manager
         private Timer _timer;
         private const int TimerExpiration = 60;
 
-        public JobManager(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig)
+        public JobManager(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig, ICoinConfig coinConfig)
         {
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
@@ -73,7 +76,8 @@ namespace CoiniumServ.Mining.Jobs.Manager
             _hashAlgorithm = hashAlgorithm;
             _walletConfig = walletConfig;
             _rewardsConfig = rewardsConfig;
-            _jobCounter = new JobCounter();
+            _jobCounter = new JobCounter(); // todo make this ioc based too.
+            _logger = Log.ForContext<JobManager>().ForContext("Component", coinConfig.Name);
         }
 
         public void Initialize(UInt32 instanceId)
@@ -105,9 +109,9 @@ namespace CoiniumServ.Mining.Jobs.Manager
                 return;
 
             if (initiatedByTimer)
-                Log.ForContext<JobManager>().Information("Broadcasted job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds.",job.Id, count, TimerExpiration);
+                _logger.Information("Broadcasted job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds.", job.Id, count, TimerExpiration);
             else
-                Log.ForContext<JobManager>().Information("Broadcasted job 0x{0:x} to {1} subscribers as we have just found a new block.", job.Id,count);
+                _logger.Information("Broadcasted job 0x{0:x} to {1} subscribers as we have just found a new block.", job.Id, count);
 
             _timer.Change(TimerExpiration * 1000, Timeout.Infinite); // reset the idle-block timer.
         }
@@ -147,12 +151,12 @@ namespace CoiniumServ.Mining.Jobs.Manager
             }
             catch (RpcException rpcException)
             {
-                Log.ForContext<JobManager>().Error(rpcException, "New job creation failed:");
+                _logger.Error(rpcException, "New job creation failed:");
                 return null;
             }
             catch (Exception e)
             {
-                Log.ForContext<JobManager>().Error(e, "New job creation failed:");
+                _logger.Error(e, "New job creation failed:");
                 return null;
             }
         }
@@ -181,7 +185,7 @@ namespace CoiniumServ.Mining.Jobs.Manager
             }
             catch (Exception e)
             {
-                Log.ForContext<JobManager>().Error(e, "Job broadcast failed:");
+                _logger.Error(e, "Job broadcast failed:");
                 return 0;
             }
         }

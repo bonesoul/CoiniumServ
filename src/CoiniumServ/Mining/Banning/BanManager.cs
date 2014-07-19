@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Mining.Shares;
@@ -44,8 +45,12 @@ namespace CoiniumServ.Mining.Banning
 
         private readonly Timer _timer;
 
-        public BanManager(IBanConfig banConfig, IShareManager shareManager)
+        private readonly ILogger _logger;
+
+        public BanManager(IShareManager shareManager, IBanConfig banConfig, ICoinConfig coinConfig)
         {
+            _logger = Log.ForContext<BanManager>().ForContext("Component", coinConfig.Name);
+
             Config = banConfig;
 
             if (!Config.Enabled)
@@ -81,7 +86,7 @@ namespace CoiniumServ.Mining.Banning
             }
             else // he needs a ban
             {
-                Log.ForContext<BanManager>().Information("Banned miner {0:l} because of high percentage of invalid shares: {1}%.", miner.Username, invalidPercentage);
+                _logger.Information("Banned miner {0:l} because of high percentage of invalid shares: {1}%.", miner.Username, invalidPercentage);
                 Ban(miner);
             }
         }
@@ -131,9 +136,9 @@ namespace CoiniumServ.Mining.Banning
             var remainingBans = _bannedIps.Count;
 
             if(expiredBans > 0)
-                Log.ForContext<BanManager>().Information("Cleared {0} expired bans [remaining bans: {1}].", expiredBans, remainingBans);
+                _logger.Information("Cleared {0} expired bans [remaining bans: {1}].", expiredBans, remainingBans);
             else
-                Log.ForContext<BanManager>().Information("No expired bans found to be cleared [remaining bans: {0}].", remainingBans);
+                _logger.Information("No expired bans found to be cleared [remaining bans: {0}].", remainingBans);
 
             // reset the recache timer.
             _timer.Change(Config.PurgeInterval * 1000, Timeout.Infinite);

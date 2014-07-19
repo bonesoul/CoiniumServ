@@ -26,6 +26,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using CoiniumServ.Mining.Pools;
+using CoiniumServ.Mining.Shares;
 using CoiniumServ.Repository;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Utils;
@@ -43,6 +44,8 @@ namespace CoiniumServ
         /// Used for uptime calculations.
         /// </summary>
         public static readonly DateTime StartupTime = DateTime.Now; // used for uptime calculations.
+
+        private static ILogger _logger;
 
         static void Main(string[] args)
         {
@@ -77,8 +80,9 @@ namespace CoiniumServ
             Logging.Init(globalConfig);
 
             // print a version banner.
-            Log.Information("CoiniumServ {0:l} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
-            Log.Information("Running over {0:l} {1:l}.", PlatformManager.Framework.ToString(), PlatformManager.FrameworkVersion);
+            _logger = Log.ForContext<Program>();
+            _logger.Information("CoiniumServ {0:l} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+            _logger.Information("Running over {0:l} {1:l}.", PlatformManager.Framework.ToString(), PlatformManager.FrameworkVersion);
 
             // start pool manager.
             var poolManager = kernel.Resolve<IPoolManagerFactory>().Get();
@@ -110,11 +114,11 @@ namespace CoiniumServ
 
             if (e.IsTerminating)
             {
-                Log.Fatal(exception, "Terminating program because of unhandled exception!");
+                _logger.Fatal(exception, "Terminating program because of unhandled exception!");
                 Environment.Exit(-1);
             }
             else
-                Log.Error(exception, "Caught unhandled exception");
+                _logger.Error(exception, "Caught unhandled exception");
         }
 
         #endregion

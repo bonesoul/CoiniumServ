@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Mining.Pools.Config;
@@ -54,11 +55,14 @@ namespace CoiniumServ.Payments
         private readonly IWalletConfig _walletConfig;
         private string _poolAccount = string.Empty;
 
-        public PaymentProcessor(IDaemonClient daemonClient, IStorage storage , IWalletConfig walletConfig)
+        private readonly ILogger _logger;
+
+        public PaymentProcessor(IDaemonClient daemonClient, IStorage storage , IWalletConfig walletConfig, ICoinConfig coinConfig)
         {
             _daemonClient = daemonClient;
             _storage = storage;
             _walletConfig = walletConfig;
+            _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", coinConfig.Name);
         }
 
         public void Initialize(IPaymentConfig config)
@@ -109,7 +113,7 @@ namespace CoiniumServ.Payments
                 ProcessRemainingBalances(workerBalances); // process the remaining balances.
                 ProcessRounds(rounds); // process the rounds.
 
-                Log.ForContext<PaymentProcessor>().Information("Payments processed - took {0:0.000} seconds.", (float)_stopWatch.ElapsedMilliseconds/1000);
+                _logger.Information("Payments processed - took {0:0.000} seconds.", (float)_stopWatch.ElapsedMilliseconds / 1000);
                 
                 _stopWatch.Reset();
 
@@ -173,7 +177,7 @@ namespace CoiniumServ.Payments
 
                 if (totalAmountToPay <= 0)
                 {
-                    Log.ForContext<PaymentProcessor>().Information("No pending payments found.");
+                    _logger.Information("No pending payments found.");
                     return;
                 }
 
@@ -185,11 +189,11 @@ namespace CoiniumServ.Payments
                     balance.Paid = true;
                 }
 
-                Log.ForContext<PaymentProcessor>().Information("Paid a total of {0} coins to {1} workers.", totalAmountToPay, workerBalances.Count);
+                _logger.Information("Paid a total of {0} coins to {1} workers.", totalAmountToPay, workerBalances.Count);
             }
             catch (RpcException e)
             {
-                Log.ForContext<PaymentProcessor>().Error("Payment failed: {0} [{1}] - payouts: {2}.", e.Message, e.Code, payments);
+                _logger.Error("Payment failed: {0} [{1}] - payouts: {2}.", e.Message, e.Code, payments);
             }
         }
 
@@ -334,7 +338,7 @@ namespace CoiniumServ.Payments
             if (result.IsValid && result.IsMine)
                 return true;
 
-            Log.ForContext<PaymentProcessor>().Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _walletConfig.Adress);
+            _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _walletConfig.Adress);
             return false;
         }
 
@@ -361,12 +365,12 @@ namespace CoiniumServ.Payments
             }
             catch (RpcException e)
             {
-                Log.ForContext<PaymentProcessor>().Error("Halted as getbalance call failed: {0}.", e.Message);
+                _logger.Error("Halted as getbalance call failed: {0}.", e.Message);
                 return false;
             }
             catch (Exception)
             {
-                Log.ForContext<PaymentProcessor>().Error("Halted as we can not determine satoshis in a coin - failed parsing: {0}", json);
+                _logger.Error("Halted as we can not determine satoshis in a coin - failed parsing: {0}", json);
                 return false;
             }
         }

@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Persistance;
@@ -36,6 +37,6 @@ namespace CoiniumServ.Mining.Shares
         /// <param name="jobTracker"></param>
         /// <param name="storage"></param>
         /// <returns></returns>
-        IShareManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage);
+        IShareManager Get(IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, ICoinConfig coinConfig);
     }
 }
