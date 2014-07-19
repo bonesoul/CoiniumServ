@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using Serilog;
 
 namespace CoiniumServ.Utils.Platform
 {
@@ -31,37 +32,44 @@ namespace CoiniumServ.Utils.Platform
     public class PlatformManager
     {
         /// <summary>
-        /// Current .Net framework.
+        /// Current framework we are running on.
         /// </summary>
-        public static NetFrameworks Framework { get; private set; }
+        public static Frameworks Framework { get; private set; }
 
         /// <summary>
-        /// Current .Net framework's version.
+        /// Is the framework .Net 4.5?
+        /// </summary>
+        public static bool IsDotNet45 { get; private set; }
+
+        /// <summary>
+        /// Current framework's version.
         /// </summary>
         public static Version FrameworkVersion { get; private set; }
 
+        private static readonly ILogger Logger;
+
         static PlatformManager()
         {
+            Logger = Log.ForContext<PlatformManager>();
+
             IdentifyPlatform();
         }
+
+        public static void PrintPlatformBanner()
+        {
+            Logger.Information("Running over {0:l} {1:l} ({2:l}).", Framework == Frameworks.DotNet ? ".Net" : "Mono",
+                IsDotNet45 ? "4.5" : "4",
+                FrameworkVersion);
+        }        
 
         /// <summary>
         /// Identifies the current platform and used frameworks.
         /// </summary>
         private static void IdentifyPlatform()
         {
-            // find dot.net framework.
-            Framework = IsRunningOnMono() ? NetFrameworks.Mono : NetFrameworks.DotNet;
+            Framework = Type.GetType("Mono.Runtime") != null ? Frameworks.Mono : Frameworks.DotNet;
+            IsDotNet45 = Type.GetType("System.Reflection.ReflectionContext", false) != null; /* ReflectionContext exists from .NET 4.5 onwards. */
             FrameworkVersion = Environment.Version;
-        }
-
-        /// <summary>
-        /// Returns true if code runs over Mono framework.
-        /// </summary>
-        /// <returns>true if running over Mono, false otherwise.</returns>
-        public static bool IsRunningOnMono()
-        {
-            return Type.GetType("Mono.Runtime") != null;
         }
     }
 }

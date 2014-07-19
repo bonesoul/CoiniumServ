@@ -56,7 +56,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IBlocks, Blocks>().AsMultiInstance();
             _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();
             _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
-            _applicationContext.Container.Register<IAlgorithms, Mining.Pools.Statistics.Algorithms>().AsSingleton();
+            _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
         }
     }
 }

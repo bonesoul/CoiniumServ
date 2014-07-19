@@ -21,7 +21,10 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Config;
 
 namespace CoiniumServ.Factories
 {
@@ -36,5 +39,13 @@ namespace CoiniumServ.Factories
         /// <param name="algorithm"></param>
         /// <returns></returns>
         IHashAlgorithm GetHashAlgorithm(string algorithm);
+
+        /// <summary>
+        /// Returns a new instance of daemon client.
+        /// </summary>
+        /// <param name="daemonConfig"></param>
+        /// <param name="coinConfig"></param>
+        /// <returns></returns>
+        IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
     }
 }

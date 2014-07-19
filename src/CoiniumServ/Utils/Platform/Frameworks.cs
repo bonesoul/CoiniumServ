@@ -25,9 +25,15 @@ namespace CoiniumServ.Utils.Platform
     /// <summary>
     /// .Net frameworks.
     /// </summary>
-    public enum NetFrameworks
+    public enum Frameworks
     {
         DotNet,
         Mono
+    }
+
+    public enum DotNetVersion
+    {
+        DotNet4,
+        DotNet45
     }
 }

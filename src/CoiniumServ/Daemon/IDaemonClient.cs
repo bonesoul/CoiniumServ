@@ -59,7 +59,5 @@ namespace CoiniumServ.Daemon
         string GetAccount(string bitcoinAddress);
 
         string SendMany(string fromAccount, Dictionary<string, decimal> toBitcoinAddress, int minConf = 1, string comment = "");
-
-        void Initialize(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
     }
 }

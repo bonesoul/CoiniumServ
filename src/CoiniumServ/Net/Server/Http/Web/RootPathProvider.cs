@@ -32,7 +32,7 @@ namespace CoiniumServ.Net.Server.Http.Web
     {
         public string GetRootPath()
         {
-            return string.Format(PlatformManager.IsRunningOnMono() ? "{0}/web/default" : "{0}\\web\\default",
+            return string.Format(PlatformManager.Framework == Frameworks.Mono ? "{0}/web/default" : "{0}\\web\\default",
                 Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
         }
     }

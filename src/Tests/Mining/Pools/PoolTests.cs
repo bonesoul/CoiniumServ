@@ -111,6 +111,11 @@ namespace CoiniumServ.Tests.Mining.Pools
             // pool-config mockup.
             _config = Substitute.For<IPoolConfig>();
             _config.Daemon.Valid.Returns(true);
+
+            // init daemon client
+            _daemonClient = _objectFactory.GetDaemonClient(_config.Daemon, _config.Coin);
+            _daemonClient.GetInfo().Returns(new Info());
+            _daemonClient.GetMiningInfo().Returns(new MiningInfo());
         }
 
         /// <summary>
@@ -122,8 +127,7 @@ namespace CoiniumServ.Tests.Mining.Pools
             var pool = new Pool(
                 _objectFactory,
                 _serverFactory,
-                _serviceFactory,
-                _daemonClient,
+                _serviceFactory,                
                 _minerManagerFactory,
                 _jobTrackerFactory,
                 _jobManagerFactory,
@@ -147,7 +151,6 @@ namespace CoiniumServ.Tests.Mining.Pools
                 _objectFactory, 
                 _serverFactory, 
                 _serviceFactory, 
-                _daemonClient,
                 _minerManagerFactory,
                 _jobTrackerFactory,
                 _jobManagerFactory, 
@@ -194,12 +197,7 @@ namespace CoiniumServ.Tests.Mining.Pools
             _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm, walletConfig,
                 rewardsConfig, _config.Coin).Returns(_jobManager);
 
-            _jobManager.Initialize(pool.InstanceId);
-        
-            // init daemon client
-            _daemonClient.Initialize(_config.Daemon, _config.Coin);
-            _daemonClient.GetInfo().Returns(new Info());
-            _daemonClient.GetMiningInfo().Returns(new MiningInfo());
+            _jobManager.Initialize(pool.InstanceId);       
 
             // init server
             _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager, _banManager, _config.Coin).Returns(_miningServer);

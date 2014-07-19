@@ -69,7 +69,7 @@ namespace CoiniumServ.Mining.Pools
         private readonly IVardiffManagerFactory _vardiffManagerFactory;
         private readonly IBanManagerFactory _banningManagerFactory;
 
-        private readonly IDaemonClient _daemonClient;
+        private IDaemonClient _daemonClient;
         private readonly IServerFactory _serverFactory;
         private IMinerManager _minerManager;
         private IJobTracker _jobTracker;
@@ -93,7 +93,7 @@ namespace CoiniumServ.Mining.Pools
         /// <summary>
         /// Initializes a new instance of the <see cref="Pool" /> class.
         /// </summary>
-        /// <param name="hashAlgorithmFactory">The hash algorithm factory.</param>
+        /// <param name="objectFactory"></param>
         /// <param name="serverFactory">The server factory.</param>
         /// <param name="serviceFactory">The service factory.</param>
         /// <param name="client">The client.</param>
@@ -110,7 +110,6 @@ namespace CoiniumServ.Mining.Pools
             IObjectFactory objectFactory,
             IServerFactory serverFactory, 
             IServiceFactory serviceFactory,
-            IDaemonClient client, 
             IMinerManagerFactory minerManagerFactory, 
             IJobTrackerFactory jobTrackerFactory,
             IJobManagerFactory jobManagerFactory, 
@@ -126,7 +125,6 @@ namespace CoiniumServ.Mining.Pools
 
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
             Enforce.ArgumentNotNull(serviceFactory, "IServiceFactory");
-            Enforce.ArgumentNotNull(client, "IDaemonClient");
             Enforce.ArgumentNotNull(minerManagerFactory, "IMinerManagerFactory");
             Enforce.ArgumentNotNull(jobTrackerFactory, "IJobTrackerFactory");
             Enforce.ArgumentNotNull(jobManagerFactory, "IJobManagerFactory");
@@ -138,7 +136,6 @@ namespace CoiniumServ.Mining.Pools
 
             _objectFactory = objectFactory;
 
-            _daemonClient = client;
             _minerManagerFactory = minerManagerFactory;
             _jobManagerFactory = jobManagerFactory;
             _jobTrackerFactory = jobTrackerFactory;
@@ -177,7 +174,7 @@ namespace CoiniumServ.Mining.Pools
             if (Config.Daemon == null || Config.Daemon.Valid == false)
                 _logger.Error("Coin daemon configuration is not valid!");
 
-            _daemonClient.Initialize(Config.Daemon, Config.Coin);
+            _daemonClient = _objectFactory.GetDaemonClient(Config.Daemon, Config.Coin);
         }
 
         private void InitManagers()

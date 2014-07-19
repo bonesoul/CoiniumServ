@@ -24,6 +24,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Requests;
+using CoiniumServ.Daemon.Responses;
+
 /* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
 /* Possible alternative implementations:
@@ -35,8 +40,6 @@ using System.Linq;
 
 // Original bitcoin api call list: https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_Calls_list
 // Rpc error codes: https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
-using CoiniumServ.Daemon.Requests;
-using CoiniumServ.Daemon.Responses;
 
 namespace CoiniumServ.Daemon
 {
@@ -46,6 +49,10 @@ namespace CoiniumServ.Daemon
     public class DaemonClient : DaemonBase, IDaemonClient
     {
         public static readonly object[] EmptyString = {}; // used as empty parameter.
+
+        public DaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig)
+            :base(daemonConfig, coinConfig)
+        { }
 
         /// <summary>
         /// Version 0.8: Attempts add or remove node from the addnode list or try a connection to node once.

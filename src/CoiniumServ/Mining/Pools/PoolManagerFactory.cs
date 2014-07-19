@@ -41,7 +41,7 @@ namespace CoiniumServ.Mining.Pools
 
         public IPoolManager Get()
         {
-            return _poolManager ?? (_poolManager = _applicationContext.Container.Resolve<IPoolManager>());
+            return _applicationContext.Container.Resolve<IPoolManager>();
         }
     }
 }

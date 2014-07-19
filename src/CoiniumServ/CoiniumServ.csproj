@@ -263,7 +263,7 @@
     <Compile Include="Utils\Helpers\Time\TimeHelpers.cs" />
     <Compile Include="Utils\Buffers\IRingBuffer.cs" />
     <Compile Include="Utils\Logging.cs" />
-    <Compile Include="Utils\Platform\Framework.cs" />
+    <Compile Include="Utils\Platform\Frameworks.cs" />
     <Compile Include="Utils\Platform\PlatformManager.cs" />
     <Compile Include="Utils\Buffers\RingBuffer.cs" />
     <Compile Include="Utils\Versions\VersionInfo.cs" />
