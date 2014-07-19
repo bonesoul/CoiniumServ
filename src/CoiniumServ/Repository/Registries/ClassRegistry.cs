@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using CoiniumServ.Crypto.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Pools;
@@ -45,20 +44,6 @@ namespace CoiniumServ.Repository.Registries
 
         public void RegisterInstances()
         {
-            // hash algorithms
-            _applicationContext.Container.Register<IHashAlgorithm, Blake>(Crypto.Algorithms.Algorithms.Blake).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Fugue>(Crypto.Algorithms.Algorithms.Fugue).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Groestl>(Crypto.Algorithms.Algorithms.Groestl).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Keccak>(Crypto.Algorithms.Algorithms.Keccak).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(Crypto.Algorithms.Algorithms.Scrypt).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Sha256>(Crypto.Algorithms.Algorithms.Sha256).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Shavite3>(Crypto.Algorithms.Algorithms.Shavite3).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Skein>(Crypto.Algorithms.Algorithms.Skein).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X11>(Crypto.Algorithms.Algorithms.X11).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X13>(Crypto.Algorithms.Algorithms.X13).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X15>(Crypto.Algorithms.Algorithms.X15).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X17>(Crypto.Algorithms.Algorithms.X17).AsSingleton();
-
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();

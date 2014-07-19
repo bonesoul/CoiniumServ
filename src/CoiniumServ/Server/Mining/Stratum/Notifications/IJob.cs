@@ -23,8 +23,8 @@
 
 using System;
 using System.Collections.Generic;
-using CoiniumServ.Crypto.Algorithms;
-using CoiniumServ.Crypto.Merkle;
+using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Cryptology.Merkle;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Transactions;
 using CoiniumServ.Utils.Numerics;

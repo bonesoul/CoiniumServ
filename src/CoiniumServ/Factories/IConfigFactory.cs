@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -20,15 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Crypto.Algorithms
+
+namespace CoiniumServ.Factories
 {
-    public interface IHashAlgorithmFactory
+    /// <summary>
+    /// Configuration factory that handles configs.
+    /// </summary>
+    public interface IConfigFactory
     {
-        /// <summary>
-        /// Gets the specified algorithm name.
-        /// </summary>
-        /// <param name="algorithmName">Name of the algorithm.</param>
-        /// <returns></returns>
-        IHashAlgorithm Get(string algorithmName);
     }
 }

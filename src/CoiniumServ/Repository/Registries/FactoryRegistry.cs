@@ -22,7 +22,7 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Factories;
 using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Jobs.Tracker;
@@ -52,8 +52,9 @@ namespace CoiniumServ.Repository.Registries
 
         public void RegisterInstances()
         {
+            _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
+
             _applicationContext.Container.Register<IPoolManagerFactory, PoolManagerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithmFactory, HashAlgorithmFactory>().AsSingleton();
             _applicationContext.Container.Register<IPoolFactory, PoolFactory>().AsSingleton();
             _applicationContext.Container.Register<IServerFactory, ServerFactory>().AsSingleton();
             _applicationContext.Container.Register<IServiceFactory, ServiceFactory>().AsSingleton();

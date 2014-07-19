@@ -21,24 +21,12 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Cryptology;
-
-namespace CoiniumServ.Transactions
+namespace CoiniumServ.Factories
 {
     /// <summary>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
+    /// Configuration factory that handles configs.
     /// </summary>
-    public class OutPoint
+    public class ConfigFactory:IConfigFactory
     {
-        /// <summary>
-        /// The hash of the referenced transaction - as we creating a generation transaction - none.
-        /// </summary>
-        public Hash Hash { get; set; }
-
-        /// <summary>
-        /// The index of the specific output in the transaction. The first output is 0, etc.
-        /// </summary>
-        public UInt32 Index { get; set; }
     }
 }

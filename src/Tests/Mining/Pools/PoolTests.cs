@@ -22,10 +22,10 @@
 #endregion
 
 using System;
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Factories;
 using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Jobs.Tracker;
@@ -49,12 +49,12 @@ namespace CoiniumServ.Tests.Mining.Pools
     public class PoolTests
     {
         // factory mocks
+        private readonly IObjectFactory _objectFactory;
         private readonly IServerFactory _serverFactory;
         private readonly IServiceFactory _serviceFactory;
         private readonly IJobManagerFactory _jobManagerFactory;
         private readonly IJobTrackerFactory _jobTrackerFactory;
         private readonly IShareManagerFactory _shareManagerFactory;
-        private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
         private readonly IMinerManagerFactory _minerManagerFactory;
         private readonly IStorageFactory _storageFactory;
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
@@ -82,9 +82,9 @@ namespace CoiniumServ.Tests.Mining.Pools
         /// </summary>
         public PoolTests()
         {
+            _objectFactory = Substitute.For<IObjectFactory>();
             _jobManagerFactory = Substitute.For<IJobManagerFactory>();
             _jobTrackerFactory = Substitute.For<IJobTrackerFactory>();
-            _hashAlgorithmFactory = Substitute.For<IHashAlgorithmFactory>();
             _shareManagerFactory = Substitute.For<IShareManagerFactory>();
             _minerManagerFactory = Substitute.For<IMinerManagerFactory>();
             _serverFactory = Substitute.For<IServerFactory>();
@@ -120,7 +120,7 @@ namespace CoiniumServ.Tests.Mining.Pools
         public void ConstructorTest_NonNullParams_ShouldSucceed()
         {
             var pool = new Pool(
-                _hashAlgorithmFactory,
+                _objectFactory,
                 _serverFactory,
                 _serviceFactory,
                 _daemonClient,
@@ -144,7 +144,7 @@ namespace CoiniumServ.Tests.Mining.Pools
         public void InitializationTest_NonNullParams_ShouldSuccess()
         {
             var pool = new Pool(
-                _hashAlgorithmFactory, 
+                _objectFactory, 
                 _serverFactory, 
                 _serviceFactory, 
                 _daemonClient,
@@ -162,7 +162,7 @@ namespace CoiniumServ.Tests.Mining.Pools
 
             // initialize hash algorithm
             var hashAlgorithm = Substitute.For<IHashAlgorithm>();
-            _hashAlgorithmFactory.Get(_config.Coin.Algorithm).Returns(hashAlgorithm);
+            _objectFactory.GetHashAlgorithm(_config.Coin.Algorithm).Returns(hashAlgorithm);
 
             // initialize the miner manager.
             _minerManagerFactory.Get(_daemonClient, _config.Coin);

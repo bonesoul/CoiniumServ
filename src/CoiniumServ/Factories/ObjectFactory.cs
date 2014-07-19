@@ -21,24 +21,38 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Cryptology;
+using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Repository.Context;
 
-namespace CoiniumServ.Transactions
+namespace CoiniumServ.Factories
 {
     /// <summary>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
+    /// Object factory that creates instances of objects
     /// </summary>
-    public class OutPoint
+    public class ObjectFactory:IObjectFactory
     {
         /// <summary>
-        /// The hash of the referenced transaction - as we creating a generation transaction - none.
+        /// The application context for internal use.
         /// </summary>
-        public Hash Hash { get; set; }
+        private readonly IApplicationContext _applicationContext;
 
         /// <summary>
-        /// The index of the specific output in the transaction. The first output is 0, etc.
+        /// Initializes a new instance of the <see cref="ObjectFactory" /> class.
         /// </summary>
-        public UInt32 Index { get; set; }
+        /// <param name="applicationContext">The application context.</param>
+        public ObjectFactory(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
+
+        /// <summary>
+        /// Returns instance of the given hash algorithm.
+        /// </summary>
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
+        public IHashAlgorithm GetHashAlgorithm(string algorithm)
+        {
+            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
+        }
     }
 }

@@ -24,7 +24,7 @@
 using System;
 using System.Dynamic;
 using System.Linq;
-using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools.Config;

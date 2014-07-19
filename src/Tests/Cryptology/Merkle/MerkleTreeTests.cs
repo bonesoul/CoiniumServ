@@ -22,7 +22,7 @@
 #endregion
 
 using System.Linq;
-using CoiniumServ.Crypto.Merkle;
+using CoiniumServ.Cryptology.Merkle;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Transactions.Utils;
@@ -31,7 +31,7 @@ using Newtonsoft.Json;
 using Should.Fluent;
 using Xunit;
 
-namespace CoiniumServ.Tests.Crypto.Merkle
+namespace CoiniumServ.Tests.Cryptology.Merkle
 {
     public class MerkleTreeTests
     {

@@ -21,24 +21,36 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Cryptology;
+using System.Globalization;
+using CoiniumServ.Utils.Numerics;
 
-namespace CoiniumServ.Transactions
+namespace CoiniumServ.Cryptology.Algorithms
 {
-    /// <summary>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
-    /// </summary>
-    public class OutPoint
+    public static class Algorithms
     {
-        /// <summary>
-        /// The hash of the referenced transaction - as we creating a generation transaction - none.
-        /// </summary>
-        public Hash Hash { get; set; }
+        public const string Blake = "blake";
+        public const string Fugue = "fugue";
+        public const string Groestl = "groestl";
+        public const string Keccak = "keccak";
+        public const string Scrypt = "scrypt";
+        public const string Sha256 = "sha256";
+        public const string Shavite3 = "shavite3";
+        public const string Skein = "skein";
+        public const string X11 = "X11";
+        public const string X13 = "X13";
+        public const string X15 = "X15";
+        public const string X17 = "X17";
+
+        // todo: add hefty1, qubit support
 
         /// <summary>
-        /// The index of the specific output in the transaction. The first output is 0, etc.
+        /// Global diff1
         /// </summary>
-        public UInt32 Index { get; set; }
+        public static BigInteger Diff1 { get; private set; }
+
+        static Algorithms()
+        {
+            Diff1 = BigInteger.Parse("00000000ffff0000000000000000000000000000000000000000000000000000", NumberStyles.HexNumber);                                    
+        }
     }
 }

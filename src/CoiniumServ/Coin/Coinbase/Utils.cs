@@ -25,7 +25,7 @@ using System;
 using System.IO;
 using System.Linq;
 using CoiniumServ.Coin.Address;
-using CoiniumServ.Crypto;
+using CoiniumServ.Cryptology;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Numerics;
 using Gibbed.IO;

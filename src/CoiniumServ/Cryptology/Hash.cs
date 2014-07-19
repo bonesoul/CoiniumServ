@@ -30,7 +30,7 @@ using Org.BouncyCastle.Utilities.Encoders;
 
 // originally from: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Sha256Hash.cs
 
-namespace CoiniumServ.Crypto
+namespace CoiniumServ.Cryptology
 {
     /// <summary>
     /// A Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a

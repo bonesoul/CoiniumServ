@@ -53,6 +53,7 @@ namespace CoiniumServ.Repository.Registries
                     typeof(ServiceRegistry),
                     typeof(ClassRegistry),
                     typeof(FactoryRegistry),
+                    typeof(AlgorithmRegistry),
                 });
         }
     }

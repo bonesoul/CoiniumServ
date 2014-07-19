@@ -26,8 +26,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using CoiniumServ.Coin.Helpers;
-using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
+using CoiniumServ.Factories;
 using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Jobs.Tracker;
@@ -55,20 +56,21 @@ namespace CoiniumServ.Mining.Pools
 
         public IPerPool Statistics { get; private set; }
 
-        private readonly IDaemonClient _daemonClient;
-        private readonly IServerFactory _serverFactory;
+        private readonly IObjectFactory _objectFactory;
+
         private readonly IServiceFactory _serviceFactory;
         private readonly IJobTrackerFactory _jobTrackerFactory;
         private readonly IJobManagerFactory _jobManagerFactory;
         private readonly IShareManagerFactory _shareManagerFactory;
         private readonly IMinerManagerFactory _minerManagerFactory;
-        private readonly IHashAlgorithmFactory _hashAlgorithmFactory;
         private readonly IStorageFactory _storageFactory;
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IStatisticsObjectFactory _statisticsObjectFactory;
         private readonly IVardiffManagerFactory _vardiffManagerFactory;
         private readonly IBanManagerFactory _banningManagerFactory;
 
+        private readonly IDaemonClient _daemonClient;
+        private readonly IServerFactory _serverFactory;
         private IMinerManager _minerManager;
         private IJobTracker _jobTracker;
         private IJobManager _jobManager;
@@ -105,7 +107,7 @@ namespace CoiniumServ.Mining.Pools
         /// <param name="vardiffManagerFactory"></param>
         /// <param name="banningManagerFactory"></param>
         public Pool(
-            IHashAlgorithmFactory hashAlgorithmFactory, 
+            IObjectFactory objectFactory,
             IServerFactory serverFactory, 
             IServiceFactory serviceFactory,
             IDaemonClient client, 
@@ -119,7 +121,9 @@ namespace CoiniumServ.Mining.Pools
             IVardiffManagerFactory vardiffManagerFactory,
             IBanManagerFactory banningManagerFactory)
         {
-            Enforce.ArgumentNotNull(hashAlgorithmFactory, "IHashAlgorithmFactory");
+
+            Enforce.ArgumentNotNull(objectFactory, "IObjectFactory");
+
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
             Enforce.ArgumentNotNull(serviceFactory, "IServiceFactory");
             Enforce.ArgumentNotNull(client, "IDaemonClient");
@@ -132,6 +136,8 @@ namespace CoiniumServ.Mining.Pools
             Enforce.ArgumentNotNull(vardiffManagerFactory, "IVardiffManagerFactory");
             Enforce.ArgumentNotNull(banningManagerFactory, "IBanningManagerFactory");
 
+            _objectFactory = objectFactory;
+
             _daemonClient = client;
             _minerManagerFactory = minerManagerFactory;
             _jobManagerFactory = jobManagerFactory;
@@ -139,7 +145,6 @@ namespace CoiniumServ.Mining.Pools
             _shareManagerFactory = shareManagerFactory;
             _serverFactory = serverFactory;
             _serviceFactory = serviceFactory;
-            _hashAlgorithmFactory = hashAlgorithmFactory;
             _storageFactory = storageFactory;
             _paymentProcessorFactory = paymentProcessorFactory;
             _statisticsObjectFactory = statisticsObjectFactory;
@@ -178,7 +183,7 @@ namespace CoiniumServ.Mining.Pools
         private void InitManagers()
         {
             // init the algorithm
-            _hashAlgorithm = _hashAlgorithmFactory.Get(Config.Coin.Algorithm);
+            _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
 
             _storage = _storageFactory.Get(Storages.Redis, Config);
 

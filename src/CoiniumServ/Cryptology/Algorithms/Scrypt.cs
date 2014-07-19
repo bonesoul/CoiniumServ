@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -21,34 +21,49 @@
 // 
 #endregion
 
-using CoiniumServ.Repository.Context;
+using System;
+using CryptSharp.Utility;
 
-namespace CoiniumServ.Crypto.Algorithms
+namespace CoiniumServ.Cryptology.Algorithms
 {
-    public class HashAlgorithmFactory : IHashAlgorithmFactory
+    public class Scrypt : IHashAlgorithm
     {
         /// <summary>
-        /// The application context.
+        /// Gets the multiplier.
         /// </summary>
-        private readonly IApplicationContext _applicationContext;
+        /// <value>
+        /// The multiplier.
+        /// </value>
+        public UInt32 Multiplier { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HashAlgorithmFactory" /> class.
+        /// N parameter - CPU/memory cost parameter.
         /// </summary>
-        /// <param name="applicationContext">The application context.</param>
-        public HashAlgorithmFactory(IApplicationContext applicationContext)
+        private readonly int _n;
+
+        /// <summary>
+        /// R parameter - block size.
+        /// </summary>
+        private readonly int _r;
+
+        /// <summary>
+        /// P - parallelization parameter -  a large value of p can increase computational 
+        /// cost of scrypt without increasing the memory usage.
+        /// </summary>
+        private readonly int _p;
+
+        public Scrypt()
         {
-            _applicationContext = applicationContext;
+            _n = 1024;
+            _r = 1;
+            _p = 1;
+
+            Multiplier = (UInt32) Math.Pow(2, 16);
         }
 
-        /// <summary>
-        /// Gets the specified algorithm name.
-        /// </summary>
-        /// <param name="algorithm">Name of the algorithm.</param>
-        /// <returns></returns>
-        public IHashAlgorithm Get(string algorithm)
+        public byte[] Hash(byte[] input, dynamic config)
         {
-            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
+            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
         }
     }
 }

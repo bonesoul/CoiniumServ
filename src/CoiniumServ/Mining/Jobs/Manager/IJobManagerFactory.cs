@@ -22,7 +22,7 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Miners;

@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -22,23 +22,13 @@
 #endregion
 
 using System;
-using CoiniumServ.Cryptology;
 
-namespace CoiniumServ.Transactions
+namespace CoiniumServ.Cryptology.Algorithms
 {
-    /// <summary>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
-    /// </summary>
-    public class OutPoint
+    public interface IHashAlgorithm
     {
-        /// <summary>
-        /// The hash of the referenced transaction - as we creating a generation transaction - none.
-        /// </summary>
-        public Hash Hash { get; set; }
+        UInt32 Multiplier { get; }
 
-        /// <summary>
-        /// The index of the specific output in the transaction. The first output is 0, etc.
-        /// </summary>
-        public UInt32 Index { get; set; }
+        byte[] Hash(byte[] input, dynamic config);
     }
 }

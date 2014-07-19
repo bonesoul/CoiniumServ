@@ -24,7 +24,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace CoiniumServ.Crypto
+namespace CoiniumServ.Cryptology
 {
     public static class Utils
     {

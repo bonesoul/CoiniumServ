@@ -21,24 +21,32 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Cryptology;
+using System.Security.Cryptography;
 
-namespace CoiniumServ.Transactions
+namespace CoiniumServ.Cryptology.Algorithms
 {
-    /// <summary>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
-    /// </summary>
-    public class OutPoint
+    public class Sha256:IHashAlgorithm
     {
-        /// <summary>
-        /// The hash of the referenced transaction - as we creating a generation transaction - none.
-        /// </summary>
-        public Hash Hash { get; set; }
+        public uint Multiplier { get; private set; }
 
-        /// <summary>
-        /// The index of the specific output in the transaction. The first output is 0, etc.
-        /// </summary>
-        public UInt32 Index { get; set; }
+        private readonly SHA256Managed _algorithm;
+
+        public Sha256()
+        {
+            _algorithm = new SHA256Managed();
+
+            Multiplier = 1;           
+        }
+
+        public byte[] Hash(byte[] input, dynamic config)
+        {
+            return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
+        }
+
+        public byte[] DoubleDigest(byte[] input)
+        {
+            var first = _algorithm.ComputeHash(input);
+            return _algorithm.ComputeHash(first);
+        }
     }
 }

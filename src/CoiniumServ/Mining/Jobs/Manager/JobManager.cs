@@ -24,7 +24,7 @@
 using System;
 using System.Threading;
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Mining.Jobs.Tracker;

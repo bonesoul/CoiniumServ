@@ -26,7 +26,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using CoiniumServ.Mining.Pools;
-using CoiniumServ.Mining.Shares;
 using CoiniumServ.Repository;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Utils;

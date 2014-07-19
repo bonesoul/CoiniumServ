@@ -22,23 +22,26 @@
 #endregion
 
 using System;
-using CoiniumServ.Cryptology;
+using HashLib;
 
-namespace CoiniumServ.Transactions
+namespace CoiniumServ.Cryptology.Algorithms
 {
-    /// <summary>
-    /// Structure:  https://en.bitcoin.it/wiki/Protocol_specification#tx
-    /// </summary>
-    public class OutPoint
+    public class Blake : IHashAlgorithm
     {
-        /// <summary>
-        /// The hash of the referenced transaction - as we creating a generation transaction - none.
-        /// </summary>
-        public Hash Hash { get; set; }
+        public uint Multiplier { get; private set; }
 
-        /// <summary>
-        /// The index of the specific output in the transaction. The first output is 0, etc.
-        /// </summary>
-        public UInt32 Index { get; set; }
+        private readonly IHash _hasher;
+
+        public Blake()
+        {
+            _hasher = HashFactory.Crypto.SHA3.CreateBlake256();
+
+            Multiplier = (UInt32) Math.Pow(2, 8);
+        }
+
+        public byte[] Hash(byte[] input, dynamic config)
+        {
+            return _hasher.ComputeBytes(input).GetBytes();
+        }
     }
 }
