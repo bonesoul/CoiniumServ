@@ -29,8 +29,8 @@ using AustinHarris.JsonRpc;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools;
 using CoiniumServ.Server.Mining.Vanilla.Service;
+using CoiniumServ.Utils;
 using CoiniumServ.Utils.Extensions;
-using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla
 {
@@ -99,13 +99,13 @@ namespace CoiniumServ.Server.Mining.Vanilla
                     context.Request.Response.ContentLength64 = response.Length;
                     context.Request.Response.OutputStream.Write(response, 0, response.Length);
 
-                    Log.ForContext<VanillaMiner>().Verbose("Reply:\n{0}", result.PrettifyJson());
+                    Logging.PacketLogger.ForContext<VanillaMiner>().Verbose("tx: {0}", result.PrettifyJson());
                 });
 
             using (var reader = new StreamReader(httpRequest.InputStream, Encoding.UTF8))
             {
                 var line = reader.ReadToEnd();
-                Log.ForContext<VanillaMiner>().Verbose("Recv:\n{0}", line.PrettifyJson());
+                Logging.PacketLogger.ForContext<VanillaMiner>().Verbose("rx: {0}", line.PrettifyJson());
 
                 var rpcRequest = new HttpServiceRequest(line, httpContext);
                 var rpcContext = new HttpServiceContext(this, rpcRequest);
