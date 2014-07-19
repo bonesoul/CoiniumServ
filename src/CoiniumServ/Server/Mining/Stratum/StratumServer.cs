@@ -24,6 +24,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Miners;
@@ -51,18 +52,23 @@ namespace CoiniumServ.Server.Mining.Stratum
 
         private readonly IBanManager _banManager;
 
+        private readonly ILogger _logger;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StratumServer"/> class.
         /// </summary>
         /// <param name="pool"></param>
         /// <param name="minerManager">The miner manager.</param>
         /// <param name="jobManager"></param>
-        public StratumServer(IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager)
+        /// <param name="banManager"></param>
+        /// <param name="coinConfig"></param>
+        public StratumServer(IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager, ICoinConfig coinConfig)
         {
             _pool = pool;
             _minerManager = minerManager;
             _jobManager = jobManager;
             _banManager = banManager;
+            _logger = Log.ForContext<StratumServer>().ForContext("Component", coinConfig.Name);
         }
 
         /// <summary>
@@ -113,7 +119,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="e"></param>
         private void OnClientConnection(object sender, ConnectionEventArgs e)
         {
-            Log.ForContext<StratumServer>().Information("Stratum client connected: {0}", e.Connection.ToString());
+            _logger.Information("Stratum client connected: {0}", e.Connection.ToString());
 
             // TODO: remove the jobManager dependency by instead injecting extranonce counter.
             var miner = _minerManager.Create<StratumMiner>(_jobManager.ExtraNonce.Next(), e.Connection, _pool);
@@ -127,14 +133,14 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="e"></param>
         private void OnClientDisconnect(object sender, ConnectionEventArgs e)
         {
-            Log.ForContext<StratumServer>().Information("Stratum client disconnected: {0}", e.Connection.ToString());
+            _logger.Information("Stratum client disconnected: {0}", e.Connection.ToString());
 
             _minerManager.Remove(e.Connection);
         }
 
         private void OnBannedConnection(object sender, BannedConnectionEventArgs e)
         {
-            Log.ForContext<StratumServer>().Information("Rejected connection from banned ip: {0:l}", e.Endpoint.Address.ToString());
+            _logger.Information("Rejected connection from banned ip: {0:l}", e.Endpoint.Address.ToString());
         }
 
         /// <summary>

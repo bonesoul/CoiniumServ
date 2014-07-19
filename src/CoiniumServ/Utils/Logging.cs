@@ -24,6 +24,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Microsoft.CSharp.RuntimeBinder;
 using Serilog;
 using Serilog.Core;
@@ -40,15 +41,13 @@ namespace CoiniumServ.Utils
 
         public static ILogger PacketLogger { get; private set; }
 
-        private const string ConsoleLogFormat = "{Timestamp:HH:mm:ss} [{Level}] [{Source:l}] [{Pool:l}] {Message}{NewLine}{Exception}";
-        private const string FileLogFormat = "{Timestamp} [{Level}] [{Source:l}] [{Pool:l}] {Message}{NewLine}{Exception}";
+        private const string ConsoleLogFormat = "{Timestamp:HH:mm:ss} [{Level}] [{Source:l}] [{Component:l}] {Message}{NewLine}{Exception}";
+        private const string FileLogFormat = "{Timestamp} [{Level}] [{Source:l}] [{Component:l}] {Message}{NewLine}{Exception}";
 
         private static string _rootFolder;
 
         public static void Init(dynamic config)
         {
-            //Serilog.Debugging.SelfLog.Out = Console.Out; // comment out this line to see serilog's debug messages.
-
             try
             {
                 // read the root folder for logs.
@@ -63,10 +62,10 @@ namespace CoiniumServ.Utils
                 
                 // add enrichers
                 globalConfig.Enrich.With(new SourceEnricher());
-                globalConfig.Enrich.With(new PoolEnricher());
+                globalConfig.Enrich.With(new ComponentEnricher());
 
                 packetLoggerConfig.Enrich.With(new SourceEnricher());
-                packetLoggerConfig.Enrich.With(new PoolEnricher());
+                packetLoggerConfig.Enrich.With(new ComponentEnricher());
 
                 // read log targets.
                 var targets = config.logs.targets;
@@ -172,15 +171,15 @@ namespace CoiniumServ.Utils
         {
             logEvent.AddPropertyIfAbsent(logEvent.Properties.Keys.Contains("SourceContext")
                 ? propertyFactory.CreateProperty("Source", logEvent.Properties["SourceContext"].ToString().Replace("\"","").Split('.').Last())
-                : propertyFactory.CreateProperty("Source", "global"));
+                : propertyFactory.CreateProperty("Source", "n/a"));
         }
     }
 
-    public class PoolEnricher : ILogEventEnricher
+    public class ComponentEnricher : ILogEventEnricher
     {
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
-            logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("Pool", "n/a"));
+            logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("Component", "global"));
         }
     }
 }

@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Shares;
 using CoiniumServ.Repository.Context;
 using Nancy.TinyIoc;
@@ -43,12 +44,13 @@ namespace CoiniumServ.Mining.Vardiff
             _applicationContext = applicationContext;
         }
 
-        public IVardiffManager Get(IVardiffConfig vardiffConfig, IShareManager shareManager)
+        public IVardiffManager Get(IShareManager shareManager, IVardiffConfig vardiffConfig, ICoinConfig coinConfig)
         {
             var @params = new NamedParameterOverloads
             {
-                {"vardiffConfig", vardiffConfig},
                 {"shareManager", shareManager},
+                {"vardiffConfig", vardiffConfig},
+                {"coinConfig", coinConfig}
             };
 
             return _applicationContext.Container.Resolve<IVardiffManager>(@params);

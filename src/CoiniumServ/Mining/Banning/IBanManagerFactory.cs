@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Mining.Shares;
 
@@ -28,6 +29,6 @@ namespace CoiniumServ.Mining.Banning
 {
     public interface IBanManagerFactory
     {
-        IBanManager Get(IBanConfig banConfig, IShareManager shareManager);
+        IBanManager Get(IShareManager shareManager, IBanConfig banConfig, ICoinConfig coinConfig);
     }
 }

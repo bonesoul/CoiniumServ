@@ -39,10 +39,13 @@ namespace CoiniumServ.Mining.Pools
 
         private readonly IPoolConfigFactory _poolConfigFactory;
 
+        private readonly ILogger _logger;
+
         public PoolManager(IPoolFactory poolFactory, IPoolConfigFactory poolConfigFactory)
         {
             _poolFactory = poolFactory;
             _poolConfigFactory = poolConfigFactory;
+            _logger = Log.ForContext<PoolManager>();
         }
 
         public void Run()
@@ -77,7 +80,7 @@ namespace CoiniumServ.Mining.Pools
                 names.Add(poolConfig.Coin.Name);
             }
 
-            Log.ForContext<PoolManager>().Information("Discovered a total of {0} enabled pool configurations: {1}.", pools.Count, names);
+            _logger.Information("Discovered a total of {0} enabled pool configurations: {1}.", pools.Count, names);
 
             foreach (var config in pools)
             {

@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Repository.Context;
 using Nancy.TinyIoc;
@@ -43,11 +44,12 @@ namespace CoiniumServ.Mining.Miners
             _applicationContext = applicationContext;
         }
 
-        public IMinerManager Get(IDaemonClient daemonClient)
+        public IMinerManager Get(IDaemonClient daemonClient, ICoinConfig coinConfig)
         {
             var @params = new NamedParameterOverloads
             {
-                {"daemonClient", daemonClient}
+                {"daemonClient", daemonClient},
+                {"coinConfig",coinConfig}
             };
 
             return _applicationContext.Container.Resolve<IMinerManager>(@params);

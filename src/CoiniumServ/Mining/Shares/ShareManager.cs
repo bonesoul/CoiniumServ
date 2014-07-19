@@ -23,6 +23,7 @@
 
 using System;
 using AustinHarris.JsonRpc;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Persistance;
@@ -46,17 +47,21 @@ namespace CoiniumServ.Mining.Shares
 
         private readonly IStorage _storage;
 
+        private readonly ILogger _logger;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareManager" /> class.
         /// </summary>
         /// <param name="daemonClient"></param>
         /// <param name="jobTracker"></param>
         /// <param name="storage"></param>
-        public ShareManager(IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
+        /// <param name="coinConfig"></param>
+        public ShareManager(IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, ICoinConfig coinConfig)
         {
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _storage = storage;
+            _logger = Log.ForContext<ShareManager>().ForContext("Component", coinConfig.Name);
         }
 
         /// <summary>
@@ -101,12 +106,12 @@ namespace CoiniumServ.Mining.Shares
 
             if (!share.IsBlockCandidate)
             {
-                Log.ForContext<ShareManager>().Debug("Share accepted at {0:0.00}/{1} by miner {2:l}.", share.Difficulty, miner.Difficulty, miner.Username);
+                _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);
                 return;
             }
 
             // if share contains a block candicate
-            Log.ForContext<ShareManager>().Debug("Share with block candidate [{0}] accepted at {1:0.00}/{2} by miner {3:l}.", share.Height, share.Difficulty, miner.Difficulty, miner.Username);
+            _logger.Debug("Share with block candidate [{0}] accepted at {1:0.00}/{2} by miner {3:l}", share.Height, share.Difficulty, miner.Difficulty, miner.Username);
 
             var accepted = SubmitBlock(share); // submit block to daemon.
 
@@ -148,7 +153,7 @@ namespace CoiniumServ.Mining.Shares
                     break;
             }
 
-            Log.ForContext<ShareManager>().Debug("Share rejected at {0:0.00}/{1} by miner {2:l}.", share.Difficulty, miner.Difficulty, miner.Username);            
+            _logger.Debug("Share rejected at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);            
         }
 
         private bool SubmitBlock(IShare share)
@@ -158,17 +163,17 @@ namespace CoiniumServ.Mining.Shares
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
                 var isAccepted = CheckIfBlockAccepted(share);
 
-                Log.ForContext<ShareManager>().Information(
+                _logger.Information(
                     isAccepted
-                            ? "Found block [{0}] with hash: {1:l}."
-                            : "Submitted block [{0}] but got denied: {1:l}.", 
-                            share.Height, share.BlockHash.ToHexString());
+                        ? "Found block [{0}] with hash: {1:l}"
+                        : "Submitted block [{0}] but got denied: {1:l}",
+                    share.Height, share.BlockHash.ToHexString());
 
                 return isAccepted;
             }
             catch (Exception e)
             {
-                Log.ForContext<ShareManager>().Error(e, "Submit block failed - height: {0}, hash: {1:l}", share.Height, share.BlockHash);
+                _logger.Error(e, "Submit block failed - height: {0}, hash: {1:l}", share.Height, share.BlockHash);
                 return false;
             }
         }
@@ -183,7 +188,7 @@ namespace CoiniumServ.Mining.Shares
             }
             catch (Exception e)
             {
-                Log.ForContext<ShareManager>().Error(e, "Get block failed - height: {0}, hash: {1:l}", share.Height, share.BlockHash);
+                _logger.Error(e, "Get block failed - height: {0}, hash: {1:l}", share.Height, share.BlockHash);
                 return false;
             }
         }

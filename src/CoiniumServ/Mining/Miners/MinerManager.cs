@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Pools;
 using CoiniumServ.Net.Server.Sockets;
@@ -34,23 +35,23 @@ namespace CoiniumServ.Mining.Miners
 {
     public class MinerManager : IMinerManager
     {
-        private readonly Dictionary<int, IMiner> _miners;
+        public IList<IMiner> Miners { get { return _miners.Values.ToList(); } }
 
-        public IList<IMiner> Miners
-        {
-            get { return _miners.Values.ToList(); }
-        }
+        public event EventHandler MinerAuthenticated;
+
+        private readonly Dictionary<int, IMiner> _miners;        
 
         private int _counter = 0; // counter for assigining unique id's to miners.
 
         private readonly IDaemonClient _daemonClient;
 
-        public event EventHandler MinerAuthenticated;
+        private readonly ILogger _logger;        
 
-        public MinerManager(IDaemonClient daemonClient)
+        public MinerManager(IDaemonClient daemonClient, ICoinConfig coinConfig)
         {
             _daemonClient = daemonClient;
             _miners = new Dictionary<int, IMiner>();
+            _logger = Log.ForContext<MinerManager>().ForContext("Component", coinConfig.Name);
         }
 
         public IMiner GetMiner(Int32 id)
@@ -99,7 +100,8 @@ namespace CoiniumServ.Mining.Miners
         {
             miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid;
 
-            Log.ForContext<MinerManager>().Information(miner.Authenticated ? "Authenticated miner: {0:l} [{1:l}]" : "Unauthenticated miner: {0:l} [{1:l}]", 
+            _logger.Information(
+                miner.Authenticated ? "Authenticated miner: {0:l} [{1:l}]" : "Unauthenticated miner: {0:l} [{1:l}]",
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
             if (!miner.Authenticated) 

@@ -81,6 +81,8 @@ namespace CoiniumServ.Mining.Pools
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
+        private ILogger _logger;
+
         /// <summary>
         /// Instance id of the pool.
         /// </summary>
@@ -143,8 +145,6 @@ namespace CoiniumServ.Mining.Pools
             _statisticsObjectFactory = statisticsObjectFactory;
             _vardiffManagerFactory = vardiffManagerFactory;
             _banningManagerFactory = banningManagerFactory;
-
-            GenerateInstanceId();
         }
 
         /// <summary>
@@ -155,8 +155,11 @@ namespace CoiniumServ.Mining.Pools
         public void Initialize(IPoolConfig config)
         {
             Config = config;
+            _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);
             
             // TODO: validate pool central wallet & rewards within the startup.
+
+            GenerateInstanceId();
 
             InitDaemon();            
             InitManagers();
@@ -167,7 +170,7 @@ namespace CoiniumServ.Mining.Pools
         private void InitDaemon()
         {
             if (Config.Daemon == null || Config.Daemon.Valid == false)
-                Log.ForContext<Pool>().Error("Coin daemon configuration is not valid!");
+                _logger.Error("Coin daemon configuration is not valid!");
 
             _daemonClient.Initialize(Config.Daemon);
         }
@@ -179,20 +182,22 @@ namespace CoiniumServ.Mining.Pools
 
             _storage = _storageFactory.Get(Storages.Redis, Config);
 
-            _paymentProcessor = _paymentProcessorFactory.Get(_daemonClient, _storage, Config.Wallet);
+            _paymentProcessor = _paymentProcessorFactory.Get(_daemonClient, _storage, Config.Wallet, Config.Coin);
             _paymentProcessor.Initialize(Config.Payments);
 
-            _minerManager = _minerManagerFactory.Get(_daemonClient);
+            _minerManager = _minerManagerFactory.Get(_daemonClient, Config.Coin);
 
             _jobTracker = _jobTrackerFactory.Get();
 
-            _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage);
+            _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage, Config.Coin);
 
-            _vardiffManager = _vardiffManagerFactory.Get(Config.Stratum.Vardiff, _shareManager);
+            _vardiffManager = _vardiffManagerFactory.Get(_shareManager, Config.Stratum.Vardiff, Config.Coin);
 
-            _banningManager = _banningManagerFactory.Get(Config.Banning, _shareManager);
+            _banningManager = _banningManagerFactory.Get( _shareManager,Config.Banning,Config.Coin);
 
-            _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, _hashAlgorithm, Config.Wallet, Config.Rewards);
+            _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager,
+                _hashAlgorithm, Config.Wallet, Config.Rewards, Config.Coin);
+
             _jobManager.Initialize(InstanceId);
 
             var latestBlocks = _statisticsObjectFactory.GetLatestBlocks(_storage);
@@ -209,7 +214,7 @@ namespace CoiniumServ.Mining.Pools
 
             if (Config.Stratum != null && Config.Stratum.Enabled)
             {
-                var stratumServer = _serverFactory.Get("Stratum", this, _minerManager, _jobManager, _banningManager);
+                var stratumServer = _serverFactory.Get("Stratum", this, _minerManager, _jobManager, _banningManager, Config.Coin);
                 var stratumService = _serviceFactory.Get("Stratum", Config.Coin, _shareManager, _daemonClient);
                 stratumServer.Initialize(Config.Stratum);
 
@@ -218,7 +223,7 @@ namespace CoiniumServ.Mining.Pools
 
             if (Config.Vanilla != null && Config.Vanilla.Enabled)
             {
-                var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager, _jobManager, _banningManager);
+                var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager, _jobManager, _banningManager, Config.Coin);
                 var vanillaService = _serviceFactory.Get("Vanilla", Config.Coin, _shareManager, _daemonClient);
 
                 vanillaServer.Initialize(Config.Vanilla);
@@ -235,14 +240,12 @@ namespace CoiniumServ.Mining.Pools
             // TODO: add downloading blocks information from getblocktemplate().
             // TODO: make this multi-line & readable.
             // TODO: read services from config so that we can print pool info even before starting the servers.
-            Log.ForContext<Pool>().Information("Pool started for {0:l}\r\n" +
-                                               "Coin symbol: {1:l} algorithm: {2:l}\r\n" +
-                                               "Coin version: {3} protocol: {4} wallet: {5}\r\n" +
-                                               "Daemon network: {6:l} peers: {7} blocks: {8} errors: {9:l}\r\n" +
-                                               "Network difficulty: {10:0.00000000} block difficulty: {11:0.00}\r\n" +
-                                               "Network hashrate: {12:l}\r\n" +
-                                               "{13:l}\r\n",
-                Config.Coin.Name,
+            _logger.Information("Coin symbol: {0:l} algorithm: {1:l} " +
+                                               "Coin version: {2} protocol: {3} wallet: {4} " +
+                                               "Daemon network: {5:l} peers: {6} blocks: {7} errors: {8:l} " +
+                                               "Network difficulty: {9:0.00000000} block difficulty: {10:0.00} " +
+                                               "Network hashrate: {11:l} " +
+                                               "{12:l}",
                 Config.Coin.Symbol,
                 Config.Coin.Algorithm,
                 info.Version,
@@ -266,7 +269,7 @@ namespace CoiniumServ.Mining.Pools
         {
             if (!Config.Valid)
             {
-                Log.ForContext<Pool>().Error("Can't start pool as configuration is not valid.");
+                _logger.Error("Can't start pool as configuration is not valid.");
                 return;
             }
 
@@ -290,7 +293,7 @@ namespace CoiniumServ.Mining.Pools
             var randomBytes = new byte[4];
             rndGenerator.GetNonZeroBytes(randomBytes); // create cryptographically random array of bytes.
             InstanceId = BitConverter.ToUInt32(randomBytes, 0); // convert them to instance Id.
-            Log.ForContext<Pool>().Debug("Generated cryptographically random instance Id: {0}", InstanceId);
+            _logger.Debug("Generated cryptographically random instance Id: {0}", InstanceId);
         }
     }
 }

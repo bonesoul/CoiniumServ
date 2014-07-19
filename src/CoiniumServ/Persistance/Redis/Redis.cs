@@ -27,6 +27,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using CoiniumServ.Mining.Pools;
 using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Mining.Shares;
 using CoiniumServ.Payments;
@@ -52,10 +53,15 @@ namespace CoiniumServ.Persistance.Redis
         private IDatabase _database;
         private IServer _server;
 
+        private readonly ILogger _logger;
+
         public Redis(IGlobalConfigFactory globalConfigFactory, IPoolConfig poolConfig)
         {
+            _logger = Log.ForContext<Redis>().ForContext("Component", poolConfig.Coin.Name);
+
             _poolConfig = poolConfig; // the pool config.
             _redisConfig = globalConfigFactory.GetRedisConfig(); // read the redis config.
+
             IsEnabled = _redisConfig.Enabled;
 
             if (IsEnabled)
@@ -445,12 +451,12 @@ namespace CoiniumServ.Persistance.Redis
                 if (version < _requiredMinimumVersion)
                     throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
 
-                Log.ForContext<Redis>().Information("Storage initialized: {0:l}:{1}, v{2:l}.", endpoint.Host, endpoint.Port, version);
+                _logger.Information("Storage initialized: {0:l}:{1}, v{2:l}.", endpoint.Host, endpoint.Port, version);
             }
             catch (Exception e)
             {
                 IsEnabled = false;
-                Log.ForContext<Redis>().Error(string.Format("Storage initialization failed: {0:l}:{1}.", endpoint.Host, endpoint.Port));
+                _logger.Error(string.Format("Storage initialization failed: {0:l}:{1}.", endpoint.Host, endpoint.Port));
             }
         }
 

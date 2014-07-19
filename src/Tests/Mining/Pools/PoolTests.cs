@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Crypto.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
@@ -74,6 +75,7 @@ namespace CoiniumServ.Tests.Mining.Pools
         private readonly IStatistics _statistics;
         private readonly IVardiffManager _vardiffManager;
         private readonly IBanManager _banManager;
+        private readonly IPoolConfig _config;
 
         /// <summary>
         /// Initialize mock objects.
@@ -105,6 +107,10 @@ namespace CoiniumServ.Tests.Mining.Pools
             _statistics = Substitute.For<IStatistics>();
             _vardiffManager = Substitute.For<IVardiffManager>();
             _banManager = Substitute.For<IBanManager>();
+
+            // pool-config mockup.
+            _config = Substitute.For<IPoolConfig>();
+            _config.Daemon.Valid.Returns(true);
         }
 
         /// <summary>
@@ -129,7 +135,6 @@ namespace CoiniumServ.Tests.Mining.Pools
                 _banManagerFactory);
 
             pool.Should().Not.Be.Null();
-            pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
         }
   
         /// <summary>
@@ -154,62 +159,60 @@ namespace CoiniumServ.Tests.Mining.Pools
                 _banManagerFactory);
 
             pool.Should().Not.Be.Null();
-            pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
-
-            // pool-config mockup.
-            var poolConfig = Substitute.For<IPoolConfig>();
-            poolConfig.Daemon.Valid.Returns(true);
 
             // initialize hash algorithm
             var hashAlgorithm = Substitute.For<IHashAlgorithm>();
-            _hashAlgorithmFactory.Get(poolConfig.Coin.Algorithm).Returns(hashAlgorithm);
+            _hashAlgorithmFactory.Get(_config.Coin.Algorithm).Returns(hashAlgorithm);
 
             // initialize the miner manager.
-            _minerManagerFactory.Get(_daemonClient);
+            _minerManagerFactory.Get(_daemonClient, _config.Coin);
 
             var walletConfig = Substitute.For<IWalletConfig>();
             var rewardsConfig = Substitute.For<IRewardsConfig>();
 
             // payment processor            
-            _paymentProcessorFactory.Get(_daemonClient, _storage, walletConfig);
+            _paymentProcessorFactory.Get(_daemonClient, _storage, walletConfig, _config.Coin);
 
             // initialize storage manager
-            _storageFactory.Get(Storages.Redis, poolConfig);
+            _storageFactory.Get(Storages.Redis, _config);
 
             // initialize the job tracker
             _jobTrackerFactory.Get();
 
             // initialize share manager.
-            _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage).Returns(_shareManager);
+            _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage, _config.Coin).Returns(_shareManager);
 
             // vardiff manager
             var vardiffConfig = Substitute.For<IVardiffConfig>();
-            _vardiffManagerFactory.Get(vardiffConfig, _shareManager);
+            _vardiffManagerFactory.Get(_shareManager, vardiffConfig, _config.Coin);
 
             // banning manager
             var banConfig = Substitute.For<IBanConfig>();
-            _banManagerFactory.Get(banConfig, _shareManager);
+            _banManagerFactory.Get(_shareManager, banConfig, _config.Coin);
 
             // initalize job manager.
-            _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm, walletConfig,rewardsConfig).Returns(_jobManager);
+            _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm, walletConfig,
+                rewardsConfig, _config.Coin).Returns(_jobManager);
+
             _jobManager.Initialize(pool.InstanceId);
         
             // init daemon client
-            _daemonClient.Initialize(poolConfig.Daemon);
+            _daemonClient.Initialize(_config.Daemon);
             _daemonClient.GetInfo().Returns(new Info());
             _daemonClient.GetMiningInfo().Returns(new MiningInfo());
 
             // init server
-            _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager,_banManager).Returns(_miningServer);
+            _serverFactory.Get(Services.Stratum, pool, _minerManager, _jobManager, _banManager, _config.Coin).Returns(_miningServer);
 
             // init service
-            _serviceFactory.Get(Services.Stratum, poolConfig.Coin, _shareManager, _daemonClient).Returns(_rpcService);
+            _serviceFactory.Get(Services.Stratum, _config.Coin, _shareManager, _daemonClient).Returns(_rpcService);
 
             // initalize the server.
-            _miningServer.Initialize(poolConfig.Stratum);
+            _miningServer.Initialize(_config.Stratum);
 
             // initialize the pool.
-            pool.Initialize(poolConfig);
+            pool.Initialize(_config);
+            pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
         }
     }
 }
