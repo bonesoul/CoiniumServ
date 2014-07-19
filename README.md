@@ -8,6 +8,42 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 ![CoiniumServ running over mono & ubuntu](http://i.imgur.com/izIB5nq.png)
 
+### Support
+
+Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coinium-serv@freenode](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde).
+
+You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
+
+* IRC (**irc.freenode.net**):
+  - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
+  - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
+  - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
+* Official site: [coiniumserv.com](http://www.coiniumserv.com)
+* [Twitter](http://twitter.com/coinium)
+* [Support forums](http://forum.coinium.org/forum/19-support/)
+* [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
+* [Bitcoin wiki](https://en.bitcoin.it/wiki/CoiniumServ)
+
+### Donation
+
+You can contribute the development of the project by donating; 
+
+* BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
+* LTC: `LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa`
+* DOGE: `D7mzHQtkWD9B1Xwnmjfg9x2DofbaZBg6Lc`
+
+###### Bounties
+
+BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
+
+[![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1)
+
+###### Tips
+
+You can send tips and furher support the project or get tips for contributing by commiting.
+
+[![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)
+
 ### Features
 
 ###### Platform Agnostic
@@ -79,25 +115,9 @@ wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/cont
 
 ### Documentation
 
-* [Documentation & Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
+* [Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
 * [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
 * [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan) ( & motivation)
-
-### Support
-
-Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coinium-serv@freenode](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde).
-
-You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
-
-* IRC (**irc.freenode.net**):
-  - **#coinium-serv** [user support](http://webchat.freenode.net/?channels=%23coinium-serv&prompt=1&uio=OT10cnVlde)
-  - **#coinium-dev** [dev talk](http://webchat.freenode.net/?channels=%23coinium-dev&prompt=1&uio=OT10cnVlde)
-  - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
-* Official site: [coiniumserv.com](http://www.coiniumserv.com)
-* [Twitter](http://twitter.com/coinium)
-* [Support forums](http://forum.coinium.org/forum/19-support/)
-* [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
-* [Bitcoin wiki](https://en.bitcoin.it/wiki/CoiniumServ)
 
 ### Contributing
 
@@ -105,26 +125,6 @@ Start reading by these;
 
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
-
-### Donation
-
-You can contribute the development of the project by donating; 
-
-* BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
-* LTC: `LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa`
-* DOGE: `D7mzHQtkWD9B1Xwnmjfg9x2DofbaZBg6Lc`
-
-###### Bounties
-
-BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
-
-[![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1)
-
-###### Tips
-
-You can send tips and furher support the project or get tips for contributing by commiting.
-
-[![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)
 
 ### License
 
