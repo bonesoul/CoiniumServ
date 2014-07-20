@@ -59,15 +59,10 @@ namespace CoiniumServ.Mining.Pools
         private readonly IObjectFactory _objectFactory;
 
         private readonly IServiceFactory _serviceFactory;
-        private readonly IJobTrackerFactory _jobTrackerFactory;
-        private readonly IJobManagerFactory _jobManagerFactory;
-        private readonly IShareManagerFactory _shareManagerFactory;
-        private readonly IMinerManagerFactory _minerManagerFactory;
         private readonly IStorageFactory _storageFactory;
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IStatisticsObjectFactory _statisticsObjectFactory;
         private readonly IVardiffManagerFactory _vardiffManagerFactory;
-        private readonly IBanManagerFactory _banningManagerFactory;
 
         private IDaemonClient _daemonClient;
         private readonly IServerFactory _serverFactory;
@@ -93,77 +88,50 @@ namespace CoiniumServ.Mining.Pools
         /// <summary>
         /// Initializes a new instance of the <see cref="Pool" /> class.
         /// </summary>
+        /// <param name="poolConfig"></param>
         /// <param name="objectFactory"></param>
         /// <param name="serverFactory">The server factory.</param>
         /// <param name="serviceFactory">The service factory.</param>
-        /// <param name="client">The client.</param>
-        /// <param name="minerManagerFactory">The miner manager factory.</param>
-        /// <param name="jobTrackerFactory"></param>
-        /// <param name="jobManagerFactory">The job manager factory.</param>
-        /// <param name="shareManagerFactory">The share manager factory.</param>
         /// <param name="storageFactory"></param>
         /// <param name="paymentProcessorFactory"></param>
         /// <param name="statisticsObjectFactory"></param>
         /// <param name="vardiffManagerFactory"></param>
-        /// <param name="banningManagerFactory"></param>
         public Pool(
+            IPoolConfig poolConfig,
             IObjectFactory objectFactory,
             IServerFactory serverFactory, 
             IServiceFactory serviceFactory,
-            IMinerManagerFactory minerManagerFactory, 
-            IJobTrackerFactory jobTrackerFactory,
-            IJobManagerFactory jobManagerFactory, 
-            IShareManagerFactory shareManagerFactory,
             IStorageFactory storageFactory,
             IPaymentProcessorFactory paymentProcessorFactory,
             IStatisticsObjectFactory statisticsObjectFactory, 
-            IVardiffManagerFactory vardiffManagerFactory,
-            IBanManagerFactory banningManagerFactory)
+            IVardiffManagerFactory vardiffManagerFactory)
         {
 
             Enforce.ArgumentNotNull(objectFactory, "IObjectFactory");
 
             Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
             Enforce.ArgumentNotNull(serviceFactory, "IServiceFactory");
-            Enforce.ArgumentNotNull(minerManagerFactory, "IMinerManagerFactory");
-            Enforce.ArgumentNotNull(jobTrackerFactory, "IJobTrackerFactory");
-            Enforce.ArgumentNotNull(jobManagerFactory, "IJobManagerFactory");
-            Enforce.ArgumentNotNull(shareManagerFactory, "IShareManagerFactory");
             Enforce.ArgumentNotNull(storageFactory, "IStorageFactory");
             Enforce.ArgumentNotNull(paymentProcessorFactory, "IPaymentProcessorFactory");
             Enforce.ArgumentNotNull(vardiffManagerFactory, "IVardiffManagerFactory");
-            Enforce.ArgumentNotNull(banningManagerFactory, "IBanningManagerFactory");
 
             _objectFactory = objectFactory;
 
-            _minerManagerFactory = minerManagerFactory;
-            _jobManagerFactory = jobManagerFactory;
-            _jobTrackerFactory = jobTrackerFactory;
-            _shareManagerFactory = shareManagerFactory;
             _serverFactory = serverFactory;
             _serviceFactory = serviceFactory;
             _storageFactory = storageFactory;
             _paymentProcessorFactory = paymentProcessorFactory;
             _statisticsObjectFactory = statisticsObjectFactory;
             _vardiffManagerFactory = vardiffManagerFactory;
-            _banningManagerFactory = banningManagerFactory;
-        }
 
-        /// <summary>
-        /// Initializes the specified bind ip.
-        /// </summary>
-        /// <param name="config">The configuration.</param>
-        /// <exception cref="System.ArgumentNullException">config;config.Daemon can not be null!</exception>
-        public void Initialize(IPoolConfig config)
-        {
-            Config = config;
-            _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);
-            
             // TODO: validate pool central wallet & rewards within the startup.
 
-            GenerateInstanceId();
+            Config = poolConfig;            
+            
+            _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);
 
-            InitDaemon();            
+            GenerateInstanceId();
+            InitDaemon();
             InitManagers();
             InitServers();
             PrintPoolInfo();
@@ -174,7 +142,7 @@ namespace CoiniumServ.Mining.Pools
             if (Config.Daemon == null || Config.Daemon.Valid == false)
                 _logger.Error("Coin daemon configuration is not valid!");
 
-            _daemonClient = _objectFactory.GetDaemonClient(Config.Daemon, Config.Coin);
+            _daemonClient = _objectFactory.GetDaemonClient(Config.Coin.Name, Config.Daemon);
         }
 
         private void InitManagers()
@@ -187,18 +155,18 @@ namespace CoiniumServ.Mining.Pools
             _paymentProcessor = _paymentProcessorFactory.Get(_daemonClient, _storage, Config.Wallet, Config.Coin);
             _paymentProcessor.Initialize(Config.Payments);
 
-            _minerManager = _minerManagerFactory.Get(_daemonClient, Config.Coin);
+            _minerManager = _objectFactory.GetMiningManager(Config.Coin.Name, _daemonClient);
 
-            _jobTracker = _jobTrackerFactory.Get();
+            _jobTracker = _objectFactory.GetJobTracker();
 
-            _shareManager = _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage, Config.Coin);
+            _shareManager = _objectFactory.GetShareManager(Config.Coin.Name, _daemonClient, _jobTracker, _storage);
 
             _vardiffManager = _vardiffManagerFactory.Get(_shareManager, Config.Stratum.Vardiff, Config.Coin);
 
-            _banningManager = _banningManagerFactory.Get( _shareManager,Config.Banning,Config.Coin);
+            _banningManager = _objectFactory.GetBanManager(Config.Coin.Name, _shareManager, Config.Banning);
 
-            _jobManager = _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager,
-                _hashAlgorithm, Config.Wallet, Config.Rewards, Config.Coin);
+            _jobManager = _objectFactory.GetJobManager(Config.Coin.Name, _daemonClient, _jobTracker, _shareManager, _minerManager,
+                _hashAlgorithm, Config.Wallet, Config.Rewards);
 
             _jobManager.Initialize(InstanceId);
 

@@ -47,19 +47,19 @@ namespace CoiniumServ.Mining.Banning
 
         private readonly ILogger _logger;
 
-        public BanManager(IShareManager shareManager, IBanConfig banConfig, ICoinConfig coinConfig)
-        {
-            _logger = Log.ForContext<BanManager>().ForContext("Component", coinConfig.Name);
-
+        public BanManager(string pool, IShareManager shareManager, IBanConfig banConfig)
+        {            
             Config = banConfig;
 
             if (!Config.Enabled)
                 return;
 
+            _logger = Log.ForContext<BanManager>().ForContext("Component", pool);
             _bannedIps = new Dictionary<IPAddress, int>();
+            _timer = new Timer(CheckBans, null, Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
+
             shareManager.ShareSubmitted += OnShare;
 
-            _timer = new Timer(CheckBans, null, Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
             CheckBans(null);
         }
 

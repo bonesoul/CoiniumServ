@@ -25,6 +25,14 @@ using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
+using CoiniumServ.Mining.Banning;
+using CoiniumServ.Mining.Jobs.Manager;
+using CoiniumServ.Mining.Jobs.Tracker;
+using CoiniumServ.Mining.Miners;
+using CoiniumServ.Mining.Pools;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Shares;
+using CoiniumServ.Persistance;
 
 namespace CoiniumServ.Factories
 {
@@ -33,6 +41,8 @@ namespace CoiniumServ.Factories
     /// </summary>
     public interface IObjectFactory
     {
+        #region hash algorithms
+
         /// <summary>
         /// Returns instance of the given hash algorithm
         /// </summary>
@@ -40,12 +50,34 @@ namespace CoiniumServ.Factories
         /// <returns></returns>
         IHashAlgorithm GetHashAlgorithm(string algorithm);
 
+        #endregion
+
+        #region pool objects
+
+        IPoolManager GetPoolManager();
+
+        IPool GetPool(IPoolConfig poolConfig);
+
         /// <summary>
         /// Returns a new instance of daemon client.
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="daemonConfig"></param>
-        /// <param name="coinConfig"></param>
         /// <returns></returns>
-        IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
+        IDaemonClient GetDaemonClient(string pool, IDaemonConfig daemonConfig);
+
+        IMinerManager GetMiningManager(string pool, IDaemonClient daemonClient);
+
+        IJobManager GetJobManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
+           IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig,
+           IRewardsConfig rewardsConfig);
+
+        IJobTracker GetJobTracker();
+
+        IShareManager GetShareManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage);
+
+        IBanManager GetBanManager(string pool, IShareManager shareManager, IBanConfig banConfig);
+
+        #endregion
     }
 }

@@ -32,6 +32,8 @@ namespace CoiniumServ.Mining.Jobs
     /// </summary>
     public class ExtraNonce:IExtraNonce
     {
+        // TODO: use ioc for extranonce too
+
         private UInt32 _counter;
 
         /// <summary>

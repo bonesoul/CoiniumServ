@@ -52,15 +52,10 @@ namespace CoiniumServ.Tests.Mining.Pools
         private readonly IObjectFactory _objectFactory;
         private readonly IServerFactory _serverFactory;
         private readonly IServiceFactory _serviceFactory;
-        private readonly IJobManagerFactory _jobManagerFactory;
-        private readonly IJobTrackerFactory _jobTrackerFactory;
-        private readonly IShareManagerFactory _shareManagerFactory;
-        private readonly IMinerManagerFactory _minerManagerFactory;
         private readonly IStorageFactory _storageFactory;
         private readonly IPaymentProcessorFactory _paymentProcessorFactory;
         private readonly IStatisticsObjectFactory _statisticsObjectFactory;
         private readonly IVardiffManagerFactory _vardiffManagerFactory;
-        private readonly IBanManagerFactory _banManagerFactory;
 
         // object mocks.
         private readonly IDaemonClient _daemonClient;
@@ -83,17 +78,13 @@ namespace CoiniumServ.Tests.Mining.Pools
         public PoolTests()
         {
             _objectFactory = Substitute.For<IObjectFactory>();
-            _jobManagerFactory = Substitute.For<IJobManagerFactory>();
-            _jobTrackerFactory = Substitute.For<IJobTrackerFactory>();
-            _shareManagerFactory = Substitute.For<IShareManagerFactory>();
-            _minerManagerFactory = Substitute.For<IMinerManagerFactory>();
+
             _serverFactory = Substitute.For<IServerFactory>();
             _serviceFactory = Substitute.For<IServiceFactory>();
             _storageFactory = Substitute.For<IStorageFactory>();
             _paymentProcessorFactory = Substitute.For<IPaymentProcessorFactory>();
             _statisticsObjectFactory = Substitute.For<IStatisticsObjectFactory>();
             _vardiffManagerFactory = Substitute.For<IVardiffManagerFactory>();
-            _banManagerFactory = Substitute.For<IBanManagerFactory>();
 
             _daemonClient = Substitute.For<IDaemonClient>();
             _minerManager = Substitute.For<IMinerManager>();
@@ -113,7 +104,7 @@ namespace CoiniumServ.Tests.Mining.Pools
             _config.Daemon.Valid.Returns(true);
 
             // init daemon client
-            _daemonClient = _objectFactory.GetDaemonClient(_config.Daemon, _config.Coin);
+            _daemonClient = _objectFactory.GetDaemonClient(_config.Coin.Name, _config.Daemon);
             _daemonClient.GetInfo().Returns(new Info());
             _daemonClient.GetMiningInfo().Returns(new MiningInfo());
         }
@@ -125,18 +116,15 @@ namespace CoiniumServ.Tests.Mining.Pools
         public void ConstructorTest_NonNullParams_ShouldSucceed()
         {
             var pool = new Pool(
+                _config,
                 _objectFactory,
                 _serverFactory,
                 _serviceFactory,                
-                _minerManagerFactory,
-                _jobTrackerFactory,
-                _jobManagerFactory,
-                _shareManagerFactory,
                 _storageFactory,
                 _paymentProcessorFactory,
                 _statisticsObjectFactory,
-                _vardiffManagerFactory,
-                _banManagerFactory);
+                _vardiffManagerFactory
+                );
 
             pool.Should().Not.Be.Null();
         }
@@ -148,18 +136,15 @@ namespace CoiniumServ.Tests.Mining.Pools
         public void InitializationTest_NonNullParams_ShouldSuccess()
         {
             var pool = new Pool(
+                _config,
                 _objectFactory, 
                 _serverFactory, 
                 _serviceFactory, 
-                _minerManagerFactory,
-                _jobTrackerFactory,
-                _jobManagerFactory, 
-                _shareManagerFactory,
                 _storageFactory,
                 _paymentProcessorFactory,
                 _statisticsObjectFactory,
-                _vardiffManagerFactory,
-                _banManagerFactory);
+                _vardiffManagerFactory
+                );
 
             pool.Should().Not.Be.Null();
 
@@ -168,7 +153,7 @@ namespace CoiniumServ.Tests.Mining.Pools
             _objectFactory.GetHashAlgorithm(_config.Coin.Algorithm).Returns(hashAlgorithm);
 
             // initialize the miner manager.
-            _minerManagerFactory.Get(_daemonClient, _config.Coin);
+            _objectFactory.GetMiningManager(_config.Coin.Name, _daemonClient);
 
             var walletConfig = Substitute.For<IWalletConfig>();
             var rewardsConfig = Substitute.For<IRewardsConfig>();
@@ -180,10 +165,10 @@ namespace CoiniumServ.Tests.Mining.Pools
             _storageFactory.Get(Storages.Redis, _config);
 
             // initialize the job tracker
-            _jobTrackerFactory.Get();
+            _objectFactory.GetJobTracker();
 
             // initialize share manager.
-            _shareManagerFactory.Get(_daemonClient, _jobTracker, _storage, _config.Coin).Returns(_shareManager);
+            _objectFactory.GetShareManager(_config.Coin.Name, _daemonClient, _jobTracker, _storage).Returns(_shareManager);
 
             // vardiff manager
             var vardiffConfig = Substitute.For<IVardiffConfig>();
@@ -191,11 +176,11 @@ namespace CoiniumServ.Tests.Mining.Pools
 
             // banning manager
             var banConfig = Substitute.For<IBanConfig>();
-            _banManagerFactory.Get(_shareManager, banConfig, _config.Coin);
+            _objectFactory.GetBanManager(_config.Coin.Name, _shareManager, banConfig);
 
             // initalize job manager.
-            _jobManagerFactory.Get(_daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm, walletConfig,
-                rewardsConfig, _config.Coin).Returns(_jobManager);
+            _objectFactory.GetJobManager(_config.Coin.Name, _daemonClient, _jobTracker, _shareManager, _minerManager, hashAlgorithm, walletConfig,
+                rewardsConfig).Returns(_jobManager);
 
             _jobManager.Initialize(pool.InstanceId);       
 
@@ -209,7 +194,6 @@ namespace CoiniumServ.Tests.Mining.Pools
             _miningServer.Initialize(_config.Stratum);
 
             // initialize the pool.
-            pool.Initialize(_config);
             pool.InstanceId.Should().Be.GreaterThan((UInt32)0);
         }
     }

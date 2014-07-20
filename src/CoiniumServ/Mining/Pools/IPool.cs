@@ -32,12 +32,6 @@ namespace CoiniumServ.Mining.Pools
 
         IPerPool Statistics { get; }
 
-        /// <summary>
-        /// Initializes the specified bind ip.
-        /// </summary>
-        /// <param name="config">The configuration.</param>        
-        void Initialize(IPoolConfig config);
-
         void Start();
 
         void Stop();

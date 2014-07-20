@@ -25,6 +25,7 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using CoiniumServ.Factories;
 using CoiniumServ.Mining.Pools;
 using CoiniumServ.Repository;
 using CoiniumServ.Server.Web;
@@ -84,7 +85,7 @@ namespace CoiniumServ
             PlatformManager.PrintPlatformBanner();
 
             // start pool manager.
-            var poolManager = kernel.Resolve<IPoolManagerFactory>().Get();
+            var poolManager = kernel.Resolve<IObjectFactory>().GetPoolManager();
             poolManager.Run();
 
             // start web server.

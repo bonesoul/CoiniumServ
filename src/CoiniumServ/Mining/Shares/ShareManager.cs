@@ -52,16 +52,16 @@ namespace CoiniumServ.Mining.Shares
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareManager" /> class.
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="daemonClient"></param>
         /// <param name="jobTracker"></param>
         /// <param name="storage"></param>
-        /// <param name="coinConfig"></param>
-        public ShareManager(IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, ICoinConfig coinConfig)
+        public ShareManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
         {
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _storage = storage;
-            _logger = Log.ForContext<ShareManager>().ForContext("Component", coinConfig.Name);
+            _logger = Log.ForContext<ShareManager>().ForContext("Component", pool);
         }
 
         /// <summary>

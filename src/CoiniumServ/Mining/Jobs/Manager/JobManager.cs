@@ -67,7 +67,9 @@ namespace CoiniumServ.Mining.Jobs.Manager
         private Timer _timer;
         private const int TimerExpiration = 60;
 
-        public JobManager(IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig, ICoinConfig coinConfig)
+        public JobManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
+            IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig,
+            IRewardsConfig rewardsConfig)
         {
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
@@ -77,7 +79,8 @@ namespace CoiniumServ.Mining.Jobs.Manager
             _walletConfig = walletConfig;
             _rewardsConfig = rewardsConfig;
             _jobCounter = new JobCounter(); // todo make this ioc based too.
-            _logger = Log.ForContext<JobManager>().ForContext("Component", coinConfig.Name);
+
+            _logger = Log.ForContext<JobManager>().ForContext("Component", pool);
         }
 
         public void Initialize(UInt32 instanceId)

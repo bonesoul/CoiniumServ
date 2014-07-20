@@ -50,8 +50,8 @@ namespace CoiniumServ.Daemon
     {
         public static readonly object[] EmptyString = {}; // used as empty parameter.
 
-        public DaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig)
-            :base(daemonConfig, coinConfig)
+        public DaemonClient(string pool, IDaemonConfig daemonConfig)
+            :base(pool, daemonConfig)
         { }
 
         /// <summary>
