@@ -1,16 +1,34 @@
 {
-    # detailed sample config file for pool which explicility defines all settings
+    # detailed sample config file for pool which explicility sets all settings
 
-	"enabled": false,
-	
+	"enabled": false,	
 	"coin": "litecoin.json",
 
-    # central wallet configuration
+    # -------------------------------
+    # Wallet & Rewards Configuration
+    # -------------------------------
+    
+    # address: generated coins will arrive here.
+
     "wallet" : {
         "address":  "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"
     },
 
-	# coin daemon connection configuration
+    # rewards: list of addresses that gets a percentage from each mined block (ie, pool fee.)
+
+    "rewards":  [
+        {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1} 
+    ],
+
+    # -------------------------------
+    # Coin Daemon RPC Connection
+    # -------------------------------
+
+	# host: ip/hostname of coin-daemon.
+    # port: the port coin daemon is listening on.
+    # username: username for rpc connection.
+    # password: password for rpc connection.
+
 	"daemon": {
 		"host": "127.0.0.1",
 		"port": 9333,
@@ -18,19 +36,56 @@
 		"password": "password"
 	},
 
-    # rewards configuration    
-    "rewards":  [
-        {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1} 
-    ],
+    # -------------------------------
+    # Payment Processing Configuration
+    # -------------------------------
 
-	# payment processing configuration
+	# enabled: Set this true to let CoiniumServ handle the payments, false if you would like some other software like mpos to handle them.
+    # interval: Interval in seconds that payment-processor will be running.
+    # minimum:  Minimum amount of coins before a miner is eligable for getting a payment.
+
 	"payments": {
 		"enabled": true,
         "interval": 60,
 		"minimum": 1
 	},
 
-	# stratum server configuration
+    # -------------------------------
+    # Job Manager Configuration
+    # -------------------------------
+
+    "jobs":  {
+        "blockRefresh": 1000,
+        "rebroadcast": 55        
+    },
+
+    # -------------------------------
+    # Miner Manager Configuration
+    # -------------------------------
+
+    "miners":  {
+        "timeout": 600,
+        "validateUsernames": "true"
+    },
+
+    # -------------------------------
+    # Stratum Server Configuration
+    # -------------------------------
+
+    # stratum:
+    # enabled: Set this true to enable stratum server.
+    # bind: Interface to bind stratum server.
+    # port: Port to listen for stratum connections.
+    # diff: Default difficulty assigned to newly connected miners.
+
+    # vardiff:
+    # enabled: Set this true to enable variable-difficulty support.
+    # minDiff: Minimum difficulty that can be assigned to miners.
+    # maxDiff: Maximum difficulty that can be assigned to miners.
+    # targetTime: Try to get a single share per this many seconds from miner.
+    # retargetTime: Retarget a miners difficulty ever this many seconds.
+    # variancePercent: Allow difficulty for a miner to vary this percent without retargeting.
+
 	"stratum": {
 		"enabled": true,
 		"bind": "0.0.0.0",
@@ -45,6 +100,13 @@
             "variancePercent": 30
         }
 	},
+    
+    # -------------------------------
+    # Getwork Server Configuration
+    # -------------------------------
+
+    # EXPERIMENTAL!; This feature is still in development and still not complete yet.
+    # enabled: Set this true to enable getwork server.
 
 	# vanilla server configuration - experimental!
 	"vanilla": {

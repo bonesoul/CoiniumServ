@@ -1,8 +1,7 @@
 ﻿{
     # sample pool config file that only sets specific settings for the pool and gets the others from default.json
 
-	"enabled": false,
-	
+	"enabled": false,	
 	"coin": "litecoin.json",
 
     # central wallet configuration
@@ -10,17 +9,17 @@
         "address":  "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"
     },
 
+    # rewards configuration    
+    "rewards":  [
+        {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1} 
+    ],
+
 	# coin daemon connection configuration
 	"daemon": {
 		"port": 9333,
 		"username": "user",
 		"password": "password"
 	},
-
-    # rewards configuration    
-    "rewards":  [
-        {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1} 
-    ],
 
 	# payment processing configuration
 	"payments": {
