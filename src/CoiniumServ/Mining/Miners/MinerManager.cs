@@ -47,11 +47,11 @@ namespace CoiniumServ.Mining.Miners
 
         private readonly ILogger _logger;        
 
-        public MinerManager(IDaemonClient daemonClient, ICoinConfig coinConfig)
+        public MinerManager(string pool, IDaemonClient daemonClient)
         {
             _daemonClient = daemonClient;
             _miners = new Dictionary<int, IMiner>();
-            _logger = Log.ForContext<MinerManager>().ForContext("Component", coinConfig.Name);
+            _logger = Log.ForContext<MinerManager>().ForContext("Component", pool);
         }
 
         public IMiner GetMiner(Int32 id)

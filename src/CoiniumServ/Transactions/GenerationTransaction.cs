@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CoiniumServ.Coin.Coinbase;
-using CoiniumServ.Crypto;
+using CoiniumServ.Cryptology;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Mining.Jobs;

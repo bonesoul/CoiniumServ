@@ -21,7 +21,7 @@
 // 
 #endregion
 
-using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools.Config;

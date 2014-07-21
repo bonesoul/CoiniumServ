@@ -22,7 +22,7 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Factories;
 using CoiniumServ.Mining.Banning;
 using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Mining.Jobs.Tracker;
@@ -52,15 +52,10 @@ namespace CoiniumServ.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IPoolManagerFactory, PoolManagerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithmFactory, HashAlgorithmFactory>().AsSingleton();
-            _applicationContext.Container.Register<IPoolFactory, PoolFactory>().AsSingleton();
+            _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
+
             _applicationContext.Container.Register<IServerFactory, ServerFactory>().AsSingleton();
             _applicationContext.Container.Register<IServiceFactory, ServiceFactory>().AsSingleton();
-            _applicationContext.Container.Register<IJobManagerFactory, JobManagerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IJobTrackerFactory, JobTrackerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IShareManagerFactory, ShareManagerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IMinerManagerFactory, MinerManagerFactory>().AsSingleton();
             _applicationContext.Container.Register<ICoinConfigFactory, CoinConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfigFactory, PoolConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IGlobalConfigFactory, GlobalConfigFactory>().AsSingleton();
@@ -68,7 +63,6 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IPaymentProcessorFactory, PaymentProcessorFactory>().AsSingleton();
             _applicationContext.Container.Register<IStatisticsObjectFactory, StatististicsObjectFactory>().AsSingleton();
             _applicationContext.Container.Register<IVardiffManagerFactory, VardiffManagerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IBanManagerFactory, BanManagerFactory>().AsSingleton();
         }
     }
 }

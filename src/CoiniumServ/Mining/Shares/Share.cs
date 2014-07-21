@@ -23,8 +23,8 @@
 
 using System;
 using CoiniumServ.Coin.Coinbase;
-using CoiniumServ.Crypto;
-using CoiniumServ.Crypto.Algorithms;
+using CoiniumServ.Cryptology;
+using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Server.Mining.Stratum;

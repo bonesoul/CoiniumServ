@@ -22,7 +22,7 @@
 #endregion
 
 using System;
-using CoiniumServ.Crypto;
+using CoiniumServ.Cryptology;
 
 namespace CoiniumServ.Transactions
 {

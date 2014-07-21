@@ -25,10 +25,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Mining.Pools;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
@@ -43,17 +41,17 @@ namespace CoiniumServ.Daemon
         public string RpcPassword { get; private set; }
         public Int32 RequestCounter { get; private set; }
 
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
-        public virtual void Initialize(IDaemonConfig daemonConfig, ICoinConfig coinConfig)
+        public DaemonBase(string pool, IDaemonConfig daemonConfig)
         {
-            _logger = Logging.PacketLogger.ForContext<Pool>().ForContext("Component", coinConfig.Name);
+            _logger = Logging.PacketLogger.ForContext<DaemonClient>().ForContext("Component", pool);
 
-            var url = string.Format("{0}", daemonConfig.Url);
-            RpcUrl = url;
+            RpcUrl = string.Format("http://{0}:{1}", daemonConfig.Host, daemonConfig.Port);
             RpcUser = daemonConfig.Username;
             RpcPassword = daemonConfig.Password;
-            RequestCounter = 0;
+
+            RequestCounter = 0;  
         }
 
         /// <summary>
@@ -66,7 +64,7 @@ namespace CoiniumServ.Daemon
         /// <param name="method">Method to invoke.</param>
         /// <param name="parameters">Parameters to pass to the method.</param>
         /// <returns>The JSON RPC response deserialized as the given type.</returns>
-        public T MakeRequest<T>(string method, params object[] parameters)
+        protected T MakeRequest<T>(string method, params object[] parameters)
         {
             var rpcResponse = MakeRpcRequest<T>(new DaemonRequest(RequestCounter++, method, parameters));
             return rpcResponse.Result;

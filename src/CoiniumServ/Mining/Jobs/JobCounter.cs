@@ -30,6 +30,8 @@ namespace CoiniumServ.Mining.Jobs
     /// </summary>
     public class JobCounter : IJobCounter
     {
+        // use ioc for job-counter too
+
         private UInt64 Current { get; set; }
 
         public JobCounter()

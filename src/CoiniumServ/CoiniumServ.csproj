@@ -111,21 +111,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Helpers\Hashrate.cs" />
-    <Compile Include="Crypto\Algorithms\Blake.cs" />
-    <Compile Include="Crypto\Algorithms\Fugue.cs" />
-    <Compile Include="Crypto\Algorithms\Groestl.cs" />
-    <Compile Include="Crypto\Algorithms\Keccak.cs" />
-    <Compile Include="Crypto\Algorithms\Sha256.cs" />
-    <Compile Include="Crypto\Algorithms\Shavite3.cs" />
-    <Compile Include="Crypto\Algorithms\Skein.cs" />
-    <Compile Include="Crypto\Algorithms\X11.cs" />
-    <Compile Include="Crypto\Algorithms\X13.cs" />
-    <Compile Include="Crypto\Algorithms\X15.cs" />
-    <Compile Include="Crypto\Algorithms\X17.cs" />
+    <Compile Include="Cryptology\Algorithms\Blake.cs" />
+    <Compile Include="Cryptology\Algorithms\Fugue.cs" />
+    <Compile Include="Cryptology\Algorithms\Groestl.cs" />
+    <Compile Include="Cryptology\Algorithms\Keccak.cs" />
+    <Compile Include="Cryptology\Algorithms\Sha256.cs" />
+    <Compile Include="Cryptology\Algorithms\Shavite3.cs" />
+    <Compile Include="Cryptology\Algorithms\Skein.cs" />
+    <Compile Include="Cryptology\Algorithms\X11.cs" />
+    <Compile Include="Cryptology\Algorithms\X13.cs" />
+    <Compile Include="Cryptology\Algorithms\X15.cs" />
+    <Compile Include="Cryptology\Algorithms\X17.cs" />
+    <Compile Include="Factories\ConfigFactory.cs" />
+    <Compile Include="Factories\IConfigFactory.cs" />
+    <Compile Include="Factories\IObjectFactory.cs" />
+    <Compile Include="Factories\ObjectFactory.cs" />
     <Compile Include="Mining\Banning\BanManager.cs" />
-    <Compile Include="Mining\Banning\BanManagerFactory.cs" />
     <Compile Include="Mining\Banning\IBanManager.cs" />
-    <Compile Include="Mining\Banning\IBanManagerFactory.cs" />
     <Compile Include="Mining\Pools\Config\BanConfig.cs" />
     <Compile Include="Mining\Pools\Config\IBanConfig.cs" />
     <Compile Include="Mining\Pools\Config\IRewardsConfig.cs" />
@@ -147,15 +149,11 @@
     <Compile Include="Daemon\IDaemonBase.cs" />
     <Compile Include="Daemon\Responses\IBlockTemplate.cs" />
     <Compile Include="Mining\Jobs\Tracker\IJobTracker.cs" />
-    <Compile Include="Mining\Jobs\Tracker\IJobTrackerFactory.cs" />
     <Compile Include="Mining\Jobs\Tracker\JobTracker.cs" />
-    <Compile Include="Mining\Jobs\Tracker\JobTrackerFactory.cs" />
     <Compile Include="Mining\Miners\MinerEventArgs.cs" />
-    <Compile Include="Mining\Pools\IPoolManagerFactory.cs" />
     <Compile Include="Mining\Pools\Statistics\IGlobal.cs" />
     <Compile Include="Mining\Pools\Statistics\IPerAlgorithm.cs" />
     <Compile Include="Mining\Pools\Statistics\IPerPool.cs" />
-    <Compile Include="Mining\Pools\PoolManagerFactory.cs" />
     <Compile Include="Mining\Pools\Statistics\IPools.cs" />
     <Compile Include="Mining\Pools\Statistics\IStatistics.cs" />
     <Compile Include="Mining\Pools\Statistics\IStatisticsProvider.cs" />
@@ -201,6 +199,7 @@
     <Compile Include="Persistance\Blocks\OrphanedBlock.cs" />
     <Compile Include="Persistance\Redis\IRedisConfig.cs" />
     <Compile Include="Persistance\Redis\RedisConfig.cs" />
+    <Compile Include="Repository\Registries\AlgorithmRegistry.cs" />
     <Compile Include="Server\Mining\Vanilla\IVanillaMiner.cs" />
     <Compile Include="Server\Servers.cs" />
     <Compile Include="Server\Web\IWebServer.cs" />
@@ -215,12 +214,8 @@
     <Compile Include="Utils\Configuration\IGlobalConfigFactory.cs" />
     <Compile Include="Utils\Configuration\GlobalConfigFactory.cs" />
     <Compile Include="Utils\Extensions\StringExtensions.cs" />
-    <Compile Include="Crypto\Merkle\IMerkleRoot.cs" />
-    <Compile Include="Crypto\Merkle\IMerkleTree.cs" />
-    <Compile Include="Crypto\Merkle\MerkleRoot.cs" />
+    <Compile Include="Cryptology\Merkle\IMerkleTree.cs" />
     <Compile Include="Mining\Jobs\IJobCounter.cs" />
-    <Compile Include="Mining\Miners\IMinerManagerFactory.cs" />
-    <Compile Include="Mining\Miners\MinerManagerFactory.cs" />
     <Compile Include="Mining\Shares\IShare.cs" />
     <Compile Include="Mining\Shares\Share.cs" />
     <Compile Include="Mining\Shares\ShareError.cs" />
@@ -260,15 +255,13 @@
     <Compile Include="Utils\Helpers\Time\TimeHelpers.cs" />
     <Compile Include="Utils\Buffers\IRingBuffer.cs" />
     <Compile Include="Utils\Logging.cs" />
-    <Compile Include="Utils\Platform\Framework.cs" />
+    <Compile Include="Utils\Platform\Frameworks.cs" />
     <Compile Include="Utils\Platform\PlatformManager.cs" />
     <Compile Include="Utils\Buffers\RingBuffer.cs" />
     <Compile Include="Utils\Versions\VersionInfo.cs" />
-    <Compile Include="Crypto\Algorithms\Algorithms.cs" />
-    <Compile Include="Crypto\Algorithms\IHashAlgorithmFactory.cs" />
-    <Compile Include="Crypto\Algorithms\HashAlgorithmFactory.cs" />
-    <Compile Include="Crypto\Algorithms\IHashAlgorithm.cs" />
-    <Compile Include="Crypto\Algorithms\Scrypt.cs" />
+    <Compile Include="Cryptology\Algorithms\Algorithms.cs" />
+    <Compile Include="Cryptology\Algorithms\IHashAlgorithm.cs" />
+    <Compile Include="Cryptology\Algorithms\Scrypt.cs" />
     <Compile Include="Coin\Address\Base58.cs" />
     <Compile Include="Coin\Config\CoinConfig.cs" />
     <Compile Include="Coin\Config\CoinConfigFactory.cs" />
@@ -291,32 +284,26 @@
     <Compile Include="Repository\Registries\ManagerRegistry.cs" />
     <Compile Include="Repository\Registries\ServerRegistry.cs" />
     <Compile Include="Repository\Registries\ServiceRegistry.cs" />
-    <Compile Include="Crypto\Hash.cs" />
+    <Compile Include="Cryptology\Hash.cs" />
     <Compile Include="Utils\Commands\CommandAttributes.cs" />
     <Compile Include="Utils\Commands\CommandGroup.cs" />
     <Compile Include="Utils\Commands\CommandManager.cs" />
     <Compile Include="Repository\Registries\Registry.cs" />
-    <Compile Include="Crypto\Utils.cs" />
+    <Compile Include="Cryptology\Utils.cs" />
     <Compile Include="Mining\Jobs\ExtraNonce.cs" />
     <Compile Include="Mining\Jobs\IExtraNonce.cs" />
-    <Compile Include="Mining\Jobs\Manager\IJobManagerFactory.cs" />
     <Compile Include="Mining\Jobs\JobCounter.cs" />
-    <Compile Include="Mining\Jobs\Manager\JobManagerFactory.cs" />
     <Compile Include="Mining\Miners\IMinerManager.cs" />
-    <Compile Include="Crypto\Merkle\MerkleTree.cs" />
+    <Compile Include="Cryptology\Merkle\MerkleTree.cs" />
     <Compile Include="Daemon\Responses\BlockTemplateTransaction.cs" />
     <Compile Include="Mining\Jobs\Manager\IJobManager.cs" />
     <Compile Include="Mining\Jobs\Manager\JobManager.cs" />
     <Compile Include="Mining\Miners\MinerManager.cs" />
     <Compile Include="Mining\Pools\IPool.cs" />
     <Compile Include="Mining\Pools\Config\IPoolConfig.cs" />
-    <Compile Include="Mining\Pools\IPoolFactory.cs" />
     <Compile Include="Mining\Pools\IPoolManager.cs" />
     <Compile Include="Mining\Pools\Pool.cs" />
-    <Compile Include="Mining\Pools\PoolFactory.cs" />
-    <Compile Include="Mining\Shares\IShareManagerFactory.cs" />
     <Compile Include="Mining\Shares\IShareManager.cs" />
-    <Compile Include="Mining\Shares\ShareManagerFactory.cs" />
     <Compile Include="Mining\Shares\ShareManager.cs" />
     <Compile Include="Server\Mining\Service\IRpcService.cs" />
     <Compile Include="Server\Mining\IMiningServer.cs" />
@@ -398,6 +385,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="config\coins\namecoin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="config\config-sample.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

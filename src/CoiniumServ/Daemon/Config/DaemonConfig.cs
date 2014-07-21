@@ -34,11 +34,6 @@ namespace CoiniumServ.Daemon.Config
 
         public string Password { get; private set; }
 
-        public string Url
-        {
-            get { return string.Format("http://{0}:{1}", Host, Port); }
-        }
-
         public DaemonConfig(dynamic config)
         {
             if (config == null)

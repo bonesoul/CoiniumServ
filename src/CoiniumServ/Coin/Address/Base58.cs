@@ -25,7 +25,7 @@ using System;
 using System.Linq;
 using System.Text;
 using CoiniumServ.Coin.Address.Exceptions;
-using CoiniumServ.Crypto;
+using CoiniumServ.Cryptology;
 using Org.BouncyCastle.Math;
 
 namespace CoiniumServ.Coin.Address

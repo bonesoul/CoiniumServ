@@ -22,23 +22,11 @@
 #endregion
 
 using System;
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon.Config;
 
 namespace CoiniumServ.Daemon
 {
     public interface IDaemonBase
     {
-        string RpcUrl { get; }
-
-        string RpcUser { get;}
-        string RpcPassword { get;}
-        Int32 RequestCounter { get; }
-
-        T MakeRequest<T>(string method, params object[] parameters);
-
         string MakeRawRequest(string method, params object[] parameters);
-
-        void Initialize(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
     }
 }

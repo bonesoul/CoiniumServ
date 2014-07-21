@@ -22,7 +22,7 @@
 #endregion
 
 using System;
-using CoiniumServ.Crypto;
+using CoiniumServ.Cryptology;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Server.Mining.Stratum.Notifications;

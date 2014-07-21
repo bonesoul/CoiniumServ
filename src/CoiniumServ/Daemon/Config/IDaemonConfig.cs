@@ -35,7 +35,5 @@ namespace CoiniumServ.Daemon.Config
         string Username { get; }
 
         string Password { get; }
-
-        string Url { get; }
     }
 }
