@@ -27,8 +27,9 @@ using System.Net;
 using System.Text;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Utils;
+using CoiniumServ.Factories;
 using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Logging;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -45,13 +46,11 @@ namespace CoiniumServ.Daemon
 
         public DaemonBase(string pool, IDaemonConfig daemonConfig)
         {
-            _logger = Logging.PacketLogger.ForContext<DaemonClient>().ForContext("Component", pool);
-
             RpcUrl = string.Format("http://{0}:{1}", daemonConfig.Host, daemonConfig.Port);
             RpcUser = daemonConfig.Username;
             RpcPassword = daemonConfig.Password;
-
-            RequestCounter = 0;  
+            RequestCounter = 0;
+            _logger = LogManager.PacketLogger.ForContext<DaemonClient>().ForContext("Component", pool);
         }
 
         /// <summary>

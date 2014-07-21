@@ -27,7 +27,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using CoiniumServ.Mining.Pools;
+using CoiniumServ.Factories;
 using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Mining.Shares;
 using CoiniumServ.Payments;
@@ -55,12 +55,12 @@ namespace CoiniumServ.Persistance.Redis
 
         private readonly ILogger _logger;
 
-        public Redis(IGlobalConfigFactory globalConfigFactory, IPoolConfig poolConfig)
+        public Redis(IConfigManager configManager, IPoolConfig poolConfig)
         {
             _logger = Log.ForContext<Redis>().ForContext("Component", poolConfig.Coin.Name);
 
             _poolConfig = poolConfig; // the pool config.
-            _redisConfig = globalConfigFactory.GetRedisConfig(); // read the redis config.
+            _redisConfig = configManager.RedisConfig; // read the redis config.
 
             IsEnabled = _redisConfig.Enabled;
 

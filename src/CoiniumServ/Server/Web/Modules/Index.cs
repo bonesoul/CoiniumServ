@@ -34,7 +34,7 @@ namespace CoiniumServ.Server.Web.Modules
         {
             Get["/"] = _ => View["index", new IndexModel
             {
-                Pools = poolManager.GetPools(),
+                Pools = poolManager.Pools,
                 Statistics = statistics,
             }];
         }
@@ -42,7 +42,7 @@ namespace CoiniumServ.Server.Web.Modules
 
     public class IndexModel
     {
-        public IList<IPool> Pools { get; set; }
+        public IReadOnlyCollection<IPool> Pools { get; set; }
 
         public IStatistics Statistics { get; set; }
     }

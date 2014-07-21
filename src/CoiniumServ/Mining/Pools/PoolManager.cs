@@ -25,86 +25,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Factories;
-using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Utils.Configuration;
-using CoiniumServ.Utils.Helpers.IO;
 using Serilog;
 
 namespace CoiniumServ.Mining.Pools
 {
     public class PoolManager : IPoolManager
     {
-        private readonly List<IPool> _pools = new List<IPool>();
+        public IReadOnlyCollection<IPool> Pools { get { return _pools.Values.ToList(); } }
 
-        private readonly IObjectFactory _objectFactory;
-
-        private readonly IPoolConfigFactory _poolConfigFactory;
+        private readonly Dictionary<string, IPool> _pools; 
 
         private readonly ILogger _logger;
 
-        public PoolManager(IObjectFactory objectFactory, IPoolConfigFactory poolConfigFactory)
+        public PoolManager(IObjectFactory objectFactory , IConfigManager configManager)
         {
-            _objectFactory = objectFactory;
-            _poolConfigFactory = poolConfigFactory;
             _logger = Log.ForContext<PoolManager>();
-        }
+            _pools = new Dictionary<string, IPool>();
 
-        public void Run()
-        {
-            // load pool configs.
-            LoadConfigs();
-
-            // run pools.
-            foreach (var pool in _pools)
+            foreach (var config in configManager.PoolConfigs)
             {
-                pool.Start();
-            }
-        }
-
-        public void LoadConfigs()
-        {
-            const string configRoot = "config/pools";
-            
-            var files = FileHelpers.GetFilesByExtensionRecursive(configRoot, ".json");
-            
-            var pools = new List<IPoolConfig>();
-            var names = new List<string>();
-
-            foreach (var file in files)
-            {
-                var poolConfig = _poolConfigFactory.Get(JsonConfigReader.Read(file));
-                
-                if (!poolConfig.Enabled) // skip pools that are not enabled.
-                    continue;
-
-                pools.Add(poolConfig);
-                names.Add(poolConfig.Coin.Name);
-            }
-
-            _logger.Information("Discovered a total of {0} enabled pool configurations: {1}.", pools.Count, names);
-
-            foreach (var config in pools)
-            {
-                AddPool(config);
+                _pools.Add(config.Coin.Symbol, objectFactory.GetPool(config));
             }
         }
 
         public IPool GetBySymbol(string symbol)
         {
-            return _pools.FirstOrDefault(pool => pool.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
+            return _pools.Values.FirstOrDefault(pair => pair.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
         }
 
-        public IPool AddPool(IPoolConfig poolConfig)
+        public void Run()
         {
-            var pool = _objectFactory.GetPool(poolConfig);
-            _pools.Add(pool);
-
-            return pool;
-        }
-
-        public IList<IPool> GetPools()
-        {
-            return _pools;
+            foreach (var kvp in _pools)
+            {
+                kvp.Value.Start();
+            }
         }
     }
 }

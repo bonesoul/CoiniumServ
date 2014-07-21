@@ -166,7 +166,7 @@
     <Compile Include="Mining\Vardiff\VardiffConfig.cs" />
     <Compile Include="Mining\Vardiff\VardiffManager.cs" />
     <Compile Include="Net\Server\Http\Web\ErrorConfiguration.cs" />
-    <Compile Include="Net\Server\Http\Web\NancyBootstrapper.cs" />
+    <Compile Include="Net\Server\Http\Web\WebBootstrapper.cs" />
     <Compile Include="Net\Server\Http\Web\RootPathProvider.cs" />
     <Compile Include="Net\Server\Sockets\ISocketServer.cs" />
     <Compile Include="Net\Server\Sockets\BannedConnectionEventArgs.cs" />
@@ -204,8 +204,8 @@
     <Compile Include="Server\Web\Modules\Pool.cs" />
     <Compile Include="Server\Web\WebServer.cs" />
     <Compile Include="Server\Web\WebServerConfig.cs" />
-    <Compile Include="Utils\Configuration\IGlobalConfigFactory.cs" />
-    <Compile Include="Utils\Configuration\GlobalConfigFactory.cs" />
+    <Compile Include="Utils\Configuration\ConfigManager.cs" />
+    <Compile Include="Utils\Configuration\IConfigManager.cs" />
     <Compile Include="Utils\Extensions\StringExtensions.cs" />
     <Compile Include="Cryptology\Merkle\IMerkleTree.cs" />
     <Compile Include="Mining\Jobs\IJobCounter.cs" />
@@ -235,8 +235,6 @@
     <Compile Include="Repository\Context\ApplicationContext.cs" />
     <Compile Include="Utils\Configuration\JsonConfigReader.cs" />
     <Compile Include="Utils\Helpers\Validation\Enforce.cs" />
-    <Compile Include="Mining\Pools\Config\IPoolConfigFactory.cs" />
-    <Compile Include="Mining\Pools\Config\PoolConfigFactory.cs" />
     <Compile Include="Server\Mining\Service\Services.cs" />
     <Compile Include="Utils\Extensions\ArrayExtensions.cs" />
     <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
@@ -245,7 +243,12 @@
     <Compile Include="Utils\Helpers\Misc\Range.cs" />
     <Compile Include="Utils\Helpers\Time\TimeHelpers.cs" />
     <Compile Include="Utils\Buffers\IRingBuffer.cs" />
-    <Compile Include="Utils\Logging.cs" />
+    <Compile Include="Utils\Logging\ILogConfig.cs" />
+    <Compile Include="Utils\Logging\ILogTarget.cs" />
+    <Compile Include="Utils\Logging\ILogManager.cs" />
+    <Compile Include="Utils\Logging\LogConfig.cs" />
+    <Compile Include="Utils\Logging\LogTarget.cs" />
+    <Compile Include="Utils\Logging\LogManager.cs" />
     <Compile Include="Utils\Platform\Frameworks.cs" />
     <Compile Include="Utils\Platform\PlatformManager.cs" />
     <Compile Include="Utils\Buffers\RingBuffer.cs" />
@@ -255,9 +258,7 @@
     <Compile Include="Cryptology\Algorithms\Scrypt.cs" />
     <Compile Include="Coin\Address\Base58.cs" />
     <Compile Include="Coin\Config\CoinConfig.cs" />
-    <Compile Include="Coin\Config\CoinConfigFactory.cs" />
     <Compile Include="Coin\Config\ICoinConfig.cs" />
-    <Compile Include="Coin\Config\ICoinConfigFactory.cs" />
     <Compile Include="Daemon\Config\DaemonConfig.cs" />
     <Compile Include="Daemon\IDaemonClient.cs" />
     <Compile Include="Daemon\Config\IDaemonConfig.cs" />

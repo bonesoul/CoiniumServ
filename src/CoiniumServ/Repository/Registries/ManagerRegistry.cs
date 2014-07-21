@@ -28,6 +28,7 @@ using CoiniumServ.Mining.Pools;
 using CoiniumServ.Mining.Shares;
 using CoiniumServ.Mining.Vardiff;
 using CoiniumServ.Repository.Context;
+using CoiniumServ.Utils.Configuration;
 
 namespace CoiniumServ.Repository.Registries
 {
@@ -49,6 +50,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IPoolManager, PoolManager>().AsSingleton();
             _applicationContext.Container.Register<IVardiffManager, VardiffManager>().AsMultiInstance();
             _applicationContext.Container.Register<IBanManager, BanManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IConfigManager, ConfigManager>().AsSingleton();
         }
     }
 }

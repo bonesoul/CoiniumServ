@@ -21,23 +21,8 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Factories;
-using CoiniumServ.Mining.Banning;
-using CoiniumServ.Mining.Jobs.Manager;
-using CoiniumServ.Mining.Jobs.Tracker;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Mining.Pools;
-using CoiniumServ.Mining.Pools.Config;
-using CoiniumServ.Mining.Pools.Statistics;
-using CoiniumServ.Mining.Shares;
-using CoiniumServ.Mining.Vardiff;
-using CoiniumServ.Payments;
-using CoiniumServ.Persistance;
 using CoiniumServ.Repository.Context;
-using CoiniumServ.Server;
-using CoiniumServ.Server.Mining.Service;
-using CoiniumServ.Utils.Configuration;
 
 namespace CoiniumServ.Repository.Registries
 {
@@ -53,10 +38,7 @@ namespace CoiniumServ.Repository.Registries
         public void RegisterInstances()
         {
             _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
-
-            _applicationContext.Container.Register<ICoinConfigFactory, CoinConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IPoolConfigFactory, PoolConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IGlobalConfigFactory, GlobalConfigFactory>().AsSingleton();
+            _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
         }
     }
 }

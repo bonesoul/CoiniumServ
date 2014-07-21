@@ -21,21 +21,10 @@
 // 
 #endregion
 
-using CoiniumServ.Persistance.Redis;
-using CoiniumServ.Server.Web;
-
-namespace CoiniumServ.Utils.Configuration
+namespace CoiniumServ.Utils.Logging
 {
-    public interface IGlobalConfigFactory
+    public interface ILogManager
     {
-        /// <summary>
-        /// Gets the configuration.
-        /// </summary>
-        /// <returns></returns>
-        dynamic Get();
-
-        IRedisConfig GetRedisConfig();
-
-        IWebServerConfig GetWebServerConfig();
+        void Initialize();
     }
 }

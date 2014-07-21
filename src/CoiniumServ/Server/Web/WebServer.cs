@@ -21,30 +21,30 @@
 // 
 #endregion
 
-using CoiniumServ.Mining.Pools;
 using CoiniumServ.Net.Server.Http.Web;
-using CoiniumServ.Repository.Context;
 using CoiniumServ.Utils.Configuration;
+using Nancy.Bootstrapper;
+using Serilog;
 
 namespace CoiniumServ.Server.Web
 {
     public class WebServer : HttpServer, IWebServer
     {
-        public IWebServerConfig Config { get; private set; }
+        private readonly ILogger _logger;
 
-        private IPoolManager _poolManager;
-
-        public WebServer(IApplicationContext applicationContext, IGlobalConfigFactory globalConfigFactory, IPoolManager poolManager)
-            : base(applicationContext)
+        public WebServer(INancyBootstrapper webBootstrapper, IConfigManager configManager)
+            : base(webBootstrapper)
         {
-            _poolManager = poolManager;
-            Config = globalConfigFactory.GetWebServerConfig();
+            var config = configManager.WebServerConfig;
+            BindIP = config.BindInterface;
+            Port = config.Port;
 
-            BindIP = Config.BindInterface;
-            Port = Config.Port;
-            
-            if (Config.Enabled)
+            _logger = Log.ForContext<WebServer>();
+
+            if (config.Enabled)
                 Start();
+            else
+                _logger.Verbose("Skipping web-server initialization as it disabled.");
         }
     }
 }

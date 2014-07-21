@@ -21,6 +21,12 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Repository.Context;
+using CoiniumServ.Utils.Configuration;
+using Nancy.TinyIoc;
+
 namespace CoiniumServ.Factories
 {
     /// <summary>
@@ -28,5 +34,41 @@ namespace CoiniumServ.Factories
     /// </summary>
     public class ConfigFactory:IConfigFactory
     {
+        /// <summary>
+        /// The _application context
+        /// </summary>
+        private readonly IApplicationContext _applicationContext;
+
+        public ConfigFactory(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
+
+        public IConfigManager GetConfigManager()
+        {
+            return _applicationContext.Container.Resolve<IConfigManager>();
+        }
+
+        public IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"config", config},
+                {"coinConfig", coinConfig}
+            };
+
+            return _applicationContext.Container.Resolve<IPoolConfig>(@params);
+        }
+
+        public ICoinConfig GetCoinConfig(dynamic config)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"config", config},
+            };
+
+            return _applicationContext.Container.Resolve<ICoinConfig>(@params);
+        }
     }
 }
+ 

@@ -31,14 +31,14 @@ using Nancy.TinyIoc;
 
 namespace CoiniumServ.Net.Server.Http.Web
 {
-    public class NancyBootstrapper : DefaultNancyBootstrapper
+    public class WebBootstrapper : DefaultNancyBootstrapper
     {
         /// <summary>
         /// The _application context
         /// </summary>
         private readonly IApplicationContext _applicationContext;
 
-        public NancyBootstrapper(IApplicationContext applicationContext)
+        public WebBootstrapper(IApplicationContext applicationContext)
         {            
             _applicationContext = applicationContext;            
         }

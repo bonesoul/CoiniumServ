@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using CoiniumServ.Mining.Pools.Config;
 
 namespace CoiniumServ.Mining.Pools.Statistics
 {
@@ -38,5 +39,7 @@ namespace CoiniumServ.Mining.Pools.Statistics
         int CurrentBlock { get; }
 
         IBlocks Blocks { get; }
+
+        IPoolConfig Config { get; }
     }
 }

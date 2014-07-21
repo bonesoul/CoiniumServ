@@ -21,6 +21,10 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Utils.Configuration;
+
 namespace CoiniumServ.Factories
 {
     /// <summary>
@@ -28,5 +32,10 @@ namespace CoiniumServ.Factories
     /// </summary>
     public interface IConfigFactory
     {
+        IConfigManager GetConfigManager();
+
+        IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
+
+        ICoinConfig GetCoinConfig(dynamic config);
     }
 }

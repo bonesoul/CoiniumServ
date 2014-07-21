@@ -26,7 +26,5 @@ using CoiniumServ.Net.Server;
 namespace CoiniumServ.Server.Web
 {
     public interface IWebServer: IServer
-    {
-        IWebServerConfig Config { get; }
-    }
+    { }
 }

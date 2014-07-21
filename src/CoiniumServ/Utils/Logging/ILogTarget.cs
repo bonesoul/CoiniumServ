@@ -20,18 +20,28 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Mining.Pools.Config
+
+using Serilog.Events;
+
+namespace CoiniumServ.Utils.Logging
 {
-    /// <summary>
-    /// Returns an instance of IPoolConfig based on the parsed config file
-    /// </summary>
-    public interface IPoolConfigFactory
+    public interface ILogTarget
     {
-        /// <summary>
-        /// Gets the specified read configuration.
-        /// </summary>
-        /// <param name="readConfig">The read configuration.</param>
-        /// <returns></returns>
-        IPoolConfig Get(dynamic readConfig);
+        bool Enabled { get; }
+
+        LogTargetType Type { get; }
+
+        string Filename { get; }
+
+        bool Rolling { get; }
+
+        LogEventLevel Level { get; }
+    }
+
+    public enum LogTargetType
+    {
+        Console,
+        File,
+        Packet
     }
 }

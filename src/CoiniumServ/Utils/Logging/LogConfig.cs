@@ -21,33 +21,24 @@
 // 
 #endregion
 
-using CoiniumServ.Repository.Context;
-using CoiniumServ.Utils.Configuration;
+using System.Collections.Generic;
 
-namespace CoiniumServ.Coin.Config
+namespace CoiniumServ.Utils.Logging
 {
-    public class CoinConfigFactory : ICoinConfigFactory
+    public class LogConfig : ILogConfig
     {
-        /// <summary>
-        /// The _application context
-        /// </summary>
-        private IApplicationContext _applicationContext;
+        public string Root { get; private set; }
+        public List<ILogTarget> Targets { get; private set; }
 
-        public CoinConfigFactory(IApplicationContext applicationContext)
+        public LogConfig(dynamic config)
         {
-            _applicationContext = applicationContext;
+            Root = config.root;
+
+            Targets = new List<ILogTarget>();
+            foreach (var target in config.targets)
+            {
+                Targets.Add(new LogTarget(target));
+            }
         }
-
-
-        public ICoinConfig GetConfig(string name)
-        {
-            var fileName = string.Format("config/coins/{0}.json", name);
-            var file = JsonConfigReader.Read(fileName);
-
-            if (file == null)
-                return null;
-
-            return new CoinConfig(file);
-        }        
     }
 }

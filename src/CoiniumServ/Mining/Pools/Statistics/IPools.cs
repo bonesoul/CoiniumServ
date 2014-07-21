@@ -27,5 +27,6 @@ namespace CoiniumServ.Mining.Pools.Statistics
 {
     public interface IPools : IEnumerable<KeyValuePair<string, IPerPool>>,IJsonResponse, IStatisticsProvider
     {
+        IPerPool GetBySymbol(string symbol);
     }
 }

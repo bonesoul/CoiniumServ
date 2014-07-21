@@ -23,14 +23,12 @@
 
 using System.Collections.Generic;
 
-namespace CoiniumServ.Mining.Pools
+namespace CoiniumServ.Utils.Logging
 {
-    public interface IPoolManager
+    public interface ILogConfig
     {
-        IReadOnlyCollection<IPool> Pools { get; }
+        string Root { get; }
 
-        IPool GetBySymbol(string symbol);
-
-        void Run();
+        List<ILogTarget> Targets { get; } 
     }
 }

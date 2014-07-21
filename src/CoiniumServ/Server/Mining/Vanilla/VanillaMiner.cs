@@ -26,11 +26,13 @@ using System.IO;
 using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
+using CoiniumServ.Factories;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools;
 using CoiniumServ.Server.Mining.Vanilla.Service;
-using CoiniumServ.Utils;
 using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Logging;
+using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla
 {
@@ -58,12 +60,15 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
         private readonly IMinerManager _minerManager;
 
+        private readonly ILogger _logger;
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
+        /// <param name="logManager"></param>
         public VanillaMiner(int id, IPool pool, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.
@@ -71,6 +76,8 @@ namespace CoiniumServ.Server.Mining.Vanilla
             _minerManager = minerManager;
 
             Authenticated = false; // miner has to authenticate.
+
+            _logger = LogManager.PacketLogger.ForContext<VanillaMiner>().ForContext("Component", pool.Config.Coin.Name);
         }
 
         public bool Authenticate(string user, string password)
@@ -99,13 +106,13 @@ namespace CoiniumServ.Server.Mining.Vanilla
                     context.Request.Response.ContentLength64 = response.Length;
                     context.Request.Response.OutputStream.Write(response, 0, response.Length);
 
-                    Logging.PacketLogger.ForContext<VanillaMiner>().Verbose("tx: {0}", result.PrettifyJson());
+                    _logger.Verbose("tx: {0}", result.PrettifyJson());
                 });
 
             using (var reader = new StreamReader(httpRequest.InputStream, Encoding.UTF8))
             {
                 var line = reader.ReadToEnd();
-                Logging.PacketLogger.ForContext<VanillaMiner>().Verbose("rx: {0}", line.PrettifyJson());
+                _logger.Verbose("rx: {0}", line.PrettifyJson());
 
                 var rpcRequest = new HttpServiceRequest(line, httpContext);
                 var rpcContext = new HttpServiceContext(this, rpcRequest);

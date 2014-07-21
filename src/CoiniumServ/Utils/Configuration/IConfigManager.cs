@@ -20,15 +20,27 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Coin.Config
+
+using System.Collections.Generic;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Server.Web;
+using CoiniumServ.Utils.Logging;
+
+namespace CoiniumServ.Utils.Configuration
 {
-    public interface ICoinConfigFactory
+    public interface IConfigManager
     {
-        /// <summary>
-        /// Gets the configuration.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
-        ICoinConfig GetConfig(string name);
+        bool ConfigExists { get; }
+
+        IRedisConfig RedisConfig { get; }
+
+        IWebServerConfig WebServerConfig { get; }
+
+        ILogConfig LogConfig { get; }
+
+        List<IPoolConfig> PoolConfigs { get; }
+
+        void Initialize();
     }
 }

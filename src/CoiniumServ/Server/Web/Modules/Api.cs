@@ -38,9 +38,10 @@ namespace CoiniumServ.Server.Web.Modules
             Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());
             
             Get["/api/pools"] = _ => Response.AsJson(statistics.Pools.GetResponseObject());
+
             Get["/api/pool/{slug}"] = _ =>
             {
-                var pool = poolManager.GetBySymbol(_.slug);
+                var pool = statistics.Pools.GetBySymbol(_.slug);
 
                 Response response;
 

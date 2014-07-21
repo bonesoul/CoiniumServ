@@ -22,7 +22,6 @@
 #endregion
 
 using System;
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Mining.Shares;
 using CoiniumServ.Utils.Buffers;
 using CoiniumServ.Utils.Helpers.Time;

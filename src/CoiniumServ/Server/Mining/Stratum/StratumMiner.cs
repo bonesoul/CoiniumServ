@@ -22,7 +22,6 @@
 #endregion
 
 using System;
-using System.Configuration;
 using System.Text;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Mining.Miners;
@@ -31,12 +30,11 @@ using CoiniumServ.Net.Server.Sockets;
 using CoiniumServ.Server.Mining.Stratum.Errors;
 using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Server.Mining.Stratum.Service;
-using CoiniumServ.Utils;
 using CoiniumServ.Utils.Buffers;
 using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Logging;
 using Newtonsoft.Json;
 using Serilog;
-using Serilog.Context;
 
 namespace CoiniumServ.Server.Mining.Stratum
 {
@@ -85,6 +83,8 @@ namespace CoiniumServ.Server.Mining.Stratum
 
         private readonly IMinerManager _minerManager;
 
+        private readonly ILogger _logger;
+
         /// <summary>
         /// Creates a new miner instance.
         /// </summary>
@@ -93,6 +93,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="connection"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
+        /// <param name="logManager"></param>
         public StratumMiner(int id, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.
@@ -105,6 +106,8 @@ namespace CoiniumServ.Server.Mining.Stratum
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
+
+            _logger = LogManager.PacketLogger.ForContext<StratumMiner>().ForContext("Component", pool.Config.Coin.Name);
         }
 
         /// <summary>
@@ -138,7 +141,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="e"></param>
         public void Parse(ConnectionDataEventArgs e)
         {
-            Logging.PacketLogger.ForContext<StratumMiner>().Verbose("rx: {0}", e.Data.ToEncodedString().PrettifyJson());
+            _logger.Verbose("rx: {0}", e.Data.ToEncodedString().PrettifyJson());
 
             var rpcResultHandler = new AsyncCallback(
                 callback =>
@@ -152,7 +155,7 @@ namespace CoiniumServ.Server.Mining.Stratum
                     var miner = (StratumMiner)context.Miner;
                     miner.Connection.Send(response);
 
-                    Logging.PacketLogger.ForContext<StratumMiner>().Verbose("tx: {0}", result.PrettifyJson());
+                    _logger.Verbose("tx: {0}", result.PrettifyJson());
                 });
 
             var line = e.Data.ToEncodedString();
@@ -182,7 +185,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             Connection.Send(data);
 
-            Logging.PacketLogger.ForContext<StratumMiner>().Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
+            _logger.Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
         }
 
         /// <summary>
@@ -202,7 +205,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             Connection.Send(data);
 
-            Logging.PacketLogger.ForContext<StratumMiner>().Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
+            _logger.Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
         }
     }
 }

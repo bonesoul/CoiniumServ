@@ -1,6 +1,6 @@
 {
 	# website configuration
-	"web": {
+	"website": {
 		"enabled": true,
 		"bind": "127.0.0.1",
 		"port": 91
@@ -17,8 +17,8 @@
 		}
 	},
 
-    # log configuration
-	"logs": {
+    # logging configuration
+	"logging": {
 		"root": "logs",
 		"targets": [
 			{
