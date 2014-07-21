@@ -783,7 +783,7 @@
     <None Include="config\coins\zzcoin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\pools\default.json">
+    <None Include="config\pools\default-sample.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\pools\sample-detailed.json">
