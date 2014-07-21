@@ -39,9 +39,9 @@ namespace CoiniumServ.Mining.Vardiff
         private readonly float _tMax;
         private readonly ILogger _logger;
 
-        public VardiffManager(IShareManager shareManager, IVardiffConfig vardiffConfig, ICoinConfig coinConfig )
+        public VardiffManager(string pool, IShareManager shareManager, IVardiffConfig vardiffConfig)
         {
-            _logger = Log.ForContext<VardiffManager>().ForContext("Component", coinConfig.Name);
+            _logger = Log.ForContext<VardiffManager>().ForContext("Component", pool);
 
             Config = vardiffConfig;
 

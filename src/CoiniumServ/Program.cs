@@ -84,12 +84,15 @@ namespace CoiniumServ
             _logger.Information("CoiniumServ {0:l} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             PlatformManager.PrintPlatformBanner();
 
+            // object factory
+            var objectFactory = kernel.Resolve<IObjectFactory>();
+
             // start pool manager.
-            var poolManager = kernel.Resolve<IObjectFactory>().GetPoolManager();
+            var poolManager = objectFactory.GetPoolManager();
             poolManager.Run();
 
             // start web server.
-            var webServer = kernel.Resolve<IWebServer>("Web");
+            var webServer = objectFactory.GetWebServer();
 
             while (true) // idle loop & command parser
             {

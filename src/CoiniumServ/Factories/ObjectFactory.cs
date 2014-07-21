@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
@@ -30,9 +31,15 @@ using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools;
 using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Pools.Statistics;
 using CoiniumServ.Mining.Shares;
+using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Repository.Context;
+using CoiniumServ.Server.Mining;
+using CoiniumServ.Server.Mining.Service;
+using CoiniumServ.Server.Web;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Factories
@@ -155,6 +162,19 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IShareManager>(@params);
         }
 
+        public IPaymentProcessor GetPaymentProcessor(string pool, IDaemonClient daemonClient, IStorage storage,
+            IWalletConfig walletConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"pool", pool},
+                {"daemonClient", daemonClient},
+                {"storage", storage},
+                {"walletConfig", walletConfig},
+            };
+
+            return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
+        }
 
         public IBanManager GetBanManager(string pool, IShareManager shareManager, IBanConfig banConfig)
         {
@@ -166,6 +186,127 @@ namespace CoiniumServ.Factories
             };
 
             return _applicationContext.Container.Resolve<IBanManager>(@params);
+        }
+
+        public IVardiffManager GetVardiffManager(string pool, IShareManager shareManager, IVardiffConfig vardiffConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"pool", pool},
+                {"shareManager", shareManager},
+                {"vardiffConfig", vardiffConfig},
+            };
+
+            return _applicationContext.Container.Resolve<IVardiffManager>(@params);
+        }
+
+        #endregion
+
+        #region pool statistics objects
+
+        public IStatistics GetStatistics()
+        {
+            return _applicationContext.Container.Resolve<IStatistics>();
+        }
+
+        public IGlobal GetGlobalStatistics()
+        {
+            return _applicationContext.Container.Resolve<IGlobal>();
+        }
+
+        public IAlgorithms GetAlgorithmStatistics()
+        {
+            return _applicationContext.Container.Resolve<IAlgorithms>();
+        }
+
+        public IPools GetPoolStats()
+        {
+            return _applicationContext.Container.Resolve<IPools>();
+        }
+
+        public IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+                {"daemonClient", daemonClient},
+                {"minerManager",minerManager},
+                {"hashAlgorithm", hashAlgorithm},
+                {"blockStatistics", blockStatistics},
+                {"storage", storage},
+            };
+
+            return _applicationContext.Container.Resolve<IPerPool>(@params);
+        }
+
+        public ILatestBlocks GetLatestBlocks(IStorage storage)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"storage", storage}
+            };
+
+            return _applicationContext.Container.Resolve<ILatestBlocks>(@params);
+        }
+
+        public IBlocks GetBlockStats(ILatestBlocks latestBlocks, IStorage storage)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"latestBlocks", latestBlocks},
+                {"storage", storage},
+            };
+
+            return _applicationContext.Container.Resolve<IBlocks>(@params);
+        }
+
+        #endregion
+
+        #region server & service objects
+
+        public IMiningServer GetMiningServer(string type, IPool pool, IMinerManager minerManager, IJobManager jobManager,
+            IBanManager banManager, ICoinConfig coinConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"pool", pool},
+                {"minerManager", minerManager},
+                {"jobManager", jobManager},
+                {"banManager", banManager},
+                {"coinConfig", coinConfig}
+            };
+
+            return _applicationContext.Container.Resolve<IMiningServer>(type, @params);
+        }
+
+        public IRpcService GetMiningService(string type, ICoinConfig coinConfig, IShareManager shareManager, IDaemonClient daemonClient)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"coinConfig", coinConfig},
+                {"shareManager", shareManager}, 
+                {"daemonClient", daemonClient}
+            };
+            return _applicationContext.Container.Resolve<IRpcService>(type, @params);
+        }
+
+        public IWebServer GetWebServer()
+        {
+            return _applicationContext.Container.Resolve<IWebServer>();
+        }
+
+        #endregion
+
+        #region storage objects
+
+        public IStorage GetStorage(string type, IPoolConfig poolConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig}
+            };
+
+            return _applicationContext.Container.Resolve<IStorage>(type, @params);
         }
 
         #endregion

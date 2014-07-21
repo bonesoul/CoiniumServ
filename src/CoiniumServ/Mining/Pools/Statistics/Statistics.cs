@@ -22,6 +22,7 @@
 #endregion
 
 using System.Threading;
+using CoiniumServ.Factories;
 
 namespace CoiniumServ.Mining.Pools.Statistics
 {
@@ -34,7 +35,7 @@ namespace CoiniumServ.Mining.Pools.Statistics
         private readonly Timer _timer;
         private const int TimerExpiration = 10;
 
-        public Statistics(IStatisticsObjectFactory statisticsObjectFactory)
+        public Statistics(IObjectFactory statisticsObjectFactory)
         {
             Pools = statisticsObjectFactory.GetPoolStats();
             Global = statisticsObjectFactory.GetGlobalStatistics();

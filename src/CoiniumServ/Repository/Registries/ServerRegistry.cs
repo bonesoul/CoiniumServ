@@ -22,10 +22,12 @@
 #endregion
 
 using CoiniumServ.Repository.Context;
-using CoiniumServ.Server;
 using CoiniumServ.Server.Mining;
+using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Stratum.Service;
 using CoiniumServ.Server.Mining.Vanilla;
+using CoiniumServ.Server.Mining.Vanilla.Service;
 using CoiniumServ.Server.Web;
 
 namespace CoiniumServ.Repository.Registries
@@ -41,9 +43,14 @@ namespace CoiniumServ.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IMiningServer, VanillaServer>(Servers.Vanilla).AsMultiInstance();
-            _applicationContext.Container.Register<IMiningServer, StratumServer>(Servers.Stratum).AsMultiInstance();
-            _applicationContext.Container.Register<IWebServer, WebServer>(Servers.Web).AsSingleton();
+            // servers.
+            _applicationContext.Container.Register<IMiningServer, VanillaServer>(Services.Vanilla).AsMultiInstance();
+            _applicationContext.Container.Register<IMiningServer, StratumServer>(Services.Stratum).AsMultiInstance();
+            _applicationContext.Container.Register<IWebServer, WebServer>().AsSingleton();
+
+            // services.
+            _applicationContext.Container.Register<IRpcService, VanillaService>(Services.Vanilla).AsMultiInstance();
+            _applicationContext.Container.Register<IRpcService, StratumService>(Services.Stratum).AsMultiInstance();
         }
     }
 }

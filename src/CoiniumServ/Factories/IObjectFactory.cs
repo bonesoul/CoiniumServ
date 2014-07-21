@@ -31,8 +31,14 @@ using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools;
 using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Mining.Pools.Statistics;
 using CoiniumServ.Mining.Shares;
+using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
+using CoiniumServ.Server.Mining;
+using CoiniumServ.Server.Mining.Service;
+using CoiniumServ.Server.Web;
 
 namespace CoiniumServ.Factories
 {
@@ -76,7 +82,45 @@ namespace CoiniumServ.Factories
 
         IShareManager GetShareManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage);
 
+        IPaymentProcessor GetPaymentProcessor(string pool, IDaemonClient daemonClient, IStorage storage, IWalletConfig walletConfig);
+
         IBanManager GetBanManager(string pool, IShareManager shareManager, IBanConfig banConfig);
+
+        IVardiffManager GetVardiffManager(string pool, IShareManager shareManager, IVardiffConfig vardiffConfig);
+
+        #endregion
+
+        #region pool statistics objects
+
+        IStatistics GetStatistics();
+
+        IGlobal GetGlobalStatistics();
+
+        IAlgorithms GetAlgorithmStatistics();
+
+        IPools GetPoolStats();
+
+        IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage);
+
+        IBlocks GetBlockStats(ILatestBlocks latestBlocks, IStorage storage);
+
+        ILatestBlocks GetLatestBlocks(IStorage storage);
+
+        #endregion
+
+        #region server & service objects
+
+        IMiningServer GetMiningServer(string type, IPool pool, IMinerManager minerManager, IJobManager jobManager,
+            IBanManager banManager, ICoinConfig coinConfig);
+
+        IRpcService GetMiningService(string type, ICoinConfig coinConfig, IShareManager shareManager, IDaemonClient daemonClient);
+
+        IWebServer GetWebServer();
+
+        #endregion
+
+        #region storage objects
+        IStorage GetStorage(string type, IPoolConfig poolConfig);
 
         #endregion
     }

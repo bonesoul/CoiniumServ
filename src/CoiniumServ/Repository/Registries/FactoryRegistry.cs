@@ -54,15 +54,9 @@ namespace CoiniumServ.Repository.Registries
         {
             _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
 
-            _applicationContext.Container.Register<IServerFactory, ServerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IServiceFactory, ServiceFactory>().AsSingleton();
             _applicationContext.Container.Register<ICoinConfigFactory, CoinConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfigFactory, PoolConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IGlobalConfigFactory, GlobalConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IStorageFactory, StorageFactory>().AsSingleton();
-            _applicationContext.Container.Register<IPaymentProcessorFactory, PaymentProcessorFactory>().AsSingleton();
-            _applicationContext.Container.Register<IStatisticsObjectFactory, StatististicsObjectFactory>().AsSingleton();
-            _applicationContext.Container.Register<IVardiffManagerFactory, VardiffManagerFactory>().AsSingleton();
         }
     }
 }

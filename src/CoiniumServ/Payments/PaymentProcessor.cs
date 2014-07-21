@@ -57,12 +57,12 @@ namespace CoiniumServ.Payments
 
         private readonly ILogger _logger;
 
-        public PaymentProcessor(IDaemonClient daemonClient, IStorage storage , IWalletConfig walletConfig, ICoinConfig coinConfig)
+        public PaymentProcessor(string pool, IDaemonClient daemonClient, IStorage storage , IWalletConfig walletConfig)
         {
             _daemonClient = daemonClient;
             _storage = storage;
             _walletConfig = walletConfig;
-            _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", coinConfig.Name);
+            _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", pool);
         }
 
         public void Initialize(IPaymentConfig config)
