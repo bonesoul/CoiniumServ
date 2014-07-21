@@ -138,9 +138,7 @@
     <Compile Include="Mining\Pools\Statistics\IBlocks.cs" />
     <Compile Include="Mining\Pools\Statistics\IJsonResponse.cs" />
     <Compile Include="Mining\Pools\Statistics\ILatestBlocks.cs" />
-    <Compile Include="Mining\Pools\Statistics\IStatisticsObjectFactory.cs" />
     <Compile Include="Mining\Pools\Statistics\LatestBlocks.cs" />
-    <Compile Include="Mining\Pools\Statistics\StatisticsObjectFactory.cs" />
     <Compile Include="Mining\Pools\Statistics\Algorithms.cs" />
     <Compile Include="Mining\Pools\Statistics\Global.cs" />
     <Compile Include="Mining\Pools\Statistics\IAlgorithms.cs" />
@@ -165,10 +163,8 @@
     <Compile Include="Mining\Vardiff\IVardiffMiner.cs" />
     <Compile Include="Mining\Vardiff\IVardiffConfig.cs" />
     <Compile Include="Mining\Vardiff\IVardiffManager.cs" />
-    <Compile Include="Mining\Vardiff\IVardiffManagerFactory.cs" />
     <Compile Include="Mining\Vardiff\VardiffConfig.cs" />
     <Compile Include="Mining\Vardiff\VardiffManager.cs" />
-    <Compile Include="Mining\Vardiff\VardiffManagerFactory.cs" />
     <Compile Include="Net\Server\Http\Web\ErrorConfiguration.cs" />
     <Compile Include="Net\Server\Http\Web\NancyBootstrapper.cs" />
     <Compile Include="Net\Server\Http\Web\RootPathProvider.cs" />
@@ -177,12 +173,10 @@
     <Compile Include="Payments\IPaymentRound.cs" />
     <Compile Include="Payments\IPaymentConfig.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />
-    <Compile Include="Payments\IPaymentProcessorFactory.cs" />
     <Compile Include="Payments\IWorkerBalance.cs" />
     <Compile Include="Payments\PaymentRound.cs" />
     <Compile Include="Payments\PaymentConfig.cs" />
     <Compile Include="Payments\PaymentProcessor.cs" />
-    <Compile Include="Payments\PaymentProcessorFactory.cs" />
     <Compile Include="Payments\WorkerBalance.cs" />
     <Compile Include="Persistance\Blocks\BlockStatus.cs" />
     <Compile Include="Persistance\Blocks\IConfirmedBlock.cs" />
@@ -201,7 +195,6 @@
     <Compile Include="Persistance\Redis\RedisConfig.cs" />
     <Compile Include="Repository\Registries\AlgorithmRegistry.cs" />
     <Compile Include="Server\Mining\Vanilla\IVanillaMiner.cs" />
-    <Compile Include="Server\Servers.cs" />
     <Compile Include="Server\Web\IWebServer.cs" />
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
     <Compile Include="Server\Web\IWebServerConfig.cs" />
@@ -230,9 +223,7 @@
     <Compile Include="Server\Mining\Stratum\Errors\OtherError.cs" />
     <Compile Include="Server\Mining\Stratum\Notifications\IJob.cs" />
     <Compile Include="Persistance\IStorage.cs" />
-    <Compile Include="Persistance\IStorageFactory.cs" />
     <Compile Include="Persistance\Redis\Redis.cs" />
-    <Compile Include="Persistance\StorageFactory.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
@@ -283,7 +274,6 @@
     <Compile Include="Repository\Registries\FactoryRegistry.cs" />
     <Compile Include="Repository\Registries\ManagerRegistry.cs" />
     <Compile Include="Repository\Registries\ServerRegistry.cs" />
-    <Compile Include="Repository\Registries\ServiceRegistry.cs" />
     <Compile Include="Cryptology\Hash.cs" />
     <Compile Include="Utils\Commands\CommandAttributes.cs" />
     <Compile Include="Utils\Commands\CommandGroup.cs" />
@@ -308,10 +298,6 @@
     <Compile Include="Server\Mining\Service\IRpcService.cs" />
     <Compile Include="Server\Mining\IMiningServer.cs" />
     <Compile Include="Server\Mining\IMiningServerConfig.cs" />
-    <Compile Include="Server\IServerFactory.cs" />
-    <Compile Include="Server\Mining\Service\IServiceFactory.cs" />
-    <Compile Include="Server\Mining\Service\ServiceFactory.cs" />
-    <Compile Include="Server\ServerFactory.cs" />
     <Compile Include="Server\Mining\Stratum\Config\IStratumServerConfig.cs" />
     <Compile Include="Server\Mining\Stratum\Notifications\Difficulty.cs" />
     <Compile Include="Server\Mining\Vanilla\Config\IVanillaServerConfig.cs" />

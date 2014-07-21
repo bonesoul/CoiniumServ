@@ -39,7 +39,6 @@ using CoiniumServ.Mining.Shares;
 using CoiniumServ.Mining.Vardiff;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
-using CoiniumServ.Server;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Utils.Helpers.Validation;
@@ -58,14 +57,7 @@ namespace CoiniumServ.Mining.Pools
 
         private readonly IObjectFactory _objectFactory;
 
-        private readonly IServiceFactory _serviceFactory;
-        private readonly IStorageFactory _storageFactory;
-        private readonly IPaymentProcessorFactory _paymentProcessorFactory;
-        private readonly IStatisticsObjectFactory _statisticsObjectFactory;
-        private readonly IVardiffManagerFactory _vardiffManagerFactory;
-
         private IDaemonClient _daemonClient;
-        private readonly IServerFactory _serverFactory;
         private IMinerManager _minerManager;
         private IJobTracker _jobTracker;
         private IJobManager _jobManager;
@@ -78,7 +70,7 @@ namespace CoiniumServ.Mining.Pools
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Instance id of the pool.
@@ -90,39 +82,14 @@ namespace CoiniumServ.Mining.Pools
         /// </summary>
         /// <param name="poolConfig"></param>
         /// <param name="objectFactory"></param>
-        /// <param name="serverFactory">The server factory.</param>
-        /// <param name="serviceFactory">The service factory.</param>
-        /// <param name="storageFactory"></param>
-        /// <param name="paymentProcessorFactory"></param>
-        /// <param name="statisticsObjectFactory"></param>
-        /// <param name="vardiffManagerFactory"></param>
         public Pool(
             IPoolConfig poolConfig,
-            IObjectFactory objectFactory,
-            IServerFactory serverFactory, 
-            IServiceFactory serviceFactory,
-            IStorageFactory storageFactory,
-            IPaymentProcessorFactory paymentProcessorFactory,
-            IStatisticsObjectFactory statisticsObjectFactory, 
-            IVardiffManagerFactory vardiffManagerFactory)
+            IObjectFactory objectFactory)
         {
-
-            Enforce.ArgumentNotNull(objectFactory, "IObjectFactory");
-
-            Enforce.ArgumentNotNull(serverFactory, "IServerFactory");
-            Enforce.ArgumentNotNull(serviceFactory, "IServiceFactory");
-            Enforce.ArgumentNotNull(storageFactory, "IStorageFactory");
-            Enforce.ArgumentNotNull(paymentProcessorFactory, "IPaymentProcessorFactory");
-            Enforce.ArgumentNotNull(vardiffManagerFactory, "IVardiffManagerFactory");
+            Enforce.ArgumentNotNull(() => poolConfig); // make sure we have a config instance supplied.
+            Enforce.ArgumentNotNull(() => objectFactory); // make sure we have a objectFactory instance supplied.
 
             _objectFactory = objectFactory;
-
-            _serverFactory = serverFactory;
-            _serviceFactory = serviceFactory;
-            _storageFactory = storageFactory;
-            _paymentProcessorFactory = paymentProcessorFactory;
-            _statisticsObjectFactory = statisticsObjectFactory;
-            _vardiffManagerFactory = vardiffManagerFactory;
 
             // TODO: validate pool central wallet & rewards within the startup.
 
@@ -150,9 +117,9 @@ namespace CoiniumServ.Mining.Pools
             // init the algorithm
             _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
 
-            _storage = _storageFactory.Get(Storages.Redis, Config);
+            _storage = _objectFactory.GetStorage(Storages.Redis, Config);
 
-            _paymentProcessor = _paymentProcessorFactory.Get(_daemonClient, _storage, Config.Wallet, Config.Coin);
+            _paymentProcessor = _objectFactory.GetPaymentProcessor(Config.Coin.Name, _daemonClient, _storage, Config.Wallet);
             _paymentProcessor.Initialize(Config.Payments);
 
             _minerManager = _objectFactory.GetMiningManager(Config.Coin.Name, _daemonClient);
@@ -161,7 +128,7 @@ namespace CoiniumServ.Mining.Pools
 
             _shareManager = _objectFactory.GetShareManager(Config.Coin.Name, _daemonClient, _jobTracker, _storage);
 
-            _vardiffManager = _vardiffManagerFactory.Get(_shareManager, Config.Stratum.Vardiff, Config.Coin);
+            _vardiffManager = _objectFactory.GetVardiffManager(Config.Coin.Name, _shareManager, Config.Stratum.Vardiff);
 
             _banningManager = _objectFactory.GetBanManager(Config.Coin.Name, _shareManager, Config.Banning);
 
@@ -170,9 +137,9 @@ namespace CoiniumServ.Mining.Pools
 
             _jobManager.Initialize(InstanceId);
 
-            var latestBlocks = _statisticsObjectFactory.GetLatestBlocks(_storage);
-            var blockStats = _statisticsObjectFactory.GetBlockStats(latestBlocks, _storage);
-            Statistics = _statisticsObjectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, _storage);
+            var latestBlocks = _objectFactory.GetLatestBlocks(_storage);
+            var blockStats = _objectFactory.GetBlockStats(latestBlocks, _storage);
+            Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, _storage);
         }
 
         private void InitServers()
@@ -184,8 +151,8 @@ namespace CoiniumServ.Mining.Pools
 
             if (Config.Stratum != null && Config.Stratum.Enabled)
             {
-                var stratumServer = _serverFactory.Get("Stratum", this, _minerManager, _jobManager, _banningManager, Config.Coin);
-                var stratumService = _serviceFactory.Get("Stratum", Config.Coin, _shareManager, _daemonClient);
+                var stratumServer = _objectFactory.GetMiningServer("Stratum", this, _minerManager, _jobManager, _banningManager, Config.Coin);
+                var stratumService = _objectFactory.GetMiningService("Stratum", Config.Coin, _shareManager, _daemonClient);
                 stratumServer.Initialize(Config.Stratum);
 
                 _servers.Add(stratumServer, stratumService);
@@ -193,8 +160,8 @@ namespace CoiniumServ.Mining.Pools
 
             if (Config.Vanilla != null && Config.Vanilla.Enabled)
             {
-                var vanillaServer = _serverFactory.Get("Vanilla", this, _minerManager, _jobManager, _banningManager, Config.Coin);
-                var vanillaService = _serviceFactory.Get("Vanilla", Config.Coin, _shareManager, _daemonClient);
+                var vanillaServer = _objectFactory.GetMiningServer("Vanilla", this, _minerManager, _jobManager, _banningManager, Config.Coin);
+                var vanillaService = _objectFactory.GetMiningService("Vanilla", Config.Coin, _shareManager, _daemonClient);
 
                 vanillaServer.Initialize(Config.Vanilla);
 
