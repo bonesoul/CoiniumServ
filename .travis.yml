@@ -14,5 +14,5 @@ script:
 - chmod +x ./build/extra/run-tests.sh
 - ./build/extra/run-tests.sh
 notifications:
-  irc: chat.freenode.net#coinium-dev
+  irc: chat.freenode.net#coiniumserv-dev
   email: false
