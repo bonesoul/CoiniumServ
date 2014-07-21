@@ -65,6 +65,8 @@ namespace CoiniumServ.Mining.Pools.Config
         /// <param name="coinConfig"></param>
         public PoolConfig(dynamic config, ICoinConfig coinConfig)
         {
+            // todo - read per pool redis config.
+
             if (config == null)
             {
                 Valid = false;

@@ -6,7 +6,7 @@
 		"port": 91
 	},
     
-    # storage configuration.
+    # global storage configuration.
 	"storage": {
 		"redis": {
 			"enabled": true,
