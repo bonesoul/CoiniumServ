@@ -39,6 +39,7 @@ using CoiniumServ.Persistance;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
+using CoiniumServ.Utils.Logging;
 
 namespace CoiniumServ.Factories
 {
@@ -119,8 +120,10 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region storage objects
+        #region other objects
         IStorage GetStorage(string type, IPoolConfig poolConfig);
+
+        ILogManager GetLogManager();
 
         #endregion
     }

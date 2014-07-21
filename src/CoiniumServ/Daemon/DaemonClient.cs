@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Requests;
 using CoiniumServ.Daemon.Responses;
@@ -51,7 +50,7 @@ namespace CoiniumServ.Daemon
         public static readonly object[] EmptyString = {}; // used as empty parameter.
 
         public DaemonClient(string pool, IDaemonConfig daemonConfig)
-            :base(pool, daemonConfig)
+            : base(pool, daemonConfig)
         { }
 
         /// <summary>

@@ -53,10 +53,10 @@ namespace CoiniumServ.Repository.Registries
         public void RegisterInstances()
         {
             _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
+            _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
 
             _applicationContext.Container.Register<ICoinConfigFactory, CoinConfigFactory>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfigFactory, PoolConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IGlobalConfigFactory, GlobalConfigFactory>().AsSingleton();
         }
     }
 }

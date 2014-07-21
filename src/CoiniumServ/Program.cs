@@ -26,12 +26,10 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using CoiniumServ.Factories;
-using CoiniumServ.Mining.Pools;
 using CoiniumServ.Repository;
-using CoiniumServ.Server.Web;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
-using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Utils.Logging;
 using CoiniumServ.Utils.Platform;
 using Nancy.TinyIoc;
 using Serilog;
@@ -59,16 +57,16 @@ namespace CoiniumServ
 
             // start the ioc kernel.
             var kernel = TinyIoCContainer.Current;
-            new Bootstrapper(kernel);
+            var bootstrapper = new Bootstrapper(kernel);
+            var objectFactory = kernel.Resolve<IObjectFactory>();
 
             // print intro texts.
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
             // check if we have a valid config file.
-            var globalConfig = kernel.Resolve<IGlobalConfigFactory>().Get();
-
-            if (globalConfig == null)
+            var configFactory = kernel.Resolve<IConfigFactory>();
+            if (!configFactory.GlobalConfigExists)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Couldn't read config/config.json! Make sure you rename config/config-sample.json as config/config.json.");
@@ -76,16 +74,14 @@ namespace CoiniumServ
                 return;
             }
 
-            // init logging facilities.
-            Logging.Init(globalConfig);
+            // initialize log-manager.
+            var logManager = objectFactory.GetLogManager();
+            logManager.Initialize();
 
             // print a version banner.
             _logger = Log.ForContext<Program>();
             _logger.Information("CoiniumServ {0:l} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             PlatformManager.PrintPlatformBanner();
-
-            // object factory
-            var objectFactory = kernel.Resolve<IObjectFactory>();
 
             // start pool manager.
             var poolManager = objectFactory.GetPoolManager();

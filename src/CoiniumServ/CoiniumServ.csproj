@@ -204,8 +204,6 @@
     <Compile Include="Server\Web\Modules\Pool.cs" />
     <Compile Include="Server\Web\WebServer.cs" />
     <Compile Include="Server\Web\WebServerConfig.cs" />
-    <Compile Include="Utils\Configuration\IGlobalConfigFactory.cs" />
-    <Compile Include="Utils\Configuration\GlobalConfigFactory.cs" />
     <Compile Include="Utils\Extensions\StringExtensions.cs" />
     <Compile Include="Cryptology\Merkle\IMerkleTree.cs" />
     <Compile Include="Mining\Jobs\IJobCounter.cs" />
@@ -245,7 +243,12 @@
     <Compile Include="Utils\Helpers\Misc\Range.cs" />
     <Compile Include="Utils\Helpers\Time\TimeHelpers.cs" />
     <Compile Include="Utils\Buffers\IRingBuffer.cs" />
-    <Compile Include="Utils\Logging.cs" />
+    <Compile Include="Utils\Logging\ILoggingConfig.cs" />
+    <Compile Include="Utils\Logging\ILogTarget.cs" />
+    <Compile Include="Utils\Logging\ILogManager.cs" />
+    <Compile Include="Utils\Logging\LoggingConfig.cs" />
+    <Compile Include="Utils\Logging\LogTarget.cs" />
+    <Compile Include="Utils\Logging\LogManager.cs" />
     <Compile Include="Utils\Platform\Frameworks.cs" />
     <Compile Include="Utils\Platform\PlatformManager.cs" />
     <Compile Include="Utils\Buffers\RingBuffer.cs" />

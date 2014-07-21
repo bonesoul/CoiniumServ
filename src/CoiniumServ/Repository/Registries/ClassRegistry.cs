@@ -30,6 +30,8 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Redis;
 using CoiniumServ.Repository.Context;
+using CoiniumServ.Server.Web;
+using CoiniumServ.Utils.Logging;
 
 namespace CoiniumServ.Repository.Registries
 {
@@ -57,6 +59,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();
             _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
             _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
+            _applicationContext.Container.Register<ILogManager, LogManager>().AsSingleton();
         }
     }
 }

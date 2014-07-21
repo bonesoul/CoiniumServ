@@ -21,21 +21,27 @@
 // 
 #endregion
 
-using CoiniumServ.Persistance.Redis;
-using CoiniumServ.Server.Web;
+using Serilog.Events;
 
-namespace CoiniumServ.Utils.Configuration
+namespace CoiniumServ.Utils.Logging
 {
-    public interface IGlobalConfigFactory
+    public interface ILogTarget
     {
-        /// <summary>
-        /// Gets the configuration.
-        /// </summary>
-        /// <returns></returns>
-        dynamic Get();
+        bool Enabled { get; }
 
-        IRedisConfig GetRedisConfig();
+        LogTargetType Type { get; }
 
-        IWebServerConfig GetWebServerConfig();
+        string Filename { get; }
+
+        bool Rolling { get; }
+
+        LogEventLevel Level { get; }
+    }
+
+    public enum LogTargetType
+    {
+        Console,
+        File,
+        Packet
     }
 }

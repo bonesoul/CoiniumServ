@@ -18,7 +18,7 @@
 	},
 
     # log configuration
-	"logs": {
+	"logging": {
 		"root": "logs",
 		"targets": [
 			{

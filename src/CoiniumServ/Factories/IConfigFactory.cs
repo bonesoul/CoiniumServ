@@ -21,6 +21,10 @@
 // 
 #endregion
 
+using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Server.Web;
+using CoiniumServ.Utils.Logging;
+
 namespace CoiniumServ.Factories
 {
     /// <summary>
@@ -28,5 +32,14 @@ namespace CoiniumServ.Factories
     /// </summary>
     public interface IConfigFactory
     {
+        bool GlobalConfigExists { get; }
+
+        dynamic Logging { get; }
+
+        IRedisConfig GetRedisConfig();
+
+        IWebServerConfig GetWebServerConfig();
+
+        ILoggingConfig GetLoggingConfig();
     }
 }

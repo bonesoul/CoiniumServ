@@ -21,26 +21,24 @@
 // 
 #endregion
 
-using CoiniumServ.Factories;
-using CoiniumServ.Net.Server.Http.Web;
-using CoiniumServ.Repository.Context;
+using System.Collections.Generic;
 
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Utils.Logging
 {
-    public class WebServer : HttpServer, IWebServer
+    public class LoggingConfig : ILoggingConfig
     {
-        public IWebServerConfig Config { get; private set; }
+        public string Root { get; private set; }
+        public List<ILogTarget> Targets { get; private set; }
 
-        public WebServer(IApplicationContext applicationContext, IConfigFactory configFactory)
-            : base(applicationContext)
+        public LoggingConfig(dynamic config)
         {
-            Config = configFactory.GetWebServerConfig();
+            Root = config.root;
 
-            BindIP = Config.BindInterface;
-            Port = Config.Port;
-            
-            if (Config.Enabled)
-                Start();
+            Targets = new List<ILogTarget>();
+            foreach (var target in config.targets)
+            {
+                Targets.Add(new LogTarget(target));
+            }
         }
     }
 }

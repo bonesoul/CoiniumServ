@@ -40,6 +40,7 @@ using CoiniumServ.Repository.Context;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
+using CoiniumServ.Utils.Logging;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Factories
@@ -297,7 +298,7 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region storage objects
+        #region other objects
 
         public IStorage GetStorage(string type, IPoolConfig poolConfig)
         {
@@ -307,6 +308,11 @@ namespace CoiniumServ.Factories
             };
 
             return _applicationContext.Container.Resolve<IStorage>(type, @params);
+        }
+
+        public ILogManager GetLogManager()
+        {
+            return _applicationContext.Container.Resolve<ILogManager>();
         }
 
         #endregion

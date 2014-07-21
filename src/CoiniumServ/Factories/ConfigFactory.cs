@@ -21,6 +21,12 @@
 // 
 #endregion
 
+using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Repository.Context;
+using CoiniumServ.Server.Web;
+using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Utils.Logging;
+
 namespace CoiniumServ.Factories
 {
     /// <summary>
@@ -28,5 +34,45 @@ namespace CoiniumServ.Factories
     /// </summary>
     public class ConfigFactory:IConfigFactory
     {
+        public bool GlobalConfigExists { get { return _globalConfigData != null; }}
+        public dynamic Logging { get { return _globalConfigData.logging; } }
+
+        private const string GlobalConfigFilename = "config/config.json"; // global config filename.
+        private readonly dynamic _globalConfigData; // global config data.
+
+        private readonly IRedisConfig _redisConfig;
+        private readonly IWebServerConfig _webServerConfig;
+        private readonly ILoggingConfig _logConfig;
+
+        /// <summary>
+        /// The _application context
+        /// </summary>
+        private IApplicationContext _applicationContext;
+
+        public ConfigFactory(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+            _globalConfigData = JsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
+            _redisConfig = new RedisConfig(_globalConfigData.storage.redis);
+            _webServerConfig = new WebServerConfig(_globalConfigData.web);
+            _logConfig = new LoggingConfig(_globalConfigData.logging);
+        }
+
+        // todo: should be per-pool!
+        public IRedisConfig GetRedisConfig()
+        {
+            return _redisConfig;
+        }
+
+        public IWebServerConfig GetWebServerConfig()
+        {
+            return _webServerConfig;
+        }
+
+        public ILoggingConfig GetLoggingConfig()
+        {
+            return _logConfig;
+        }
     }
 }
+ 
