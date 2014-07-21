@@ -5,17 +5,6 @@
 		"bind": "127.0.0.1",
 		"port": 91
 	},
-    
-    # global storage configuration.
-	"storage": {
-		"redis": {
-			"enabled": true,
-			"host": "10.0.0.13",
-			"port": 6379,
-            "password": "",
-            "databaseId": 0
-		}
-	},
 
     # logging configuration
 	"logging": {

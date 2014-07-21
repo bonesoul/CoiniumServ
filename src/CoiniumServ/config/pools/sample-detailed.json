@@ -131,9 +131,6 @@
     # Per-pool Storage Configuration
     # -------------------------------
 
-    # note that this is different then the global storage configuration in config.json as pools will be using their own storage connections.
-    # basically, each pool can have different set of storage configuration.
-
     # redis:
     # enabled: is redis enabled?
     # host: redis host.
@@ -172,7 +169,7 @@
     # Getwork Server Configuration
     # -------------------------------
 
-    # EXPERIMENTAL!; This feature is still in development and still not complete yet.
+    # EXPERIMENTAL!; This feature is still in development and not complete yet.
     # enabled: Set this true to enable getwork server.
     # bind: interface to bind getwork server.
     # port: port to listen for getwork connections.
