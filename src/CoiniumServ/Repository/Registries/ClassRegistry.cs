@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Pools;
@@ -51,6 +52,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
             _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();

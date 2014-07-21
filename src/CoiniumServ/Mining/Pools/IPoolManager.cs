@@ -22,18 +22,14 @@
 #endregion
 
 using System.Collections.Generic;
-using CoiniumServ.Mining.Pools.Config;
 
 namespace CoiniumServ.Mining.Pools
 {
     public interface IPoolManager
     {
-
-        IList<IPool> GetPools();
+        IReadOnlyCollection<IPool> Pools { get; }
 
         IPool GetBySymbol(string symbol);
-
-        IPool AddPool(IPoolConfig poolConfig);
 
         void Run();
     }

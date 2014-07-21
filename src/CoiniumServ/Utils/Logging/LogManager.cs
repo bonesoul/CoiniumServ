@@ -24,6 +24,7 @@
 using System.IO;
 using System.Linq;
 using CoiniumServ.Factories;
+using CoiniumServ.Utils.Configuration;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -39,11 +40,11 @@ namespace CoiniumServ.Utils.Logging
 
         private string _rootFolder;
 
-        private readonly ILoggingConfig _config;
+        private readonly ILogConfig _config;
 
-        public LogManager(IConfigFactory configFactory)
+        public LogManager(IConfigManager configManager)
         {
-            _config = configFactory.GetLoggingConfig();
+            _config = configManager.LogConfig;
         }
 
         public void Initialize()

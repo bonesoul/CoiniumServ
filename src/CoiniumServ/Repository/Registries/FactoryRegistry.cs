@@ -21,9 +21,7 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Factories;
-using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Repository.Context;
 
 namespace CoiniumServ.Repository.Registries
@@ -41,9 +39,6 @@ namespace CoiniumServ.Repository.Registries
         {
             _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
             _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
-
-            _applicationContext.Container.Register<ICoinConfigFactory, CoinConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IPoolConfigFactory, PoolConfigFactory>().AsSingleton();
         }
     }
 }

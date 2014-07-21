@@ -21,8 +21,10 @@
 // 
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Mining.Pools.Statistics
@@ -50,7 +52,7 @@ namespace CoiniumServ.Mining.Pools.Statistics
                 pair.Value.Reset();
             }
 
-            foreach (var pool in _poolManager.GetPools())
+            foreach (var pool in _poolManager.Pools)
             {
                 if (!_algorithms.ContainsKey(pool.Config.Coin.Algorithm))
                     _algorithms.Add(pool.Config.Coin.Algorithm, new PerAlgorithm(pool.Config.Coin.Algorithm));
@@ -72,7 +74,7 @@ namespace CoiniumServ.Mining.Pools.Statistics
 
         public IPerAlgorithm GetByName(string name)
         {
-            return !_algorithms.ContainsKey(name) ? null : _algorithms[name];
+            return _algorithms.Values.FirstOrDefault(pair => pair.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public IEnumerator<KeyValuePair<string, IPerAlgorithm>> GetEnumerator()

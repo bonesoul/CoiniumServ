@@ -59,14 +59,15 @@ namespace CoiniumServ
             var kernel = TinyIoCContainer.Current;
             var bootstrapper = new Bootstrapper(kernel);
             var objectFactory = kernel.Resolve<IObjectFactory>();
+            var configFactory = kernel.Resolve<IConfigFactory>();
 
             // print intro texts.
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
             // check if we have a valid config file.
-            var configFactory = kernel.Resolve<IConfigFactory>();
-            if (!configFactory.GlobalConfigExists)
+            var configManager = configFactory.GetConfigManager();
+            if (!configManager.ConfigExists)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Couldn't read config/config.json! Make sure you rename config/config-sample.json as config/config.json.");
@@ -82,6 +83,9 @@ namespace CoiniumServ
             _logger = Log.ForContext<Program>();
             _logger.Information("CoiniumServ {0:l} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
             PlatformManager.PrintPlatformBanner();
+
+            // initialize config manager.
+            configManager.Initialize();
 
             // start pool manager.
             var poolManager = objectFactory.GetPoolManager();

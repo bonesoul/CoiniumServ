@@ -25,10 +25,20 @@ using System.Collections.Generic;
 
 namespace CoiniumServ.Utils.Logging
 {
-    public interface ILoggingConfig
+    public class LogConfig : ILogConfig
     {
-        string Root { get; }
+        public string Root { get; private set; }
+        public List<ILogTarget> Targets { get; private set; }
 
-        List<ILogTarget> Targets { get; } 
+        public LogConfig(dynamic config)
+        {
+            Root = config.root;
+
+            Targets = new List<ILogTarget>();
+            foreach (var target in config.targets)
+            {
+                Targets.Add(new LogTarget(target));
+            }
+        }
     }
 }

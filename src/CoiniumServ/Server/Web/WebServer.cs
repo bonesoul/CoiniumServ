@@ -21,8 +21,8 @@
 // 
 #endregion
 
-using CoiniumServ.Factories;
 using CoiniumServ.Net.Server.Http.Web;
+using CoiniumServ.Utils.Configuration;
 using Nancy.Bootstrapper;
 using Serilog;
 
@@ -30,21 +30,18 @@ namespace CoiniumServ.Server.Web
 {
     public class WebServer : HttpServer, IWebServer
     {
-        public IWebServerConfig Config { get; private set; }
-
         private readonly ILogger _logger;
 
-        public WebServer(INancyBootstrapper webBootstrapper, IConfigFactory configFactory)
+        public WebServer(INancyBootstrapper webBootstrapper, IConfigManager configManager)
             : base(webBootstrapper)
         {
+            var config = configManager.WebServerConfig;
+            BindIP = config.BindInterface;
+            Port = config.Port;
+
             _logger = Log.ForContext<WebServer>();
 
-            Config = configFactory.GetWebServerConfig();
-
-            BindIP = Config.BindInterface;
-            Port = Config.Port;
-            
-            if (Config.Enabled)
+            if (config.Enabled)
                 Start();
             else
                 _logger.Verbose("Skipping web-server initialization as it disabled.");

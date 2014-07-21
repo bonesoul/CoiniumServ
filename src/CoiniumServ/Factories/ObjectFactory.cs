@@ -289,6 +289,7 @@ namespace CoiniumServ.Factories
                 {"shareManager", shareManager}, 
                 {"daemonClient", daemonClient}
             };
+
             return _applicationContext.Container.Resolve<IRpcService>(type, @params);
         }
 

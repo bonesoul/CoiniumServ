@@ -24,6 +24,7 @@
 using System.IO;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
+using CoiniumServ.Factories;
 using CoiniumServ.Payments;
 using CoiniumServ.Server.Mining.Stratum.Config;
 using CoiniumServ.Server.Mining.Vanilla.Config;
@@ -60,9 +61,9 @@ namespace CoiniumServ.Mining.Pools.Config
         /// <summary>
         /// Initializes a new instance of the <see cref="PoolConfig"/> class.
         /// </summary>
-        /// <param name="coinConfigFactory">The coin configuration factory.</param>
         /// <param name="config">The configuration.</param>
-        public PoolConfig(ICoinConfigFactory coinConfigFactory, dynamic config)
+        /// <param name="coinConfig"></param>
+        public PoolConfig(dynamic config, ICoinConfig coinConfig)
         {
             if (config == null)
             {
@@ -78,8 +79,7 @@ namespace CoiniumServ.Mining.Pools.Config
             Wallet = new WalletConfig(config.wallet);
             Rewards = new RewardsConfig(config.rewards);
 
-            var coinName = Path.GetFileNameWithoutExtension(config.coin);
-            Coin = coinConfigFactory.GetConfig(coinName);
+            Coin = coinConfig;
 
             if (Coin == null)
             {

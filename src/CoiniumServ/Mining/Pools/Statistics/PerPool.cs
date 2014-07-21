@@ -42,14 +42,13 @@ namespace CoiniumServ.Mining.Pools.Statistics
         public double Difficulty { get; private set; }
         public int CurrentBlock { get; private set; }
         public IBlocks Blocks { get; private set; }
+        public IPoolConfig Config { get; private set; }
 
         public string Json { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
         private readonly IStorage _storage;
-        private readonly IHashAlgorithm _hashAlgorithm;
         private readonly IMinerManager _minerManager;
-        private readonly IPoolConfig _poolConfig;
         private readonly dynamic _response;
 
         private readonly double _shareMultiplier;
@@ -57,15 +56,14 @@ namespace CoiniumServ.Mining.Pools.Statistics
 
         public PerPool(IPoolConfig poolConfig, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage)
         {
-            _poolConfig = poolConfig;
-            _daemonClient = daemonClient;            
-            _hashAlgorithm = hashAlgorithm;
+            Config = poolConfig;
+            _daemonClient = daemonClient;
             _minerManager = minerManager;
             Blocks = blockStatistics;
             _storage = storage;
 
             _response = new ExpandoObject();
-            _shareMultiplier = Math.Pow(2, 32) / _hashAlgorithm.Multiplier;
+            _shareMultiplier = Math.Pow(2, 32) / hashAlgorithm.Multiplier;
         }
 
         public void Recache(object state)
@@ -82,9 +80,9 @@ namespace CoiniumServ.Mining.Pools.Statistics
             _response.hashrate = Hashrate;
 
             _response.coin = new ExpandoObject();
-            _response.coin.symbol = _poolConfig.Coin.Symbol;
-            _response.coin.name = _poolConfig.Coin.Name;
-            _response.coin.algorithm = _poolConfig.Coin.Algorithm;
+            _response.coin.symbol = Config.Coin.Symbol;
+            _response.coin.name = Config.Coin.Name;
+            _response.coin.algorithm = Config.Coin.Algorithm;
 
             _response.network = new ExpandoObject();
             _response.network.currentBlock = CurrentBlock;

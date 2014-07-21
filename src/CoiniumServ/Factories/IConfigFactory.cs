@@ -21,9 +21,9 @@
 // 
 #endregion
 
-using CoiniumServ.Persistance.Redis;
-using CoiniumServ.Server.Web;
-using CoiniumServ.Utils.Logging;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Utils.Configuration;
 
 namespace CoiniumServ.Factories
 {
@@ -32,14 +32,10 @@ namespace CoiniumServ.Factories
     /// </summary>
     public interface IConfigFactory
     {
-        bool GlobalConfigExists { get; }
+        IConfigManager GetConfigManager();
 
-        dynamic Logging { get; }
+        IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
 
-        IRedisConfig GetRedisConfig();
-
-        IWebServerConfig GetWebServerConfig();
-
-        ILoggingConfig GetLoggingConfig();
+        ICoinConfig GetCoinConfig(dynamic config);
     }
 }

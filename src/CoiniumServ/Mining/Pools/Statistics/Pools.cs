@@ -21,9 +21,11 @@
 // 
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Mining.Pools.Statistics
@@ -42,10 +44,15 @@ namespace CoiniumServ.Mining.Pools.Statistics
             _pools = new Dictionary<string, IPerPool>();
             _response = new Dictionary<string, ExpandoObject>();
 
-            foreach (var pool in poolManager.GetPools())
+            foreach (var pool in poolManager.Pools)
             {
                 _pools.Add(pool.Config.Coin.Name, pool.Statistics);
             }
+        }
+
+        public IPerPool GetBySymbol(string symbol)
+        {
+            return _pools.Values.FirstOrDefault(pair => pair.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
         }
 
         public IEnumerator<KeyValuePair<string, IPerPool>> GetEnumerator()
@@ -61,7 +68,7 @@ namespace CoiniumServ.Mining.Pools.Statistics
         public void Recache(object state)
         {
             // recache data.
-            foreach (var pool in _poolManager.GetPools())
+            foreach (var pool in _poolManager.Pools)
             {
                 pool.Statistics.Recache(state);
             }
@@ -69,7 +76,7 @@ namespace CoiniumServ.Mining.Pools.Statistics
             // recache response.
             _response.Clear();
 
-            foreach (var pool in _poolManager.GetPools())
+            foreach (var pool in _poolManager.Pools)
             {
                 _response.Add(pool.Config.Coin.Symbol.ToLower(), (ExpandoObject)pool.Statistics.GetResponseObject());
             }

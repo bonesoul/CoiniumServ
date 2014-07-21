@@ -55,12 +55,12 @@ namespace CoiniumServ.Persistance.Redis
 
         private readonly ILogger _logger;
 
-        public Redis(ConfigFactory configFactory, IPoolConfig poolConfig)
+        public Redis(IConfigManager configManager, IPoolConfig poolConfig)
         {
             _logger = Log.ForContext<Redis>().ForContext("Component", poolConfig.Coin.Name);
 
             _poolConfig = poolConfig; // the pool config.
-            _redisConfig = configFactory.GetRedisConfig(); // read the redis config.
+            _redisConfig = configManager.RedisConfig; // read the redis config.
 
             IsEnabled = _redisConfig.Enabled;
 

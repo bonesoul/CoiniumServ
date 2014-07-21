@@ -20,18 +20,27 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Mining.Pools.Config
+
+using System.Collections.Generic;
+using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Server.Web;
+using CoiniumServ.Utils.Logging;
+
+namespace CoiniumServ.Utils.Configuration
 {
-    /// <summary>
-    /// Returns an instance of IPoolConfig based on the parsed config file
-    /// </summary>
-    public interface IPoolConfigFactory
+    public interface IConfigManager
     {
-        /// <summary>
-        /// Gets the specified read configuration.
-        /// </summary>
-        /// <param name="readConfig">The read configuration.</param>
-        /// <returns></returns>
-        IPoolConfig Get(dynamic readConfig);
+        bool ConfigExists { get; }
+
+        IRedisConfig RedisConfig { get; }
+
+        IWebServerConfig WebServerConfig { get; }
+
+        ILogConfig LogConfig { get; }
+
+        List<IPoolConfig> PoolConfigs { get; }
+
+        void Initialize();
     }
 }
