@@ -23,7 +23,8 @@
 
 using CoiniumServ.Factories;
 using CoiniumServ.Net.Server.Http.Web;
-using CoiniumServ.Repository.Context;
+using Nancy.Bootstrapper;
+using Serilog;
 
 namespace CoiniumServ.Server.Web
 {
@@ -31,9 +32,13 @@ namespace CoiniumServ.Server.Web
     {
         public IWebServerConfig Config { get; private set; }
 
-        public WebServer(IApplicationContext applicationContext, IConfigFactory configFactory)
-            : base(applicationContext)
+        private readonly ILogger _logger;
+
+        public WebServer(INancyBootstrapper webBootstrapper, IConfigFactory configFactory)
+            : base(webBootstrapper)
         {
+            _logger = Log.ForContext<WebServer>();
+
             Config = configFactory.GetWebServerConfig();
 
             BindIP = Config.BindInterface;
@@ -41,6 +46,8 @@ namespace CoiniumServ.Server.Web
             
             if (Config.Enabled)
                 Start();
+            else
+                _logger.Verbose("Skipping web-server initialization as it disabled.");
         }
     }
 }

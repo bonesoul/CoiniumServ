@@ -89,8 +89,6 @@
                                 <th>Block <i class="fa fa-sort"></i></th>
                                 <th>Status <i class="fa fa-sort"></i></th>
                                 <th>Amount <i class="fa fa-sort"></i></th>
-                                <th>Hash <i class="fa fa-sort"></i></th>
-                                <th>TxHash <i class="fa fa-sort"></i></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -114,8 +112,6 @@
                                         }
                                     </td>
                                     <td>@block.Amount</td>
-                                    <td>@block.BlockHash.Substring(0, block.BlockHash.Length > 10 ? 10 : block.BlockHash.Length)..</td>
-                                    <td>@block.TransactionHash.Substring(0, block.TransactionHash.Length > 10 ? 10 : block.TransactionHash.Length)..</td>
                                 </tr>
                             }
                         </tbody>

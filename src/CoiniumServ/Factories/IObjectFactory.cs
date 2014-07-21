@@ -40,6 +40,7 @@ using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Utils.Logging;
+using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Factories
 {
@@ -117,6 +118,8 @@ namespace CoiniumServ.Factories
         IRpcService GetMiningService(string type, ICoinConfig coinConfig, IShareManager shareManager, IDaemonClient daemonClient);
 
         IWebServer GetWebServer();
+
+        INancyBootstrapper GetWebBootstrapper();
 
         #endregion
 

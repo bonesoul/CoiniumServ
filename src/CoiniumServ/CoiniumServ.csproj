@@ -166,7 +166,7 @@
     <Compile Include="Mining\Vardiff\VardiffConfig.cs" />
     <Compile Include="Mining\Vardiff\VardiffManager.cs" />
     <Compile Include="Net\Server\Http\Web\ErrorConfiguration.cs" />
-    <Compile Include="Net\Server\Http\Web\NancyBootstrapper.cs" />
+    <Compile Include="Net\Server\Http\Web\WebBootstrapper.cs" />
     <Compile Include="Net\Server\Http\Web\RootPathProvider.cs" />
     <Compile Include="Net\Server\Sockets\ISocketServer.cs" />
     <Compile Include="Net\Server\Sockets\BannedConnectionEventArgs.cs" />

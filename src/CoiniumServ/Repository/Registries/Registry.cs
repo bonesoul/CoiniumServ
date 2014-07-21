@@ -23,9 +23,7 @@
 
 using System;
 using System.Collections.Generic;
-using CoiniumServ.Net.Server.Http.Web;
 using CoiniumServ.Repository.Context;
-using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Repository.Registries
@@ -42,8 +40,6 @@ namespace CoiniumServ.Repository.Registries
         public void RegisterInstances()
         {
             _kernel.Register<IApplicationContext, ApplicationContext>().AsSingleton();
-
-            _kernel.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();
 
             _kernel.RegisterMultiple<IRegistry>(
                 new List<Type>

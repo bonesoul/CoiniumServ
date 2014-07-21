@@ -41,6 +41,7 @@ using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Utils.Logging;
+using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Factories
@@ -294,6 +295,11 @@ namespace CoiniumServ.Factories
         public IWebServer GetWebServer()
         {
             return _applicationContext.Container.Resolve<IWebServer>();
+        }
+
+        public INancyBootstrapper GetWebBootstrapper()
+        {
+            return _applicationContext.Container.Resolve<INancyBootstrapper>();
         }
 
         #endregion

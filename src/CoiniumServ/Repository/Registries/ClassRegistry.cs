@@ -26,12 +26,14 @@ using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Pools;
 using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Mining.Pools.Statistics;
+using CoiniumServ.Net.Server.Http.Web;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Redis;
 using CoiniumServ.Repository.Context;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Utils.Logging;
+using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Repository.Registries
 {
@@ -60,6 +62,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
             _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
             _applicationContext.Container.Register<ILogManager, LogManager>().AsSingleton();
+            _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();
         }
     }
 }

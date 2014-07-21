@@ -46,16 +46,13 @@ namespace CoiniumServ.Net.Server.Http.Web
         /// </summary>
         public bool IsListening { get; protected set; }
 
-        /// <summary>
-        /// The application context
-        /// </summary>
-        private readonly IApplicationContext _applicationContext;
+        private readonly INancyBootstrapper _webBootstrapper;
 
         private readonly ILogger _logger;
 
-        public HttpServer(IApplicationContext applicationContext)
+        public HttpServer(INancyBootstrapper webBootstrapper)
         {
-            _applicationContext = applicationContext;
+            _webBootstrapper = webBootstrapper;
             _logger = Log.ForContext<HttpServer>();
         }
 
@@ -68,8 +65,7 @@ namespace CoiniumServ.Net.Server.Http.Web
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
             hostConfiguration.UrlReservations.CreateAutomatically = true;
 
-            var bootstrapper = _applicationContext.Container.Resolve<INancyBootstrapper>();
-            var host = new NancyHost(bootstrapper, hostConfiguration, uri);            
+            var host = new NancyHost(_webBootstrapper, hostConfiguration, uri);            
 
             try
             {

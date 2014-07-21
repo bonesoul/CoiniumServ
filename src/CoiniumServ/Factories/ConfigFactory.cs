@@ -54,7 +54,7 @@ namespace CoiniumServ.Factories
             _applicationContext = applicationContext;
             _globalConfigData = JsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
             _redisConfig = new RedisConfig(_globalConfigData.storage.redis);
-            _webServerConfig = new WebServerConfig(_globalConfigData.web);
+            _webServerConfig = new WebServerConfig(_globalConfigData.website);
             _logConfig = new LoggingConfig(_globalConfigData.logging);
         }
 
