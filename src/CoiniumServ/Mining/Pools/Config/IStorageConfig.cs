@@ -21,24 +21,9 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Mining.Pools.Config;
-using CoiniumServ.Persistance.Redis;
-using CoiniumServ.Server.Web;
-using CoiniumServ.Utils.Logging;
-
-namespace CoiniumServ.Utils.Configuration
+namespace CoiniumServ.Mining.Pools.Config
 {
-    public interface IConfigManager
+    public interface IStorageConfig
     {
-        bool ConfigExists { get; }
-
-        IWebServerConfig WebServerConfig { get; }
-
-        ILogConfig LogConfig { get; }
-
-        List<IPoolConfig> PoolConfigs { get; }
-
-        void Initialize();
     }
 }

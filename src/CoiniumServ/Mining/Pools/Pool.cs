@@ -181,8 +181,7 @@ namespace CoiniumServ.Mining.Pools
                                                "Coin version: {2} protocol: {3} wallet: {4} " +
                                                "Daemon network: {5:l} peers: {6} blocks: {7} errors: {8:l} " +
                                                "Network difficulty: {9:0.00000000} block difficulty: {10:0.00} " +
-                                               "Network hashrate: {11:l} " +
-                                               "{12:l}",
+                                               "Network hashrate: {11:l} ",
                 Config.Coin.Symbol,
                 Config.Coin.Algorithm,
                 info.Version,
@@ -193,12 +192,7 @@ namespace CoiniumServ.Mining.Pools
                 string.IsNullOrEmpty(info.Errors) ? "none" : info.Errors,
                 miningInfo.Difficulty,
                 miningInfo.Difficulty * _hashAlgorithm.Multiplier,
-                miningInfo.NetworkHashps.GetReadableHashrate(),
-                "Services: " + _servers.Select(pair => pair.Key)
-                    .Aggregate(string.Empty,
-                        (current, server) =>
-                            current +
-                            string.Format("{0} @ {1}:{2}, ", server.Config.Name.ToLower(), server.BindIP, server.Port))
+                miningInfo.NetworkHashps.GetReadableHashrate()
                 );                
         }
 

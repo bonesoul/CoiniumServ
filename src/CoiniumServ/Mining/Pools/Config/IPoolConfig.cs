@@ -24,6 +24,7 @@
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Payments;
+using CoiniumServ.Persistance;
 using CoiniumServ.Server.Mining.Stratum.Config;
 using CoiniumServ.Server.Mining.Vanilla.Config;
 using CoiniumServ.Utils.Configuration;
@@ -52,5 +53,7 @@ namespace CoiniumServ.Mining.Pools.Config
         IPaymentConfig Payments { get; }
 
         IBanConfig Banning { get; }
+
+        IStorageConfig Storage { get; }
     }
 }

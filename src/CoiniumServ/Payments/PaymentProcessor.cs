@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Mining.Pools.Config;
@@ -36,6 +35,8 @@ using Serilog;
 
 namespace CoiniumServ.Payments
 {
+    // TODO: needs a cleanup.
+
     public class PaymentProcessor : IPaymentProcessor
     {
         public bool IsEnabled { get; private set; }
@@ -86,7 +87,7 @@ namespace CoiniumServ.Payments
                 return;
 
             // calculate the minimum amount of payments in satoshis.
-            _paymentThresholdInSatoshis = _magnitude*config.Minimum;
+            _paymentThresholdInSatoshis = (decimal) (_magnitude*config.Minimum);
 
             // if we reached here, then we can just setup the timer to run payments.  
             _timer = new Timer(RunPayments, null, _config.Interval * 1000, Timeout.Infinite);

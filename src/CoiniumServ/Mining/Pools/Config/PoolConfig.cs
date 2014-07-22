@@ -21,11 +21,11 @@
 // 
 #endregion
 
-using System.IO;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
-using CoiniumServ.Factories;
 using CoiniumServ.Payments;
+using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Redis;
 using CoiniumServ.Server.Mining.Stratum.Config;
 using CoiniumServ.Server.Mining.Vanilla.Config;
 
@@ -57,6 +57,7 @@ namespace CoiniumServ.Mining.Pools.Config
         public IPaymentConfig Payments { get; private set; }
 
         public IBanConfig Banning { get; private set; }
+        public IStorageConfig Storage { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PoolConfig"/> class.
@@ -114,6 +115,8 @@ namespace CoiniumServ.Mining.Pools.Config
             }
 
             Banning = new BanConfig(config.banning);
+
+            Storage = new RedisConfig(config.storage.redis);
 
             Valid = true;
         }

@@ -28,7 +28,7 @@ namespace CoiniumServ.Payments
         public bool Valid { get; private set; }
         public bool Enabled { get; private set; }
         public int Interval { get; private set; }
-        public int Minimum { get; private set; }
+        public double Minimum { get; private set; }
 
         public PaymentConfig(dynamic config)
         {

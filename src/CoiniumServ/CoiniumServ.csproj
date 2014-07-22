@@ -131,6 +131,7 @@
     <Compile Include="Mining\Pools\Config\BanConfig.cs" />
     <Compile Include="Mining\Pools\Config\IBanConfig.cs" />
     <Compile Include="Mining\Pools\Config\IRewardsConfig.cs" />
+    <Compile Include="Mining\Pools\Config\IStorageConfig.cs" />
     <Compile Include="Mining\Pools\Config\IWalletConfig.cs" />
     <Compile Include="Mining\Pools\Config\RewardsConfig.cs" />
     <Compile Include="Mining\Pools\Config\WalletConfig.cs" />

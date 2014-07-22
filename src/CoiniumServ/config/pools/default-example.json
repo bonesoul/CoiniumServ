@@ -21,7 +21,7 @@
 
 	"payments": {
         "interval": 60,
-		"minimum": 1
+		"minimum": 0.01
 	},
 
     # -------------------------------
@@ -42,7 +42,6 @@
 
     # blockRefresh: timeout in miliseconds to poll coin daemon for a new block.
     # rebroadcast: if now new blocks are found in this many seconds, a new job will be created and broadcasted.
-
 
     "jobs":  {
         "blockRefresh": 1000,
