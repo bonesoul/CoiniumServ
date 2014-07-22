@@ -32,6 +32,9 @@ namespace CoiniumServ.Mining.Pools.Config
         /// </summary>
         bool ValidateUsername { get; }
 
+        /// <summary>
+        /// timeout in seconds to disconnect miners that did not submit any shares for the period.
+        /// </summary>
         int Timeout { get; }
     }
 }

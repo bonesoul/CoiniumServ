@@ -21,44 +21,36 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon.Config;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Payments;
-using CoiniumServ.Persistance;
-using CoiniumServ.Server.Mining.Stratum.Config;
-using CoiniumServ.Server.Mining.Vanilla.Config;
-using CoiniumServ.Utils.Configuration;
+using System;
+using Serilog;
 
 namespace CoiniumServ.Mining.Pools.Config
 {
-    public interface IPoolConfig:IConfig
+    public class JobConfig : IJobConfig
     {
-        /// <summary>
-        /// Is the configuration enabled?
-        /// </summary>
-        bool Enabled { get; }
+        public bool Valid { get; private set; }
+        public int BlockRefreshInterval { get; private set; }
+        public int RebroadcastTimeout { get; private set; }
 
-        IDaemonConfig Daemon { get; }
+        public JobConfig(dynamic config)
+        {
+            try
+            {
+                // set the defaults;
+                BlockRefreshInterval = 1000;
+                RebroadcastTimeout = 55;
 
-        ICoinConfig Coin { get; }
+                // load the config data.
+                BlockRefreshInterval = config.blockRefreshInterval;
+                RebroadcastTimeout = config.rebroadcastTimeout;
 
-        IWalletConfig Wallet { get; }
-
-        IRewardsConfig Rewards { get; }
-
-        IPaymentConfig Payments { get; }
-
-        IMinerConfig Miner { get; }
-
-        IJobConfig Job { get; }
-
-        IStratumServerConfig Stratum { get; }
-
-        IBanConfig Banning { get; }
-
-        IStorageConfig Storage { get; }
-
-        IVanillaServerConfig Vanilla { get; }
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Log.Logger.ForContext<JobConfig>().Error(e, "Error loading job configuration");
+                Valid = false;
+            }
+        }
     }
 }

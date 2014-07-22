@@ -21,44 +21,20 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon.Config;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Payments;
-using CoiniumServ.Persistance;
-using CoiniumServ.Server.Mining.Stratum.Config;
-using CoiniumServ.Server.Mining.Vanilla.Config;
 using CoiniumServ.Utils.Configuration;
 
 namespace CoiniumServ.Mining.Pools.Config
 {
-    public interface IPoolConfig:IConfig
+    public interface IJobConfig : IConfig 
     {
         /// <summary>
-        /// Is the configuration enabled?
+        /// timeout in miliseconds to poll coin daemon for a new block.
         /// </summary>
-        bool Enabled { get; }
+        int BlockRefreshInterval { get; }
 
-        IDaemonConfig Daemon { get; }
-
-        ICoinConfig Coin { get; }
-
-        IWalletConfig Wallet { get; }
-
-        IRewardsConfig Rewards { get; }
-
-        IPaymentConfig Payments { get; }
-
-        IMinerConfig Miner { get; }
-
-        IJobConfig Job { get; }
-
-        IStratumServerConfig Stratum { get; }
-
-        IBanConfig Banning { get; }
-
-        IStorageConfig Storage { get; }
-
-        IVanillaServerConfig Vanilla { get; }
+        /// <summary>
+        /// if now new blocks are found in this many seconds, a new job will be created and broadcasted.
+        /// </summary>
+        int RebroadcastTimeout { get; }
     }
 }

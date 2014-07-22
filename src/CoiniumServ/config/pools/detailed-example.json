@@ -70,9 +70,9 @@
     # rebroadcast: if now new blocks are found in this many seconds, a new job will be created and broadcasted.
 
 
-    "jobs":  {
-        "blockRefresh": 1000,
-        "rebroadcast": 55        
+    "job":  {
+        "blockRefreshInterval": 1000,
+        "rebroadcastTimeout": 55        
     },
 
     # -------------------------------
@@ -116,14 +116,14 @@
     # enabled: set this true to enable banning support.
     # duration: duration of ban when a miner gets flagged for so.
     # invalidPercent: percentage of invalid shares to trigger a ban.
-    # checkThreshold: mumber of shares required before a miner's shares are considered for a ban.
+    # checkThreshold: number of shares required before a miner's shares are considered for a ban.
     # purgeInterval: purge interval in seconds that bans are checked to see if they are expired.
 
     "banning": {
         "enabled": true,
         "duration": 600,
         "invalidPercent": 50,
-        "checkThreshold": 500,
+        "checkThreshold": 100,
         "purgeInterval": 300
     },
 

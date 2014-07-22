@@ -31,6 +31,7 @@ You can contribute the development of the project by donating;
 * BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
 * LTC: `LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa`
 * DOGE: `DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr`
+* RDD: `Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr`
 
 ###### Bounties
 
@@ -129,6 +130,12 @@ Start reading by these;
 
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
+
+###### Donors
+
+Here is a list of our generous donors that keep the project ongoing;
+
+* [reddapi.com](https://www.reddapi.com)
 
 ### License
 
