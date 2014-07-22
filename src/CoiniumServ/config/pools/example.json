@@ -1,0 +1,117 @@
+﻿{
+    # sample pool config file that only sets specific settings for the pool and gets the others from default.json
+
+	"enabled": false,	
+	"coin": "litecoin.json",
+
+    # -------------------------------
+    # Coin Daemon RPC Connection
+    # -------------------------------
+
+    # port: the port coin daemon is listening on.
+    # username: username for rpc connection.
+    # password: password for rpc connection.
+
+	"daemon": {
+		"port": 9333,
+		"username": "user",
+		"password": "password"
+	},
+
+    # -------------------------------
+    # Wallet & Rewards Configuration
+    # -------------------------------
+
+    # address: generated coins will arrive here.
+
+    "wallet" : {
+        "address":  "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"
+    },
+
+    # rewards: list of addresses that gets a percentage from each mined block (ie, pool fee.)
+   
+    "rewards":  [
+        {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1} 
+    ],
+
+    # -------------------------------
+    # Payment Processing Configuration
+    # -------------------------------
+
+	# enabled: set this true to let CoiniumServ handle the payments, false if you would like some other software like mpos to handle them.
+
+	"payments": {
+		"enabled": true
+	},
+
+    # -------------------------------
+    # Stratum Server Configuration
+    # -------------------------------
+
+    # stratum:
+    # enabled: set this true to enable stratum server.
+    # port: port to listen for stratum connections.
+
+    # vardiff:
+    # enabled: set this true to enable variable-difficulty support.
+
+	"stratum": {
+		"enabled": true,
+		"port": 3333,
+        "vardiff": {
+            "enabled": true
+        }
+	},
+
+    # -------------------------------
+    # Ban Configuration
+    # -------------------------------
+
+    # you can ban miners which submits invalid work / data to reduce system/network load.
+    # enabled: set this true to enable banning support.
+
+    "banning": {
+        "enabled": true
+    },
+
+    # -------------------------------
+    # Per-pool Storage Configuration
+    # -------------------------------
+
+    # redis:
+    # enabled: is redis enabled?
+
+	"storage": {
+		"redis": {
+			"enabled": true
+		}
+	},
+
+    # -------------------------------
+    # MPOS Compatibility Mode
+    # -------------------------------
+
+    # NOT-IMPLEMENTED-YET!
+    # enabled: set this true to enable mpos compatibility mode - make sure to internal disable payment-processor!
+    # name: database-name.
+
+	"mpos": {
+		"enabled": false,
+		"database": {
+			"name": "db-name"
+		}
+	},
+
+    # -------------------------------
+    # Getwork Server Configuration
+    # -------------------------------
+
+    # EXPERIMENTAL!; This feature is still in development and not complete yet.
+    # enabled: Set this true to enable getwork server.
+    # port: port to listen for getwork connections.
+
+	"vanilla": {
+		"enabled": false,
+		"port": 2223			
+	}	
+}

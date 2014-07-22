@@ -61,6 +61,8 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
             Initialize();
             ProcessRequest += ProcessHttpRequest;
+
+            _logger.Information("Vanilla server listening on {0:l}:{1}", BindIP, Port);
         }
 
         private void ProcessHttpRequest(HttpListenerContext context)

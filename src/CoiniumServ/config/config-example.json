@@ -1,21 +1,20 @@
 {
-	# website configuration
+    # -------------------------------
+    # Website Configuration
+    # -------------------------------
+
+    # enabled: set this true to enable frontend.
+
+    # website configuration
 	"website": {
 		"enabled": true,
 		"bind": "127.0.0.1",
 		"port": 91
 	},
-    
-    # storage configuration.
-	"storage": {
-		"redis": {
-			"enabled": true,
-			"host": "10.0.0.13",
-			"port": 6379,
-            "password": "",
-            "databaseId": 0
-		}
-	},
+
+    # -------------------------------
+    # Logging Configuration
+    # -------------------------------
 
     # logging configuration
 	"logging": {

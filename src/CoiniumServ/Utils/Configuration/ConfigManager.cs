@@ -21,13 +21,13 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Factories;
 using CoiniumServ.Mining.Pools.Config;
-using CoiniumServ.Persistance.Redis;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Utils.Helpers.IO;
 using CoiniumServ.Utils.Logging;
@@ -38,7 +38,6 @@ namespace CoiniumServ.Utils.Configuration
     public class ConfigManager:IConfigManager
     {
         public bool ConfigExists { get { return _globalConfigData != null; } }
-        public IRedisConfig RedisConfig { get; private set; }
         public IWebServerConfig WebServerConfig { get; private set; }
         public ILogConfig LogConfig { get; private set; }
 
@@ -51,7 +50,9 @@ namespace CoiniumServ.Utils.Configuration
         private readonly Dictionary<string, ICoinConfig> _coinConfigs; // cache for loaded coin configs. 
 
         private readonly dynamic _globalConfigData; // global config data.
+        private dynamic _defaultPoolConfig;
         private readonly IConfigFactory _configFactory;
+
         private ILogger _logger;
 
         public ConfigManager(IConfigFactory configFactory)
@@ -63,7 +64,6 @@ namespace CoiniumServ.Utils.Configuration
             _coinConfigs =  new Dictionary<string, ICoinConfig>();
 
             LogConfig = new LogConfig(_globalConfigData.logging);
-            RedisConfig = new RedisConfig(_globalConfigData.storage.redis);
             WebServerConfig = new WebServerConfig(_globalConfigData.website);            
         }
 
@@ -84,11 +84,22 @@ namespace CoiniumServ.Utils.Configuration
             {
                 var data = JsonConfigReader.Read(file);
 
+                // check if we have a default.json pool config.
+                var filename = Path.GetFileNameWithoutExtension(file);
+                if (!string.IsNullOrEmpty(filename) && filename.Equals("default", StringComparison.OrdinalIgnoreCase)) 
+                {
+                    _defaultPoolConfig = data;
+                    continue; // don't add the default.json to list of pools and yet again do not load the coinconfig data for it.
+                }
+
                 if (!data.enabled) // skip pools that are not enabled.
                     continue;
 
                 var coinName = Path.GetFileNameWithoutExtension(data.coin);
                 var coinConfig = GetCoinConfig(coinName);
+
+                if(_defaultPoolConfig != null)
+                    data = JsonConfig.Merger.Merge(_defaultPoolConfig, data); // if we do have a default.json config, merge with it.
 
                 PoolConfigs.Add(_configFactory.GetPoolConfig(data, coinConfig));
             }

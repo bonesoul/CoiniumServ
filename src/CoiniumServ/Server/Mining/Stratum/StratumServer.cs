@@ -94,6 +94,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         public override bool Start()
         {
             var success = Listen(BindIP, Port);
+            _logger.Information("Stratum server listening on {0:l}:{1}", BindIP, Port);
             return success;
         }
 

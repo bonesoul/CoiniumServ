@@ -32,6 +32,6 @@ namespace CoiniumServ.Payments
 
         Int32 Interval { get; }
 
-        Int32 Minimum { get; }
+        double Minimum { get; }
     }
 }
