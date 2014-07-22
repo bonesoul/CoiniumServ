@@ -21,42 +21,9 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon.Config;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Payments;
-using CoiniumServ.Persistance;
-using CoiniumServ.Server.Mining.Stratum.Config;
-using CoiniumServ.Server.Mining.Vanilla.Config;
-using CoiniumServ.Utils.Configuration;
-
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Persistance
 {
-    public interface IPoolConfig:IConfig
+    public interface IStorageConfig
     {
-        /// <summary>
-        /// Is the configuration enabled?
-        /// </summary>
-        bool Enabled { get; }
-
-        IDaemonConfig Daemon { get; }
-
-        ICoinConfig Coin { get; }
-
-        IWalletConfig Wallet { get; }
-
-        IRewardsConfig Rewards { get; }
-
-        IPaymentConfig Payments { get; }
-
-        IMinerConfig Miner { get; }
-
-        IStratumServerConfig Stratum { get; }
-
-        IBanConfig Banning { get; }
-
-        IStorageConfig Storage { get; }
-
-        IVanillaServerConfig Vanilla { get; }
     }
 }

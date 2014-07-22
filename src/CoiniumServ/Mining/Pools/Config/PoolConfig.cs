@@ -43,6 +43,7 @@ namespace CoiniumServ.Mining.Pools.Config
 
         public ICoinConfig Coin { get; private set; }
 
+        public IMinerConfig Miner { get; private set; }
         public IStratumServerConfig Stratum { get; private set; }
 
         public IVanillaServerConfig Vanilla { get; private set; }
@@ -66,7 +67,6 @@ namespace CoiniumServ.Mining.Pools.Config
         /// <param name="coinConfig"></param>
         public PoolConfig(dynamic config, ICoinConfig coinConfig)
         {
-            // todo - read per pool redis config.
 
             if (config == null)
             {
@@ -78,6 +78,9 @@ namespace CoiniumServ.Mining.Pools.Config
 
             if (Enabled == false)
                 return;
+
+            Miner = new MinerConfig(config.miner);
+
 
             Wallet = new WalletConfig(config.wallet);
             Rewards = new RewardsConfig(config.rewards);

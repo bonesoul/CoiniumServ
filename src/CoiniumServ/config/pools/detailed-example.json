@@ -58,7 +58,7 @@
     # timeout: timeout in seconds to disconnect miners that did not submit any shares for the period.
 
     "miner":  {
-        "validateUsername": "true",
+        "validateUsername": true,
         "timeout": 300
     },
 

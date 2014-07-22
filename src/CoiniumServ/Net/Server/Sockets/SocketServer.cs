@@ -114,7 +114,21 @@ namespace CoiniumServ.Net.Server.Sockets
                 Port = port;
 
                 // Start listening for incoming connections.
-                Listener.Listen(10);
+                Listener.Listen(int.MaxValue); // let the maximum amount of accept backlog - we are basically leaving it to OS to determine the value. 
+                                               // by setting the maximum available value, we can make sure that we can handle large amounts of concurrent
+                                               // connection requests (maybe after a server restart).
+                
+                // http://blog.stephencleary.com/2009/05/using-socket-as-server-listening-socket.html
+                // The “backlog” parameter to Socket.Listen is how many connections the OS may accept on behalf of the application. This is not 
+                // the total number of active connections; it is only how many connections will be established if the application “gets behind”. 
+                // Once connections are Accepted, they move out of the backlog queue and no longer “count” against the backlog limit.
+
+                // The .NET docs fail to mention that int.MaxValue can be used to invoke the “dynamic backlog” feature (Windows Server systems only), 
+                // essentially leaving it up to the OS. It is tempting to set this value very high (e.g., always passing int.MaxValue), but this would 
+                // hurt system performance (on non-server machines) by pre-allocating a large amount of scarce resources. This value should be set to a 
+                // reasonable amount (usually between 2 and 5), based on how many connections one is realistically expecting and how quickly they can be 
+                // Accepted.
+
                 IsListening = true;
 
                 // Begin accepting any incoming connections asynchronously.
@@ -160,14 +174,16 @@ namespace CoiniumServ.Net.Server.Sockets
                     OnClientConnection(new ConnectionEventArgs(connection)); // Raise the ClientConnected event.
                     connection.BeginReceive(ReceiveCallback, connection); // Begin receiving on the new connection connection.
                 }
-
-                Listener.BeginAccept(AcceptCallback, null); // Continue receiving other incoming connection asynchronously.
             }
-            catch (NullReferenceException) { } // we recive this after issuing server-shutdown, just ignore it.
-            //catch (Exception exception)
-            //{
-            //    Log.Error("Can not accept connection: {0}", exception);
-            //}
+            catch (Exception exception)
+            {
+                Log.ForContext<SocketServer>().Error(exception, "Can not accept connection");
+            }
+            finally
+            {
+                 // no matter we were able to accept last connection request, make sure we continue to listen for new connections.
+                Listener.BeginAccept(AcceptCallback, null);
+            }
         }
 
         public virtual bool IsBanned(Socket socket)
