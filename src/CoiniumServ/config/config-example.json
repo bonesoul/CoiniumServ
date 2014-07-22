@@ -1,10 +1,20 @@
 {
-	# website configuration
+    # -------------------------------
+    # Website Configuration
+    # -------------------------------
+
+    # enabled: set this true to enable frontend.
+
+    # website configuration
 	"website": {
 		"enabled": true,
 		"bind": "127.0.0.1",
 		"port": 91
 	},
+
+    # -------------------------------
+    # Logging Configuration
+    # -------------------------------
 
     # logging configuration
 	"logging": {

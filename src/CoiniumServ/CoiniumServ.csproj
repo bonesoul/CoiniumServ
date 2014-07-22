@@ -375,7 +375,7 @@
     <None Include="config\coins\namecoin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\config-sample.json">
+    <None Include="config\config-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\coins\21coin.json">
@@ -783,13 +783,13 @@
     <None Include="config\coins\zzcoin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\pools\default-sample.json">
+    <None Include="config\pools\default-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\pools\sample-detailed.json">
+    <None Include="config\pools\detailed-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\pools\sample.json">
+    <None Include="config\pools\example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
