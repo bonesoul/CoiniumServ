@@ -48,8 +48,8 @@ namespace CoiniumServ.Mining.Pools.Config
             }
             catch (Exception e)
             {
-                Log.Logger.ForContext<JobConfig>().Error(e, "Error loading job configuration");
                 Valid = false;
+                Log.Logger.ForContext<JobConfig>().Error(e, "Error loading job configuration");
             }
         }
     }

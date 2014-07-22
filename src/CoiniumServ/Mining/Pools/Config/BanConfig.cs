@@ -56,8 +56,8 @@ namespace CoiniumServ.Mining.Pools.Config
             }
             catch (Exception e)
             {
-                Log.Logger.ForContext<BanConfig>().Error(e, "Error loading banning configuration");
                 Valid = false;
+                Log.Logger.ForContext<BanConfig>().Error(e, "Error loading banning configuration");
             }
         }
     }

@@ -23,7 +23,6 @@
 
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
-using CoiniumServ.Mining.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Server.Mining.Stratum.Config;

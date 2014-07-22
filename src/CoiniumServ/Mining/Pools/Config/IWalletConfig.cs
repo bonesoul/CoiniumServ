@@ -21,10 +21,15 @@
 // 
 #endregion
 
+using CoiniumServ.Utils.Configuration;
+
 namespace CoiniumServ.Mining.Pools.Config
 {
-    public interface IWalletConfig
+    public interface IWalletConfig:IConfig
     {
+        /// <summary>
+        ///  Address that generated coins will arrive.
+        /// </summary>
         string Adress { get; }
     }
 }

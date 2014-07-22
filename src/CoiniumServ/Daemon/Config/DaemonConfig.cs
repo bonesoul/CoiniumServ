@@ -20,6 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
+using Serilog;
+
 namespace CoiniumServ.Daemon.Config
 {
     public class DaemonConfig:IDaemonConfig
@@ -36,18 +40,24 @@ namespace CoiniumServ.Daemon.Config
 
         public DaemonConfig(dynamic config)
         {
-            if (config == null)
+            try
+            {
+                // set the defaults;
+                Host = "0.0.0.0";
+
+                // load the config data.
+                Host = config.host;
+                Port = config.port;
+                Username = config.username;
+                Password = config.password;
+
+                Valid = true;
+            }
+            catch (Exception e)
             {
                 Valid = false;
-                return;
+                Log.Logger.ForContext<DaemonConfig>().Error(e, "Error loading daemon configuration");
             }
-
-            Host = !string.IsNullOrEmpty(config.host) ? config.host : "0.0.0.0";
-            Port = config.port;
-            Username = config.username;
-            Password = config.password;
-
-            Valid = true;
         }
     }
 }

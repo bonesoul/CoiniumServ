@@ -48,8 +48,8 @@ namespace CoiniumServ.Mining.Pools.Config
             }
             catch (Exception e)
             {
-                Log.Logger.ForContext<MinerConfig>().Error(e, "Error loading miner configuration");
                 Valid = false;
+                Log.Logger.ForContext<MinerConfig>().Error(e, "Error loading miner configuration");
             }
         }
     }
