@@ -21,9 +21,17 @@
 // 
 #endregion
 
+using CoiniumServ.Utils.Configuration;
+
 namespace CoiniumServ.Mining.Pools.Config
 {
-    public interface IStorageConfig
+    public interface IMinerConfig : IConfig 
     {
+        /// <summary>
+        /// Should worker usernames validated against coin daemon as an address?
+        /// </summary>
+        bool ValidateUsername { get; }
+
+        int Timeout { get; }
     }
 }

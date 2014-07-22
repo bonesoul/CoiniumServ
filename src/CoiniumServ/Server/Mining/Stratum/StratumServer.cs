@@ -109,7 +109,14 @@ namespace CoiniumServ.Server.Mining.Stratum
 
         public override bool IsBanned(Socket socket)
         {
-            var endpoint = (IPEndPoint) socket.RemoteEndPoint;
+            if (socket == null) // we should have a valid socket data.
+                return true; // else just behave the client as banned.
+
+            var endpoint = (IPEndPoint) socket.RemoteEndPoint; // get the remote endpoint for socket.
+            
+            if (endpoint == null || endpoint.Address == null) // if we don't have an endpoint information, basically we can't determine the ip miner
+                return false; // in case, we just allow him to get connected as we can ban him later based on his behaviours.
+
             return _banManager.IsBanned(endpoint.Address);
         }
 

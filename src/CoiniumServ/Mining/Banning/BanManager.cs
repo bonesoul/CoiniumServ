@@ -108,15 +108,17 @@ namespace CoiniumServ.Mining.Banning
 
         public bool IsBanned(IPAddress ip)
         {
+            if (!Config.Enabled) // if banning is not enabled,
+                return false; // just skip queries.
+
             if (!_bannedIps.ContainsKey(ip)) // check if ip exists in banlist.
                 return false;
 
             if (!BanExpired(ip)) // if ip has still an ongoing ban.
                 return true;
 
-            // if the code flow reaches here, it means the ban has been expired, so remove it first.
-            RemoveBan(ip);
-            return false;
+            RemoveBan(ip); // if the code flow reaches here, it means the ban has been expired, so remove it first.
+            return false; // and tell that ip has no bans.
         }
 
         public void CheckBans(object state)

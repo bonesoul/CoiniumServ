@@ -21,42 +21,36 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon.Config;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Payments;
-using CoiniumServ.Persistance;
-using CoiniumServ.Server.Mining.Stratum.Config;
-using CoiniumServ.Server.Mining.Vanilla.Config;
-using CoiniumServ.Utils.Configuration;
+using System;
+using Serilog;
 
 namespace CoiniumServ.Mining.Pools.Config
 {
-    public interface IPoolConfig:IConfig
+    public class MinerConfig:IMinerConfig
     {
-        /// <summary>
-        /// Is the configuration enabled?
-        /// </summary>
-        bool Enabled { get; }
+        public bool Valid { get; private set; }
+        public bool ValidateUsername { get; private set; }
+        public int Timeout { get; private set; }
 
-        IDaemonConfig Daemon { get; }
+        public MinerConfig(dynamic config)
+        {
+            try
+            {
+                // set the defaults;
+                ValidateUsername = true;
+                Timeout = 300;
 
-        ICoinConfig Coin { get; }
+                // load the config data.
+                ValidateUsername = config.validateUsername;
+                Timeout = config.timeout;
 
-        IWalletConfig Wallet { get; }
-
-        IRewardsConfig Rewards { get; }
-
-        IPaymentConfig Payments { get; }
-
-        IMinerConfig Miner { get; }
-
-        IStratumServerConfig Stratum { get; }
-
-        IBanConfig Banning { get; }
-
-        IStorageConfig Storage { get; }
-
-        IVanillaServerConfig Vanilla { get; }
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Log.Logger.ForContext<MinerConfig>().Error(e, "Error loading miner configuration");
+                Valid = false;
+            }
+        }
     }
 }
