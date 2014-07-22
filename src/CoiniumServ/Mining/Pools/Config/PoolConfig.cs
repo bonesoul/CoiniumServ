@@ -44,6 +44,7 @@ namespace CoiniumServ.Mining.Pools.Config
         public ICoinConfig Coin { get; private set; }
 
         public IMinerConfig Miner { get; private set; }
+        public IJobConfig Job { get; private set; }
         public IStratumServerConfig Stratum { get; private set; }
 
         public IVanillaServerConfig Vanilla { get; private set; }
@@ -80,6 +81,8 @@ namespace CoiniumServ.Mining.Pools.Config
                 return;
 
             Miner = new MinerConfig(config.miner);
+
+            Job = new JobConfig(config.job);
 
 
             Wallet = new WalletConfig(config.wallet);

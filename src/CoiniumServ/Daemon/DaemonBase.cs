@@ -161,7 +161,7 @@ namespace CoiniumServ.Daemon
             }
             catch (JsonException jsonEx)
             {
-                throw new Exception("There was a problem deserializing the response from the bitcoin wallet.", jsonEx);
+                throw new Exception("There was a problem deserializing the response from the coin wallet.", jsonEx);
             }
         }
 

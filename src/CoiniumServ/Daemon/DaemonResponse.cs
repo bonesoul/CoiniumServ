@@ -27,7 +27,7 @@ namespace CoiniumServ.Daemon
 {
     /// <summary>
     /// Class containing the information contained in a JSON RPC response received from
-    /// the Bitcoin wallet.
+    /// the coin wallet.
     /// </summary>
     /// <typeparam name="T">
     /// Type of the result object. This can simply be a string like a transaction id, 

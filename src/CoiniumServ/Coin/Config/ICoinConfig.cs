@@ -27,12 +27,24 @@ namespace CoiniumServ.Coin.Config
 {
     public interface ICoinConfig:IConfig
     {
+        /// <summary>
+        /// name of the coin
+        /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// 3 or 4 letter symbol for the coin
+        /// </summary>
         string Symbol { get; }
 
+        /// <summary>
+        /// The algorithm used by the coin.
+        /// </summary>
         string Algorithm { get; }
 
+        /// <summary>
+        /// Extra options provided that will be passed to coin algorithm.
+        /// </summary>
         dynamic Options { get; }
     }
 }

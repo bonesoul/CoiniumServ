@@ -20,6 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
+using Serilog;
+
 namespace CoiniumServ.Coin.Config
 {
     public class CoinConfig : ICoinConfig
@@ -32,18 +36,20 @@ namespace CoiniumServ.Coin.Config
 
         public CoinConfig(dynamic config)
         {
-            if (config == null)
+            try
+            {
+                Name = config.name;
+                Symbol = config.symbol;
+                Algorithm = config.algorithm;
+                Options = config;
+
+                Valid = true;
+            }
+            catch (Exception e)
             {
                 Valid = false;
-                return;
+                Log.Logger.ForContext<CoinConfig>().Error(e, "Error loading coin configuration");
             }
-
-            Name = config.name;
-            Symbol = config.symbol;
-            Algorithm = config.algorithm;
-            Options = config;
-
-            Valid = true;
         }
     }
 }

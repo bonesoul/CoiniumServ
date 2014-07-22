@@ -21,27 +21,41 @@
 // 
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JsonConfig;
+using Serilog;
 
 namespace CoiniumServ.Mining.Pools.Config
 {
     public class RewardsConfig:IRewardsConfig
     {
         public bool Valid { get; private set; }
+
+        /// <summary>
+        /// list of addresses that gets a percentage from each mined block (ie, pool fee.)
+        /// </summary>
         private readonly Dictionary<string, float> _rewards;
 
         public RewardsConfig(dynamic config)
         {
-            _rewards = new Dictionary<string, float>();
+            try
+            {
+                _rewards = new Dictionary<string, float>();
 
-            // weird stuff going below because of JsonConfig libraries handling of dictionaries.            
-            foreach (ConfigObject kvp in config)
-                foreach (KeyValuePair<string, object> pair in kvp)
-                    _rewards.Add(pair.Key, float.Parse(pair.Value.ToString()));   
+                // weird stuff going below because of JsonConfig libraries handling of dictionaries.            
+                foreach (ConfigObject kvp in config)
+                    foreach (KeyValuePair<string, object> pair in kvp)
+                        _rewards.Add(pair.Key, float.Parse(pair.Value.ToString()));
 
-            Valid = true;
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<RewardsConfig>().Error(e, "Error loading rewards configuration");
+            }
         }
 
         public IEnumerator<KeyValuePair<string, float>> GetEnumerator()

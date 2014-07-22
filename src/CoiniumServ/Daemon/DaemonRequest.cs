@@ -29,12 +29,12 @@ using Newtonsoft.Json;
 namespace CoiniumServ.Daemon
 {
     /// <summary>
-    /// Class containing data sent to the Bitcoin wallet as a JSON RPC call.
+    /// Class containing data sent to the coin wallet as a JSON RPC call.
     /// </summary>
     public class DaemonRequest
     {
         /// <summary>
-        /// The method to call on the Bitcoin wallet.
+        /// The method to call on the coin wallet.
         /// </summary>
         [JsonProperty(PropertyName = "method", Order = 0)]
         public string Method { get; set; }
