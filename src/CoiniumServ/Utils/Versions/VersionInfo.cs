@@ -29,12 +29,17 @@ namespace CoiniumServ.Utils.Versions
     public static class VersionInfo
     {
         /// <summary>
+        /// Codename.
+        /// </summary>
+        public const string CodeName = "Medivh";
+
+        /// <summary>
         /// Main assembly versions info.
         /// </summary>
         public static class Assembly
         {
             /// <summary>
-            /// Main assemblies version.
+            /// Main assemby version.
             /// </summary>
             public const string Version = "0.1.0.*";
         }
