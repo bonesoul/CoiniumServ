@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Payments;
@@ -28,6 +29,7 @@ using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Redis;
 using CoiniumServ.Server.Mining.Stratum.Config;
 using CoiniumServ.Server.Mining.Vanilla.Config;
+using Serilog;
 
 namespace CoiniumServ.Mining.Pools.Config
 {
@@ -37,29 +39,18 @@ namespace CoiniumServ.Mining.Pools.Config
     public class PoolConfig : IPoolConfig
     {
         public bool Valid { get; private set; }
-
         public bool Enabled { get; private set; }
-        public IWalletConfig Wallet { get; private set; }
-
         public ICoinConfig Coin { get; private set; }
-
+        public IDaemonConfig Daemon { get; private set; }
+        public IWalletConfig Wallet { get; private set; }
+        public IRewardsConfig Rewards { get; private set; }
+        public IPaymentConfig Payments { get; private set; }
         public IMinerConfig Miner { get; private set; }
         public IJobConfig Job { get; private set; }
         public IStratumServerConfig Stratum { get; private set; }
-
-        public IVanillaServerConfig Vanilla { get; private set; }
-
-        /// <summary>
-        /// Gets the daemon configuration.
-        /// </summary>
-        public IDaemonConfig Daemon { get; private set; }
-
-        public IRewardsConfig Rewards { get; private set; }
-
-        public IPaymentConfig Payments { get; private set; }
-
         public IBanConfig Banning { get; private set; }
         public IStorageConfig Storage { get; private set; }
+        public IVanillaServerConfig Vanilla { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PoolConfig"/> class.
@@ -68,63 +59,32 @@ namespace CoiniumServ.Mining.Pools.Config
         /// <param name="coinConfig"></param>
         public PoolConfig(dynamic config, ICoinConfig coinConfig)
         {
+            try
+            {
+                Enabled = config.enabled ? config.enabled : false;
 
-            if (config == null)
+                if (Enabled == false) // if the configuration is not enabled
+                    return; // just skip reading rest of the parameters.
+
+                Coin = coinConfig;
+                Daemon = new DaemonConfig(config.daemon);
+                Wallet = new WalletConfig(config.wallet);
+                Rewards = new RewardsConfig(config.rewards);
+                Payments = new PaymentConfig(config.payments);
+                Miner = new MinerConfig(config.miner);
+                Job = new JobConfig(config.job);
+                Stratum = new StratumServerConfig(config.stratum);
+                Banning = new BanConfig(config.banning);
+                Storage = new RedisConfig(config.storage.redis);
+                Vanilla = new VanillaServerConfig(config.vanilla);
+
+                Valid = true;
+            }
+            catch (Exception e)
             {
                 Valid = false;
-                return;
+                Log.Logger.ForContext<PoolConfig>().Error(e, "Error loading pool configuration");
             }
-
-            Enabled = config.enabled ? config.enabled : false;
-
-            if (Enabled == false)
-                return;
-
-            Miner = new MinerConfig(config.miner);
-
-            Job = new JobConfig(config.job);
-
-
-            Wallet = new WalletConfig(config.wallet);
-            Rewards = new RewardsConfig(config.rewards);
-
-            Coin = coinConfig;
-
-            if (Coin == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Stratum = new StratumServerConfig(config.stratum);
-            Vanilla = new VanillaServerConfig(config.vanilla);
-
-            if (Stratum == null && Vanilla == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Daemon = new DaemonConfig(config.daemon);
-
-            if (Daemon == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Payments = new PaymentConfig(config.payments);
-            if (Payments == null)
-            {
-                Valid = false;
-                return;
-            }
-
-            Banning = new BanConfig(config.banning);
-
-            Storage = new RedisConfig(config.storage.redis);
-
-            Valid = true;
         }
     }
 }

@@ -38,9 +38,9 @@ namespace CoiniumServ.Mining.Pools.Config
         /// </summary>
         bool Enabled { get; }
 
-        IDaemonConfig Daemon { get; }
-
         ICoinConfig Coin { get; }
+
+        IDaemonConfig Daemon { get; }
 
         IWalletConfig Wallet { get; }
 
