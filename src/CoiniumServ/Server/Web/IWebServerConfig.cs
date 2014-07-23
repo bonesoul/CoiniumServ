@@ -22,15 +22,22 @@
 #endregion
 
 using System;
+using CoiniumServ.Utils.Configuration;
 
 namespace CoiniumServ.Server.Web
 {
-    public interface IWebServerConfig
+    public interface IWebServerConfig:IConfig
     {
         bool Enabled { get; }
 
+        /// <summary>
+        /// interface to bind webserver.
+        /// </summary>
         string BindInterface { get; }
 
+        /// <summary>
+        /// port to listen for http connections.
+        /// </summary>
         Int32 Port { get; }
     }
 }

@@ -22,13 +22,20 @@
 #endregion
 
 using System.Collections.Generic;
+using CoiniumServ.Utils.Configuration;
 
 namespace CoiniumServ.Utils.Logging
 {
-    public interface ILogConfig
+    public interface ILogConfig : IConfig
     {
+        /// <summary>
+        /// relative path of logs.
+        /// </summary>
         string Root { get; }
 
+        /// <summary>
+        /// log targets.
+        /// </summary>
         List<ILogTarget> Targets { get; } 
     }
 }

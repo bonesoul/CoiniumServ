@@ -28,8 +28,14 @@ namespace CoiniumServ.Server.Mining.Stratum.Config
 {
     public interface IStratumServerConfig : IServerConfig
     {
+        /// <summary>
+        /// default difficulty assigned to newly connected miners.
+        /// </summary>
         Int32 Diff { get; }
 
+        /// <summary>
+        /// vardiff configuration.
+        /// </summary>
         IVardiffConfig Vardiff { get; }
     }
 }

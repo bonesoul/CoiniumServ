@@ -21,7 +21,10 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
+using CoiniumServ.Mining.Pools.Config;
+using Serilog;
 
 namespace CoiniumServ.Utils.Logging
 {
@@ -29,15 +32,26 @@ namespace CoiniumServ.Utils.Logging
     {
         public string Root { get; private set; }
         public List<ILogTarget> Targets { get; private set; }
+        public bool Valid { get; private set; }
 
         public LogConfig(dynamic config)
         {
-            Root = config.root;
-
-            Targets = new List<ILogTarget>();
-            foreach (var target in config.targets)
+            try
             {
-                Targets.Add(new LogTarget(target));
+                Root = config.root;
+
+                Targets = new List<ILogTarget>();
+                foreach (var target in config.targets)
+                {
+                    Targets.Add(new LogTarget(target));
+                }
+
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<LogConfig>().Error(e, "Error loading logging configuration");
             }
         }
     }

@@ -34,47 +34,58 @@ namespace CoiniumServ.Utils.Logging
         public string Filename { get; private set; }
         public bool Rolling { get; private set; }
         public LogEventLevel Level { get; private set; }
+        public bool Valid { get; private set; }
 
         public LogTarget(dynamic config)
         {
-            Enabled = config.enabled;
-            Filename = config.filename;
-            Rolling = config.rolling;
-
-            switch ((string) config.type)
+            try
             {
-                case "console":
-                    Type = LogTargetType.Console;
-                    break;
-                case "file":
-                    Type = LogTargetType.File;
-                    break;
-                case "packet":
-                    Type = LogTargetType.Packet;
-                    break;
-            }
+                Enabled = config.enabled;
+                Filename = config.filename;
+                Rolling = config.rolling;
 
-            switch ((string) config.level)
-            {
-                case "verbose":
-                    Level = LogEventLevel.Verbose;
-                    break;
-                case "debug":
-                    Level = LogEventLevel.Debug;
-                    break;
-                case "information":
-                    Level = LogEventLevel.Information;
-                    break;
-                case "warning":
-                    Level = LogEventLevel.Warning;
-                    break;
-                case "error":
-                    Level = LogEventLevel.Error;
-                    break;
-                case "fatal":
-                    Level = LogEventLevel.Fatal;
-                    break;
+                switch ((string) config.type)
+                {
+                    case "console":
+                        Type = LogTargetType.Console;
+                        break;
+                    case "file":
+                        Type = LogTargetType.File;
+                        break;
+                    case "packet":
+                        Type = LogTargetType.Packet;
+                        break;
+                }
+
+                switch ((string) config.level)
+                {
+                    case "verbose":
+                        Level = LogEventLevel.Verbose;
+                        break;
+                    case "debug":
+                        Level = LogEventLevel.Debug;
+                        break;
+                    case "information":
+                        Level = LogEventLevel.Information;
+                        break;
+                    case "warning":
+                        Level = LogEventLevel.Warning;
+                        break;
+                    case "error":
+                        Level = LogEventLevel.Error;
+                        break;
+                    case "fatal":
+                        Level = LogEventLevel.Fatal;
+                        break;
+                }
+
+                Valid = true;
             }
-        }      
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<LogTarget>().Error(e, "Error loading log target configuration");
+            }
+        }
     }
 }

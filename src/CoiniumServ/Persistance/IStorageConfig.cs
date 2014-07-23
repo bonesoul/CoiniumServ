@@ -21,9 +21,11 @@
 // 
 #endregion
 
+using CoiniumServ.Utils.Configuration;
+
 namespace CoiniumServ.Persistance
 {
-    public interface IStorageConfig
+    public interface IStorageConfig:IConfig
     {
     }
 }

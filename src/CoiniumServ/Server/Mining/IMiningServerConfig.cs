@@ -28,12 +28,16 @@ namespace CoiniumServ.Server.Mining
 {
     public interface IServerConfig:IConfig 
     {
-        string Name { get; }
-
         bool Enabled { get; }
 
+        /// <summary>
+        /// interface to bind server.
+        /// </summary>
         string BindInterface { get; }
 
+        /// <summary>
+        /// port to listen for connections.
+        /// </summary>
         Int32 Port { get; }
     }
 }

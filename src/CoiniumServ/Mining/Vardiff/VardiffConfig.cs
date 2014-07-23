@@ -21,6 +21,9 @@
 // 
 #endregion
 
+using System;
+using Serilog;
+
 namespace CoiniumServ.Mining.Vardiff
 {
     public class VardiffConfig:IVardiffConfig
@@ -31,15 +34,34 @@ namespace CoiniumServ.Mining.Vardiff
         public int TargetTime { get; private set; }
         public int RetargetTime { get; private set; }
         public int VariancePercent { get; private set; }
+        public bool Valid { get; private set; }
 
         public VardiffConfig(dynamic config)
         {
-            Enabled = config.enabled;
-            MinimumDifficulty = config.minDiff;
-            MaximumDifficulty = config.maxDiff;
-            TargetTime = config.targetTime;
-            RetargetTime = config.retargetTime;
-            VariancePercent = config.variancePercent;            
+            try
+            {
+                // set the defaults;
+                MinimumDifficulty = 8;
+                MaximumDifficulty = 512;
+                TargetTime = 15;
+                RetargetTime = 90;
+                VariancePercent = 30;
+
+                // load the config data.
+                Enabled = config.enabled;
+                MinimumDifficulty = config.minDiff;
+                MaximumDifficulty = config.maxDiff;
+                TargetTime = config.targetTime;
+                RetargetTime = config.retargetTime;
+                VariancePercent = config.variancePercent;
+
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<VardiffConfig>().Error(e, "Error loading vardiff configuration");
+            }   
         }
     }
 }

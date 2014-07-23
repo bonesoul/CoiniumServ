@@ -21,27 +21,49 @@
 // 
 #endregion
 
+using CoiniumServ.Utils.Configuration;
 using Serilog.Events;
 
 namespace CoiniumServ.Utils.Logging
 {
-    public interface ILogTarget
+    public interface ILogTarget: IConfig
     {
         bool Enabled { get; }
 
+        /// <summary>
+        /// console, file or packet.
+        /// </summary>
         LogTargetType Type { get; }
 
+        /// <summary>
+        /// filename of the log file.
+        /// </summary>
         string Filename { get; }
 
+        /// <summary>
+        /// set this true to get a seperate log file for every day.
+        /// </summary>
         bool Rolling { get; }
 
+        /// <summary>
+        /// minimum log level.
+        /// </summary>
         LogEventLevel Level { get; }
     }
 
     public enum LogTargetType
     {
+        /// <summary>
+        /// Logs to console.
+        /// </summary>
         Console,
+        /// <summary>
+        /// Logs to a file.
+        /// </summary>
         File,
+        /// <summary>
+        /// Logs network packets to a file.
+        /// </summary>
         Packet
     }
 }

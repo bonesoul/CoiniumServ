@@ -23,7 +23,6 @@
 
 using System.Collections.Generic;
 using CoiniumServ.Mining.Pools.Config;
-using CoiniumServ.Persistance.Redis;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Utils.Logging;
 

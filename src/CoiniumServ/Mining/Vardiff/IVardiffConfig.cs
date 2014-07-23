@@ -21,20 +21,37 @@
 // 
 #endregion
 
+using CoiniumServ.Utils.Configuration;
+
 namespace CoiniumServ.Mining.Vardiff
 {
-    public interface IVardiffConfig
+    public interface IVardiffConfig : IConfig
     {
         bool Enabled { get; }
 
+        /// <summary>
+        /// minimum difficulty that can be assigned to miners.
+        /// </summary>
         int MinimumDifficulty { get; }
 
+        /// <summary>
+        /// maximum difficulty that can be assigned to miners.
+        /// </summary>
         int MaximumDifficulty { get; }
 
+        /// <summary>
+        /// try to get a single share per this many seconds from miner.
+        /// </summary>
         int TargetTime { get; }
 
+        /// <summary>
+        /// retarget a miners difficulty ever this many seconds.
+        /// </summary>
         int RetargetTime { get; }
 
+        /// <summary>
+        /// allow difficulty for a miner to vary this percent without retargeting.
+        /// </summary>
         int VariancePercent { get; }
     }
 }

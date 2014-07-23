@@ -22,16 +22,31 @@
 #endregion
 
 using System;
-using CoiniumServ.Mining.Pools.Config;
 
 namespace CoiniumServ.Persistance.Redis
 {
     public interface IRedisConfig : IStorageConfig
     {
         bool Enabled { get; }
+
+        /// <summary>
+        /// redis host.
+        /// </summary>
         string Host { get; }
+
+        /// <summary>
+        /// redis port.
+        /// </summary>
         Int32 Port { get;  }
+
+        /// <summary>
+        /// the password if redis installation requires one.
+        /// </summary>
         string Password { get;  }
+
+        /// <summary>
+        /// redis database instance id
+        /// </summary>
         int DatabaseId { get;  }
     }
 }

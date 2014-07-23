@@ -4,17 +4,29 @@
     # -------------------------------
 
     # enabled: set this true to enable frontend.
+    # bind: interface to bind webserver.
+    # port: port to listen for http connections.
 
     # website configuration
 	"website": {
 		"enabled": true,
 		"bind": "127.0.0.1",
-		"port": 91
+		"port": 80
 	},
 
     # -------------------------------
     # Logging Configuration
     # -------------------------------
+
+    # root: relative path of logs.
+    # targets: log targets.
+    
+    # target: 
+    # enabled: is the log target enabled?
+    # type: console, file or packet.
+    # filename: filename of the log file.
+    # rolling: set this true to get a seperate log file for every day.
+    # level: minimum log level.
 
     # logging configuration
 	"logging": {

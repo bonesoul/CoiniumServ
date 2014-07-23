@@ -23,15 +23,13 @@
 
 using System;
 using CoiniumServ.Mining.Vardiff;
-using CoiniumServ.Server.Mining.Service;
+using Serilog;
 
 namespace CoiniumServ.Server.Mining.Stratum.Config
 {
     public class StratumServerConfig:IStratumServerConfig
     {
         public bool Valid { get; private set; }
-
-        public string Name { get; private set; }
 
         public bool Enabled { get; private set; }
 
@@ -44,21 +42,25 @@ namespace CoiniumServ.Server.Mining.Stratum.Config
 
         public StratumServerConfig(dynamic config)
         {
-            if (config == null)
+            try
+            {
+                // set the defaults;
+                BindInterface = "0.0.0.0";
+
+                // load the config data.
+                Enabled = config.enabled;
+                BindInterface = config.bind;
+                Port = config.port;
+                Diff = config.diff;
+                Vardiff = new VardiffConfig(config.vardiff);
+
+                Valid = true;
+            }
+            catch (Exception e)
             {
                 Valid = false;
-                return;
+                Log.Logger.ForContext<StratumServerConfig>().Error(e, "Error loading stratum server configuration");
             }
-
-            Name = Services.Stratum;
-            Enabled = config.enabled;
-            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "0.0.0.0";
-            Port = config.port;
-            Diff = config.diff;
-
-            Vardiff = new VardiffConfig(config.vardiff);
-
-            Valid = true;
         }
     }
 }
