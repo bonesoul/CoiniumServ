@@ -64,7 +64,9 @@ namespace CoiniumServ.Configuration
             _coinConfigs =  new Dictionary<string, ICoinConfig>();
 
             LogConfig = new LogConfig(_globalConfigData.logging);
-            WebServerConfig = new WebServerConfig(_globalConfigData.website);            
+            WebServerConfig = new WebServerConfig(_globalConfigData.website);
+
+            // TODO: implement metrics config.
         }
 
         public void Initialize()

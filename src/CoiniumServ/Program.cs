@@ -30,6 +30,7 @@ using CoiniumServ.Repository;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
 using CoiniumServ.Utils.Platform;
+using CoiniumServ.Utils.Versions;
 using Nancy.TinyIoc;
 using Serilog;
 
@@ -80,7 +81,7 @@ namespace CoiniumServ
 
             // print a version banner.
             _logger = Log.ForContext<Program>();
-            _logger.Information("CoiniumServ {0:l} warming-up..", Assembly.GetAssembly(typeof(Program)).GetName().Version);
+            _logger.Information("CoiniumServ {0} {1:l} warming-up..", VersionInfo.CodeName, Assembly.GetAssembly(typeof(Program)).GetName().Version);
             PlatformManager.PrintPlatformBanner();
 
             // initialize config manager.

@@ -33,6 +33,12 @@ You can contribute the development of the project by donating;
 * DOGE: `DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr`
 * RDD: `Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr`
 
+###### Donors
+
+Here is a list of our generous donors that keep the project ongoing;
+
+* [reddapi.com](https://www.reddapi.com)
+
 ###### Bounties
 
 BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
@@ -131,12 +137,6 @@ Start reading by these;
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
 
-###### Donors
-
-Here is a list of our generous donors that keep the project ongoing;
-
-* [reddapi.com](https://www.reddapi.com)
-
 ### License
 
 Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org - 
@@ -155,5 +155,5 @@ GNU General Public License for more details.
 For the terms of this license, see [licenses/gpl_v3.txt](https://github.com/CoiniumServ/CoiniumServ/blob/develop/licenses/gpl_v3.txt).
 
 Alternatively, you can license this software under a commercial
-license or white-label it as set out in [licenses/commercial.txt](https://github.com/CoiniumServ/CoiniumServ/blob/develop/licenses/commercial.txt).
+license or white-label it as set out in [licenses/commercial.md](https://github.com/CoiniumServ/CoiniumServ/blob/develop/licenses/commercial.md).
 

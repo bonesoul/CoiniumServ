@@ -21,32 +21,15 @@
 // 
 #endregion
 
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Modules.Models;
 using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules
 {
-    public class PoolModule : NancyModule
+    public class DonateModule : NancyModule
     {
-        public PoolModule(IPoolManager poolManager)
+        public DonateModule()
         {
-            Get["/pool/{slug}/"] = _ =>
-            {
-                var pool = poolManager.GetBySymbol(_.slug);
-
-                if (pool != null)
-                    return View["pool", pool];
-
-
-                var error = new Error
-                {
-                    Summary = "Pool not found",
-                    Details = string.Format("The request pool does not exist: {0}", _.slug)
-                };
-
-                return View["error", error];
-            };
+            Get["/donate/"] = _ => View["donate"];
         }
     }
 }

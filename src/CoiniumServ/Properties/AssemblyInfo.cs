@@ -29,17 +29,18 @@ using System.Runtime.InteropServices;
 using CoiniumServ.Utils.Versions;
 
 [assembly: AssemblyTitle("CoiniumServ")]
-[assembly: AssemblyDescription("Crypto currency pool software")]
+[assembly: AssemblyDescription("Next-gen crypto currency mining pool software")]
+[assembly: AssemblyCompany("Coinium.org")]
+[assembly: AssemblyProduct("CoiniumServ - " + VersionInfo.CodeName)]
+[assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, CoiniumServ project, http://www.coinium.org -  http://www.coiniumserv.com")]
+[assembly: AssemblyTrademark("CoiniumServ")]
+[assembly: AssemblyCulture("")]
+
 #if DEBUG
     [assembly: AssemblyConfiguration("Debug")]
 #else
     [assembly: AssemblyConfiguration("Release")]
 #endif
-    [assembly: AssemblyCompany("Coinium.org")]
-    [assembly: AssemblyProduct("CoiniumServ")]
-[assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, coinium project, http://www.coinium.org")]
-[assembly: AssemblyTrademark("CoiniumServ")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

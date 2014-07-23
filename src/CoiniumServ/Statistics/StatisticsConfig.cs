@@ -21,32 +21,36 @@
 // 
 #endregion
 
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Modules.Models;
-using Nancy;
+using System;
+using Serilog;
 
-namespace CoiniumServ.Server.Web.Modules
+namespace CoiniumServ.Statistics
 {
-    public class PoolModule : NancyModule
+    public class StatisticsConfig:IStatisticsConfig
     {
-        public PoolModule(IPoolManager poolManager)
+        public bool Valid { get; private set; }
+        public int UpdateInterval { get; private set; }
+        public int HashrateWindow { get; private set; }
+
+        public StatisticsConfig(dynamic config)
         {
-            Get["/pool/{slug}/"] = _ =>
+            try
             {
-                var pool = poolManager.GetBySymbol(_.slug);
+                // set the defaults;
+                UpdateInterval = 60;
+                HashrateWindow = 300;
 
-                if (pool != null)
-                    return View["pool", pool];
+                // load the config data.
+                UpdateInterval = config.updateInterval;
+                HashrateWindow = config.hashrateWindow;
 
-
-                var error = new Error
-                {
-                    Summary = "Pool not found",
-                    Details = string.Format("The request pool does not exist: {0}", _.slug)
-                };
-
-                return View["error", error];
-            };
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<StatisticsConfig>().Error(e, "Error loading website statistics configuration");
+            }
         }
     }
 }

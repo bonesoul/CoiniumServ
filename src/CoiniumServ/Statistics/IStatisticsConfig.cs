@@ -21,32 +21,20 @@
 // 
 #endregion
 
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Modules.Models;
-using Nancy;
+using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Server.Web.Modules
+namespace CoiniumServ.Statistics
 {
-    public class PoolModule : NancyModule
+    public interface IStatisticsConfig:IConfig
     {
-        public PoolModule(IPoolManager poolManager)
-        {
-            Get["/pool/{slug}/"] = _ =>
-            {
-                var pool = poolManager.GetBySymbol(_.slug);
+        /// <summary>
+        /// interval for recaching statistics.
+        /// </summary>
+        int UpdateInterval { get; }
 
-                if (pool != null)
-                    return View["pool", pool];
-
-
-                var error = new Error
-                {
-                    Summary = "Pool not found",
-                    Details = string.Format("The request pool does not exist: {0}", _.slug)
-                };
-
-                return View["error", error];
-            };
-        }
+        /// <summary>
+        /// how many seconds worth of shares should be gathered to generate hashrate.
+        /// </summary>
+        int HashrateWindow { get; }
     }
 }

@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using CoiniumServ.Statistics;
 using Serilog;
 
 namespace CoiniumServ.Server.Web
@@ -31,6 +32,7 @@ namespace CoiniumServ.Server.Web
         public bool Enabled { get; private set; }
         public string BindInterface { get; private set; }
         public int Port { get; private set; }
+        public IStatisticsConfig Statistics { get; private set; }
         public bool Valid { get; private set; }
         public WebServerConfig(dynamic config)
         {
@@ -44,6 +46,7 @@ namespace CoiniumServ.Server.Web
                 Enabled = config.enabled;
                 BindInterface = config.bind;
                 Port = config.port;
+                Statistics = new StatisticsConfig(config.stats);
 
                 Valid = true;
             }

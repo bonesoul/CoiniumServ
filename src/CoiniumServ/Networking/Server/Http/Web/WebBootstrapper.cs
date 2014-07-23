@@ -26,7 +26,6 @@ using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.CustomErrors;
-using Nancy.Diagnostics;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Networking.Server.Http.Web
@@ -41,11 +40,6 @@ namespace CoiniumServ.Networking.Server.Http.Web
         public WebBootstrapper(IApplicationContext applicationContext)
         {            
             _applicationContext = applicationContext;            
-        }
-
-        protected override DiagnosticsConfiguration DiagnosticsConfiguration
-        {
-            get { return new DiagnosticsConfiguration { Password = @"coinium" }; }
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
@@ -65,6 +59,7 @@ namespace CoiniumServ.Networking.Server.Http.Web
             nancyConventions.StaticContentsConventions.Clear();
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("css", "/css"));
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("js", "/js"));
+            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("images", "/images"));
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("font-awesome", "/font-awesome"));
 
             // view location

@@ -139,10 +139,12 @@
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
     <Compile Include="Payments\WalletConfig.cs" />
+    <Compile Include="Server\Web\Modules\Donate.cs" />
     <Compile Include="Statistics\Blocks.cs" />
     <Compile Include="Statistics\IBlocks.cs" />
     <Compile Include="Statistics\IJsonResponse.cs" />
     <Compile Include="Statistics\ILatestBlocks.cs" />
+    <Compile Include="Statistics\IStatisticsConfig.cs" />
     <Compile Include="Statistics\LatestBlocks.cs" />
     <Compile Include="Statistics\Algorithms.cs" />
     <Compile Include="Statistics\Global.cs" />
@@ -165,6 +167,7 @@
     <Compile Include="Statistics\Pools.cs" />
     <Compile Include="Statistics\Statistics.cs" />
     <Compile Include="Shares\ShareEventArgs.cs" />
+    <Compile Include="Statistics\StatisticsConfig.cs" />
     <Compile Include="Vardiff\IVardiffMiner.cs" />
     <Compile Include="Vardiff\IVardiffConfig.cs" />
     <Compile Include="Vardiff\IVardiffManager.cs" />
@@ -791,7 +794,7 @@
     <None Include="config\pools\default-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\pools\detailed-example.json">
+    <None Include="config\pools\advanced-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\pools\example.json">
@@ -800,6 +803,12 @@
     <None Include="packages.config" />
     <None Include="web.config" />
     <None Include="web\default\api.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\donate.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\error.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\font-awesome\fonts\fontawesome-webfont.eot">
@@ -898,9 +907,6 @@
     <None Include="web\default\layout.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\error.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="web\default\pool.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -920,22 +926,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Coinium.ico" />
-    <Content Include="web\default\blank-page.html">
+    <None Include="web\default\images\coiniumserv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="web\default\bootstrap-elements.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="web\default\bootstrap-grid.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="web\default\charts.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="web\default\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="web\default\index.html" />
     <None Include="web\default\css\bootstrap.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -954,9 +950,6 @@
     <None Include="web\default\font-awesome\fonts\fontawesome-webfont.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="web\default\forms.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="web\default\js\bootstrap.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -993,16 +986,8 @@
     <None Include="web\default\js\tablesorter\tables.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="web\default\tables.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="web\default\typography.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="web\default\images\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

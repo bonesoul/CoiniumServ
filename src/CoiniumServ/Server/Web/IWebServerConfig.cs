@@ -23,6 +23,7 @@
 
 using System;
 using CoiniumServ.Configuration;
+using CoiniumServ.Statistics;
 
 namespace CoiniumServ.Server.Web
 {
@@ -39,5 +40,7 @@ namespace CoiniumServ.Server.Web
         /// port to listen for http connections.
         /// </summary>
         Int32 Port { get; }
+
+        IStatisticsConfig Statistics { get; }
     }
 }
