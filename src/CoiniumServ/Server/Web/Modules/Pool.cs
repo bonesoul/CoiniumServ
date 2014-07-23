@@ -21,7 +21,7 @@
 // 
 #endregion
 
-using CoiniumServ.Mining.Pools;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Modules.Models;
 using Nancy;
 

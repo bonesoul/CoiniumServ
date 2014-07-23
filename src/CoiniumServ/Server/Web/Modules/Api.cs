@@ -21,9 +21,9 @@
 // 
 #endregion
 
-using CoiniumServ.Mining.Pools;
-using CoiniumServ.Mining.Pools.Statistics;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Modules.Models;
+using CoiniumServ.Statistics;
 using Nancy;
 using Newtonsoft.Json;
 

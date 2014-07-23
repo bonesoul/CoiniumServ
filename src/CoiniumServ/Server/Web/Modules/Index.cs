@@ -22,8 +22,8 @@
 #endregion
 
 using System.Collections.Generic;
-using CoiniumServ.Mining.Pools;
-using CoiniumServ.Mining.Pools.Statistics;
+using CoiniumServ.Pools;
+using CoiniumServ.Statistics;
 using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules

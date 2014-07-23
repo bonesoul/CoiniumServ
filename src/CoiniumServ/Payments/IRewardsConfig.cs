@@ -22,7 +22,7 @@
 #endregion
 
 using System.Collections.Generic;
-using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Configuration;
 
 namespace CoiniumServ.Payments
 {

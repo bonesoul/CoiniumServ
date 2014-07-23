@@ -23,9 +23,9 @@
 
 using System;
 using System.Collections.Generic;
-using CoiniumServ.Mining.Shares;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Shares;
 
 namespace CoiniumServ.Persistance
 {

@@ -23,7 +23,7 @@
 
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
-using CoiniumServ.Mining.Jobs;
+using CoiniumServ.Jobs;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;

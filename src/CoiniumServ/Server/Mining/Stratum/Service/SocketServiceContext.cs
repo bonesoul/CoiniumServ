@@ -21,7 +21,7 @@
 // 
 #endregion
 
-using CoiniumServ.Mining.Miners;
+using CoiniumServ.Miners;
 
 namespace CoiniumServ.Server.Mining.Stratum.Service
 {

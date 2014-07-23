@@ -69,13 +69,13 @@
     <Compile Include="Daemon\BlockTemplateTests.cs" />
     <Compile Include="Utils\Extensions\ArrayExtensionsTests.cs" />
     <Compile Include="Utils\Extensions\StringExtensionsTests.cs" />
-    <Compile Include="Mining\Shares\ShareTests.cs" />
+    <Compile Include="Shares\ShareTests.cs" />
     <Compile Include="Transactions\GenerationTransactionTests.cs" />
     <Compile Include="Coin\AmountTests.cs" />
     <Compile Include="Coin\Base58Test.cs" />
     <Compile Include="Coin\Coinbase\UtilsTests.cs" />
     <Compile Include="Cryptology\Merkle\MerkleTreeTests.cs" />
-    <Compile Include="Mining\Pools\PoolTests.cs" />
+    <Compile Include="Pools\PoolTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\Stratum\Notifications\JobTests.cs" />
     <Compile Include="Transactions\OutputsTests.cs" />

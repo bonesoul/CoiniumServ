@@ -21,7 +21,7 @@
 // 
 #endregion
 
-using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Configuration;
 
 namespace CoiniumServ.Coin.Config
 {

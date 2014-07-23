@@ -22,7 +22,7 @@
 #endregion
 
 using System;
-using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Configuration;
 
 namespace CoiniumServ.Server.Web
 {

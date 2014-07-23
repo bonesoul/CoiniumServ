@@ -27,11 +27,11 @@ using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Factories;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Mining.Pools;
+using CoiniumServ.Logging;
+using CoiniumServ.Miners;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Vanilla.Service;
 using CoiniumServ.Utils.Extensions;
-using CoiniumServ.Utils.Logging;
 using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla
