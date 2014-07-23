@@ -33,6 +33,12 @@ You can contribute the development of the project by donating;
 * DOGE: `DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr`
 * RDD: `Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr`
 
+###### Donors
+
+Here is a list of our generous donors that keep the project ongoing;
+
+* [reddapi.com](https://www.reddapi.com)
+
 ###### Bounties
 
 BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
@@ -130,12 +136,6 @@ Start reading by these;
 
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
-
-###### Donors
-
-Here is a list of our generous donors that keep the project ongoing;
-
-* [reddapi.com](https://www.reddapi.com)
 
 ### License
 
