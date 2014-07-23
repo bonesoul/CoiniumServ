@@ -21,26 +21,20 @@
 // 
 #endregion
 
-using System;
 using CoiniumServ.Configuration;
-using CoiniumServ.Statistics;
 
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Statistics
 {
-    public interface IWebServerConfig:IConfig
+    public interface IStatisticsConfig:IConfig
     {
-        bool Enabled { get; }
+        /// <summary>
+        /// interval for recaching statistics.
+        /// </summary>
+        int UpdateInterval { get; }
 
         /// <summary>
-        /// interface to bind webserver.
+        /// how many seconds worth of shares should be gathered to generate hashrate.
         /// </summary>
-        string BindInterface { get; }
-
-        /// <summary>
-        /// port to listen for http connections.
-        /// </summary>
-        Int32 Port { get; }
-
-        IStatisticsConfig Statistics { get; }
+        int HashrateWindow { get; }
     }
 }

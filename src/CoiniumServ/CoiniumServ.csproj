@@ -144,6 +144,7 @@
     <Compile Include="Statistics\IBlocks.cs" />
     <Compile Include="Statistics\IJsonResponse.cs" />
     <Compile Include="Statistics\ILatestBlocks.cs" />
+    <Compile Include="Statistics\IStatisticsConfig.cs" />
     <Compile Include="Statistics\LatestBlocks.cs" />
     <Compile Include="Statistics\Algorithms.cs" />
     <Compile Include="Statistics\Global.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Statistics\Pools.cs" />
     <Compile Include="Statistics\Statistics.cs" />
     <Compile Include="Shares\ShareEventArgs.cs" />
+    <Compile Include="Statistics\StatisticsConfig.cs" />
     <Compile Include="Vardiff\IVardiffMiner.cs" />
     <Compile Include="Vardiff\IVardiffConfig.cs" />
     <Compile Include="Vardiff\IVardiffManager.cs" />
@@ -792,10 +794,10 @@
     <None Include="config\pools\default-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\pools\detailed-example.json">
+    <None Include="config\pools\advanced-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\pools\example.json">
+    <None Include="config\pools\simple-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

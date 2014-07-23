@@ -22,38 +22,34 @@
 #endregion
 
 using System;
-using CoiniumServ.Statistics;
 using Serilog;
 
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Statistics
 {
-    public class WebServerConfig : IWebServerConfig
+    public class StatisticsConfig:IStatisticsConfig
     {
-        public bool Enabled { get; private set; }
-        public string BindInterface { get; private set; }
-        public int Port { get; private set; }
-        public IStatisticsConfig Statistics { get; private set; }
         public bool Valid { get; private set; }
-        public WebServerConfig(dynamic config)
+        public int UpdateInterval { get; private set; }
+        public int HashrateWindow { get; private set; }
+
+        public StatisticsConfig(dynamic config)
         {
             try
             {
                 // set the defaults;
-                BindInterface = "127.0.0.1";
-                Port = 80;
+                UpdateInterval = 60;
+                HashrateWindow = 300;
 
                 // load the config data.
-                Enabled = config.enabled;
-                BindInterface = config.bind;
-                Port = config.port;
-                Statistics = new StatisticsConfig(config.stats);
+                UpdateInterval = config.updateInterval;
+                HashrateWindow = config.hashrateWindow;
 
                 Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<WebServerConfig>().Error(e, "Error loading web-server configuration");
+                Log.Logger.ForContext<StatisticsConfig>().Error(e, "Error loading website statistics configuration");
             }
         }
     }
