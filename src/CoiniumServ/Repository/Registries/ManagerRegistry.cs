@@ -21,14 +21,14 @@
 // 
 #endregion
 
-using CoiniumServ.Mining.Banning;
-using CoiniumServ.Mining.Jobs.Manager;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Mining.Pools;
-using CoiniumServ.Mining.Shares;
-using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Banning;
+using CoiniumServ.Configuration;
+using CoiniumServ.Jobs.Manager;
+using CoiniumServ.Miners;
+using CoiniumServ.Pools;
 using CoiniumServ.Repository.Context;
-using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Shares;
+using CoiniumServ.Vardiff;
 
 namespace CoiniumServ.Repository.Registries
 {

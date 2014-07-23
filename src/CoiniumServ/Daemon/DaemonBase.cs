@@ -28,8 +28,8 @@ using System.Text;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Factories;
+using CoiniumServ.Logging;
 using CoiniumServ.Utils.Extensions;
-using CoiniumServ.Utils.Logging;
 using Newtonsoft.Json;
 using Serilog;
 

@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Net;
 using CoiniumServ.Repository.Context;
 using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
@@ -59,13 +60,12 @@ namespace CoiniumServ.Net.Server.Http.Web
         public bool Start()
         {
             var uri = new Uri(string.Format("http://{0}:{1}", BindIP, Port));
-            _logger.Information("Web-server listening on: {0:l}", uri);
 
             var hostConfiguration = new HostConfiguration();
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
             hostConfiguration.UrlReservations.CreateAutomatically = true;
 
-            var host = new NancyHost(_webBootstrapper, hostConfiguration, uri);            
+            var host = new NancyHost(_webBootstrapper, hostConfiguration, uri);
 
             try
             {
@@ -74,11 +74,18 @@ namespace CoiniumServ.Net.Server.Http.Web
             }
             catch (InvalidOperationException e) // nancy requires elevated privileges to run on port 80.
             {
-                _logger.Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
+                _logger.Error("Need elevated privileges to listen on port {0}. Try running as administrator or root.", Port);
+                IsListening = false;
+                return false;                
+            }
+            catch (HttpListenerException e)
+            {
+                _logger.Error("Can not listen on requested interface: {0:l}",BindIP);
                 IsListening = false;
                 return false;
             }
 
+            _logger.Information("Web-server listening on: {0:l}", uri);
             return true;
         }
 

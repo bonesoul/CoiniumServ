@@ -25,10 +25,10 @@ using System.Net;
 
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Mining.Jobs.Manager;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Mining.Pools;
-using CoiniumServ.Net.Server.Http.Basic;
+using CoiniumServ.Jobs.Manager;
+using CoiniumServ.Miners;
+using CoiniumServ.Networking.Server.Http.Basic;
+using CoiniumServ.Pools;
 using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla

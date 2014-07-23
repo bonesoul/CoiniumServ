@@ -22,9 +22,9 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Configuration;
+using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
-using CoiniumServ.Utils.Configuration;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Factories

@@ -28,7 +28,6 @@ using System.Linq;
 using System.Threading;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Blocks;
 using Serilog;

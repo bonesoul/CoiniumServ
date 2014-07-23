@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using Serilog;
 
 namespace CoiniumServ.Persistance.Redis
 {
@@ -32,14 +33,29 @@ namespace CoiniumServ.Persistance.Redis
         public Int32 Port { get; private set; }
         public string Password { get; private set; }
         public int DatabaseId { get; private set; }
+        public bool Valid { get; private set; }
 
         public RedisConfig(dynamic config)
         {
-            Enabled = config.enabled;
-            Host = config.host;
-            Port = config.port;
-            Password = config.password;
-            DatabaseId = config.databaseId;            
+            try
+            {
+                // set the defaults;
+                Host = "127.0.0.1";
+                Port = 6379;
+                DatabaseId = 0;
+
+                // load the config data.
+                Enabled = config.enabled;
+                Host = config.host;
+                Port = config.port;
+                Password = config.password;
+                DatabaseId = config.databaseId;   
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<RedisConfig>().Error(e, "Error loading redis configuration");
+            }
         }
     }
 }

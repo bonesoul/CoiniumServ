@@ -20,6 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
+using Serilog;
+
 namespace CoiniumServ.Server.Web
 {
     public class WebServerConfig : IWebServerConfig
@@ -27,12 +31,27 @@ namespace CoiniumServ.Server.Web
         public bool Enabled { get; private set; }
         public string BindInterface { get; private set; }
         public int Port { get; private set; }
-
+        public bool Valid { get; private set; }
         public WebServerConfig(dynamic config)
         {
-            Enabled = config.enabled;
-            BindInterface = config.bind;
-            Port = config.port;
+            try
+            {
+                // set the defaults;
+                BindInterface = "127.0.0.1";
+                Port = 80;
+
+                // load the config data.
+                Enabled = config.enabled;
+                BindInterface = config.bind;
+                Port = config.port;
+
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<WebServerConfig>().Error(e, "Error loading web-server configuration");
+            }
         }
     }
 }

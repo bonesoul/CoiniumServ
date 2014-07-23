@@ -22,15 +22,13 @@
 #endregion
 
 using System;
-using CoiniumServ.Server.Mining.Service;
+using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla.Config
 {
     public class VanillaServerConfig : IVanillaServerConfig 
     {
         public bool Valid { get; private set; }
-
-        public string Name { get; private set; }
 
         public bool Enabled { get; private set; }
 
@@ -40,18 +38,24 @@ namespace CoiniumServ.Server.Mining.Vanilla.Config
 
         public VanillaServerConfig(dynamic config)
         {
-            if (config == null)
+            try
             {
-                Valid = false;
-                return;
+                // set the defaults;
+                BindInterface = "0.0.0.0";
+
+               // load the config data.
+                Enabled = config.enabled;
+                BindInterface = config.bind;
+                Port = config.port;
+
+                Valid = true;
             }
 
-            Name = Services.Vanilla;
-            Enabled = config.enabled;
-            BindInterface = !string.IsNullOrEmpty(config.bind) ? config.bind : "localhost";
-            Port = config.port;
-
-            Valid = true;
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<VanillaServerConfig>().Error(e, "Error loading vannila server configuration");
+            }
         }
     }
 }

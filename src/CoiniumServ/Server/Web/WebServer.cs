@@ -21,8 +21,8 @@
 // 
 #endregion
 
-using CoiniumServ.Net.Server.Http.Web;
-using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Configuration;
+using CoiniumServ.Networking.Server.Http.Web;
 using Nancy.Bootstrapper;
 using Serilog;
 

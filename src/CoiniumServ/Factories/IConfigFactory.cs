@@ -22,8 +22,8 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Mining.Pools.Config;
-using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Configuration;
+using CoiniumServ.Pools.Config;
 
 namespace CoiniumServ.Factories
 {

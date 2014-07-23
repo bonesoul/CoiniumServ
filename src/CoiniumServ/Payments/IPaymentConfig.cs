@@ -22,7 +22,7 @@
 #endregion
 
 using System;
-using CoiniumServ.Utils.Configuration;
+using CoiniumServ.Configuration;
 
 namespace CoiniumServ.Payments
 {
@@ -30,8 +30,14 @@ namespace CoiniumServ.Payments
     {
         bool Enabled { get; }
 
+        /// <summary>
+        /// interval in seconds that payment-processor will be running.
+        /// </summary>
         Int32 Interval { get; }
 
+        /// <summary>
+        /// minimum amount of coins before a miner is eligable for getting a payment.
+        /// </summary>
         double Minimum { get; }
     }
 }

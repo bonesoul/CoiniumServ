@@ -22,9 +22,9 @@
 #endregion
 
 using System;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Miners;
 using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Vardiff;
 
 namespace CoiniumServ.Server.Mining.Stratum
 {

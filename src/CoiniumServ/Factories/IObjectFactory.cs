@@ -21,25 +21,25 @@
 // 
 #endregion
 
+using CoiniumServ.Banning;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
-using CoiniumServ.Mining.Banning;
-using CoiniumServ.Mining.Jobs.Manager;
-using CoiniumServ.Mining.Jobs.Tracker;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Mining.Pools;
-using CoiniumServ.Mining.Pools.Config;
-using CoiniumServ.Mining.Pools.Statistics;
-using CoiniumServ.Mining.Shares;
-using CoiniumServ.Mining.Vardiff;
+using CoiniumServ.Jobs.Manager;
+using CoiniumServ.Jobs.Tracker;
+using CoiniumServ.Logging;
+using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
+using CoiniumServ.Pools;
+using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
-using CoiniumServ.Utils.Logging;
+using CoiniumServ.Shares;
+using CoiniumServ.Statistics;
+using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Factories

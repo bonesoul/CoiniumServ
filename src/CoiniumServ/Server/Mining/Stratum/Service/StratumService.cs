@@ -23,10 +23,10 @@
 
 using AustinHarris.JsonRpc;
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Mining.Jobs;
-using CoiniumServ.Mining.Shares;
+using CoiniumServ.Jobs;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Mining.Stratum.Responses;
+using CoiniumServ.Shares;
 
 namespace CoiniumServ.Server.Mining.Stratum.Service
 {

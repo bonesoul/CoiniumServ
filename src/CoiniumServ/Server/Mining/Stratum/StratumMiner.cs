@@ -24,15 +24,15 @@
 using System;
 using System.Text;
 using AustinHarris.JsonRpc;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Mining.Pools;
-using CoiniumServ.Net.Server.Sockets;
+using CoiniumServ.Logging;
+using CoiniumServ.Miners;
+using CoiniumServ.Networking.Server.Sockets;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Errors;
 using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Server.Mining.Stratum.Service;
 using CoiniumServ.Utils.Buffers;
 using CoiniumServ.Utils.Extensions;
-using CoiniumServ.Utils.Logging;
 using Newtonsoft.Json;
 using Serilog;
 

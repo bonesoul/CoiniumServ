@@ -21,6 +21,9 @@
 // 
 #endregion
 
+using System;
+using Serilog;
+
 namespace CoiniumServ.Payments
 {
     public class PaymentConfig:IPaymentConfig
@@ -32,17 +35,24 @@ namespace CoiniumServ.Payments
 
         public PaymentConfig(dynamic config)
         {
-            if (config == null)
+            try
+            {
+                // set the defaults;
+                Interval = 60;
+                Minimum = 0.01;
+
+                // load the config data.
+                Enabled = config.enabled;
+                Interval = config.interval;
+                Minimum = config.minimum;
+
+                Valid = true;
+            }
+            catch (Exception e)
             {
                 Valid = false;
-                return;
+                Log.Logger.ForContext<PaymentConfig>().Error(e, "Error loading payment configuration");
             }
-            
-            Enabled = config.enabled;
-            Interval = config.interval;
-            Minimum = config.minimum;
-
-            Valid = true;
         }
     }
 }

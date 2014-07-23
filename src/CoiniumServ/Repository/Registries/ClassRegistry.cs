@@ -23,17 +23,16 @@
 
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
-using CoiniumServ.Mining.Jobs.Tracker;
-using CoiniumServ.Mining.Pools;
-using CoiniumServ.Mining.Pools.Config;
-using CoiniumServ.Mining.Pools.Statistics;
-using CoiniumServ.Net.Server.Http.Web;
+using CoiniumServ.Jobs.Tracker;
+using CoiniumServ.Logging;
+using CoiniumServ.Networking.Server.Http.Web;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Pools;
+using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
-using CoiniumServ.Server.Web;
-using CoiniumServ.Utils.Logging;
+using CoiniumServ.Statistics;
 using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Repository.Registries
@@ -56,8 +55,8 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
-            _applicationContext.Container.Register<IStatistics, Statistics>().AsSingleton();
-            _applicationContext.Container.Register<IPools, Pools>().AsSingleton();            
+            _applicationContext.Container.Register<IStatistics, Statistics.Statistics>().AsSingleton();
+            _applicationContext.Container.Register<IPools, Statistics.Pools>().AsSingleton();            
             _applicationContext.Container.Register<IPerPool, PerPool>().AsMultiInstance();
             _applicationContext.Container.Register<IBlocks, Blocks>().AsMultiInstance();
             _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();

@@ -24,12 +24,12 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using CoiniumServ.Banning;
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Mining.Banning;
-using CoiniumServ.Mining.Jobs.Manager;
-using CoiniumServ.Mining.Miners;
-using CoiniumServ.Mining.Pools;
-using CoiniumServ.Net.Server.Sockets;
+using CoiniumServ.Jobs.Manager;
+using CoiniumServ.Miners;
+using CoiniumServ.Networking.Server.Sockets;
+using CoiniumServ.Pools;
 using Serilog;
 
 // stratum server uses json-rpc 2.0 (over raw sockets) & json-rpc.net (http://jsonrpc2.codeplex.com/)
