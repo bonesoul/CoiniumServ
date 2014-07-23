@@ -92,7 +92,7 @@
                             @foreach (var pool in Model.Pools)
                             {
                                 <tr>
-                                    <td><a href="/pool/@pool.Config.Coin.Symbol">@pool.Config.Coin.Name</a></td>
+                                    <td><a href="/pool/@pool.Config.Coin.Symbol/">@pool.Config.Coin.Name</a></td>
                                     <td>@pool.Statistics.Hashrate.GetReadableHashrate()</td>
                                     <td>@pool.Statistics.NetworkHashrate.GetReadableHashrate()</td>
                                     <td>@pool.Statistics.Difficulty</td>

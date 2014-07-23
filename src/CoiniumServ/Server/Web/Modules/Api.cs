@@ -21,7 +21,8 @@
 // 
 #endregion
 
-using CoiniumServ.Pools;
+using System.Linq;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Server.Web.Modules.Models;
 using CoiniumServ.Statistics;
 using Nancy;
@@ -31,9 +32,13 @@ namespace CoiniumServ.Server.Web.Modules
 {
     public class ApiModule: NancyModule
     {
-        public ApiModule(IPoolManager poolManager, IStatistics statistics)
+        public ApiModule(IStatistics statistics)
         {
-            Get["/api"] = _ => View["api"];
+            Get["/api/"] = _ => View["api", new ApiModel
+            {
+                BaseUrl = Request.Url.SiteBase,
+                Coin = statistics.Pools.First().Value.Config.Coin
+            }];
 
             Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());
             
@@ -71,5 +76,11 @@ namespace CoiniumServ.Server.Web.Modules
                 return response;                
             };
         }
+    }
+
+    public class ApiModel
+    {
+        public string BaseUrl { get; set; }
+        public ICoinConfig Coin { get; set; }
     }
 }
