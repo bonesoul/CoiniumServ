@@ -155,5 +155,5 @@ GNU General Public License for more details.
 For the terms of this license, see [licenses/gpl_v3.txt](https://github.com/CoiniumServ/CoiniumServ/blob/develop/licenses/gpl_v3.txt).
 
 Alternatively, you can license this software under a commercial
-license or white-label it as set out in [licenses/commercial.txt](https://github.com/CoiniumServ/CoiniumServ/blob/develop/licenses/commercial.txt).
+license or white-label it as set out in [licenses/commercial.md](https://github.com/CoiniumServ/CoiniumServ/blob/develop/licenses/commercial.md).
 
