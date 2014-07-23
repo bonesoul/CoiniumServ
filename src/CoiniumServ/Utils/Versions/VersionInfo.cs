@@ -31,7 +31,7 @@ namespace CoiniumServ.Utils.Versions
         /// <summary>
         /// Codename.
         /// </summary>
-        public const string CodeName = "Medivh";
+        public const string CodeName = "Piri Reis";
 
         /// <summary>
         /// Main assembly versions info.
