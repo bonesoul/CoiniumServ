@@ -797,7 +797,7 @@
     <None Include="config\pools\advanced-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\pools\simple-example.json">
+    <None Include="config\pools\example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
