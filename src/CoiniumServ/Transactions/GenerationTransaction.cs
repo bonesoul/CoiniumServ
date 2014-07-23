@@ -31,6 +31,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Mining.Jobs;
 using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Payments;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Helpers.Time;
 using Gibbed.IO;

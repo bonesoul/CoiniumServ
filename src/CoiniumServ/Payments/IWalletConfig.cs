@@ -21,36 +21,15 @@
 // 
 #endregion
 
-using System;
-using Serilog;
+using CoiniumServ.Utils.Configuration;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Payments
 {
-    public class MinerConfig:IMinerConfig
+    public interface IWalletConfig:IConfig
     {
-        public bool Valid { get; private set; }
-        public bool ValidateUsername { get; private set; }
-        public int Timeout { get; private set; }
-
-        public MinerConfig(dynamic config)
-        {
-            try
-            {
-                // set the defaults;
-                ValidateUsername = true;
-                Timeout = 300;
-
-                // load the config data.
-                ValidateUsername = config.validateUsername;
-                Timeout = config.timeout;
-
-                Valid = true;
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<MinerConfig>().Error(e, "Error loading miner configuration");
-            }
-        }
+        /// <summary>
+        ///  Address that generated coins will arrive.
+        /// </summary>
+        string Adress { get; }
     }
 }

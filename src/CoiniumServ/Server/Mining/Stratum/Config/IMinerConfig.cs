@@ -23,7 +23,7 @@
 
 using CoiniumServ.Utils.Configuration;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Server.Mining.Stratum.Config
 {
     public interface IMinerConfig : IConfig 
     {

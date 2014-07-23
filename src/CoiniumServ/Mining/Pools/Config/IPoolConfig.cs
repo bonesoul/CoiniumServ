@@ -23,6 +23,8 @@
 
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
+using CoiniumServ.Mining.Banning;
+using CoiniumServ.Mining.Jobs.Manager;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Server.Mining.Stratum.Config;

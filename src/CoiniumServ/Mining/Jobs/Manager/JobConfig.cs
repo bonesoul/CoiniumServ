@@ -21,15 +21,36 @@
 // 
 #endregion
 
-using CoiniumServ.Utils.Configuration;
+using System;
+using Serilog;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Mining.Jobs.Manager
 {
-    public interface IWalletConfig:IConfig
+    public class JobConfig : IJobConfig
     {
-        /// <summary>
-        ///  Address that generated coins will arrive.
-        /// </summary>
-        string Adress { get; }
+        public bool Valid { get; private set; }
+        public int BlockRefreshInterval { get; private set; }
+        public int RebroadcastTimeout { get; private set; }
+
+        public JobConfig(dynamic config)
+        {
+            try
+            {
+                // set the defaults;
+                BlockRefreshInterval = 1000;
+                RebroadcastTimeout = 55;
+
+                // load the config data.
+                BlockRefreshInterval = config.blockRefreshInterval;
+                RebroadcastTimeout = config.rebroadcastTimeout;
+
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<JobConfig>().Error(e, "Error loading job configuration");
+            }
+        }
     }
 }

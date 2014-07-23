@@ -23,7 +23,6 @@
 
 using System;
 using System.Threading;
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
@@ -31,6 +30,7 @@ using CoiniumServ.Mining.Jobs.Tracker;
 using CoiniumServ.Mining.Miners;
 using CoiniumServ.Mining.Pools.Config;
 using CoiniumServ.Mining.Shares;
+using CoiniumServ.Payments;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Server.Mining.Vanilla;

@@ -23,7 +23,7 @@
 
 using CoiniumServ.Utils.Configuration;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Mining.Jobs.Manager
 {
     public interface IJobConfig : IConfig 
     {

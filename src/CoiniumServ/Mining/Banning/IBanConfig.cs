@@ -21,12 +21,32 @@
 // 
 #endregion
 
-using System.Collections.Generic;
 using CoiniumServ.Utils.Configuration;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Mining.Banning
 {
-    public interface IRewardsConfig :IEnumerable<KeyValuePair<string, float>>,  IConfig 
+    public interface IBanConfig : IConfig
     {
+        bool Enabled { get; }
+
+        /// <summary>
+        /// duration of ban when a miner gets flagged for so.
+        /// </summary>
+        int Duration { get; }
+
+        /// <summary>
+        /// percentage of invalid shares to trigger a ban.
+        /// </summary>
+        int InvalidPercent { get; }
+
+        /// <summary>
+        /// number of shares required before a miner's shares are considered for a ban.
+        /// </summary>
+        int CheckThreshold { get; }
+
+        /// <summary>
+        /// purge interval in seconds that bans are checked to see if they are expired.
+        /// </summary>
+        int PurgeInterval { get; }
     }
 }

@@ -21,32 +21,36 @@
 // 
 #endregion
 
-using CoiniumServ.Utils.Configuration;
+using System;
+using Serilog;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Server.Mining.Stratum.Config
 {
-    public interface IBanConfig : IConfig
+    public class MinerConfig:IMinerConfig
     {
-        bool Enabled { get; }
+        public bool Valid { get; private set; }
+        public bool ValidateUsername { get; private set; }
+        public int Timeout { get; private set; }
 
-        /// <summary>
-        /// duration of ban when a miner gets flagged for so.
-        /// </summary>
-        int Duration { get; }
+        public MinerConfig(dynamic config)
+        {
+            try
+            {
+                // set the defaults;
+                ValidateUsername = true;
+                Timeout = 300;
 
-        /// <summary>
-        /// percentage of invalid shares to trigger a ban.
-        /// </summary>
-        int InvalidPercent { get; }
+                // load the config data.
+                ValidateUsername = config.validateUsername;
+                Timeout = config.timeout;
 
-        /// <summary>
-        /// number of shares required before a miner's shares are considered for a ban.
-        /// </summary>
-        int CheckThreshold { get; }
-
-        /// <summary>
-        /// purge interval in seconds that bans are checked to see if they are expired.
-        /// </summary>
-        int PurgeInterval { get; }
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<MinerConfig>().Error(e, "Error loading miner configuration");
+            }
+        }
     }
 }

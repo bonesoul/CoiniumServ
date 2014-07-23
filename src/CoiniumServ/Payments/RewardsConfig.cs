@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using JsonConfig;
 using Serilog;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Payments
 {
     public class RewardsConfig:IRewardsConfig
     {

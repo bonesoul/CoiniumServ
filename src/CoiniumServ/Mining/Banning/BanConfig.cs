@@ -24,32 +24,40 @@
 using System;
 using Serilog;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Mining.Banning
 {
-    public class JobConfig : IJobConfig
+    public class BanConfig : IBanConfig
     {
+        public bool Enabled { get; private set; }
+        public int Duration { get; private set; }
+        public int InvalidPercent { get; private set; }
+        public int CheckThreshold { get; private set; }
+        public int PurgeInterval { get; private set; }
         public bool Valid { get; private set; }
-        public int BlockRefreshInterval { get; private set; }
-        public int RebroadcastTimeout { get; private set; }
 
-        public JobConfig(dynamic config)
+        public BanConfig(dynamic config)
         {
             try
             {
                 // set the defaults;
-                BlockRefreshInterval = 1000;
-                RebroadcastTimeout = 55;
+                Duration = 600;
+                InvalidPercent = 50;
+                CheckThreshold = 100;
+                PurgeInterval = 300;
 
                 // load the config data.
-                BlockRefreshInterval = config.blockRefreshInterval;
-                RebroadcastTimeout = config.rebroadcastTimeout;
+                Enabled = config.enabled;
+                Duration = config.duration;
+                InvalidPercent = config.invalidPercent;
+                CheckThreshold = config.checkThreshold;
+                PurgeInterval = config.purgeInterval;
 
                 Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<JobConfig>().Error(e, "Error loading job configuration");
+                Log.Logger.ForContext<BanConfig>().Error(e, "Error loading banning configuration");
             }
         }
     }

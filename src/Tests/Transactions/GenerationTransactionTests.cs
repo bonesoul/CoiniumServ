@@ -28,6 +28,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Mining.Jobs;
 using CoiniumServ.Mining.Pools.Config;
+using CoiniumServ.Payments;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Extensions;

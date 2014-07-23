@@ -24,40 +24,25 @@
 using System;
 using Serilog;
 
-namespace CoiniumServ.Mining.Pools.Config
+namespace CoiniumServ.Payments
 {
-    public class BanConfig : IBanConfig
+    public class WalletConfig:IWalletConfig
     {
-        public bool Enabled { get; private set; }
-        public int Duration { get; private set; }
-        public int InvalidPercent { get; private set; }
-        public int CheckThreshold { get; private set; }
-        public int PurgeInterval { get; private set; }
+        public string Adress { get; private set; }
         public bool Valid { get; private set; }
 
-        public BanConfig(dynamic config)
+        public WalletConfig(dynamic config)
         {
             try
             {
-                // set the defaults;
-                Duration = 600;
-                InvalidPercent = 50;
-                CheckThreshold = 100;
-                PurgeInterval = 300;
-
-                // load the config data.
-                Enabled = config.enabled;
-                Duration = config.duration;
-                InvalidPercent = config.invalidPercent;
-                CheckThreshold = config.checkThreshold;
-                PurgeInterval = config.purgeInterval;
+                Adress = config.address;
 
                 Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<BanConfig>().Error(e, "Error loading banning configuration");
+                Log.Logger.ForContext<WalletConfig>().Error(e, "Error loading wallet configuration");
             }
         }
     }
