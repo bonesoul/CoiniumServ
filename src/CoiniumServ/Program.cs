@@ -91,12 +91,12 @@ namespace CoiniumServ
 
             // todo: move to it's own class
             // initialize metrics support    
-            Metric.Config
-                .WithAllCounters()
-                .WithReporting(c => c
-                    .WithTextFileReport(string.Format(@"{0}\\logs\\metrics\\report.log", FileHelpers.AssemblyRoot), TimeSpan.FromSeconds(60))
-                    .WithCSVReports(string.Format(@"{0}\\logs\\metrics\\csv", FileHelpers.AssemblyRoot), TimeSpan.FromSeconds(1)))
-                    .WithErrorHandler(exception => _logger.Error("Metrics error: {0}", exception.Message));
+            //Metric.Config
+                //.WithAllCounters()
+                //.WithReporting(c => c
+                //    .WithTextFileReport(string.Format(@"{0}\\logs\\metrics\\report.log", FileHelpers.AssemblyRoot), TimeSpan.FromSeconds(60))
+                //    .WithCSVReports(string.Format(@"{0}\\logs\\metrics\\csv", FileHelpers.AssemblyRoot), TimeSpan.FromSeconds(1)))
+                //    .WithErrorHandler(exception => _logger.Error("Metrics error: {0}", exception.Message));
 
             // start pool manager.
             var poolManager = objectFactory.GetPoolManager();

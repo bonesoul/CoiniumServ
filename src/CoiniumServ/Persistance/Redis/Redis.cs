@@ -431,6 +431,7 @@ namespace CoiniumServ.Persistance.Redis
             {
                 AllowAdmin = true,
                 ConnectTimeout = 1000,
+				ResolveDns = true
             };
 
             var endpoint = new DnsEndPoint(_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork);
@@ -459,7 +460,7 @@ namespace CoiniumServ.Persistance.Redis
             }
             catch (Exception e)
             {
-                _logger.Error(string.Format("Storage initialization failed: {0:l}:{1}.", endpoint.Host, endpoint.Port));
+				_logger.Error("Storage initialization failed: {0:l}:{1} - {2}.", endpoint.Host, endpoint.Port, e.InnerException.Message);
             }
         }
 
