@@ -35,6 +35,8 @@ namespace CoiniumServ.Server.Mining.Stratum.Notifications
     {
         UInt64 Id { get; }
 
+        int Height { get; }
+
         string PreviousBlockHash { get; }
 
         string PreviousBlockHashReversed { get;  }

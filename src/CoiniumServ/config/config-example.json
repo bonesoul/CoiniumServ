@@ -1,5 +1,14 @@
 {
     # -------------------------------
+    # Network Configuration
+    # -------------------------------
+
+    "network": {
+        "name": "CoiniumServ.com",
+        "motd": "Welcome to CoiniumServ pool network, enjoy your stay! - http://www.coiniumserv.com"
+    },
+
+    # -------------------------------
     # Website Configuration
     # -------------------------------
 
@@ -16,7 +25,7 @@
 		"bind": "127.0.0.1",
 		"port": 80,
         "stats": {
-            "updateInterval": 60,
+            "updateInterval": 1,
             "hashrateWindow": 300
         }
 	},

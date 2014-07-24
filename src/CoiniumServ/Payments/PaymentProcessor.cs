@@ -102,7 +102,6 @@ namespace CoiniumServ.Payments
             {
                 _stopWatch.Start();
 
-
                 var pendingBlocks = _storage.GetPendingBlocks(); // get all the pending blocks.
                 var finalizedBlocks = GetFinalizedBlocks(pendingBlocks);
 
@@ -114,7 +113,7 @@ namespace CoiniumServ.Payments
                 ProcessRemainingBalances(workerBalances); // process the remaining balances.
                 ProcessRounds(rounds); // process the rounds.
 
-                _logger.Information("Payments processed - took {0:0.000} seconds.", (float)_stopWatch.ElapsedMilliseconds / 1000);
+                _logger.Information("Payments processed - took {0:0.000} seconds", (float)_stopWatch.ElapsedMilliseconds / 1000);
                 
                 _stopWatch.Reset();
 

@@ -21,8 +21,12 @@
 // 
 #endregion
 
+using System;
+using System.Diagnostics;
 using System.Threading;
+using CoiniumServ.Configuration;
 using CoiniumServ.Factories;
+using Serilog;
 
 namespace CoiniumServ.Statistics
 {
@@ -31,28 +35,45 @@ namespace CoiniumServ.Statistics
         public IGlobal Global { get; private set; }
         public IAlgorithms Algorithms { get; private set; }
         public IPools Pools { get; private set; }
+        public DateTime LastUpdate { get; private set; }
 
-        private readonly Timer _timer;
-        private const int TimerExpiration = 10;
+        private readonly Timer _recacheTimer; // timer for recaching stastics.
 
-        public Statistics(IObjectFactory statisticsObjectFactory)
+        private readonly Stopwatch _stopWatch = new Stopwatch();
+
+        private readonly IStatisticsConfig _config;
+
+        private readonly ILogger _logger;
+
+        public Statistics(IConfigManager configManager, IObjectFactory statisticsObjectFactory)
         {
+            _config = configManager.WebServerConfig.Statistics;
+
             Pools = statisticsObjectFactory.GetPoolStats();
             Global = statisticsObjectFactory.GetGlobalStatistics();
             Algorithms = statisticsObjectFactory.GetAlgorithmStatistics();
 
-            _timer = new Timer(Recache, null, Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
+            _logger = Log.ForContext<Statistics>();
+
+            _recacheTimer = new Timer(Recache, null, Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
             Recache(null); // recache data initially.
         }
 
         public void Recache(object state)
         {
+            _stopWatch.Start();
+
+            // recache data.
             Pools.Recache(state);
             Algorithms.Recache(state);
             Global.Recache(state);
 
-            // reset the recache timer.
-            _timer.Change(TimerExpiration * 1000, Timeout.Infinite);
+            LastUpdate = DateTime.Now;
+
+            _logger.Debug("Recached statistics - took {0:0.000} seconds", (float)_stopWatch.ElapsedMilliseconds / 1000);
+            _stopWatch.Reset();
+
+            _recacheTimer.Change(_config.UpdateInterval * 1000, Timeout.Infinite); // reset the recache timer.
         }
     }
 }
