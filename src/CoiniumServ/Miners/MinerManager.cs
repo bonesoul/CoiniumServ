@@ -27,6 +27,7 @@ using System.Linq;
 using CoiniumServ.Daemon;
 using CoiniumServ.Networking.Server.Sockets;
 using CoiniumServ.Pools;
+using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
 using Serilog;
 
@@ -46,11 +47,11 @@ namespace CoiniumServ.Miners
 
         private readonly ILogger _logger;        
 
-        public MinerManager(string pool, IDaemonClient daemonClient)
+        public MinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient)
         {
             _daemonClient = daemonClient;
             _miners = new Dictionary<int, IMiner>();
-            _logger = Log.ForContext<MinerManager>().ForContext("Component", pool);
+            _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         public IMiner GetMiner(Int32 id)

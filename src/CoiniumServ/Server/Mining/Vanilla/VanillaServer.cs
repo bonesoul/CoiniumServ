@@ -24,11 +24,11 @@
 using System.Net;
 
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Networking.Server.Http.Basic;
 using CoiniumServ.Pools;
+using CoiniumServ.Pools.Config;
 using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla
@@ -45,12 +45,12 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
         private readonly ILogger _logger;
 
-        public VanillaServer(IPool pool, IMinerManager minerManager, IJobManager jobManager, ICoinConfig coinConfig)
+        public VanillaServer(IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager)
         {
             _pool = pool;
             _minerManager = minerManager;
             _jobManager = jobManager;
-            _logger = Log.ForContext<VanillaServer>().ForContext("Component", coinConfig.Name);
+            _logger = Log.ForContext<VanillaServer>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         public void Initialize(IServerConfig config)

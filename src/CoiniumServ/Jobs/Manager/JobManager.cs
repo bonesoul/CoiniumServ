@@ -29,6 +29,7 @@ using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Server.Mining.Vanilla;
@@ -66,20 +67,19 @@ namespace CoiniumServ.Jobs.Manager
         private Timer _timer;
         private const int TimerExpiration = 60;
 
-        public JobManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
-            IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig,
-            IRewardsConfig rewardsConfig)
+        public JobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
+            IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _shareManager = shareManager;
             _minerManager = minerManager;
             _hashAlgorithm = hashAlgorithm;
-            _walletConfig = walletConfig;
-            _rewardsConfig = rewardsConfig;
+            _walletConfig = poolConfig.Wallet;
+            _rewardsConfig = poolConfig.Rewards;
             _jobCounter = new JobCounter(); // todo make this ioc based too.
 
-            _logger = Log.ForContext<JobManager>().ForContext("Component", pool);
+            _logger = Log.ForContext<JobManager>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         public void Initialize(UInt32 instanceId)
@@ -102,30 +102,32 @@ namespace CoiniumServ.Jobs.Manager
             BroadcastNewJob(true);
         }
 
-        private void BroadcastNewJob(bool initiatedByTimer)
-        {
-            var job = GetNewJob(); // create a new job.
-            var count = Broadcast(job); // broadcast to miners.  
-
-            if (job == null)
-                return;
-
-            if (initiatedByTimer)
-                _logger.Information("Broadcasted job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds.", job.Id, count, TimerExpiration);
-            else
-                _logger.Information("Broadcasted job 0x{0:x} to {1} subscribers as we have just found a new block.", job.Id, count);
-
-            _timer.Change(TimerExpiration * 1000, Timeout.Infinite); // reset the idle-block timer.
-        }
-
         private void OnMinerAuthenticated(object sender, EventArgs e)
         {
-            var miner = ((MinerEventArgs) e).Miner;
+            var miner = ((MinerEventArgs)e).Miner;
 
-            if (miner == null) 
+            if (miner == null)
                 return;
 
-            var result = SendJobToMiner(miner, _jobTracker.Current);
+            if(_jobTracker.Current != null) // if we have a valid job,
+                SendJobToMiner(miner, _jobTracker.Current); // send it to newly connected miner.
+        }
+
+        private void BroadcastNewJob(bool initiatedByTimer)
+        {            
+            var job = GetNewJob(); // create a new job.
+
+            if (job != null) // if we were able to create a new job
+            {
+                var count = Broadcast(job); // broadcast to miners.  
+
+                if (initiatedByTimer)
+                    _logger.Information("Broadcasted job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds.", job.Id, count, TimerExpiration);
+                else
+                    _logger.Information("Broadcasted job 0x{0:x} to {1} subscribers as we have just found a new block.", job.Id, count);
+            }
+
+            _timer.Change(TimerExpiration * 1000, Timeout.Infinite); // reset the idle-block timer.
         }
 
         private IJob GetNewJob()
@@ -153,7 +155,7 @@ namespace CoiniumServ.Jobs.Manager
             }
             catch (RpcException rpcException)
             {
-                _logger.Error(rpcException, "New job creation failed:");
+                _logger.Error("New job creation failed: {0:l}", rpcException.Message);
                 return null;
             }
             catch (Exception e)

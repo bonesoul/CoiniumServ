@@ -53,7 +53,7 @@ namespace CoiniumServ.Tests.Pools
             _config.Daemon.Valid.Returns(true);
 
             // daemon client mockup.
-            _daemonClient = _objectFactory.GetDaemonClient(_config.Coin.Name, _config.Daemon);
+            _daemonClient = _objectFactory.GetDaemonClient(_config);
             _daemonClient.GetInfo().Returns(new Info());
             _daemonClient.GetMiningInfo().Returns(new MiningInfo());
         }

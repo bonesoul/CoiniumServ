@@ -48,5 +48,7 @@ namespace CoiniumServ.Jobs.Tracker
             _jobs.Add(job.Id, job);
             Current = job;
         }
+
+        // TODO: remove expired jobs.
     }
 }

@@ -108,7 +108,7 @@ namespace CoiniumServ.Pools
             if (Config.Daemon == null || Config.Daemon.Valid == false)
                 _logger.Error("Coin daemon configuration is not valid!");
 
-            _daemonClient = _objectFactory.GetDaemonClient(Config.Coin.Name, Config.Daemon);
+            _daemonClient = _objectFactory.GetDaemonClient(Config);
         }
 
         private void InitManagers()
@@ -118,21 +118,20 @@ namespace CoiniumServ.Pools
 
             _storage = _objectFactory.GetStorage(Storages.Redis, Config);
 
-            _paymentProcessor = _objectFactory.GetPaymentProcessor(Config.Coin.Name, _daemonClient, _storage, Config.Wallet);
+            _paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, _storage);
             _paymentProcessor.Initialize(Config.Payments);
 
-            _minerManager = _objectFactory.GetMiningManager(Config.Coin.Name, _daemonClient);
+            _minerManager = _objectFactory.GetMinerManager(Config, _daemonClient);
 
             _jobTracker = _objectFactory.GetJobTracker();
 
-            _shareManager = _objectFactory.GetShareManager(Config.Coin.Name, _daemonClient, _jobTracker, _storage);
+            _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, _jobTracker, _storage);
 
-            _vardiffManager = _objectFactory.GetVardiffManager(Config.Coin.Name, _shareManager, Config.Stratum.Vardiff);
+            _vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
 
-            _banningManager = _objectFactory.GetBanManager(Config.Coin.Name, _shareManager, Config.Banning);
+            _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
 
-            _jobManager = _objectFactory.GetJobManager(Config.Coin.Name, _daemonClient, _jobTracker, _shareManager, _minerManager,
-                _hashAlgorithm, Config.Wallet, Config.Rewards);
+            _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, _jobTracker, _shareManager, _minerManager,_hashAlgorithm);
 
             _jobManager.Initialize(InstanceId);
 
@@ -150,8 +149,8 @@ namespace CoiniumServ.Pools
 
             if (Config.Stratum != null && Config.Stratum.Enabled)
             {
-                var stratumServer = _objectFactory.GetMiningServer("Stratum", this, _minerManager, _jobManager, _banningManager, Config.Coin);
-                var stratumService = _objectFactory.GetMiningService("Stratum", Config.Coin, _shareManager, _daemonClient);
+                var stratumServer = _objectFactory.GetMiningServer("Stratum", Config, this, _minerManager, _jobManager, _banningManager);
+                var stratumService = _objectFactory.GetMiningService("Stratum", Config, _shareManager, _daemonClient);
                 stratumServer.Initialize(Config.Stratum);
 
                 _servers.Add(stratumServer, stratumService);
@@ -159,8 +158,8 @@ namespace CoiniumServ.Pools
 
             if (Config.Vanilla != null && Config.Vanilla.Enabled)
             {
-                var vanillaServer = _objectFactory.GetMiningServer("Vanilla", this, _minerManager, _jobManager, _banningManager, Config.Coin);
-                var vanillaService = _objectFactory.GetMiningService("Vanilla", Config.Coin, _shareManager, _daemonClient);
+                var vanillaServer = _objectFactory.GetMiningServer("Vanilla", Config, this, _minerManager, _jobManager, _banningManager);
+                var vanillaService = _objectFactory.GetMiningService("Vanilla", Config, _shareManager, _daemonClient);
 
                 vanillaServer.Initialize(Config.Vanilla);
 

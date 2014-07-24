@@ -25,7 +25,6 @@ using CoiniumServ.Banning;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
-using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
@@ -103,44 +102,39 @@ namespace CoiniumServ.Factories
         /// <summary>
         /// Returns a new instance of daemon client.
         /// </summary>
-        /// <param name="pool"></param>
-        /// <param name="daemonConfig"></param>
         /// <returns></returns>
-        public IDaemonClient GetDaemonClient(string pool, IDaemonConfig daemonConfig)
+        public IDaemonClient GetDaemonClient(IPoolConfig poolConfig)
         {
             var @params = new NamedParameterOverloads
             {
-                {"pool", pool},
-                {"daemonConfig", daemonConfig},                
+                {"poolConfig", poolConfig}              
             };
 
             return _applicationContext.Container.Resolve<IDaemonClient>(@params);
         }
 
-        public IMinerManager GetMiningManager(string pool, IDaemonClient daemonClient)
+        public IMinerManager GetMinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient)
         {
             var @params = new NamedParameterOverloads
             {
-                {"pool", pool},
+                {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
             };
 
             return _applicationContext.Container.Resolve<IMinerManager>(@params);
         }
 
-        public IJobManager GetJobManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
-            IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig, IRewardsConfig rewardsConfig)
+        public IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
+            IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             var @params = new NamedParameterOverloads
             {
-                {"pool", pool},
+                {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
                 {"jobTracker", jobTracker},
                 {"shareManager", shareManager},
                 {"minerManager", minerManager},
                 {"hashAlgorithm", hashAlgorithm},
-                {"walletConfig", walletConfig},
-                {"rewardsConfig", rewardsConfig},
             };
 
             return _applicationContext.Container.Resolve<IJobManager>(@params);
@@ -151,11 +145,11 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IJobTracker>();
         }
 
-        public IShareManager GetShareManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
+        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
-                {"pool", pool},
+                {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
                 {"jobTracker", jobTracker},
                 {"storage", storage},
@@ -164,39 +158,35 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IShareManager>(@params);
         }
 
-        public IPaymentProcessor GetPaymentProcessor(string pool, IDaemonClient daemonClient, IStorage storage,
-            IWalletConfig walletConfig)
+        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
-                {"pool", pool},
+                {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
-                {"storage", storage},
-                {"walletConfig", walletConfig},
+                {"storage", storage},                
             };
 
             return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
         }
 
-        public IBanManager GetBanManager(string pool, IShareManager shareManager, IBanConfig banConfig)
+        public IBanManager GetBanManager(IPoolConfig poolConfig, IShareManager shareManager)
         {
             var @params = new NamedParameterOverloads
             {
-                {"pool", pool},
-                {"shareManager", shareManager},
-                {"banConfig", banConfig},
+                {"poolConfig", poolConfig},
+                {"shareManager", shareManager},                
             };
 
             return _applicationContext.Container.Resolve<IBanManager>(@params);
         }
 
-        public IVardiffManager GetVardiffManager(string pool, IShareManager shareManager, IVardiffConfig vardiffConfig)
+        public IVardiffManager GetVardiffManager(IPoolConfig poolConfig, IShareManager shareManager)
         {
             var @params = new NamedParameterOverloads
             {
-                {"pool", pool},
+                {"poolConfig", poolConfig},
                 {"shareManager", shareManager},
-                {"vardiffConfig", vardiffConfig},
             };
 
             return _applicationContext.Container.Resolve<IVardiffManager>(@params);
@@ -266,26 +256,26 @@ namespace CoiniumServ.Factories
 
         #region server & service objects
 
-        public IMiningServer GetMiningServer(string type, IPool pool, IMinerManager minerManager, IJobManager jobManager,
-            IBanManager banManager, ICoinConfig coinConfig)
+        public IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,
+            IBanManager banManager)
         {
             var @params = new NamedParameterOverloads
             {
+                {"poolConfig", poolConfig},
                 {"pool", pool},
                 {"minerManager", minerManager},
                 {"jobManager", jobManager},
                 {"banManager", banManager},
-                {"coinConfig", coinConfig}
             };
 
             return _applicationContext.Container.Resolve<IMiningServer>(type, @params);
         }
 
-        public IRpcService GetMiningService(string type, ICoinConfig coinConfig, IShareManager shareManager, IDaemonClient daemonClient)
+        public IRpcService GetMiningService(string type, IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient)
         {
             var @params = new NamedParameterOverloads
             {
-                {"coinConfig", coinConfig},
+                {"poolConfig", poolConfig},
                 {"shareManager", shareManager}, 
                 {"daemonClient", daemonClient}
             };

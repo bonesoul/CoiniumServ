@@ -25,11 +25,11 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using CoiniumServ.Banning;
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Networking.Server.Sockets;
 using CoiniumServ.Pools;
+using CoiniumServ.Pools.Config;
 using Serilog;
 
 // stratum server uses json-rpc 2.0 (over raw sockets) & json-rpc.net (http://jsonrpc2.codeplex.com/)
@@ -61,14 +61,14 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="minerManager">The miner manager.</param>
         /// <param name="jobManager"></param>
         /// <param name="banManager"></param>
-        /// <param name="coinConfig"></param>
-        public StratumServer(IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager, ICoinConfig coinConfig)
+        /// <param name="poolConfig"></param>
+        public StratumServer(IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager)
         {
             _pool = pool;
             _minerManager = minerManager;
             _jobManager = jobManager;
             _banManager = banManager;
-            _logger = Log.ForContext<StratumServer>().ForContext("Component", coinConfig.Name);
+            _logger = Log.ForContext<StratumServer>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         /// <summary>

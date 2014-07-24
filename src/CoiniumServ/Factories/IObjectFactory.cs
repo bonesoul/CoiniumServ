@@ -69,26 +69,23 @@ namespace CoiniumServ.Factories
         /// <summary>
         /// Returns a new instance of daemon client.
         /// </summary>
-        /// <param name="pool"></param>
-        /// <param name="daemonConfig"></param>
         /// <returns></returns>
-        IDaemonClient GetDaemonClient(string pool, IDaemonConfig daemonConfig);
+        IDaemonClient GetDaemonClient(IPoolConfig poolConfig);
 
-        IMinerManager GetMiningManager(string pool, IDaemonClient daemonClient);
+        IMinerManager GetMinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient);
 
-        IJobManager GetJobManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
-           IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IWalletConfig walletConfig,
-           IRewardsConfig rewardsConfig);
+        IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
+            IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
 
         IJobTracker GetJobTracker();
 
-        IShareManager GetShareManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage);
+        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage);
 
-        IPaymentProcessor GetPaymentProcessor(string pool, IDaemonClient daemonClient, IStorage storage, IWalletConfig walletConfig);
+        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage);
 
-        IBanManager GetBanManager(string pool, IShareManager shareManager, IBanConfig banConfig);
+        IBanManager GetBanManager(IPoolConfig poolConfig, IShareManager shareManager);
 
-        IVardiffManager GetVardiffManager(string pool, IShareManager shareManager, IVardiffConfig vardiffConfig);
+        IVardiffManager GetVardiffManager(IPoolConfig poolConfig, IShareManager shareManager);
 
         #endregion
 
@@ -112,10 +109,10 @@ namespace CoiniumServ.Factories
 
         #region server & service objects
 
-        IMiningServer GetMiningServer(string type, IPool pool, IMinerManager minerManager, IJobManager jobManager,
-            IBanManager banManager, ICoinConfig coinConfig);
+        IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,
+            IBanManager banManager);
 
-        IRpcService GetMiningService(string type, ICoinConfig coinConfig, IShareManager shareManager, IDaemonClient daemonClient);
+        IRpcService GetMiningService(string type, IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient);
 
         IWebServer GetWebServer();
 
