@@ -1000,16 +1000,16 @@
     <CustomCommands>
       <!-- Custom commands for mono -->
       <CustomCommands>
-        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/BuildProviders/Nancy.ViewEngines.Razor.BuildProviders.dll&quot; &quot;$(ProjectDir)/bin/&quot;" />
-        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/lib/net40/Nancy.ViewEngines.Razor.dll&quot; &quot;$(ProjectDir)/bin/&quot;" />
+        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/BuildProviders/Nancy.ViewEngines.Razor.BuildProviders.dll&quot; &quot;$(SolutionDir)/bin/&quot;" />
+        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/lib/net40/Nancy.ViewEngines.Razor.dll&quot; &quot;$(SolutionDir)/bin/&quot;" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
     <PostBuildEvent>
 if $(ConfigurationName) == Debug (
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.2\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.2\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.2\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(SolutionDir)bin\"
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.2\lib\net40\Nancy.ViewEngines.Razor.dll" "$(SolutionDir)bin\"
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
