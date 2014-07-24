@@ -29,6 +29,7 @@ using CoiniumServ.Networking.Server.Sockets;
 using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Vanilla;
 using Serilog;
 
 namespace CoiniumServ.Miners
@@ -43,7 +44,9 @@ namespace CoiniumServ.Miners
 
         private int _counter = 0; // counter for assigining unique id's to miners.
 
-        private readonly IMinerConfig _config;
+        private readonly IMinerConfig _minerConfig;
+
+        private readonly IMetaConfig _metaConfig;
 
         private readonly IDaemonClient _daemonClient;
 
@@ -51,7 +54,8 @@ namespace CoiniumServ.Miners
 
         public MinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient)
         {
-            _config = poolConfig.Miner;
+            _minerConfig = poolConfig.Miner;
+            _metaConfig = poolConfig.Meta;
             _daemonClient = daemonClient;
             _miners = new Dictionary<int, IMiner>();
             _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);
@@ -70,19 +74,19 @@ namespace CoiniumServ.Miners
                 select pair.Value).FirstOrDefault();
         }
 
-        public T Create<T>(IPool pool) where T : IMiner
+        public T Create<T>(IPool pool) where T : IVanillaMiner
         {
             var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, pool, this }); // create an instance of the miner.
-            var miner = (IMiner)instance;
+            var miner = (IVanillaMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.
 
             return (T)miner;
         }
 
-        public T Create<T>(UInt32 extraNonce, IConnection connection, IPool pool) where T : IMiner
+        public T Create<T>(UInt32 extraNonce, IConnection connection, IPool pool) where T : IStratumMiner
         {
             var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, extraNonce, connection, pool, this });  // create an instance of the miner.
-            var miner = (IMiner)instance;
+            var miner = (IStratumMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.           
 
             return (T)miner;
@@ -101,7 +105,7 @@ namespace CoiniumServ.Miners
 
         public void Authenticate(IMiner miner)
         {
-            if (_config.ValidateUsername) // should we validate miner username?
+            if (_minerConfig.ValidateUsername) // should we validate miner username?
                 miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
             else
                 miner.Authenticated = true; // else just accept him.
@@ -112,13 +116,18 @@ namespace CoiniumServ.Miners
 
             if (!miner.Authenticated) 
                 return;
-            
-            if(miner is IStratumMiner)
-                (miner as IStratumMiner).SendDifficulty(); // send the initial difficulty.
 
+            if (miner is IStratumMiner)
+            {
+                var stratumMiner = (IStratumMiner) miner;
+                stratumMiner.SendDifficulty(); // send the initial difficulty.
+                stratumMiner.SendMessage(_metaConfig.MOTD); // send the motd.
+            }
+           
             OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.            
         }
 
+        // todo: consider exposing this event by miner object itself.
         protected virtual void OnMinerAuthenticated(MinerEventArgs e)
         {
             var handler = MinerAuthenticated;

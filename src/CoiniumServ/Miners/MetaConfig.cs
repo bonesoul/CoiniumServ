@@ -21,25 +21,33 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Logging;
-using CoiniumServ.Pools.Config;
-using CoiniumServ.Server.Web;
+using System;
+using Serilog;
 
-namespace CoiniumServ.Configuration
+namespace CoiniumServ.Miners
 {
-    public interface IConfigManager
+    public class MetaConfig :IMetaConfig
     {
-        bool ConfigExists { get; }
+        public bool Valid { get; private set; }
+        public string MOTD { get; private set; }
 
-        IWebServerConfig WebServerConfig { get; }
+        public MetaConfig(dynamic config)
+        {
+            try
+            {
+                // set the defaults;
+                MOTD = "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com";
 
-        ILogConfig LogConfig { get; }
+                // load the config data.
+                MOTD = config.motd;
 
-        IStackConfig StackConfig { get; }
-
-        List<IPoolConfig> PoolConfigs { get; }
-
-        void Initialize();
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<MetaConfig>().Error(e, "Error loading meta configuration");
+            }
+        }
     }
 }

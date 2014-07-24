@@ -1,11 +1,10 @@
 {
     # -------------------------------
-    # Network Configuration
+    # Stack Configuration
     # -------------------------------
 
-    "network": {
-        "name": "CoiniumServ.com",
-        "motd": "Welcome to CoiniumServ pool network, enjoy your stay! - http://www.coiniumserv.com"
+    "stack": {
+        "name": "CoiniumServ.com"
     },
 
     # -------------------------------

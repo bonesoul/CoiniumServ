@@ -21,45 +21,14 @@
 // 
 #endregion
 
-using System.Collections;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-
-namespace CoiniumServ.Server.Mining.Stratum.Notifications
+namespace CoiniumServ.Miners
 {
-    // TODO: can we get rid of this?
-
-    [JsonArray]
-    public class Difficulty : IEnumerable<object>
+    public enum MinerSoftware
     {
-        /// <summary>
-        /// Difficulty for jobs.
-        /// </summary>
-        [JsonIgnore]
-        private readonly float _diff;
-
-        /// <summary>
-        /// Creates a new instance of JobNotification.
-        /// </summary>
-        /// <param name="difficulty"></param>
-        public Difficulty(float difficulty)
-        {
-            _diff = difficulty;
-        }
-
-        public IEnumerator<object> GetEnumerator()
-        {
-            var data = new List<object>
-            {
-                _diff
-            };
-
-            return data.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        Unknown,
+        BfgMiner,
+        CCMiner,
+        CGMiner,
+        CudaMiner
     }
 }

@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System;
 using CoiniumServ.Pools;
 
 namespace CoiniumServ.Miners
@@ -53,6 +54,10 @@ namespace CoiniumServ.Miners
         int ValidShares { get; set; }
 
         int InvalidShares { get; set; }
+
+        MinerSoftware Software { get; }
+
+        Version Version { get; }
 
         /// <summary>
         /// Authenticates the miner.

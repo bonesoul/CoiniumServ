@@ -21,25 +21,33 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Logging;
-using CoiniumServ.Pools.Config;
-using CoiniumServ.Server.Web;
+using System;
+using Serilog;
 
 namespace CoiniumServ.Configuration
 {
-    public interface IConfigManager
+    public class StackConfig : IStackConfig
     {
-        bool ConfigExists { get; }
+        public bool Valid { get; private set; }
+        public string Name { get; private set; }
 
-        IWebServerConfig WebServerConfig { get; }
+        public StackConfig(dynamic config)
+        {
+            try
+            {
+                // set the defaults;
+                Name = "CoiniumServ.com";
 
-        ILogConfig LogConfig { get; }
+                // load the config data.
+                Name = config.name;
 
-        IStackConfig StackConfig { get; }
-
-        List<IPoolConfig> PoolConfigs { get; }
-
-        void Initialize();
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<StackConfig>().Error(e, "Error loading stack configuration");
+            }
+        }
     }
 }

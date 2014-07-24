@@ -45,6 +45,7 @@ namespace CoiniumServ.Pools.Config
         public bool Enabled { get; private set; }
         public ICoinConfig Coin { get; private set; }
         public IDaemonConfig Daemon { get; private set; }
+        public IMetaConfig Meta { get; private set; }
         public IWalletConfig Wallet { get; private set; }
         public IRewardsConfig Rewards { get; private set; }
         public IPaymentConfig Payments { get; private set; }
@@ -71,6 +72,7 @@ namespace CoiniumServ.Pools.Config
 
                 Coin = coinConfig;
                 Daemon = new DaemonConfig(config.daemon);
+                Meta = new MetaConfig(config.meta);
                 Wallet = new WalletConfig(config.wallet);
                 Rewards = new RewardsConfig(config.rewards);
                 Payments = new PaymentConfig(config.payments);

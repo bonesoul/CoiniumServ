@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Logging;
@@ -85,6 +86,9 @@ namespace CoiniumServ.Server.Mining.Stratum
 
         private readonly ILogger _logger;
 
+        public MinerSoftware Software { get; private set; }
+        public Version Version { get; private set; }
+
         /// <summary>
         /// Creates a new miner instance.
         /// </summary>
@@ -110,14 +114,6 @@ namespace CoiniumServ.Server.Mining.Stratum
         }
 
         /// <summary>
-        /// Subscribes the miner to mining service.
-        /// </summary>
-        public void Subscribe()
-        {
-            Subscribed = true;
-        }
-
-        /// <summary>
         /// Authenticates the miner.
         /// </summary>
         /// <param name="user"></param>
@@ -135,13 +131,53 @@ namespace CoiniumServ.Server.Mining.Stratum
         }
 
         /// <summary>
+        /// Subscribes the miner to mining service.
+        /// </summary>
+        public void Subscribe(string signature)
+        {
+            Subscribed = true;
+
+            // identify the miner software.
+            try
+            {
+                var data = signature.Split('/');
+                var software = data[0].ToLower();
+                var version = data[1];
+
+                switch (software)
+                {
+                    case "bfgminer":
+                        Software = MinerSoftware.BfgMiner;
+                        break;
+                    case "ccminer":
+                        Software = MinerSoftware.CCMiner;
+                        break;
+                    case "cgminer":
+                        Software = MinerSoftware.CGMiner;
+                        break;
+                    case "cudaminer":
+                        Software = MinerSoftware.CudaMiner;
+                        break;
+                    default:
+                        Software = MinerSoftware.Unknown;
+                        break;
+                }
+
+                Version = new Version(version);
+            }
+            catch (Exception e)
+            {
+                Software = MinerSoftware.Unknown;
+                Version = new Version();
+            }
+        }
+
+        /// <summary>
         /// Parses the incoming data.
         /// </summary>
         /// <param name="e"></param>
         public void Parse(ConnectionDataEventArgs e)
         {
-            _logger.Verbose("rx: {0}", e.Data.ToEncodedString().PrettifyJson());
-
             var rpcResultHandler = new AsyncCallback(
                 callback =>
                 {
@@ -157,14 +193,39 @@ namespace CoiniumServ.Server.Mining.Stratum
                     _logger.Verbose("tx: {0}", result.PrettifyJson());
                 });
 
-            var line = e.Data.ToEncodedString();
-            line = line.Replace("\n", "");
+            try
+            {
+                var line = e.Data.ToEncodedString();
+                line = line.Replace("\n", "");
 
-            var rpcRequest = new SocketServiceRequest(line);
-            var rpcContext = new SocketServiceContext(this, rpcRequest);
+                var rpcRequest = new SocketServiceRequest(line);
+                var rpcContext = new SocketServiceContext(this, rpcRequest);
 
-            var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
-            JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
+                _logger.Verbose("rx: {0}", line.PrettifyJson());
+
+                var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
+                JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
+            }
+            catch (JsonReaderException) // if client send an invalid message
+            {
+                // TODO: Add tls support!
+                this.Connection.Disconnect(); // disconnect him.
+            }
+        }
+
+        /// <summary>
+        /// Sends message of the day to miner.
+        /// </summary>
+        public void SendMessage(string message)
+        {
+            var notification = new JsonRequest
+            {
+                Id = null,
+                Method = "client.show_message",
+                Params = new List<object> { message }
+            };
+
+            Send(notification);
         }
 
         /// <summary>
@@ -176,15 +237,10 @@ namespace CoiniumServ.Server.Mining.Stratum
             {
                 Id = null,
                 Method = "mining.set_difficulty",
-                Params = new Difficulty(Difficulty)
+                Params = new List<object>{ Difficulty }
             };
 
-            var json = JsonConvert.SerializeObject(notification) + "\n";
-
-            var data = Encoding.UTF8.GetBytes(json);
-            Connection.Send(data);
-
-            _logger.Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
+            Send(notification);
         }
 
         /// <summary>
@@ -199,7 +255,12 @@ namespace CoiniumServ.Server.Mining.Stratum
                 Params = job
             };
 
-            var json = JsonConvert.SerializeObject(notification) + "\n";
+            Send(notification);
+        }
+
+        private void Send(JsonRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request) + "\n";
 
             var data = Encoding.UTF8.GetBytes(json);
             Connection.Send(data);

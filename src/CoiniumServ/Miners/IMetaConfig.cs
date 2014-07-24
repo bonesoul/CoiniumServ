@@ -21,25 +21,12 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Logging;
-using CoiniumServ.Pools.Config;
-using CoiniumServ.Server.Web;
+using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Configuration
+namespace CoiniumServ.Miners
 {
-    public interface IConfigManager
+    public interface IMetaConfig:IConfig
     {
-        bool ConfigExists { get; }
-
-        IWebServerConfig WebServerConfig { get; }
-
-        ILogConfig LogConfig { get; }
-
-        IStackConfig StackConfig { get; }
-
-        List<IPoolConfig> PoolConfigs { get; }
-
-        void Initialize();
+        string MOTD { get; }
     }
 }

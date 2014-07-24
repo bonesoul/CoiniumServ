@@ -2,7 +2,14 @@
     # sample pool config file that only sets specific settings for the pool and gets the others from default.json
 
 	"enabled": false,	
-	"coin": "litecoin.json",
+
+    # -------------------------------
+    # Coin configuration
+    # -------------------------------
+
+    # coin: name of the coin configuration file that should exist in config/coins/.
+
+	"coin": "litecoin.json",    
 
     # -------------------------------
     # Coin Daemon RPC Connection

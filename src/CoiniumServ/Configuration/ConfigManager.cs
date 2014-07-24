@@ -40,6 +40,7 @@ namespace CoiniumServ.Configuration
         public bool ConfigExists { get { return _globalConfigData != null; } }
         public IWebServerConfig WebServerConfig { get; private set; }
         public ILogConfig LogConfig { get; private set; }
+        public IStackConfig StackConfig { get; private set; }
 
         public List<IPoolConfig> PoolConfigs { get; private set; }
 
@@ -60,11 +61,12 @@ namespace CoiniumServ.Configuration
             _configFactory = configFactory;
 
             _globalConfigData = JsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
-            PoolConfigs = new List<IPoolConfig>();
             _coinConfigs =  new Dictionary<string, ICoinConfig>();
 
+            PoolConfigs = new List<IPoolConfig>();
             LogConfig = new LogConfig(_globalConfigData.logging);
             WebServerConfig = new WebServerConfig(_globalConfigData.website);
+            StackConfig = new StackConfig(_globalConfigData.stack);
 
             // TODO: implement metrics config.
         }

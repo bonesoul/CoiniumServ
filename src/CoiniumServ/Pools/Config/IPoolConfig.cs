@@ -45,6 +45,8 @@ namespace CoiniumServ.Pools.Config
 
         IDaemonConfig Daemon { get; }
 
+        IMetaConfig Meta { get; }
+
         IWalletConfig Wallet { get; }
 
         IRewardsConfig Rewards { get; }
