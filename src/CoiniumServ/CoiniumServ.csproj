@@ -33,7 +33,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -998,10 +998,10 @@
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <CustomCommands>
-      <!-- Custom commands for Xamarin -->
+      <!-- Custom commands for mono -->
       <CustomCommands>
         <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/BuildProviders/Nancy.ViewEngines.Razor.BuildProviders.dll&quot; &quot;$(ProjectDir)/bin/&quot;" />
-        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/lib/Net40/Nancy.ViewEngines.Razor.dll&quot; &quot;$(ProjectDir)/bin/&quot;" />
+        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/lib/net40/Nancy.ViewEngines.Razor.dll&quot; &quot;$(ProjectDir)/bin/&quot;" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
