@@ -27,13 +27,13 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using CoiniumServ.Factories;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Time;
+using Metrics;
 using Serilog;
 using StackExchange.Redis;
 
@@ -42,7 +42,8 @@ namespace CoiniumServ.Persistance.Redis
     public class Redis:IStorage, IRedis
     {
         public bool IsEnabled { get; private set; }
-        public bool IsConnected { get { return _connectionMultiplexer.IsConnected; } }
+
+        public bool IsConnected { get { return _connectionMultiplexer != null && _connectionMultiplexer.IsConnected; } }
 
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
         private readonly IRedisConfig _redisConfig;
@@ -65,6 +66,10 @@ namespace CoiniumServ.Persistance.Redis
 
             if (IsEnabled)
                 Initialize();
+
+            // add health check.
+            HealthChecks.RegisterHealthCheck(string.Format("{0}-redis", _poolConfig.Coin.Name.ToLower()),
+                () => IsConnected ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy("connection problem"));
         }
 
         public void AddShare(IShare share)
@@ -454,7 +459,6 @@ namespace CoiniumServ.Persistance.Redis
             }
             catch (Exception e)
             {
-                IsEnabled = false;
                 _logger.Error(string.Format("Storage initialization failed: {0:l}:{1}.", endpoint.Host, endpoint.Port));
             }
         }

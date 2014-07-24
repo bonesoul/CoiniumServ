@@ -29,8 +29,10 @@ using CoiniumServ.Factories;
 using CoiniumServ.Repository;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
+using CoiniumServ.Utils.Helpers.IO;
 using CoiniumServ.Utils.Platform;
 using CoiniumServ.Utils.Versions;
+using Metrics;
 using Nancy.TinyIoc;
 using Serilog;
 
@@ -57,7 +59,7 @@ namespace CoiniumServ
 
             // start the ioc kernel.
             var kernel = TinyIoCContainer.Current;
-            var bootstrapper = new Bootstrapper(kernel);
+            new Bootstrapper(kernel);
             var objectFactory = kernel.Resolve<IObjectFactory>();
             var configFactory = kernel.Resolve<IConfigFactory>();
 
@@ -86,6 +88,15 @@ namespace CoiniumServ
 
             // initialize config manager.
             configManager.Initialize();
+
+            // todo: move to it's own class
+            // initialize metrics support    
+            Metric.Config
+                .WithAllCounters()
+                .WithReporting(c => c
+                    .WithTextFileReport(string.Format(@"{0}\\logs\\metrics\\report.log", FileHelpers.AssemblyRoot), TimeSpan.FromSeconds(60))
+                    .WithCSVReports(string.Format(@"{0}\\logs\\metrics\\csv", FileHelpers.AssemblyRoot), TimeSpan.FromSeconds(1)))
+                    .WithErrorHandler(exception => _logger.Error("Metrics error: {0}", exception.Message));
 
             // start pool manager.
             var poolManager = objectFactory.GetPoolManager();

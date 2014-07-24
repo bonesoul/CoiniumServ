@@ -22,6 +22,7 @@
 #endregion
 
 using CoiniumServ.Repository.Context;
+using Metrics;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
@@ -43,8 +44,13 @@ namespace CoiniumServ.Networking.Server.Http.Web
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
-        {
-            StaticConfiguration.EnableRequestTracing = true;
+        {            
+            // enable metrics module
+            // todo: enable authentication support
+            Metric.Config.WithNancy(config => config
+                .WithMetricsModule("/admin/metrics"));
+                //.WithMetricsModule(m => m.RequiresAuthentication(), "/admin/metrics"));
+
             CustomErrors.Enable(pipelines, new ErrorConfiguration());
         }
 
