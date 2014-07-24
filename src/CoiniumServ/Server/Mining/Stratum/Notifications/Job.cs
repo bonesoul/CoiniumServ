@@ -47,6 +47,11 @@ namespace CoiniumServ.Server.Mining.Stratum.Notifications
         [JsonIgnore]
         public UInt64 Id { get; private set; }
 
+        /// <summary>
+        /// Height of the block we are looking for.
+        /// </summary>
+        public int Height { get; private set; }
+
         public string PreviousBlockHash { get; private set; }
 
         /// <summary>
@@ -134,6 +139,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Notifications
             Id = id;
             HashAlgorithm = algorithm;
             BlockTemplate = blockTemplate;
+            Height = blockTemplate.Height;
             GenerationTransaction = generationTransaction;
             PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ToHexString();
             PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();

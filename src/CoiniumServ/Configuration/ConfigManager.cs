@@ -40,6 +40,7 @@ namespace CoiniumServ.Configuration
         public bool ConfigExists { get { return _globalConfigData != null; } }
         public IWebServerConfig WebServerConfig { get; private set; }
         public ILogConfig LogConfig { get; private set; }
+        public IStackConfig StackConfig { get; private set; }
 
         public List<IPoolConfig> PoolConfigs { get; private set; }
 
@@ -60,11 +61,12 @@ namespace CoiniumServ.Configuration
             _configFactory = configFactory;
 
             _globalConfigData = JsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
-            PoolConfigs = new List<IPoolConfig>();
             _coinConfigs =  new Dictionary<string, ICoinConfig>();
 
+            PoolConfigs = new List<IPoolConfig>();
             LogConfig = new LogConfig(_globalConfigData.logging);
             WebServerConfig = new WebServerConfig(_globalConfigData.website);
+            StackConfig = new StackConfig(_globalConfigData.stack);
 
             // TODO: implement metrics config.
         }
@@ -78,7 +80,7 @@ namespace CoiniumServ.Configuration
 
         private void LoadPoolConfigs()
         {
-            _logger.Verbose("Discovering enabled pool configs..");
+            _logger.Debug("Discovering enabled pool configs..");
 
             var files = FileHelpers.GetFilesByExtensionRecursive(PoolConfigRoot, ".json");
 
@@ -101,7 +103,7 @@ namespace CoiniumServ.Configuration
                 var coinConfig = GetCoinConfig(coinName);
 
                 if(_defaultPoolConfig != null)
-                    data = JsonConfig.Merger.Merge(_defaultPoolConfig, data); // if we do have a default.json config, merge with it.
+                    data = JsonConfig.Merger.Merge(data, _defaultPoolConfig); // if we do have a default.json config, merge with it.
 
                 PoolConfigs.Add(_configFactory.GetPoolConfig(data, coinConfig));
             }

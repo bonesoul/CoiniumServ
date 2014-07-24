@@ -26,6 +26,7 @@ using AustinHarris.JsonRpc;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
+using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Errors;
 using CoiniumServ.Server.Mining.Vanilla;
@@ -51,16 +52,16 @@ namespace CoiniumServ.Shares
         /// <summary>
         /// Initializes a new instance of the <see cref="ShareManager" /> class.
         /// </summary>
-        /// <param name="pool"></param>
+        /// <param name="poolConfig"></param>
         /// <param name="daemonClient"></param>
         /// <param name="jobTracker"></param>
         /// <param name="storage"></param>
-        public ShareManager(string pool, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
+        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
         {
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _storage = storage;
-            _logger = Log.ForContext<ShareManager>().ForContext("Component", pool);
+            _logger = Log.ForContext<ShareManager>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         /// <summary>

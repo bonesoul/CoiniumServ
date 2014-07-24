@@ -1,5 +1,13 @@
 {
     # -------------------------------
+    # Stack Configuration
+    # -------------------------------
+
+    "stack": {
+        "name": "CoiniumServ.com"
+    },
+
+    # -------------------------------
     # Website Configuration
     # -------------------------------
 
@@ -16,7 +24,7 @@
 		"bind": "127.0.0.1",
 		"port": 80,
         "stats": {
-            "updateInterval": 60,
+            "updateInterval": 1,
             "hashrateWindow": 300
         }
 	},

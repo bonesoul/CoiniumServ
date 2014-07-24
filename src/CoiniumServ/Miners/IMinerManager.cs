@@ -25,25 +25,27 @@ using System;
 using System.Collections.Generic;
 using CoiniumServ.Networking.Server.Sockets;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Vanilla;
 
 namespace CoiniumServ.Miners
 {
     public interface IMinerManager
     {
+        event EventHandler MinerAuthenticated;
+
         IList<IMiner> Miners { get; }
 
         IMiner GetMiner(Int32 id);
 
         IMiner GetByConnection(IConnection connection);
 
-        T Create<T>(IPool pool) where T : IMiner;
+        T Create<T>(IPool pool) where T : IVanillaMiner;
 
-        T Create<T>(UInt32 extraNonce, IConnection connection, IPool pool) where T : IMiner;
+        T Create<T>(UInt32 extraNonce, IConnection connection, IPool pool) where T : IStratumMiner;
 
         void Remove(IConnection connection);
 
         void Authenticate(IMiner miner);
-
-        event EventHandler MinerAuthenticated;
     }
 }

@@ -224,11 +224,6 @@ namespace CoiniumServ.Networking.Server.Sockets
                 Log.ForContext<SocketServer>().Debug(e, "ReceiveCallback");
                 RemoveConnection(connection); // An error occured while receiving, connection has disconnected.
             }
-            catch (Exception e)
-            {
-                Log.ForContext<SocketServer>().Debug(e, "ReceiveCallback");
-                RemoveConnection(connection); // An error occured while receiving, the connection may have been disconnected.
-            }
         }
 
         #endregion

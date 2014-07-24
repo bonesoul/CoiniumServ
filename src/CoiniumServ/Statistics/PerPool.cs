@@ -24,6 +24,7 @@
 using System;
 using System.Dynamic;
 using System.Linq;
+using CoiniumServ.Configuration;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Miners;
@@ -49,14 +50,16 @@ namespace CoiniumServ.Statistics
         private readonly IDaemonClient _daemonClient;
         private readonly IStorage _storage;
         private readonly IMinerManager _minerManager;
+        private readonly IStatisticsConfig _statisticsConfig;
+
         private readonly dynamic _response;
 
         private readonly double _shareMultiplier;
-        private const int HashrateWindow = 300; /* How many seconds worth of shares should be gathered to generate hashrate. */
 
-        public PerPool(IPoolConfig poolConfig, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage)
+        public PerPool(IPoolConfig poolConfig, IConfigManager configManager, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage)
         {
             Config = poolConfig;
+            _statisticsConfig = configManager.WebServerConfig.Statistics;
             _daemonClient = daemonClient;
             _minerManager = minerManager;
             Blocks = blockStatistics;
@@ -95,12 +98,12 @@ namespace CoiniumServ.Statistics
         private void ReadHashrate()
         {
             // read hashrate stats.
-            var windowTime = TimeHelpers.NowInUnixTime() - HashrateWindow;
+            var windowTime = TimeHelpers.NowInUnixTime() - _statisticsConfig.HashrateWindow;
             _storage.DeleteExpiredHashrateData(windowTime);
             var hashrates = _storage.GetHashrateData(windowTime);
 
             double total = hashrates.Sum(pair => pair.Value);
-            Hashrate = Convert.ToUInt64(_shareMultiplier * total / HashrateWindow);            
+            Hashrate = Convert.ToUInt64(_shareMultiplier * total / _statisticsConfig.HashrateWindow);            
         }
 
         private void ReadCoinData()

@@ -21,34 +21,10 @@
 // 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
-
-namespace CoiniumServ.Jobs.Tracker
+namespace CoiniumServ.Configuration
 {
-    public class JobTracker:IJobTracker
+    public interface IStackConfig : IConfig
     {
-        private readonly Dictionary<UInt64, IJob> _jobs;
-
-        public IJob Current { get; private set; }
-
-        public JobTracker()
-        {
-            _jobs = new Dictionary<UInt64, IJob>();
-        }
-
-        public IJob Get(UInt64 id)
-        {
-            return _jobs.ContainsKey(id) ? _jobs[id] : null;
-        }
-
-        public void Add(IJob job)
-        {
-            _jobs.Add(job.Id, job);
-            Current = job;
-        }
-
-        // TODO: remove expired jobs.
+        string Name { get; }
     }
 }

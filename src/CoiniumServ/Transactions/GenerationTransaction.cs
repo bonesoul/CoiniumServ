@@ -123,7 +123,9 @@ namespace CoiniumServ.Transactions
         /// </remarks>
         public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, IWalletConfig walletConfig, IRewardsConfig rewardsConfig, bool supportTxMessages = false)
         {
-            DaemonClient = daemonClient;
+            // TODO: we need a whole refactoring here.
+            // we should use DI and it shouldn't really require daemonClient connection to function.
+
             BlockTemplate = blockTemplate;
             ExtraNonce = extraNonce;
             SupportTxMessages = supportTxMessages;

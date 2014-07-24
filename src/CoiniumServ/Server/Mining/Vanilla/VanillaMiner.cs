@@ -26,7 +26,6 @@ using System.IO;
 using System.Net;
 using System.Text;
 using AustinHarris.JsonRpc;
-using CoiniumServ.Factories;
 using CoiniumServ.Logging;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
@@ -58,6 +57,9 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
         public IPool Pool { get; private set; }
 
+        public MinerSoftware Software { get; private set; }
+        public Version Version { get; private set; }
+
         private readonly IMinerManager _minerManager;
 
         private readonly ILogger _logger;
@@ -68,7 +70,6 @@ namespace CoiniumServ.Server.Mining.Vanilla
         /// <param name="id"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
-        /// <param name="logManager"></param>
         public VanillaMiner(int id, IPool pool, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.
@@ -76,6 +77,9 @@ namespace CoiniumServ.Server.Mining.Vanilla
             _minerManager = minerManager;
 
             Authenticated = false; // miner has to authenticate.
+
+            Software = MinerSoftware.Unknown;
+            Version = new Version();
 
             _logger = LogManager.PacketLogger.ForContext<VanillaMiner>().ForContext("Component", pool.Config.Coin.Name);
         }

@@ -2,6 +2,13 @@
     # detailed sample config file for pool which explicility sets all settings.
 
 	"enabled": false,	
+
+    # -------------------------------
+    # Coin configuration
+    # -------------------------------
+
+    # coin: name of the coin configuration file that should exist in config/coins/.
+
 	"coin": "litecoin.json",    
 
     # -------------------------------
@@ -19,6 +26,16 @@
 		"username": "user",
 		"password": "password"
 	},
+
+    # -------------------------------
+    # Meta Configuration
+    # -------------------------------
+
+    # motd: message of the day.
+
+    "meta": {
+        "motd": "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com"
+     },
 
     # -------------------------------
     # Wallet & Rewards Configuration

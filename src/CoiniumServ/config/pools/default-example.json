@@ -1,7 +1,7 @@
 ﻿{
     # default pool configuration
     # if a per-pool config file doesn't override a setting, default value from this file will be applied
-
+    
     # -------------------------------
     # Coin Daemon RPC Connection
     # -------------------------------
@@ -11,6 +11,16 @@
 	"daemon": {
 		"host": "127.0.0.1"
 	},
+
+    # -------------------------------
+    # Meta Configuration
+    # -------------------------------
+
+    # motd: message of the day.
+
+    "meta": {
+        "motd": "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com"
+     },
 
     # -------------------------------
     # Payment Processing Configuration

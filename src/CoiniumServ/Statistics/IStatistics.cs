@@ -20,6 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
+
 namespace CoiniumServ.Statistics
 {
     public interface IStatistics
@@ -29,5 +32,7 @@ namespace CoiniumServ.Statistics
         IAlgorithms Algorithms { get; }
 
         IPools Pools { get; }
+
+        DateTime LastUpdate { get; }
     }
 }

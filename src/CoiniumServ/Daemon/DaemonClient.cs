@@ -27,7 +27,6 @@ using System.Linq;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Requests;
 using CoiniumServ.Daemon.Responses;
-
 /* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
 /* Possible alternative implementations:
@@ -39,6 +38,7 @@ using CoiniumServ.Daemon.Responses;
 
 // Original bitcoin api call list: https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_Calls_list
 // Rpc error codes: https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
+using CoiniumServ.Pools.Config;
 
 namespace CoiniumServ.Daemon
 {
@@ -49,8 +49,8 @@ namespace CoiniumServ.Daemon
     {
         public static readonly object[] EmptyString = {}; // used as empty parameter.
 
-        public DaemonClient(string pool, IDaemonConfig daemonConfig)
-            : base(pool, daemonConfig)
+        public DaemonClient(IPoolConfig poolConfig)
+            : base(poolConfig)
         { }
 
         /// <summary>

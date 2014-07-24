@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using CoiniumServ.Pools.Config;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Buffers;
 using CoiniumServ.Utils.Helpers.Time;
@@ -38,21 +39,21 @@ namespace CoiniumServ.Vardiff
         private readonly float _tMax;
         private readonly ILogger _logger;
 
-        public VardiffManager(string pool, IShareManager shareManager, IVardiffConfig vardiffConfig)
+        public VardiffManager(IPoolConfig poolConfig, IShareManager shareManager)
         {
-            _logger = Log.ForContext<VardiffManager>().ForContext("Component", pool);
+            _logger = Log.ForContext<VardiffManager>().ForContext("Component", poolConfig.Coin.Name);
 
-            Config = vardiffConfig;
+            Config = poolConfig.Stratum.Vardiff;
 
             if (!Config.Enabled)
                 return;
 
             shareManager.ShareSubmitted += OnShare;
-            
-            var variance = vardiffConfig.TargetTime*((float)vardiffConfig.VariancePercent/100);
-            _bufferSize = vardiffConfig.RetargetTime/vardiffConfig.TargetTime*4;
-            _tMin = vardiffConfig.TargetTime - variance;
-            _tMax = vardiffConfig.TargetTime + variance;
+
+            var variance = Config.TargetTime * ((float)Config.VariancePercent / 100);
+            _bufferSize = Config.RetargetTime / Config.TargetTime * 4;
+            _tMin = Config.TargetTime - variance;
+            _tMax = Config.TargetTime + variance;
         }
 
         private void OnShare(object sender, EventArgs e)

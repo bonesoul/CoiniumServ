@@ -22,33 +22,32 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
+using Serilog;
 
-namespace CoiniumServ.Jobs.Tracker
+namespace CoiniumServ.Configuration
 {
-    public class JobTracker:IJobTracker
+    public class StackConfig : IStackConfig
     {
-        private readonly Dictionary<UInt64, IJob> _jobs;
+        public bool Valid { get; private set; }
+        public string Name { get; private set; }
 
-        public IJob Current { get; private set; }
-
-        public JobTracker()
+        public StackConfig(dynamic config)
         {
-            _jobs = new Dictionary<UInt64, IJob>();
-        }
+            try
+            {
+                // set the defaults;
+                Name = "CoiniumServ.com";
 
-        public IJob Get(UInt64 id)
-        {
-            return _jobs.ContainsKey(id) ? _jobs[id] : null;
-        }
+                // load the config data.
+                Name = config.name;
 
-        public void Add(IJob job)
-        {
-            _jobs.Add(job.Id, job);
-            Current = job;
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<StackConfig>().Error(e, "Error loading stack configuration");
+            }
         }
-
-        // TODO: remove expired jobs.
     }
 }

@@ -36,6 +36,8 @@ namespace CoiniumServ.Configuration
 
         ILogConfig LogConfig { get; }
 
+        IStackConfig StackConfig { get; }
+
         List<IPoolConfig> PoolConfigs { get; }
 
         void Initialize();

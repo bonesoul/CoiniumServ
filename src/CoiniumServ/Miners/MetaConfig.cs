@@ -22,33 +22,32 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
+using Serilog;
 
-namespace CoiniumServ.Jobs.Tracker
+namespace CoiniumServ.Miners
 {
-    public class JobTracker:IJobTracker
+    public class MetaConfig :IMetaConfig
     {
-        private readonly Dictionary<UInt64, IJob> _jobs;
+        public bool Valid { get; private set; }
+        public string MOTD { get; private set; }
 
-        public IJob Current { get; private set; }
-
-        public JobTracker()
+        public MetaConfig(dynamic config)
         {
-            _jobs = new Dictionary<UInt64, IJob>();
-        }
+            try
+            {
+                // set the defaults;
+                MOTD = "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com";
 
-        public IJob Get(UInt64 id)
-        {
-            return _jobs.ContainsKey(id) ? _jobs[id] : null;
-        }
+                // load the config data.
+                MOTD = config.motd;
 
-        public void Add(IJob job)
-        {
-            _jobs.Add(job.Id, job);
-            Current = job;
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<MetaConfig>().Error(e, "Error loading meta configuration");
+            }
         }
-
-        // TODO: remove expired jobs.
     }
 }

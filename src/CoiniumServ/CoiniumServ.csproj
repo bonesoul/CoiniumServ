@@ -111,6 +111,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Helpers\Hashrate.cs" />
+    <Compile Include="Configuration\IStackConfig.cs" />
+    <Compile Include="Configuration\StackConfig.cs" />
     <Compile Include="Cryptology\Algorithms\Blake.cs" />
     <Compile Include="Cryptology\Algorithms\Fugue.cs" />
     <Compile Include="Cryptology\Algorithms\Groestl.cs" />
@@ -131,7 +133,10 @@
     <Compile Include="Banning\BanConfig.cs" />
     <Compile Include="Banning\IBanConfig.cs" />
     <Compile Include="Jobs\Manager\IJobConfig.cs" />
+    <Compile Include="Miners\IMetaConfig.cs" />
     <Compile Include="Miners\IMinerConfig.cs" />
+    <Compile Include="Miners\MetaConfig.cs" />
+    <Compile Include="Miners\MinerSoftware.cs" />
     <Compile Include="Payments\IRewardsConfig.cs" />
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
@@ -308,7 +313,6 @@
     <Compile Include="Server\Mining\IMiningServer.cs" />
     <Compile Include="Server\Mining\IMiningServerConfig.cs" />
     <Compile Include="Server\Mining\Stratum\Config\IStratumServerConfig.cs" />
-    <Compile Include="Server\Mining\Stratum\Notifications\Difficulty.cs" />
     <Compile Include="Server\Mining\Vanilla\Config\IVanillaServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaMiner.cs" />
     <Compile Include="Pools\Config\PoolConfig.cs" />

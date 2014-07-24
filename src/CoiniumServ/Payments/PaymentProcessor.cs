@@ -30,6 +30,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Pools.Config;
 using Serilog;
 
 namespace CoiniumServ.Payments
@@ -57,12 +58,12 @@ namespace CoiniumServ.Payments
 
         private readonly ILogger _logger;
 
-        public PaymentProcessor(string pool, IDaemonClient daemonClient, IStorage storage , IWalletConfig walletConfig)
+        public PaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage )
         {
             _daemonClient = daemonClient;
             _storage = storage;
-            _walletConfig = walletConfig;
-            _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", pool);
+            _walletConfig = poolConfig.Wallet;
+            _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         public void Initialize(IPaymentConfig config)
@@ -101,7 +102,6 @@ namespace CoiniumServ.Payments
             {
                 _stopWatch.Start();
 
-
                 var pendingBlocks = _storage.GetPendingBlocks(); // get all the pending blocks.
                 var finalizedBlocks = GetFinalizedBlocks(pendingBlocks);
 
@@ -113,7 +113,7 @@ namespace CoiniumServ.Payments
                 ProcessRemainingBalances(workerBalances); // process the remaining balances.
                 ProcessRounds(rounds); // process the rounds.
 
-                _logger.Information("Payments processed - took {0:0.000} seconds.", (float)_stopWatch.ElapsedMilliseconds / 1000);
+                _logger.Information("Payments processed - took {0:0.000} seconds", (float)_stopWatch.ElapsedMilliseconds / 1000);
                 
                 _stopWatch.Reset();
 
