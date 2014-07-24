@@ -101,7 +101,7 @@ namespace CoiniumServ.Configuration
                 var coinConfig = GetCoinConfig(coinName);
 
                 if(_defaultPoolConfig != null)
-                    data = JsonConfig.Merger.Merge(_defaultPoolConfig, data); // if we do have a default.json config, merge with it.
+                    data = JsonConfig.Merger.Merge(data, _defaultPoolConfig); // if we do have a default.json config, merge with it.
 
                 PoolConfigs.Add(_configFactory.GetPoolConfig(data, coinConfig));
             }

@@ -28,11 +28,10 @@ using CoiniumServ.Banning;
 using CoiniumServ.Coin.Helpers;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
-using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Miners;
-using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining;
@@ -40,7 +39,6 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers.Validation;
-using CoiniumServ.Vardiff;
 using Serilog;
 
 namespace CoiniumServ.Pools
@@ -54,17 +52,15 @@ namespace CoiniumServ.Pools
 
         public IPerPool Statistics { get; private set; }
 
+        // object factory.
         private readonly IObjectFactory _objectFactory;
 
+        // dependent objects.
         private IDaemonClient _daemonClient;
         private IMinerManager _minerManager;
-        private IJobTracker _jobTracker;
         private IJobManager _jobManager;
         private IShareManager _shareManager;
-        private IStorage _storage;
         private IHashAlgorithm _hashAlgorithm;
-        private IPaymentProcessor _paymentProcessor;
-        private IVardiffManager _vardiffManager;
         private IBanManager _banningManager;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
@@ -116,28 +112,28 @@ namespace CoiniumServ.Pools
             // init the algorithm
             _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
 
-            _storage = _objectFactory.GetStorage(Storages.Redis, Config);
+            var storage = _objectFactory.GetStorage(Storages.Redis, Config);
 
-            _paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, _storage);
-            _paymentProcessor.Initialize(Config.Payments);
+            var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, storage);
+            paymentProcessor.Initialize(Config.Payments);
 
             _minerManager = _objectFactory.GetMinerManager(Config, _daemonClient);
 
-            _jobTracker = _objectFactory.GetJobTracker();
+            var jobTracker = _objectFactory.GetJobTracker();
 
-            _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, _jobTracker, _storage);
+            _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, storage);
 
-            _vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
+            var vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
 
             _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
 
-            _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, _jobTracker, _shareManager, _minerManager,_hashAlgorithm);
+            _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, _minerManager, _hashAlgorithm);
 
             _jobManager.Initialize(InstanceId);
 
-            var latestBlocks = _objectFactory.GetLatestBlocks(_storage);
-            var blockStats = _objectFactory.GetBlockStats(latestBlocks, _storage);
-            Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, _storage);
+            var latestBlocks = _objectFactory.GetLatestBlocks(storage);
+            var blockStats = _objectFactory.GetBlockStats(latestBlocks, storage);
+            Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, storage);
         }
 
         private void InitServers()
@@ -170,16 +166,10 @@ namespace CoiniumServ.Pools
         private void PrintPoolInfo()
         {
             var info = _daemonClient.GetInfo();
-            var miningInfo = _daemonClient.GetMiningInfo();
 
-            // TODO: add downloading blocks information from getblocktemplate().
-            // TODO: somecoins like namecoin do not have the method getmininginfo(), so divide this information and handle exceptions.
-            // TODO: read services from config so that we can print pool info even before starting the servers.
             _logger.Information("Coin symbol: {0:l} algorithm: {1:l} " +
                                                "Coin version: {2} protocol: {3} wallet: {4} " +
-                                               "Daemon network: {5:l} peers: {6} blocks: {7} errors: {8:l} " +
-                                               "Network difficulty: {9:0.00000000} block difficulty: {10:0.00} " +
-                                               "Network hashrate: {11:l} ",
+                                               "Daemon network: {5:l} peers: {6} blocks: {7} errors: {8:l} ",
                 Config.Coin.Symbol,
                 Config.Coin.Algorithm,
                 info.Version,
@@ -187,11 +177,22 @@ namespace CoiniumServ.Pools
                 info.WalletVersion,
                 info.Testnet ? "testnet" : "mainnet",
                 info.Connections, info.Blocks,
-                string.IsNullOrEmpty(info.Errors) ? "none" : info.Errors,
-                miningInfo.Difficulty,
-                miningInfo.Difficulty * _hashAlgorithm.Multiplier,
-                miningInfo.NetworkHashps.GetReadableHashrate()
-                );                
+                string.IsNullOrEmpty(info.Errors) ? "none" : info.Errors);
+
+            try
+            {
+                // try reading mininginfo(), some coins may not support it.
+                var miningInfo = _daemonClient.GetMiningInfo();
+
+                _logger.Information("Network difficulty: {0:0.00000000} block difficulty: {1:0.00} Network hashrate: {2:l} ",
+                    miningInfo.Difficulty,
+                    miningInfo.Difficulty*_hashAlgorithm.Multiplier,
+                    miningInfo.NetworkHashps.GetReadableHashrate());
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Can not read mininginfo() as coin daemon doesn't support it");
+            }
         }
 
         public void Start()

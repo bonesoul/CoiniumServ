@@ -93,7 +93,6 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="connection"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
-        /// <param name="logManager"></param>
         public StratumMiner(int id, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager)
         {
             Id = id; // the id of the miner.

@@ -32,6 +32,7 @@ namespace CoiniumServ.Miners
         /// </summary>
         bool ValidateUsername { get; }
 
+        // todo: need to utilize this!
         /// <summary>
         /// timeout in seconds to disconnect miners that did not submit any shares for the period.
         /// </summary>

@@ -43,12 +43,15 @@ namespace CoiniumServ.Miners
 
         private int _counter = 0; // counter for assigining unique id's to miners.
 
+        private readonly IMinerConfig _config;
+
         private readonly IDaemonClient _daemonClient;
 
         private readonly ILogger _logger;        
 
         public MinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient)
         {
+            _config = poolConfig.Miner;
             _daemonClient = daemonClient;
             _miners = new Dictionary<int, IMiner>();
             _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);
@@ -98,10 +101,13 @@ namespace CoiniumServ.Miners
 
         public void Authenticate(IMiner miner)
         {
-            miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid;
+            if (_config.ValidateUsername) // should we validate miner username?
+                miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
+            else
+                miner.Authenticated = true; // else just accept him.
 
             _logger.Information(
-                miner.Authenticated ? "Authenticated miner: {0:l} [{1:l}]" : "Unauthenticated miner: {0:l} [{1:l}]",
+                miner.Authenticated ? "Authenticated miner: {0:l} [{1:l}]" : "Miner authentication failed: {0:l} [{1:l}]",
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 
             if (!miner.Authenticated) 
