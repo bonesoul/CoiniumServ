@@ -72,7 +72,7 @@ namespace CoiniumServ
             if (!configManager.ConfigExists)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Couldn't read config/config.json! Make sure you rename config/config-sample.json as config/config.json.");
+                Console.WriteLine("Couldn't read config/config.json! Make sure you rename config/config-example.json as config/config.json.");
                 Console.ResetColor();
                 return;
             }
