@@ -430,10 +430,10 @@ namespace CoiniumServ.Persistance.Redis
             var options = new ConfigurationOptions()
             {
                 AllowAdmin = true,
-                ConnectTimeout = 1000
+                ConnectTimeout = 1000,
+                ResolveDns = true
             };
 			            
-            //var endpoint = new IPEndPoint(ipAddress, _redisConfig.Port);
 			var endpoint = new DnsEndPoint (_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork);
 
             options.EndPoints.Add(endpoint);
