@@ -33,6 +33,8 @@ You can contribute the development of the project by donating;
 * DOGE: `DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr`
 * RDD: `Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr`
 
+If you would like to automatically donate a percentage of your pool's earning to support the project, check the [donation setup](https://github.com/CoiniumServ/CoiniumServ/wiki/Donation) guide.
+
 ###### Donors
 
 Here is a list of our generous donors that keep the project ongoing;
