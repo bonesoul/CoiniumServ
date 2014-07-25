@@ -17,6 +17,9 @@
     # stats: 
     # updateInterval: interval for recaching statistics.
     # hashrateWindow: how many seconds worth of shares should be gathered to generate hashrate.
+    # backend: 
+    # enabled: set this true to enable admin backend.
+    # password: password for enabling administrator 
 
     # website configuration
 	"website": {
@@ -24,8 +27,12 @@
 		"bind": "127.0.0.1",
 		"port": 80,
         "stats": {
-            "updateInterval": 1,
+            "updateInterval": 60,
             "hashrateWindow": 300
+        },
+        "backend" : {
+            "password": "your-password-here",
+            "metrics": true
         }
 	},
 

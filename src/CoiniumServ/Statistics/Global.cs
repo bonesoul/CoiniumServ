@@ -23,6 +23,7 @@
 
 using System;
 using System.Dynamic;
+using Metrics;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Statistics
@@ -37,12 +38,15 @@ namespace CoiniumServ.Statistics
         private readonly IPools _pools;
         private readonly IAlgorithms _algorithms;
 
-
         public Global(IPools pools, IAlgorithms algorithms)
         {
             _pools = pools;
             _algorithms = algorithms;
             _response = new ExpandoObject();
+
+            // add metrics
+            Metric.Gauge("global-workers", () => WorkerCount, Unit.Items);
+            Metric.Gauge("global-hashrate", () => Hashrate, Unit.Custom("hashes"));
         }
 
         public void Recache(object state)

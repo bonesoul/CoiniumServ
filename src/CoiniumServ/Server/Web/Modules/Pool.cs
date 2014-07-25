@@ -38,7 +38,6 @@ namespace CoiniumServ.Server.Web.Modules
                 if (pool != null)
                     return View["pool", pool];
 
-
                 var error = new Error
                 {
                     Summary = "Pool not found",

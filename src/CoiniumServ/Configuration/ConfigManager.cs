@@ -64,22 +64,24 @@ namespace CoiniumServ.Configuration
             _coinConfigs =  new Dictionary<string, ICoinConfig>();
 
             PoolConfigs = new List<IPoolConfig>();
+
+            if(_globalConfigData == null)
+                return;
+
             LogConfig = new LogConfig(_globalConfigData.logging);
             WebServerConfig = new WebServerConfig(_globalConfigData.website);
             StackConfig = new StackConfig(_globalConfigData.stack);
-
             // TODO: implement metrics config.
         }
 
         public void Initialize()
         {
-            _logger = Log.ForContext<ConfigManager>();
-
             LoadPoolConfigs();
         }
 
         private void LoadPoolConfigs()
         {
+            _logger = Log.ForContext<ConfigManager>();
             _logger.Debug("Discovering enabled pool configs..");
 
             var files = FileHelpers.GetFilesByExtensionRecursive(PoolConfigRoot, ".json");

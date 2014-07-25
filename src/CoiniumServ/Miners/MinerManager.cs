@@ -30,6 +30,7 @@ using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Vanilla;
+using Metrics;
 using Serilog;
 
 namespace CoiniumServ.Miners
@@ -58,7 +59,10 @@ namespace CoiniumServ.Miners
             _metaConfig = poolConfig.Meta;
             _daemonClient = daemonClient;
             _miners = new Dictionary<int, IMiner>();
-            _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);            
+
+            // add metrics
+            Metric.Gauge(string.Format("{0}-workers", poolConfig.Coin.Name.ToLower()), () => Miners.Count, Unit.Items);
         }
 
         public IMiner GetMiner(Int32 id)
