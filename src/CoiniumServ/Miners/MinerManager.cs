@@ -59,10 +59,7 @@ namespace CoiniumServ.Miners
             _metaConfig = poolConfig.Meta;
             _daemonClient = daemonClient;
             _miners = new Dictionary<int, IMiner>();
-            _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);            
-
-            // add metrics
-            Metric.Gauge(string.Format("{0}-workers", poolConfig.Coin.Name.ToLower()), () => Miners.Count, Unit.Items);
+            _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         public IMiner GetMiner(Int32 id)

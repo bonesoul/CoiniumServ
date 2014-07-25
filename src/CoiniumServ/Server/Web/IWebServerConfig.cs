@@ -42,5 +42,7 @@ namespace CoiniumServ.Server.Web
         Int32 Port { get; }
 
         IStatisticsConfig Statistics { get; }
+
+        IBackendConfig Backend { get; }
     }
 }

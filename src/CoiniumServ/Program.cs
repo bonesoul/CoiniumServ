@@ -89,23 +89,15 @@ namespace CoiniumServ
             // initialize config manager.
             configManager.Initialize();
 
-            // todo: move to it's own class
             // initialize metrics support    
-            Metric.Config
-                .WithReporting(c => c
-                    .WithTextFileReport(string.Format(@"{0}\\logs\\metrics\\report.log", FileHelpers.AssemblyRoot), TimeSpan.FromSeconds(60))
-                    .WithCSVReports(string.Format(@"{0}\\logs\\metrics\\csv", FileHelpers.AssemblyRoot), TimeSpan.FromSeconds(1)))
-                    .WithErrorHandler(exception => _logger.Error("Metrics error: {0}", exception.Message));
-
-            if (PlatformManager.Framework == Frameworks.DotNet)
-                Metric.Config.WithAllCounters(); // there is a still unresolved bug with mono borking with system.security.claimsidentity.
+            objectFactory.GetMetricsManager();
 
             // start pool manager.
             var poolManager = objectFactory.GetPoolManager();
             poolManager.Run();
 
             // start web server.
-            var webServer = objectFactory.GetWebServer();
+            objectFactory.GetWebServer();
 
             while (true) // idle loop & command parser
             {

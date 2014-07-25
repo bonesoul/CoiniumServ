@@ -22,12 +22,12 @@
 #endregion
 
 using CoiniumServ.Banning;
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
+using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
@@ -310,6 +310,11 @@ namespace CoiniumServ.Factories
         public ILogManager GetLogManager()
         {
             return _applicationContext.Container.Resolve<ILogManager>();
+        }
+
+        public IMetricsManager GetMetricsManager()
+        {
+            return _applicationContext.Container.Resolve<IMetricsManager>();
         }
 
         #endregion

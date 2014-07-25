@@ -136,6 +136,8 @@
     <Compile Include="Banning\BanConfig.cs" />
     <Compile Include="Banning\IBanConfig.cs" />
     <Compile Include="Jobs\Manager\IJobConfig.cs" />
+    <Compile Include="Metrics\IMetricsManager.cs" />
+    <Compile Include="Metrics\MetricsManager.cs" />
     <Compile Include="Miners\IMetaConfig.cs" />
     <Compile Include="Miners\IMinerConfig.cs" />
     <Compile Include="Miners\MetaConfig.cs" />
@@ -147,6 +149,8 @@
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
     <Compile Include="Payments\WalletConfig.cs" />
+    <Compile Include="Server\Web\IBackendConfig.cs" />
+    <Compile Include="Server\Web\Modules\BackendConfig.cs" />
     <Compile Include="Server\Web\Modules\Donate.cs" />
     <Compile Include="Statistics\Blocks.cs" />
     <Compile Include="Statistics\IBlocks.cs" />

@@ -21,27 +21,12 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
-using CoiniumServ.Logging;
-using CoiniumServ.Pools.Config;
-using CoiniumServ.Server.Web;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Server.Web
 {
-    /// <summary>
-    /// Configuration factory that handles configs.
-    /// </summary>
-    public interface IConfigFactory
+    public interface IBackendConfig : IConfig
     {
-        IConfigManager GetConfigManager();
-
-        #region per-pool configs
-
-        IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
-
-        ICoinConfig GetCoinConfig(dynamic config);
-
-        #endregion
+        bool MetricsEnabled { get; }
     }
 }

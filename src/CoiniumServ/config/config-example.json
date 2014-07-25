@@ -3,6 +3,8 @@
     # Stack Configuration
     # -------------------------------
 
+    # name:  name of the pool stack.
+
     "stack": {
         "name": "CoiniumServ.com"
     },
@@ -31,8 +33,9 @@
             "hashrateWindow": 300
         },
         "backend" : {
-            "password": "your-password-here",
-            "metrics": true
+            "metrics": {
+                "enabled": false
+            }
         }
 	},
 

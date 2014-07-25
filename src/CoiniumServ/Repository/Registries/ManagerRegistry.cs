@@ -24,6 +24,8 @@
 using CoiniumServ.Banning;
 using CoiniumServ.Configuration;
 using CoiniumServ.Jobs.Manager;
+using CoiniumServ.Logging;
+using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
 using CoiniumServ.Repository.Context;
@@ -51,6 +53,8 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IVardiffManager, VardiffManager>().AsMultiInstance();
             _applicationContext.Container.Register<IBanManager, BanManager>().AsMultiInstance();
             _applicationContext.Container.Register<IConfigManager, ConfigManager>().AsSingleton();
+            _applicationContext.Container.Register<ILogManager, LogManager>().AsSingleton();
+            _applicationContext.Container.Register<IMetricsManager, MetricsManager>().AsSingleton();
         }
     }
 }

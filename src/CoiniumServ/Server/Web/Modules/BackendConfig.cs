@@ -21,27 +21,30 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Configuration;
-using CoiniumServ.Logging;
-using CoiniumServ.Pools.Config;
-using CoiniumServ.Server.Web;
+using System;
+using Serilog;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Server.Web.Modules
 {
-    /// <summary>
-    /// Configuration factory that handles configs.
-    /// </summary>
-    public interface IConfigFactory
+    public class BackendConfig: IBackendConfig
     {
-        IConfigManager GetConfigManager();
+        public bool Valid { get; private set; }
+        public bool MetricsEnabled { get; private set; }
 
-        #region per-pool configs
+        public BackendConfig(dynamic config)
+        {
+            try
+            {
+                // load the config data.
+                MetricsEnabled = config.metrics.enabled;
 
-        IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
-
-        ICoinConfig GetCoinConfig(dynamic config);
-
-        #endregion
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<BackendConfig>().Error(e, "Error loading backend configuration");
+            }
+        }
     }
 }
