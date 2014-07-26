@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Management.Instrumentation;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Factories;
 using CoiniumServ.Logging;
@@ -37,11 +38,9 @@ namespace CoiniumServ.Configuration
 {
     public class ConfigManager:IConfigManager
     {
-        public bool ConfigExists { get { return _globalConfigData != null; } }
         public IWebServerConfig WebServerConfig { get; private set; }
         public ILogConfig LogConfig { get; private set; }
         public IStackConfig StackConfig { get; private set; }
-
         public List<IPoolConfig> PoolConfigs { get; private set; }
 
         private const string GlobalConfigFilename = "config/config.json"; // global config filename.
@@ -50,7 +49,6 @@ namespace CoiniumServ.Configuration
 
         private readonly Dictionary<string, ICoinConfig> _coinConfigs; // cache for loaded coin configs. 
 
-        private readonly dynamic _globalConfigData; // global config data.
         private dynamic _defaultPoolConfig;
         private readonly IConfigFactory _configFactory;
 
@@ -60,18 +58,28 @@ namespace CoiniumServ.Configuration
         {
             _configFactory = configFactory;
 
-            _globalConfigData = JsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
-            _coinConfigs =  new Dictionary<string, ICoinConfig>();
+            _coinConfigs = new Dictionary<string, ICoinConfig>(); // dictionary of coin configurations.
+            PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
 
-            PoolConfigs = new List<IPoolConfig>();
+            ReadGlobalConfig();
+        }
 
-            if(_globalConfigData == null)
-                return;
+        private void ReadGlobalConfig()
+        {
+            var data = JsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
 
-            LogConfig = new LogConfig(_globalConfigData.logging);
-            WebServerConfig = new WebServerConfig(_globalConfigData.website);
-            StackConfig = new StackConfig(_globalConfigData.stack);
-            // TODO: implement metrics config.
+            if (data == null) // make sure it exists, else gracefully exists
+            {                
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Couldn't read config/config.json! Make sure you rename config/config-example.json as config/config.json.");
+                Console.ResetColor();
+
+                Environment.Exit(-1);
+            }
+
+            LogConfig = new LogConfig(data.logging);
+            WebServerConfig = new WebServerConfig(data.website);
+            StackConfig = new StackConfig(data.stack);
         }
 
         public void Initialize()
