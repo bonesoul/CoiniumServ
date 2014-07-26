@@ -23,6 +23,7 @@
 
 using System;
 using System.Net;
+using System.Net.Sockets;
 using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
 using Serilog;
@@ -71,14 +72,17 @@ namespace CoiniumServ.Networking.Server.Http.Web
                 host.Start();
                 IsListening = true;
             }
-            catch (InvalidOperationException e) // nancy requires elevated privileges to run on port 80.
-            {
-                _logger.Error("Need elevated privileges to listen on port {0}. Try running as administrator or root.", Port);
+            catch (InvalidOperationException) { // nancy requires elevated privileges to run on port well known ports - thrown when we are on Windows.
+                _logger.Error("Need elevated privileges to listen on port {0}. Try running as administrator.", Port);
                 IsListening = false;
                 return false;                
             }
-            catch (HttpListenerException e)
-            {
+			catch(SocketException) { // nancy requires elevated privileges to run on port well known ports - thrown when we are on mono.
+				_logger.Error("Need elevated privileges to listen on port {0}. Try running as root.", Port);
+				IsListening = false;
+				return false;  
+			}
+            catch (HttpListenerException) {
                 _logger.Error("Can not listen on requested interface: {0:l}",BindIP);
                 IsListening = false;
                 return false;
