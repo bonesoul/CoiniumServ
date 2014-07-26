@@ -46,8 +46,6 @@ namespace CoiniumServ.Configuration
         private const string PoolConfigRoot = "config/pools"; // root of pool configs.
         private const string CoinConfigRoot = "config/coins"; // root of pool configs.
 
-        private readonly Dictionary<string, ICoinConfig> _coinConfigs; // cache for loaded coin configs. 
-
         private dynamic _defaultPoolConfig;
 
         private readonly IConfigFactory _configFactory;
@@ -58,7 +56,6 @@ namespace CoiniumServ.Configuration
         {
             _configFactory = configFactory;
 
-            _coinConfigs = new Dictionary<string, ICoinConfig>(); // dictionary of coin configurations.
             PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
 
             ReadGlobalConfig(); // read the global config.
@@ -112,6 +109,12 @@ namespace CoiniumServ.Configuration
                 var coinName = Path.GetFileNameWithoutExtension(data.coin);
                 var coinConfig = GetCoinConfig(coinName);
 
+                if (!coinConfig.Valid)
+                {
+                    _logger.Error("coins/{0:l}.json doesnt't contain a valid configuration, skipping pool configuration: pools/{1:l}.json", coinName, filename);
+                    continue;
+                }
+
                 if(_defaultPoolConfig != null)
                     data = JsonConfig.Merger.Merge(data, _defaultPoolConfig); // if we do have a default.json config, merge with it.
 
@@ -124,16 +127,11 @@ namespace CoiniumServ.Configuration
 
         private ICoinConfig GetCoinConfig(string name)
         {
-            if (!_coinConfigs.ContainsKey(name))
-            {
-                var fileName = string.Format("{0}/{1}.json", CoinConfigRoot, name);
-                var data = JsonConfigReader.Read(fileName);
-                var coinConfig = _configFactory.GetCoinConfig(data);
+            var fileName = string.Format("{0}/{1}.json", CoinConfigRoot, name);
+            var data = JsonConfigReader.Read(fileName);
+            var coinConfig = _configFactory.GetCoinConfig(data);
 
-                _coinConfigs.Add(name, coinConfig);
-            }
-
-            return _coinConfigs[name];            
+            return coinConfig;
         }
     }
 }
