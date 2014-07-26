@@ -67,12 +67,11 @@ namespace CoiniumServ
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
-            // check if we have a valid config file.
+            // load the config-manager.
             var configManager = configFactory.GetConfigManager();
 
-            // initialize log-manager.
-            var logManager = objectFactory.GetLogManager();
-            logManager.Initialize();
+            // initialize log-manager as we'll need it below.
+            objectFactory.GetLogManager();
 
             // print a version banner.
             _logger = Log.ForContext<Program>();

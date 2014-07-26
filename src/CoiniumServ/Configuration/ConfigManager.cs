@@ -25,7 +25,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Management.Instrumentation;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Factories;
 using CoiniumServ.Logging;
@@ -50,6 +49,7 @@ namespace CoiniumServ.Configuration
         private readonly Dictionary<string, ICoinConfig> _coinConfigs; // cache for loaded coin configs. 
 
         private dynamic _defaultPoolConfig;
+
         private readonly IConfigFactory _configFactory;
 
         private ILogger _logger;
@@ -61,7 +61,7 @@ namespace CoiniumServ.Configuration
             _coinConfigs = new Dictionary<string, ICoinConfig>(); // dictionary of coin configurations.
             PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
 
-            ReadGlobalConfig();
+            ReadGlobalConfig(); // read the global config.
         }
 
         private void ReadGlobalConfig()
@@ -77,9 +77,9 @@ namespace CoiniumServ.Configuration
                 Environment.Exit(-1);
             }
 
-            LogConfig = new LogConfig(data.logging);
-            WebServerConfig = new WebServerConfig(data.website);
             StackConfig = new StackConfig(data.stack);
+            WebServerConfig = new WebServerConfig(data.website);
+            LogConfig = new LogConfig(data.logging);
         }
 
         public void Initialize()

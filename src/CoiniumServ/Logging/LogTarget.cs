@@ -41,8 +41,6 @@ namespace CoiniumServ.Logging
             try
             {
                 Enabled = config.enabled;
-                Filename = config.filename;
-                Rolling = config.rolling;
 
                 switch ((string) config.type)
                 {
@@ -77,6 +75,12 @@ namespace CoiniumServ.Logging
                     case "fatal":
                         Level = LogEventLevel.Fatal;
                         break;
+                }
+
+                if (Type == LogTargetType.File || Type == LogTargetType.Packet)
+                {
+                    Filename = config.filename;
+                    Rolling = config.rolling;
                 }
 
                 Valid = true;

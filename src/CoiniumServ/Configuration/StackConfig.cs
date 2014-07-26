@@ -35,11 +35,8 @@ namespace CoiniumServ.Configuration
         {
             try
             {
-                // set the defaults;
-                Name = "CoiniumServ.com";
-
                 // load the config data.
-                Name = config.name;
+                Name = string.IsNullOrEmpty(config.name) ? "CoiniumServ.com" : config.name;
 
                 Valid = true;
             }

@@ -40,14 +40,10 @@ namespace CoiniumServ.Server.Web
         {
             try
             {
-                // set the defaults;
-                BindInterface = "127.0.0.1";
-                Port = 80;
-
                 // load the config data.
                 Enabled = config.enabled;
-                BindInterface = config.bind;
-                Port = config.port;
+                BindInterface = string.IsNullOrEmpty(config.bind) ? "127.0.0.1" : config.bind;
+                Port = config.port == 0 ? 80 : config.port;
                 Statistics = new StatisticsConfig(config.stats);
                 Backend = new BackendConfig(config.backend);
 

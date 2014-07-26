@@ -39,7 +39,7 @@ namespace CoiniumServ.Server.Web
         /// <summary>
         /// port to listen for http connections.
         /// </summary>
-        Int32 Port { get; }
+        int Port { get; }
 
         IStatisticsConfig Statistics { get; }
 
