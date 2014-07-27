@@ -37,21 +37,17 @@ namespace CoiniumServ.Configuration
 {
     public class ConfigManager:IConfigManager
     {
-        public bool ConfigExists { get { return _globalConfigData != null; } }
         public IWebServerConfig WebServerConfig { get; private set; }
         public ILogConfig LogConfig { get; private set; }
         public IStackConfig StackConfig { get; private set; }
-
         public List<IPoolConfig> PoolConfigs { get; private set; }
 
         private const string GlobalConfigFilename = "config/config.json"; // global config filename.
         private const string PoolConfigRoot = "config/pools"; // root of pool configs.
         private const string CoinConfigRoot = "config/coins"; // root of pool configs.
 
-        private readonly Dictionary<string, ICoinConfig> _coinConfigs; // cache for loaded coin configs. 
-
-        private readonly dynamic _globalConfigData; // global config data.
         private dynamic _defaultPoolConfig;
+
         private readonly IConfigFactory _configFactory;
 
         private ILogger _logger;
@@ -60,18 +56,27 @@ namespace CoiniumServ.Configuration
         {
             _configFactory = configFactory;
 
-            _globalConfigData = JsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
-            _coinConfigs =  new Dictionary<string, ICoinConfig>();
+            PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
 
-            PoolConfigs = new List<IPoolConfig>();
+            ReadGlobalConfig(); // read the global config.
+        }
 
-            if(_globalConfigData == null)
-                return;
+        private void ReadGlobalConfig()
+        {
+            var data = JsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
 
-            LogConfig = new LogConfig(_globalConfigData.logging);
-            WebServerConfig = new WebServerConfig(_globalConfigData.website);
-            StackConfig = new StackConfig(_globalConfigData.stack);
-            // TODO: implement metrics config.
+            if (data == null) // make sure it exists, else gracefully exists
+            {                
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Couldn't read config/config.json! Make sure you rename config/config-example.json as config/config.json.");
+                Console.ResetColor();
+
+                Environment.Exit(-1);
+            }
+
+            StackConfig = new StackConfig(data.stack);
+            WebServerConfig = new WebServerConfig(data.website);
+            LogConfig = new LogConfig(data.logging);
         }
 
         public void Initialize()
@@ -104,6 +109,12 @@ namespace CoiniumServ.Configuration
                 var coinName = Path.GetFileNameWithoutExtension(data.coin);
                 var coinConfig = GetCoinConfig(coinName);
 
+                if (!coinConfig.Valid)
+                {
+                    _logger.Error("coins/{0:l}.json doesnt't contain a valid configuration, skipping pool configuration: pools/{1:l}.json", coinName, filename);
+                    continue;
+                }
+
                 if(_defaultPoolConfig != null)
                     data = JsonConfig.Merger.Merge(data, _defaultPoolConfig); // if we do have a default.json config, merge with it.
 
@@ -116,16 +127,11 @@ namespace CoiniumServ.Configuration
 
         private ICoinConfig GetCoinConfig(string name)
         {
-            if (!_coinConfigs.ContainsKey(name))
-            {
-                var fileName = string.Format("{0}/{1}.json", CoinConfigRoot, name);
-                var data = JsonConfigReader.Read(fileName);
-                var coinConfig = _configFactory.GetCoinConfig(data);
+            var fileName = string.Format("{0}/{1}.json", CoinConfigRoot, name);
+            var data = JsonConfigReader.Read(fileName);
+            var coinConfig = _configFactory.GetCoinConfig(data);
 
-                _coinConfigs.Add(name, coinConfig);
-            }
-
-            return _coinConfigs[name];            
+            return coinConfig;
         }
     }
 }

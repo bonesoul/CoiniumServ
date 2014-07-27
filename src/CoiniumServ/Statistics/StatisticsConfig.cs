@@ -36,13 +36,9 @@ namespace CoiniumServ.Statistics
         {
             try
             {
-                // set the defaults;
-                UpdateInterval = 60;
-                HashrateWindow = 300;
-
                 // load the config data.
-                UpdateInterval = config.updateInterval;
-                HashrateWindow = config.hashrateWindow;
+                UpdateInterval = config.updateInterval == 0 ? 60 : config.updateInterval;
+                HashrateWindow = config.hashrateWindow == 0 ? 300 : config.hashrateWindow;
 
                 Valid = true;
             }

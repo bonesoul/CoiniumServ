@@ -21,28 +21,10 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Configuration;
-using CoiniumServ.Statistics;
-
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Metrics
 {
-    public interface IWebServerConfig:IConfig
+    public interface IMetricsManager
     {
-        bool Enabled { get; }
 
-        /// <summary>
-        /// interface to bind webserver.
-        /// </summary>
-        string BindInterface { get; }
-
-        /// <summary>
-        /// port to listen for http connections.
-        /// </summary>
-        int Port { get; }
-
-        IStatisticsConfig Statistics { get; }
-
-        IBackendConfig Backend { get; }
     }
 }

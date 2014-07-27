@@ -30,8 +30,6 @@ namespace CoiniumServ.Configuration
 {
     public interface IConfigManager
     {
-        bool ConfigExists { get; }
-
         IWebServerConfig WebServerConfig { get; }
 
         ILogConfig LogConfig { get; }

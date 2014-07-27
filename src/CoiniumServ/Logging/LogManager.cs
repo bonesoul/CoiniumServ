@@ -44,9 +44,11 @@ namespace CoiniumServ.Logging
         public LogManager(IConfigManager configManager)
         {
             _config = configManager.LogConfig;
+
+            Initialize();
         }
 
-        public void Initialize()
+        private void Initialize()
         {
             // read the root folder for logs.
             _rootFolder = !string.IsNullOrEmpty(_config.Root) ? _config.Root : "logs";

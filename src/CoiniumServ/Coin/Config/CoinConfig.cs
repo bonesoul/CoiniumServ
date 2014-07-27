@@ -43,7 +43,10 @@ namespace CoiniumServ.Coin.Config
                 Algorithm = config.algorithm;
                 Options = config;
 
-                Valid = true;
+                if (Name == null || Symbol == null || Algorithm == null)
+                    Valid = false;
+                else
+                    Valid = true;
             }
             catch (Exception e)
             {

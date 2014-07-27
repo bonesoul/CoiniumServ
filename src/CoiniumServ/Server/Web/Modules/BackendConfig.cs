@@ -22,27 +22,29 @@
 #endregion
 
 using System;
-using CoiniumServ.Configuration;
-using CoiniumServ.Statistics;
+using Serilog;
 
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Server.Web.Modules
 {
-    public interface IWebServerConfig:IConfig
+    public class BackendConfig: IBackendConfig
     {
-        bool Enabled { get; }
+        public bool Valid { get; private set; }
+        public bool MetricsEnabled { get; private set; }
 
-        /// <summary>
-        /// interface to bind webserver.
-        /// </summary>
-        string BindInterface { get; }
+        public BackendConfig(dynamic config)
+        {
+            try
+            {
+                // load the config data.
+                MetricsEnabled = config.metrics.enabled;
 
-        /// <summary>
-        /// port to listen for http connections.
-        /// </summary>
-        int Port { get; }
-
-        IStatisticsConfig Statistics { get; }
-
-        IBackendConfig Backend { get; }
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<BackendConfig>().Error(e, "Error loading backend configuration");
+            }
+        }
     }
 }

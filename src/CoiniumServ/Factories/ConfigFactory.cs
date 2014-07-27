@@ -23,8 +23,10 @@
 
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
+using CoiniumServ.Logging;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
+using CoiniumServ.Server.Web;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Factories

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using Serilog;
 
 namespace CoiniumServ.Logging
@@ -37,12 +38,18 @@ namespace CoiniumServ.Logging
         {
             try
             {
-                Root = config.root;
+                Root = string.IsNullOrEmpty(config.root) ? "logs" : config.root;
 
                 Targets = new List<ILogTarget>();
-                foreach (var target in config.targets)
+
+                if (config.targets is JsonConfig.NullExceptionPreventer)
+                    AddDefaults(); // if we don't have any targets defined, setup a few default ones.
+                else
                 {
-                    Targets.Add(new LogTarget(target));
+                    foreach (var target in config.targets)
+                    {
+                        Targets.Add(new LogTarget(target));
+                    }
                 }
 
                 Valid = true;
@@ -52,6 +59,24 @@ namespace CoiniumServ.Logging
                 Valid = false;
                 Log.Logger.ForContext<LogConfig>().Error(e, "Error loading logging configuration");
             }
+        }
+
+        private void AddDefaults()
+        {
+            dynamic consoleLog = new ExpandoObject();
+            consoleLog.enabled = true;
+            consoleLog.type = "console";
+            consoleLog.level = "debug";
+
+            dynamic serverLog = new ExpandoObject();
+            serverLog.enabled = true;
+            serverLog.type = "file";
+            serverLog.filename = "server.log";
+            serverLog.level = "information";
+            serverLog.rolling = false;
+
+            Targets.Add(new LogTarget(consoleLog));
+            Targets.Add(new LogTarget(serverLog));
         }
     }
 }

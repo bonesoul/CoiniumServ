@@ -22,6 +22,7 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
+using CoiniumServ.Configuration;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
@@ -32,6 +33,7 @@ using CoiniumServ.Persistance.Redis;
 using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
+using CoiniumServ.Server.Web;
 using CoiniumServ.Statistics;
 using Nancy.Bootstrapper;
 
@@ -62,7 +64,6 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();
             _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
             _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
-            _applicationContext.Container.Register<ILogManager, LogManager>().AsSingleton();
             _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();
         }
     }

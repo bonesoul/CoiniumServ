@@ -461,7 +461,7 @@ namespace CoiniumServ.Persistance.Redis
             }
             catch (Exception e)
             {
-				_logger.Error("Storage initialization failed: {0:l}:{1} - {2}.", endpoint.Host, endpoint.Port, e.InnerException.Message);
+				_logger.Error("Storage initialization failed: {0:l}:{1} - {2:l}.", endpoint.Host, endpoint.Port, e.InnerException.Message);
             }
         }
 

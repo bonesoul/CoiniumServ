@@ -24,7 +24,5 @@
 namespace CoiniumServ.Logging
 {
     public interface ILogManager
-    {
-        void Initialize();
-    }
+    { }
 }
