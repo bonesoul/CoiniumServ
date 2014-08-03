@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -427,30 +428,32 @@ namespace CoiniumServ.Persistance.Redis
 
         private void Initialize()
         {
+            var endpoint = new DnsEndPoint(_redisConfig.Host, _redisConfig.Port,AddressFamily.InterNetwork);
+
             var options = new ConfigurationOptions()
             {
                 AllowAdmin = true,
-                ConnectTimeout = 1000,
-                ResolveDns = true
+                ConnectTimeout = 5000,
+                ResolveDns = true,
+                EndPoints = { endpoint }
             };
 			            
-			var endpoint = new DnsEndPoint (_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork);
-
-            options.EndPoints.Add(endpoint);
 
             if (!string.IsNullOrEmpty(_redisConfig.Password))
                 options.Password = _redisConfig.Password;
 
+            var connectionLog = new StringWriter();
+
             try
             {
                 // create the connection
-                _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options).Result;
+                _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options, connectionLog).Result;
 
                 // access to database.
                 _database = _connectionMultiplexer.GetDatabase(_redisConfig.DatabaseId);
 
                 // get the configured server.
-                _server = _connectionMultiplexer.GetServer(endpoint);
+                _server = _connectionMultiplexer.GetServer(_connectionMultiplexer.GetEndPoints().First());
 
                 // check the version
                 var version = GetVersion();
@@ -461,7 +464,7 @@ namespace CoiniumServ.Persistance.Redis
             }
             catch (Exception e)
             {
-				_logger.Error("Storage initialization failed: {0:l}:{1} - {2:l}.", endpoint.Host, endpoint.Port, e.InnerException.Message);
+                _logger.Error("Storage initialization failed: {0:l}:{1} - {2:l}\n\r {3:l}", endpoint.Host, endpoint.Port, e.Message, connectionLog);
             }
         }
 
