@@ -21,23 +21,16 @@
 // 
 #endregion
 
-using CoiniumServ.Configuration;
+using System.Collections.Generic;
 using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Modules.Models;
 using CoiniumServ.Statistics;
-using Nancy;
 
-namespace CoiniumServ.Server.Web.Modules
+namespace CoiniumServ.Server.Web.Modules.Models
 {
-    public class IndexModule : NancyModule
+    public class IndexModel
     {
-        public IndexModule(IPoolManager poolManager, IStatistics statistics, IConfigManager configManager)
-        {
-            Get["/"] = _ => View["index", new IndexModel
-            {
-                Pools = poolManager.Pools,
-                Statistics = statistics
-            }];
-        }
+        public IReadOnlyCollection<IPool> Pools { get; set; }
+
+        public IStatistics Statistics { get; set; }
     }
 }

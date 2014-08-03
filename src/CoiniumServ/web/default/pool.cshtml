@@ -1,6 +1,6 @@
 ﻿@using CoiniumServ.Coin.Helpers
 @using CoiniumServ.Persistance.Blocks
-@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Pools.IPool>
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Modules.Models.PoolModel>
 
 @{ Layout = "layout.cshtml"; }
 
@@ -8,36 +8,36 @@
     <div class="col-md-4">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money"></i> @Model.Config.Coin.Name Statistics</h3>
+                <h3 class="panel-title"><i class="fa fa-money"></i> @Model.Pool.Config.Coin.Name Statistics</h3>
             </div>
             <div class="panel-body">
                 <div class="list-group">
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Config.Coin.Symbol</span>
+                        <span class="badge">@Model.Pool.Config.Coin.Symbol</span>
                         <i class="fa fa-calendar"></i> Symbol
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.Hashrate.GetReadableHashrate()</span>
+                        <span class="badge">@Model.Pool.Statistics.Hashrate.GetReadableHashrate()</span>
                         <i class="fa fa-calendar"></i> Hashrate
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.NetworkHashrate.GetReadableHashrate()</span>
+                        <span class="badge">@Model.Pool.Statistics.NetworkHashrate.GetReadableHashrate()</span>
                         <i class="fa fa-calendar"></i> Network Hashrate
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.Difficulty</span>
+                        <span class="badge">@Model.Pool.Statistics.Difficulty</span>
                         <i class="fa fa-calendar"></i> Difficulty
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.WorkerCount</span>
+                        <span class="badge">@Model.Pool.Statistics.WorkerCount</span>
                         <i class="fa fa-calendar"></i> Workers
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Config.Coin.Algorithm</span>
+                        <span class="badge">@Model.Pool.Config.Coin.Algorithm</span>
                         <i class="fa fa-calendar"></i> Algorithm
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.CurrentBlock</span>
+                        <span class="badge">@Model.Pool.Statistics.CurrentBlock</span>
                         <i class="fa fa-calendar"></i> Current Block
                     </a>
                 </div>
@@ -52,19 +52,19 @@
             <div class="panel-body">
                 <div class="list-group">
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.Blocks.Total</span>
+                        <span class="badge">@Model.Pool.Statistics.Blocks.Total</span>
                         <i class="fa fa-refresh"></i> Total
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.Blocks.Pending</span>
+                        <span class="badge">@Model.Pool.Statistics.Blocks.Pending</span>
                         <i class="fa fa-refresh fa-spin"></i> Pending
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.Blocks.Confirmed</span>
+                        <span class="badge">@Model.Pool.Statistics.Blocks.Confirmed</span>
                         <i class="fa fa-check"></i> Confirmed
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Statistics.Blocks.Orphaned</span>
+                        <span class="badge">@Model.Pool.Statistics.Blocks.Orphaned</span>
                         <i class="fa fa-question"></i> Orphaned
                     </a>
                 </div>
@@ -90,7 +90,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var block in Model.Statistics.Blocks.Latest)
+                            @foreach (var block in Model.Pool.Statistics.Blocks.Latest)
                             {
                                 <tr>
                                     <td><a href="https://chain.so/block/LTCTEST/@block.Height" target="_blank">@block.Height</a></td>

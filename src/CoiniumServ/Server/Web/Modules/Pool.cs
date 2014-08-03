@@ -35,16 +35,17 @@ namespace CoiniumServ.Server.Web.Modules
             {
                 var pool = poolManager.GetBySymbol(_.slug);
 
-                if (pool != null)
-                    return View["pool", pool];
+                if (pool == null) // make sure queried pool exists.
+                    return View["error", new ErrorModel
+                    {
+                        Summary = "Pool not found",
+                        Details = string.Format("The request pool does not exist: {0}", _.slug)
+                    }];
 
-                var error = new Error
+                return View["pool", new PoolModel
                 {
-                    Summary = "Pool not found",
-                    Details = string.Format("The request pool does not exist: {0}", _.slug)
-                };
-
-                return View["error", error];
+                    Pool = pool
+                }];
             };
         }
     }
