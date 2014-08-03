@@ -31,7 +31,6 @@ using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Vanilla;
-using Metrics;
 using Serilog;
 
 namespace CoiniumServ.Miners
@@ -78,7 +77,14 @@ namespace CoiniumServ.Miners
 
         public T Create<T>(IPool pool) where T : IVanillaMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, pool, this }); // create an instance of the miner.
+            var @params = new object[]
+            {
+                _counter++,
+                pool,
+                this
+            };
+
+            var instance = Activator.CreateInstance(typeof(T), @params); // create an instance of the miner.
             var miner = (IVanillaMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.
 
@@ -87,7 +93,16 @@ namespace CoiniumServ.Miners
 
         public T Create<T>(UInt32 extraNonce, IConnection connection, IPool pool) where T : IStratumMiner
         {
-            var instance = Activator.CreateInstance(typeof(T), new object[] { _counter++, extraNonce, connection, pool, this });  // create an instance of the miner.
+            var @params = new object[]
+            {
+                _counter++, 
+                extraNonce, 
+                connection, 
+                pool, 
+                this
+            };
+
+            var instance = Activator.CreateInstance(typeof(T), @params);  // create an instance of the miner.
             var miner = (IStratumMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.           
 

@@ -37,7 +37,8 @@ namespace CoiniumServ.Server.Mining.Stratum.Config
 
         public Int32 Port { get; private set; }
 
-        public Int32 Diff { get; private set; }
+        public float Diff { get; private set; }
+
         public IVardiffConfig Vardiff { get; private set; }
 
         public StratumServerConfig(dynamic config)
@@ -48,7 +49,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Config
                 Enabled = config.enabled;
                 BindInterface = string.IsNullOrEmpty(config.bind) ? "0.0.0.0" : config.bind;
                 Port = config.port;
-                Diff = config.diff == 0 ? 16 : config.diff;
+                Diff = config.diff == 0 ? 16 : (float)config.diff;
                 Vardiff = new VardiffConfig(config.vardiff);
 
                 Valid = true;

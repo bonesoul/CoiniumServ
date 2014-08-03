@@ -29,6 +29,7 @@ using CoiniumServ.Logging;
 using CoiniumServ.Miners;
 using CoiniumServ.Networking.Server.Sockets;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Stratum.Config;
 using CoiniumServ.Server.Mining.Stratum.Errors;
 using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Server.Mining.Stratum.Service;
@@ -105,7 +106,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             _minerManager = minerManager;
             Pool = pool;
 
-            Difficulty = 16; // set miner difficulty.
+            Difficulty = pool.Config.Stratum.Diff; // set miner difficulty.
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.

@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System;
 using CoiniumServ.Vardiff;
 
 namespace CoiniumServ.Server.Mining.Stratum.Config
@@ -31,7 +30,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Config
         /// <summary>
         /// default difficulty assigned to newly connected miners.
         /// </summary>
-        Int32 Diff { get; }
+        float Diff { get; }
 
         /// <summary>
         /// vardiff configuration.
