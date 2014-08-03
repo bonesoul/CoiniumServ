@@ -332,14 +332,22 @@ namespace CoiniumServ.Payments
 
         private bool ValidatePoolAddress()
         {
-            var result = _daemonClient.ValidateAddress(_walletConfig.Adress);
+            try
+            {
+                var result = _daemonClient.ValidateAddress(_walletConfig.Adress);
 
-            // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
-            if (result.IsValid && result.IsMine)
-                return true;
+                // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
+                if (result.IsValid && result.IsMine)
+                    return true;
 
-            _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _walletConfig.Adress);
-            return false;
+                _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.",_walletConfig.Adress);
+                return false;
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Halted as we can not connect to configured coin daemon: {0:l}", e.Message);
+                return false;
+            }
         }
 
         private bool DeterminePrecision()

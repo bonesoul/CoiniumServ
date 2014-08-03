@@ -32,7 +32,7 @@ namespace CoiniumServ.Daemon.Exceptions
         public RpcException(string message, Exception innerException) :
             base(message, innerException)
         {
-            Code = Int32.MinValue;
+            Code = 0;
         }
 
         public RpcException(DaemonErrorResponse response) :

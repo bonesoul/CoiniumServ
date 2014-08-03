@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Networking.Server.Sockets;
 using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
@@ -107,7 +108,14 @@ namespace CoiniumServ.Miners
         public void Authenticate(IMiner miner)
         {
             if (_minerConfig.ValidateUsername) // should we validate miner username?
-                miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
+                try
+                {
+                    miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
+                }
+                catch (RpcException e)
+                {
+                    miner.Authenticated = false;
+                }
             else
                 miner.Authenticated = true; // else just accept him.
 

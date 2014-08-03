@@ -27,6 +27,7 @@ using System.Linq;
 using CoiniumServ.Configuration;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Miners;
 using CoiniumServ.Persistance;
 using CoiniumServ.Pools.Config;
@@ -108,10 +109,19 @@ namespace CoiniumServ.Statistics
 
         private void ReadCoinData()
         {
-            var miningInfo = _daemonClient.GetMiningInfo();
-            NetworkHashrate = miningInfo.NetworkHashps;
-            Difficulty = miningInfo.Difficulty;
-            CurrentBlock = miningInfo.Blocks;            
+            try
+            {
+                var miningInfo = _daemonClient.GetMiningInfo();
+                NetworkHashrate = miningInfo.NetworkHashps;
+                Difficulty = miningInfo.Difficulty;
+                CurrentBlock = miningInfo.Blocks;
+            }
+            catch (RpcException e)
+            {
+                NetworkHashrate = 0;
+                Difficulty = 0;
+                CurrentBlock = -1;
+            }
         }
 
         public object GetResponseObject()
