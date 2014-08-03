@@ -433,7 +433,6 @@ namespace CoiniumServ.Persistance.Redis
             var options = new ConfigurationOptions()
             {
                 AllowAdmin = true,
-                ConnectTimeout = 5000,
                 ResolveDns = true,
                 EndPoints = { endpoint }
             };
