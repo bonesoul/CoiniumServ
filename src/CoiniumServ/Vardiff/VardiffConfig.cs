@@ -40,20 +40,13 @@ namespace CoiniumServ.Vardiff
         {
             try
             {
-                // set the defaults;
-                MinimumDifficulty = 8;
-                MaximumDifficulty = 512;
-                TargetTime = 15;
-                RetargetTime = 90;
-                VariancePercent = 30;
-
                 // load the config data.
                 Enabled = config.enabled;
-                MinimumDifficulty = config.minDiff;
-                MaximumDifficulty = config.maxDiff;
-                TargetTime = config.targetTime;
-                RetargetTime = config.retargetTime;
-                VariancePercent = config.variancePercent;
+                MinimumDifficulty = config.minDiff == 0 ? 8: config.minDiff;
+                MaximumDifficulty = config.maxDiff == 0? 512: config.maxDiff;
+                TargetTime = config.targetTime == 0 ? 15 : config.targetTime;
+                RetargetTime = config.retargetTime == 0 ? 90 : config.retargetTime;
+                VariancePercent = config.variancePercent == 0 ? 30 : config.variancePercent;
 
                 Valid = true;
             }

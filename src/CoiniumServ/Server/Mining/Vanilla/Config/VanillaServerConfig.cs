@@ -40,12 +40,9 @@ namespace CoiniumServ.Server.Mining.Vanilla.Config
         {
             try
             {
-                // set the defaults;
-                BindInterface = "0.0.0.0";
-
                // load the config data.
                 Enabled = config.enabled;
-                BindInterface = config.bind;
+                BindInterface = string.IsNullOrEmpty(config.bind) ? "0.0.0.0" : config.bind;
                 Port = config.port;
 
                 Valid = true;

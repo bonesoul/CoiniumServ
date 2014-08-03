@@ -39,17 +39,12 @@ namespace CoiniumServ.Persistance.Redis
         {
             try
             {
-                // set the defaults;
-                Host = "127.0.0.1";
-                Port = 6379;
-                DatabaseId = 0;
-
                 // load the config data.
                 Enabled = config.enabled;
-                Host = config.host;
-                Port = config.port;
+                Host = string.IsNullOrEmpty(config.host) ? "127.0.0.1" : config.host;
+                Port = config.port == 0 ? 6379 : config.port;
                 Password = config.password;
-                DatabaseId = config.databaseId;   
+                DatabaseId = config.databaseId;
             }
             catch (Exception e)
             {

@@ -44,14 +44,11 @@ namespace CoiniumServ.Server.Mining.Stratum.Config
         {
             try
             {
-                // set the defaults;
-                BindInterface = "0.0.0.0";
-
                 // load the config data.
                 Enabled = config.enabled;
-                BindInterface = config.bind;
+                BindInterface = string.IsNullOrEmpty(config.bind) ? "0.0.0.0" : config.bind;
                 Port = config.port;
-                Diff = config.diff;
+                Diff = config.diff == 0 ? 16 : config.diff;
                 Vardiff = new VardiffConfig(config.vardiff);
 
                 Valid = true;

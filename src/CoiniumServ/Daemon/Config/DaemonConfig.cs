@@ -42,11 +42,8 @@ namespace CoiniumServ.Daemon.Config
         {
             try
             {
-                // set the defaults;
-                Host = "0.0.0.0";
-
                 // load the config data.
-                Host = config.host;
+                Host = string.IsNullOrEmpty(config.host) ? "0.0.0.0" : config.host;
                 Port = config.port;
                 Username = config.username;
                 Password = config.password;

@@ -37,14 +37,10 @@ namespace CoiniumServ.Payments
         {
             try
             {
-                // set the defaults;
-                Interval = 60;
-                Minimum = 0.01;
-
                 // load the config data.
                 Enabled = config.enabled;
-                Interval = config.interval;
-                Minimum = config.minimum;
+                Interval = config.interval == 0 ? 60 : config.interval;
+                Minimum = config.minimum == 0 ? 0.01 : config.minimum;
 
                 Valid = true;
             }

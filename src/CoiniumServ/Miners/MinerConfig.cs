@@ -36,13 +36,9 @@ namespace CoiniumServ.Miners
         {
             try
             {
-                // set the defaults;
-                ValidateUsername = true;
-                Timeout = 300;
-
                 // load the config data.
                 ValidateUsername = config.validateUsername;
-                Timeout = config.timeout;
+                Timeout = config.timeout == 0 ? 300 : config.timeout;
 
                 Valid = true;
             }
