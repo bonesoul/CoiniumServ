@@ -139,7 +139,7 @@ namespace CoiniumServ.Daemon
             }
             catch (WebException exception)
             {
-                throw new RpcException("An unknown web exception occured while trying to send the JSON request.", exception);
+                throw new RpcException(string.Format("json-rpc exception: {0}", exception.Message), exception);
             }
 
             return webRequest;

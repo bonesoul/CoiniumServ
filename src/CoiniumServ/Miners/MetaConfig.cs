@@ -35,11 +35,10 @@ namespace CoiniumServ.Miners
         {
             try
             {
-                // set the defaults;
-                MOTD = "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com";
-
                 // load the config data.
-                MOTD = config.motd;
+                MOTD = string.IsNullOrEmpty(config.motd)
+                    ? "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com"
+                    : config.motd;
 
                 Valid = true;
             }

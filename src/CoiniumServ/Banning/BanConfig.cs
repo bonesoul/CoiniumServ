@@ -39,18 +39,12 @@ namespace CoiniumServ.Banning
         {
             try
             {
-                // set the defaults;
-                Duration = 600;
-                InvalidPercent = 50;
-                CheckThreshold = 100;
-                PurgeInterval = 300;
-
                 // load the config data.
                 Enabled = config.enabled;
-                Duration = config.duration;
-                InvalidPercent = config.invalidPercent;
-                CheckThreshold = config.checkThreshold;
-                PurgeInterval = config.purgeInterval;
+                Duration = config.duration == 0 ? 600 : config.duration;
+                InvalidPercent = config.invalidPercent == 0 ? 50 : config.invalidPercent;
+                CheckThreshold = config.checkThreshold == 0 ? 100 : config.checkThreshold;
+                PurgeInterval = config.purgeInterval == 0 ? 300 : config.purgeInterval;
 
                 Valid = true;
             }

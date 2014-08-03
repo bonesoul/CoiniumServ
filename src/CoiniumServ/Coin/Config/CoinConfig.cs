@@ -43,7 +43,7 @@ namespace CoiniumServ.Coin.Config
                 Algorithm = config.algorithm;
                 Options = config;
 
-                if (Name == null || Symbol == null || Algorithm == null)
+                if (Name == null || Symbol == null || Algorithm == null) // make sure we have valid name, symbol and algorithm data.
                     Valid = false;
                 else
                     Valid = true;

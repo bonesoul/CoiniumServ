@@ -32,12 +32,12 @@ namespace CoiniumServ.Vardiff
         /// <summary>
         /// minimum difficulty that can be assigned to miners.
         /// </summary>
-        int MinimumDifficulty { get; }
+        float MinimumDifficulty { get; }
 
         /// <summary>
         /// maximum difficulty that can be assigned to miners.
         /// </summary>
-        int MaximumDifficulty { get; }
+        float MaximumDifficulty { get; }
 
         /// <summary>
         /// try to get a single share per this many seconds from miner.

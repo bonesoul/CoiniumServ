@@ -36,13 +36,9 @@ namespace CoiniumServ.Jobs.Manager
         {
             try
             {
-                // set the defaults;
-                BlockRefreshInterval = 1000;
-                RebroadcastTimeout = 55;
-
                 // load the config data.
-                BlockRefreshInterval = config.blockRefreshInterval;
-                RebroadcastTimeout = config.rebroadcastTimeout;
+                BlockRefreshInterval = config.blockRefreshInterval == 0 ? 1000 : config.blockRefreshInterval;
+                RebroadcastTimeout = config.rebroadcastTimeout == 0 ? 55 : config.rebroadcastTimeout;
 
                 Valid = true;
             }

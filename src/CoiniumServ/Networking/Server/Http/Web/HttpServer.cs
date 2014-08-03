@@ -62,7 +62,6 @@ namespace CoiniumServ.Networking.Server.Http.Web
             var uri = new Uri(string.Format("http://{0}:{1}", BindIP, Port));
 
             var hostConfiguration = new HostConfiguration();
-            hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
             hostConfiguration.UrlReservations.CreateAutomatically = true;
 
             var host = new NancyHost(_webBootstrapper, hostConfiguration, uri);
@@ -95,15 +94,6 @@ namespace CoiniumServ.Networking.Server.Http.Web
         public bool Stop()
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Unhandled exception callback for nancy based web-server.
-        /// </summary>
-        /// <param name="exception"></param>
-        private void UnhandledExceptionHandler(Exception exception)
-        {
-            _logger.Error("Web-server: {0}", exception);
         }
 
         public void Dispose()

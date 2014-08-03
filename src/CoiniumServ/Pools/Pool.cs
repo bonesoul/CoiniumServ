@@ -88,30 +88,69 @@ namespace CoiniumServ.Pools
 
             // TODO: validate pool central wallet & rewards within the startup.
 
-            Config = poolConfig;            
+            Config = poolConfig;
             
             _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);
 
             GenerateInstanceId();
+
             InitDaemon();
             InitManagers();
             InitServers();
-            PrintPoolInfo();
         }
 
         private void InitDaemon()
         {
             if (Config.Daemon == null || Config.Daemon.Valid == false)
+            {
                 _logger.Error("Coin daemon configuration is not valid!");
+                return;
+            }
 
             _daemonClient = _objectFactory.GetDaemonClient(Config);
+
+            try
+            {
+                var info = _daemonClient.GetInfo();
+
+                _logger.Information("Coin symbol: {0:l} algorithm: {1:l} " +
+                                    "Coin version: {2} protocol: {3} wallet: {4} " +
+                                    "Daemon network: {5:l} peers: {6} blocks: {7} errors: {8:l} ",
+                    Config.Coin.Symbol,
+                    Config.Coin.Algorithm,
+                    info.Version,
+                    info.ProtocolVersion,
+                    info.WalletVersion,
+                    info.Testnet ? "testnet" : "mainnet",
+                    info.Connections, info.Blocks,
+                    string.IsNullOrEmpty(info.Errors) ? "none" : info.Errors);
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Can not read getinfo(): {0:l}", e.Message);
+                return;
+            }
+
+            try
+            {
+                _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
+
+                // try reading mininginfo(), some coins may not support it.
+                var miningInfo = _daemonClient.GetMiningInfo();
+
+                _logger.Information("Network difficulty: {0:0.00000000} block difficulty: {1:0.00} Network hashrate: {2:l} ",
+                    miningInfo.Difficulty,
+                    miningInfo.Difficulty * _hashAlgorithm.Multiplier,
+                    miningInfo.NetworkHashps.GetReadableHashrate());
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Can not read mininginfo() - the coin may not support the request: {0:l}", e.Message);
+            }
         }
 
         private void InitManagers()
         {
-            // init the algorithm
-            _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
-
             var storage = _objectFactory.GetStorage(Storages.Redis, Config);
 
             var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, storage);
@@ -140,9 +179,6 @@ namespace CoiniumServ.Pools
         {
             _servers = new Dictionary<IMiningServer, IRpcService>();
 
-            // TODO: we don't need here a server config list as a pool can host only one instance of stratum and one vanilla server.
-            // we must be dictative here, using a server list may cause situations we don't want (multiple stratum configs etc..)
-
             if (Config.Stratum != null && Config.Stratum.Enabled)
             {
                 var stratumServer = _objectFactory.GetMiningServer("Stratum", Config, this, _minerManager, _jobManager, _banningManager);
@@ -160,38 +196,6 @@ namespace CoiniumServ.Pools
                 vanillaServer.Initialize(Config.Vanilla);
 
                 _servers.Add(vanillaServer, vanillaService);
-            }
-        }
-
-        private void PrintPoolInfo()
-        {
-            var info = _daemonClient.GetInfo();
-
-            _logger.Information("Coin symbol: {0:l} algorithm: {1:l} " +
-                                               "Coin version: {2} protocol: {3} wallet: {4} " +
-                                               "Daemon network: {5:l} peers: {6} blocks: {7} errors: {8:l} ",
-                Config.Coin.Symbol,
-                Config.Coin.Algorithm,
-                info.Version,
-                info.ProtocolVersion,
-                info.WalletVersion,
-                info.Testnet ? "testnet" : "mainnet",
-                info.Connections, info.Blocks,
-                string.IsNullOrEmpty(info.Errors) ? "none" : info.Errors);
-
-            try
-            {
-                // try reading mininginfo(), some coins may not support it.
-                var miningInfo = _daemonClient.GetMiningInfo();
-
-                _logger.Information("Network difficulty: {0:0.00000000} block difficulty: {1:0.00} Network hashrate: {2:l} ",
-                    miningInfo.Difficulty,
-                    miningInfo.Difficulty*_hashAlgorithm.Multiplier,
-                    miningInfo.NetworkHashps.GetReadableHashrate());
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read mininginfo() as coin daemon doesn't support it");
             }
         }
 
