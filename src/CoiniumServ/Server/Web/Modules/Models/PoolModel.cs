@@ -21,11 +21,12 @@
 // 
 #endregion
 
+using CoiniumServ.Pools;
+
 namespace CoiniumServ.Server.Web.Modules.Models
 {
-    public class Error
+    public class PoolModel
     {
-        public string Summary { get; set; }
-        public string Details { get; set; }
+        public IPool Pool { get; set; }
     }
 }
