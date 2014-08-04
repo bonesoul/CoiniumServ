@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Pools.Config;
@@ -91,7 +92,30 @@ namespace CoiniumServ.Persistance.Redis
 
         public IDictionary<string, int> GetBlockCounts()
         {
-            throw new NotImplementedException();
+            var blocks = new Dictionary<string, int>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks;
+
+            _client.StartPipe();
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+            var pendingKey = string.Format("{0}:blocks:pending", coin);
+            var confirmedKey = string.Format("{0}:blocks:confirmed", coin);
+            var oprhanedKey = string.Format("{0}:blocks:orphaned", coin);
+
+            _client.ZCard(pendingKey);
+            _client.ZCard(confirmedKey);
+            _client.ZCard(oprhanedKey);
+
+            var results = _client.EndPipe();
+
+            blocks["pending"] = Int32.Parse(results[0].ToString());
+            blocks["confirmed"] = Int32.Parse(results[1].ToString());
+            blocks["orphaned"] = Int32.Parse(results[2].ToString());
+
+            return blocks;
         }
 
         public void DeleteExpiredHashrateData(int until)
@@ -106,7 +130,28 @@ namespace CoiniumServ.Persistance.Redis
 
         public IDictionary<string, double> GetHashrateData(int since)
         {
-            throw new NotImplementedException();
+            var hashrates = new Dictionary<string, double>();
+
+            if (!IsEnabled || !IsConnected)
+                return hashrates;
+
+            var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
+
+            var results = _client.ZRangeByScore(key, since, double.PositiveInfinity);
+
+            foreach (var result in results)
+            {
+                var data = result.Split(':');
+                var share = double.Parse(data[0].Replace(',', '.'), CultureInfo.InvariantCulture);
+                var worker = data[1];
+
+                if (!hashrates.ContainsKey(worker))
+                    hashrates.Add(worker, 0);
+
+                hashrates[worker] += share;
+            }
+
+            return hashrates;
         }
 
         public IList<IPendingBlock> GetPendingBlocks()

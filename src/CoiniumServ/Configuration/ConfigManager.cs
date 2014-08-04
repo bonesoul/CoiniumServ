@@ -109,6 +109,12 @@ namespace CoiniumServ.Configuration
                 var coinName = Path.GetFileNameWithoutExtension(data.coin);
                 var coinConfig = GetCoinConfig(coinName);
 
+                if (coinConfig == null)
+                {
+                    _logger.Error("Referenced coin configuration file coins/{0:l}.json doesn't exist, skipping pool configuration: pools/{1:l}.json", coinName, filename);
+                    continue;
+                }
+
                 if (!coinConfig.Valid)
                 {
                     _logger.Error("coins/{0:l}.json doesnt't contain a valid configuration, skipping pool configuration: pools/{1:l}.json", coinName, filename);
@@ -129,6 +135,10 @@ namespace CoiniumServ.Configuration
         {
             var fileName = string.Format("{0}/{1}.json", CoinConfigRoot, name);
             var data = JsonConfigReader.Read(fileName);
+
+            if (data == null) // make sure we were able to read the coin configuration file.
+                return null;
+
             var coinConfig = _configFactory.GetCoinConfig(data);
 
             return coinConfig;
