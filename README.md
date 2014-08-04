@@ -82,6 +82,8 @@ Can run on these platforms;
 * Transaction messages support [in-development].
 * Vardiff support.
 * Ban manager support that can handles miners flooding with invalid shares.
+* Embedded web-server & front-end
+* Full-stack API
 
 ###### Hashing Algorithms
 
