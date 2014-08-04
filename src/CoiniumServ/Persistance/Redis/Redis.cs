@@ -428,13 +428,12 @@ namespace CoiniumServ.Persistance.Redis
 
         private void Initialize()
         {
-            var endpoint = new DnsEndPoint(_redisConfig.Host, _redisConfig.Port,AddressFamily.InterNetwork);
-
             var options = new ConfigurationOptions()
             {
                 AllowAdmin = true,
                 ResolveDns = true,
-                EndPoints = { endpoint }
+                //ConnectTimeout = 5000,
+                EndPoints = { new DnsEndPoint(_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork) }
             };
 			            
 
@@ -459,11 +458,11 @@ namespace CoiniumServ.Persistance.Redis
                 if (version < _requiredMinimumVersion)
                     throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
 
-                _logger.Information("Storage initialized: {0:l}:{1}, v{2:l}.", endpoint.Host, endpoint.Port, version);
+                _logger.Information("Storage initialized: {0:l}:{1}, v{2:l}.", _redisConfig.Host, _redisConfig.Port, version);
             }
             catch (Exception e)
             {
-                _logger.Error("Storage initialization failed: {0:l}:{1} - {2:l}\n\r {3:l}", endpoint.Host, endpoint.Port, e.Message, connectionLog);
+                _logger.Error("Storage initialization failed: {0:l}:{1} - {2:l}\n\r {3:l}", _redisConfig.Host, _redisConfig.Port, e.Message, connectionLog);
             }
         }
 
