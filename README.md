@@ -97,16 +97,13 @@ _Needs Testing_
 * ✓ __Keccak__ 
 * ✓ __SHAvite3__
 * ✓ __Skein__ 
-* ✓ __X11__ 
-* ✓ __X13__ 
-* ✓ __X14__ 
-* ✓ __X15__ 
-* ✓ __X17__
+* ✓ multi-algos: __X11__, __X13__, __X14__, __X15__, __X17__
 
 _Under Development_
 
 * ✓ __Scrypt-Jane__ 
 * ✓ __Scrypt-N__ 
+* ✓ __Scrypt-OG__ 
 * ✓ __Quark__ 
 * ✓ __NIST5__
 * ✓ __Qubit__
