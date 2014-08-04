@@ -23,10 +23,8 @@
 
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
-using CoiniumServ.Logging;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
-using CoiniumServ.Server.Web;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Factories
@@ -49,6 +47,11 @@ namespace CoiniumServ.Factories
         public IConfigManager GetConfigManager()
         {
             return _applicationContext.Container.Resolve<IConfigManager>();
+        }
+
+        public IJsonConfigReader GetJsonConfigReader()
+        {
+            return _applicationContext.Container.Resolve<IJsonConfigReader>();
         }
 
         public IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig)

@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Helpers\Hashrate.cs" />
+    <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Configuration\IStackConfig.cs" />
     <Compile Include="Configuration\StackConfig.cs" />
     <Compile Include="Cryptology\Algorithms\Blake.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Cryptology\Algorithms\Skein.cs" />
     <Compile Include="Cryptology\Algorithms\X11.cs" />
     <Compile Include="Cryptology\Algorithms\X13.cs" />
+    <Compile Include="Cryptology\Algorithms\X14.cs" />
     <Compile Include="Cryptology\Algorithms\X15.cs" />
     <Compile Include="Cryptology\Algorithms\X17.cs" />
     <Compile Include="Factories\ConfigFactory.cs" />

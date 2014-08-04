@@ -29,10 +29,8 @@ using CoiniumServ.Factories;
 using CoiniumServ.Repository;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
-using CoiniumServ.Utils.Helpers.IO;
 using CoiniumServ.Utils.Platform;
 using CoiniumServ.Utils.Versions;
-using Metrics;
 using Nancy.TinyIoc;
 using Serilog;
 
@@ -49,9 +47,7 @@ namespace CoiniumServ
 
         static void Main(string[] args)
         {
-            #if !DEBUG  // Catch any unhandled exceptions if we are in release mode.
-                AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
-            #endif
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler; // Catch any unhandled exceptions if we are in release mode.
 
             // use invariant culture - we have to set it explicitly for every thread we create to 
             // prevent any file-reading problems (mostly because of number formats).
@@ -114,8 +110,10 @@ namespace CoiniumServ
 
             if (e.IsTerminating)
             {
-                _logger.Fatal(exception, "Terminating program because of unhandled exception!");
-                Environment.Exit(-1);
+                _logger.Fatal(exception, "Terminating because of unhandled exception!");
+                #if !DEBUG // prevent console window from being closed when we are in development mode.
+                    Environment.Exit(-1);
+                #endif
             }
             else
                 _logger.Error(exception, "Caught unhandled exception");

@@ -38,6 +38,7 @@ namespace CoiniumServ.Cryptology.Algorithms
         public const string Skein = "skein";
         public const string X11 = "x11";
         public const string X13 = "x13";
+        public const string X14 = "x14";
         public const string X15 = "x15";
         public const string X17 = "x17";
 

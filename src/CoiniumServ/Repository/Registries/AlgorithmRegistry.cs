@@ -48,6 +48,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IHashAlgorithm, Skein>(Algorithms.Skein).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, X11>(Algorithms.X11).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, X13>(Algorithms.X13).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, X14>(Algorithms.X14).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, X15>(Algorithms.X15).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, X17>(Algorithms.X17).AsSingleton();
         }
