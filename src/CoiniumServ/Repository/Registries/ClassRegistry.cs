@@ -47,20 +47,29 @@ namespace CoiniumServ.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
+            // pool
+            _applicationContext.Container.Register<IPools, Statistics.Pools>().AsSingleton();  
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
-            _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();
+            _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
+            _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
+
+            // config
+            _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();            
+
+            // storage
+            _applicationContext.Container.Register<IStorage, Redis3>(Storages.Redis).AsMultiInstance();
+
+            // statistics
             _applicationContext.Container.Register<IStatistics, Statistics.Statistics>().AsSingleton();
-            _applicationContext.Container.Register<IPools, Statistics.Pools>().AsSingleton();            
+            _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
             _applicationContext.Container.Register<IPerPool, PerPool>().AsMultiInstance();
             _applicationContext.Container.Register<IBlocks, Blocks>().AsMultiInstance();
             _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();
-            _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
-            _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
+
+            // web
             _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();
         }
     }
