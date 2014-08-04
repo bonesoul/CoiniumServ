@@ -130,7 +130,7 @@ wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/cont
 
 * [Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
 * [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
-* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan) ( & motivation)
+* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
 
 ### Contributing
 
