@@ -21,20 +21,18 @@
 // 
 #endregion
 
-using CoiniumServ.Vardiff;
+using System;
+using System.Net;
 
-namespace CoiniumServ.Server.Mining.Stratum.Config
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
-    public interface IStratumServerConfig : IServerConfig
+    public class BannedConnectionEventArgs:EventArgs
     {
-        /// <summary>
-        /// default difficulty assigned to newly connected miners.
-        /// </summary>
-        float Diff { get; }
+        public IPEndPoint Endpoint { get; private set; }
 
-        /// <summary>
-        /// vardiff configuration.
-        /// </summary>
-        IVardiffConfig Vardiff { get; }
+        public BannedConnectionEventArgs(EndPoint endpoint)
+        {
+            Endpoint = (IPEndPoint)endpoint;
+        }
     }
 }

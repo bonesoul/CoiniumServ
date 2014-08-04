@@ -24,7 +24,6 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
-using CoiniumServ.Networking.Server;
 using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
 using Serilog;

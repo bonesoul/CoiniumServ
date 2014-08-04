@@ -21,38 +21,38 @@
 // 
 #endregion
 
-namespace CoiniumServ.Networking.Server
+using System;
+using Serilog;
+
+namespace CoiniumServ.Server.Mining.Vanilla
 {
-    /// <summary>
-    /// Server interface that any implementations should extend.
-    /// </summary>
-    public interface IServer
+    public class VanillaServerConfig : IVanillaServerConfig 
     {
-        /// <summary>
-        /// The IP address of the interface the server binded.
-        /// </summary>
-        string BindIP { get; }
+        public bool Valid { get; private set; }
 
-        /// <summary>
-        /// The listening port for the server.
-        /// </summary>
-        int Port { get; }
+        public bool Enabled { get; private set; }
 
-        /// <summary>
-        /// Is server currently listening for connections?
-        /// </summary>
-        bool IsListening { get; }
+        public string BindInterface { get; private set; }
 
-        /// <summary>
-        /// Starts a server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Start();
+        public Int32 Port { get; private set; }
 
-        /// <summary>
-        /// Stops the server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Stop();
+        public VanillaServerConfig(dynamic config)
+        {
+            try
+            {
+               // load the config data.
+                Enabled = config.enabled;
+                BindInterface = string.IsNullOrEmpty(config.bind) ? "0.0.0.0" : config.bind;
+                Port = config.port;
+
+                Valid = true;
+            }
+
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<VanillaServerConfig>().Error(e, "Error loading vannila server configuration");
+            }
+        }
     }
 }

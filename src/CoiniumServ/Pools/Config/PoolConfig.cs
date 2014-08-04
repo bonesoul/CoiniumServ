@@ -30,8 +30,8 @@ using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Redis;
-using CoiniumServ.Server.Mining.Stratum.Config;
-using CoiniumServ.Server.Mining.Vanilla.Config;
+using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Vanilla;
 using Serilog;
 
 namespace CoiniumServ.Pools.Config

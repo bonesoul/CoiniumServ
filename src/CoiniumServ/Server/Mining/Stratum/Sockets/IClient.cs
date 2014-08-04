@@ -20,19 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-using System.Collections.Generic;
-
-namespace CoiniumServ.Networking.Server.Sockets
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
-    public interface ISocketServer:IServer
+    /// <summary>
+    /// Client interface.
+    /// </summary>
+    public interface IClient
     {
-        void RemoveConnection(IConnection connection);
-
-        void Shutdown();
-
-        void DisconnectAll();
-
-        IEnumerable<IConnection> GetConnections();
+        /// <summary>
+        /// Gets or sets the TCP connection bound to client.
+        /// </summary>
+        IConnection Connection { get; }
     }
 }

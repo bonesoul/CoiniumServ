@@ -28,7 +28,7 @@ using System.Threading;
 
 // source from: http://stackoverflow.com/a/4673210/170181
 
-namespace CoiniumServ.Networking.Server.Http.Basic
+namespace CoiniumServ.Server.Mining.Vanilla
 {
     public class HttpServer : IServer, IDisposable
     {

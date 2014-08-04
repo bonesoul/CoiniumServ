@@ -26,10 +26,10 @@ using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Networking.Server.Sockets;
 using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Server.Mining.Vanilla;
 using Serilog;
 

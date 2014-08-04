@@ -21,18 +21,38 @@
 // 
 #endregion
 
-using System;
-using System.Net;
-
-namespace CoiniumServ.Networking.Server.Sockets
+namespace CoiniumServ.Server
 {
-    public class BannedConnectionEventArgs:EventArgs
+    /// <summary>
+    /// Server interface that any implementations should extend.
+    /// </summary>
+    public interface IServer
     {
-        public IPEndPoint Endpoint { get; private set; }
+        /// <summary>
+        /// The IP address of the interface the server binded.
+        /// </summary>
+        string BindIP { get; }
 
-        public BannedConnectionEventArgs(EndPoint endpoint)
-        {
-            Endpoint = (IPEndPoint)endpoint;
-        }
+        /// <summary>
+        /// The listening port for the server.
+        /// </summary>
+        int Port { get; }
+
+        /// <summary>
+        /// Is server currently listening for connections?
+        /// </summary>
+        bool IsListening { get; }
+
+        /// <summary>
+        /// Starts a server instance.
+        /// </summary>
+        /// <returns></returns>
+        bool Start();
+
+        /// <summary>
+        /// Stops the server instance.
+        /// </summary>
+        /// <returns></returns>
+        bool Stop();
     }
 }

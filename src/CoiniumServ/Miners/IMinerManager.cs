@@ -23,9 +23,9 @@
 
 using System;
 using System.Collections.Generic;
-using CoiniumServ.Networking.Server.Sockets;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Server.Mining.Vanilla;
 
 namespace CoiniumServ.Miners

@@ -29,7 +29,7 @@ using System.Net.Sockets;
 using CoiniumServ.Utils.Extensions;
 using Serilog;
 
-namespace CoiniumServ.Networking.Server.Sockets
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
     public class SocketServer : ISocketServer, IDisposable
     {

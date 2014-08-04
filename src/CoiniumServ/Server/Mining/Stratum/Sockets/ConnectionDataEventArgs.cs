@@ -21,27 +21,26 @@
 // 
 #endregion
 
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace CoiniumServ.Networking.Server.Sockets
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
-    public class ConnectionEventArgs : EventArgs
+    public sealed class ConnectionDataEventArgs : ConnectionEventArgs
     {
-        public IConnection Connection { get; private set; }
+        public IEnumerable<byte> Data { get; private set; }
 
-        public ConnectionEventArgs(IConnection connection)
+        public ConnectionDataEventArgs(IConnection connection, IEnumerable<byte> data)
+            : base(connection)
         {
-            if (connection == null)
-                throw new ArgumentNullException("connection");
-
-            Connection = connection;
+            Data = data ?? new byte[0];
         }
 
         public override string ToString()
         {
             return Connection.RemoteEndPoint != null
-                ? Connection.RemoteEndPoint.ToString()
-                : "Not Connected";
+                ? string.Format("{0}: {1} bytes", Connection.RemoteEndPoint, Data.Count())
+                : string.Format("Not Connected: {0} bytes", Data.Count());
         }
     }
 }

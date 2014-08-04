@@ -25,7 +25,7 @@ using System;
 using CoiniumServ.Vardiff;
 using Serilog;
 
-namespace CoiniumServ.Server.Mining.Stratum.Config
+namespace CoiniumServ.Server.Mining.Stratum
 {
     public class StratumServerConfig:IStratumServerConfig
     {
