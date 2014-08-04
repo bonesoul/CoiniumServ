@@ -56,20 +56,20 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
 
-            // config
-            _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
-
-            // storage
-            _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();
-
             // statistics
             _applicationContext.Container.Register<IStatistics, Statistics.Statistics>().AsSingleton();
             _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
             _applicationContext.Container.Register<IPerPool, PerPool>().AsMultiInstance();
             _applicationContext.Container.Register<IBlocks, Blocks>().AsMultiInstance();
             _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();
+
+            // config
+            _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
+
+            // storage
+            _applicationContext.Container.Register<IStorage, Redis3>(Storages.Redis).AsMultiInstance();
 
             // web
             _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();

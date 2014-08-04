@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Pools.Config;
@@ -156,13 +157,116 @@ namespace CoiniumServ.Persistance.Redis
 
         public IList<IPendingBlock> GetPendingBlocks()
         {
-            throw new NotImplementedException();
+            var blocks = new Dictionary<UInt32, IPendingBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks.Values.ToList();
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            var pendingKey = string.Format("{0}:blocks:pending", coin);
+
+            var results = _client.ZRevRangeByScore(pendingKey, -1, 0, true);
+
+            foreach (var result in results)
+            {
+                var data = result.Split(':');
+                var blockHash = data[0];
+                var transactionHash = data[1];
+                var hashCandidate = new HashCandidate(blockHash, transactionHash);
+
+                // TODO: need to use the scores.
+                //if (!blocks.ContainsKey((UInt32)result.Score))
+                //    blocks.Add((UInt32)result.Score, new PendingBlock((UInt32)result.Score));
+
+                //var persistedBlock = blocks[(UInt32)result.Score];
+                //persistedBlock.AddHashCandidate(hashCandidate);
+            }
+
+            return blocks.Values.ToList();
+        }
+
+        private IEnumerable<IFinalizedBlock> GetFinalizedBlocks(BlockStatus status)
+        {
+            var blocks = new Dictionary<UInt32, IFinalizedBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks.Values.ToList();
+
+            if (status == BlockStatus.Pending)
+                throw new Exception("Pending is not a valid finalized block status");
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            string key = string.Empty;
+
+            switch (status)
+            {
+                case BlockStatus.Kicked:
+                    key = string.Format("{0}:blocks:kicked", coin);
+                    break;
+                case BlockStatus.Orphaned:
+                    key = string.Format("{0}:blocks:orphaned", coin);
+                    break;
+                case BlockStatus.Confirmed:
+                    key = string.Format("{0}:blocks:confirmed", coin);
+                    break;
+            }
+
+
+            var results = _client.ZRevRangeByScore(key,-1, 0, true);
+
+            foreach (var result in results)
+            {
+                var data = result.Split(':');
+                var blockHash = data[0];
+                var transactionHash = data[1];
+
+                // TODO: need to use the scores.
+                //switch (status)
+                //{
+                //    case BlockStatus.Kicked:
+                //        blocks.Add((UInt32)result.Score, new KickedBlock((UInt32)result.Score, blockHash, transactionHash, 0, 0));
+                //        break;
+                //    case BlockStatus.Orphaned:
+                //        blocks.Add((UInt32)result.Score, new OrphanedBlock((UInt32)result.Score, blockHash, transactionHash, 0, 0));
+                //        break;
+                //    case BlockStatus.Confirmed:
+                //        blocks.Add((UInt32)result.Score, new ConfirmedBlock((UInt32)result.Score, blockHash, transactionHash, 0, 0));
+                //        break;
+                //}
+            }
+
+            return blocks.Values.ToList();
         }
 
         public IDictionary<uint, IPersistedBlock> GetAllBlocks()
         {
-            throw new NotImplementedException();
-        }
+            var blocks = new Dictionary<uint, IPersistedBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks;
+
+            foreach (var block in GetFinalizedBlocks(BlockStatus.Confirmed))
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            foreach (var block in GetFinalizedBlocks(BlockStatus.Orphaned))
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            foreach (var block in GetFinalizedBlocks(BlockStatus.Kicked))
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            foreach (var block in GetPendingBlocks())
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            return blocks;
+        }       
 
         public Dictionary<uint, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)
         {
