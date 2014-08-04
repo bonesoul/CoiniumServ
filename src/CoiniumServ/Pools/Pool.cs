@@ -108,6 +108,7 @@ namespace CoiniumServ.Pools
             }
 
             _daemonClient = _objectFactory.GetDaemonClient(Config);
+            _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
 
             try
             {
@@ -133,8 +134,6 @@ namespace CoiniumServ.Pools
 
             try
             {
-                _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
-
                 // try reading mininginfo(), some coins may not support it.
                 var miningInfo = _daemonClient.GetMiningInfo();
 

@@ -22,7 +22,10 @@
 #endregion
 
 using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using JsonConfig;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace CoiniumServ.Configuration
@@ -30,18 +33,61 @@ namespace CoiniumServ.Configuration
     // TODO: let this be a factory and add log.forcontext<>
     public static class JsonConfigReader
     {
+        public const string Comments = @"#(.*?)\r?\n";
+
         public static dynamic Read(string fileName)
         {
             try
             {
-                return Config.ApplyJsonFromPath(fileName, new ConfigObject());
-            }
-            catch (Exception)
-            {
-                Log.Error("Json parsing failed for: {0}.", fileName);
-            }
+                var json = ReadJsonFromFile(fileName); // read the json.
+                json = CleanComments(json); // strip out comment lines that starts with # as they'll be preventing validation.
+                var valid = ValidateJson(json, fileName); // check if it's valid.
 
-            return null;
+                return !valid ? null : Config.ApplyJson(json, new ConfigObject()); // read configuration from the json.
+            }
+            catch (Exception e)
+            {
+                Log.Error("Json parsing failed for: {0:l} - {1:l}", fileName, e.Message);
+                return null;
+            }
+        }
+
+        private static bool ValidateJson(string json, string fileName)
+        {
+            try
+            {
+                // try to validate the json.
+                var @object = JsonConvert.DeserializeObject<dynamic>(json);
+
+                return true;
+            }
+            catch (JsonReaderException e)
+            {
+                Log.Error("Json validation failed for: {0:l} - {1:l}", fileName,e.Message);
+                return false;
+            }
+        }
+
+        private static string ReadJsonFromFile(string fileName)
+        {
+            try
+            {
+                var json = File.ReadAllText(fileName);
+                return json;
+            }
+            catch (FileNotFoundException e)
+            {
+                Log.Error("Can not read json file {0:l} - {1:l}", fileName, e.Message);
+                return null;
+            }
+        }
+
+        private static string CleanComments(string json)
+        {
+            // strip out comment lines that starts with # as they'll be preventing validation.
+            json = Regex.Replace(json, Comments, "");
+
+            return json;
         }
     }
 }
