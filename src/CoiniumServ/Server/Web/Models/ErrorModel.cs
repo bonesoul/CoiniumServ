@@ -21,15 +21,11 @@
 // 
 #endregion
 
-namespace CoiniumServ.Server.Web.Modules.Models
+namespace CoiniumServ.Server.Web.Models
 {
-    public class JsonError
+    public class ErrorModel
     {
-        public string Error { get; private set; }
-
-        public JsonError(string error)
-        {
-            Error = error;
-        }
+        public string Summary { get; set; }
+        public string Details { get; set; }
     }
 }

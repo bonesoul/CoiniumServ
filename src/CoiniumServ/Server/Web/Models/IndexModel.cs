@@ -21,13 +21,16 @@
 // 
 #endregion
 
-using CoiniumServ.Configuration;
+using System.Collections.Generic;
+using CoiniumServ.Pools;
+using CoiniumServ.Statistics;
 
-namespace CoiniumServ.Server.Web.Modules.Models
+namespace CoiniumServ.Server.Web.Models
 {
-    public class ErrorModel
+    public class IndexModel
     {
-        public string Summary { get; set; }
-        public string Details { get; set; }
+        public IReadOnlyCollection<IPool> Pools { get; set; }
+
+        public IStatistics Statistics { get; set; }
     }
 }

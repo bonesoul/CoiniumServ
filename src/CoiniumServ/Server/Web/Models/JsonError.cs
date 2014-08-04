@@ -21,16 +21,15 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Pools;
-using CoiniumServ.Statistics;
-
-namespace CoiniumServ.Server.Web.Modules.Models
+namespace CoiniumServ.Server.Web.Models
 {
-    public class IndexModel
+    public class JsonError
     {
-        public IReadOnlyCollection<IPool> Pools { get; set; }
+        public string Error { get; private set; }
 
-        public IStatistics Statistics { get; set; }
+        public JsonError(string error)
+        {
+            Error = error;
+        }
     }
 }

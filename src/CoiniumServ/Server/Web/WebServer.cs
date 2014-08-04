@@ -22,7 +22,6 @@
 #endregion
 
 using CoiniumServ.Configuration;
-using CoiniumServ.Networking.Server.Http.Web;
 using Nancy.Bootstrapper;
 using Serilog;
 

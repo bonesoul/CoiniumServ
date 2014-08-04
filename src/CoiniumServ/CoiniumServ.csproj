@@ -175,8 +175,8 @@
     <Compile Include="Server\Web\IBackendConfig.cs" />
     <Compile Include="Server\Web\Modules\BackendConfig.cs" />
     <Compile Include="Server\Web\Modules\Donate.cs" />
-    <Compile Include="Server\Web\Modules\Models\IndexModel.cs" />
-    <Compile Include="Server\Web\Modules\Models\PoolModel.cs" />
+    <Compile Include="Server\Web\Models\IndexModel.cs" />
+    <Compile Include="Server\Web\Models\PoolModel.cs" />
     <Compile Include="Statistics\Blocks.cs" />
     <Compile Include="Statistics\IBlocks.cs" />
     <Compile Include="Statistics\IJsonResponse.cs" />
@@ -210,9 +210,9 @@
     <Compile Include="Vardiff\IVardiffManager.cs" />
     <Compile Include="Vardiff\VardiffConfig.cs" />
     <Compile Include="Vardiff\VardiffManager.cs" />
-    <Compile Include="Networking\Server\Http\Web\ErrorConfiguration.cs" />
-    <Compile Include="Networking\Server\Http\Web\WebBootstrapper.cs" />
-    <Compile Include="Networking\Server\Http\Web\RootPathProvider.cs" />
+    <Compile Include="Server\Web\ErrorConfiguration.cs" />
+    <Compile Include="Server\Web\WebBootstrapper.cs" />
+    <Compile Include="Server\Web\RootPathProvider.cs" />
     <Compile Include="Networking\Server\Sockets\ISocketServer.cs" />
     <Compile Include="Networking\Server\Sockets\BannedConnectionEventArgs.cs" />
     <Compile Include="Payments\IPaymentRound.cs" />
@@ -244,8 +244,8 @@
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
     <Compile Include="Server\Web\IWebServerConfig.cs" />
     <Compile Include="Server\Web\Modules\Api.cs" />
-    <Compile Include="Server\Web\Modules\Models\ErrorModel.cs" />
-    <Compile Include="Server\Web\Modules\Models\JsonError.cs" />
+    <Compile Include="Server\Web\Models\ErrorModel.cs" />
+    <Compile Include="Server\Web\Models\JsonError.cs" />
     <Compile Include="Server\Web\Modules\Pool.cs" />
     <Compile Include="Server\Web\WebServer.cs" />
     <Compile Include="Server\Web\WebServerConfig.cs" />
@@ -406,7 +406,7 @@
     <Compile Include="Server\Mining\Stratum\Responses\SubscribeResponse.cs" />
     <Compile Include="Networking\Server\Sockets\SocketServer.cs" />
     <Compile Include="Server\Web\Modules\Index.cs" />
-    <Compile Include="Networking\Server\Http\Web\HttpServer.cs" />
+    <Compile Include="Server\Web\HttpServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\ConsoleWindow.cs" />

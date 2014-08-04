@@ -24,11 +24,12 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using CoiniumServ.Networking.Server;
 using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
 using Serilog;
 
-namespace CoiniumServ.Networking.Server.Http.Web
+namespace CoiniumServ.Server.Web
 {
     public class HttpServer : IServer, IDisposable
     {

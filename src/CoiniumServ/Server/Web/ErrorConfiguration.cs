@@ -24,7 +24,7 @@
 using Nancy;
 using Nancy.CustomErrors;
 
-namespace CoiniumServ.Networking.Server.Http.Web
+namespace CoiniumServ.Server.Web
 {
     public class ErrorConfiguration : CustomErrorsConfiguration
     {
