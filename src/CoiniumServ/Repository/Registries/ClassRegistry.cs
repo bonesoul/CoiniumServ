@@ -22,6 +22,7 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
+using CoiniumServ.Configuration;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Networking.Server.Http.Web;
@@ -57,7 +58,8 @@ namespace CoiniumServ.Repository.Registries
 
             // config
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();            
+            _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
 
             // storage
             _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();

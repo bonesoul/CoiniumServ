@@ -111,7 +111,9 @@ namespace CoiniumServ
             if (e.IsTerminating)
             {
                 _logger.Fatal(exception, "Terminating because of unhandled exception!");
-                Environment.Exit(-1);
+                #if !DEBUG // prevent console window from being closed when we are in development mode.
+                    Environment.Exit(-1);
+                #endif
             }
             else
                 _logger.Error(exception, "Caught unhandled exception");

@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coin\Helpers\Hashrate.cs" />
+    <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Configuration\IStackConfig.cs" />
     <Compile Include="Configuration\StackConfig.cs" />
     <Compile Include="Cryptology\Algorithms\Blake.cs" />

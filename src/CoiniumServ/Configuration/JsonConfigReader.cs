@@ -31,11 +31,11 @@ using Serilog;
 namespace CoiniumServ.Configuration
 {
     // TODO: let this be a factory and add log.forcontext<>
-    public static class JsonConfigReader
+    public class JsonConfigReader : IJsonConfigReader
     {
-        public const string Comments = @"#(.*?)\r?\n";
+        private const string Comments = @"#(.*?)\r?\n";
 
-        public static dynamic Read(string fileName)
+        public dynamic Read(string fileName)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace CoiniumServ.Configuration
             }
         }
 
-        private static bool ValidateJson(string json, string fileName)
+        private bool ValidateJson(string json, string fileName)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace CoiniumServ.Configuration
             }
         }
 
-        private static string ReadJsonFromFile(string fileName)
+        private string ReadJsonFromFile(string fileName)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace CoiniumServ.Configuration
             }
         }
 
-        private static string CleanComments(string json)
+        private string CleanComments(string json)
         {
             // strip out comment lines that starts with # as they'll be preventing validation.
             json = Regex.Replace(json, Comments, "");

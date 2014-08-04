@@ -21,29 +21,10 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Configuration;
-using CoiniumServ.Logging;
-using CoiniumServ.Pools.Config;
-using CoiniumServ.Server.Web;
-
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Configuration
 {
-    /// <summary>
-    /// Configuration factory that handles configs.
-    /// </summary>
-    public interface IConfigFactory
+    public interface IJsonConfigReader
     {
-        IConfigManager GetConfigManager();
-
-        IJsonConfigReader GetJsonConfigReader();
-
-        #region per-pool configs
-
-        IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
-
-        ICoinConfig GetCoinConfig(dynamic config);
-
-        #endregion
+        dynamic Read(string fileName);
     }
 }

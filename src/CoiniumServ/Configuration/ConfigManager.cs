@@ -49,12 +49,14 @@ namespace CoiniumServ.Configuration
         private dynamic _defaultPoolConfig;
 
         private readonly IConfigFactory _configFactory;
+        private readonly IJsonConfigReader _jsonConfigReader;
 
         private ILogger _logger;
 
-        public ConfigManager(IConfigFactory configFactory)
+        public ConfigManager(IConfigFactory configFactory, IJsonConfigReader jsonConfigReader)
         {
             _configFactory = configFactory;
+            _jsonConfigReader = jsonConfigReader;
 
             PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
 
@@ -63,7 +65,7 @@ namespace CoiniumServ.Configuration
 
         private void ReadGlobalConfig()
         {
-            var data = JsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
+            var data = _jsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
 
             if (data == null) // make sure it exists, else gracefully exists
             {                
@@ -93,7 +95,10 @@ namespace CoiniumServ.Configuration
 
             foreach (var file in files)
             {
-                var data = JsonConfigReader.Read(file); // read the pool config json.
+                var data = _jsonConfigReader.Read(file); // read the pool config json.
+
+                if (data == null) // make sure we have loaded json data.
+                    continue;
 
                 // check if we have a default.json pool config.
                 var filename = Path.GetFileNameWithoutExtension(file);
@@ -103,7 +108,7 @@ namespace CoiniumServ.Configuration
                     continue; // don't add the default.json to list of pools and yet again do not load the coinconfig data for it.
                 }
 
-                if (data == null || !data.enabled) // skip pools that are not enabled.
+                if (!data.enabled) // skip pools that are not enabled.
                     continue;
 
                 var coinName = Path.GetFileNameWithoutExtension(data.coin); // get the coin-name assigned to pool.
@@ -134,7 +139,7 @@ namespace CoiniumServ.Configuration
         private ICoinConfig GetCoinConfig(string name)
         {
             var fileName = string.Format("{0}/{1}.json", CoinConfigRoot, name);
-            var data = JsonConfigReader.Read(fileName);
+            var data = _jsonConfigReader.Read(fileName);
 
             if (data == null) // make sure we were able to read the coin configuration file.
                 return null;
