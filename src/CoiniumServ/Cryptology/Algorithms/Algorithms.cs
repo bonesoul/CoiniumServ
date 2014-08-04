@@ -36,10 +36,10 @@ namespace CoiniumServ.Cryptology.Algorithms
         public const string Sha256 = "sha256";
         public const string Shavite3 = "shavite3";
         public const string Skein = "skein";
-        public const string X11 = "X11";
-        public const string X13 = "X13";
-        public const string X15 = "X15";
-        public const string X17 = "X17";
+        public const string X11 = "x11";
+        public const string X13 = "x13";
+        public const string X15 = "x15";
+        public const string X17 = "x17";
 
         // todo: add hefty1, qubit support
 
