@@ -97,7 +97,7 @@ _Needs Testing_
 * ✓ __Keccak__ 
 * ✓ __SHAvite3__
 * ✓ __Skein__ 
-* ✓ multi-algos: __X11__, __X13__, __X14__, __X15__, __X17__
+* ✓ __multi-algos: X11, X13, X14, X15, X17__
 
 _Under Development_
 
