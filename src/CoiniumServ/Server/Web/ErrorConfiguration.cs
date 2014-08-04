@@ -21,27 +21,19 @@
 // 
 #endregion
 
-using System;
+using Nancy;
+using Nancy.CustomErrors;
 
-namespace CoiniumServ.Networking.Server.Sockets
+namespace CoiniumServ.Server.Web
 {
-    public class ConnectionEventArgs : EventArgs
+    public class ErrorConfiguration : CustomErrorsConfiguration
     {
-        public IConnection Connection { get; private set; }
-
-        public ConnectionEventArgs(IConnection connection)
+        public ErrorConfiguration()
         {
-            if (connection == null)
-                throw new ArgumentNullException("connection");
-
-            Connection = connection;
-        }
-
-        public override string ToString()
-        {
-            return Connection.RemoteEndPoint != null
-                ? Connection.RemoteEndPoint.ToString()
-                : "Not Connected";
+            // Map error status codes to custom view names
+            ErrorViews[HttpStatusCode.NotFound] = "error";
+            ErrorViews[HttpStatusCode.InternalServerError] = "error";
+            ErrorViews[HttpStatusCode.Forbidden] = "error";
         }
     }
 }

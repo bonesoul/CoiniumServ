@@ -21,38 +21,20 @@
 // 
 #endregion
 
-using System;
-using Serilog;
+using CoiniumServ.Vardiff;
 
-namespace CoiniumServ.Server.Mining.Vanilla.Config
+namespace CoiniumServ.Server.Mining.Stratum
 {
-    public class VanillaServerConfig : IVanillaServerConfig 
+    public interface IStratumServerConfig : IServerConfig
     {
-        public bool Valid { get; private set; }
+        /// <summary>
+        /// default difficulty assigned to newly connected miners.
+        /// </summary>
+        float Diff { get; }
 
-        public bool Enabled { get; private set; }
-
-        public string BindInterface { get; private set; }
-
-        public Int32 Port { get; private set; }
-
-        public VanillaServerConfig(dynamic config)
-        {
-            try
-            {
-               // load the config data.
-                Enabled = config.enabled;
-                BindInterface = string.IsNullOrEmpty(config.bind) ? "0.0.0.0" : config.bind;
-                Port = config.port;
-
-                Valid = true;
-            }
-
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<VanillaServerConfig>().Error(e, "Error loading vannila server configuration");
-            }
-        }
+        /// <summary>
+        /// vardiff configuration.
+        /// </summary>
+        IVardiffConfig Vardiff { get; }
     }
 }

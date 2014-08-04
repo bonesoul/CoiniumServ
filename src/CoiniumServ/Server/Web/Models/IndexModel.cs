@@ -21,19 +21,16 @@
 // 
 #endregion
 
-using System.IO;
-using System.Reflection;
-using CoiniumServ.Utils.Platform;
-using Nancy;
+using System.Collections.Generic;
+using CoiniumServ.Pools;
+using CoiniumServ.Statistics;
 
-namespace CoiniumServ.Networking.Server.Http.Web
+namespace CoiniumServ.Server.Web.Models
 {
-    public class CustomRootPathProvider : IRootPathProvider
+    public class IndexModel
     {
-        public string GetRootPath()
-        {
-            return string.Format(PlatformManager.Framework == Frameworks.Mono ? "{0}/web/default" : "{0}\\web\\default",
-                Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-        }
+        public IReadOnlyCollection<IPool> Pools { get; set; }
+
+        public IStatistics Statistics { get; set; }
     }
 }

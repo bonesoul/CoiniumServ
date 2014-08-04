@@ -23,7 +23,7 @@
 
 using System.Linq;
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Server.Web.Modules.Models;
+using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
 using Nancy;
 using Newtonsoft.Json;

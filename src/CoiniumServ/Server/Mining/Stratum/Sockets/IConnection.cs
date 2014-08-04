@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace CoiniumServ.Networking.Server.Sockets
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
     /// <summary>
     /// Connection interface.

@@ -21,18 +21,38 @@
 // 
 #endregion
 
-using System.Collections.Generic;
+using System;
+using Serilog;
 
-namespace CoiniumServ.Networking.Server.Sockets
+namespace CoiniumServ.Server.Mining.Vanilla
 {
-    public interface ISocketServer:IServer
+    public class VanillaServerConfig : IVanillaServerConfig 
     {
-        void RemoveConnection(IConnection connection);
+        public bool Valid { get; private set; }
 
-        void Shutdown();
+        public bool Enabled { get; private set; }
 
-        void DisconnectAll();
+        public string BindInterface { get; private set; }
 
-        IEnumerable<IConnection> GetConnections();
+        public Int32 Port { get; private set; }
+
+        public VanillaServerConfig(dynamic config)
+        {
+            try
+            {
+               // load the config data.
+                Enabled = config.enabled;
+                BindInterface = string.IsNullOrEmpty(config.bind) ? "0.0.0.0" : config.bind;
+                Port = config.port;
+
+                Valid = true;
+            }
+
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<VanillaServerConfig>().Error(e, "Error loading vannila server configuration");
+            }
+        }
     }
 }

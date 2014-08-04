@@ -22,7 +22,7 @@
 #endregion
 
 using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Modules.Models;
+using CoiniumServ.Server.Web.Models;
 using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules

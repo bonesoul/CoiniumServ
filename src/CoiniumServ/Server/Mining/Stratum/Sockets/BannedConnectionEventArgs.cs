@@ -21,19 +21,18 @@
 // 
 #endregion
 
-using Nancy;
-using Nancy.CustomErrors;
+using System;
+using System.Net;
 
-namespace CoiniumServ.Networking.Server.Http.Web
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
-    public class ErrorConfiguration : CustomErrorsConfiguration
+    public class BannedConnectionEventArgs:EventArgs
     {
-        public ErrorConfiguration()
+        public IPEndPoint Endpoint { get; private set; }
+
+        public BannedConnectionEventArgs(EndPoint endpoint)
         {
-            // Map error status codes to custom view names
-            ErrorViews[HttpStatusCode.NotFound] = "error";
-            ErrorViews[HttpStatusCode.InternalServerError] = "error";
-            ErrorViews[HttpStatusCode.Forbidden] = "error";
+            Endpoint = (IPEndPoint)endpoint;
         }
     }
 }

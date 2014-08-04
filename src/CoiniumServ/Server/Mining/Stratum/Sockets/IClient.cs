@@ -20,21 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-using CoiniumServ.Vardiff;
-
-namespace CoiniumServ.Server.Mining.Stratum.Config
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
-    public interface IStratumServerConfig : IServerConfig
+    /// <summary>
+    /// Client interface.
+    /// </summary>
+    public interface IClient
     {
         /// <summary>
-        /// default difficulty assigned to newly connected miners.
+        /// Gets or sets the TCP connection bound to client.
         /// </summary>
-        float Diff { get; }
-
-        /// <summary>
-        /// vardiff configuration.
-        /// </summary>
-        IVardiffConfig Vardiff { get; }
+        IConnection Connection { get; }
     }
 }

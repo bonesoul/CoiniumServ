@@ -29,8 +29,8 @@ using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
-using CoiniumServ.Server.Mining.Stratum.Config;
-using CoiniumServ.Server.Mining.Vanilla.Config;
+using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Vanilla;
 
 namespace CoiniumServ.Pools.Config
 {

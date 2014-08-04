@@ -21,26 +21,38 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
-
-namespace CoiniumServ.Networking.Server.Sockets
+namespace CoiniumServ.Server
 {
-    public sealed class ConnectionDataEventArgs : ConnectionEventArgs
+    /// <summary>
+    /// Server interface that any implementations should extend.
+    /// </summary>
+    public interface IServer
     {
-        public IEnumerable<byte> Data { get; private set; }
+        /// <summary>
+        /// The IP address of the interface the server binded.
+        /// </summary>
+        string BindIP { get; }
 
-        public ConnectionDataEventArgs(IConnection connection, IEnumerable<byte> data)
-            : base(connection)
-        {
-            Data = data ?? new byte[0];
-        }
+        /// <summary>
+        /// The listening port for the server.
+        /// </summary>
+        int Port { get; }
 
-        public override string ToString()
-        {
-            return Connection.RemoteEndPoint != null
-                ? string.Format("{0}: {1} bytes", Connection.RemoteEndPoint, Data.Count())
-                : string.Format("Not Connected: {0} bytes", Data.Count());
-        }
+        /// <summary>
+        /// Is server currently listening for connections?
+        /// </summary>
+        bool IsListening { get; }
+
+        /// <summary>
+        /// Starts a server instance.
+        /// </summary>
+        /// <returns></returns>
+        bool Start();
+
+        /// <summary>
+        /// Stops the server instance.
+        /// </summary>
+        /// <returns></returns>
+        bool Stop();
     }
 }

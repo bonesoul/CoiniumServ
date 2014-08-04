@@ -21,16 +21,27 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Pools;
-using CoiniumServ.Statistics;
+using System;
 
-namespace CoiniumServ.Server.Web.Modules.Models
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
-    public class IndexModel
+    public class ConnectionEventArgs : EventArgs
     {
-        public IReadOnlyCollection<IPool> Pools { get; set; }
+        public IConnection Connection { get; private set; }
 
-        public IStatistics Statistics { get; set; }
+        public ConnectionEventArgs(IConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException("connection");
+
+            Connection = connection;
+        }
+
+        public override string ToString()
+        {
+            return Connection.RemoteEndPoint != null
+                ? Connection.RemoteEndPoint.ToString()
+                : "Not Connected";
+        }
     }
 }

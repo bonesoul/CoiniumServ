@@ -21,38 +21,18 @@
 // 
 #endregion
 
-namespace CoiniumServ.Networking.Server
+using System.Collections.Generic;
+
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
-    /// <summary>
-    /// Server interface that any implementations should extend.
-    /// </summary>
-    public interface IServer
+    public interface ISocketServer:IServer
     {
-        /// <summary>
-        /// The IP address of the interface the server binded.
-        /// </summary>
-        string BindIP { get; }
+        void RemoveConnection(IConnection connection);
 
-        /// <summary>
-        /// The listening port for the server.
-        /// </summary>
-        int Port { get; }
+        void Shutdown();
 
-        /// <summary>
-        /// Is server currently listening for connections?
-        /// </summary>
-        bool IsListening { get; }
+        void DisconnectAll();
 
-        /// <summary>
-        /// Starts a server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Start();
-
-        /// <summary>
-        /// Stops the server instance.
-        /// </summary>
-        /// <returns></returns>
-        bool Stop();
+        IEnumerable<IConnection> GetConnections();
     }
 }

@@ -30,7 +30,7 @@ using Nancy.Conventions;
 using Nancy.CustomErrors;
 using Nancy.TinyIoc;
 
-namespace CoiniumServ.Networking.Server.Http.Web
+namespace CoiniumServ.Server.Web
 {
     public class WebBootstrapper : DefaultNancyBootstrapper
     {

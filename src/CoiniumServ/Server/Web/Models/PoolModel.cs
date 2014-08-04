@@ -21,18 +21,12 @@
 // 
 #endregion
 
-using System;
-using System.Net;
+using CoiniumServ.Pools;
 
-namespace CoiniumServ.Networking.Server.Sockets
+namespace CoiniumServ.Server.Web.Models
 {
-    public class BannedConnectionEventArgs:EventArgs
+    public class PoolModel
     {
-        public IPEndPoint Endpoint { get; private set; }
-
-        public BannedConnectionEventArgs(EndPoint endpoint)
-        {
-            Endpoint = (IPEndPoint)endpoint;
-        }
+        public IPool Pool { get; set; }
     }
 }

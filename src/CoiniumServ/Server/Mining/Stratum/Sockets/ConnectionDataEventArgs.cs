@@ -20,16 +20,27 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Networking.Server.Sockets
+
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
-    /// <summary>
-    /// Client interface.
-    /// </summary>
-    public interface IClient
+    public sealed class ConnectionDataEventArgs : ConnectionEventArgs
     {
-        /// <summary>
-        /// Gets or sets the TCP connection bound to client.
-        /// </summary>
-        IConnection Connection { get; }
+        public IEnumerable<byte> Data { get; private set; }
+
+        public ConnectionDataEventArgs(IConnection connection, IEnumerable<byte> data)
+            : base(connection)
+        {
+            Data = data ?? new byte[0];
+        }
+
+        public override string ToString()
+        {
+            return Connection.RemoteEndPoint != null
+                ? string.Format("{0}: {1} bytes", Connection.RemoteEndPoint, Data.Count())
+                : string.Format("Not Connected: {0} bytes", Data.Count());
+        }
     }
 }

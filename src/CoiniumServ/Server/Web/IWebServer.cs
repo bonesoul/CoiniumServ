@@ -21,8 +21,6 @@
 // 
 #endregion
 
-using CoiniumServ.Networking.Server;
-
 namespace CoiniumServ.Server.Web
 {
     public interface IWebServer: IServer
