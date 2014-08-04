@@ -51,7 +51,7 @@ namespace CoiniumServ.Coin.Config
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<CoinConfig>().Error(e, "Error loading coin configuration");
+                Log.Logger.ForContext<CoinConfig>().Error("Error loading coin configuration: {0:l}", e.Message);
             }
         }
     }

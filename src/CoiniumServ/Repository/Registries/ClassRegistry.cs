@@ -22,10 +22,8 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Configuration;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
-using CoiniumServ.Logging;
 using CoiniumServ.Networking.Server.Http.Web;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
@@ -33,7 +31,6 @@ using CoiniumServ.Persistance.Redis;
 using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
-using CoiniumServ.Server.Web;
 using CoiniumServ.Statistics;
 using Nancy.Bootstrapper;
 

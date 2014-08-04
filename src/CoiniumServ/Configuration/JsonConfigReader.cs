@@ -27,6 +27,7 @@ using Serilog;
 
 namespace CoiniumServ.Configuration
 {
+    // TODO: let this be a factory and add log.forcontext<>
     public static class JsonConfigReader
     {
         public static dynamic Read(string fileName)

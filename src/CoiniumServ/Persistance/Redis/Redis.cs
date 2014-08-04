@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -430,38 +431,38 @@ namespace CoiniumServ.Persistance.Redis
             var options = new ConfigurationOptions()
             {
                 AllowAdmin = true,
-                ConnectTimeout = 1000,
-                ResolveDns = true
+                ResolveDns = true,
+                //ConnectTimeout = 5000,
+                EndPoints = { new DnsEndPoint(_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork) }
             };
 			            
-			var endpoint = new DnsEndPoint (_redisConfig.Host, _redisConfig.Port, AddressFamily.InterNetwork);
-
-            options.EndPoints.Add(endpoint);
 
             if (!string.IsNullOrEmpty(_redisConfig.Password))
                 options.Password = _redisConfig.Password;
 
+            var connectionLog = new StringWriter();
+
             try
             {
                 // create the connection
-                _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options).Result;
+                _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options, connectionLog).Result;
 
                 // access to database.
                 _database = _connectionMultiplexer.GetDatabase(_redisConfig.DatabaseId);
 
                 // get the configured server.
-                _server = _connectionMultiplexer.GetServer(endpoint);
+                _server = _connectionMultiplexer.GetServer(_connectionMultiplexer.GetEndPoints().First());
 
                 // check the version
                 var version = GetVersion();
                 if (version < _requiredMinimumVersion)
                     throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
 
-                _logger.Information("Storage initialized: {0:l}:{1}, v{2:l}.", endpoint.Host, endpoint.Port, version);
+                _logger.Information("Storage initialized: {0:l}:{1}, v{2:l}.", _redisConfig.Host, _redisConfig.Port, version);
             }
             catch (Exception e)
             {
-				_logger.Error("Storage initialization failed: {0:l}:{1} - {2:l}.", endpoint.Host, endpoint.Port, e.InnerException.Message);
+                _logger.Error("Storage initialization failed: {0:l}:{1} - {2:l}\n\r {3:l}", _redisConfig.Host, _redisConfig.Port, e.Message, connectionLog);
             }
         }
 
