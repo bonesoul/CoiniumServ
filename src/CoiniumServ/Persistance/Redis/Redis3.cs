@@ -27,28 +27,27 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Shares;
+using ctstone.Redis;
 using Serilog;
-using ServiceStack.Redis;
 
 namespace CoiniumServ.Persistance.Redis
 {
-    public class Redis2 : IStorage, IRedis
+    public class Redis3:IStorage, IRedis
     {
-        public bool IsConnected { get; private set; }
         public bool IsEnabled { get; private set; }
+        public bool IsConnected { get { return _client != null && _client.Connected; } }
 
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
-
-        private RedisClient _client;
-
         private readonly IRedisConfig _redisConfig;
         private readonly IPoolConfig _poolConfig;
 
+        private RedisClient _client;
+
         private readonly ILogger _logger;
 
-        public Redis2(PoolConfig poolConfig)
+        public Redis3(PoolConfig poolConfig)
         {
-            _logger = Log.ForContext<Redis2>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<Redis3>().ForContext("Component", poolConfig.Coin.Name);
 
             _poolConfig = poolConfig; // the pool config.
             _redisConfig = (IRedisConfig)poolConfig.Storage;
@@ -59,39 +58,40 @@ namespace CoiniumServ.Persistance.Redis
                 Initialize();
         }
 
+
         public void AddShare(IShare share)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void AddBlock(IShare share)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void SetRemainingBalances(IList<IWorkerBalance> workerBalances)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void DeleteShares(IPaymentRound round)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void MoveSharesToCurrentRound(IPaymentRound round)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void MoveBlock(IPaymentRound round)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IDictionary<string, int> GetBlockCounts()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void DeleteExpiredHashrateData(int until)
@@ -101,32 +101,32 @@ namespace CoiniumServ.Persistance.Redis
 
             var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
 
-            _client.RemoveRangeFromSortedSetByScore(key, double.NegativeInfinity, until); // stackservice v3 nuget package throws an exception here, may be we should use the repo version? https://github.com/ServiceStack/ServiceStack.Redis/tree/v3
+            _client.ZRemRangeByScore(key, double.NegativeInfinity, until);
         }
 
         public IDictionary<string, double> GetHashrateData(int since)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IList<IPendingBlock> GetPendingBlocks()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IDictionary<uint, IPersistedBlock> GetAllBlocks()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Dictionary<uint, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Dictionary<string, double> GetPreviousBalances()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         private void Initialize()
@@ -134,19 +134,14 @@ namespace CoiniumServ.Persistance.Redis
             try
             {
                 // create the connection
-                _client = !string.IsNullOrEmpty(_redisConfig.Password)
-                    ? new RedisClient(_redisConfig.Host, _redisConfig.Port, _redisConfig.Password)
-                    {
-                        Db = _redisConfig.DatabaseId,
-                        ConnectTimeout = 5000
-                    }
-                    : new RedisClient(_redisConfig.Host, _redisConfig.Port)
-                    {
-                        Db = _redisConfig.DatabaseId,
-                        ConnectTimeout = 5000
-                    };
+                _client = new RedisClient(_redisConfig.Host, _redisConfig.Port, 0);
 
-                IsConnected = true;
+                // select the database
+                _client.Select((uint) _redisConfig.DatabaseId);
+
+                // authenticate if needed.
+                if (!string.IsNullOrEmpty(_redisConfig.Password))
+                    _client.Auth(_redisConfig.Password);
 
                 // check the version
                 var version = GetVersion();
@@ -164,15 +159,18 @@ namespace CoiniumServ.Persistance.Redis
         private Version GetVersion()
         {
             Version version = null;
-            var info = _client.Info;
+            var info = _client.Info("server");
 
-            foreach (var pair in info)
+            var parts = info.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+
+            foreach (var part in parts)
             {
-                if (pair.Key != "redis_version")
+                var data = part.Split(':');
+
+                if (data[0] != "redis_version")
                     continue;
 
-                version = new Version(pair.Value);
-                break;
+                version = new Version(data[1]);
             }
 
             return version;
