@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace CoiniumServGui
@@ -30,7 +31,7 @@ namespace CoiniumServGui
         public MainForm()
         {
             InitializeComponent();
-            Application.ApplicationExit += OnApplicationExit;
+            Application.ApplicationExit += OnApplicationExit;            
         }
 
         private void OnApplicationExit(object sender, EventArgs e)
@@ -38,8 +39,11 @@ namespace CoiniumServGui
             consoleControl1.ProcessInterface.StopProcess();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
+            Text = string.Format("CoiniumServ \"{0}\" - v{1}", CoiniumServ.Utils.Versions.VersionInfo.CodeName,
+                Assembly.GetAssembly(typeof(CoiniumServ.Utils.Versions.VersionInfo)).GetName().Version);
+
             consoleControl1.StartProcess("CoiniumServ.exe","");
         }
     }
