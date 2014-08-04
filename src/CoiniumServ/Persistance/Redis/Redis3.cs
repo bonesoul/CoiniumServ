@@ -29,7 +29,7 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Shares;
-using ctstone.Redis;
+using CSRedis;
 using Serilog;
 
 namespace CoiniumServ.Persistance.Redis
@@ -98,8 +98,6 @@ namespace CoiniumServ.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return blocks;
 
-            _client.StartPipe();
-
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
 
             var pendingKey = string.Format("{0}:blocks:pending", coin);
@@ -110,11 +108,9 @@ namespace CoiniumServ.Persistance.Redis
             _client.ZCard(confirmedKey);
             _client.ZCard(oprhanedKey);
 
-            var results = _client.EndPipe();
-
-            blocks["pending"] = Int32.Parse(results[0].ToString());
-            blocks["confirmed"] = Int32.Parse(results[1].ToString());
-            blocks["orphaned"] = Int32.Parse(results[2].ToString());
+            blocks["pending"] = (int)_client.ZCardAsync(pendingKey).Result;
+            blocks["confirmed"] = (int)_client.ZCardAsync(confirmedKey).Result;
+            blocks["orphaned"] = (int)_client.ZCardAsync(oprhanedKey).Result;
 
             return blocks;
         }
@@ -126,7 +122,7 @@ namespace CoiniumServ.Persistance.Redis
 
             var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
 
-            _client.ZRemRangeByScore(key, double.NegativeInfinity, until);
+            _client.ZRemRangeByScoreAsync(key, double.NegativeInfinity, until);
         }
 
         public IDictionary<string, double> GetHashrateData(int since)
@@ -138,7 +134,7 @@ namespace CoiniumServ.Persistance.Redis
 
             var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
 
-            var results = _client.ZRangeByScore(key, since, double.PositiveInfinity);
+            var results = _client.ZRangeByScoreAsync(key, since, double.PositiveInfinity).Result;
 
             foreach (var result in results)
             {
@@ -165,21 +161,23 @@ namespace CoiniumServ.Persistance.Redis
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var pendingKey = string.Format("{0}:blocks:pending", coin);
 
-            var results = _client.ZRevRangeByScore(pendingKey, -1, 0, true);
+            var results = _client.ZRevRangeByScoreWithScoresAsync(pendingKey, -1, 0, true).Result;
 
             foreach (var result in results)
             {
-                var data = result.Split(':');
+                var item = result.Item1;
+                var score = result.Item2;
+
+                var data = item.Split(':');
                 var blockHash = data[0];
                 var transactionHash = data[1];
                 var hashCandidate = new HashCandidate(blockHash, transactionHash);
 
-                // TODO: need to use the scores.
-                //if (!blocks.ContainsKey((UInt32)result.Score))
-                //    blocks.Add((UInt32)result.Score, new PendingBlock((UInt32)result.Score));
+                if (!blocks.ContainsKey((UInt32)score))
+                    blocks.Add((UInt32)score, new PendingBlock((UInt32)score));
 
-                //var persistedBlock = blocks[(UInt32)result.Score];
-                //persistedBlock.AddHashCandidate(hashCandidate);
+                var persistedBlock = blocks[(UInt32)score];
+                persistedBlock.AddHashCandidate(hashCandidate);
             }
 
             return blocks.Values.ToList();
@@ -212,27 +210,30 @@ namespace CoiniumServ.Persistance.Redis
             }
 
 
-            var results = _client.ZRevRangeByScore(key,-1, 0, true);
+
+            var results = _client.ZRevRangeByScoreWithScoresAsync(key, -1, 0, true).Result;
 
             foreach (var result in results)
             {
-                var data = result.Split(':');
+                var item = result.Item1;
+                var score = result.Item2;
+
+                var data = item.Split(':');
                 var blockHash = data[0];
                 var transactionHash = data[1];
 
-                // TODO: need to use the scores.
-                //switch (status)
-                //{
-                //    case BlockStatus.Kicked:
-                //        blocks.Add((UInt32)result.Score, new KickedBlock((UInt32)result.Score, blockHash, transactionHash, 0, 0));
-                //        break;
-                //    case BlockStatus.Orphaned:
-                //        blocks.Add((UInt32)result.Score, new OrphanedBlock((UInt32)result.Score, blockHash, transactionHash, 0, 0));
-                //        break;
-                //    case BlockStatus.Confirmed:
-                //        blocks.Add((UInt32)result.Score, new ConfirmedBlock((UInt32)result.Score, blockHash, transactionHash, 0, 0));
-                //        break;
-                //}
+                switch (status)
+                {
+                    case BlockStatus.Kicked:
+                        blocks.Add((UInt32)score, new KickedBlock((UInt32)score, blockHash, transactionHash, 0, 0));
+                        break;
+                    case BlockStatus.Orphaned:
+                        blocks.Add((UInt32)score, new OrphanedBlock((UInt32)score, blockHash, transactionHash, 0, 0));
+                        break;
+                    case BlockStatus.Confirmed:
+                        blocks.Add((UInt32)score, new ConfirmedBlock((UInt32)score, blockHash, transactionHash, 0, 0));
+                        break;
+                }
             }
 
             return blocks.Values.ToList();
@@ -283,14 +284,14 @@ namespace CoiniumServ.Persistance.Redis
             try
             {
                 // create the connection
-                _client = new RedisClient(_redisConfig.Host, _redisConfig.Port, 0);
+                _client = new RedisClient(_redisConfig.Host, _redisConfig.Port);
 
                 // select the database
-                _client.Select((uint) _redisConfig.DatabaseId);
+                _client.SelectAsync(_redisConfig.DatabaseId);
 
                 // authenticate if needed.
                 if (!string.IsNullOrEmpty(_redisConfig.Password))
-                    _client.Auth(_redisConfig.Password);
+                    _client.AuthAsync(_redisConfig.Password);
 
                 // check the version
                 var version = GetVersion();
@@ -308,9 +309,9 @@ namespace CoiniumServ.Persistance.Redis
         private Version GetVersion()
         {
             Version version = null;
-            var info = _client.Info("server");
+            var info = _client.InfoAsync("server").Result;
 
-            var parts = info.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            var parts = info.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 
             foreach (var part in parts)
             {
