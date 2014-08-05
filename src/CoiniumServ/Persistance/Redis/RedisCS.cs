@@ -76,11 +76,11 @@ namespace CoiniumServ.Persistance.Redis
 
                 // add the share to round 
                 var currentKey = string.Format("{0}:shares:round:current", coin);
-                var test =_client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
+                _client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
 
                 // increment shares stats.
                 var statsKey = string.Format("{0}:stats", coin);
-                _client.HIncrByAsync(statsKey, share.IsValid ? "validShares" : "invalidShares", 1);
+                _client.HIncrBy(statsKey, share.IsValid ? "validShares" : "invalidShares", 1);
 
                 if (!share.IsValid)
                     return;
@@ -88,7 +88,7 @@ namespace CoiniumServ.Persistance.Redis
                 // add to hashrate
                 var hashrateKey = string.Format("{0}:hashrate", coin);
                 var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
-                _client.ZAddAsync(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
+                _client.ZAdd(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
             }
             catch (RedisException e)
             {
@@ -112,17 +112,17 @@ namespace CoiniumServ.Persistance.Redis
                 // rename round.
                 var currentKey = string.Format("{0}:shares:round:current", coin);
                 var roundKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
-                _client.RenameNxAsync(currentKey, roundKey);
+                _client.RenameNx(currentKey, roundKey);
 
                 // add block to pending.
                 var pendingKey = string.Format("{0}:blocks:pending", coin);
                 var entry = string.Format("{0}:{1}", share.BlockHash.ToHexString(), share.Block.Tx.First());
-                _client.ZAddAsync(pendingKey, Tuple.Create(share.Block.Height, entry));
+                _client.ZAdd(pendingKey, Tuple.Create(share.Block.Height, entry));
             }
 
             // increment block stats.
             var statsKey = string.Format("{0}:stats", coin);
-            _client.HIncrByAsync(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1);
+            _client.HIncrBy(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1);
         }
 
         public void SetRemainingBalances(IList<IWorkerBalance> workerBalances)
@@ -134,10 +134,10 @@ namespace CoiniumServ.Persistance.Redis
 
             foreach (var workerBalance in workerBalances)
             {
-                _client.HDelAsync(balancesKey, workerBalance.Worker); // first delete the existing key.
+                _client.HDel(balancesKey, workerBalance.Worker); // first delete the existing key.
 
                 if (!workerBalance.Paid) // if outstanding balance exists, commit it.
-                    _client.HIncrByFloatAsync(balancesKey, workerBalance.Worker, (double)workerBalance.Balance); // increment the value.
+                    _client.HIncrByFloat(balancesKey, workerBalance.Worker, (double)workerBalance.Balance); // increment the value.
             }
         }
 
@@ -149,7 +149,7 @@ namespace CoiniumServ.Persistance.Redis
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
 
-            _client.DelAsync(roundKey); // delete the associated shares.            
+            _client.Del(roundKey); // delete the associated shares.            
         }
 
         public void MoveSharesToCurrentRound(IPaymentRound round)
@@ -167,11 +167,11 @@ namespace CoiniumServ.Persistance.Redis
             // add shares to current round again.
             foreach (var pair in round.Shares)
             {
-                _client.HIncrByFloatAsync(currentRound, pair.Key, pair.Value);
+                _client.HIncrByFloat(currentRound, pair.Key, pair.Value);
             }
 
             // delete the associated shares.
-            _client.DelAsync(roundShares); // delete the associated shares.
+            _client.Del(roundShares); // delete the associated shares.
         }
 
         public void MoveBlock(IPaymentRound round)
@@ -202,8 +202,8 @@ namespace CoiniumServ.Persistance.Redis
             }
 
             var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);
-            _client.ZRemRangeByScoreAsync(pendingKey, round.Block.Height, round.Block.Height);
-            _client.ZAddAsync(newKey, Tuple.Create(round.Block.Height, entry));
+            _client.ZRemRangeByScore(pendingKey, round.Block.Height, round.Block.Height);
+            _client.ZAdd(newKey, Tuple.Create(round.Block.Height, entry));
         }
 
         public IDictionary<string, int> GetBlockCounts()
@@ -219,9 +219,9 @@ namespace CoiniumServ.Persistance.Redis
             var confirmedKey = string.Format("{0}:blocks:confirmed", coin);
             var oprhanedKey = string.Format("{0}:blocks:orphaned", coin);
 
-            blocks["pending"] = (int)_client.ZCardAsync(pendingKey).Result;
-            blocks["confirmed"] = (int)_client.ZCardAsync(confirmedKey).Result;
-            blocks["orphaned"] = (int)_client.ZCardAsync(oprhanedKey).Result;
+            blocks["pending"] = (int)_client.ZCard(pendingKey);
+            blocks["confirmed"] = (int)_client.ZCard(confirmedKey);
+            blocks["orphaned"] = (int)_client.ZCard(oprhanedKey);
 
             return blocks;
         }
@@ -233,7 +233,7 @@ namespace CoiniumServ.Persistance.Redis
 
             var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
 
-            _client.ZRemRangeByScoreAsync(key, double.NegativeInfinity, until);
+            _client.ZRemRangeByScore(key, double.NegativeInfinity, until);
         }
 
         public IDictionary<string, double> GetHashrateData(int since)
@@ -245,7 +245,7 @@ namespace CoiniumServ.Persistance.Redis
 
             var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
 
-            var results = _client.ZRangeByScoreAsync(key, since, double.PositiveInfinity).Result;
+            var results = _client.ZRangeByScore(key, since, double.PositiveInfinity);
 
             foreach (var result in results)
             {
@@ -272,7 +272,7 @@ namespace CoiniumServ.Persistance.Redis
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var pendingKey = string.Format("{0}:blocks:pending", coin);
 
-            var results = _client.ZRevRangeByScoreWithScoresAsync(pendingKey, double.PositiveInfinity, 0, true).Result;
+            var results = _client.ZRevRangeByScoreWithScores(pendingKey, double.PositiveInfinity, 0, true);
 
             foreach (var result in results)
             {
@@ -320,7 +320,7 @@ namespace CoiniumServ.Persistance.Redis
                     break;
             }
 
-            var results = _client.ZRevRangeByScoreWithScoresAsync(key, double.PositiveInfinity, 0, true).Result;
+            var results = _client.ZRevRangeByScoreWithScores(key, double.PositiveInfinity, 0, true);
 
             foreach (var result in results)
             {
@@ -390,7 +390,7 @@ namespace CoiniumServ.Persistance.Redis
             foreach (var round in rounds)
             {
                 var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
-                var hashes = _client.HGetAllAsync(roundKey).Result;
+                var hashes = _client.HGetAll(roundKey);
 
                 var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
                 sharesForRounds.Add(round.Block.Height, shares);
@@ -407,7 +407,7 @@ namespace CoiniumServ.Persistance.Redis
                 return previousBalances;
 
             var key = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
-            var hashes = _client.HGetAllAsync(key).Result;
+            var hashes = _client.HGetAll(key);
             previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
 
             return previousBalances;
@@ -425,11 +425,11 @@ namespace CoiniumServ.Persistance.Redis
                 };
 
                 // select the database
-                _client.SelectAsync(_redisConfig.DatabaseId);
+                _client.Select(_redisConfig.DatabaseId);
 
                 // authenticate if needed.
                 if (!string.IsNullOrEmpty(_redisConfig.Password))
-                    _client.AuthAsync(_redisConfig.Password);
+                    _client.Auth(_redisConfig.Password);
 
                 // check the version
                 var version = GetVersion();
@@ -447,7 +447,7 @@ namespace CoiniumServ.Persistance.Redis
         private Version GetVersion()
         {
             Version version = null;
-            var info = _client.InfoAsync("server").Result;
+            var info = _client.Info("server");
 
             var parts = info.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 
