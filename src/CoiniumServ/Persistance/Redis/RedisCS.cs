@@ -67,11 +67,11 @@ namespace CoiniumServ.Persistance.Redis
 
         public void AddShare(IShare share)
         {
-            if (!IsEnabled || !IsConnected)
-                return;
-
             try
             {
+                if (!IsEnabled || !IsConnected)
+                    return;
+
                 var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
 
                 // add the share to round 
@@ -102,161 +102,250 @@ namespace CoiniumServ.Persistance.Redis
 
         public void AddBlock(IShare share)
         {
-            if (!IsEnabled || !IsConnected)
-                return;
-
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-
-            if (share.IsBlockAccepted)
+            try
             {
-                // rename round.
-                var currentKey = string.Format("{0}:shares:round:current", coin);
-                var roundKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
-                _client.RenameNx(currentKey, roundKey);
+                if (!IsEnabled || !IsConnected)
+                    return;
 
-                // add block to pending.
-                var pendingKey = string.Format("{0}:blocks:pending", coin);
-                var entry = string.Format("{0}:{1}", share.BlockHash.ToHexString(), share.Block.Tx.First());
-                _client.ZAdd(pendingKey, Tuple.Create(share.Block.Height, entry));
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+                if (share.IsBlockAccepted)
+                {
+                    // rename round.
+                    var currentKey = string.Format("{0}:shares:round:current", coin);
+                    var roundKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
+                    _client.Rename(currentKey, roundKey);
+
+                    // add block to pending.
+                    var pendingKey = string.Format("{0}:blocks:pending", coin);
+                    var entry = string.Format("{0}:{1}", share.BlockHash.ToHexString(), share.Block.Tx.First());
+                    _client.ZAdd(pendingKey, Tuple.Create(share.Block.Height, entry));
+                }
+
+                // increment block stats.
+                var statsKey = string.Format("{0}:stats", coin);
+                _client.HIncrBy(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1);
             }
-
-            // increment block stats.
-            var statsKey = string.Format("{0}:stats", coin);
-            _client.HIncrBy(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1);
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while adding block: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while adding block: {0:l}", e.Message);
+            }
         }
 
         public void SetRemainingBalances(IList<IWorkerBalance> workerBalances)
         {
-            if (!IsEnabled || !IsConnected)
-                return;
-
-            var balancesKey = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
-
-            foreach (var workerBalance in workerBalances)
+            try
             {
-                _client.HDel(balancesKey, workerBalance.Worker); // first delete the existing key.
+                if (!IsEnabled || !IsConnected)
+                    return;
 
-                if (!workerBalance.Paid) // if outstanding balance exists, commit it.
-                    _client.HIncrByFloat(balancesKey, workerBalance.Worker, (double)workerBalance.Balance); // increment the value.
+                var balancesKey = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
+
+                foreach (var workerBalance in workerBalances)
+                {
+                    _client.HDel(balancesKey, workerBalance.Worker); // first delete the existing key.
+
+                    if (!workerBalance.Paid) // if outstanding balance exists, commit it.
+                        _client.HIncrByFloat(balancesKey, workerBalance.Worker, (double) workerBalance.Balance);
+                            // increment the value.
+                }
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while setting remaining balance: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while setting remaining balance: {0:l}", e.Message);
             }
         }
 
         public void DeleteShares(IPaymentRound round)
         {
-            if (!IsEnabled || !IsConnected)
-                return;
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return;
 
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-            var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+                var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
 
-            _client.Del(roundKey); // delete the associated shares.            
+                _client.Del(roundKey); // delete the associated shares.            
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while deleting shares: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while deleting shares: {0:l}", e.Message);
+            }
         }
 
         public void MoveSharesToCurrentRound(IPaymentRound round)
         {
-            if (!IsEnabled || !IsConnected)
-                return;
-
-            if (round.Block.Status == BlockStatus.Confirmed || round.Block.Status == BlockStatus.Pending)
-                return;
-
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-            var currentRound = string.Format("{0}:shares:round:current", coin); // current round key.
-            var roundShares = string.Format("{0}:shares:round:{1}", coin, round.Block.Height); // rounds shares key.
-
-            // add shares to current round again.
-            foreach (var pair in round.Shares)
+            try
             {
-                _client.HIncrByFloat(currentRound, pair.Key, pair.Value);
-            }
+                if (!IsEnabled || !IsConnected)
+                    return;
 
-            // delete the associated shares.
-            _client.Del(roundShares); // delete the associated shares.
+                if (round.Block.Status == BlockStatus.Confirmed || round.Block.Status == BlockStatus.Pending)
+                    return;
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+                var currentRound = string.Format("{0}:shares:round:current", coin); // current round key.
+                var roundShares = string.Format("{0}:shares:round:{1}", coin, round.Block.Height); // rounds shares key.
+
+                // add shares to current round again.
+                foreach (var pair in round.Shares)
+                {
+                    _client.HIncrByFloat(currentRound, pair.Key, pair.Value);
+                }
+
+                // delete the associated shares.
+                _client.Del(roundShares); // delete the associated shares.
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while moving shares: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while moving shares: {0:l}", e.Message);
+            }
         }
 
         public void MoveBlock(IPaymentRound round)
         {
-            if (!IsEnabled || !IsConnected)
-                return;
-
-            if (round.Block.Status == BlockStatus.Pending)
-                return;
-
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-
-            // re-flag the rounds.
-            var pendingKey = string.Format("{0}:blocks:pending", coin); // old key for the round.
-            var newKey = string.Empty; // new key for the round.
-
-            switch (round.Block.Status)
+            try
             {
-                case BlockStatus.Kicked:
-                    newKey = string.Format("{0}:blocks:kicked", coin);
-                    break;
-                case BlockStatus.Orphaned:
-                    newKey = string.Format("{0}:blocks:orphaned", coin);
-                    break;
-                case BlockStatus.Confirmed:
-                    newKey = string.Format("{0}:blocks:confirmed", coin);
-                    break;
-            }
+                if (!IsEnabled || !IsConnected)
+                    return;
 
-            var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);
-            _client.ZRemRangeByScore(pendingKey, round.Block.Height, round.Block.Height);
-            _client.ZAdd(newKey, Tuple.Create(round.Block.Height, entry));
+                if (round.Block.Status == BlockStatus.Pending)
+                    return;
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+                // re-flag the rounds.
+                var pendingKey = string.Format("{0}:blocks:pending", coin); // old key for the round.
+                var newKey = string.Empty; // new key for the round.
+
+                switch (round.Block.Status)
+                {
+                    case BlockStatus.Kicked:
+                        newKey = string.Format("{0}:blocks:kicked", coin);
+                        break;
+                    case BlockStatus.Orphaned:
+                        newKey = string.Format("{0}:blocks:orphaned", coin);
+                        break;
+                    case BlockStatus.Confirmed:
+                        newKey = string.Format("{0}:blocks:confirmed", coin);
+                        break;
+                }
+
+                var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);
+                _client.ZRemRangeByScore(pendingKey, round.Block.Height, round.Block.Height);
+                _client.ZAdd(newKey, Tuple.Create(round.Block.Height, entry));
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while moving block: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while moving block: {0:l}", e.Message);
+            }
         }
 
         public IDictionary<string, int> GetBlockCounts()
         {
             var blocks = new Dictionary<string, int>();
 
-            if (!IsEnabled || !IsConnected)
-                return blocks;
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return blocks;
 
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
 
-            var pendingKey = string.Format("{0}:blocks:pending", coin);
-            var confirmedKey = string.Format("{0}:blocks:confirmed", coin);
-            var oprhanedKey = string.Format("{0}:blocks:orphaned", coin);
+                var pendingKey = string.Format("{0}:blocks:pending", coin);
+                var confirmedKey = string.Format("{0}:blocks:confirmed", coin);
+                var oprhanedKey = string.Format("{0}:blocks:orphaned", coin);
 
-            blocks["pending"] = (int)_client.ZCard(pendingKey);
-            blocks["confirmed"] = (int)_client.ZCard(confirmedKey);
-            blocks["orphaned"] = (int)_client.ZCard(oprhanedKey);
+                blocks["pending"] = (int) _client.ZCard(pendingKey);
+                blocks["confirmed"] = (int) _client.ZCard(confirmedKey);
+                blocks["orphaned"] = (int) _client.ZCard(oprhanedKey);
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while getting block counts: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while getting block counts: {0:l}", e.Message);
+            }
 
             return blocks;
         }
 
         public void DeleteExpiredHashrateData(int until)
         {
-            if (!IsEnabled || !IsConnected)
-                return;
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return;
 
-            var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
+                var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
 
-            _client.ZRemRangeByScore(key, double.NegativeInfinity, until);
+                _client.ZRemRangeByScore(key, double.NegativeInfinity, until);
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while deleting expired hashrate data: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while deleting expired hashrate data: {0:l}", e.Message);
+            }
         }
 
         public IDictionary<string, double> GetHashrateData(int since)
         {
             var hashrates = new Dictionary<string, double>();
 
-            if (!IsEnabled || !IsConnected)
-                return hashrates;
-
-            var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
-
-            var results = _client.ZRangeByScore(key, since, double.PositiveInfinity);
-
-            foreach (var result in results)
+            try
             {
-                var data = result.Split(':');
-                var share = double.Parse(data[0].Replace(',', '.'), CultureInfo.InvariantCulture);
-                var worker = data[1];
+                if (!IsEnabled || !IsConnected)
+                    return hashrates;
 
-                if (!hashrates.ContainsKey(worker))
-                    hashrates.Add(worker, 0);
+                var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
 
-                hashrates[worker] += share;
+                var results = _client.ZRangeByScore(key, since, double.PositiveInfinity);
+
+                foreach (var result in results)
+                {
+                    var data = result.Split(':');
+                    var share = double.Parse(data[0].Replace(',', '.'), CultureInfo.InvariantCulture);
+                    var worker = data[1];
+
+                    if (!hashrates.ContainsKey(worker))
+                        hashrates.Add(worker, 0);
+
+                    hashrates[worker] += share;
+                }
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while getting hashrate data: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while getting hashrate data: {0:l}", e.Message);
             }
 
             return hashrates;
@@ -266,29 +355,40 @@ namespace CoiniumServ.Persistance.Redis
         {
             var blocks = new Dictionary<UInt32, IPendingBlock>();
 
-            if (!IsEnabled || !IsConnected)
-                return blocks.Values.ToList();
-
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-            var pendingKey = string.Format("{0}:blocks:pending", coin);
-
-            var results = _client.ZRevRangeByScoreWithScores(pendingKey, double.PositiveInfinity, 0, true);
-
-            foreach (var result in results)
+            try
             {
-                var item = result.Item1;
-                var score = result.Item2;
+                if (!IsEnabled || !IsConnected)
+                    return blocks.Values.ToList();
 
-                var data = item.Split(':');
-                var blockHash = data[0];
-                var transactionHash = data[1];
-                var hashCandidate = new HashCandidate(blockHash, transactionHash);
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+                var pendingKey = string.Format("{0}:blocks:pending", coin);
 
-                if (!blocks.ContainsKey((UInt32)score))
-                    blocks.Add((UInt32)score, new PendingBlock((UInt32)score));
+                var results = _client.ZRevRangeByScoreWithScores(pendingKey, double.PositiveInfinity, 0, true);
 
-                var persistedBlock = blocks[(UInt32)score];
-                persistedBlock.AddHashCandidate(hashCandidate);
+                foreach (var result in results)
+                {
+                    var item = result.Item1;
+                    var score = result.Item2;
+
+                    var data = item.Split(':');
+                    var blockHash = data[0];
+                    var transactionHash = data[1];
+                    var hashCandidate = new HashCandidate(blockHash, transactionHash);
+
+                    if (!blocks.ContainsKey((UInt32) score))
+                        blocks.Add((UInt32) score, new PendingBlock((UInt32) score));
+
+                    var persistedBlock = blocks[(UInt32) score];
+                    persistedBlock.AddHashCandidate(hashCandidate);
+                }
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while getting pending blocks: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while getting pending blocks: {0:l}", e.Message);
             }
 
             return blocks.Values.ToList();
@@ -298,51 +398,62 @@ namespace CoiniumServ.Persistance.Redis
         {
             var blocks = new Dictionary<UInt32, IFinalizedBlock>();
 
-            if (!IsEnabled || !IsConnected)
-                return blocks.Values.ToList();
-
-            if (status == BlockStatus.Pending)
-                throw new Exception("Pending is not a valid finalized block status");
-
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-            string key = string.Empty;
-
-            switch (status)
+            try
             {
-                case BlockStatus.Kicked:
-                    key = string.Format("{0}:blocks:kicked", coin);
-                    break;
-                case BlockStatus.Orphaned:
-                    key = string.Format("{0}:blocks:orphaned", coin);
-                    break;
-                case BlockStatus.Confirmed:
-                    key = string.Format("{0}:blocks:confirmed", coin);
-                    break;
-            }
+                if (!IsEnabled || !IsConnected)
+                    return blocks.Values.ToList();
 
-            var results = _client.ZRevRangeByScoreWithScores(key, double.PositiveInfinity, 0, true);
+                if (status == BlockStatus.Pending)
+                    throw new Exception("Pending is not a valid finalized block status");
 
-            foreach (var result in results)
-            {
-                var item = result.Item1;
-                var score = result.Item2;
-
-                var data = item.Split(':');
-                var blockHash = data[0];
-                var transactionHash = data[1];
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+                string key = string.Empty;
 
                 switch (status)
                 {
                     case BlockStatus.Kicked:
-                        blocks.Add((UInt32)score, new KickedBlock((UInt32)score, blockHash, transactionHash, 0, 0));
+                        key = string.Format("{0}:blocks:kicked", coin);
                         break;
                     case BlockStatus.Orphaned:
-                        blocks.Add((UInt32)score, new OrphanedBlock((UInt32)score, blockHash, transactionHash, 0, 0));
+                        key = string.Format("{0}:blocks:orphaned", coin);
                         break;
                     case BlockStatus.Confirmed:
-                        blocks.Add((UInt32)score, new ConfirmedBlock((UInt32)score, blockHash, transactionHash, 0, 0));
+                        key = string.Format("{0}:blocks:confirmed", coin);
                         break;
                 }
+
+                var results = _client.ZRevRangeByScoreWithScores(key, double.PositiveInfinity, 0, true);
+
+                foreach (var result in results)
+                {
+                    var item = result.Item1;
+                    var score = result.Item2;
+
+                    var data = item.Split(':');
+                    var blockHash = data[0];
+                    var transactionHash = data[1];
+
+                    switch (status)
+                    {
+                        case BlockStatus.Kicked:
+                            blocks.Add((UInt32) score, new KickedBlock((UInt32) score, blockHash, transactionHash, 0, 0));
+                            break;
+                        case BlockStatus.Orphaned:
+                            blocks.Add((UInt32) score,new OrphanedBlock((UInt32) score, blockHash, transactionHash, 0, 0));
+                            break;
+                        case BlockStatus.Confirmed:
+                            blocks.Add((UInt32) score, new ConfirmedBlock((UInt32) score, blockHash, transactionHash, 0, 0));
+                            break;
+                    }
+                }
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while getting finalized blocks: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while getting finalized blocks: {0:l}", e.Message);
             }
 
             return blocks.Values.ToList();
@@ -382,18 +493,29 @@ namespace CoiniumServ.Persistance.Redis
         {
             var sharesForRounds = new Dictionary<UInt32, Dictionary<string, double>>(); // dictionary of block-height <-> shares.
 
-            if (!IsEnabled || !IsConnected)
-                return sharesForRounds;
-
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-
-            foreach (var round in rounds)
+            try
             {
-                var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
-                var hashes = _client.HGetAll(roundKey);
+                if (!IsEnabled || !IsConnected)
+                    return sharesForRounds;
 
-                var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
-                sharesForRounds.Add(round.Block.Height, shares);
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+                foreach (var round in rounds)
+                {
+                    var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+                    var hashes = _client.HGetAll(roundKey);
+
+                    var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+                    sharesForRounds.Add(round.Block.Height, shares);
+                }
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while getting shares for round: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while getting shares for round: {0:l}", e.Message);
             }
 
             return sharesForRounds;
@@ -403,12 +525,23 @@ namespace CoiniumServ.Persistance.Redis
         {
             var previousBalances = new Dictionary<string, double>();
 
-            if (!IsEnabled || !IsConnected)
-                return previousBalances;
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return previousBalances;
 
-            var key = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
-            var hashes = _client.HGetAll(key);
-            previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+                var key = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
+                var hashes = _client.HGetAll(key);
+                previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while getting previous balances: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while getting previous balances: {0:l}", e.Message);
+            }
 
             return previousBalances;
         }
