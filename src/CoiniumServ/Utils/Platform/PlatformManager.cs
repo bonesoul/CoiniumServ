@@ -64,11 +64,10 @@ namespace CoiniumServ.Utils.Platform
 
         public static void PrintPlatformBanner()
         {
-			if(Framework == Frameworks.DotNet)
-				Logger.Information("Running over {0:l}, framework: {1:l} (v{2:l}).", ".Net", IsDotNet45 ? "4.5" : "4", FrameworkVersion);
-			else
-				Logger.Information("Running over {0:l} [{1:l}], framework: {2:l} (v{3:l}).", "Mono", MonoVersion, IsDotNet45 ? "4.5" : "4", FrameworkVersion);
-        }        
+            Logger.Information("Running over {0:l}, framework: {1:l} (v{2:l}).",
+                Framework == Frameworks.DotNet ? ".Net" : string.Format("Mono [{0}]", MonoVersion),
+                IsDotNet45 ? "4.5" : "4", FrameworkVersion);
+        }
 
         /// <summary>
         /// Identifies the current platform and used frameworks.
