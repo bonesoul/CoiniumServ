@@ -39,7 +39,7 @@ namespace CoiniumServ.Persistance.Redis
     /// <summary>
     /// CSRedis based redis client.
     /// </summary>
-    public class RedisCS:IStorage, IRedis
+    public class Redis:IStorage, IRedis
     {
         public bool IsEnabled { get; private set; }
         public bool IsConnected { get { return _client != null && _client.Connected; } }
@@ -52,9 +52,9 @@ namespace CoiniumServ.Persistance.Redis
 
         private readonly ILogger _logger;
 
-        public RedisCS(PoolConfig poolConfig)
+        public Redis(PoolConfig poolConfig)
         {
-            _logger = Log.ForContext<RedisCS>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<Redis>().ForContext("Component", poolConfig.Coin.Name);
 
             _poolConfig = poolConfig; // the pool config.
             _redisConfig = (IRedisConfig)poolConfig.Storage;
