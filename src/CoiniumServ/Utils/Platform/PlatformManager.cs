@@ -57,7 +57,12 @@ namespace CoiniumServ.Utils.Platform
 
         public static void PrintPlatformBanner()
         {
-            Logger.Information("Running over {0:l} {1:l} ({2:l}).", Framework == Frameworks.DotNet ? ".Net" : "Mono",
+            #if __MonoCS__
+                var test = Mono.Runtime.GetDisplayName();
+            #endif
+                
+
+            Logger.Information("Running over {0:l}, framework: {1:l} (v{2:l}).", Framework == Frameworks.DotNet ? ".Net" : "Mono",
                 IsDotNet45 ? "4.5" : "4",
                 FrameworkVersion);
         }        
