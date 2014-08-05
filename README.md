@@ -72,6 +72,7 @@ Can run on these platforms;
 
 ###### Functionality
 * Stratum server (over TCP sockets).
+* Stratum show_message support (MOTD & messages).
 * Vanilla server (getwork over http server). [experimental]
 * Daemon RPC interface.
 * Block template / job managment.

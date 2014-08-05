@@ -21,15 +21,25 @@
 // 
 #endregion
 
+using CoiniumServ.Statistics;
 using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules
 {
     public class DonateModule : NancyModule
     {
-        public DonateModule()
+        public DonateModule(IStatistics statistics)
         {
-            Get["/donate/"] = _ => View["donate"];
+            Get["/donate/"] = _ =>
+            {
+                // include common data required by layout.
+                ViewBag.Title = "Donation";
+                ViewBag.Heading = "Donation";
+                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+
+                // return our view
+                return View["donate"];
+            };
         }
     }
 }

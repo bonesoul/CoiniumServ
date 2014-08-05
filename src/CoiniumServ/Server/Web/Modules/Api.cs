@@ -34,11 +34,20 @@ namespace CoiniumServ.Server.Web.Modules
     {
         public ApiModule(IStatistics statistics)
         {
-            Get["/api/"] = _ => View["api", new ApiModel
+            Get["/api/"] = _ =>
             {
-                BaseUrl = Request.Url.SiteBase,
-                Coin = statistics.Pools.First().Value.Config.Coin
-            }];
+                // include common data required by layout.
+                ViewBag.Title = "API";
+                ViewBag.Heading = "Public API";
+                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+
+                // return our view
+                return View["api", new ApiModel
+                {
+                    BaseUrl = Request.Url.SiteBase,
+                    Coin = statistics.Pools.First().Value.Config.Coin
+                }];
+            };
 
             Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());
             
