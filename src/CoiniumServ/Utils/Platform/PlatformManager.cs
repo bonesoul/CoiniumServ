@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Reflection;
 using Serilog;
 
 namespace CoiniumServ.Utils.Platform
@@ -46,6 +47,12 @@ namespace CoiniumServ.Utils.Platform
         /// </summary>
         public static Version FrameworkVersion { get; private set; }
 
+		/// <summary>
+		/// Gets the mono version.
+		/// </summary>
+		/// <value>The mono version.</value>
+		public static string MonoVersion { get; private set; }
+
         private static readonly ILogger Logger;
 
         static PlatformManager()
@@ -57,10 +64,10 @@ namespace CoiniumServ.Utils.Platform
 
         public static void PrintPlatformBanner()
         {
-            Logger.Information("Running over {0:l} {1:l} ({2:l}).", Framework == Frameworks.DotNet ? ".Net" : "Mono",
-                IsDotNet45 ? "4.5" : "4",
-                FrameworkVersion);
-        }        
+            Logger.Information("Running over {0:l}, framework: {1:l} (v{2:l}).",
+                Framework == Frameworks.DotNet ? ".Net" : string.Format("Mono {0}", MonoVersion),
+                IsDotNet45 ? "4.5" : "4", FrameworkVersion);
+        }
 
         /// <summary>
         /// Identifies the current platform and used frameworks.
@@ -70,6 +77,26 @@ namespace CoiniumServ.Utils.Platform
             Framework = Type.GetType("Mono.Runtime") != null ? Frameworks.Mono : Frameworks.DotNet;
             IsDotNet45 = Type.GetType("System.Reflection.ReflectionContext", false) != null; /* ReflectionContext exists from .NET 4.5 onwards. */
             FrameworkVersion = Environment.Version;
+
+			if (Framework == Frameworks.Mono)
+				MonoVersion = GetMonoVersion();
         }
+
+		private static string GetMonoVersion()
+		{
+			// we can use reflection to get mono version using Mono.Runtime.GetDisplayName().
+
+			var type = Type.GetType("Mono.Runtime");
+
+			if (type == null)
+				return string.Empty;
+                   
+			var displayName = type.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static); 
+
+			if (displayName == null)
+				return string.Empty;
+						  
+			return displayName.Invoke(null, null).ToString();
+		}
     }
 }

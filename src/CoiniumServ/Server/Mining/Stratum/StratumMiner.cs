@@ -165,7 +165,7 @@ namespace CoiniumServ.Server.Mining.Stratum
 
                 Version = new Version(version);
             }
-            catch (Exception e)
+            catch (Exception) // on unknown signature
             {
                 Software = MinerSoftware.Unknown;
                 Version = new Version();
