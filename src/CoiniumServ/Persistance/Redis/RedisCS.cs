@@ -74,6 +74,8 @@ namespace CoiniumServ.Persistance.Redis
 
                 var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
 
+                _client.StartPipe(); // batch the commands.
+
                 // add the share to round 
                 var currentKey = string.Format("{0}:shares:round:current", coin);
                 _client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
@@ -82,13 +84,15 @@ namespace CoiniumServ.Persistance.Redis
                 var statsKey = string.Format("{0}:stats", coin);
                 _client.HIncrBy(statsKey, share.IsValid ? "validShares" : "invalidShares", 1);
 
-                if (!share.IsValid)
-                    return;
-
                 // add to hashrate
-                var hashrateKey = string.Format("{0}:hashrate", coin);
-                var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
-                _client.ZAdd(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
+                if (share.IsValid)
+                {
+                    var hashrateKey = string.Format("{0}:hashrate", coin);
+                    var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
+                    _client.ZAdd(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
+                }
+
+                _client.EndPipe(); // execute the batch commands.
             }
             catch (RedisException e)
             {
@@ -109,6 +113,8 @@ namespace CoiniumServ.Persistance.Redis
 
                 var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
 
+                _client.StartPipe(); // batch the commands.
+
                 if (share.IsBlockAccepted)
                 {
                     // rename round.
@@ -125,6 +131,8 @@ namespace CoiniumServ.Persistance.Redis
                 // increment block stats.
                 var statsKey = string.Format("{0}:stats", coin);
                 _client.HIncrBy(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1);
+
+                _client.EndPipe(); // execute the batch commands.
             }
             catch (RedisException e)
             {
@@ -147,12 +155,15 @@ namespace CoiniumServ.Persistance.Redis
 
                 foreach (var workerBalance in workerBalances)
                 {
+                    _client.StartPipeTransaction(); // batch the commands as atomic.
+
                     _client.HDel(balancesKey, workerBalance.Worker); // first delete the existing key.
 
                     if (!workerBalance.Paid) // if outstanding balance exists, commit it.
-                        _client.HIncrByFloat(balancesKey, workerBalance.Worker, (double) workerBalance.Balance);
-                            // increment the value.
-                }
+                        _client.HIncrByFloat(balancesKey, workerBalance.Worker, (double) workerBalance.Balance); // increment the value.
+
+                    _client.EndPipe(); // execute the batch commands.
+                }                
             }
             catch (RedisException e)
             {
@@ -200,14 +211,17 @@ namespace CoiniumServ.Persistance.Redis
                 var currentRound = string.Format("{0}:shares:round:current", coin); // current round key.
                 var roundShares = string.Format("{0}:shares:round:{1}", coin, round.Block.Height); // rounds shares key.
 
+                _client.StartPipeTransaction(); // batch the commands as atomic.
+
                 // add shares to current round again.
                 foreach (var pair in round.Shares)
                 {
                     _client.HIncrByFloat(currentRound, pair.Key, pair.Value);
                 }
 
-                // delete the associated shares.
                 _client.Del(roundShares); // delete the associated shares.
+
+                _client.EndPipe(); // execute the batch commands.
             }
             catch (RedisException e)
             {
@@ -249,8 +263,11 @@ namespace CoiniumServ.Persistance.Redis
                 }
 
                 var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);
+
+                _client.StartPipeTransaction(); // batch the commands as atomic.
                 _client.ZRemRangeByScore(pendingKey, round.Block.Height, round.Block.Height);
                 _client.ZAdd(newKey, Tuple.Create(round.Block.Height, entry));
+                _client.EndPipe(); // execute the batch commands.
             }
             catch (RedisException e)
             {
@@ -277,9 +294,18 @@ namespace CoiniumServ.Persistance.Redis
                 var confirmedKey = string.Format("{0}:blocks:confirmed", coin);
                 var oprhanedKey = string.Format("{0}:blocks:orphaned", coin);
 
-                blocks["pending"] = (int) _client.ZCard(pendingKey);
-                blocks["confirmed"] = (int) _client.ZCard(confirmedKey);
-                blocks["orphaned"] = (int) _client.ZCard(oprhanedKey);
+                _client.StartPipe(); // batch the commands as atomic.
+
+                _client.ZCard(pendingKey);
+                _client.ZCard(confirmedKey);
+                _client.ZCard(oprhanedKey);
+
+                var results = _client.EndPipe(); // execute the batch commands.
+
+                blocks["pending"] = Convert.ToInt32(results[0]);
+                blocks["confirmed"] = Convert.ToInt32(results[1]);
+                blocks["orphaned"] = Convert.ToInt32(results[2]);
+
             }
             catch (RedisException e)
             {
