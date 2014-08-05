@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using CoiniumServ.Configuration;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
@@ -31,13 +30,21 @@ namespace CoiniumServ.Server.Web.Modules
 {
     public class IndexModule : NancyModule
     {
-        public IndexModule(IPoolManager poolManager, IStatistics statistics, IConfigManager configManager)
+        public IndexModule(IPoolManager poolManager, IStatistics statistics)
         {
-            Get["/"] = _ => View["index", new IndexModel
+            Get["/"] = _ =>
             {
-                Pools = poolManager.Pools,
-                Statistics = statistics
-            }];
+                // include common data required by layout.
+                ViewBag.Heading = "Welcome";
+                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+
+                // return our view
+                return View["index", new IndexModel
+                {
+                    Pools = poolManager.Pools,
+                    Statistics = statistics
+                }];
+            };
         }
     }
 }

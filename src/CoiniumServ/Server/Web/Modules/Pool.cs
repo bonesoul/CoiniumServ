@@ -23,25 +23,37 @@
 
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
+using CoiniumServ.Statistics;
 using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules
 {
     public class PoolModule : NancyModule
     {
-        public PoolModule(IPoolManager poolManager)
+        public PoolModule(IPoolManager poolManager, IStatistics statistics)
         {
             Get["/pool/{slug}/"] = _ =>
             {
-                var pool = poolManager.GetBySymbol(_.slug);
+                var pool = poolManager.GetBySymbol(_.slug); // find the requested pool.
+
+                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 
                 if (pool == null) // make sure queried pool exists.
+                {
+                    ViewBag.Title = "Error";
+                    ViewBag.Heading = "An error occured!";
+
                     return View["error", new ErrorModel
                     {
                         Summary = "Pool not found",
-                        Details = string.Format("The request pool does not exist: {0}", _.slug)
+                        Details = string.Format("The requested pool does not exist: {0}", _.slug)
                     }];
+                }
+             
+                ViewBag.Title = string.Format("{0} Pool", pool.Config.Coin.Name);
+                ViewBag.Heading = string.Format("{0} Pool Details", pool.Config.Coin.Name);
 
+                // return our view
                 return View["pool", new PoolModel
                 {
                     Pool = pool
