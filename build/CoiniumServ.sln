@@ -22,8 +22,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoiniumServGui", "..\src\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRedis", "..\deps\csredis\CSRedis\CSRedis.csproj", "{D35E185E-A7E1-41E1-846C-21944F56074F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRedis.Tests", "..\deps\csredis\CSRedis.Tests\CSRedis.Tests.csproj", "{422A4579-8C59-4E92-8EB5-2A45C38D27FB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,21 +137,6 @@ Global
 		{D35E185E-A7E1-41E1-846C-21944F56074F}.Testing|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D35E185E-A7E1-41E1-846C-21944F56074F}.Testing|Mixed Platforms.Build.0 = Release|Any CPU
 		{D35E185E-A7E1-41E1-846C-21944F56074F}.Testing|x86.ActiveCfg = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Release|x86.ActiveCfg = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Testing|Any CPU.ActiveCfg = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Testing|Any CPU.Build.0 = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Testing|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Testing|Mixed Platforms.Build.0 = Release|Any CPU
-		{422A4579-8C59-4E92-8EB5-2A45C38D27FB}.Testing|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
