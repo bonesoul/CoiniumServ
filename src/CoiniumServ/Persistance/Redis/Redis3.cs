@@ -24,11 +24,14 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Shares;
-using ctstone.Redis;
+using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Extensions;
+using CSRedis;
 using Serilog;
 
 namespace CoiniumServ.Persistance.Redis
@@ -59,35 +62,134 @@ namespace CoiniumServ.Persistance.Redis
                 Initialize();
         }
 
-
         public void AddShare(IShare share)
         {
-            throw new NotImplementedException();
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+            // add the share to round 
+            var currentKey = string.Format("{0}:shares:round:current", coin);
+            _client.HIncrByFloatAsync(currentKey, share.Miner.Username, share.Difficulty);
+
+            // increment shares stats.
+            var statsKey = string.Format("{0}:stats", coin);
+            _client.HIncrByAsync(statsKey, share.IsValid ? "validShares" : "invalidShares", 1);
+            
+            if (!share.IsValid) 
+                return;
+
+            // add to hashrate
+            var hashrateKey = string.Format("{0}:hashrate", coin);
+            var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
+            _client.ZAddAsync(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
         }
 
         public void AddBlock(IShare share)
         {
-            throw new NotImplementedException();
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+            if (share.IsBlockAccepted)
+            {
+                // rename round.
+                var currentKey = string.Format("{0}:shares:round:current", coin);
+                var roundKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
+                _client.RenameNxAsync(currentKey, roundKey);
+
+                // add block to pending.
+                var pendingKey = string.Format("{0}:blocks:pending", coin);
+                var entry = string.Format("{0}:{1}", share.BlockHash.ToHexString(), share.Block.Tx.First());
+                _client.ZAddAsync(pendingKey, Tuple.Create(share.Block.Height, entry));
+            }
+
+            // increment block stats.
+            var statsKey = string.Format("{0}:stats", coin);
+            _client.HIncrByAsync(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1);
         }
 
         public void SetRemainingBalances(IList<IWorkerBalance> workerBalances)
         {
-            throw new NotImplementedException();
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            var balancesKey = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
+
+            foreach (var workerBalance in workerBalances)
+            {
+                _client.HDelAsync(balancesKey, workerBalance.Worker); // first delete the existing key.
+
+                if (!workerBalance.Paid) // if outstanding balance exists, commit it.
+                    _client.HIncrByFloatAsync(balancesKey, workerBalance.Worker, (double)workerBalance.Balance); // increment the value.
+            }
         }
 
         public void DeleteShares(IPaymentRound round)
         {
-            throw new NotImplementedException();
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+
+            _client.DelAsync(roundKey); // delete the associated shares.            
         }
 
         public void MoveSharesToCurrentRound(IPaymentRound round)
         {
-            throw new NotImplementedException();
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            if (round.Block.Status == BlockStatus.Confirmed || round.Block.Status == BlockStatus.Pending)
+                return;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            var currentRound = string.Format("{0}:shares:round:current", coin); // current round key.
+            var roundShares = string.Format("{0}:shares:round:{1}", coin, round.Block.Height); // rounds shares key.
+
+            // add shares to current round again.
+            foreach (var pair in round.Shares)
+            {
+                _client.HIncrByFloatAsync(currentRound, pair.Key, pair.Value);
+            }
+
+            // delete the associated shares.
+            _client.DelAsync(roundShares); // delete the associated shares.
         }
 
         public void MoveBlock(IPaymentRound round)
         {
-            throw new NotImplementedException();
+            if (!IsEnabled || !IsConnected)
+                return;
+
+            if (round.Block.Status == BlockStatus.Pending)
+                return;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+            // re-flag the rounds.
+            var pendingKey = string.Format("{0}:blocks:pending", coin); // old key for the round.
+            var newKey = string.Empty; // new key for the round.
+
+            switch (round.Block.Status)
+            {
+                case BlockStatus.Kicked:
+                    newKey = string.Format("{0}:blocks:kicked", coin);
+                    break;
+                case BlockStatus.Orphaned:
+                    newKey = string.Format("{0}:blocks:orphaned", coin);
+                    break;
+                case BlockStatus.Confirmed:
+                    newKey = string.Format("{0}:blocks:confirmed", coin);
+                    break;
+            }
+
+            var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);
+            _client.ZRemRangeByScoreAsync(pendingKey, round.Block.Height, round.Block.Height);
+            _client.ZAddAsync(newKey, Tuple.Create(round.Block.Height, entry));
         }
 
         public IDictionary<string, int> GetBlockCounts()
@@ -96,8 +198,6 @@ namespace CoiniumServ.Persistance.Redis
 
             if (!IsEnabled || !IsConnected)
                 return blocks;
-
-            _client.StartPipe();
 
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
 
@@ -109,11 +209,9 @@ namespace CoiniumServ.Persistance.Redis
             _client.ZCard(confirmedKey);
             _client.ZCard(oprhanedKey);
 
-            var results = _client.EndPipe();
-
-            blocks["pending"] = Int32.Parse(results[0].ToString());
-            blocks["confirmed"] = Int32.Parse(results[1].ToString());
-            blocks["orphaned"] = Int32.Parse(results[2].ToString());
+            blocks["pending"] = (int)_client.ZCardAsync(pendingKey).Result;
+            blocks["confirmed"] = (int)_client.ZCardAsync(confirmedKey).Result;
+            blocks["orphaned"] = (int)_client.ZCardAsync(oprhanedKey).Result;
 
             return blocks;
         }
@@ -125,7 +223,7 @@ namespace CoiniumServ.Persistance.Redis
 
             var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
 
-            _client.ZRemRangeByScore(key, double.NegativeInfinity, until);
+            _client.ZRemRangeByScoreAsync(key, double.NegativeInfinity, until);
         }
 
         public IDictionary<string, double> GetHashrateData(int since)
@@ -137,7 +235,7 @@ namespace CoiniumServ.Persistance.Redis
 
             var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
 
-            var results = _client.ZRangeByScore(key, since, double.PositiveInfinity);
+            var results = _client.ZRangeByScoreAsync(key, since, double.PositiveInfinity).Result;
 
             foreach (var result in results)
             {
@@ -156,22 +254,153 @@ namespace CoiniumServ.Persistance.Redis
 
         public IList<IPendingBlock> GetPendingBlocks()
         {
-            throw new NotImplementedException();
+            var blocks = new Dictionary<UInt32, IPendingBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks.Values.ToList();
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            var pendingKey = string.Format("{0}:blocks:pending", coin);
+
+            var results = _client.ZRevRangeByScoreWithScoresAsync(pendingKey, -1, 0, true).Result;
+
+            foreach (var result in results)
+            {
+                var item = result.Item1;
+                var score = result.Item2;
+
+                var data = item.Split(':');
+                var blockHash = data[0];
+                var transactionHash = data[1];
+                var hashCandidate = new HashCandidate(blockHash, transactionHash);
+
+                if (!blocks.ContainsKey((UInt32)score))
+                    blocks.Add((UInt32)score, new PendingBlock((UInt32)score));
+
+                var persistedBlock = blocks[(UInt32)score];
+                persistedBlock.AddHashCandidate(hashCandidate);
+            }
+
+            return blocks.Values.ToList();
+        }
+
+        private IEnumerable<IFinalizedBlock> GetFinalizedBlocks(BlockStatus status)
+        {
+            var blocks = new Dictionary<UInt32, IFinalizedBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks.Values.ToList();
+
+            if (status == BlockStatus.Pending)
+                throw new Exception("Pending is not a valid finalized block status");
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            string key = string.Empty;
+
+            switch (status)
+            {
+                case BlockStatus.Kicked:
+                    key = string.Format("{0}:blocks:kicked", coin);
+                    break;
+                case BlockStatus.Orphaned:
+                    key = string.Format("{0}:blocks:orphaned", coin);
+                    break;
+                case BlockStatus.Confirmed:
+                    key = string.Format("{0}:blocks:confirmed", coin);
+                    break;
+            }
+
+            var results = _client.ZRevRangeByScoreWithScoresAsync(key, -1, 0, true).Result;
+
+            foreach (var result in results)
+            {
+                var item = result.Item1;
+                var score = result.Item2;
+
+                var data = item.Split(':');
+                var blockHash = data[0];
+                var transactionHash = data[1];
+
+                switch (status)
+                {
+                    case BlockStatus.Kicked:
+                        blocks.Add((UInt32)score, new KickedBlock((UInt32)score, blockHash, transactionHash, 0, 0));
+                        break;
+                    case BlockStatus.Orphaned:
+                        blocks.Add((UInt32)score, new OrphanedBlock((UInt32)score, blockHash, transactionHash, 0, 0));
+                        break;
+                    case BlockStatus.Confirmed:
+                        blocks.Add((UInt32)score, new ConfirmedBlock((UInt32)score, blockHash, transactionHash, 0, 0));
+                        break;
+                }
+            }
+
+            return blocks.Values.ToList();
         }
 
         public IDictionary<uint, IPersistedBlock> GetAllBlocks()
         {
-            throw new NotImplementedException();
-        }
+            var blocks = new Dictionary<uint, IPersistedBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks;
+
+            foreach (var block in GetFinalizedBlocks(BlockStatus.Confirmed))
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            foreach (var block in GetFinalizedBlocks(BlockStatus.Orphaned))
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            foreach (var block in GetFinalizedBlocks(BlockStatus.Kicked))
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            foreach (var block in GetPendingBlocks())
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            return blocks;
+        }       
 
         public Dictionary<uint, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)
         {
-            throw new NotImplementedException();
+            var sharesForRounds = new Dictionary<UInt32, Dictionary<string, double>>(); // dictionary of block-height <-> shares.
+
+            if (!IsEnabled || !IsConnected)
+                return sharesForRounds;
+
+            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+            foreach (var round in rounds)
+            {
+                var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+                var hashes = _client.HGetAllAsync(roundKey).Result;
+
+                var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+                sharesForRounds.Add(round.Block.Height, shares);
+            }
+
+            return sharesForRounds;
         }
 
         public Dictionary<string, double> GetPreviousBalances()
         {
-            throw new NotImplementedException();
+            var previousBalances = new Dictionary<string, double>();
+
+            if (!IsEnabled || !IsConnected)
+                return previousBalances;
+
+            var key = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
+            var hashes = _client.HGetAllAsync(key).Result;
+            previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+
+            return previousBalances;
         }
 
         private void Initialize()
@@ -179,14 +408,18 @@ namespace CoiniumServ.Persistance.Redis
             try
             {
                 // create the connection
-                _client = new RedisClient(_redisConfig.Host, _redisConfig.Port, 0);
+                _client = new RedisClient(_redisConfig.Host, _redisConfig.Port)
+                {
+                    ReconnectAttempts = 3,
+                    ReconnectTimeout = 200
+                };
 
                 // select the database
-                _client.Select((uint) _redisConfig.DatabaseId);
+                _client.SelectAsync(_redisConfig.DatabaseId);
 
                 // authenticate if needed.
                 if (!string.IsNullOrEmpty(_redisConfig.Password))
-                    _client.Auth(_redisConfig.Password);
+                    _client.AuthAsync(_redisConfig.Password);
 
                 // check the version
                 var version = GetVersion();
@@ -204,9 +437,9 @@ namespace CoiniumServ.Persistance.Redis
         private Version GetVersion()
         {
             Version version = null;
-            var info = _client.Info("server");
+            var info = _client.InfoAsync("server").Result;
 
-            var parts = info.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            var parts = info.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 
             foreach (var part in parts)
             {

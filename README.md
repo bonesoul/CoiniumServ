@@ -82,6 +82,8 @@ Can run on these platforms;
 * Transaction messages support [in-development].
 * Vardiff support.
 * Ban manager support that can handles miners flooding with invalid shares.
+* Embedded web-server & front-end
+* Full-stack API
 
 ###### Hashing Algorithms
 
@@ -97,16 +99,13 @@ _Needs Testing_
 * ✓ __Keccak__ 
 * ✓ __SHAvite3__
 * ✓ __Skein__ 
-* ✓ __X11__ 
-* ✓ __X13__ 
-* ✓ __X14__ 
-* ✓ __X15__ 
-* ✓ __X17__
+* ✓ __multi-algos: X11, X13, X14, X15, X17__
 
 _Under Development_
 
 * ✓ __Scrypt-Jane__ 
 * ✓ __Scrypt-N__ 
+* ✓ __Scrypt-OG__ 
 * ✓ __Quark__ 
 * ✓ __NIST5__
 * ✓ __Qubit__
@@ -131,7 +130,7 @@ wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/cont
 
 * [Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
 * [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
-* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan) ( & motivation)
+* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
 
 ### Contributing
 
