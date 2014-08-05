@@ -8,7 +8,7 @@ echo "Cloning submodules.."
 git submodule init
 git submodule update
 echo "Building CoiniumServ.."
-cd build
-./build-mono.sh 
+cd build/extra
+./build-mono-release.sh 
 cd ..
 echo "CoiniumServ build done.."
