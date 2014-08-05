@@ -40,7 +40,10 @@ using StackExchange.Redis;
 
 namespace CoiniumServ.Persistance.Redis
 {
-    public class Redis:IStorage, IRedis
+    /// <summary>
+    /// StackExchange.Redis based redis-client.
+    /// </summary>
+    public class RedisSE:IStorage, IRedis
     {
         public bool IsEnabled { get; private set; }
 
@@ -56,9 +59,9 @@ namespace CoiniumServ.Persistance.Redis
 
         private readonly ILogger _logger;
 
-        public Redis(PoolConfig poolConfig)
+        public RedisSE(PoolConfig poolConfig)
         {
-            _logger = Log.ForContext<Redis>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<RedisSE>().ForContext("Component", poolConfig.Coin.Name);
 
             _poolConfig = poolConfig; // the pool config.
             _redisConfig = (IRedisConfig) poolConfig.Storage;

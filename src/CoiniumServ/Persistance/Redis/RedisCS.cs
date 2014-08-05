@@ -36,7 +36,10 @@ using Serilog;
 
 namespace CoiniumServ.Persistance.Redis
 {
-    public class Redis3:IStorage, IRedis
+    /// <summary>
+    /// CSRedis based redis client.
+    /// </summary>
+    public class RedisCS:IStorage, IRedis
     {
         public bool IsEnabled { get; private set; }
         public bool IsConnected { get { return _client != null && _client.Connected; } }
@@ -49,9 +52,9 @@ namespace CoiniumServ.Persistance.Redis
 
         private readonly ILogger _logger;
 
-        public Redis3(PoolConfig poolConfig)
+        public RedisCS(PoolConfig poolConfig)
         {
-            _logger = Log.ForContext<Redis3>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<RedisCS>().ForContext("Component", poolConfig.Coin.Name);
 
             _poolConfig = poolConfig; // the pool config.
             _redisConfig = (IRedisConfig)poolConfig.Storage;
@@ -205,10 +208,6 @@ namespace CoiniumServ.Persistance.Redis
             var confirmedKey = string.Format("{0}:blocks:confirmed", coin);
             var oprhanedKey = string.Format("{0}:blocks:orphaned", coin);
 
-            _client.ZCard(pendingKey);
-            _client.ZCard(confirmedKey);
-            _client.ZCard(oprhanedKey);
-
             blocks["pending"] = (int)_client.ZCardAsync(pendingKey).Result;
             blocks["confirmed"] = (int)_client.ZCardAsync(confirmedKey).Result;
             blocks["orphaned"] = (int)_client.ZCardAsync(oprhanedKey).Result;
@@ -262,7 +261,7 @@ namespace CoiniumServ.Persistance.Redis
             var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
             var pendingKey = string.Format("{0}:blocks:pending", coin);
 
-            var results = _client.ZRevRangeByScoreWithScoresAsync(pendingKey, -1, 0, true).Result;
+            var results = _client.ZRevRangeByScoreWithScoresAsync(pendingKey, double.PositiveInfinity, 0, true).Result;
 
             foreach (var result in results)
             {
@@ -310,7 +309,7 @@ namespace CoiniumServ.Persistance.Redis
                     break;
             }
 
-            var results = _client.ZRevRangeByScoreWithScoresAsync(key, -1, 0, true).Result;
+            var results = _client.ZRevRangeByScoreWithScoresAsync(key, double.PositiveInfinity, 0, true).Result;
 
             foreach (var result in results)
             {

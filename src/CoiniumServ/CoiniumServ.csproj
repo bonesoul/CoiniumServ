@@ -58,6 +58,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\CryptSharpOfficial.2.0.0.0\lib\CryptSharp.dll</HintPath>
     </Reference>
+    <Reference Include="csredis, Version=3.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\packages\csredis.3.0.5\lib\net40\csredis.dll</HintPath>
+    </Reference>
     <Reference Include="HashLib, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
@@ -151,7 +155,7 @@
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
     <Compile Include="Payments\WalletConfig.cs" />
-    <Compile Include="Persistance\Redis\Redis3.cs" />
+    <Compile Include="Persistance\Redis\RedisCS.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
     <Compile Include="Server\Web\Modules\BackendConfig.cs" />
     <Compile Include="Server\Web\Modules\Donate.cs" />
@@ -248,7 +252,7 @@
     <Compile Include="Server\Mining\Stratum\Errors\OtherError.cs" />
     <Compile Include="Server\Mining\Stratum\Notifications\IJob.cs" />
     <Compile Include="Persistance\IStorage.cs" />
-    <Compile Include="Persistance\Redis\Redis.cs" />
+    <Compile Include="Persistance\Redis\RedisSE.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
