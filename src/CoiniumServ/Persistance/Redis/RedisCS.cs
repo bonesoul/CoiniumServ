@@ -70,23 +70,34 @@ namespace CoiniumServ.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return;
 
-            var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+            try
+            {
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
 
-            // add the share to round 
-            var currentKey = string.Format("{0}:shares:round:current", coin);
-            _client.HIncrByFloatAsync(currentKey, share.Miner.Username, share.Difficulty);
+                // add the share to round 
+                var currentKey = string.Format("{0}:shares:round:current", coin);
+                var test =_client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
 
-            // increment shares stats.
-            var statsKey = string.Format("{0}:stats", coin);
-            _client.HIncrByAsync(statsKey, share.IsValid ? "validShares" : "invalidShares", 1);
-            
-            if (!share.IsValid) 
-                return;
+                // increment shares stats.
+                var statsKey = string.Format("{0}:stats", coin);
+                _client.HIncrByAsync(statsKey, share.IsValid ? "validShares" : "invalidShares", 1);
 
-            // add to hashrate
-            var hashrateKey = string.Format("{0}:hashrate", coin);
-            var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
-            _client.ZAddAsync(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
+                if (!share.IsValid)
+                    return;
+
+                // add to hashrate
+                var hashrateKey = string.Format("{0}:hashrate", coin);
+                var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
+                _client.ZAddAsync(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
+            }
+            catch (RedisException e)
+            {
+                _logger.Error("An exception occured while comitting share: {0:l}", e.Message);
+            }
+            catch (RedisProtocolException e)
+            {
+                _logger.Error("An exception occured while comitting share: {0:l}", e.Message);
+            }
         }
 
         public void AddBlock(IShare share)
