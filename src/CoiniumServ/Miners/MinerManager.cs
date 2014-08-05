@@ -127,7 +127,7 @@ namespace CoiniumServ.Miners
                 {
                     miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
                 }
-                catch (RpcException e)
+                catch (RpcException)
                 {
                     miner.Authenticated = false;
                 }

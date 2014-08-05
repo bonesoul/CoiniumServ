@@ -116,7 +116,7 @@ namespace CoiniumServ.Statistics
                 Difficulty = miningInfo.Difficulty;
                 CurrentBlock = miningInfo.Blocks;
             }
-            catch (RpcException e)
+            catch (RpcException)
             {
                 NetworkHashrate = 0;
                 Difficulty = 0;
