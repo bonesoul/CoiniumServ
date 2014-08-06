@@ -151,7 +151,7 @@
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
     <Compile Include="Payments\WalletConfig.cs" />
-    <Compile Include="Persistance\Redis\RedisCS.cs" />
+    <Compile Include="Persistance\Redis\Redis.cs" />
     <Compile Include="Persistance\Redis\RedisSE.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
     <Compile Include="Server\Web\Modules\BackendConfig.cs" />
