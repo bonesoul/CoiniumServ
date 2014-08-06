@@ -194,6 +194,8 @@ namespace CoiniumServ.Shares
                     Debugger.Break(); // TODO: diagnose the case as this may eventually allow us to remove kicked blocks processing from payments processor and so.
                 }
 
+                // todo: also add pool-wallet address check as in payment-processor.
+
                 share.SetFoundBlock(block); // assign the block to share.
                 return true;
             }
