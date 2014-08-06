@@ -108,11 +108,16 @@ namespace CoiniumServ.Shares
             }
             Nonce = Convert.ToUInt32(nonceString, 16); // nonce supplied by the miner for the share.
 
-            // TODO: add duplicate share check.
-
             // set job supplied parameters.
             Height = job.BlockTemplate.Height; // associated job's block height.
             ExtraNonce1 = miner.ExtraNonce; // extra nonce1 assigned to miner.
+
+            // check for duplicate shares.
+            if (!Job.RegisterShare(this)) // try to register share with the job and see if it's duplicated or not.
+            {
+                Error = ShareError.DuplicateShare;
+                return;
+            }
 
             // construct the coinbase.
             CoinbaseBuffer = Serializers.SerializeCoinbase(Job, ExtraNonce1, ExtraNonce2); 

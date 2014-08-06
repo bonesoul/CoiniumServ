@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Cryptology.Merkle;
 using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Shares;
 using CoiniumServ.Transactions;
 using CoiniumServ.Utils.Numerics;
 
@@ -66,5 +67,7 @@ namespace CoiniumServ.Jobs
         IMerkleTree MerkleTree { get; }
 
         new IEnumerator<object> GetEnumerator();
+
+        bool RegisterShare(IShare share);
     }
 }
