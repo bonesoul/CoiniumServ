@@ -1008,7 +1008,7 @@
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
     <PostBuildEvent>
 if $(ConfigurationName) == Debug (
 xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.2\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"

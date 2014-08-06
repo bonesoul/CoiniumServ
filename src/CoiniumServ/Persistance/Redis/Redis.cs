@@ -94,11 +94,7 @@ namespace CoiniumServ.Persistance.Redis
 
                 _client.EndPipe(); // execute the batch commands.
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while comitting share: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while comitting share: {0:l}", e.Message);
             }
@@ -134,11 +130,7 @@ namespace CoiniumServ.Persistance.Redis
 
                 _client.EndPipe(); // execute the batch commands.
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while adding block: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while adding block: {0:l}", e.Message);
             }
@@ -165,11 +157,7 @@ namespace CoiniumServ.Persistance.Redis
                     _client.EndPipe(); // execute the batch commands.
                 }                
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while setting remaining balance: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while setting remaining balance: {0:l}", e.Message);
             }
@@ -187,11 +175,7 @@ namespace CoiniumServ.Persistance.Redis
 
                 _client.Del(roundKey); // delete the associated shares.            
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while deleting shares: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while deleting shares: {0:l}", e.Message);
             }
@@ -223,11 +207,7 @@ namespace CoiniumServ.Persistance.Redis
 
                 _client.EndPipe(); // execute the batch commands.
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while moving shares: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while moving shares: {0:l}", e.Message);
             }
@@ -269,11 +249,7 @@ namespace CoiniumServ.Persistance.Redis
                 _client.ZAdd(newKey, Tuple.Create(round.Block.Height, entry));
                 _client.EndPipe(); // execute the batch commands.
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while moving block: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while moving block: {0:l}", e.Message);
             }
@@ -307,11 +283,7 @@ namespace CoiniumServ.Persistance.Redis
                 blocks["orphaned"] = Convert.ToInt32(results[2]);
 
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while getting block counts: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while getting block counts: {0:l}", e.Message);
             }
@@ -330,11 +302,7 @@ namespace CoiniumServ.Persistance.Redis
 
                 _client.ZRemRangeByScore(key, double.NegativeInfinity, until);
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while deleting expired hashrate data: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while deleting expired hashrate data: {0:l}", e.Message);
             }
@@ -365,11 +333,7 @@ namespace CoiniumServ.Persistance.Redis
                     hashrates[worker] += share;
                 }
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while getting hashrate data: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while getting hashrate data: {0:l}", e.Message);
             }
@@ -408,11 +372,7 @@ namespace CoiniumServ.Persistance.Redis
                     persistedBlock.AddHashCandidate(hashCandidate);
                 }
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while getting pending blocks: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while getting pending blocks: {0:l}", e.Message);
             }
@@ -473,11 +433,7 @@ namespace CoiniumServ.Persistance.Redis
                     }
                 }
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while getting finalized blocks: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while getting finalized blocks: {0:l}", e.Message);
             }
@@ -535,11 +491,7 @@ namespace CoiniumServ.Persistance.Redis
                     sharesForRounds.Add(round.Block.Height, shares);
                 }
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while getting shares for round: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while getting shares for round: {0:l}", e.Message);
             }
@@ -560,11 +512,7 @@ namespace CoiniumServ.Persistance.Redis
                 var hashes = _client.HGetAll(key);
                 previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
             }
-            catch (RedisException e)
-            {
-                _logger.Error("An exception occured while getting previous balances: {0:l}", e.Message);
-            }
-            catch (RedisProtocolException e)
+            catch (Exception e)
             {
                 _logger.Error("An exception occured while getting previous balances: {0:l}", e.Message);
             }
@@ -606,18 +554,26 @@ namespace CoiniumServ.Persistance.Redis
         private Version GetVersion()
         {
             Version version = null;
-            var info = _client.Info("server");
 
-            var parts = info.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-
-            foreach (var part in parts)
+            try
             {
-                var data = part.Split(':');
+                var info = _client.Info("server");
 
-                if (data[0] != "redis_version")
-                    continue;
+                var parts = info.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
 
-                version = new Version(data[1]);
+                foreach (var part in parts)
+                {
+                    var data = part.Split(':');
+
+                    if (data[0] != "redis_version")
+                        continue;
+
+                    version = new Version(data[1]);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting version info: {0:l}", e.Message);
             }
 
             return version;
