@@ -22,6 +22,8 @@
 #endregion
 
 using System;
+using System.Diagnostics;
+using System.Linq;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
@@ -103,18 +105,16 @@ namespace CoiniumServ.Shares
             miner.ValidShares++;
 
             _storage.AddShare(share); // commit the share.
+            _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);
 
+            // check if share is a block candidate
             if (!share.IsBlockCandidate)
-            {
-                _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);
                 return;
-            }
+            
+            // submit block candidate to daemon.
+            var accepted = SubmitBlock(share);
 
-            // if share contains a block candicate
-            _logger.Debug("Share with block candidate [{0}] accepted at {1:0.00}/{2} by miner {3:l}", share.Height, share.Difficulty, miner.Difficulty, miner.Username);
-
-            var accepted = SubmitBlock(share); // submit block to daemon.
-
+            // check if it was accepted and valid.
             if (!accepted) 
                 return;
 
@@ -183,6 +183,17 @@ namespace CoiniumServ.Shares
             try
             {
                 var block = _daemonClient.GetBlock(share.BlockHash.ToHexString()); // query the block.
+
+                // generation transaction (the first one) in a block is simply calculated by coinbase hash.
+                var generationTransactionHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString();
+
+                // make sure our generation transaction matches what the coin daemon reports.
+                if (generationTransactionHash != block.Tx.First())
+                {
+                    _logger.Fatal("Share's generation transaction hash is different then what coin daemon reports. Possible kicked block!");
+                    Debugger.Break(); // TODO: diagnose the case as this may eventually allow us to remove kicked blocks processing from payments processor and so.
+                }
+
                 share.SetFoundBlock(block); // assign the block to share.
                 return true;
             }
