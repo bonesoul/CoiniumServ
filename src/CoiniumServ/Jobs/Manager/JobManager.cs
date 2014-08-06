@@ -31,7 +31,6 @@ using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Shares;
 using CoiniumServ.Transactions;

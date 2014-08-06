@@ -24,7 +24,7 @@
 using System;
 using System.IO;
 using System.Text;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
+using CoiniumServ.Jobs;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Arrays;
 using Gibbed.IO;

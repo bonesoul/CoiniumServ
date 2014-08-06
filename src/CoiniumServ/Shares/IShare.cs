@@ -24,8 +24,8 @@
 using System;
 using CoiniumServ.Cryptology;
 using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Jobs;
 using CoiniumServ.Miners;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Utils.Numerics;
 
 namespace CoiniumServ.Shares

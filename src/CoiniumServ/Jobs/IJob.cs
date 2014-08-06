@@ -29,7 +29,7 @@ using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Transactions;
 using CoiniumServ.Utils.Numerics;
 
-namespace CoiniumServ.Server.Mining.Stratum.Notifications
+namespace CoiniumServ.Jobs
 {
     public interface IJob : IEnumerable<object>
     {

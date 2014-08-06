@@ -23,7 +23,6 @@
 
 using System;
 using System.Collections.Generic;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
 
 namespace CoiniumServ.Jobs.Tracker
 {

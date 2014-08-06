@@ -36,7 +36,7 @@ using CoiniumServ.Utils.Numerics;
 using Gibbed.IO;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Server.Mining.Stratum.Notifications
+namespace CoiniumServ.Jobs
 {
     [JsonArray]
     public class Job : IJob

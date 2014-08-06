@@ -29,7 +29,6 @@ using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Miners;
 using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Time;
 using CoiniumServ.Utils.Numerics;

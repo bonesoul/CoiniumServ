@@ -30,7 +30,6 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Payments;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Extensions;
