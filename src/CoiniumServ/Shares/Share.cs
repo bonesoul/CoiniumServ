@@ -26,10 +26,12 @@ using CoiniumServ.Coin.Coinbase;
 using CoiniumServ.Cryptology;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Jobs;
 using CoiniumServ.Miners;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Helpers.Time;
 using CoiniumServ.Utils.Numerics;
 using Serilog;
 
@@ -68,42 +70,49 @@ namespace CoiniumServ.Shares
             Job = job;
             Error = ShareError.None;
 
-            // TODO: add extranonce2 size check!.
-            // TODO: add duplicate share check.
-            // TODO: add nTime out of range check
+            var submitTime = TimeHelpers.NowInUnixTime(); // time we recieved the share from miner.
 
             if (Job == null)
             {
                 Error = ShareError.JobNotFound;
-                Log.ForContext<Share>().Warning("Job doesn't exist: {0}", JobId);
                 return;
             }
+
+            // check size of miner supplied extraNonce2
+            if (extraNonce2.Length/2 != ExtraNonce.ExpectedExtraNonce2Size)
+            {
+                Error = ShareError.IncorrectExtraNonce2Size;
+                return;
+            }
+            ExtraNonce2 = Convert.ToUInt32(extraNonce2, 16); // set extraNonce2 for the share.
             
-            // check miner supplied nTime.
+            // check size of miner supplied nTime.
             if (nTimeString.Length != 8)
             {
                 Error = ShareError.IncorrectNTimeSize;
-                Log.ForContext<Share>().Warning("Incorrect size of nTime");
+                return;
+            }
+            NTime = Convert.ToUInt32(nTimeString, 16); // read ntime for the share
+            
+            // make sure NTime is within range.
+            if (NTime < job.BlockTemplate.CurTime || NTime > submitTime + 7200)
+            {
+                Error = ShareError.NTimeOutOfRange;
                 return;
             }
 
-            NTime = Convert.ToUInt32(nTimeString, 16); // ntime for the share
-
-            // check miner supplied nonce.
+            // check size of miner supplied nonce.
             if (nonceString.Length != 8)
             {
                 Error = ShareError.IncorrectNonceSize;
-                Log.ForContext<Share>().Warning("incorrect size of nonce");
                 return;
             }
-
             Nonce = Convert.ToUInt32(nonceString, 16); // nonce supplied by the miner for the share.
 
-            // check miner supplied extraNonce2
-            ExtraNonce2 = Convert.ToUInt32(extraNonce2, 16);
+            // TODO: add duplicate share check.
 
-            // check job supplied parameters.
-            Height = job.BlockTemplate.Height;
+            // set job supplied parameters.
+            Height = job.BlockTemplate.Height; // associated job's block height.
             ExtraNonce1 = miner.ExtraNonce; // extra nonce1 assigned to miner.
 
             // construct the coinbase.

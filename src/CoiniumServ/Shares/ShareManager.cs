@@ -128,32 +128,35 @@ namespace CoiniumServ.Shares
             var miner = (IStratumMiner)share.Miner;
             miner.InvalidShares++;
 
+            JsonRpcException exception = null; // the exception determined by the stratum error code.
             switch (share.Error)
             {
                 case ShareError.DuplicateShare:
-                    JsonRpcContext.SetException(new DuplicateShareError(share.Nonce));
+                    exception = new DuplicateShareError(share.Nonce);                    
                     break;
                 case ShareError.IncorrectExtraNonce2Size:
-                    JsonRpcContext.SetException(new OtherError("Incorrect extranonce2 size"));
+                    exception = new OtherError("Incorrect extranonce2 size");
                     break;
                 case ShareError.IncorrectNTimeSize:
-                    JsonRpcContext.SetException(new OtherError("Incorrect nTime size"));
+                    exception = new OtherError("Incorrect nTime size");
                     break;
                 case ShareError.IncorrectNonceSize:
-                    JsonRpcContext.SetException(new OtherError("Incorrect nonce size"));
+                    exception = new OtherError("Incorrect nonce size");
                     break;
                 case ShareError.JobNotFound:
-                    JsonRpcContext.SetException(new JobNotFoundError(share.JobId));
+                    exception = new JobNotFoundError(share.JobId);
                     break;
                 case ShareError.LowDifficultyShare:
-                    JsonRpcContext.SetException(new LowDifficultyShare(share.Difficulty));
+                    exception = new LowDifficultyShare(share.Difficulty);
                     break;
                 case ShareError.NTimeOutOfRange:
-                    JsonRpcContext.SetException(new OtherError("nTime out of range"));
+                    exception = new OtherError("nTime out of range");
                     break;
             }
+            JsonRpcContext.SetException(exception); // set the stratum exception within the json-rpc reply.
 
-            _logger.Debug("Share rejected at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);            
+            Debug.Assert(exception != null); // exception should be never null when the share is marked as invalid.
+            _logger.Debug("Rejected share by miner {0:l}, reason: {1:l}", miner.Username, exception.message);
         }
 
         private bool SubmitBlock(IShare share)
