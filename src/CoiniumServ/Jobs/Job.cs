@@ -29,6 +29,7 @@ using CoiniumServ.Coin.Coinbase;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Cryptology.Merkle;
 using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Shares;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Utils;
 using CoiniumServ.Utils.Extensions;
@@ -36,7 +37,7 @@ using CoiniumServ.Utils.Numerics;
 using Gibbed.IO;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Server.Mining.Stratum.Notifications
+namespace CoiniumServ.Jobs
 {
     [JsonArray]
     public class Job : IJob
@@ -127,6 +128,11 @@ namespace CoiniumServ.Server.Mining.Stratum.Notifications
         public IMerkleTree MerkleTree { get; private set; }
 
         /// <summary>
+        /// List of shares submitted by miners in order to determine duplicate shares.
+        /// </summary>
+        private readonly IList<UInt64> _shares;
+
+        /// <summary>
         /// Creates a new instance of JobNotification.
         /// </summary>
         /// <param name="id"></param>
@@ -141,13 +147,15 @@ namespace CoiniumServ.Server.Mining.Stratum.Notifications
             BlockTemplate = blockTemplate;
             Height = blockTemplate.Height;
             GenerationTransaction = generationTransaction;
+            _shares = new List<UInt64>();
+
             PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ToHexString();
             PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();
 
             // calculate the merkle tree
-            this.MerkleTree = new MerkleTree(BlockTemplate.Transactions.GetHashList());
+            MerkleTree = new MerkleTree(BlockTemplate.Transactions.GetHashList());
         
             // set version
             Version = BitConverter.GetBytes(blockTemplate.Version.BigEndian()).ToHexString();
@@ -188,6 +196,17 @@ namespace CoiniumServ.Server.Mining.Stratum.Notifications
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public bool RegisterShare(IShare share)
+        {
+            var submissionId = (UInt64) (share.ExtraNonce1 + share.ExtraNonce2 + share.NTime + share.Nonce); // simply hash the share by summing them..
+
+            if(_shares.Contains(submissionId)) // if our list already contain the share
+                return false; // it basically means we hit a duplicate share.
+
+            _shares.Add(submissionId); // if the code flows here, that basically means we just recieved a new share.
+            return true;
         }
     }
 }

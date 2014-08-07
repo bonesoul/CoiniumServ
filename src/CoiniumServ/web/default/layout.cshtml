@@ -8,7 +8,13 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <title>@ViewBag.Title | CoiniumServ</title>
+        <title>
+            @if (@ViewBag.Title)
+            { 
+                @ViewBag.Title @: | 
+            } 
+            CoiniumServ
+        </title>
 
         <!-- css -->
         <link rel="stylesheet" href="/css/bootstrap.css">

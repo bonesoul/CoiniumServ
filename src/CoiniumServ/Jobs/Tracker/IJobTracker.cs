@@ -22,7 +22,6 @@
 #endregion
 
 using System;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
 
 namespace CoiniumServ.Jobs.Tracker
 {

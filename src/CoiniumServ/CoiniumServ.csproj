@@ -242,7 +242,7 @@
     <Compile Include="Server\Mining\Stratum\Errors\LowDifficultyShare.cs" />
     <Compile Include="Server\Mining\Stratum\Errors\NotSubscriberError.cs" />
     <Compile Include="Server\Mining\Stratum\Errors\OtherError.cs" />
-    <Compile Include="Server\Mining\Stratum\Notifications\IJob.cs" />
+    <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Persistance\IStorage.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
@@ -347,7 +347,7 @@
     <Compile Include="Server\Mining\Stratum\Sockets\ConnectionDataEventArgs.cs" />
     <Compile Include="Server\Mining\Stratum\Sockets\IClient.cs" />
     <Compile Include="Server\Mining\Stratum\Sockets\IConnection.cs" />
-    <Compile Include="Server\Mining\Stratum\Notifications\Job.cs" />
+    <Compile Include="Jobs\Job.cs" />
     <Compile Include="Server\Mining\Stratum\StratumServer.cs" />
     <Compile Include="Utils\Extensions\JsonExtensions.cs" />
     <Compile Include="Daemon\Requests\CreateRawTransaction.cs" />

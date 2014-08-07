@@ -29,7 +29,6 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Payments;
-using CoiniumServ.Server.Mining.Stratum.Notifications;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Script;
 using Newtonsoft.Json;
@@ -83,7 +82,7 @@ using Xunit;
     ]
  */
 
-namespace CoiniumServ.Tests.Server.Stratum.Notifications
+namespace CoiniumServ.Tests.Jobs
 {
     public class JobTests
     {
