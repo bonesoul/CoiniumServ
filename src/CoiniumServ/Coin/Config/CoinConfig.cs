@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using CoiniumServ.Daemon.Responses;
 using Serilog;
 
 namespace CoiniumServ.Coin.Config
@@ -32,6 +33,7 @@ namespace CoiniumServ.Coin.Config
         public string Name { get; private set; }
         public string Symbol { get; private set; }
         public string Algorithm { get; private set; }
+        public string BlockExplorer { get; private set; }
         public dynamic Options { get; private set; }
 
         public CoinConfig(dynamic config)
@@ -41,6 +43,7 @@ namespace CoiniumServ.Coin.Config
                 Name = config.name;
                 Symbol = config.symbol;
                 Algorithm = config.algorithm;
+                BlockExplorer = string.IsNullOrEmpty(config.blockExplorer) ? "https://altexplorer.net" : config.blockExplorer;
                 Options = config;
 
                 if (Name == null || Symbol == null || Algorithm == null) // make sure we have valid name, symbol and algorithm data.

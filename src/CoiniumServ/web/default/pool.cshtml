@@ -93,7 +93,7 @@
                             @foreach (var block in Model.Pool.Statistics.Blocks.Latest)
                             {
                                 <tr>
-                                    <td><a href="https://chain.so/block/LTCTEST/@block.Height" target="_blank">@block.Height</a></td>
+                                    <td><a href="@Model.Pool.Config.Coin.BlockExplorer/block/@block.BlockHash" target="_blank">@block.Height</a></td>
                                     <td>
                                         @switch (block.Status)
                                         {
