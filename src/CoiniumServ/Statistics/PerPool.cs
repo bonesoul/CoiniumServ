@@ -43,7 +43,7 @@ namespace CoiniumServ.Statistics
         public int WorkerCount { get; private set; }
         public double Difficulty { get; private set; }
         public int CurrentBlock { get; private set; }
-        public IBlocks Blocks { get; private set; }
+        public IBlocksCount Blocks { get; private set; }
         public IPoolConfig Config { get; private set; }
 
         public string Json { get; private set; }
@@ -57,7 +57,7 @@ namespace CoiniumServ.Statistics
 
         private readonly double _shareMultiplier;
 
-        public PerPool(IPoolConfig poolConfig, IConfigManager configManager, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage)
+        public PerPool(IPoolConfig poolConfig, IConfigManager configManager, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorage storage)
         {
             Config = poolConfig;
             _statisticsConfig = configManager.WebServerConfig.Statistics;

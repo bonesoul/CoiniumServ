@@ -20,34 +20,36 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System.Diagnostics;
+
 namespace CoiniumServ.Persistance.Blocks
 {
-    public class OrphanedBlock:IOrphanedBlock
+    [DebuggerDisplay("Height: {Height}, Status: {Status}")]
+    public class PersistedBlock:IPersistedBlock
     {
         public uint Height { get; private set; }
-        public BlockStatus Status { get; private set; }
-        public string BlockHash { get; private set; }
-        public string TransactionHash { get; private set; }
-        public decimal Reward { get; set; }
-        public decimal Amount { get; set; }
 
-        public OrphanedBlock(uint height, string blockHash, string transactionHash, decimal amount, decimal reward)
+        public BlockStatus Status { get; set; }
+
+        public string BlockHash { get; private set; }
+
+        public string TransactionHash { get; private set; }
+
+        public decimal Reward { get; private set; }
+
+        public decimal Amount { get; private set; }
+
+        public bool IsPending { get { return Status != BlockStatus.Orphaned && Status != BlockStatus.Confirmed; } }
+
+        public PersistedBlock(BlockStatus status, uint height, string blockHash, string transactionHash, decimal amount, decimal reward)
         {
+            Status = status;
             Height = height;
             BlockHash = blockHash;
             TransactionHash = transactionHash;
-            Reward = reward;
             Amount = amount;
-            Status = BlockStatus.Orphaned;
-        }
-
-        public OrphanedBlock(uint height, IHashCandidate candidate)
-            : this(height, candidate.BlockHash, candidate.TransactionHash,candidate.Amount, candidate.Reward)
-        { }
-
-        public override string ToString()
-        {
-            return string.Format("Height: {0}, Status: Orphaned.", Height);
+            Reward = reward;
         }
     }
 }

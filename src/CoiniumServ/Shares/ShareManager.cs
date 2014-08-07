@@ -25,7 +25,9 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using AustinHarris.JsonRpc;
+using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
 using CoiniumServ.Pools.Config;
@@ -49,6 +51,10 @@ namespace CoiniumServ.Shares
 
         private readonly IStorage _storage;
 
+        private readonly IBlockProcessor _blockProcessor;
+
+        private readonly IPoolConfig _poolConfig;
+
         private readonly ILogger _logger;
 
         /// <summary>
@@ -58,11 +64,14 @@ namespace CoiniumServ.Shares
         /// <param name="daemonClient"></param>
         /// <param name="jobTracker"></param>
         /// <param name="storage"></param>
-        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
+        /// <param name="blockProcessor"></param>
+        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, IBlockProcessor blockProcessor)
         {
+            _poolConfig = poolConfig;
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _storage = storage;
+            _blockProcessor = blockProcessor;
             _logger = Log.ForContext<ShareManager>().ForContext("Component", poolConfig.Coin.Name);
         }
 
@@ -114,13 +123,19 @@ namespace CoiniumServ.Shares
             // submit block candidate to daemon.
             var accepted = SubmitBlock(share);
 
-            // check if it was accepted and valid.
-            if (!accepted) 
-                return;
+            // log about the acceptance status of the block.
+            _logger.Information(
+                accepted
+                    ? "Found block [{0}] with hash: {1:l}"
+                    : "Submitted block [{0}] with hash {1:l} but had to kick it as it was not accepted by the coin daemon",
+                share.Height, share.BlockHash.ToHexString());
+
+            if (!accepted) // if block wasn't accepted
+                return; // just return as we don't need to notify about it and store it.
 
             OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
 
-            _storage.AddBlock(share); // commit the block.
+            _storage.AddBlock(share); // commit the block details to storage.
         }
 
         private void HandleInvalidShare(IShare share)
@@ -161,50 +176,39 @@ namespace CoiniumServ.Shares
 
         private bool SubmitBlock(IShare share)
         {
+            // TODO: we should try different submission techniques and probably more then once: https://github.com/ahmedbodi/stratum-mining/blob/master/lib/bitcoin_rpc.py#L65-123
+
             try
             {
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
-                var isAccepted = CheckIfBlockAccepted(share);
 
-                _logger.Information(
-                    isAccepted
-                        ? "Found block [{0}] with hash: {1:l}"
-                        : "Submitted block [{0}] but got denied: {1:l}",
-                    share.Height, share.BlockHash.ToHexString());
+                // query the block against coin daemon and see if seems all good.               
+                Block blockInfo; // the block repsonse from coin daemon.
+                Transaction genTx; // generation transaction response from coin daemon.
+                var exists = _blockProcessor.GetBlockDetails(share.BlockHash.ToHexString(), out blockInfo, out genTx); // query the coin daemon for the block details.
 
-                return isAccepted;
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Submit block failed - height: {0}, hash: {1:l}", share.Height, share.BlockHash);
-                return false;
-            }
-        }
+                if (!exists) // make sure the block exists.
+                    return false;
 
-        private bool CheckIfBlockAccepted(IShare share)
-        {
-            try
-            {
-                var block = _daemonClient.GetBlock(share.BlockHash.ToHexString()); // query the block.
+                 // calculate our expected generation transactions's hash
+                var expectedTxHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString();
 
-                // generation transaction (the first one) in a block is simply calculated by coinbase hash.
-                var generationTransactionHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString();
+                // make sure our calculated and reported generation tx hashes match.
+                if (!_blockProcessor.CheckGenTxHash(blockInfo, expectedTxHash))
+                    return false;
+                
+                // make sure the blocks generation transaction contains our central pool wallet address
+                if (!_blockProcessor.ContainsPoolOutput(genTx))
+                    return false;
 
-                // make sure our generation transaction matches what the coin daemon reports.
-                if (generationTransactionHash != block.Tx.First())
-                {
-                    _logger.Fatal("Share's generation transaction hash is different then what coin daemon reports. Possible kicked block!");
-                    Debugger.Break(); // TODO: diagnose the case as this may eventually allow us to remove kicked blocks processing from payments processor and so.
-                }
+                // if the code flows here, then it means the block was succesfully submitted and belongs to us.
+                share.SetFoundBlock(blockInfo); // assign the block to share.
 
-                // todo: also add pool-wallet address check as in payment-processor.
-
-                share.SetFoundBlock(block); // assign the block to share.
                 return true;
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Get block failed - height: {0}, hash: {1:l}", share.Height, share.BlockHash);
+                _logger.Error(e, "Submit block failed - height: {0}, hash: {1:l} - {2:l}", share.Height, share.BlockHash, e.Message);
                 return false;
             }
         }

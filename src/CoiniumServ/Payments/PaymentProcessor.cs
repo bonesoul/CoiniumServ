@@ -26,10 +26,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using Serilog;
 
@@ -42,8 +45,13 @@ namespace CoiniumServ.Payments
         public bool IsEnabled { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
+
         private readonly IStorage _storage;
+
         private IPaymentConfig _config;
+
+        private readonly IBlockProcessor _blockProcessor;
+
         private Timer _timer;
 
         private Int32 _precision; // coin's precision.
@@ -54,15 +62,19 @@ namespace CoiniumServ.Payments
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
         private readonly IWalletConfig _walletConfig;
+
         private string _poolAccount = string.Empty;
 
         private readonly ILogger _logger;
 
-        public PaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage )
+        public PaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage, IBlockProcessor blockProcessor)
         {
             _daemonClient = daemonClient;
             _storage = storage;
+            _blockProcessor = blockProcessor;
+
             _walletConfig = poolConfig.Wallet;
+
             _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", poolConfig.Coin.Name);
         }
 
@@ -102,10 +114,9 @@ namespace CoiniumServ.Payments
             {
                 _stopWatch.Start();
 
-                var pendingBlocks = _storage.GetPendingBlocks(); // get all the pending blocks.
-                var finalizedBlocks = GetFinalizedBlocks(pendingBlocks);
-
-                var rounds = GetPaymentRounds(finalizedBlocks); // get the list of rounds that should be paid.
+                var pendingBlocks = _storage.GetBlocks(BlockStatus.Pending); // get all the pending blocks.
+                var nonPendingBlocks = GetNonPendingBlocks(pendingBlocks); // get the confirmed blocks that are either orphan or mature.
+                var rounds = GetPaymentRounds(nonPendingBlocks); // get the list of rounds that should be paid.
                 AssignSharesToRounds(rounds); // process the rounds, calculate shares and payouts per rounds.
                 var previousBalances = GetPreviousBalances(); // get previous balances of workers.
                 var workerBalances = CalculateRewards(rounds, previousBalances); // calculate the payments.               
@@ -215,7 +226,6 @@ namespace CoiniumServ.Payments
                         _storage.DeleteShares(round); // delete the associated shares.
                         _storage.MoveBlock(round); // move pending block to appropriate place.  
                         break;
-                    case BlockStatus.Kicked:
                     case BlockStatus.Orphaned:
                         _storage.MoveSharesToCurrentRound(round); // move shares to current round so the work of miners aren't gone to void.
                         _storage.MoveBlock(round); // move pending block to appropriate place.                      
@@ -239,79 +249,82 @@ namespace CoiniumServ.Payments
             }
         }
 
-        private IList<IFinalizedBlock> GetFinalizedBlocks(IEnumerable<IPendingBlock> blocks)
+        private IEnumerable<IPersistedBlock> GetNonPendingBlocks(IEnumerable<IPersistedBlock> blocks)
         {
-            var finalizedBlocks = new List<IFinalizedBlock>();
+            var nonPendingBlocks = new List<IPersistedBlock>();
 
-            foreach (var block in blocks)
+            foreach (var item in blocks)
             {
-                foreach (var candidate in block.Candidates)
-                {
-                    CheckCandidates(candidate);
-                }
+                var block = item; // get a local copy of the block
+                QueryBlock(ref block); // check the block.
 
-                block.Check();
-
-                if(block.IsFinalized)
-                    finalizedBlocks.Add(block.Finalized);
+                if (!block.IsPending) // only add non-pending blocks to list.
+                    nonPendingBlocks.Add(block);
             }
 
-            return finalizedBlocks;
+            return nonPendingBlocks;
         }
 
-        private IEnumerable<IConfirmedBlock> GetConfirmedBlocks(IEnumerable<IFinalizedBlock> blocks)
+        private void QueryBlock(ref IPersistedBlock block)
         {
-            return blocks.OfType<IConfirmedBlock>().ToList();
-        }
+            // query the block against coin daemon and see if seems all good.               
+            Block blockInfo; // the block repsonse from coin daemon.
+            Transaction genTx; // generation transaction response from coin daemon.
+            var exists = _blockProcessor.GetBlockDetails(block.BlockHash, out blockInfo, out genTx); // query the coin daemon for the block details.
 
-        private void CheckCandidates(IHashCandidate candidate)
-        {
-            try
+            if (!exists) // make sure the block exists.
             {
-                // get the transaction.
-                var transaction = _daemonClient.GetTransaction(candidate.TransactionHash);
-
-                // total amount of coins contained in the block.
-                candidate.Amount = transaction.Details.Sum(output => (decimal)output.Amount);
-
-                // get the output transaction that targets pools central wallet.
-                var poolOutput = transaction.Details.FirstOrDefault(output => output.Address == _walletConfig.Adress);
-
-                // make sure output for the pool central wallet exists
-                if (poolOutput == null)
-                {
-                    candidate.Status = BlockStatus.Kicked; // kick the hash.
-                    candidate.Reward = 0;
-                }
-                else
-                {
-                    switch (poolOutput.Category)
-                    {
-                        case "immature":
-                            candidate.Status = BlockStatus.Pending;
-                            break;
-                        case "orphan":
-                            candidate.Status = BlockStatus.Orphaned;
-                            break;
-                        case "generate":
-                            candidate.Status = BlockStatus.Confirmed;
-                            break;
-                        default:
-                            candidate.Status = BlockStatus.Pending;
-                            break;
-                    }
-
-                    candidate.Reward = (decimal) poolOutput.Amount;
-                }
+                block.Status = BlockStatus.Orphaned;
+                return;
             }
-            catch (RpcException)
+
+            // calculate our expected generation transactions's hash
+            var expectedTxHash = block.TransactionHash;
+
+            // make sure our calculated and reported generation tx hashes match.
+            if (!_blockProcessor.CheckGenTxHash(blockInfo, expectedTxHash))
             {
-                candidate.Status = BlockStatus.Kicked; // kick the hash.
-                candidate.Reward = 0;
-            }            
+                block.Status = BlockStatus.Orphaned;
+                return;
+            }
+
+            // make sure the blocks generation transaction contains our central pool wallet address
+            if (!_blockProcessor.ContainsPoolOutput(genTx))
+            {
+                block.Status = BlockStatus.Orphaned;
+                return;
+            }
+
+            // get the output transaction that targets pools central wallet.
+            var poolOutput = genTx.Details.FirstOrDefault(output => output.Address == _walletConfig.Adress);
+
+            // make sure we have a valid reference to poolOutput
+            if (poolOutput == null)
+            {
+                block.Status = BlockStatus.Orphaned;
+                return;
+            }
+
+            switch (poolOutput.Category)
+            {
+                case "immature":
+                    block.Status = BlockStatus.Pending;
+                    break;
+                case "orphan":
+                    block.Status = BlockStatus.Orphaned;
+                    break;
+                case "generate":
+                    block.Status = BlockStatus.Confirmed;
+                    break;
+            }
+
+            // TODO: add back these.
+            // total amount of coins contained in the block.
+            // candidate.Amount = transaction.Details.Sum(output => (decimal)output.Amount);
+            // candidate.Reward = (decimal) poolOutput.Amount;               
         }
 
-        private IList<IPaymentRound> GetPaymentRounds(IEnumerable<IFinalizedBlock> blocks)
+        private IList<IPaymentRound> GetPaymentRounds(IEnumerable<IPersistedBlock> blocks)
         {
             var rounds = new List<IPaymentRound>();
 

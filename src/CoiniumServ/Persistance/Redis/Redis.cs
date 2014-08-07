@@ -231,9 +231,6 @@ namespace CoiniumServ.Persistance.Redis
 
                 switch (round.Block.Status)
                 {
-                    case BlockStatus.Kicked:
-                        newKey = string.Format("{0}:blocks:kicked", coin);
-                        break;
                     case BlockStatus.Orphaned:
                         newKey = string.Format("{0}:blocks:orphaned", coin);
                         break;
@@ -340,9 +337,9 @@ namespace CoiniumServ.Persistance.Redis
             return hashrates;
         }
 
-        public IList<IPendingBlock> GetPendingBlocks()
+        public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
         {
-            var blocks = new Dictionary<UInt32, IPendingBlock>();
+            var blocks = new Dictionary<UInt32, IPersistedBlock>();
 
             try
             {
@@ -350,54 +347,12 @@ namespace CoiniumServ.Persistance.Redis
                     return blocks.Values.ToList();
 
                 var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-                var pendingKey = string.Format("{0}:blocks:pending", coin);
-
-                var results = _client.ZRevRangeByScoreWithScores(pendingKey, double.PositiveInfinity, 0, true);
-
-                foreach (var result in results)
-                {
-                    var item = result.Item1;
-                    var score = result.Item2;
-
-                    var data = item.Split(':');
-                    var blockHash = data[0];
-                    var transactionHash = data[1];
-                    var hashCandidate = new HashCandidate(blockHash, transactionHash);
-
-                    if (!blocks.ContainsKey((UInt32) score))
-                        blocks.Add((UInt32) score, new PendingBlock((UInt32) score));
-
-                    var persistedBlock = blocks[(UInt32) score];
-                    persistedBlock.AddHashCandidate(hashCandidate);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error("An exception occured while getting pending blocks: {0:l}", e.Message);
-            }
-
-            return blocks.Values.ToList();
-        }
-
-        private IEnumerable<IFinalizedBlock> GetFinalizedBlocks(BlockStatus status)
-        {
-            var blocks = new Dictionary<UInt32, IFinalizedBlock>();
-
-            try
-            {
-                if (!IsEnabled || !IsConnected)
-                    return blocks.Values.ToList();
-
-                if (status == BlockStatus.Pending)
-                    throw new Exception("Pending is not a valid finalized block status");
-
-                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-                string key = string.Empty;
+                var key = string.Empty;
 
                 switch (status)
                 {
-                    case BlockStatus.Kicked:
-                        key = string.Format("{0}:blocks:kicked", coin);
+                    case BlockStatus.Pending:
+                        key = string.Format("{0}:blocks:pending", coin);
                         break;
                     case BlockStatus.Orphaned:
                         key = string.Format("{0}:blocks:orphaned", coin);
@@ -418,23 +373,12 @@ namespace CoiniumServ.Persistance.Redis
                     var blockHash = data[0];
                     var transactionHash = data[1];
 
-                    switch (status)
-                    {
-                        case BlockStatus.Kicked:
-                            blocks.Add((UInt32) score, new KickedBlock((UInt32) score, blockHash, transactionHash, 0, 0));
-                            break;
-                        case BlockStatus.Orphaned:
-                            blocks.Add((UInt32) score,new OrphanedBlock((UInt32) score, blockHash, transactionHash, 0, 0));
-                            break;
-                        case BlockStatus.Confirmed:
-                            blocks.Add((UInt32) score, new ConfirmedBlock((UInt32) score, blockHash, transactionHash, 0, 0));
-                            break;
-                    }
+                    blocks.Add((UInt32) score, new PersistedBlock(status, (UInt32) score, blockHash, transactionHash, 0, 0));                    
                 }
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting finalized blocks: {0:l}", e.Message);
+                _logger.Error("An exception occured while getting {0:l} blocks: {1:l}", status, e.Message);
             }
 
             return blocks.Values.ToList();
@@ -447,22 +391,17 @@ namespace CoiniumServ.Persistance.Redis
             if (!IsEnabled || !IsConnected)
                 return blocks;
 
-            foreach (var block in GetFinalizedBlocks(BlockStatus.Confirmed))
+            foreach (var block in GetBlocks(BlockStatus.Confirmed))
             {
                 blocks.Add(block.Height, block);
             }
 
-            foreach (var block in GetFinalizedBlocks(BlockStatus.Orphaned))
+            foreach (var block in GetBlocks(BlockStatus.Orphaned))
             {
                 blocks.Add(block.Height, block);
             }
 
-            foreach (var block in GetFinalizedBlocks(BlockStatus.Kicked))
-            {
-                blocks.Add(block.Height, block);
-            }
-
-            foreach (var block in GetPendingBlocks())
+            foreach (var block in GetBlocks(BlockStatus.Pending))
             {
                 blocks.Add(block.Height, block);
             }

@@ -38,7 +38,7 @@ namespace CoiniumServ.Statistics
 
         int CurrentBlock { get; }
 
-        IBlocks Blocks { get; }
+        IBlocksCount Blocks { get; }
 
         IPoolConfig Config { get; }
     }

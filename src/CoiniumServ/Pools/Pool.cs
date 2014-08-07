@@ -150,32 +150,42 @@ namespace CoiniumServ.Pools
 
         private void InitManagers()
         {
-            var storage = _objectFactory.GetStorage(Storages.Redis, Config);
+            try
+            {
+                var storage = _objectFactory.GetStorage(Storages.Redis, Config);
 
-            var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, storage);
-            paymentProcessor.Initialize(Config.Payments);
+                _minerManager = _objectFactory.GetMinerManager(Config, _daemonClient);
 
-            _minerManager = _objectFactory.GetMinerManager(Config, _daemonClient);
+                var jobTracker = _objectFactory.GetJobTracker();
 
-            var jobTracker = _objectFactory.GetJobTracker();
+                var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
 
-            _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, storage);
+                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, storage, blockProcessor);
 
-            var vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
+                var vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
 
-            _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
+                _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
 
-            _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, _minerManager, _hashAlgorithm);
+                _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, _minerManager, _hashAlgorithm);
+                _jobManager.Initialize(InstanceId);
 
-            _jobManager.Initialize(InstanceId);
+                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, storage, blockProcessor);
+                paymentProcessor.Initialize(Config.Payments);
 
-            var latestBlocks = _objectFactory.GetLatestBlocks(storage);
-            var blockStats = _objectFactory.GetBlockStats(latestBlocks, storage);
-            Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, storage);
+                var latestBlocks = _objectFactory.GetLatestBlocks(storage);
+                var blockStats = _objectFactory.GetBlockStats(latestBlocks, storage);
+                Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, storage);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Pool initialization error: {0:l}", e.Message);
+            }
         }
 
         private void InitServers()
         {
+            // todo: merge this with InitManagers so we don't have use private declaration of class instances
+
             _servers = new Dictionary<IMiningServer, IRpcService>();
 
             if (Config.Stratum != null && Config.Stratum.Enabled)
