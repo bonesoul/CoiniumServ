@@ -150,9 +150,10 @@ namespace CoiniumServ.Shares
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
 
                 // Check if share difficulty reaches miner difficulty.
-                if (Difficulty / 16 < 0.99)
+                if (Difficulty / miner.Difficulty < 0.99)
                 {
-                    // todo: add low difficulty share check.
+                    Error = ShareError.LowDifficultyShare;
+                    return;
                 }
             }
         }
