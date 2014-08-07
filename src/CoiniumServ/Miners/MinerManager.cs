@@ -51,6 +51,8 @@ namespace CoiniumServ.Miners
 
         private readonly IDaemonClient _daemonClient;
 
+        private readonly IStratumServerConfig _stratumServerConfig;
+
         private readonly ILogger _logger;        
 
         public MinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient)
@@ -58,6 +60,8 @@ namespace CoiniumServ.Miners
             _minerConfig = poolConfig.Miner;
             _metaConfig = poolConfig.Meta;
             _daemonClient = daemonClient;
+            _stratumServerConfig = poolConfig.Stratum;
+
             _miners = new Dictionary<int, IMiner>();
             _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);
         }
@@ -144,7 +148,7 @@ namespace CoiniumServ.Miners
             if (miner is IStratumMiner)
             {
                 var stratumMiner = (IStratumMiner) miner;
-                stratumMiner.SendDifficulty(); // send the initial difficulty.
+                stratumMiner.SetDifficulty(_stratumServerConfig.Diff); // set the initial difficulty for the miner and send it.
                 stratumMiner.SendMessage(_metaConfig.MOTD); // send the motd.
             }
            

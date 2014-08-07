@@ -55,7 +55,9 @@ namespace CoiniumServ.Server.Mining.Stratum.Responses
         {
             var data = new List<object>
             {
-                new List<string> // 2-tuple with name of subscribed notification and subscription ID. Teoretically it may be used for unsubscribing, but obviously miners won't use it. (http://mining.bitcoin.cz/stratum-mining)
+                // 2-tuple with name of subscribed notification and subscription ID. Teoretically it may be used for unsubscribing, 
+                // but obviously miners won't use it. (http://mining.bitcoin.cz/stratum-mining)
+                new List<string>
                 {
                     "mining.set_difficulty",
                     SubscriptionId.ToString(CultureInfo.InvariantCulture), // set to miner's id - just a place holder value.

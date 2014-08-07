@@ -30,7 +30,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Errors
     public class LowDifficultyShare : JsonRpcException, IStratumError
     {
         public LowDifficultyShare(double diff)
-            : base(23, string.Format("Low difficulty share of: {0}", diff), null)
+            : base(23, string.Format("Low difficulty share of: {0:0.00}", diff), null)
         { }
     }
 }

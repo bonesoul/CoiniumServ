@@ -150,11 +150,16 @@ namespace CoiniumServ.Shares
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
 
                 // Check if share difficulty reaches miner difficulty.
-                if (Difficulty / miner.Difficulty < 0.99)
-                {
-                    Error = ShareError.LowDifficultyShare;
-                    return;
-                }
+                var lowDifficulty = Difficulty/miner.Difficulty < 0.99; // share difficulty should be equal or more then miner's target difficulty.
+
+                if (!lowDifficulty) // if share difficulty is high enough to match miner's current difficulty.
+                    return; // just accept the share.
+
+                if (Difficulty >= miner.PreviousDifficulty) // if the difficulty matches miner's previous difficulty before the last vardiff triggered difficulty change
+                    return; // still accept the share.
+
+                // if the share difficulty can't match miner's current difficulty or previous difficulty                
+                Error = ShareError.LowDifficultyShare; // then just reject the share with low difficult share error.
             }
         }
 

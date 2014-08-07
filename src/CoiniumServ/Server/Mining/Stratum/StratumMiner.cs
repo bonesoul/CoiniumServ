@@ -72,6 +72,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         public IPool Pool { get; private set; }
 
         public float Difficulty { get; set; }
+        public float PreviousDifficulty { get; set; }
 
         /// <summary>
         /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
@@ -104,8 +105,6 @@ namespace CoiniumServ.Server.Mining.Stratum
             Connection = connection; // the underlying connection.
             _minerManager = minerManager;
             Pool = pool;
-
-            Difficulty = pool.Config.Stratum.Diff; // set miner difficulty.
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
@@ -231,8 +230,14 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Sends difficulty to the miner.
         /// </summary>
-        public void SendDifficulty()
+        public void SetDifficulty(float difficulty)
         {
+            if (Difficulty == difficulty) // if new difficulty is the same with current one,
+                return; // just skip.
+
+            PreviousDifficulty = Difficulty; // store the previous difficulty (so we can still accept shares targeted for last difficulty when vardiff sets a new difficulty).
+            Difficulty = difficulty;
+
             var notification = new JsonRequest
             {
                 Id = null,
