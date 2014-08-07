@@ -42,12 +42,12 @@ namespace CoiniumServ.Persistance.Blocks
 
         public string BlockHash
         {
-            get { return IsFinalized ? Finalized.BlockHash : "Many.."; }
+            get { return IsFinalized ? Finalized.BlockHash : Candidates.First().BlockHash; }
         }
 
         public string TransactionHash
         {
-            get { return IsFinalized ? Finalized.BlockHash : "Many.."; }
+            get { return IsFinalized ? Finalized.BlockHash : Candidates.First().TransactionHash; }
         }
 
         public decimal Reward

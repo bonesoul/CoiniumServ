@@ -1,5 +1,6 @@
 {
     "name": "Catcoin",
     "symbol": "CAT",
-    "algorithm": "scrypt"
+    "algorithm": "scrypt",
+    "blockExplorer": "http://catchain.info"
 }

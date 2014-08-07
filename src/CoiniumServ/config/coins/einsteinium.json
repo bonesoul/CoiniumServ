@@ -1,5 +1,6 @@
 {
     "name": "Einsteinium",
     "symbol": "EMC2",
-    "algorithm": "scrypt"
+    "algorithm": "scrypt",
+    "blockExplorer": "https://altexplorer.net"
 }

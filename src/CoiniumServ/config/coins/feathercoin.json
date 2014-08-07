@@ -1,5 +1,6 @@
 {
     "name": "Feathercoin",
     "symbol": "FTC",
-    "algorithm": "scrypt"
+    "algorithm": "scrypt",
+    "blockExplorer": "https://explorer.feathercoin.com"
 }

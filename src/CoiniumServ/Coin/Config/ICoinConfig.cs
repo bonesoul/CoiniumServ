@@ -43,6 +43,11 @@ namespace CoiniumServ.Coin.Config
         string Algorithm { get; }
 
         /// <summary>
+        /// Block explorer for the coin.
+        /// </summary>
+        string BlockExplorer { get; }
+
+        /// <summary>
         /// Extra options provided that will be passed to coin algorithm.
         /// </summary>
         dynamic Options { get; }
