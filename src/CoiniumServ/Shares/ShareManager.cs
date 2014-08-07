@@ -28,6 +28,7 @@ using AustinHarris.JsonRpc;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
+using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Errors;
@@ -49,6 +50,8 @@ namespace CoiniumServ.Shares
 
         private readonly IStorage _storage;
 
+        private readonly IPoolConfig _poolConfig;
+
         private readonly ILogger _logger;
 
         /// <summary>
@@ -60,6 +63,7 @@ namespace CoiniumServ.Shares
         /// <param name="storage"></param>
         public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
         {
+            _poolConfig = poolConfig;
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _storage = storage;
@@ -161,10 +165,12 @@ namespace CoiniumServ.Shares
 
         private bool SubmitBlock(IShare share)
         {
+            // we should try different submission techniques and probably more then once: https://github.com/ahmedbodi/stratum-mining/blob/master/lib/bitcoin_rpc.py#L65-123
+
             try
             {
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
-                var isAccepted = CheckIfBlockAccepted(share);
+                var isAccepted = CheckBlock(share);
 
                 _logger.Information(
                     isAccepted
@@ -181,30 +187,43 @@ namespace CoiniumServ.Shares
             }
         }
 
-        private bool CheckIfBlockAccepted(IShare share)
+        private bool CheckBlock(IShare share)
         {
             try
             {
                 var block = _daemonClient.GetBlock(share.BlockHash.ToHexString()); // query the block.
 
-                // generation transaction (the first one) in a block is simply calculated by coinbase hash.
-                var generationTransactionHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString();
+                // calculate our generation transactions's hash
+                var genTxHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString();
 
-                // make sure our generation transaction matches what the coin daemon reports.
-                if (generationTransactionHash != block.Tx.First())
+                // read the very first (generation transaction) of the block
+                var initialTx = block.Tx.First();
+
+                // make sure our calculated generation transaction hash matches the very first transaction reported for block by coin daemon.
+                if (genTxHash != initialTx)
                 {
-                    _logger.Fatal("Share's generation transaction hash is different then what coin daemon reports. Possible kicked block!");
-                    Debugger.Break(); // TODO: diagnose the case as this may eventually allow us to remove kicked blocks processing from payments processor and so.
+                    Log.Debug("Kicked submitted block {0} because reported generation transaction hash [{1:l}] doesn't match our calculated one [{2:l}]", initialTx, genTxHash);
+                    return false;
                 }
 
-                // todo: also add pool-wallet address check as in payment-processor.
+                // also make sure the transaction includes our pool wallet address.
+                var transaction = _daemonClient.GetTransaction(initialTx);
+
+                // check if the transaction includes output for the configured central pool wallet address.
+                var gotPoolOutput = transaction.Details.Any(test => test.Address == _poolConfig.Wallet.Adress);
+
+                if (!gotPoolOutput)
+                {
+                    Log.Debug("Kicked submitted block {0} because generation transaction doesn't contain an output for pool's central wallet address: {1:l]", share.Height, _poolConfig.Wallet.Adress);
+                    return false;
+                }
 
                 share.SetFoundBlock(block); // assign the block to share.
                 return true;
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Get block failed - height: {0}, hash: {1:l}", share.Height, share.BlockHash);
+                _logger.Error("Submitted block does not exist: {0}, hash: {1:l}, {2:l}", share.Height, share.BlockHash, e.Message);
                 return false;
             }
         }
