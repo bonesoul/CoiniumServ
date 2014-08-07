@@ -98,10 +98,10 @@ namespace CoiniumServ.Vardiff
             else
                 return;
 
-            miner.Difficulty = miner.Difficulty*deltaDiff;
+            var newDifficulty = miner.Difficulty*deltaDiff; // calculate the new difficulty.
+            miner.SetDifficulty(newDifficulty); // set the new difficulty and send it.
             _logger.Debug("Difficulty updated to {0} for miner: {1:l}", miner.Difficulty, miner.Username);
 
-            miner.SendDifficulty();
             miner.VardiffBuffer.Clear();            
         }
     }

@@ -75,6 +75,8 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         public event ConnectionDataEventHandler DataReceived;
         public event ConnectionDataEventHandler DataSent;
 
+        protected ILogger _logger;
+
         /// <summary>
         /// Is the instance disposed?
         /// </summary>
@@ -138,7 +140,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
             }
             catch (SocketException exception)
             {
-                Log.ForContext<SocketServer>().Fatal("{0} can not bind on {1}, server shutting down.. Reason: {2}", GetType().Name, bindIP, exception);
+                _logger.Fatal("{0} can not bind on {1}, server shutting down.. Reason: {2}", GetType().Name, bindIP, exception);
                 Shutdown();
                 return false;
             }
@@ -177,7 +179,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
             }
             catch (Exception exception)
             {
-                Log.ForContext<SocketServer>().Error(exception, "Can not accept connection");
+                _logger.Error(exception, "Can not accept connection");
             }
             finally
             {
@@ -214,14 +216,14 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
                     if (connection.IsConnected)
                         connection.BeginReceive(ReceiveCallback, connection);
                     else
-                        Log.ForContext<SocketServer>().Debug("Connection closed:" + connection.Client);
+                        _logger.Debug("Connection closed:" + connection.Client);
                 }
                 else
                     RemoveConnection(connection); // Connection was lost.
             }
             catch (SocketException e)
             {
-                Log.ForContext<SocketServer>().Debug(e, "ReceiveCallback");
+                _logger.Debug("An exception occured in recieve callback: {0:l}", e.Message);
                 RemoveConnection(connection); // An error occured while receiving, connection has disconnected.
             }
         }
@@ -261,12 +263,12 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
             catch (SocketException socketException)
             {
                 RemoveConnection(connection); // An error occured while sending, connection has disconnected.
-                Log.ForContext<SocketServer>().Error(socketException, "Send");
+                _logger.Error(socketException, "Send");
             }
             catch (Exception e)
             {
                 RemoveConnection(connection); // An error occured while sending, it is possible that the connection has a problem.
-                Log.ForContext<SocketServer>().Error(e, "Send");
+                _logger.Error(e, "Send");
             }
 
             return totalBytesSent;

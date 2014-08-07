@@ -40,7 +40,9 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         bool Subscribed { get; }
 
-        float Difficulty { get; set; }
+        float Difficulty { get; }
+
+        float PreviousDifficulty { get; }
 
         /// <summary>
         /// Sends message of the day to miner.
@@ -48,9 +50,9 @@ namespace CoiniumServ.Server.Mining.Stratum
         void SendMessage(string message);
 
         /// <summary>
-        /// Sends difficulty to the miner.
+        /// Sets a new difficulty to the miner and sends it.
         /// </summary>
-        void SendDifficulty();
+        void SetDifficulty(float difficulty);
 
         /// <summary>
         /// Sends a new mining job to the miner.
