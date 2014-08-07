@@ -20,34 +20,38 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Persistance.Blocks
-{
-    public class KickedBlock:IKickedBlock
-    {
-        public uint Height { get; private set; }
-        public BlockStatus Status { get; private set; }
-        public string BlockHash { get; private set; }
-        public string TransactionHash { get; private set; }
-        public decimal Reward { get; set; }
-        public decimal Amount { get; set; }
 
-        public KickedBlock(uint height, string blockHash, string transactionHash, decimal amount, decimal reward)
+using CoiniumServ.Persistance;
+
+namespace CoiniumServ.Statistics
+{
+    public class BlocksCount:IBlocksCount
+    {
+        public int Pending { get; private set; }
+        public int Confirmed { get; private set; }
+        public int Orphaned { get; private set; }
+        public int Total { get; private set; }
+        public ILatestBlocks Latest { get; private set; }
+
+        private readonly IStorage _storage;
+
+        public BlocksCount(ILatestBlocks latestBlocks, IStorage storage)
         {
-            Height = height;
-            BlockHash = blockHash;
-            TransactionHash = transactionHash;
-            Amount = amount;
-            Reward = reward;
-            Status = BlockStatus.Kicked;
+            _storage = storage;
+            Latest = latestBlocks;
         }
 
-        public KickedBlock(uint height, IHashCandidate candidate)
-            : this(height, candidate.BlockHash, candidate.TransactionHash, candidate.Amount, candidate.Reward)
-        { }
-
-        public override string ToString()
+        public void Recache(object state)
         {
-            return string.Format("Height: {0}, Status: Kicked.", Height);
+            // get block statistics.
+            var blockCounts = _storage.GetBlockCounts();
+
+            // read block stats.
+            Pending = blockCounts.ContainsKey("pending") ? blockCounts["pending"] : 0;
+            Confirmed = blockCounts.ContainsKey("confirmed") ? blockCounts["confirmed"] : 0;
+            Orphaned = blockCounts.ContainsKey("orphaned") ? blockCounts["orphaned"] : 0;
+
+            Latest.Recache(state);
         }
     }
 }

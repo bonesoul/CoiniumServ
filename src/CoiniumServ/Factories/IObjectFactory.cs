@@ -22,6 +22,7 @@
 #endregion
 
 using CoiniumServ.Banning;
+using CoiniumServ.Blocks;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Manager;
@@ -78,9 +79,11 @@ namespace CoiniumServ.Factories
 
         IJobTracker GetJobTracker();
 
-        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage);
+        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, IBlockProcessor blockProcessor);
 
-        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage);
+        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage, IBlockProcessor blockProcessor);
+
+        IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient);
 
         IBanManager GetBanManager(IPoolConfig poolConfig, IShareManager shareManager);
 
@@ -98,9 +101,9 @@ namespace CoiniumServ.Factories
 
         IPools GetPoolStats();
 
-        IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage);
+        IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorage storage);
 
-        IBlocks GetBlockStats(ILatestBlocks latestBlocks, IStorage storage);
+        IBlocksCount GetBlockStats(ILatestBlocks latestBlocks, IStorage storage);
 
         ILatestBlocks GetLatestBlocks(IStorage storage);
 

@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Blocks;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
 using CoiniumServ.Daemon;
@@ -55,12 +56,13 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
+            _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
 
             // statistics
             _applicationContext.Container.Register<IStatistics, Statistics.Statistics>().AsSingleton();
             _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
             _applicationContext.Container.Register<IPerPool, PerPool>().AsMultiInstance();
-            _applicationContext.Container.Register<IBlocks, Blocks>().AsMultiInstance();
+            _applicationContext.Container.Register<IBlocksCount, BlocksCount>().AsMultiInstance();
             _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();
 
             // config

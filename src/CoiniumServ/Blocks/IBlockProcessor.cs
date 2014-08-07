@@ -21,9 +21,16 @@
 // 
 #endregion
 
-namespace CoiniumServ.Persistance.Blocks
+using CoiniumServ.Daemon.Responses;
+
+namespace CoiniumServ.Blocks
 {
-    public interface IConfirmedBlock:IFinalizedBlock
+    public interface IBlockProcessor
     {
+        bool GetBlockDetails(string blockHash, out Block block, out Transaction generationTransaction);
+
+        bool CheckGenTxHash(Block block, string expectedTxHash);
+
+        bool ContainsPoolOutput(Transaction transaction);
     }
 }

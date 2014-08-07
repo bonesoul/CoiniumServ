@@ -109,6 +109,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blocks\BlockProcessor.cs" />
+    <Compile Include="Blocks\IBlockProcessor.cs" />
     <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Configuration\IStackConfig.cs" />
@@ -143,6 +145,7 @@
     <Compile Include="Payments\IRewardsConfig.cs" />
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
+    <Compile Include="Persistance\Blocks\PersistedBlock.cs" />
     <Compile Include="Persistance\IStorageConfig.cs" />
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
@@ -153,8 +156,8 @@
     <Compile Include="Server\Web\Modules\Donate.cs" />
     <Compile Include="Server\Web\Models\IndexModel.cs" />
     <Compile Include="Server\Web\Models\PoolModel.cs" />
-    <Compile Include="Statistics\Blocks.cs" />
-    <Compile Include="Statistics\IBlocks.cs" />
+    <Compile Include="Statistics\BlocksCount.cs" />
+    <Compile Include="Statistics\IBlocksCount.cs" />
     <Compile Include="Statistics\IJsonResponse.cs" />
     <Compile Include="Statistics\ILatestBlocks.cs" />
     <Compile Include="Statistics\IStatisticsConfig.cs" />
@@ -200,18 +203,7 @@
     <Compile Include="Payments\PaymentProcessor.cs" />
     <Compile Include="Payments\WorkerBalance.cs" />
     <Compile Include="Persistance\Blocks\BlockStatus.cs" />
-    <Compile Include="Persistance\Blocks\IConfirmedBlock.cs" />
-    <Compile Include="Persistance\Blocks\IFinalizedBlock.cs" />
-    <Compile Include="Persistance\Blocks\IKickedBlock.cs" />
-    <Compile Include="Persistance\Blocks\IOrphanedBlock.cs" />
-    <Compile Include="Persistance\Blocks\IPendingBlock.cs" />
     <Compile Include="Persistance\Blocks\IPersistedBlock.cs" />
-    <Compile Include="Persistance\Blocks\IHashCandidate.cs" />
-    <Compile Include="Persistance\Blocks\PendingBlock.cs" />
-    <Compile Include="Persistance\Blocks\HashCandidate.cs" />
-    <Compile Include="Persistance\Blocks\ConfirmedBlock.cs" />
-    <Compile Include="Persistance\Blocks\KickedBlock.cs" />
-    <Compile Include="Persistance\Blocks\OrphanedBlock.cs" />
     <Compile Include="Persistance\Redis\IRedisConfig.cs" />
     <Compile Include="Persistance\Redis\RedisConfig.cs" />
     <Compile Include="Repository\Registries\AlgorithmRegistry.cs" />

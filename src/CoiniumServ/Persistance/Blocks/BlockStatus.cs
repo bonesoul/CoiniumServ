@@ -25,7 +25,6 @@ namespace CoiniumServ.Persistance.Blocks
     public enum BlockStatus
     {
         Pending,
-        Kicked,
         Orphaned,
         Confirmed
     }

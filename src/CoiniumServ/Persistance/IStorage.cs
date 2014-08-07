@@ -51,7 +51,7 @@ namespace CoiniumServ.Persistance
 
         IDictionary<string, double> GetHashrateData(int since);
 
-        IList<IPendingBlock> GetPendingBlocks();
+        IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
 
         IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
 

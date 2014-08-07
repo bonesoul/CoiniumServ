@@ -21,9 +21,15 @@
 // 
 #endregion
 
-namespace CoiniumServ.Persistance.Blocks
+namespace CoiniumServ.Statistics
 {
-    public interface IKickedBlock:IFinalizedBlock
+    public interface IBlocksCount : IStatisticsProvider
     {
+        int Pending { get; }
+        int Confirmed { get; }
+        int Orphaned { get; }
+        int Total { get; }
+
+        ILatestBlocks Latest { get; }
     }
 }

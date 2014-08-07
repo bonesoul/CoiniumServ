@@ -29,12 +29,12 @@ namespace CoiniumServ.Payments
 {
     public class PaymentRound:IPaymentRound
     {
-        public IFinalizedBlock Block { get; private set; }
+        public IPersistedBlock Block { get; private set; }
         public Dictionary<string, double> Shares { get; private set; }
         public Dictionary<string, decimal> Payouts { get; private set; }
 
 
-        public PaymentRound(IFinalizedBlock block)
+        public PaymentRound(IPersistedBlock block)
         {
             Block = block;
             Payouts = new Dictionary<string, decimal>();

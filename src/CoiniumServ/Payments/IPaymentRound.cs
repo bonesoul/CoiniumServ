@@ -28,7 +28,7 @@ namespace CoiniumServ.Payments
 {
     public interface IPaymentRound
     {
-        IFinalizedBlock Block { get; }
+        IPersistedBlock Block { get; }
 
         Dictionary<string, double> Shares { get; }
 

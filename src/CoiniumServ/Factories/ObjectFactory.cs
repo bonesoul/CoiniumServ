@@ -22,6 +22,7 @@
 #endregion
 
 using CoiniumServ.Banning;
+using CoiniumServ.Blocks;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Manager;
@@ -145,7 +146,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IJobTracker>();
         }
 
-        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage)
+        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, IBlockProcessor blockProcessor)
         {
             var @params = new NamedParameterOverloads
             {
@@ -153,21 +154,34 @@ namespace CoiniumServ.Factories
                 {"daemonClient", daemonClient},
                 {"jobTracker", jobTracker},
                 {"storage", storage},
+                {"blockProcessor", blockProcessor}
             };
 
             return _applicationContext.Container.Resolve<IShareManager>(@params);
         }
 
-        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage)
+        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage, IBlockProcessor blockProcessor)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
-                {"storage", storage},                
+                {"storage", storage},
+                {"blockProcessor", blockProcessor},
             };
 
             return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
+        }
+
+        public IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+                {"daemonClient", daemonClient},           
+            };
+
+            return _applicationContext.Container.Resolve<IBlockProcessor>(@params);
         }
 
         public IBanManager GetBanManager(IPoolConfig poolConfig, IShareManager shareManager)
@@ -216,7 +230,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IPools>();
         }
 
-        public IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocks blockStatistics, IStorage storage)
+        public IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
@@ -241,7 +255,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<ILatestBlocks>(@params);
         }
 
-        public IBlocks GetBlockStats(ILatestBlocks latestBlocks, IStorage storage)
+        public IBlocksCount GetBlockStats(ILatestBlocks latestBlocks, IStorage storage)
         {
             var @params = new NamedParameterOverloads
             {
@@ -249,7 +263,7 @@ namespace CoiniumServ.Factories
                 {"storage", storage},
             };
 
-            return _applicationContext.Container.Resolve<IBlocks>(@params);
+            return _applicationContext.Container.Resolve<IBlocksCount>(@params);
         }
 
         #endregion
