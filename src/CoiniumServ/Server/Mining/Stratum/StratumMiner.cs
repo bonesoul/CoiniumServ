@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Jobs;
 using CoiniumServ.Logging;
@@ -39,6 +40,8 @@ using Serilog;
 
 namespace CoiniumServ.Server.Mining.Stratum
 {
+    // TODO: Add tls support!
+
     public class StratumMiner : IClient, IStratumMiner
     {
         /// <summary>
@@ -87,8 +90,13 @@ namespace CoiniumServ.Server.Mining.Stratum
 
         private readonly ILogger _logger;
 
+        private readonly ILogger _packetLogger;
+
         public MinerSoftware Software { get; private set; }
+
         public Version Version { get; private set; }
+
+        private readonly AsyncCallback _rpcResultHandler;
 
         /// <summary>
         /// Creates a new miner instance.
@@ -109,7 +117,20 @@ namespace CoiniumServ.Server.Mining.Stratum
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
 
-            _logger = LogManager.PacketLogger.ForContext<StratumMiner>().ForContext("Component", pool.Config.Coin.Name);
+
+            _logger = Log.ForContext<StratumMiner>().ForContext("Component", pool.Config.Coin.Name);
+            _packetLogger = LogManager.PacketLogger.ForContext<StratumMiner>().ForContext("Component", pool.Config.Coin.Name);
+
+            _rpcResultHandler = callback =>
+            {
+                var asyncData = ((JsonRpcStateAsync)callback); // get the async data.
+                var result = asyncData.Result + "\n"; // read the result.
+                var response = Encoding.UTF8.GetBytes(result); // set the response.
+
+                Connection.Send(response); // send the response.
+
+                _packetLogger.Verbose("tx: {0}", result.PrettifyJson());
+            };
         }
 
         /// <summary>
@@ -177,38 +198,35 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="e"></param>
         public void Parse(ConnectionDataEventArgs e)
         {
-            var rpcResultHandler = new AsyncCallback(
-                callback =>
-                {
-                    var asyncData = ((JsonRpcStateAsync)callback);
-                    var result = asyncData.Result + "\n";
-                    var response = Encoding.UTF8.GetBytes(result);
+            var data = e.Data.ToEncodedString(); // read the data.
+            var lines = Regex.Split(data, @"\r?\n|\r"); // get all lines with the recieved data.
 
-                    var context = (SocketServiceContext) asyncData.AsyncState;
+            foreach (var line in lines) // loop through all lines
+            {
+                if (string.IsNullOrWhiteSpace(line)) // if line doesn't contain any data.
+                    continue; // just skip it.
 
-                    var miner = (StratumMiner)context.Miner;
-                    miner.Connection.Send(response);
+                ProcessRequest(line); // process the json-rpc request.
+            }
+        }
 
-                    _logger.Verbose("tx: {0}", result.PrettifyJson());
-                });
-
+        private void ProcessRequest(string line)
+        {
             try
             {
-                var line = e.Data.ToEncodedString();
-                line = line.Replace("\n", "");
+                var rpcContext = new SocketServiceContext(this); // set the context.
 
-                var rpcRequest = new SocketServiceRequest(line);
-                var rpcContext = new SocketServiceContext(this, rpcRequest);
+                _packetLogger.Verbose("rx: {0}", line.PrettifyJson());
 
-                _logger.Verbose("rx: {0}", line.PrettifyJson());
-
-                var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
+                var async = new JsonRpcStateAsync(_rpcResultHandler, rpcContext) {JsonRpc = line};
                 JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
             }
-            catch (JsonReaderException) // if client send an invalid message
+            catch (JsonReaderException e) // if client sent an invalid message
             {
-                // TODO: Add tls support!
-                this.Connection.Disconnect(); // disconnect him.
+                _logger.Error("Disconnecting miner {0:l} as we recieved an invalid json-rpc request - {1:l}",
+                    Username ?? Connection.RemoteEndPoint.ToString(), e.Message);
+
+                Connection.Disconnect(); // disconnect him.
             }
         }
 

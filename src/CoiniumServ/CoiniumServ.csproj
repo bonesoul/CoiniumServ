@@ -323,7 +323,6 @@
     <Compile Include="Server\Mining\Vanilla\Service\VanillaService.cs" />
     <Compile Include="Miners\IMiner.cs" />
     <Compile Include="Server\Mining\Stratum\Service\SocketServiceContext.cs" />
-    <Compile Include="Server\Mining\Stratum\Service\SocketServiceRequest.cs" />
     <Compile Include="Server\Commands\Server.cs" />
     <Compile Include="Server\Commands\Stats.cs" />
     <Compile Include="Server\Commands\Uptime.cs" />
