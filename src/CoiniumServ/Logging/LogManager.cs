@@ -23,7 +23,9 @@
 
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using CoiniumServ.Configuration;
+using CoiniumServ.Utils.Helpers.IO;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -52,7 +54,7 @@ namespace CoiniumServ.Logging
         {
             // read the root folder for logs.
             _rootFolder = string.IsNullOrEmpty(_config.Root) ? "logs" : _config.Root;
-            var rootPath = Path.GetFullPath(_rootFolder);
+            var rootPath = FileHelpers.GetAbsolutePath(_rootFolder);
 
             if (!Directory.Exists(rootPath)) // make sure log root exists.
                 Directory.CreateDirectory(rootPath);            
@@ -99,7 +101,7 @@ namespace CoiniumServ.Logging
 
         private void CreateFileLog(LoggerConfiguration config, ILogTarget target)
         {
-            var filePath = Path.GetFullPath(string.Format("{0}/{1}", _rootFolder, target.Filename));
+            var filePath = FileHelpers.GetAbsolutePath(string.Format("{0}/{1}", _rootFolder, target.Filename));
 
             if (target.Rolling)
                 config.WriteTo.RollingFile(filePath, target.Level, FileLogFormat);
@@ -109,7 +111,7 @@ namespace CoiniumServ.Logging
 
         private void CreatePacketLog(LoggerConfiguration config, ILogTarget target)
         {
-            var filePath = Path.GetFullPath(string.Format("{0}/{1}", _rootFolder, target.Filename));
+            var filePath = FileHelpers.GetAbsolutePath(string.Format("{0}/{1}", _rootFolder, target.Filename));
 
             if (target.Rolling)
                 config.WriteTo.RollingFile(filePath, target.Level, FileLogFormat);

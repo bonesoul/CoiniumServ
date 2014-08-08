@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using CoiniumServ.Utils.Platform;
 
 namespace CoiniumServ.Utils.Helpers.IO
 {
@@ -34,6 +35,16 @@ namespace CoiniumServ.Utils.Helpers.IO
         public static string AssemblyRoot
         {
             get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
+        }
+
+        public static string GetAbsolutePath(string file)
+        {
+            var path = string.Format("{0}/{1}", AssemblyRoot, file); // first get the path as *unix paths.
+
+            if (PlatformManager.Framework == Frameworks.DotNet) // if we are running on windows,
+                path = path.Replace('/', '\\'); // replace to windows-native paths.
+
+            return path;
         }
 
         public static List<string> GetFilesByExtensionRecursive(string directory, string fileExtension)
