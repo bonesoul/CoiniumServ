@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,14 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
-using Coinium.Transactions;
-using Coinium.Transactions.Script;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Jobs;
+using CoiniumServ.Payments;
+using CoiniumServ.Transactions;
+using CoiniumServ.Transactions.Script;
+using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
@@ -66,7 +69,7 @@ using Xunit;
     p2: 0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000
 */
 
-namespace Tests.Transactions
+namespace CoiniumServ.Tests.Transactions
 {
     public class GenerationTransactionTests
     {
@@ -76,6 +79,8 @@ namespace Tests.Transactions
         private readonly IExtraNonce _extraNonce;
         private readonly ISignatureScript _signatureScript;
         private readonly IOutputs _outputs;
+        private readonly IWalletConfig _walletConfig;
+        private readonly IRewardsConfig _rewardsConfig;
 
         public GenerationTransactionTests()
         {
@@ -100,25 +105,32 @@ namespace Tests.Transactions
                 "/nodeStratum/");
 
             // use the same output data within our sample data.
-            _outputs = new Outputs(_daemonClient);
+            _outputs = Substitute.For<Outputs>(_daemonClient);
             double blockReward = 5000000000; // the amount rewarded by the block.
 
-            // sample recipient
-            const string recipient = "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji";
+            // sample reward recipient
+            _rewardsConfig = Substitute.For<IRewardsConfig>();
             var amount = blockReward * 0.01;
             blockReward -= amount;
-            _outputs.AddRecipient(recipient, amount);
+            var rewards = new Dictionary<string, float> { { "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji", (float)amount } };
+
+            _rewardsConfig.GetEnumerator().Returns(rewards.GetEnumerator());
+            foreach (var pair in rewards)
+            {
+                _outputs.AddRecipient(pair.Key, pair.Value);
+            }
 
             // sample pool wallet
-            const string poolWallet = "mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq";
-            _outputs.AddPool(poolWallet, blockReward);
+            _walletConfig = Substitute.For<IWalletConfig>();
+            _walletConfig.Adress.Returns("mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq");
+            _outputs.AddPoolWallet(_walletConfig.Adress, blockReward);
         }
 
         [Fact]
         public void CreateGenerationTransactionTest()
         {
             // create the test object.
-            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate);
+            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, _walletConfig, _rewardsConfig);
 
             // use the exactly same input script data within our sample data.
             generationTransaction.Inputs.First().SignatureScript = _signatureScript;

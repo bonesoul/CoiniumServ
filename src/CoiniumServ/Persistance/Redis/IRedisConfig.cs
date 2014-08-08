@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -23,14 +23,30 @@
 
 using System;
 
-namespace Coinium.Persistance.Redis
+namespace CoiniumServ.Persistance.Redis
 {
-    public interface IRedisConfig
+    public interface IRedisConfig : IStorageConfig
     {
-        bool IsEnabled { get; }
+        bool Enabled { get; }
+
+        /// <summary>
+        /// redis host.
+        /// </summary>
         string Host { get; }
+
+        /// <summary>
+        /// redis port.
+        /// </summary>
         Int32 Port { get;  }
+
+        /// <summary>
+        /// the password if redis installation requires one.
+        /// </summary>
         string Password { get;  }
+
+        /// <summary>
+        /// redis database instance id
+        /// </summary>
         int DatabaseId { get;  }
     }
 }

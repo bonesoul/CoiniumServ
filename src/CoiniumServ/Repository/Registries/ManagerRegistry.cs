@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -21,14 +21,18 @@
 // 
 #endregion
 
-using Coinium.Mining.Jobs;
-using Coinium.Mining.Jobs.Manager;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Mining.Shares;
-using Coinium.Repository.Context;
+using CoiniumServ.Banning;
+using CoiniumServ.Configuration;
+using CoiniumServ.Jobs.Manager;
+using CoiniumServ.Logging;
+using CoiniumServ.Metrics;
+using CoiniumServ.Miners;
+using CoiniumServ.Pools;
+using CoiniumServ.Repository.Context;
+using CoiniumServ.Shares;
+using CoiniumServ.Vardiff;
 
-namespace Coinium.Repository.Registries
+namespace CoiniumServ.Repository.Registries
 {
     public class ManagerRegistry : IRegistry
     {
@@ -45,7 +49,12 @@ namespace Coinium.Repository.Registries
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
             _applicationContext.Container.Register<IJobManager, JobManager>().AsMultiInstance();
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IPoolManager, PoolManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IPoolManager, PoolManager>().AsSingleton();
+            _applicationContext.Container.Register<IVardiffManager, VardiffManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IBanManager, BanManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IConfigManager, ConfigManager>().AsSingleton();
+            _applicationContext.Container.Register<ILogManager, LogManager>().AsSingleton();
+            _applicationContext.Container.Register<IMetricsManager, MetricsManager>().AsSingleton();
         }
     }
 }

@@ -1,0 +1,6 @@
+{
+    "name": "Anoncoin",
+    "symbol": "ANC",
+    "algorithm": "scrypt",
+    "blockExplorer": "http://ancblockchain.com"
+}

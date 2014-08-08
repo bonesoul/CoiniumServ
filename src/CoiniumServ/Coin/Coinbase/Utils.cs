@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,17 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Linq;
-using Coinium.Coin.Address;
-using Coinium.Crypto;
-using Coinium.Utils.Extensions;
-using Coinium.Utils.Numerics;
+using CoiniumServ.Coin.Address;
+using CoiniumServ.Cryptology;
+using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Numerics;
 using Gibbed.IO;
 using Serilog;
 
-namespace Coinium.Coin.Coinbase
+namespace CoiniumServ.Coin.Coinbase
 {
     /// <summary>
     /// Provides helper functions for "serialized CSscript formatting" as defined here: https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki#specification
@@ -77,10 +78,13 @@ namespace Coinium.Coin.Coinbase
         /// Hashes the coinbase.
         /// </summary>
         /// <param name="coinbase"></param>
+        /// <param name="doubleDigest"></param>
         /// <returns></returns>
-        public static Hash HashCoinbase(byte[] coinbase)
+        public static Hash HashCoinbase(byte[] coinbase, bool doubleDigest = true)
         {
-            return coinbase.DoubleDigest();
+            return doubleDigest ? coinbase.DoubleDigest() : coinbase.Digest();
+
+            // TODO: fix this according - https://github.com/zone117x/node-stratum-pool/blob/eb4b62e9c4de8a8cde83c2b3756ca1a45f02b957/lib/jobManager.js#L69
         }
 
         /// <summary>

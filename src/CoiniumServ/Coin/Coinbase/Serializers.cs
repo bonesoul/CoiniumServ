@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,15 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Text;
-using Coinium.Server.Stratum.Notifications;
-using Coinium.Utils.Extensions;
-using Coinium.Utils.Helpers.Arrays;
+using CoiniumServ.Jobs;
+using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Helpers.Arrays;
 using Gibbed.IO;
 
-namespace Coinium.Coin.Coinbase
+namespace CoiniumServ.Coin.Coinbase
 {
     public static class Serializers
     {
@@ -255,17 +256,17 @@ namespace Coinium.Coin.Coinbase
                 if (input.Length < 0x10000)
                 {
                     stream.WriteValueU8(253);
-                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed lenght.
+                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed length.
                 }
-                else if (input.Length < 0x100000000)
+                else if ((long)input.Length < 0x100000000)
                 {
                     stream.WriteValueU8(254);
-                    stream.WriteValueU32(((UInt32)input.Length).LittleEndian()); // write packed lenght.
+                    stream.WriteValueU32(((UInt32)input.Length).LittleEndian()); // write packed length.
                 }
                 else
                 {
                     stream.WriteValueU8(255);
-                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed lenght.
+                    stream.WriteValueU16(((UInt16)input.Length).LittleEndian()); // write packed length.
                 }
 
                 stream.WriteString(input);

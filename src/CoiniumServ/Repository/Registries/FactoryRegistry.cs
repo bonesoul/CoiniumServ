@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -21,22 +21,10 @@
 // 
 #endregion
 
-using Coinium.Coin.Config;
-using Coinium.Crypto.Algorithms;
-using Coinium.Mining.Jobs;
-using Coinium.Mining.Jobs.Manager;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Mining.Miners;
-using Coinium.Mining.Pools;
-using Coinium.Mining.Pools.Config;
-using Coinium.Mining.Shares;
-using Coinium.Persistance;
-using Coinium.Repository.Context;
-using Coinium.Server;
-using Coinium.Service;
-using Coinium.Utils.Configuration;
+using CoiniumServ.Factories;
+using CoiniumServ.Repository.Context;
 
-namespace Coinium.Repository.Registries
+namespace CoiniumServ.Repository.Registries
 {
     public class FactoryRegistry : IRegistry
     {
@@ -49,18 +37,8 @@ namespace Coinium.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IHashAlgorithmFactory, HashAlgorithmFactory>().AsSingleton();
-            _applicationContext.Container.Register<IPoolFactory, PoolFactory>().AsSingleton();
-            _applicationContext.Container.Register<IServerFactory, ServerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IServiceFactory, ServiceFactory>().AsSingleton();
-            _applicationContext.Container.Register<IJobManagerFactory, JobManagerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IJobTrackerFactory, JobTrackerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IShareManagerFactory, ShareManagerFactory>().AsSingleton();
-            _applicationContext.Container.Register<IMinerManagerFactory, MinerManagerFactory>().AsSingleton();
-            _applicationContext.Container.Register<ICoinConfigFactory, CoinConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IPoolConfigFactory, PoolConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IGlobalConfigFactory, GlobalConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IStorageFactory, StorageFactory>().AsSingleton();
+            _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
+            _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
         }
     }
 }

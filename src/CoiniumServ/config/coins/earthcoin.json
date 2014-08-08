@@ -1,0 +1,6 @@
+{
+    "name": "Earthcoin",
+    "symbol": "EAC",
+    "algorithm": "scrypt",
+    "blockExplorer": "http://earthchain.info"
+}

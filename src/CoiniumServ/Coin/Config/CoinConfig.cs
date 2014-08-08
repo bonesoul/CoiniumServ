@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Coin.Config
+
+using System;
+using CoiniumServ.Daemon.Responses;
+using Serilog;
+
+namespace CoiniumServ.Coin.Config
 {
     public class CoinConfig : ICoinConfig
     {
@@ -28,20 +33,29 @@ namespace Coinium.Coin.Config
         public string Name { get; private set; }
         public string Symbol { get; private set; }
         public string Algorithm { get; private set; }
+        public string BlockExplorer { get; private set; }
+        public dynamic Options { get; private set; }
 
         public CoinConfig(dynamic config)
         {
-            if (config == null)
+            try
+            {
+                Name = config.name;
+                Symbol = config.symbol;
+                Algorithm = config.algorithm;
+                BlockExplorer = string.IsNullOrEmpty(config.blockExplorer) ? "https://altexplorer.net" : config.blockExplorer;
+                Options = config;
+
+                if (Name == null || Symbol == null || Algorithm == null) // make sure we have valid name, symbol and algorithm data.
+                    Valid = false;
+                else
+                    Valid = true;
+            }
+            catch (Exception e)
             {
                 Valid = false;
-                return;
+                Log.Logger.ForContext<CoinConfig>().Error("Error loading coin configuration: {0:l}", e.Message);
             }
-
-            Name = config.name;
-            Symbol = config.symbol;
-            Algorithm = config.algorithm;
-
-            Valid = true;
         }
     }
 }

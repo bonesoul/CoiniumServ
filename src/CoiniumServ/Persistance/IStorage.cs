@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,16 +20,43 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using Coinium.Mining.Shares;
 
-namespace Coinium.Persistance
+using System;
+using System.Collections.Generic;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Shares;
+
+namespace CoiniumServ.Persistance
 {
     public interface IStorage
     {
         bool IsEnabled { get; }
 
-        void CommitShare(IShare share);
+        void AddShare(IShare share);
 
-        void CommitBlock(IShare share);
+        void AddBlock(IShare share);
+
+        void SetRemainingBalances(IList<IWorkerBalance> workerBalances);
+
+        void DeleteShares(IPaymentRound round);
+
+        void MoveSharesToCurrentRound(IPaymentRound round);
+
+        void MoveBlock(IPaymentRound round);
+
+        IDictionary<string, int> GetBlockCounts();
+
+        void DeleteExpiredHashrateData(int until);
+
+        IDictionary<string, double> GetHashrateData(int since);
+
+        IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
+
+        IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
+
+        Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
+
+        Dictionary<string, double> GetPreviousBalances();
     }
 }

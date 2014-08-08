@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -21,10 +21,12 @@
 // 
 #endregion
 
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Responses;
+using System.Collections.Generic;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Responses;
 
-namespace Coinium.Daemon
+namespace CoiniumServ.Daemon
 {
     public interface IDaemonClient
     {
@@ -36,12 +38,26 @@ namespace Coinium.Daemon
 
         Block GetBlock(string hash);
 
-        Work Getwork();
+        Getwork Getwork();
 
         bool Getwork(string data);
 
+        Info GetInfo();
+
+        MiningInfo GetMiningInfo();
+
         ValidateAddress ValidateAddress(string walletAddress);
 
-        void Initialize(IDaemonConfig daemonConfig);
+        Transaction GetTransaction(string txId);
+
+        decimal GetBalance(string account = "");
+
+        string MakeRawRequest(string method, params object[] parameters);
+
+        Dictionary<string, decimal> ListAccounts();
+
+        string GetAccount(string bitcoinAddress);
+
+        string SendMany(string fromAccount, Dictionary<string, decimal> toBitcoinAddress, int minConf = 1, string comment = "");
     }
 }

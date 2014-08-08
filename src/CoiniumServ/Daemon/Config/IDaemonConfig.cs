@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -22,20 +22,30 @@
 #endregion
 
 using System;
-using Coinium.Utils.Configuration;
+using CoiniumServ.Configuration;
 
-namespace Coinium.Daemon.Config
+namespace CoiniumServ.Daemon.Config
 {
     public interface IDaemonConfig:IConfig
     {
+        /// <summary>
+        /// ip/hostname of coin-daemon.
+        /// </summary>
         string Host { get; }
 
+        /// <summary>
+        /// the port coin daemon is listening on.
+        /// </summary>
         Int32 Port { get; }
 
+        /// <summary>
+        /// username for rpc connection.
+        /// </summary>
         string Username { get; }
 
+        /// <summary>
+        /// password for rpc connection.
+        /// </summary>
         string Password { get; }
-
-        string Url { get; }
     }
 }

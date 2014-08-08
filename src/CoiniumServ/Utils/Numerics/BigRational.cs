@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,9 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text;
 
-namespace Coinium.Utils.Numerics
+#pragma warning disable 3021 // disable CLSCompliant attribute warnings - http://msdn.microsoft.com/en-us/library/1x9049cy(v=vs.90).aspx
+
+namespace CoiniumServ.Utils.Numerics
 {
 
     /* Most mono versions doesn't include a proper BigInteger implementation, so we just include one that's complete from the latest mono repository

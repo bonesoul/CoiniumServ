@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -21,16 +21,22 @@
 // 
 #endregion
 
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Mining.Jobs.Tracker;
-using Coinium.Mining.Pools;
-using Coinium.Mining.Pools.Config;
-using Coinium.Persistance;
-using Coinium.Persistance.Redis;
-using Coinium.Repository.Context;
+using CoiniumServ.Blocks;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Configuration;
+using CoiniumServ.Daemon;
+using CoiniumServ.Jobs.Tracker;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Pools;
+using CoiniumServ.Pools.Config;
+using CoiniumServ.Repository.Context;
+using CoiniumServ.Server.Web;
+using CoiniumServ.Statistics;
+using Nancy.Bootstrapper;
 
-namespace Coinium.Repository.Registries
+namespace CoiniumServ.Repository.Registries
 {
     public class ClassRegistry : IRegistry
     {
@@ -43,12 +49,32 @@ namespace Coinium.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(Algorithms.Scrypt).AsSingleton();
-            _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
+            // pool
+            _applicationContext.Container.Register<IPools, Statistics.Pools>().AsSingleton();  
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
-            _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsSingleton();
+            _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
+            _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
+            _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
+
+            // statistics
+            _applicationContext.Container.Register<IStatistics, Statistics.Statistics>().AsSingleton();
+            _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
+            _applicationContext.Container.Register<IPerPool, PerPool>().AsMultiInstance();
+            _applicationContext.Container.Register<IBlocksCount, BlocksCount>().AsMultiInstance();
+            _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();
+
+            // config
+            _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
+
+            // storage
+            _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();
+
+            // web
+            _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();
         }
     }
 }

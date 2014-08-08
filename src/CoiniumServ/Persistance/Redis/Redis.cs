@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -22,115 +22,499 @@
 #endregion
 
 using System;
-using System.Net;
-using System.Net.Sockets;
-using Coinium.Mining.Shares;
-using Coinium.Utils.Configuration;
-using Coinium.Utils.Helpers.Time;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Pools.Config;
+using CoiniumServ.Shares;
+using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Extensions;
+using CSRedis;
 using Serilog;
-using StackExchange.Redis;
 
-namespace Coinium.Persistance.Redis
+namespace CoiniumServ.Persistance.Redis
 {
+    /// <summary>
+    /// CSRedis based redis client.
+    /// </summary>
     public class Redis:IStorage, IRedis
     {
         public bool IsEnabled { get; private set; }
-        public bool IsConnected { get { return _connectionMultiplexer.IsConnected; } }
-        public IRedisConfig Config { get; private set; }
+        public bool IsConnected { get { return _client != null && _client.Connected; } }
 
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
-        private readonly IGlobalConfigFactory _globalConfigFactory;
-        private ConnectionMultiplexer _connectionMultiplexer;
-        private IDatabase _database;
-        private IServer _server;
+        private readonly IRedisConfig _redisConfig;
+        private readonly IPoolConfig _poolConfig;
 
-        public Redis(IGlobalConfigFactory globalConfigFactory)
+        private RedisClient _client;
+
+        private readonly ILogger _logger;
+
+        public Redis(PoolConfig poolConfig)
         {
-            _globalConfigFactory = globalConfigFactory;
+            _logger = Log.ForContext<Redis>().ForContext("Component", poolConfig.Coin.Name);
 
-            Config = _globalConfigFactory.GetRedisConfig(); // read the config.
-            IsEnabled = Config.IsEnabled;
+            _poolConfig = poolConfig; // the pool config.
+            _redisConfig = (IRedisConfig)poolConfig.Storage;
+
+            IsEnabled = _redisConfig.Enabled;
 
             if (IsEnabled)
                 Initialize();
         }
 
-        public void CommitShare(IShare share)
+        public void AddShare(IShare share)
         {
-            if (!IsEnabled || !IsConnected)
-                return;
-
-            var coin = share.Miner.Pool.Config.Coin.Name.ToLower();
-
-            // add the share to round.
-            var roundKey = string.Format("{0}:shares:round:current", coin);
-            _database.HashIncrement(roundKey, share.Miner.Username, share.Difficulty ,CommandFlags.FireAndForget);
-
-            // increment the valid shares.
-            var statsKey = string.Format("{0}:stats", coin);
-            _database.HashIncrement(statsKey, share.IsValid ? "validShares" : "invalidShares", 1 , CommandFlags.FireAndForget);
-
-            // add to hashrate.
-            if (share.IsValid)
+            try
             {
-                var hashrateKey = string.Format("{0}:hashrate", coin);
-                var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
-                _database.SortedSetAdd(hashrateKey, entry, TimeHelpers.NowInUnixTime(), CommandFlags.FireAndForget);
+                if (!IsEnabled || !IsConnected)
+                    return;
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+                //_client.StartPipe(); // batch the commands.
+
+                // add the share to round 
+                var currentKey = string.Format("{0}:shares:round:current", coin);
+                _client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
+
+                // increment shares stats.
+                var statsKey = string.Format("{0}:stats", coin);
+                _client.HIncrBy(statsKey, share.IsValid ? "validShares" : "invalidShares", 1);
+
+                // add to hashrate
+                if (share.IsValid)
+                {
+                    var hashrateKey = string.Format("{0}:hashrate", coin);
+                    var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
+                    _client.ZAdd(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
+                }
+
+                //_client.EndPipe(); // execute the batch commands.
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while comitting share: {0:l}", e.Message);
             }
         }
 
-        public void CommitBlock(IShare share)
+        public void AddBlock(IShare share)
         {
-            var coin = share.Miner.Pool.Config.Coin.Name.ToLower();
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return;
 
-            // rename round:current to round:height.
-            var currentKey = string.Format("{0}:shares:round:current", coin);
-            var newKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
-            _database.KeyRenameAsync(currentKey, newKey, When.Always, CommandFlags.HighPriority);           
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+                //_client.StartPipe(); // batch the commands.
+
+                if (share.IsBlockAccepted)
+                {
+                    // rename round.
+                    var currentKey = string.Format("{0}:shares:round:current", coin);
+                    var roundKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
+                    _client.Rename(currentKey, roundKey);
+
+                    // add block to pending.
+                    var pendingKey = string.Format("{0}:blocks:pending", coin);
+                    var entry = string.Format("{0}:{1}", share.BlockHash.ToHexString(), share.Block.Tx.First());
+                    _client.ZAdd(pendingKey, Tuple.Create(share.Block.Height, entry));
+                }
+
+                // increment block stats.
+                var statsKey = string.Format("{0}:stats", coin);
+                _client.HIncrBy(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1);
+
+                //_client.EndPipe(); // execute the batch commands.
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while adding block: {0:l}", e.Message);
+            }
+        }
+
+        public void SetRemainingBalances(IList<IWorkerBalance> workerBalances)
+        {
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return;
+
+                var balancesKey = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
+
+                foreach (var workerBalance in workerBalances)
+                {
+                    //_client.StartPipeTransaction(); // batch the commands as atomic.
+
+                    _client.HDel(balancesKey, workerBalance.Worker); // first delete the existing key.
+
+                    if (!workerBalance.Paid) // if outstanding balance exists, commit it.
+                        _client.HIncrByFloat(balancesKey, workerBalance.Worker, (double) workerBalance.Balance); // increment the value.
+
+                    //_client.EndPipe(); // execute the batch commands.
+                }                
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while setting remaining balance: {0:l}", e.Message);
+            }
+        }
+
+        public void DeleteShares(IPaymentRound round)
+        {
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return;
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+                var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+
+                _client.Del(roundKey); // delete the associated shares.            
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while deleting shares: {0:l}", e.Message);
+            }
+        }
+
+        public void MoveSharesToCurrentRound(IPaymentRound round)
+        {
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return;
+
+                if (round.Block.Status == BlockStatus.Confirmed || round.Block.Status == BlockStatus.Pending)
+                    return;
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+                var currentRound = string.Format("{0}:shares:round:current", coin); // current round key.
+                var roundShares = string.Format("{0}:shares:round:{1}", coin, round.Block.Height); // rounds shares key.
+
+                //_client.StartPipeTransaction(); // batch the commands as atomic.
+
+                // add shares to current round again.
+                foreach (var pair in round.Shares)
+                {
+                    _client.HIncrByFloat(currentRound, pair.Key, pair.Value);
+                }
+
+                _client.Del(roundShares); // delete the associated shares.
+
+                //_client.EndPipe(); // execute the batch commands.
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while moving shares: {0:l}", e.Message);
+            }
+        }
+
+        public void MoveBlock(IPaymentRound round)
+        {
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return;
+
+                if (round.Block.Status == BlockStatus.Pending)
+                    return;
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+                // re-flag the rounds.
+                var pendingKey = string.Format("{0}:blocks:pending", coin); // old key for the round.
+                var newKey = string.Empty; // new key for the round.
+
+                switch (round.Block.Status)
+                {
+                    case BlockStatus.Orphaned:
+                        newKey = string.Format("{0}:blocks:orphaned", coin);
+                        break;
+                    case BlockStatus.Confirmed:
+                        newKey = string.Format("{0}:blocks:confirmed", coin);
+                        break;
+                }
+
+                var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);
+
+                //_client.StartPipeTransaction(); // batch the commands as atomic.
+                _client.ZRemRangeByScore(pendingKey, round.Block.Height, round.Block.Height);
+                _client.ZAdd(newKey, Tuple.Create(round.Block.Height, entry));
+                //_client.EndPipe(); // execute the batch commands.
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while moving block: {0:l}", e.Message);
+            }
+        }
+
+        public IDictionary<string, int> GetBlockCounts()
+        {
+            var blocks = new Dictionary<string, int>();
+
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return blocks;
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+                var pendingKey = string.Format("{0}:blocks:pending", coin);
+                var confirmedKey = string.Format("{0}:blocks:confirmed", coin);
+                var oprhanedKey = string.Format("{0}:blocks:orphaned", coin);
+
+                //_client.StartPipe(); // batch the commands as atomic.
+
+                blocks["pending"] = (int) _client.ZCard(pendingKey);
+                blocks["confirmed"] = (int)_client.ZCard(confirmedKey);
+                blocks["orphaned"] = (int)_client.ZCard(oprhanedKey);
+
+                /*var results = _client.EndPipe(); // execute the batch commands.
+
+                blocks["pending"] = Convert.ToInt32(results[0]);
+                blocks["confirmed"] = Convert.ToInt32(results[1]);
+                blocks["orphaned"] = Convert.ToInt32(results[2]);*/
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting block counts: {0:l}", e.Message);
+            }
+
+            return blocks;
+        }
+
+        public void DeleteExpiredHashrateData(int until)
+        {
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return;
+
+                var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
+
+                _client.ZRemRangeByScore(key, double.NegativeInfinity, until);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while deleting expired hashrate data: {0:l}", e.Message);
+            }
+        }
+
+        public IDictionary<string, double> GetHashrateData(int since)
+        {
+            var hashrates = new Dictionary<string, double>();
+
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return hashrates;
+
+                var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
+
+                var results = _client.ZRangeByScore(key, since, double.PositiveInfinity);
+
+                foreach (var result in results)
+                {
+                    var data = result.Split(':');
+                    var share = double.Parse(data[0].Replace(',', '.'), CultureInfo.InvariantCulture);
+                    var worker = data[1];
+
+                    if (!hashrates.ContainsKey(worker))
+                        hashrates.Add(worker, 0);
+
+                    hashrates[worker] += share;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting hashrate data: {0:l}", e.Message);
+            }
+
+            return hashrates;
+        }
+
+        public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
+        {
+            var blocks = new Dictionary<UInt32, IPersistedBlock>();
+
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return blocks.Values.ToList();
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+                var key = string.Empty;
+
+                switch (status)
+                {
+                    case BlockStatus.Pending:
+                        key = string.Format("{0}:blocks:pending", coin);
+                        break;
+                    case BlockStatus.Orphaned:
+                        key = string.Format("{0}:blocks:orphaned", coin);
+                        break;
+                    case BlockStatus.Confirmed:
+                        key = string.Format("{0}:blocks:confirmed", coin);
+                        break;
+                }
+
+                var results = _client.ZRevRangeByScoreWithScores(key, double.PositiveInfinity, 0, true);
+
+                foreach (var result in results)
+                {
+                    var item = result.Item1;
+                    var score = result.Item2;
+
+                    var data = item.Split(':');
+                    var blockHash = data[0];
+                    var transactionHash = data[1];
+
+                    blocks.Add((UInt32) score, new PersistedBlock(status, (UInt32) score, blockHash, transactionHash, 0, 0));                    
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting {0:l} blocks: {1:l}", status, e.Message);
+            }
+
+            return blocks.Values.ToList();
+        }
+
+        public IDictionary<uint, IPersistedBlock> GetAllBlocks()
+        {
+            var blocks = new Dictionary<uint, IPersistedBlock>();
+
+            if (!IsEnabled || !IsConnected)
+                return blocks;
+
+            foreach (var block in GetBlocks(BlockStatus.Confirmed))
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            foreach (var block in GetBlocks(BlockStatus.Orphaned))
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            foreach (var block in GetBlocks(BlockStatus.Pending))
+            {
+                blocks.Add(block.Height, block);
+            }
+
+            return blocks;
+        }       
+
+        public Dictionary<uint, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)
+        {
+            var sharesForRounds = new Dictionary<UInt32, Dictionary<string, double>>(); // dictionary of block-height <-> shares.
+
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return sharesForRounds;
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+
+                foreach (var round in rounds)
+                {
+                    var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+                    var hashes = _client.HGetAll(roundKey);
+
+                    var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+                    sharesForRounds.Add(round.Block.Height, shares);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting shares for round: {0:l}", e.Message);
+            }
+
+            return sharesForRounds;
+        }
+
+        public Dictionary<string, double> GetPreviousBalances()
+        {
+            var previousBalances = new Dictionary<string, double>();
+
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return previousBalances;
+
+                var key = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
+                var hashes = _client.HGetAll(key);
+                previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting previous balances: {0:l}", e.Message);
+            }
+
+            return previousBalances;
         }
 
         private void Initialize()
         {
-            var options = new ConfigurationOptions();
-            var endpoint = new DnsEndPoint(Config.Host, Config.Port, AddressFamily.InterNetwork);
-            options.EndPoints.Add(endpoint);
-            options.AllowAdmin = true;
-            if (!string.IsNullOrEmpty(Config.Password))
-                options.Password = Config.Password;
-
             try
             {
                 // create the connection
-                _connectionMultiplexer = ConnectionMultiplexer.ConnectAsync(options).Result;
+                _client = new RedisClient(_redisConfig.Host, _redisConfig.Port)
+                {
+                    ReconnectAttempts = 3,
+                    ReconnectTimeout = 200
+                };
 
-                // access to database.
-                _database = _connectionMultiplexer.GetDatabase(Config.DatabaseId);
+                // select the database
+                _client.Select(_redisConfig.DatabaseId);
 
-                // get the configured server.
-                _server = _connectionMultiplexer.GetServer(endpoint);
+                // authenticate if needed.
+                if (!string.IsNullOrEmpty(_redisConfig.Password))
+                    _client.Auth(_redisConfig.Password);
 
                 // check the version
-                var info = _server.Info();
-                Version version = null;
-                foreach (var pair in info[0])
-                {
-                    if (pair.Key == "redis_version")
-                    {
-                        version = new Version(pair.Value);
-                        if (version < _requiredMinimumVersion)
-                            throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
+                var version = GetVersion();
+                if (version < _requiredMinimumVersion)
+                    throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
 
-                        break;
-                    }
-                }
-                
-                Log.ForContext<Redis>().Information("Storage initialized: {0}, v{1}.", endpoint, version);
+                _logger.Information("Storage initialized: {0:l}:{1}, v{2:l}.", _redisConfig.Host, _redisConfig.Port, version);
             }
             catch (Exception e)
             {
-                IsEnabled = false;
-                Log.ForContext<Redis>().Error(e, string.Format("Storage initialization failed: {0}", endpoint));
+                _logger.Error("Storage initialization failed: {0:l}:{1} - {2:l}", _redisConfig.Host, _redisConfig.Port, e.Message);
             }
+        }
+
+        private Version GetVersion()
+        {
+            Version version = null;
+
+            try
+            {
+                var info = _client.Info("server");
+
+                var parts = info.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
+
+                foreach (var part in parts)
+                {
+                    var data = part.Split(':');
+
+                    if (data[0] != "redis_version")
+                        continue;
+
+                    version = new Version(data[1]);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting version info: {0:l}", e.Message);
+            }
+
+            return version;
         }
     }
 }

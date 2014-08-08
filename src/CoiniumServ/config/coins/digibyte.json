@@ -1,0 +1,6 @@
+{
+    "name": "Digibyte",
+    "symbol": "DGB",
+    "algorithm": "scrypt",
+    "blockExplorer": "https://altexplorer.net"
+}

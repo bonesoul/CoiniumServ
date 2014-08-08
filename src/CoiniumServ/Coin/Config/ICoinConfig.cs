@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -21,16 +21,35 @@
 // 
 #endregion
 
-using Coinium.Utils.Configuration;
+using CoiniumServ.Configuration;
 
-namespace Coinium.Coin.Config
+namespace CoiniumServ.Coin.Config
 {
     public interface ICoinConfig:IConfig
     {
+        /// <summary>
+        /// name of the coin
+        /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// 3 or 4 letter symbol for the coin
+        /// </summary>
         string Symbol { get; }
 
+        /// <summary>
+        /// The algorithm used by the coin.
+        /// </summary>
         string Algorithm { get; }
+
+        /// <summary>
+        /// Block explorer for the coin.
+        /// </summary>
+        string BlockExplorer { get; }
+
+        /// <summary>
+        /// Extra options provided that will be passed to coin algorithm.
+        /// </summary>
+        dynamic Options { get; }
     }
 }

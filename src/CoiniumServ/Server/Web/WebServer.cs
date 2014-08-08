@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,73 +20,30 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Nancy;
+
+using CoiniumServ.Configuration;
 using Nancy.Bootstrapper;
-using Nancy.Diagnostics;
-using Nancy.Hosting.Self;
-using Nancy.TinyIoc;
 using Serilog;
 
-namespace Coinium.Server.Web
+namespace CoiniumServ.Server.Web
 {
-    public class WebServer
+    public class WebServer : HttpServer, IWebServer
     {
-        public int Port { get; private set; }
+        private readonly ILogger _logger;
 
-        public string Interface { get; private set; }
-
-        /// <summary>
-        /// Inits a new instance of embedded web-server.
-        /// </summary>
-        public WebServer()
+        public WebServer(INancyBootstrapper webBootstrapper, IConfigManager configManager)
+            : base(webBootstrapper)
         {
-            //this.Interface = Config.Instance.Interface;
-            //this.Port = Config.Instance.Port;
-        }
+            var config = configManager.WebServerConfig;
+            BindIP = config.BindInterface;
+            Port = config.Port;
 
-        public void Start()
-        {
-            var uri = new Uri(string.Format("http://{0}:{1}", Interface, Port));
-            Log.ForContext<WebServer>().Verbose("Web-server listening on: {0}", uri);
+            _logger = Log.ForContext<WebServer>();
 
-            var hostConfiguration = new HostConfiguration();
-            hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
-            hostConfiguration.UrlReservations.CreateAutomatically = true;
-
-            var host = new NancyHost(hostConfiguration, uri);
-
-            try
-            {
-                host.Start();
-            }
-            catch (InvalidOperationException e) // nancy requires elevated privileges to run on port 80.
-            {
-                Log.ForContext<WebServer>().Error("Need elevated privileges to listen on port {0}. [Error: {1}].", Port, e);
-                Environment.Exit(-1);
-            }
-        }
-
-        /// <summary>
-        /// Unhandled exception callback for nancy based web-server.
-        /// </summary>
-        /// <param name="exception"></param>
-        private void UnhandledExceptionHandler(Exception exception)
-        {
-            Log.ForContext<WebServer>().Error("Web-server: {0}", exception);
-        }
-    }
-
-    public class CustomBootstrapper : DefaultNancyBootstrapper
-    {
-        protected override DiagnosticsConfiguration DiagnosticsConfiguration
-        {
-            get { return new DiagnosticsConfiguration { Password = @"coinium" }; }
-        }
-
-        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
-        {
-            StaticConfiguration.EnableRequestTracing = true;
+            if (config.Enabled)
+                Start();
+            else
+                _logger.Verbose("Skipping web-server initialization as it disabled.");
         }
     }
 }

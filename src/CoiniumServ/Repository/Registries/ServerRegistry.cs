@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -21,13 +21,16 @@
 // 
 #endregion
 
-using Coinium.Repository.Context;
-using Coinium.Server;
-using Coinium.Server.Stratum;
-using Coinium.Server.Vanilla;
-using Coinium.Service;
+using CoiniumServ.Repository.Context;
+using CoiniumServ.Server.Mining;
+using CoiniumServ.Server.Mining.Service;
+using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Mining.Stratum.Service;
+using CoiniumServ.Server.Mining.Vanilla;
+using CoiniumServ.Server.Mining.Vanilla.Service;
+using CoiniumServ.Server.Web;
 
-namespace Coinium.Repository.Registries
+namespace CoiniumServ.Repository.Registries
 {
     public class ServerRegistry : IRegistry
     {
@@ -40,8 +43,14 @@ namespace Coinium.Repository.Registries
 
         public void RegisterInstances()
         {
+            // servers.
             _applicationContext.Container.Register<IMiningServer, VanillaServer>(Services.Vanilla).AsMultiInstance();
             _applicationContext.Container.Register<IMiningServer, StratumServer>(Services.Stratum).AsMultiInstance();
+            _applicationContext.Container.Register<IWebServer, WebServer>().AsSingleton();
+
+            // services.
+            _applicationContext.Container.Register<IRpcService, VanillaService>(Services.Vanilla).AsMultiInstance();
+            _applicationContext.Container.Register<IRpcService, StratumService>(Services.Stratum).AsMultiInstance();
         }
     }
 }

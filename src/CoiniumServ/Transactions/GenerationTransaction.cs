@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,20 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Coinium.Coin.Coinbase;
-using Coinium.Crypto;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
-using Coinium.Transactions.Script;
-using Coinium.Utils.Helpers.Time;
+using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Cryptology;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Jobs;
+using CoiniumServ.Payments;
+using CoiniumServ.Transactions.Script;
+using CoiniumServ.Utils.Helpers.Time;
 using Gibbed.IO;
 
-namespace Coinium.Transactions
+namespace CoiniumServ.Transactions
 {
     /// <summary>
     /// A generation transaction.
@@ -112,15 +114,18 @@ namespace Coinium.Transactions
         /// <param name="extraNonce">The extra nonce.</param>
         /// <param name="daemonClient">The daemon client.</param>
         /// <param name="blockTemplate">The block template.</param>
+        /// <param name="rewardsConfig"></param>
         /// <param name="supportTxMessages">if set to <c>true</c> [support tx messages].</param>
         /// <remarks>
         /// Reference implementations:
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
         /// </remarks>
-        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, bool supportTxMessages = false)
+        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, IWalletConfig walletConfig, IRewardsConfig rewardsConfig, bool supportTxMessages = false)
         {
-            DaemonClient = daemonClient;
+            // TODO: we need a whole refactoring here.
+            // we should use DI and it shouldn't really require daemonClient connection to function.
+
             BlockTemplate = blockTemplate;
             ExtraNonce = extraNonce;
             SupportTxMessages = supportTxMessages;
@@ -155,15 +160,8 @@ namespace Coinium.Transactions
 
             double blockReward = BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
 
-            const string poolWallet = "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"; // pool's central wallet address.
-
-            var rewardRecipients = new Dictionary<string, double> // reward recipients addresses.
-            {
-                {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t", 1} // pool fee
-            };
-
             // generate output transactions for recipients (set in config).
-            foreach (var pair in rewardRecipients)
+            foreach (var pair in rewardsConfig)
             {
                 var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
                 blockReward -= amount;
@@ -172,7 +170,7 @@ namespace Coinium.Transactions
             }
 
             // send the remaining coins to pool's central wallet.
-            Outputs.AddPool(poolWallet, blockReward); 
+            Outputs.AddPoolWallet(walletConfig.Adress, blockReward); 
         }
 
         public void Create()

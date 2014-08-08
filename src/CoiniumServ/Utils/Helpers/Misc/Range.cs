@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Coinium.Utils.Helpers.Misc
+namespace CoiniumServ.Utils.Helpers.Misc
 {
     /// <summary>
     /// Port of python's range from

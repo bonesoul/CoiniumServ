@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Daemon.Config
+
+using System;
+using Serilog;
+
+namespace CoiniumServ.Daemon.Config
 {
     public class DaemonConfig:IDaemonConfig
     {
@@ -34,25 +38,23 @@ namespace Coinium.Daemon.Config
 
         public string Password { get; private set; }
 
-        public string Url
-        {
-            get { return string.Format("http://{0}:{1}", Host, Port); }
-        }
-
         public DaemonConfig(dynamic config)
         {
-            if (config == null)
+            try
+            {
+                // load the config data.
+                Host = string.IsNullOrEmpty(config.host) ? "0.0.0.0" : config.host;
+                Port = config.port;
+                Username = config.username;
+                Password = config.password;
+
+                Valid = true;
+            }
+            catch (Exception e)
             {
                 Valid = false;
-                return;
+                Log.Logger.ForContext<DaemonConfig>().Error(e, "Error loading daemon configuration");
             }
-
-            Host = !string.IsNullOrEmpty(config.host) ? config.host : "0.0.0.0";
-            Port = config.port;
-            Username = config.username;
-            Password = config.password;
-
-            Valid = true;
         }
     }
 }

@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Coinium.Net.Server.Sockets
+namespace CoiniumServ.Net.Server.Sockets
 {
     public class Connection : IConnection
     {
@@ -66,7 +67,7 @@ namespace Coinium.Net.Server.Sockets
         /// <summary>
         /// The server instance that connection is bound to.
         /// </summary>
-        private SocketServer _server;
+        private readonly SocketServer _server;
 
         /// <summary>
         /// Default buffer size.
@@ -176,11 +177,12 @@ namespace Coinium.Net.Server.Sockets
         /// <returns>Returns count of sent bytes.</returns>
         public int Send(IEnumerable<byte> data, SocketFlags flags)
         {
-            if (data == null) throw new ArgumentNullException("data");
+            if (data == null) 
+                throw new ArgumentNullException("data");
+
             if (_server == null)
-            {
                 throw new Exception("[Connection] _server is null in Send");
-            }
+
             return _server.Send(this, data, flags);
         }
 
@@ -224,10 +226,7 @@ namespace Coinium.Net.Server.Sockets
 
         public void Disconnect()
         {
-            if(Socket.Connected)
-                Socket.Disconnect(true);
-
-            Client = null;            
+            _server.RemoveConnection(this);
         }
 
         #endregion

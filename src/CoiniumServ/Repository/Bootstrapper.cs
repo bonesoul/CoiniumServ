@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -21,11 +21,10 @@
 // 
 #endregion
 
-using Coinium.Repository.Context;
-using Coinium.Repository.Registries;
+using CoiniumServ.Repository.Registries;
 using Nancy.TinyIoc;
 
-namespace Coinium.Repository
+namespace CoiniumServ.Repository
 {
     /// <summary>
     /// IOC & DI registry.
@@ -38,15 +37,13 @@ namespace Coinium.Repository
         public Bootstrapper(TinyIoCContainer container)
         {
             _container = container;
+            Run();
         }
 
         public void Run()
         {
             var masterRegistry = new Registry(_container);
             masterRegistry.RegisterInstances();
-
-            var applicationContext = _container.Resolve<IApplicationContext>();
-            applicationContext.Initialize(_container);
 
             foreach (var registry in _container.ResolveAll<IRegistry>())
             {

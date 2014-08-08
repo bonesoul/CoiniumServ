@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Coinium.Utils.Helpers.Validation
+namespace CoiniumServ.Utils.Helpers.Validation
 {
     /// <summary>
     /// The enforce.
@@ -45,9 +45,7 @@ namespace Coinium.Utils.Helpers.Validation
         public static void ArgumentIsValid<T>(T value, string message, Func<T, bool> predicate)
         {
             if (!predicate(value))
-            {
                 throw new ArgumentException(message);
-            }
         }
 
         /// <summary>
@@ -70,9 +68,7 @@ namespace Coinium.Utils.Helpers.Validation
         public static void ArgumentNotNull(object value, string name)
         {
             if (value == null)
-            {
-                throw new ArgumentNullException(string.Format("{0} cannot be passed as null. Check the DI configuration or consuming class.", name));
-            }
+                throw new ArgumentNullException(name);
         }
 
         /// <summary>
@@ -85,9 +81,7 @@ namespace Coinium.Utils.Helpers.Validation
         public static void HasItems<T>(ICollection<T> collection, string name)
         {
             if (collection == null || collection.Count == 0)
-            {
                 throw new ArgumentException(string.Format("{0} does not contain elements and elements are required. Check the consuming class.", name));
-            }
         }
 
         /// <summary>
@@ -99,9 +93,7 @@ namespace Coinium.Utils.Helpers.Validation
         public static void EnumValueIsDefined<TEnum>(TEnum value, string name)
         {
             if (!Enum.IsDefined(typeof(TEnum), value))
-            {
                 throw new ArgumentException(string.Format("The enum value {0} does not exist in {1}.", value, typeof(TEnum).Name));
-            }
         }
 
         /// <summary>

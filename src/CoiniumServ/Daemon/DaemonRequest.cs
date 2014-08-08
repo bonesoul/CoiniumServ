@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -26,15 +26,15 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Coinium.Daemon
+namespace CoiniumServ.Daemon
 {
     /// <summary>
-    /// Class containing data sent to the Bitcoin wallet as a JSON RPC call.
+    /// Class containing data sent to the coin wallet as a JSON RPC call.
     /// </summary>
     public class DaemonRequest
     {
         /// <summary>
-        /// The method to call on the Bitcoin wallet.
+        /// The method to call on the coin wallet.
         /// </summary>
         [JsonProperty(PropertyName = "method", Order = 0)]
         public string Method { get; set; }

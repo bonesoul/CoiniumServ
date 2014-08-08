@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -25,28 +25,34 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Exceptions;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Factories;
+using CoiniumServ.Logging;
+using CoiniumServ.Pools;
+using CoiniumServ.Pools.Config;
+using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace Coinium.Daemon
+namespace CoiniumServ.Daemon
 {
-    public class DaemonBase
+    public class DaemonBase : IDaemonBase
     {
         public string RpcUrl { get; private set; }
         public string RpcUser { get; private set; }
         public string RpcPassword { get; private set; }
         public Int32 RequestCounter { get; private set; }
 
-        public virtual void Initialize(IDaemonConfig config)
+        private readonly ILogger _logger;
+
+        public DaemonBase(IPoolConfig poolConfig)
         {
-            var url = string.Format("{0}", config.Url);
-            RpcUrl = url;
-            RpcUser = config.Username;
-            RpcPassword = config.Password;
+            RpcUrl = string.Format("http://{0}:{1}", poolConfig.Daemon.Host, poolConfig.Daemon.Port);
+            RpcUser = poolConfig.Daemon.Username;
+            RpcPassword = poolConfig.Daemon.Password;
             RequestCounter = 0;
+            _logger = LogManager.PacketLogger.ForContext<DaemonClient>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         /// <summary>
@@ -59,21 +65,10 @@ namespace Coinium.Daemon
         /// <param name="method">Method to invoke.</param>
         /// <param name="parameters">Parameters to pass to the method.</param>
         /// <returns>The JSON RPC response deserialized as the given type.</returns>
-        public T MakeRequest<T>(string method, params object[] parameters)
+        protected T MakeRequest<T>(string method, params object[] parameters)
         {
             var rpcResponse = MakeRpcRequest<T>(new DaemonRequest(RequestCounter++, method, parameters));
             return rpcResponse.Result;
-        }
-
-        /// <summary>
-        /// Make a raw JSON RPC request with the given request object. Returns raw JSON.
-        /// </summary>
-        /// <param name="walletRequest">The request object.</param>
-        /// <returns>The raw JSON string.</returns>
-        public string MakeRawRpcRequest(DaemonRequest walletRequest)
-        {
-            HttpWebRequest httpWebRequest = MakeHttpRequest(walletRequest);
-            return GetJsonResponse(httpWebRequest);
         }
 
         /// <summary>
@@ -85,8 +80,33 @@ namespace Coinium.Daemon
         /// <returns>A JSON RPC response with the result deserialized as the given type.</returns>
         private DaemonResponse<T> MakeRpcRequest<T>(DaemonRequest walletRequest)
         {
-            HttpWebRequest httpWebRequest = MakeHttpRequest(walletRequest);
+            var httpWebRequest = MakeHttpRequest(walletRequest);
             return GetRpcResponse<T>(httpWebRequest);
+        }
+
+        /// <summary>
+        /// Make a raw JSON RPC request with the given request object. Returns raw JSON.
+        /// </summary>
+        /// <param name="method"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public string MakeRawRequest(string method, params object[] parameters)
+        {
+            var response = MakeRawRpcRequest(new DaemonRequest(RequestCounter++, method, parameters));
+            _logger.Verbose("rx: {0}", response.PrettifyJson());
+
+            return response;
+        }
+
+        /// <summary>
+        /// Make a raw JSON RPC request with the given request object. Returns raw JSON.
+        /// </summary>
+        /// <param name="walletRequest">The request object.</param>
+        /// <returns>The raw JSON string.</returns>
+        private string MakeRawRpcRequest(DaemonRequest walletRequest)
+        {
+            var httpWebRequest = MakeHttpRequest(walletRequest);
+            return GetJsonResponse(httpWebRequest);
         }
 
         /// <summary>
@@ -104,7 +124,7 @@ namespace Coinium.Daemon
             webRequest.Method = "POST";
             webRequest.Timeout = 1000;
 
-            Log.ForContext<DaemonBase>().Verbose("Send: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
+            _logger.Verbose("tx: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
 
             byte[] byteArray = walletRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;
@@ -119,7 +139,7 @@ namespace Coinium.Daemon
             }
             catch (WebException exception)
             {
-                throw new DaemonException(exception);
+                throw new RpcException(string.Format("json-rpc exception: {0}", exception.Message), exception);
             }
 
             return webRequest;
@@ -135,7 +155,7 @@ namespace Coinium.Daemon
         {
             string json = GetJsonResponse(httpWebRequest);
 
-            Log.ForContext<DaemonBase>().Verbose("Recv: {0}", json.PrettifyJson());
+            _logger.Verbose("rx: {0}", json.PrettifyJson());
 
             try
             {
@@ -143,7 +163,7 @@ namespace Coinium.Daemon
             }
             catch (JsonException jsonEx)
             {
-                throw new Exception("There was a problem deserializing the response from the bitcoin wallet.", jsonEx);
+                throw new Exception("There was a problem deserializing the response from the coin wallet.", jsonEx);
             }
         }
 
@@ -170,14 +190,14 @@ namespace Coinium.Daemon
             }
             catch (ProtocolViolationException protocolException)
             {
-                throw new Exception("Unable to connect to the daemon.", protocolException);
+                throw new RpcException("Unable to connect to the daemon.", protocolException);
             }
             catch (WebException webException)
             {
                 var response = webException.Response as HttpWebResponse;
 
                 if(response == null)
-                    throw new Exception("An unknown web exception occured while trying to read the JSON response.", webException);
+                    throw new RpcException(string.Format("Error while reading the json response: {0}.", webException.Message), webException);
 
                 using (var stream = response.GetResponseStream())
                 {
@@ -185,14 +205,14 @@ namespace Coinium.Daemon
                     {
                         string error = reader.ReadToEnd();
 
-                        var daemonError = JsonConvert.DeserializeObject<DaemonError>(error);
-                        throw new DaemonException(daemonError);
+                        var errorResponse = JsonConvert.DeserializeObject<DaemonErrorResponse>(error);
+                        throw new RpcException(errorResponse);
                     }
                 }
             }
             catch (Exception exception)
             {
-                throw new Exception("An unknown exception occured while trying to read the JSON response.", exception);
+                throw new RpcException("An unknown exception occured while trying to read the JSON response.", exception);
             }
         }
     }

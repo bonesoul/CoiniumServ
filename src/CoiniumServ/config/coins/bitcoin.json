@@ -1,0 +1,6 @@
+{
+    "name": "Bitcoin",
+    "symbol": "BTC",
+    "algorithm": "sha256",
+    "blockExplorer": "https://blockchain.info"
+}

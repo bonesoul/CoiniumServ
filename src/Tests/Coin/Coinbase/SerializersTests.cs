@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,17 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Coinium.Coin.Coinbase;
-using Coinium.Crypto.Algorithms;
-using Coinium.Daemon;
-using Coinium.Daemon.Responses;
-using Coinium.Mining.Jobs;
-using Coinium.Server.Stratum.Notifications;
-using Coinium.Transactions;
-using Coinium.Transactions.Script;
-using Coinium.Utils.Extensions;
+using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Jobs;
+using CoiniumServ.Payments;
+using CoiniumServ.Transactions;
+using CoiniumServ.Transactions.Script;
+using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using NSubstitute;
 using Should.Fluent;
@@ -93,7 +95,7 @@ using Xunit;
     2014-06-25 13:24:04 [Pool]	[litecoin] (Thread 1) Block found: e242093d92f4c98bfd5dd1f9f6489652d1165f5ce4eed1f28747d2b8e3efd8b6
  */
 
-namespace Tests.Coin.Coinbase
+namespace CoiniumServ.Tests.Coin.Coinbase
 {
     public class SerializerTests
     {
@@ -134,18 +136,25 @@ namespace Tests.Coin.Coinbase
             _outputs = Substitute.For<Outputs>(_daemonClient);
             double blockReward = 5000000000; // the amount rewarded by the block.
 
-            // sample recipient
-            const string recipient = "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji";
+            // sample reward recipient
+            var rewardsConfig = Substitute.For<IRewardsConfig>();
             var amount = blockReward * 0.01;
             blockReward -= amount;
-            _outputs.AddRecipient(recipient, amount);
+            var rewards = new Dictionary<string, float> { { "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji", (float)amount } };
+
+            rewardsConfig.GetEnumerator().Returns(rewards.GetEnumerator());
+            foreach (var pair in rewards)
+            {
+                _outputs.AddRecipient(pair.Key, pair.Value);
+            }
 
             // sample pool wallet
-            const string poolWallet = "mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq";
-            _outputs.AddPool(poolWallet, blockReward);
-
+            var walletConfig = Substitute.For<IWalletConfig>();
+            walletConfig.Adress.Returns("mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq");
+            _outputs.AddPoolWallet(walletConfig.Adress, blockReward);
+                                   
             // generation transaction.
-            _generationTransaction = Substitute.For<GenerationTransaction>(_extraNonce, _daemonClient, _blockTemplate, false);
+            _generationTransaction = Substitute.For<GenerationTransaction>(_extraNonce, _daemonClient, _blockTemplate, walletConfig, rewardsConfig, false);
             _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
             _generationTransaction.Outputs = _outputs;
             _generationTransaction.Create();
@@ -181,7 +190,7 @@ namespace Tests.Coin.Coinbase
 
             // create the coinbase.
             var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
-            var coinbaseHash = Coinium.Coin.Coinbase.Utils.HashCoinbase(coinbase);
+            var coinbaseHash = CoiniumServ.Coin.Coinbase.Utils.HashCoinbase(coinbase);
 
             // create the merkle root.
             var merkleRoot = _job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();
@@ -203,7 +212,7 @@ namespace Tests.Coin.Coinbase
 
             // create the coinbase.
             var coinbase = Serializers.SerializeCoinbase(_job, extraNonce1, extraNonce2);
-            var coinbaseHash = Coinium.Coin.Coinbase.Utils.HashCoinbase(coinbase);
+            var coinbaseHash = CoiniumServ.Coin.Coinbase.Utils.HashCoinbase(coinbase);
 
             // create the merkle root.
             var merkleRoot = _job.MerkleTree.WithFirst(coinbaseHash).ReverseBuffer();

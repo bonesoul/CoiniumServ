@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -24,10 +24,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coinium.Daemon.Config;
-using Coinium.Daemon.Requests;
-using Coinium.Daemon.Responses;
-
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Requests;
+using CoiniumServ.Daemon.Responses;
 /* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
 /* Possible alternative implementations:
@@ -39,14 +38,21 @@ using Coinium.Daemon.Responses;
 
 // Original bitcoin api call list: https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_Calls_list
 // Rpc error codes: https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
+using CoiniumServ.Pools.Config;
 
-namespace Coinium.Daemon
+namespace CoiniumServ.Daemon
 {
     /// <summary>
     /// RPC client for coind's.
     /// </summary>
     public class DaemonClient : DaemonBase, IDaemonClient
     {
+        public static readonly object[] EmptyString = {}; // used as empty parameter.
+
+        public DaemonClient(IPoolConfig poolConfig)
+            : base(poolConfig)
+        { }
+
         /// <summary>
         /// Version 0.8: Attempts add or remove node from the addnode list or try a connection to node once.
         /// </summary>
@@ -186,7 +192,9 @@ namespace Coinium.Daemon
         /// <returns>The balance of the account or the total wallet.</returns>
         public decimal GetBalance(string account = "")
         {
-            return MakeRequest<decimal>("getbalance", account);
+            return string.IsNullOrEmpty(account)
+                ? MakeRequest<decimal>("getbalance", EmptyString)
+                : MakeRequest<decimal>("getbalance", account);
         }
 
         /// <summary>
@@ -465,9 +473,9 @@ namespace Coinium.Daemon
         /// "target" : little endian hash target
         /// If [data] is specified, tries to solve the block and returns true if it was successful.
         /// </summary>
-        public Work Getwork()
+        public Getwork Getwork()
         {
-            return MakeRequest<Work>("getwork", null);   
+            return MakeRequest<Getwork>("getwork", null);   
         }
 
         /// <summary>

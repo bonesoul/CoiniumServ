@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,15 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 
-namespace Coinium.Transactions
+namespace CoiniumServ.Transactions
 {
     public interface IOutputs
     {
         List<TxOut> List { get; }
 
-        void AddPool(string address, double amount);
+        void AddPoolWallet(string address, double amount);
 
         void AddRecipient(string address, double amount);
 

@@ -2,7 +2,7 @@
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     https://github.com/CoiniumServ/CoiniumServ
+//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
 // 
 //     This software is dual-licensed: you can redistribute it and/or modify
 //     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace Coinium.Utils.Versions
+namespace CoiniumServ.Utils.Versions
 {
     /// <summary>
     /// Supported Versions Info.
@@ -29,14 +29,19 @@ namespace Coinium.Utils.Versions
     public static class VersionInfo
     {
         /// <summary>
+        /// Codename.
+        /// </summary>
+        public const string CodeName = "Piri Reis";
+
+        /// <summary>
         /// Main assembly versions info.
         /// </summary>
         public static class Assembly
         {
             /// <summary>
-            /// Main assemblies version.
+            /// Main assemby version.
             /// </summary>
-            public const string Version = "0.1.*";
+            public const string Version = "0.1.0.*";
         }
     }
 }

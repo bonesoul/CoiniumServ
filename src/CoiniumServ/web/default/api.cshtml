@@ -1,0 +1,89 @@
+﻿@using System.Linq
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Modules.ApiModel>
+
+@{ Layout = "layout.cshtml"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-money"></i> API</h3>
+            </div>
+            <div class="panel-body">                
+                <table class="table table-bordered table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Arguments</th>
+                            <th>Description</th>
+                            <th style="width: 100px;">Demo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>global</td>
+                            <td>none</td>
+                            <td><strong>Global Information</strong><br><small>Returns general statistics & information about the pool network.</small></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="http://www.jsoneditoronline.org/?url=@Model.BaseUrl/api/global/" title="Demo view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                    <a href="/api/global/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-file-text-o"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>pools</td>
+                            <td>none</td>
+                            <td><strong>Pools List & Statistics</strong><br><small>Returns list of pools and detailed statistics for them.</small></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="http://www.jsoneditoronline.org/?url=@Model.BaseUrl/api/pools/" title="Demo view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                    <a href="/api/pools/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-file-text-o"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>pool</td>
+                            <td><code>coin symbol</code></td>
+                            <td><strong>Pool Statistics</strong><br><small>Returns detailed statistics for a given pool.</small></td>
+                            <td>
+                                @if (@Model.Coin != null)
+                                {
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="http://www.jsoneditoronline.org/?url=@Model.BaseUrl/api/pool/@Model.Coin.Symbol/" title="Demo view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                        <a href="/api/pool/@Model.Coin.Symbol/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-file-text-o"></i></a>
+                                    </div>
+                                }
+                            </td>
+                        </tr>       
+                        <tr>
+                            <td>algorithms</td>
+                            <td>none</td>
+                            <td><strong>Algorithms List & Statistics</strong><br><small>Returns list of algorithms and detailed statistics for them.</small></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="http://www.jsoneditoronline.org/?url=@Model.BaseUrl/api/algorithms/" title="Demo view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                    <a href="/api/algorithms/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-file-text-o"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>algorithm</td>
+                            <td><code>algorithm name</code></td>
+                            <td><strong>Algorithm Statistics</strong><br><small>Returns detailed statistics for a given algorithm.</small></td>
+                            <td>
+                                @if (@Model.Coin != null)
+                                {
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="http://www.jsoneditoronline.org/?url=@Model.BaseUrl/api/algorithm/@Model.Coin.Algorithm/" title="Demo view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                        <a href="/api/algorithm/@Model.Coin.Algorithm/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-file-text-o"></i></a>
+                                    </div>
+                                }
+                            </td>
+                        </tr>                                           
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
