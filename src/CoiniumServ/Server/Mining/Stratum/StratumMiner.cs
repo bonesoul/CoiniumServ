@@ -287,7 +287,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             var data = Encoding.UTF8.GetBytes(json);
             Connection.Send(data);
 
-            _logger.Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
+            _packetLogger.Verbose("tx: {0}", data.ToEncodedString().PrettifyJson());
         }
     }
 }
