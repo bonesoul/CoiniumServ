@@ -39,7 +39,8 @@ namespace CoiniumServ.Configuration
         {
             try
             {
-                var json = ReadJsonFromFile(fileName); // read the json.
+                var path = Path.GetFullPath(fileName);
+                var json = ReadJsonFromFile(path); // read the json.
                 json = CleanComments(json); // strip out comment lines that starts with # as they'll be preventing validation.
                 var valid = ValidateJson(json, fileName); // check if it's valid.
 
