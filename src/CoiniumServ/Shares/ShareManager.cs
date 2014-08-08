@@ -208,7 +208,7 @@ namespace CoiniumServ.Shares
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Submit block failed - height: {0}, hash: {1:l} - {2:l}", share.Height, share.BlockHash, e.Message);
+                _logger.Error("Submit block failed - height: {0}, hash: {1:l} - {2:l}", share.Height, share.BlockHash, e.Message);
                 return false;
             }
         }
