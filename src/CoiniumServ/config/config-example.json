@@ -74,7 +74,7 @@
 				"type": "file",
 				"filename": "debug.log",
 				"rolling": false,
-				"level": "verbose"
+				"level": "debug"
 			},
 			{
 				"enabled": true,
