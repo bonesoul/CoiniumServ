@@ -317,7 +317,6 @@
     <Compile Include="Pools\Config\PoolConfig.cs" />
     <Compile Include="Pools\PoolManager.cs" />
     <Compile Include="Server\Mining\Vanilla\Service\HttpServiceContext.cs" />
-    <Compile Include="Server\Mining\Vanilla\Service\HttpServiceRequest.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaServer.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\Service\VanillaService.cs" />

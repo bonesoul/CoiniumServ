@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System.Net;
 using CoiniumServ.Miners;
 
 namespace CoiniumServ.Server.Mining.Vanilla.Service
@@ -29,12 +30,12 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
     {
         public IMiner Miner { get; private set; }
 
-        public HttpServiceRequest Request { get; private set; } // todo - do we really need this?
+        public HttpListenerResponse Response { get; private set; }
 
-        public HttpServiceContext(IMiner miner, HttpServiceRequest request)
+        public HttpServiceContext(IMiner miner, HttpListenerContext context)
         {
             Miner = miner;
-            Request = request;
+            Response = context.Response;
         }
     }
 }

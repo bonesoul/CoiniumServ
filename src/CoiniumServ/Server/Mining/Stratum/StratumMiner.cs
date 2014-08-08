@@ -117,7 +117,6 @@ namespace CoiniumServ.Server.Mining.Stratum
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
 
-
             _logger = Log.ForContext<StratumMiner>().ForContext("Component", pool.Config.Coin.Name);
             _packetLogger = LogManager.PacketLogger.ForContext<StratumMiner>().ForContext("Component", pool.Config.Coin.Name);
 
