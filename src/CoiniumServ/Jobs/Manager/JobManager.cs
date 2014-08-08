@@ -233,9 +233,6 @@ namespace CoiniumServ.Jobs.Manager
 
             stratumMiner.SendJob(job);
 
-            // todo: this message should be configurable and optional
-            stratumMiner.SendMessage(string.Format("New job 0x{0:x} for next block {1}.", job.Id, job.Height));
-
             return true;
         }
     }
