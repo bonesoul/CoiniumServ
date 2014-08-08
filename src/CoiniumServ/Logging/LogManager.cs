@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -101,22 +102,38 @@ namespace CoiniumServ.Logging
 
         private void CreateFileLog(LoggerConfiguration config, ILogTarget target)
         {
-            var filePath = FileHelpers.GetAbsolutePath(string.Format("{0}/{1}", _rootFolder, target.Filename));
+            try
+            {
+                var filePath = FileHelpers.GetAbsolutePath(string.Format("{0}/{1}", _rootFolder, target.Filename));
 
-            if (target.Rolling)
-                config.WriteTo.RollingFile(filePath, target.Level, FileLogFormat);
-            else
-                config.WriteTo.File(filePath, target.Level, FileLogFormat);
+                if (target.Rolling)
+                    config.WriteTo.RollingFile(filePath, target.Level, FileLogFormat);
+                else
+                    config.WriteTo.File(filePath, target.Level, FileLogFormat);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                // we can at least log the error to console.
+                Log.ForContext<LogManager>().Error("Error creating file log {0:l} - {1:l}", target.Filename, e.Message);
+            }
         }
 
         private void CreatePacketLog(LoggerConfiguration config, ILogTarget target)
         {
-            var filePath = FileHelpers.GetAbsolutePath(string.Format("{0}/{1}", _rootFolder, target.Filename));
+            try
+            {
+                var filePath = FileHelpers.GetAbsolutePath(string.Format("{0}/{1}", _rootFolder, target.Filename));
 
-            if (target.Rolling)
-                config.WriteTo.RollingFile(filePath, target.Level, FileLogFormat);
-            else
-                config.WriteTo.File(filePath, target.Level, FileLogFormat);
+                if (target.Rolling)
+                    config.WriteTo.RollingFile(filePath, target.Level, FileLogFormat);
+                else
+                    config.WriteTo.File(filePath, target.Level, FileLogFormat);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                // we can at least log the error to console.
+                Log.ForContext<LogManager>().Error("Error creating file log {0:l} - {1:l}", target.Filename, e.Message);
+            }
         }
     }
 
