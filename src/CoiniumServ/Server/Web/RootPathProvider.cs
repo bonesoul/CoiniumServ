@@ -21,8 +21,7 @@
 // 
 #endregion
 
-using CoiniumServ.Utils.Helpers.IO;
-using CoiniumServ.Utils.Platform;
+using System.IO;
 using Nancy;
 
 namespace CoiniumServ.Server.Web
@@ -31,7 +30,7 @@ namespace CoiniumServ.Server.Web
     {
         public string GetRootPath()
         {
-            return string.Format(PlatformManager.Framework == Frameworks.Mono ? "{0}/web/default" : "{0}\\web\\default", FileHelpers.AssemblyRoot);
+            return Path.GetFullPath("web/default");
         }
     }
 }
