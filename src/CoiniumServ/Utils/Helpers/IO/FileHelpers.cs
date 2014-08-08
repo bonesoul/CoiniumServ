@@ -27,6 +27,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using CoiniumServ.Utils.Platform;
+using Serilog;
 
 namespace CoiniumServ.Utils.Helpers.IO
 {
@@ -47,29 +48,25 @@ namespace CoiniumServ.Utils.Helpers.IO
             return path;
         }
 
-        public static List<string> GetFilesByExtensionRecursive(string directory, string fileExtension)
+        public static List<string> GetFilesByExtension(string directory, string expectedExtension)
         {
             var files = new List<string>(); // Store results in the file results list.
-            var stack = new Stack<string>(); // Store a stack of our directories.
 
-            stack.Push(directory); // Add initial directory.
-
-            while (stack.Count > 0) // Continue while there are directories to process
+            try
             {
-                var topDir = stack.Pop(); // Get top directory
+                var topDir = GetAbsolutePath(directory);
                 var dirInfo = new DirectoryInfo(topDir);
 
-                files.AddRange((from fileInfo in dirInfo.GetFiles()
-                                where string.Compare(fileInfo.Extension, fileExtension, StringComparison.OrdinalIgnoreCase) == 0
-                                select topDir + "/" + fileInfo.Name).ToList());
-
-                foreach (var dir in Directory.GetDirectories(topDir)) // Add all directories at this directory.
-                {
-                    stack.Push(dir);
-                }
+                files.AddRange(from fileInfo in dirInfo.GetFiles()
+                    where string.Compare(fileInfo.Extension, expectedExtension, StringComparison.OrdinalIgnoreCase) == 0
+                    select string.Format("{0}/{1}", directory, fileInfo.Name));
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                Log.Error("Directory not found: {0:l}", e.Message);
             }
 
-            return files.Select(file => file.Replace("\\", "/")).ToList();
+            return files;
         }
     }
 }
