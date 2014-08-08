@@ -215,15 +215,13 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
                     // Begin receiving again on the socket, if it is connected.
                     if (connection.IsConnected)
                         connection.BeginReceive(ReceiveCallback, connection);
-                    else
-                        _logger.Debug("Connection closed:" + connection.Client);
                 }
                 else
                     RemoveConnection(connection); // Connection was lost.
             }
             catch (SocketException e)
             {
-                _logger.Debug("An exception occured in recieve callback: {0:l}", e.Message);
+                _logger.Verbose("An exception occured in recieve callback: {0:l}", e.Message);
                 RemoveConnection(connection); // An error occured while receiving, connection has disconnected.
             }
         }

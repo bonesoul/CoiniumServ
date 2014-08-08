@@ -317,13 +317,11 @@
     <Compile Include="Pools\Config\PoolConfig.cs" />
     <Compile Include="Pools\PoolManager.cs" />
     <Compile Include="Server\Mining\Vanilla\Service\HttpServiceContext.cs" />
-    <Compile Include="Server\Mining\Vanilla\Service\HttpServiceRequest.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaServer.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\Service\VanillaService.cs" />
     <Compile Include="Miners\IMiner.cs" />
     <Compile Include="Server\Mining\Stratum\Service\SocketServiceContext.cs" />
-    <Compile Include="Server\Mining\Stratum\Service\SocketServiceRequest.cs" />
     <Compile Include="Server\Commands\Server.cs" />
     <Compile Include="Server\Commands\Stats.cs" />
     <Compile Include="Server\Commands\Uptime.cs" />

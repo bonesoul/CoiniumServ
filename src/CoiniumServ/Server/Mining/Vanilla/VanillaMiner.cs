@@ -31,6 +31,7 @@ using CoiniumServ.Miners;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Vanilla.Service;
 using CoiniumServ.Utils.Extensions;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla
@@ -64,6 +65,10 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
         private readonly ILogger _logger;
 
+        private readonly ILogger _packetLogger;
+
+        private readonly AsyncCallback _rpcResultHandler;
+
         /// <summary>
         /// 
         /// </summary>
@@ -81,7 +86,23 @@ namespace CoiniumServ.Server.Mining.Vanilla
             Software = MinerSoftware.Unknown;
             Version = new Version();
 
-            _logger = LogManager.PacketLogger.ForContext<VanillaMiner>().ForContext("Component", pool.Config.Coin.Name);
+            _logger = Log.ForContext<VanillaMiner>().ForContext("Component", pool.Config.Coin.Name);
+            _packetLogger = LogManager.PacketLogger.ForContext<VanillaMiner>().ForContext("Component", pool.Config.Coin.Name);
+
+            _rpcResultHandler = callback =>
+            {
+                var asyncData = ((JsonRpcStateAsync) callback);
+                var result = asyncData.Result;
+                var response = Encoding.UTF8.GetBytes(result);
+                var context = (HttpServiceContext) asyncData.AsyncState;
+
+                context.Response.ContentType = "application/json";
+                context.Response.ContentEncoding = Encoding.UTF8;
+                context.Response.ContentLength64 = response.Length;
+                context.Response.OutputStream.Write(response, 0, response.Length);
+
+                _packetLogger.Verbose("tx: {0}", result.PrettifyJson());
+            };
         }
 
         public bool Authenticate(string user, string password)
@@ -94,36 +115,25 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
         public void Parse(HttpListenerContext httpContext)
         {
-            var httpRequest = httpContext.Request;
-
-            var rpcResultHandler = new AsyncCallback(
-                callback =>
-                {
-                    var asyncData = ((JsonRpcStateAsync) callback);
-                    var result = asyncData.Result;
-                    var response = Encoding.UTF8.GetBytes(result);
-
-                    var context = (HttpServiceContext)asyncData.AsyncState;
-
-                    context.Request.Response.ContentType = "application/json";
-                    context.Request.Response.ContentEncoding = Encoding.UTF8;
-                    context.Request.Response.ContentLength64 = response.Length;
-                    context.Request.Response.OutputStream.Write(response, 0, response.Length);
-
-                    _logger.Verbose("tx: {0}", result.PrettifyJson());
-                });
-
-            using (var reader = new StreamReader(httpRequest.InputStream, Encoding.UTF8))
+            try
             {
-                var line = reader.ReadToEnd();
-                _logger.Verbose("rx: {0}", line.PrettifyJson());
+                var httpRequest = httpContext.Request;
 
-                var rpcRequest = new HttpServiceRequest(line, httpContext);
-                var rpcContext = new HttpServiceContext(this, rpcRequest);
+                using (var reader = new StreamReader(httpRequest.InputStream, Encoding.UTF8))
+                {
+                    var line = reader.ReadToEnd();
+                    var rpcContext = new HttpServiceContext(this, httpContext);
 
-                var async = new JsonRpcStateAsync(rpcResultHandler, rpcContext) { JsonRpc = line };
-                JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
-            }        
+                    _packetLogger.Verbose("rx: {0}", line.PrettifyJson());
+
+                    var async = new JsonRpcStateAsync(_rpcResultHandler, rpcContext) {JsonRpc = line};
+                    JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
+                }
+            }
+            catch (JsonReaderException e) // if client sent an invalid message
+            {
+                _logger.Error("Skipping invalid json-rpc request - {0:l}", e.Message);
+            }
         }
     }
 }

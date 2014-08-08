@@ -29,12 +29,9 @@ namespace CoiniumServ.Server.Mining.Stratum.Service
     {
         public IMiner Miner { get; private set; }
 
-        public SocketServiceRequest Request { get; private set; } // todo - do we really need this?
-
-        public SocketServiceContext(IMiner miner, SocketServiceRequest request)
+        public SocketServiceContext(IMiner miner)
         {
             Miner = miner;
-            Request = request;
         }
     }
 }
