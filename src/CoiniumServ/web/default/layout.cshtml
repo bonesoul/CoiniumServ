@@ -1,5 +1,4 @@
-﻿@using System.Collections.Generic
-@using CoiniumServ.Statistics
+﻿@using CoiniumServ.Statistics
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
 
 <!DOCTYPE html>
@@ -40,9 +39,9 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Pools <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="themes">
-                                @foreach (var pool in ViewBag.Pools)
+                                @foreach (var kvp in ViewBag.Pools.Value) // there exists a bug in nancy&razor@mono where we have to explity use Value for DynamicDictionaryValue
                                 {
-                                    <li><a href="/pool/@pool.Config.Coin.Symbol">@pool.Config.Coin.Name</a></li>
+                                    <li><a href="/pool/@kvp.Value.Config.Coin.Symbol">@kvp.Value.Config.Coin.Name</a></li>
                                 }
                             </ul>
                         </li>

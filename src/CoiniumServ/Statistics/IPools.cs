@@ -25,7 +25,7 @@ using System.Collections.Generic;
 
 namespace CoiniumServ.Statistics
 {
-    public interface IPools : IEnumerable<IPerPool>,IJsonResponse, IStatisticsProvider
+    public interface IPools : IEnumerable<KeyValuePair<string, IPerPool>>,IJsonResponse, IStatisticsProvider
     {
         IPerPool GetBySymbol(string symbol);
     }

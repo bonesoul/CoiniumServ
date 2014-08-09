@@ -46,7 +46,7 @@ namespace CoiniumServ.Server.Web.Modules
                 return View["api", new ApiModel
                 {
                     BaseUrl = Request.Url.SiteBase,
-                    Coin = statistics.Pools.First().Config.Coin
+                    Coin = statistics.Pools.First().Value.Config.Coin
                 }];
             };
 
