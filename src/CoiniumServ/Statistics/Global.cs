@@ -58,10 +58,10 @@ namespace CoiniumServ.Statistics
             Hashrate = 0;
             WorkerCount = 0;
 
-            foreach (var pair in _pools)
+            foreach (var pool in _pools)
             {
-                Hashrate += pair.Value.Hashrate;
-                WorkerCount += pair.Value.WorkerCount;
+                Hashrate += pool.Hashrate;
+                WorkerCount += pool.WorkerCount;
             }
 
             // recache response.

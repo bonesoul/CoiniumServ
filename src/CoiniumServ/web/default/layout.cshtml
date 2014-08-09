@@ -1,4 +1,6 @@
-﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+﻿@using System.Collections.Generic
+@using CoiniumServ.Statistics
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,9 +40,9 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Pools <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="themes">
-                                @foreach (var kvp in ViewBag.Pools)
+                                @foreach (var pool in ViewBag.Pools)
                                 {
-                                    <li><a href="/pool/@kvp.Key">@kvp.Value</a></li>
+                                    <li><a href="/pool/@pool.Config.Coin.Symbol">@pool.Config.Coin.Name</a></li>
                                 }
                             </ul>
                         </li>

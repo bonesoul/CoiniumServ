@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System.Linq;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
@@ -36,7 +35,7 @@ namespace CoiniumServ.Server.Web.Modules
             Get["/pool/{slug}/"] = _ =>
             {
                 ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
-                ViewBag.Pools = statistics.Pools.ToDictionary(x => x.Value.Config.Coin.Symbol, x => x.Value.Config.Coin.Name);
+                ViewBag.Pools = statistics.Pools;
 
                 var pool = poolManager.GetBySymbol(_.slug); // find the requested pool. TODO: use IStatistics instead
 
