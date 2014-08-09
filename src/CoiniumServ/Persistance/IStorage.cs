@@ -55,6 +55,8 @@ namespace CoiniumServ.Persistance
 
         IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
 
+        Dictionary<string, double> GetSharesForCurrentRound();
+
         Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
 
         Dictionary<string, double> GetPreviousBalances();

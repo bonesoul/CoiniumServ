@@ -48,6 +48,8 @@ namespace CoiniumServ.Persistance.Redis
         private readonly IRedisConfig _redisConfig;
         private readonly IPoolConfig _poolConfig;
 
+        private readonly string _coin;
+
         private RedisClient _client;
 
         private readonly ILogger _logger;
@@ -57,7 +59,8 @@ namespace CoiniumServ.Persistance.Redis
             _logger = Log.ForContext<Redis>().ForContext("Component", poolConfig.Coin.Name);
 
             _poolConfig = poolConfig; // the pool config.
-            _redisConfig = (IRedisConfig)poolConfig.Storage;
+            _redisConfig = (IRedisConfig)poolConfig.Storage; // redis config.
+            _coin = _poolConfig.Coin.Name.ToLower(); // pool's associated coin name.
 
             IsEnabled = _redisConfig.Enabled;
 
@@ -72,22 +75,20 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return;
 
-                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-
                 //_client.StartPipe(); // batch the commands.
 
                 // add the share to round 
-                var currentKey = string.Format("{0}:shares:round:current", coin);
+                var currentKey = string.Format("{0}:shares:round:current", _coin);
                 _client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
 
                 // increment shares stats.
-                var statsKey = string.Format("{0}:stats", coin);
+                var statsKey = string.Format("{0}:stats", _coin);
                 _client.HIncrBy(statsKey, share.IsValid ? "validShares" : "invalidShares", 1);
 
                 // add to hashrate
                 if (share.IsValid)
                 {
-                    var hashrateKey = string.Format("{0}:hashrate", coin);
+                    var hashrateKey = string.Format("{0}:hashrate", _coin);
                     var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
                     _client.ZAdd(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
                 }
@@ -107,25 +108,23 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return;
 
-                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-
                 //_client.StartPipe(); // batch the commands.
 
                 if (share.IsBlockAccepted)
                 {
                     // rename round.
-                    var currentKey = string.Format("{0}:shares:round:current", coin);
-                    var roundKey = string.Format("{0}:shares:round:{1}", coin, share.Height);
+                    var currentKey = string.Format("{0}:shares:round:current", _coin);
+                    var roundKey = string.Format("{0}:shares:round:{1}", _coin, share.Height);
                     _client.Rename(currentKey, roundKey);
 
                     // add block to pending.
-                    var pendingKey = string.Format("{0}:blocks:pending", coin);
+                    var pendingKey = string.Format("{0}:blocks:pending", _coin);
                     var entry = string.Format("{0}:{1}", share.BlockHash.ToHexString(), share.Block.Tx.First());
                     _client.ZAdd(pendingKey, Tuple.Create(share.Block.Height, entry));
                 }
 
                 // increment block stats.
-                var statsKey = string.Format("{0}:stats", coin);
+                var statsKey = string.Format("{0}:stats", _coin);
                 _client.HIncrBy(statsKey, share.IsBlockAccepted ? "validBlocks" : "invalidBlocks", 1);
 
                 //_client.EndPipe(); // execute the batch commands.
@@ -143,7 +142,7 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return;
 
-                var balancesKey = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
+                var balancesKey = string.Format("{0}:balances", _coin);
 
                 foreach (var workerBalance in workerBalances)
                 {
@@ -170,8 +169,7 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return;
 
-                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-                var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+                var roundKey = string.Format("{0}:shares:round:{1}", _coin, round.Block.Height);
 
                 _client.Del(roundKey); // delete the associated shares.            
             }
@@ -191,9 +189,8 @@ namespace CoiniumServ.Persistance.Redis
                 if (round.Block.Status == BlockStatus.Confirmed || round.Block.Status == BlockStatus.Pending)
                     return;
 
-                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-                var currentRound = string.Format("{0}:shares:round:current", coin); // current round key.
-                var roundShares = string.Format("{0}:shares:round:{1}", coin, round.Block.Height); // rounds shares key.
+                var currentRound = string.Format("{0}:shares:round:current", _coin); // current round key.
+                var roundShares = string.Format("{0}:shares:round:{1}", _coin, round.Block.Height); // rounds shares key.
 
                 //_client.StartPipeTransaction(); // batch the commands as atomic.
 
@@ -223,19 +220,17 @@ namespace CoiniumServ.Persistance.Redis
                 if (round.Block.Status == BlockStatus.Pending)
                     return;
 
-                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-
                 // re-flag the rounds.
-                var pendingKey = string.Format("{0}:blocks:pending", coin); // old key for the round.
+                var pendingKey = string.Format("{0}:blocks:pending", _coin); // old key for the round.
                 var newKey = string.Empty; // new key for the round.
 
                 switch (round.Block.Status)
                 {
                     case BlockStatus.Orphaned:
-                        newKey = string.Format("{0}:blocks:orphaned", coin);
+                        newKey = string.Format("{0}:blocks:orphaned", _coin);
                         break;
                     case BlockStatus.Confirmed:
-                        newKey = string.Format("{0}:blocks:confirmed", coin);
+                        newKey = string.Format("{0}:blocks:confirmed", _coin);
                         break;
                 }
 
@@ -261,11 +256,9 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return blocks;
 
-                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-
-                var pendingKey = string.Format("{0}:blocks:pending", coin);
-                var confirmedKey = string.Format("{0}:blocks:confirmed", coin);
-                var oprhanedKey = string.Format("{0}:blocks:orphaned", coin);
+                var pendingKey = string.Format("{0}:blocks:pending", _coin);
+                var confirmedKey = string.Format("{0}:blocks:confirmed", _coin);
+                var oprhanedKey = string.Format("{0}:blocks:orphaned", _coin);
 
                 //_client.StartPipe(); // batch the commands as atomic.
 
@@ -294,7 +287,7 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return;
 
-                var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
+                var key = string.Format("{0}:hashrate", _coin);
 
                 _client.ZRemRangeByScore(key, double.NegativeInfinity, until);
             }
@@ -313,7 +306,7 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return hashrates;
 
-                var key = string.Format("{0}:hashrate", _poolConfig.Coin.Name.ToLower());
+                var key = string.Format("{0}:hashrate", _coin);
 
                 var results = _client.ZRangeByScore(key, since, double.PositiveInfinity);
 
@@ -346,19 +339,18 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return blocks.Values.ToList();
 
-                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
                 var key = string.Empty;
 
                 switch (status)
                 {
                     case BlockStatus.Pending:
-                        key = string.Format("{0}:blocks:pending", coin);
+                        key = string.Format("{0}:blocks:pending", _coin);
                         break;
                     case BlockStatus.Orphaned:
-                        key = string.Format("{0}:blocks:orphaned", coin);
+                        key = string.Format("{0}:blocks:orphaned", _coin);
                         break;
                     case BlockStatus.Confirmed:
-                        key = string.Format("{0}:blocks:confirmed", coin);
+                        key = string.Format("{0}:blocks:confirmed", _coin);
                         break;
                 }
 
@@ -378,7 +370,7 @@ namespace CoiniumServ.Persistance.Redis
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting {0:l} blocks: {1:l}", status, e.Message);
+                _logger.Error("An exception occured while getting {0:l} blocks: {1:l}", status.ToString(), e.Message);
             }
 
             return blocks.Values.ToList();
@@ -407,7 +399,32 @@ namespace CoiniumServ.Persistance.Redis
             }
 
             return blocks;
-        }       
+        }
+
+        public Dictionary<string, double> GetSharesForCurrentRound()
+        {
+            var shares = new Dictionary<string, double>();
+
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return shares;
+
+                var key = string.Format("{0}:shares:round:{1}", _coin, "current");
+                var hashes = _client.HGetAll(key);
+
+                foreach (var hash in hashes)
+                {
+                    shares.Add(hash.Key, double.Parse(hash.Value, CultureInfo.InvariantCulture));
+                }                
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting shares for current round", e.Message);
+            }
+
+            return shares;
+        }
 
         public Dictionary<uint, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)
         {
@@ -418,14 +435,12 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return sharesForRounds;
 
-                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
-
                 foreach (var round in rounds)
                 {
-                    var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
+                    var roundKey = string.Format("{0}:shares:round:{1}", _coin, round.Block.Height);
                     var hashes = _client.HGetAll(roundKey);
 
-                    var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+                    var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value, CultureInfo.InvariantCulture));
                     sharesForRounds.Add(round.Block.Height, shares);
                 }
             }
@@ -446,9 +461,9 @@ namespace CoiniumServ.Persistance.Redis
                 if (!IsEnabled || !IsConnected)
                     return previousBalances;
 
-                var key = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
+                var key = string.Format("{0}:balances", _coin);
                 var hashes = _client.HGetAll(key);
-                previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+                previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value, CultureInfo.InvariantCulture));
             }
             catch (Exception e)
             {

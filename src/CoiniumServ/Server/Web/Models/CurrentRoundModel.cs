@@ -21,35 +21,13 @@
 // 
 #endregion
 
-using System;
-using Serilog;
+using System.Collections.Generic;
 
-namespace CoiniumServ.Miners
+namespace CoiniumServ.Server.Web.Models
 {
-    public class MetaConfig :IMetaConfig
+    public class CurrentRoundModel
     {
-        public bool Valid { get; private set; }
-        public string MOTD { get; private set; }
-        public string TxMessage { get; private set; }
-
-        public MetaConfig(dynamic config)
-        {
-            try
-            {
-                // load the config data.
-                MOTD = string.IsNullOrEmpty(config.motd)
-                    ? "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com"
-                    : config.motd;
-
-                TxMessage = string.IsNullOrEmpty(config.txMessage) ? "http://www.coiniumserv.com/" : config.txMessage;
-
-                Valid = true;
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<MetaConfig>().Error(e, "Error loading meta configuration");
-            }
-        }
+        public int Round { get; set; }
+        public IDictionary<string, double> Shares { get; set; }
     }
 }

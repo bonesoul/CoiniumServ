@@ -28,7 +28,7 @@
                         <span class="badge">@Model.Pool.Statistics.Difficulty</span>
                         <i class="fa fa-calendar"></i> Difficulty
                     </a>
-                    <a href="#" class="list-group-item">
+                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/workers" class="list-group-item">
                         <span class="badge">@Model.Pool.Statistics.WorkerCount</span>
                         <i class="fa fa-calendar"></i> Workers
                     </a>
@@ -36,9 +36,9 @@
                         <span class="badge">@Model.Pool.Config.Coin.Algorithm</span>
                         <i class="fa fa-calendar"></i> Algorithm
                     </a>
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.CurrentBlock</span>
-                        <i class="fa fa-calendar"></i> Current Block
+                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/round" class="list-group-item">
+                        <span class="badge">@Model.Pool.Statistics.Round</span>
+                        <i class="fa fa-calendar"></i> Round
                     </a>
                 </div>
             </div>

@@ -152,12 +152,14 @@
     <Compile Include="Payments\WalletConfig.cs" />
     <Compile Include="Persistance\Redis\Redis.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
+    <Compile Include="Server\Web\Models\CurrentRoundModel.cs" />
+    <Compile Include="Server\Web\Models\WorkersModel.cs" />
     <Compile Include="Server\Web\Modules\BackendConfig.cs" />
     <Compile Include="Server\Web\Modules\Donate.cs" />
     <Compile Include="Server\Web\Models\IndexModel.cs" />
     <Compile Include="Server\Web\Models\PoolModel.cs" />
-    <Compile Include="Statistics\BlocksCount.cs" />
-    <Compile Include="Statistics\IBlocksCount.cs" />
+    <Compile Include="Statistics\BlockStats.cs" />
+    <Compile Include="Statistics\IBlockStats.cs" />
     <Compile Include="Statistics\IJsonResponse.cs" />
     <Compile Include="Statistics\ILatestBlocks.cs" />
     <Compile Include="Statistics\IStatisticsConfig.cs" />
@@ -906,6 +908,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\pool.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\round.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\workers.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

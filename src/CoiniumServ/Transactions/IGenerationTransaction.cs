@@ -36,7 +36,7 @@ namespace CoiniumServ.Transactions
 
         IOutputs Outputs { get; set; }
 
-        byte[] Message { get;  }
+        byte[] TxMessage { get;  }
 
         UInt32 LockTime { get; }
 

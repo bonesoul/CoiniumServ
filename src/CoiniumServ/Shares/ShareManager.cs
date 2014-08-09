@@ -127,7 +127,7 @@ namespace CoiniumServ.Shares
             _logger.Information(
                 accepted
                     ? "Found block [{0}] with hash: {1:l}"
-                    : "Submitted block [{0}] with hash {1:l} but had to kick it as it was not accepted by the coin daemon",
+                    : "Submitted block [{0}] with hash {1:l} but was not accepted by the coin daemon",
                 share.Height, share.BlockHash.ToHexString());
 
             if (!accepted) // if block wasn't accepted
@@ -208,7 +208,7 @@ namespace CoiniumServ.Shares
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Submit block failed - height: {0}, hash: {1:l} - {2:l}", share.Height, share.BlockHash, e.Message);
+                _logger.Error("Submit block failed - height: {0}, hash: {1:l} - {2:l}", share.Height, share.BlockHash.ToHexString(), e.Message);
                 return false;
             }
         }

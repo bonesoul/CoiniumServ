@@ -2,6 +2,7 @@
     "name": "Lottocoin",
     "symbol": "LOT",
     "algorithm": "scrypt",
+    "txMessages": true,
     "peerMagic": "a5fdb6c1",
     "peerMagicTestnet": "fdc3b6f1"	
 }
