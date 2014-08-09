@@ -40,7 +40,7 @@
                             <ul class="dropdown-menu" aria-labelledby="themes">
                                 @foreach (var kvp in ViewBag.Pools)
                                 {
-                                    <li><a href="/pool/@kvp.Value.Config.Coin.Symbol">@kvp.Value.Config.Coin.Name</a></li>
+                                    <li><a href="/pool/@kvp.Key">@kvp.Value</a></li>
                                 }
                             </ul>
                         </li>

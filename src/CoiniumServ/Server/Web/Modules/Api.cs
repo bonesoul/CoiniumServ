@@ -39,7 +39,7 @@ namespace CoiniumServ.Server.Web.Modules
                 // include common data required by layout.
                 ViewBag.Title = "API";
                 ViewBag.Heading = "Public API";
-                ViewBag.Pools = statistics.Pools;
+                ViewBag.Pools = statistics.Pools.ToDictionary(x => x.Value.Config.Coin.Symbol, x => x.Value.Config.Coin.Name);
                 ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 
                 // return our view
