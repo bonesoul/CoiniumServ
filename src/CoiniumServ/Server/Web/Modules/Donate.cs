@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System.Linq;
 using CoiniumServ.Statistics;
 using Nancy;
 
