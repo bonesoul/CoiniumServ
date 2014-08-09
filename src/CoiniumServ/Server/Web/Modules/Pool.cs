@@ -35,6 +35,7 @@ namespace CoiniumServ.Server.Web.Modules
             Get["/pool/{slug}/"] = _ =>
             {
                 ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = statistics.Pools;
 
                 var pool = poolManager.GetBySymbol(_.slug); // find the requested pool. TODO: use IStatistics instead
 
@@ -63,6 +64,7 @@ namespace CoiniumServ.Server.Web.Modules
             Get["/pool/{slug}/workers"] = _ =>
             {
                 ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = statistics.Pools;
 
                 var pool = statistics.Pools.GetBySymbol(_.slug); // find the requested pool.                
 
@@ -91,6 +93,7 @@ namespace CoiniumServ.Server.Web.Modules
             Get["/pool/{slug}/round"] = _ =>
             {
                 ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = statistics.Pools;
 
                 var pool = statistics.Pools.GetBySymbol(_.slug); // find the requested pool.                
 
