@@ -127,7 +127,7 @@ namespace CoiniumServ.Shares
             _logger.Information(
                 accepted
                     ? "Found block [{0}] with hash: {1:l}"
-                    : "Submitted block [{0}] with hash {1:l} but was not accepted by the coin daemon",
+                    : "Submit block [{0}] failed with hash: {1:l}",
                 share.Height, share.BlockHash.ToHexString());
 
             if (!accepted) // if block wasn't accepted

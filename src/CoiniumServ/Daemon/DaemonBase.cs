@@ -203,10 +203,18 @@ namespace CoiniumServ.Daemon
                 {
                     using (var reader = new StreamReader(stream))
                     {
-                        string error = reader.ReadToEnd();
+                        string error = reader.ReadToEnd(); // read the error response.
 
-                        var errorResponse = JsonConvert.DeserializeObject<DaemonErrorResponse>(error);
-                        throw new RpcException(errorResponse);
+                        // we actually expect a json error response here, but it seems some coins may return non-json responses.
+                        try
+                        {
+                            var errorResponse = JsonConvert.DeserializeObject<DaemonErrorResponse>(error); // so let's try parsing the error response as json.
+                            throw new RpcException(errorResponse); // if we can use the error json
+                        }
+                        catch (JsonException e) // if we can't parse the error response as json
+                        {
+                            throw new RpcException(error, e); // then just use the error text.
+                        }                        
                     }
                 }
             }
