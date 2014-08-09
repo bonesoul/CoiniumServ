@@ -407,7 +407,33 @@ namespace CoiniumServ.Persistance.Redis
             }
 
             return blocks;
-        }       
+        }
+
+        public Dictionary<string, double> GetSharesForCurrentRound()
+        {
+            var shares = new Dictionary<string, double>();
+
+            try
+            {
+                if (!IsEnabled || !IsConnected)
+                    return shares;
+
+                var coin = _poolConfig.Coin.Name.ToLower(); // the coin we are working on.
+                var key = string.Format("{0}:shares:round:{1}", coin, "current");
+                var hashes = _client.HGetAll(key);
+
+                foreach (var hash in hashes)
+                {
+                    shares.Add(hash.Key, double.Parse(hash.Value, CultureInfo.InvariantCulture));
+                }                
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting shares for current round", e.Message);
+            }
+
+            return shares;
+        }
 
         public Dictionary<uint, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds)
         {
@@ -425,7 +451,7 @@ namespace CoiniumServ.Persistance.Redis
                     var roundKey = string.Format("{0}:shares:round:{1}", coin, round.Block.Height);
                     var hashes = _client.HGetAll(roundKey);
 
-                    var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+                    var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value, CultureInfo.InvariantCulture));
                     sharesForRounds.Add(round.Block.Height, shares);
                 }
             }
@@ -448,7 +474,7 @@ namespace CoiniumServ.Persistance.Redis
 
                 var key = string.Format("{0}:balances", _poolConfig.Coin.Name.ToLower());
                 var hashes = _client.HGetAll(key);
-                previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value));
+                previousBalances = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value, CultureInfo.InvariantCulture));
             }
             catch (Exception e)
             {

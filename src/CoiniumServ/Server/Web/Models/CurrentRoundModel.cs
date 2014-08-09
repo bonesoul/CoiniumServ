@@ -21,44 +21,13 @@
 // 
 #endregion
 
-using System;
 using System.Collections.Generic;
-using CoiniumServ.Payments;
-using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Shares;
 
-namespace CoiniumServ.Persistance
+namespace CoiniumServ.Server.Web.Models
 {
-    public interface IStorage
+    public class CurrentRoundModel
     {
-        bool IsEnabled { get; }
-
-        void AddShare(IShare share);
-
-        void AddBlock(IShare share);
-
-        void SetRemainingBalances(IList<IWorkerBalance> workerBalances);
-
-        void DeleteShares(IPaymentRound round);
-
-        void MoveSharesToCurrentRound(IPaymentRound round);
-
-        void MoveBlock(IPaymentRound round);
-
-        IDictionary<string, int> GetBlockCounts();
-
-        void DeleteExpiredHashrateData(int until);
-
-        IDictionary<string, double> GetHashrateData(int since);
-
-        IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
-
-        IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
-
-        Dictionary<string, double> GetSharesForCurrentRound();
-
-        Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
-
-        Dictionary<string, double> GetPreviousBalances();
+        public int Round { get; set; }
+        public IDictionary<string, double> Shares { get; set; }
     }
 }

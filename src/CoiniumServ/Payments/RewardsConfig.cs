@@ -24,6 +24,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using JsonConfig;
 using Serilog;
 
@@ -47,7 +48,7 @@ namespace CoiniumServ.Payments
                 // weird stuff going below because of JsonConfig libraries handling of dictionaries.            
                 foreach (ConfigObject kvp in config)
                     foreach (KeyValuePair<string, object> pair in kvp)
-                        _rewards.Add(pair.Key, float.Parse(pair.Value.ToString()));
+                        _rewards.Add(pair.Key, float.Parse(pair.Value.ToString(), CultureInfo.InvariantCulture));
 
                 Valid = true;
             }
