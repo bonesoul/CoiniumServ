@@ -56,6 +56,9 @@ namespace CoiniumServ.Blocks
                 // query the block.
                 block = _daemonClient.GetBlock(blockHash);
 
+                if (block.Confirmations == -1) // check if block is just reported being orphan by coin daemon.
+                    return false;
+
                 // read the very first (generation transaction) of the block
                 var generationTx = block.Tx.First();
 

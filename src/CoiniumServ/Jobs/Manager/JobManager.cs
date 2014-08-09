@@ -98,11 +98,13 @@ namespace CoiniumServ.Jobs.Manager
 
         private void OnBlockFound(object sender, EventArgs e)
         {
+            _logger.Verbose("As we have just found a new block, rebroadcasting new work");
             CreateAndBroadcastNewJob(false);
         }
 
         private void IdleJobTimer(object state)
         {
+            _logger.Verbose("As idle job timer expired, rebroadcasting new work");
             CreateAndBroadcastNewJob(true);
         }
 
@@ -115,28 +117,15 @@ namespace CoiniumServ.Jobs.Manager
             {
                 var blockTemplate = _daemonClient.GetBlockTemplate();
 
-                if (blockTemplate.Height != _jobTracker.Current.Height) // if network reports a new block-height
-                {
-                    _logger.Verbose("A new block {0} emerged in network, rebroadcasting new work", blockTemplate.Height);
-                    CreateAndBroadcastNewJob(false); // broadcast a new job.
-                }
-                else
-                    _logger.Verbose("No new blocks found in network, current job: 0x{0:x} height: {1}, network height: {2}", _jobTracker.Current.Id, _jobTracker.Current.Height, blockTemplate.Height);
+                if (blockTemplate.Height == _jobTracker.Current.Height) // if network reports the same block-height with our current job.
+                    return; // just return.
+                
+                _logger.Verbose("A new block {0} emerged in network, rebroadcasting new work", blockTemplate.Height);
+                CreateAndBroadcastNewJob(false); // broadcast a new job.
             }
             catch (RpcException) { } // just skip any exceptions caused by the block-pooler queries.
 
             _blockPollerTimer.Change(_jobConfig.BlockRefreshInterval, Timeout.Infinite); // reset the block-poller timer so we can keep polling.
-        }
-
-        private void OnMinerAuthenticated(object sender, EventArgs e)
-        {
-            var miner = ((MinerEventArgs)e).Miner;
-
-            if (miner == null)
-                return;
-
-            if(_jobTracker.Current != null) // if we have a valid job,
-                SendJobToMiner(miner, _jobTracker.Current); // send it to newly connected miner.
         }
 
         private void CreateAndBroadcastNewJob(bool initiatedByTimer)
@@ -231,6 +220,17 @@ namespace CoiniumServ.Jobs.Manager
             stratumMiner.SendJob(job);
 
             return true;
+        }
+
+        private void OnMinerAuthenticated(object sender, EventArgs e)
+        {
+            var miner = ((MinerEventArgs)e).Miner;
+
+            if (miner == null)
+                return;
+
+            if (_jobTracker.Current != null) // if we have a valid job,
+                SendJobToMiner(miner, _jobTracker.Current); // send it to newly connected miner.
         }
     }
 }

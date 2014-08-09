@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using AustinHarris.JsonRpc;
@@ -42,6 +43,7 @@ namespace CoiniumServ.Server.Mining.Stratum
 {
     // TODO: Add tls support!
 
+    [DebuggerDisplay("Id: {Id}, Username: {Username}, Connection: {Connection}, Difficulty: {Difficulty}")]
     public class StratumMiner : IClient, IStratumMiner
     {
         /// <summary>
