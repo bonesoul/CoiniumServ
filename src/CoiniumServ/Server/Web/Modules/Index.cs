@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System.Linq;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;

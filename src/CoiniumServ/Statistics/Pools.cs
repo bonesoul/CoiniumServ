@@ -56,7 +56,7 @@ namespace CoiniumServ.Statistics
             return _pools.Values.FirstOrDefault(pair => pair.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
         }
 
-        public IEnumerator<KeyValuePair<string,IPerPool>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, IPerPool>> GetEnumerator()
         {
             return _pools.GetEnumerator();
         }
