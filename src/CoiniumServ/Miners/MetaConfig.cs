@@ -30,6 +30,7 @@ namespace CoiniumServ.Miners
     {
         public bool Valid { get; private set; }
         public string MOTD { get; private set; }
+        public string TxMessage { get; private set; }
 
         public MetaConfig(dynamic config)
         {
@@ -39,6 +40,8 @@ namespace CoiniumServ.Miners
                 MOTD = string.IsNullOrEmpty(config.motd)
                     ? "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com"
                     : config.motd;
+
+                TxMessage = string.IsNullOrEmpty(config.txMessage) ? "http://www.coiniumserv.com/" : config.txMessage;
 
                 Valid = true;
             }

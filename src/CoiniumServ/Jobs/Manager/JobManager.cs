@@ -52,11 +52,9 @@ namespace CoiniumServ.Jobs.Manager
 
         private readonly IJobCounter _jobCounter;
 
+        private readonly IPoolConfig _poolConfig;
+
         private readonly IJobConfig _jobConfig;
-
-        private readonly IWalletConfig _walletConfig;
-
-        private readonly IRewardsConfig _rewardsConfig;
 
         private IExtraNonce _extraNonce; // todo: check this.
 
@@ -77,9 +75,8 @@ namespace CoiniumServ.Jobs.Manager
             _minerManager = minerManager;
             _hashAlgorithm = hashAlgorithm;
 
+            _poolConfig = poolConfig;
             _jobConfig = poolConfig.Job;
-            _walletConfig = poolConfig.Wallet;
-            _rewardsConfig = poolConfig.Rewards;
             
             _jobCounter = new JobCounter(); // todo make this ioc based too.
 
@@ -169,7 +166,7 @@ namespace CoiniumServ.Jobs.Manager
                 var blockTemplate = _daemonClient.GetBlockTemplate();
 
                 // TODO: convert generation transaction to ioc & DI based.
-                var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate,_walletConfig, _rewardsConfig);
+                var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate,_poolConfig.Wallet, _poolConfig.Rewards,_poolConfig.Meta, _poolConfig.Coin.SupportsTxMessages);
                 generationTransaction.Create();
 
                 // create the job notification.

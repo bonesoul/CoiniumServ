@@ -27,6 +27,7 @@ using System.Linq;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
+using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Script;
@@ -81,6 +82,7 @@ namespace CoiniumServ.Tests.Transactions
         private readonly IOutputs _outputs;
         private readonly IWalletConfig _walletConfig;
         private readonly IRewardsConfig _rewardsConfig;
+        private readonly IMetaConfig _metaConfig;
 
         public GenerationTransactionTests()
         {
@@ -124,13 +126,16 @@ namespace CoiniumServ.Tests.Transactions
             _walletConfig = Substitute.For<IWalletConfig>();
             _walletConfig.Adress.Returns("mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq");
             _outputs.AddPoolWallet(_walletConfig.Adress, blockReward);
+
+            // sample meta config
+            _metaConfig = Substitute.For<IMetaConfig>();
         }
 
         [Fact]
         public void CreateGenerationTransactionTest()
         {
             // create the test object.
-            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, _walletConfig, _rewardsConfig);
+            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, _walletConfig, _rewardsConfig, _metaConfig, false);
 
             // use the exactly same input script data within our sample data.
             generationTransaction.Inputs.First().SignatureScript = _signatureScript;
