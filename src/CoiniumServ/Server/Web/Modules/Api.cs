@@ -68,6 +68,36 @@ namespace CoiniumServ.Server.Web.Modules
                 return response; 
             };
 
+            Get["/api/pool/{slug}/workers"] = _ =>
+            {
+                var pool = statistics.Pools.GetBySymbol(_.slug);
+
+                Response response;
+
+                if (pool == null)
+                    response = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
+                else
+                    response = (Response)pool.WorkersJson;
+
+                response.ContentType = "application/json";
+                return response;
+            };
+
+            Get["/api/pool/{slug}/round"] = _ =>
+            {
+                var pool = statistics.Pools.GetBySymbol(_.slug);
+
+                Response response;
+
+                if (pool == null)
+                    response = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
+                else
+                    response = (Response)pool.CurrentRoundJson;
+
+                response.ContentType = "application/json";
+                return response;
+            };
+
             Get["/api/algorithms"] = _ => Response.AsJson(statistics.Algorithms.GetResponseObject());
 
             Get["/api/algorithm/{slug}"] = _ =>

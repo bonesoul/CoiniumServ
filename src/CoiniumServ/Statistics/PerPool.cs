@@ -51,6 +51,10 @@ namespace CoiniumServ.Statistics
 
         public string Json { get; private set; }
 
+        public string WorkersJson { get; private set; }
+
+        public string CurrentRoundJson { get; private set; }
+
         private readonly IDaemonClient _daemonClient;
         private readonly IStorage _storage;
         private readonly IMinerManager _minerManager;
@@ -87,21 +91,7 @@ namespace CoiniumServ.Statistics
 
             Blocks.Recache(state); // recache the blocks.
 
-            // recache json response.
-            _response.workers = WorkerCount;
-            _response.hashrate = Hashrate;
-
-            _response.coin = new ExpandoObject();
-            _response.coin.symbol = Config.Coin.Symbol;
-            _response.coin.name = Config.Coin.Name;
-            _response.coin.algorithm = Config.Coin.Algorithm;
-
-            _response.network = new ExpandoObject();
-            _response.network.currentBlock = Round;
-            _response.network.difficulty = Difficulty;
-            _response.network.hashrate = NetworkHashrate;
-
-            Json = JsonConvert.SerializeObject(_response);
+            RecacheJson();
         }
 
         private void ReadCoinData()
@@ -141,11 +131,34 @@ namespace CoiniumServ.Statistics
             {
                 Workers.Add(miner.Username, shares.ContainsKey(miner.Username) ? shares[miner.Username] : 0);
             }
+
+            WorkersJson = JsonConvert.SerializeObject(Workers);
         }
 
         private void RecacheRound()
         {
             CurrentRoundShares = _storage.GetSharesForCurrentRound();
+
+            CurrentRoundJson = JsonConvert.SerializeObject(CurrentRoundShares);
+        }
+
+        private void RecacheJson()
+        {
+            // recache json response.
+            _response.workers = WorkerCount;
+            _response.hashrate = Hashrate;
+
+            _response.coin = new ExpandoObject();
+            _response.coin.symbol = Config.Coin.Symbol;
+            _response.coin.name = Config.Coin.Name;
+            _response.coin.algorithm = Config.Coin.Algorithm;
+
+            _response.network = new ExpandoObject();
+            _response.network.currentBlock = Round;
+            _response.network.difficulty = Difficulty;
+            _response.network.hashrate = NetworkHashrate;
+
+            Json = JsonConvert.SerializeObject(_response);
         }
 
         public object GetResponseObject()

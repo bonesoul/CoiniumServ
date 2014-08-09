@@ -45,5 +45,9 @@ namespace CoiniumServ.Statistics
         IBlocksCount Blocks { get; }
 
         IPoolConfig Config { get; }
+
+        string WorkersJson { get; }
+
+        string CurrentRoundJson { get; }
     }
 }

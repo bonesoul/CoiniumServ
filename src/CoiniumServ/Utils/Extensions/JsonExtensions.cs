@@ -100,7 +100,7 @@ namespace CoiniumServ.Utils.Extensions
 
                 return output.ToString();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return input; // in case we fail to prettify json, handle the exception and just return the input.
             }

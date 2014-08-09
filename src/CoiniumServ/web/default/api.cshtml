@@ -55,7 +55,35 @@
                                     </div>
                                 }
                             </td>
-                        </tr>       
+                        </tr> 
+                        <tr>
+                            <td>pool workers</td>
+                            <td><code>coin symbol</code></td>
+                            <td><strong>Pool Workers</strong><br><small>Returns list of connected workers to pool.</small></td>
+                            <td>
+                                @if (@Model.Coin != null)
+                                {
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="http://www.jsoneditoronline.org/?url=@Model.BaseUrl/api/pool/@Model.Coin.Symbol/workers" title="Demo view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                        <a href="/api/pool/@Model.Coin.Symbol/workers" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-file-text-o"></i></a>
+                                    </div>
+                                }
+                            </td>
+                        </tr>   
+                        <tr>
+                            <td>pool round</td>
+                            <td><code>coin symbol</code></td>
+                            <td><strong>Pool Round</strong><br><small>Returns list of shares for current round.</small></td>
+                            <td>
+                                @if (@Model.Coin != null)
+                                {
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="http://www.jsoneditoronline.org/?url=@Model.BaseUrl/api/pool/@Model.Coin.Symbol/round" title="Demo view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                        <a href="/api/pool/@Model.Coin.Symbol/round" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-file-text-o"></i></a>
+                                    </div>
+                                }
+                            </td>
+                        </tr>                                                     
                         <tr>
                             <td>algorithms</td>
                             <td>none</td>
