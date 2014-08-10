@@ -29,8 +29,6 @@ namespace CoiniumServ.Blocks
     {
         Block GetBlock(string blockHash);
 
-        Transaction GetTransaction(string txHash);
-
-        TransactionDetail GetPoolOutput(Transaction transaction);
+        TransactionDetail GetPoolOutput(Block block);
     }
 }

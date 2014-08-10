@@ -27,7 +27,6 @@ using System.Linq;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
-using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
 using CoiniumServ.Pools.Config;
@@ -182,33 +181,32 @@ namespace CoiniumServ.Shares
             {
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
 
-                // query the block.
-                var block = _blockProcessor.GetBlock(share.BlockHash.ToHexString());
-                if (block == null || block.Confirmations == -1) // make sure the block exists and is accepted.
+                var block = _blockProcessor.GetBlock(share.BlockHash.ToHexString()); // query the block.
+
+                if (block == null) // make sure the block exists
                     return false;
+
+                if (block.Confirmations == -1) // make sure the block is accepted.
+                {
+                    Log.Debug("Queried block {0:l} is orphaned", block.Hash);
+                    return false;
+                }
 
                 var expectedTxHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString(); // calculate our expected generation transactions's hash
                 var genTxHash = block.Tx.First(); // read the hash of very first (generation transaction) of the block
 
-                // make sure our calculated generated transaction and one reported by coin daemon matches.
-                if (expectedTxHash != genTxHash)
+                if (expectedTxHash != genTxHash) // make sure our calculated generated transaction and one reported by coin daemon matches.
                 {
-                    Log.Debug("Submitted block {0:l} doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Hash, genTxHash, expectedTxHash);
+                     Log.Debug("Submitted block {0:l} doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Hash, genTxHash, expectedTxHash);
                     return false;
                 }
 
-                // query the transaction
-                var genTx = _blockProcessor.GetTransaction(genTxHash);
-                if (genTx == null)
-                    return false;
-
-                // read the output that contains pool output.
-                var poolOutput = _blockProcessor.GetPoolOutput(genTx);
+                var poolOutput = _blockProcessor.GetPoolOutput(block); // get the output that targets pool's central address.
 
                 // make sure the blocks generation transaction contains our central pool wallet address
                 if (poolOutput == null)
                 {
-                    Log.Debug("Queried block doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", _poolConfig.Wallet.Adress);
+                    Log.Debug("Submitted block doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", _poolConfig.Wallet.Adress);
                     return false;
                 }
 

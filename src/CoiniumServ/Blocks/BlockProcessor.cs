@@ -65,7 +65,7 @@ namespace CoiniumServ.Blocks
         {
             try
             {
-                var block = _daemonClient.GetBlock(blockHash); // query the block.
+                var block = _daemonClient.GetBlock(blockHash);
                 return block;
             }
             catch (RpcException e)
@@ -75,26 +75,25 @@ namespace CoiniumServ.Blocks
             }
         }
 
-        public Transaction GetTransaction(string txHash)
+        public TransactionDetail GetPoolOutput(Block block)
         {
             try
             {
-                var genTx = _daemonClient.GetTransaction(txHash);
-                return genTx;
+                var genTx = _daemonClient.GetTransaction(block.Tx.First()); // query the transaction
+
+                if (genTx == null) // make sure the generation transaction exists
+                    return null;
+
+                // check if coin includes output address data in transaction details.
+                return genTx.Details.Any(x => x.Address == null)
+                    ? genTx.Details.FirstOrDefault(x => x.Account == _poolAccount) // some coins doesn't include address field in outputs, so try to determine using the associated account name.
+                    : genTx.Details.FirstOrDefault(x => x.Address == _poolConfig.Wallet.Adress); // if coin includes address field in outputs, just use it.
             }
             catch (RpcException e)
             {
-                _logger.Error("Error reading transaction {0:l}, {1:l}", txHash,e.Message);
+                _logger.Error("Error reading transaction {0:l}, {1:l}", block.Tx.First(), e.Message);
                 return null;
             }
-        }
-
-        public TransactionDetail GetPoolOutput(Transaction transaction)
-        {
-            // check if coin includes output address data in transaction details.
-            return transaction.Details.Any(x => x.Address == null)
-                ? transaction.Details.FirstOrDefault(x => x.Account == _poolAccount) // some coins doesn't include address field in outputs, so try to determine using the associated account name.
-                : transaction.Details.FirstOrDefault(x => x.Address == _poolConfig.Wallet.Adress); // if coin includes address field in outputs, just use it.
         }
     }
 }
