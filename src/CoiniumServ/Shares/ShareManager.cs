@@ -27,7 +27,6 @@ using System.Linq;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
-using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
 using CoiniumServ.Pools.Config;
@@ -127,7 +126,7 @@ namespace CoiniumServ.Shares
             _logger.Information(
                 accepted
                     ? "Found block [{0}] with hash: {1:l}"
-                    : "Submitted block [{0}] with hash {1:l} but was not accepted by the coin daemon",
+                    : "Submit block [{0}] failed with hash: {1:l}",
                 share.Height, share.BlockHash.ToHexString());
 
             if (!accepted) // if block wasn't accepted
@@ -182,27 +181,37 @@ namespace CoiniumServ.Shares
             {
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
 
-                // query the block against coin daemon and see if seems all good.               
-                Block blockInfo; // the block repsonse from coin daemon.
-                Transaction genTx; // generation transaction response from coin daemon.
-                var exists = _blockProcessor.GetBlockDetails(share.BlockHash.ToHexString(), out blockInfo, out genTx); // query the coin daemon for the block details.
+                var block = _blockProcessor.GetBlock(share.BlockHash.ToHexString()); // query the block.
 
-                if (!exists) // make sure the block exists.
+                if (block == null) // make sure the block exists
                     return false;
 
-                 // calculate our expected generation transactions's hash
-                var expectedTxHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString();
-
-                // make sure our calculated and reported generation tx hashes match.
-                if (!_blockProcessor.CheckGenTxHash(blockInfo, expectedTxHash))
+                if (block.Confirmations == -1) // make sure the block is accepted.
+                {
+                    _logger.Debug("Submitted block {0:l} is orphaned", block.Hash);
                     return false;
-                
+                }
+
+                var expectedTxHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString(); // calculate our expected generation transactions's hash
+                var genTxHash = block.Tx.First(); // read the hash of very first (generation transaction) of the block
+
+                if (expectedTxHash != genTxHash) // make sure our calculated generated transaction and one reported by coin daemon matches.
+                {
+                    _logger.Debug("Submitted block {0:l} doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Hash, genTxHash, expectedTxHash);
+                    return false;
+                }
+
+                var poolOutput = _blockProcessor.GetPoolOutput(block); // get the output that targets pool's central address.
+
                 // make sure the blocks generation transaction contains our central pool wallet address
-                if (!_blockProcessor.ContainsPoolOutput(genTx))
+                if (poolOutput == null)
+                {
+                    _logger.Debug("Submitted block doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", _poolConfig.Wallet.Adress);
                     return false;
+                }
 
                 // if the code flows here, then it means the block was succesfully submitted and belongs to us.
-                share.SetFoundBlock(blockInfo); // assign the block to share.
+                share.SetFoundBlock(block); // assign the block to share.
 
                 return true;
             }
