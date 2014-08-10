@@ -11,7 +11,7 @@
 
 **Bug fixes**
 * Fixed a major bug with stratum service where multiple json-rpc calls couldn't be parsed.
-* Fixed a bug effecting submit blocks with some coins that does not include an address field in transaction outputs.
+* Fixed a bug effecting block submissions with some coins that does not include an address field in transaction outputs.
 * Fixed a bug with stratum-miner packet logger where it was emitting normal log messages.
 * Config, log and web front-end source files are no more searching in current working directory but looked for relatively to assembly location.
 * Updated some log messages to be more verbose.
