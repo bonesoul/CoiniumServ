@@ -18,7 +18,7 @@
 * LogManager can now handle unauthorized access exceptions.
 * Misc vanilla miner fixes.
 * Applied a fix to json-prettifier, it'll now handle exceptions.
-* BlockProcessor will now also honor orphan blocks with -1 confirmations.
+* ShareManager and PaymenProcessor will now also honor orphan blocks with -1 confirmations.
 * Double.parse() and float.parse() calls will now correctly use CultureInfo.InvariantCulture - basically fixing potential problems with non en-US systems.
 
 
