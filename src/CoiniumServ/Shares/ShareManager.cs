@@ -182,27 +182,38 @@ namespace CoiniumServ.Shares
             {
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
 
-                // query the block against coin daemon and see if seems all good.               
-                Block blockInfo; // the block repsonse from coin daemon.
-                Transaction genTx; // generation transaction response from coin daemon.
-                var exists = _blockProcessor.GetBlockDetails(share.BlockHash.ToHexString(), out blockInfo, out genTx); // query the coin daemon for the block details.
-
-                if (!exists) // make sure the block exists.
+                // query the block.
+                var block = _blockProcessor.GetBlock(share.BlockHash.ToHexString());
+                if (block == null || block.Confirmations == -1) // make sure the block exists and is accepted.
                     return false;
 
-                 // calculate our expected generation transactions's hash
-                var expectedTxHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString();
+                var expectedTxHash = share.CoinbaseHash.Bytes.ReverseBuffer().ToHexString(); // calculate our expected generation transactions's hash
+                var genTxHash = block.Tx.First(); // read the hash of very first (generation transaction) of the block
 
-                // make sure our calculated and reported generation tx hashes match.
-                if (!_blockProcessor.CheckGenTxHash(blockInfo, expectedTxHash))
+                // make sure our calculated generated transaction and one reported by coin daemon matches.
+                if (expectedTxHash != genTxHash)
+                {
+                    Log.Debug("Submitted block {0:l} doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Hash, genTxHash, expectedTxHash);
                     return false;
-                
+                }
+
+                // query the transaction
+                var genTx = _blockProcessor.GetTransaction(genTxHash);
+                if (genTx == null)
+                    return false;
+
+                // read the output that contains pool output.
+                var poolOutput = _blockProcessor.GetPoolOutput(genTx);
+
                 // make sure the blocks generation transaction contains our central pool wallet address
-                if (!_blockProcessor.ContainsPoolOutput(genTx))
+                if (poolOutput == null)
+                {
+                    Log.Debug("Queried block doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", _poolConfig.Wallet.Adress);
                     return false;
+                }
 
                 // if the code flows here, then it means the block was succesfully submitted and belongs to us.
-                share.SetFoundBlock(blockInfo); // assign the block to share.
+                share.SetFoundBlock(block); // assign the block to share.
 
                 return true;
             }

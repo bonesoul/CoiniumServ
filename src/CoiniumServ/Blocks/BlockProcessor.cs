@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System;
 using System.Linq;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
@@ -39,63 +38,63 @@ namespace CoiniumServ.Blocks
 
         private readonly ILogger _logger;
 
+        private string _poolAccount;
+
         public BlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient)
         {
             _poolConfig = poolConfig;
             _daemonClient = daemonClient;
             _logger = Log.ForContext<BlockProcessor>().ForContext("Component", poolConfig.Coin.Name);
+
+            FindPoolAccount();
         }
 
-        public bool GetBlockDetails(string blockHash, out Block block, out Transaction generationTransaction)
+        private void FindPoolAccount()
         {
-            block = null;
-            generationTransaction = null;
-
             try
             {
-                // query the block.
-                block = _daemonClient.GetBlock(blockHash);
+                _poolAccount = _daemonClient.GetAccount(_poolConfig.Wallet.Adress);
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Error getting account for pool central wallet address: {0:l} - {1:l}", _poolConfig.Wallet.Adress, e.Message);
+            }
+        }
 
-                if (block.Confirmations == -1) // check if block is just reported being orphan by coin daemon.
-                    return false;
-
-                // read the very first (generation transaction) of the block
-                var generationTx = block.Tx.First();
-
-                // also make sure the transaction includes our pool wallet address.
-                generationTransaction = _daemonClient.GetTransaction(generationTx);
-
-                return true;
+        public Block GetBlock(string blockHash)
+        {
+            try
+            {
+                var block = _daemonClient.GetBlock(blockHash); // query the block.
+                return block;
             }
             catch (RpcException e)
             {
                 _logger.Error("Queried block does not exist {0:l}, {1:l}", blockHash, e.Message);
-                return false;
+                return null;
             }
         }
 
-        public bool CheckGenTxHash(Block block, string expectedTxHash)
+        public Transaction GetTransaction(string txHash)
         {
-            // get the generation transaction for the block.
-            var genTx = block.Tx.First();
-          
-            if (expectedTxHash == genTx)
-                return true;
-
-            Log.Debug("Queried block {0:l} doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Hash, genTx, expectedTxHash);
-            return false;
+            try
+            {
+                var genTx = _daemonClient.GetTransaction(txHash);
+                return genTx;
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Error reading transaction {0:l}, {1:l}", txHash,e.Message);
+                return null;
+            }
         }
 
-        public bool ContainsPoolOutput(Transaction transaction)
+        public TransactionDetail GetPoolOutput(Transaction transaction)
         {
-            // check if the transaction includes output for the configured central pool wallet address.
-            var gotPoolOutput = transaction.Details.Any(x => x.Address == _poolConfig.Wallet.Adress);
-
-            if (gotPoolOutput) // if we got the correct pool output
-                return true; // then the block seems to belong us.
-
-            Log.Debug("Queried block doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", _poolConfig.Wallet.Adress);
-            return false;            
+            // check if coin includes output address data in transaction details.
+            return transaction.Details.Any(x => x.Address == null)
+                ? transaction.Details.FirstOrDefault(x => x.Account == _poolAccount) // some coins doesn't include address field in outputs, so try to determine using the associated account name.
+                : transaction.Details.FirstOrDefault(x => x.Address == _poolConfig.Wallet.Adress); // if coin includes address field in outputs, just use it.
         }
     }
 }
