@@ -72,18 +72,18 @@ namespace CoiniumServ.Server.Web
                 host.Start();
                 IsListening = true;
             }
-            catch (InvalidOperationException) { // nancy requires elevated privileges to run on port well known ports - thrown when we are on Windows.
-                _logger.Error("Need elevated privileges to listen on port {0}. Try running as administrator.", Port);
+            catch (InvalidOperationException e) { // nancy requires elevated privileges to run on port well known ports - thrown when we are on Windows.
+                _logger.Error("Need elevated privileges to listen on port {0}, try running as administrator - {1:l}", Port, e.Message);
                 IsListening = false;
                 return false;                
             }
-			catch(SocketException) { // nancy requires elevated privileges to run on port well known ports - thrown when we are on mono.
-				_logger.Error("Need elevated privileges to listen on port {0}. Try running as root.", Port);
+			catch(SocketException e) { // nancy requires elevated privileges to run on port well known ports - thrown when we are on mono.
+                _logger.Error("Need elevated privileges to listen on port {0}, try running as root - {1:l}", Port, e.Message);
 				IsListening = false;
 				return false;  
 			}
-            catch (HttpListenerException) {
-                _logger.Error("Can not listen on requested interface: {0:l}",BindIP);
+            catch (HttpListenerException e) {
+                _logger.Error("Can not listen on requested interface: {0:l} - {1:l}",BindIP, e.Message);
                 IsListening = false;
                 return false;
             }

@@ -26,6 +26,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using CoiniumServ.Utils.Platform;
+using Serilog;
 
 namespace CoiniumServ.Utils.Helpers.IO
 {
@@ -36,34 +38,35 @@ namespace CoiniumServ.Utils.Helpers.IO
             get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
         }
 
-        public static List<string> GetFilesByExtensionRecursive(string directory, string fileExtension)
+        public static string GetAbsolutePath(string file)
         {
-            var files = new List<string>(); // Store results in the file results list.
-            var stack = new Stack<string>(); // Store a stack of our directories.
+            var path = string.Format("{0}/{1}", AssemblyRoot, file); // first get the path as *unix paths.
 
-            stack.Push(directory); // Add initial directory.
+            if (PlatformManager.Framework == Frameworks.DotNet) // if we are running on windows,
+                path = path.Replace('/', '\\'); // replace to windows-native paths.
 
-            while (stack.Count > 0) // Continue while there are directories to process
-            {
-                var topDir = stack.Pop(); // Get top directory
-                var dirInfo = new DirectoryInfo(topDir);
-
-                files.AddRange((from fileInfo in dirInfo.GetFiles()
-                                where string.Compare(fileInfo.Extension, fileExtension, StringComparison.OrdinalIgnoreCase) == 0
-                                select topDir + "/" + fileInfo.Name).ToList());
-
-                foreach (var dir in Directory.GetDirectories(topDir)) // Add all directories at this directory.
-                {
-                    stack.Push(dir);
-                }
-            }
-
-            return files.Select(file => file.Replace("\\", "/")).ToList();
+            return path;
         }
 
-        public static string ReadFile(string fileName)
+        public static List<string> GetFilesByExtension(string directory, string expectedExtension)
         {
-            return File.ReadAllText(fileName);
+            var files = new List<string>(); // Store results in the file results list.
+
+            try
+            {
+                var topDir = GetAbsolutePath(directory);
+                var dirInfo = new DirectoryInfo(topDir);
+
+                files.AddRange(from fileInfo in dirInfo.GetFiles()
+                    where string.Compare(fileInfo.Extension, expectedExtension, StringComparison.OrdinalIgnoreCase) == 0
+                    select string.Format("{0}/{1}", directory, fileInfo.Name));
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                Log.Error("Directory not found: {0:l}", e.Message);
+            }
+
+            return files;
         }
     }
 }

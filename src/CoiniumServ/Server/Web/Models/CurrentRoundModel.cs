@@ -21,30 +21,13 @@
 // 
 #endregion
 
-using System.Net;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace CoiniumServ.Server.Mining.Vanilla.Service
+namespace CoiniumServ.Server.Web.Models
 {
-    /// <summary>
-    /// JsonRpc 1.0 over http request.
-    /// </summary>
-    public class HttpServiceRequest
+    public class CurrentRoundModel
     {
-        public string Text { get; private set; }
-
-        public dynamic Data { get; private set; }
-
-        public HttpListenerContext Context { get; private set; }
-
-        public HttpListenerResponse Response { get; private set; }
-
-        public HttpServiceRequest(string text, HttpListenerContext context)
-        {
-            Text = text;
-            Data = JsonConvert.DeserializeObject<dynamic>(Text);
-            Context = context;
-            Response = Context.Response;
-        }
+        public int Round { get; set; }
+        public IDictionary<string, double> Shares { get; set; }
     }
 }

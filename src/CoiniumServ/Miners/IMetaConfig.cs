@@ -28,5 +28,7 @@ namespace CoiniumServ.Miners
     public interface IMetaConfig:IConfig
     {
         string MOTD { get; }
+
+        string TxMessage { get; }
     }
 }

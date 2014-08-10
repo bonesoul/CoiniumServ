@@ -23,11 +23,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 
 namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
+    [DebuggerDisplay("Remote: {RemoteEndPoint} Connected: {IsConnected}")]
     public class Connection : IConnection
     {
         /// <summary>

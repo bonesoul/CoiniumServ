@@ -29,10 +29,8 @@ using System.Threading;
 using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using Serilog;
 
@@ -267,36 +265,27 @@ namespace CoiniumServ.Payments
 
         private void QueryBlock(ref IPersistedBlock block)
         {
-            // query the block against coin daemon and see if seems all good.               
-            Block blockInfo; // the block repsonse from coin daemon.
-            Transaction genTx; // generation transaction response from coin daemon.
-            var exists = _blockProcessor.GetBlockDetails(block.BlockHash, out blockInfo, out genTx); // query the coin daemon for the block details.
+            var blockInfo = _blockProcessor.GetBlock(block.BlockHash); // query the block.
 
-            if (!exists) // make sure the block exists.
+            if (blockInfo == null || blockInfo.Confirmations == -1) // make sure the block exists and is accepted.
             {
                 block.Status = BlockStatus.Orphaned;
                 return;
             }
 
             // calculate our expected generation transactions's hash
-            var expectedTxHash = block.TransactionHash;
+            var expectedTxHash = block.TransactionHash; // expected transaction hash
+            var genTxHash = blockInfo.Tx.First(); // read the hash of very first (generation transaction) of the block
 
             // make sure our calculated and reported generation tx hashes match.
-            if (!_blockProcessor.CheckGenTxHash(blockInfo, expectedTxHash))
-            {
-                block.Status = BlockStatus.Orphaned;
-                return;
-            }
-
-            // make sure the blocks generation transaction contains our central pool wallet address
-            if (!_blockProcessor.ContainsPoolOutput(genTx))
+            if (expectedTxHash != genTxHash)
             {
                 block.Status = BlockStatus.Orphaned;
                 return;
             }
 
             // get the output transaction that targets pools central wallet.
-            var poolOutput = genTx.Details.FirstOrDefault(output => output.Address == _walletConfig.Adress);
+            var poolOutput = _blockProcessor.GetPoolOutput(blockInfo);
 
             // make sure we have a valid reference to poolOutput
             if (poolOutput == null)

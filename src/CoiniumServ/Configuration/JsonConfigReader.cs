@@ -24,6 +24,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using CoiniumServ.Utils.Helpers.IO;
 using JsonConfig;
 using Newtonsoft.Json;
 using Serilog;
@@ -39,7 +40,8 @@ namespace CoiniumServ.Configuration
         {
             try
             {
-                var json = ReadJsonFromFile(fileName); // read the json.
+                var path = FileHelpers.GetAbsolutePath(fileName);
+                var json = ReadJsonFromFile(path); // read the json.
                 json = CleanComments(json); // strip out comment lines that starts with # as they'll be preventing validation.
                 var valid = ValidateJson(json, fileName); // check if it's valid.
 

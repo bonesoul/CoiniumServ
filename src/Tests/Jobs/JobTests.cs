@@ -28,6 +28,7 @@ using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
+using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Script;
@@ -139,11 +140,14 @@ namespace CoiniumServ.Tests.Jobs
             walletConfig.Adress.Returns("mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq");
             _outputs.AddPoolWallet(walletConfig.Adress, blockReward);
 
+            // meta config.
+            var metaConfig = Substitute.For<IMetaConfig>();
+
             // job counter
             _jobCounter = Substitute.For<JobCounter>();
 
             // generation transaction.
-            _generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, walletConfig, rewardsConfig);
+            _generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, walletConfig, rewardsConfig, metaConfig, false);
             _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
             _generationTransaction.Outputs = _outputs;
             _generationTransaction.Create();     

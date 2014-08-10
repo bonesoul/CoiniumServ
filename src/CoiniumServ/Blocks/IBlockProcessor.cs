@@ -27,10 +27,8 @@ namespace CoiniumServ.Blocks
 {
     public interface IBlockProcessor
     {
-        bool GetBlockDetails(string blockHash, out Block block, out Transaction generationTransaction);
+        Block GetBlock(string blockHash);
 
-        bool CheckGenTxHash(Block block, string expectedTxHash);
-
-        bool ContainsPoolOutput(Transaction transaction);
+        TransactionDetail GetPoolOutput(Block block);
     }
 }

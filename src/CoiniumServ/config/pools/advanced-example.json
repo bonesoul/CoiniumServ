@@ -32,9 +32,11 @@
     # -------------------------------
 
     # motd: message of the day.
+    # txMessage: message to be included used within generation transactions.
 
     "meta": {
-        "motd": "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com"
+        "motd": "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coiniumserv.com",
+        "txMessage": "http://www.coiniumserv.com/"
      },
 
     # -------------------------------

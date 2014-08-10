@@ -43,6 +43,11 @@ namespace CoiniumServ.Coin.Config
         string Algorithm { get; }
 
         /// <summary>
+        /// Does the coin uses TxMessages.
+        /// </summary>
+        bool SupportsTxMessages { get; }
+
+        /// <summary>
         /// Block explorer for the coin.
         /// </summary>
         string BlockExplorer { get; }

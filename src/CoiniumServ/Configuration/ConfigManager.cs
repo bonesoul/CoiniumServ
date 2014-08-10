@@ -91,7 +91,7 @@ namespace CoiniumServ.Configuration
             _logger = Log.ForContext<ConfigManager>();
             _logger.Debug("Discovering enabled pool configs..");
 
-            var files = FileHelpers.GetFilesByExtensionRecursive(PoolConfigRoot, ".json");
+            var files = FileHelpers.GetFilesByExtension(PoolConfigRoot, ".json");
 
             foreach (var file in files)
             {

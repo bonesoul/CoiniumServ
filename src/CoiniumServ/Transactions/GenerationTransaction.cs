@@ -30,6 +30,7 @@ using CoiniumServ.Cryptology;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
+using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Helpers.Time;
@@ -37,6 +38,8 @@ using Gibbed.IO;
 
 namespace CoiniumServ.Transactions
 {
+    // TODO: convert generation transaction to ioc & DI based.
+
     /// <summary>
     /// A generation transaction.
     /// </summary>
@@ -80,7 +83,7 @@ namespace CoiniumServ.Transactions
         /// <summary>
         ///  For coins that support/require transaction comments
         /// </summary>
-        public byte[] Message { get; private set; }
+        public byte[] TxMessage { get; private set; }
 
         /// <summary>
         /// The block number or timestamp at which this transaction is locked:
@@ -106,7 +109,7 @@ namespace CoiniumServ.Transactions
 
         public IExtraNonce ExtraNonce { get; private set; }
 
-        public bool SupportTxMessages { get; private set; }
+        public bool TxMessageEnabled { get; private set; }
 
         /// <summary>
         /// Creates a new instance of generation transaction.
@@ -114,24 +117,26 @@ namespace CoiniumServ.Transactions
         /// <param name="extraNonce">The extra nonce.</param>
         /// <param name="daemonClient">The daemon client.</param>
         /// <param name="blockTemplate">The block template.</param>
+        /// <param name="walletConfig"></param>
         /// <param name="rewardsConfig"></param>
-        /// <param name="supportTxMessages">if set to <c>true</c> [support tx messages].</param>
+        /// <param name="metaConfig"></param>
+        /// <param name="txMessageEnabled">tx messages supported by the coin?</param>
         /// <remarks>
         /// Reference implementations:
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
         /// </remarks>
-        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, IWalletConfig walletConfig, IRewardsConfig rewardsConfig, bool supportTxMessages = false)
+        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, IWalletConfig walletConfig, IRewardsConfig rewardsConfig, IMetaConfig metaConfig, bool txMessageEnabled)
         {
             // TODO: we need a whole refactoring here.
             // we should use DI and it shouldn't really require daemonClient connection to function.
 
             BlockTemplate = blockTemplate;
             ExtraNonce = extraNonce;
-            SupportTxMessages = supportTxMessages;
+            TxMessageEnabled = txMessageEnabled;
 
-            Version = (UInt32)(supportTxMessages ? 2 : 1);
-            Message = Serializers.SerializeString("https://github.com/CoiniumServ/CoiniumServ");
+            Version = (UInt32)(txMessageEnabled ? 2 : 1);
+            TxMessage = Serializers.SerializeString(metaConfig.TxMessage);
             LockTime = 0;
 
             // transaction inputs
@@ -200,7 +205,6 @@ namespace CoiniumServ.Transactions
                 scriptSig). Miners send us unique extranonces that we use to join the two parts in attempt to create
                 a valid share and/or block. */
 
-
             // create the second part.
             using (var stream = new MemoryStream())
             {
@@ -216,8 +220,8 @@ namespace CoiniumServ.Transactions
 
                 stream.WriteValueU32(LockTime.LittleEndian());
 
-                if (SupportTxMessages)
-                    stream.WriteBytes(Message);
+                if (TxMessageEnabled)
+                    stream.WriteBytes(TxMessage);
 
                 Final = stream.ToArray();
             }

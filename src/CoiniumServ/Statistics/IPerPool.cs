@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using CoiniumServ.Pools.Config;
 
 namespace CoiniumServ.Statistics
@@ -34,12 +35,19 @@ namespace CoiniumServ.Statistics
 
         Int32 WorkerCount { get; }
 
+        Dictionary<string, double> Workers { get; }
+        Dictionary<string, double> CurrentRoundShares { get; } 
+
         double Difficulty { get; }
 
-        int CurrentBlock { get; }
+        int Round { get; }
 
         IBlocksCount Blocks { get; }
 
         IPoolConfig Config { get; }
+
+        string WorkersJson { get; }
+
+        string CurrentRoundJson { get; }
     }
 }

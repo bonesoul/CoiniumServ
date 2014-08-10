@@ -36,6 +36,7 @@ namespace CoiniumServ.Server.Web.Modules
             {
                 // include common data required by layout.
                 ViewBag.Heading = "Welcome";
+                ViewBag.Pools = statistics.Pools;
                 ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 
                 // return our view

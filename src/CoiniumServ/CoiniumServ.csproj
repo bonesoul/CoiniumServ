@@ -152,12 +152,14 @@
     <Compile Include="Payments\WalletConfig.cs" />
     <Compile Include="Persistance\Redis\Redis.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
+    <Compile Include="Server\Web\Models\CurrentRoundModel.cs" />
+    <Compile Include="Server\Web\Models\WorkersModel.cs" />
     <Compile Include="Server\Web\Modules\BackendConfig.cs" />
     <Compile Include="Server\Web\Modules\Donate.cs" />
     <Compile Include="Server\Web\Models\IndexModel.cs" />
     <Compile Include="Server\Web\Models\PoolModel.cs" />
-    <Compile Include="Statistics\BlocksCount.cs" />
-    <Compile Include="Statistics\IBlocksCount.cs" />
+    <Compile Include="Statistics\BlockStats.cs" />
+    <Compile Include="Statistics\IBlockStats.cs" />
     <Compile Include="Statistics\IJsonResponse.cs" />
     <Compile Include="Statistics\ILatestBlocks.cs" />
     <Compile Include="Statistics\IStatisticsConfig.cs" />
@@ -317,13 +319,11 @@
     <Compile Include="Pools\Config\PoolConfig.cs" />
     <Compile Include="Pools\PoolManager.cs" />
     <Compile Include="Server\Mining\Vanilla\Service\HttpServiceContext.cs" />
-    <Compile Include="Server\Mining\Vanilla\Service\HttpServiceRequest.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaServer.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\Service\VanillaService.cs" />
     <Compile Include="Miners\IMiner.cs" />
     <Compile Include="Server\Mining\Stratum\Service\SocketServiceContext.cs" />
-    <Compile Include="Server\Mining\Stratum\Service\SocketServiceRequest.cs" />
     <Compile Include="Server\Commands\Server.cs" />
     <Compile Include="Server\Commands\Stats.cs" />
     <Compile Include="Server\Commands\Uptime.cs" />
@@ -908,6 +908,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\pool.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\round.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\workers.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

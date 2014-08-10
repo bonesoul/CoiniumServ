@@ -21,23 +21,12 @@
 // 
 #endregion
 
-using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace CoiniumServ.Server.Mining.Stratum.Service
+namespace CoiniumServ.Server.Web.Models
 {
-    /// <summary>
-    /// JsonRpc 2.0 over sockets request.
-    /// </summary>
-    public class SocketServiceRequest
+    public class WorkersModel
     {
-        public string Text { get; private set; }
-
-        public dynamic Data { get; private set; }
-
-        public SocketServiceRequest(string text)
-        {
-            Text = text;
-            Data = JsonConvert.DeserializeObject<dynamic>(Text);
-        }
+        public IDictionary<string,double> Workers { get; set; }
     }
 }
