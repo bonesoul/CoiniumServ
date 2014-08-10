@@ -188,7 +188,7 @@ namespace CoiniumServ.Shares
 
                 if (block.Confirmations == -1) // make sure the block is accepted.
                 {
-                    Log.Debug("Queried block {0:l} is orphaned", block.Hash);
+                    _logger.Debug("Submitted block {0:l} is orphaned", block.Hash);
                     return false;
                 }
 
@@ -197,7 +197,7 @@ namespace CoiniumServ.Shares
 
                 if (expectedTxHash != genTxHash) // make sure our calculated generated transaction and one reported by coin daemon matches.
                 {
-                     Log.Debug("Submitted block {0:l} doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Hash, genTxHash, expectedTxHash);
+                    _logger.Debug("Submitted block {0:l} doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Hash, genTxHash, expectedTxHash);
                     return false;
                 }
 
@@ -206,7 +206,7 @@ namespace CoiniumServ.Shares
                 // make sure the blocks generation transaction contains our central pool wallet address
                 if (poolOutput == null)
                 {
-                    Log.Debug("Submitted block doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", _poolConfig.Wallet.Adress);
+                    _logger.Debug("Submitted block doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", _poolConfig.Wallet.Adress);
                     return false;
                 }
 

@@ -70,7 +70,7 @@ namespace CoiniumServ.Blocks
             }
             catch (RpcException e)
             {
-                _logger.Error("Queried block does not exist {0:l}, {1:l}", blockHash, e.Message);
+                _logger.Error("Queried block does not exist {0:l} - {1:l}", blockHash, e.Message);
                 return null;
             }
         }
@@ -91,7 +91,7 @@ namespace CoiniumServ.Blocks
             }
             catch (RpcException e)
             {
-                _logger.Error("Error reading transaction {0:l}, {1:l}", block.Tx.First(), e.Message);
+                _logger.Error("Queried transaction does not exist {0:l} - {1:l}", block.Tx.First(), e.Message);
                 return null;
             }
         }
