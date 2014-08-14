@@ -1,3 +1,9 @@
+##### [v0.1.2 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.2-alpha) - 14.08.2014
+
+**Payments**
+* Fixed a major bug in payment processor which was preventing payments to miners.
+* Fixed a bug in statistics manager.
+
 ##### [v0.1.1 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.1-alpha) - 10.08.2014
 **Mining**
 * Improved SocketServiceContext and removed unnecessary overhead.
