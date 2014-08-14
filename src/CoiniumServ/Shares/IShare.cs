@@ -43,6 +43,8 @@ namespace CoiniumServ.Shares
 
         Block Block { get; }
 
+        Transaction GenerationTransaction { get; }
+
         /// <summary>
         /// Is the block data accepted by the coin daemon?
         /// </summary>
@@ -89,6 +91,6 @@ namespace CoiniumServ.Shares
 
         byte[] BlockHash { get; }
 
-        void SetFoundBlock(Block block);
+        void SetFoundBlock(Block block, Transaction genTx);
     }
 }

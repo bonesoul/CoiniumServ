@@ -22,12 +22,19 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CoiniumServ.Daemon.Responses
 {
     public class Transaction
     {
-        public double Amount { get; set; }
+        public double Amount { get; set; } // seems it's set to 0 for immature transactions or generation transactions.
+
+        /// <summary>
+        /// As Amount may not always return the total transaction amount, TotalAmount calculates and return the value using transaction details
+        /// </summary>
+        public double TotalAmount { get { return Details.Sum(item => item.Amount); } }
+
         public int Confirmations { get; set; }
 
         public bool Generated { get; set; }
@@ -46,7 +53,22 @@ namespace CoiniumServ.Daemon.Responses
         public int TimeReceived { get; set; }
 
         public List<TransactionDetail> Details { get; set; }
-        
+
+
+        /// <summary>
+        /// Returns the transaction detail that contains the output for pool.
+        /// </summary>
+        /// <param name="poolAddress"></param>
+        /// <param name="poolAccount"></param>
+        /// <returns></returns>
+        public TransactionDetail GetPoolOutput(string poolAddress, string poolAccount)
+        {
+            // check if coin includes output address data in transaction details.
+            return Details.Any(x => x.Address == null)
+                ? Details.FirstOrDefault(x => x.Account == poolAccount) // some coins doesn't include address field in outputs, so try to determine using the associated account name.
+                : Details.FirstOrDefault(x => x.Address == poolAddress); // if coin includes address field in outputs, just use it.
+        }
+
         // not sure if fields below even exists / used
         //public double Fee { get; set; }
         //public string Comment { get; set; }

@@ -143,6 +143,9 @@ namespace CoiniumServ.Payments
             // set previous balances
             foreach(var pair in previousBalances)
             {
+                if (pair.Value == 0) // skip zero balances
+                    continue;
+
                 if (!workerBalances.ContainsKey(pair.Key))
                     workerBalances.Add(pair.Key, new WorkerBalance(pair.Key, _magnitude));
 
@@ -284,8 +287,10 @@ namespace CoiniumServ.Payments
                 return;
             }
 
+            var genTx = _blockProcessor.GetGenerationTransaction(blockInfo); // get the generation transaction.
+
             // get the output transaction that targets pools central wallet.
-            var poolOutput = _blockProcessor.GetPoolOutput(blockInfo);
+            var poolOutput = _blockProcessor.GetPoolOutput(genTx);
 
             // make sure we have a valid reference to poolOutput
             if (poolOutput == null)
@@ -293,6 +298,8 @@ namespace CoiniumServ.Payments
                 block.Status = BlockStatus.Orphaned;
                 return;
             }
+
+            block.SetReward((decimal)poolOutput.Amount); // set the reward of the block to miners.
 
             switch (poolOutput.Category)
             {
@@ -306,6 +313,7 @@ namespace CoiniumServ.Payments
                     block.Status = BlockStatus.Confirmed;
                     break;
             }
+
 
             // TODO: add back these.
             // total amount of coins contained in the block.
