@@ -55,7 +55,7 @@ You can send tips and furher support the project or get tips for contributing by
 
 ### Status
 
-[v0.1.1 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.1-alpha) released
+[v0.1.2 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.2-alpha) released
 
 ### Features
 
