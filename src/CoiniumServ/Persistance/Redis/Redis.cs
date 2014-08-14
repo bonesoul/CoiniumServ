@@ -372,7 +372,7 @@ namespace CoiniumServ.Persistance.Redis
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting {0:l} blocks: {1:l}", status.ToString(), e.Message);
+                _logger.Error("An exception occured while getting {0:l} blocks: {1:l}", status.ToString().ToLower(), e.Message);
             }
 
             return blocks.Values.ToList();
