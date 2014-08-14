@@ -129,6 +129,9 @@ namespace CoiniumServ.Statistics
 
             foreach (var miner in _minerManager.Miners)
             {
+                if (!miner.Authenticated)
+                    continue;
+
                 Workers.Add(miner.Username, shares.ContainsKey(miner.Username) ? shares[miner.Username] : 0);
             }
 

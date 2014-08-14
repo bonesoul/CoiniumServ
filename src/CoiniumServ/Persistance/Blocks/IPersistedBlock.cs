@@ -31,9 +31,10 @@ namespace CoiniumServ.Persistance.Blocks
         BlockStatus Status { get; set; }
         string BlockHash { get; }
         string TransactionHash { get; }
-        decimal Reward { get; }
         decimal Amount { get; }
-
+        decimal Reward { get; }
         bool IsPending { get; }
+
+        void SetReward(decimal reward);
     }
 }

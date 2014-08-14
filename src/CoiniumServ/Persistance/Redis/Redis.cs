@@ -119,7 +119,8 @@ namespace CoiniumServ.Persistance.Redis
 
                     // add block to pending.
                     var pendingKey = string.Format("{0}:blocks:pending", _coin);
-                    var entry = string.Format("{0}:{1}", share.BlockHash.ToHexString(), share.Block.Tx.First());
+                    // entry format: blockHash:txHash:Amount
+                    var entry = string.Format("{0}:{1}:{2}", share.BlockHash.ToHexString(), share.Block.Tx.First(), share.GenerationTransaction.TotalAmount);
                     _client.ZAdd(pendingKey, Tuple.Create(share.Block.Height, entry));
                 }
 
@@ -364,8 +365,9 @@ namespace CoiniumServ.Persistance.Redis
                     var data = item.Split(':');
                     var blockHash = data[0];
                     var transactionHash = data[1];
+                    var amount = decimal.Parse(data[2]);
 
-                    blocks.Add((UInt32) score, new PersistedBlock(status, (UInt32) score, blockHash, transactionHash, 0, 0));                    
+                    blocks.Add((UInt32)score, new PersistedBlock(status, (UInt32)score, blockHash, transactionHash, amount));                    
                 }
             }
             catch (Exception e)
