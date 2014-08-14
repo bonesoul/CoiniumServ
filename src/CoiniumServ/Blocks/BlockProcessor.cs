@@ -75,25 +75,22 @@ namespace CoiniumServ.Blocks
             }
         }
 
-        public TransactionDetail GetPoolOutput(Block block)
+        public Transaction GetGenerationTransaction(Block block)
         {
             try
             {
-                var genTx = _daemonClient.GetTransaction(block.Tx.First()); // query the transaction
-
-                if (genTx == null) // make sure the generation transaction exists
-                    return null;
-
-                // check if coin includes output address data in transaction details.
-                return genTx.Details.Any(x => x.Address == null)
-                    ? genTx.Details.FirstOrDefault(x => x.Account == _poolAccount) // some coins doesn't include address field in outputs, so try to determine using the associated account name.
-                    : genTx.Details.FirstOrDefault(x => x.Address == _poolConfig.Wallet.Adress); // if coin includes address field in outputs, just use it.
+                return _daemonClient.GetTransaction(block.Tx.First()); // query the transaction
             }
             catch (RpcException e)
             {
                 _logger.Error("Queried transaction does not exist {0:l} - {1:l}", block.Tx.First(), e.Message);
                 return null;
             }
+        }
+
+        public TransactionDetail GetPoolOutput(Transaction transaction)
+        {
+            return transaction.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount);
         }
     }
 }

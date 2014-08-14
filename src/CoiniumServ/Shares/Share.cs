@@ -41,6 +41,7 @@ namespace CoiniumServ.Shares
         public bool IsValid { get { return Error == ShareError.None; } }
         public bool IsBlockCandidate { get; private set; }
         public Block Block { get; private set; }
+        public Transaction GenerationTransaction { get; private set; }
         public bool IsBlockAccepted { get { return Block != null; } }
         public IMiner Miner { get; private set; }
         public ShareError Error { get; private set; }
@@ -163,9 +164,10 @@ namespace CoiniumServ.Shares
             }
         }
 
-        public void SetFoundBlock(Block block)
+        public void SetFoundBlock(Block block, Transaction genTx)
         {
             Block = block;
+            GenerationTransaction = genTx;
         }
     }
 }

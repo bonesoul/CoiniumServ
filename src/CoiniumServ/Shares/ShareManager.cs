@@ -201,7 +201,9 @@ namespace CoiniumServ.Shares
                     return false;
                 }
 
-                var poolOutput = _blockProcessor.GetPoolOutput(block); // get the output that targets pool's central address.
+                var genTx = _blockProcessor.GetGenerationTransaction(block); // get the generation transaction.
+
+                var poolOutput = _blockProcessor.GetPoolOutput(genTx); // get the output that targets pool's central address.
 
                 // make sure the blocks generation transaction contains our central pool wallet address
                 if (poolOutput == null)
@@ -211,7 +213,7 @@ namespace CoiniumServ.Shares
                 }
 
                 // if the code flows here, then it means the block was succesfully submitted and belongs to us.
-                share.SetFoundBlock(block); // assign the block to share.
+                share.SetFoundBlock(block, genTx); // assign the block to share.
 
                 return true;
             }
