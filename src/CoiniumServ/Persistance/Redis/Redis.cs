@@ -119,8 +119,7 @@ namespace CoiniumServ.Persistance.Redis
 
                     // add block to pending.
                     var pendingKey = string.Format("{0}:blocks:pending", _coin);
-                    // entry format: blockHash:txHash:Amount
-                    var entry = string.Format("{0}:{1}:{2}", share.BlockHash.ToHexString(), share.Block.Tx.First(), share.GenerationTransaction.TotalAmount);
+                    var entry = string.Format("{0}:{1}:{2}", share.BlockHash.ToHexString(), share.Block.Tx.First(), share.GenerationTransaction.TotalAmount); // entry format: blockHash:txHash:Amount
                     _client.ZAdd(pendingKey, Tuple.Create(share.Block.Height, entry));
                 }
 
@@ -235,7 +234,7 @@ namespace CoiniumServ.Persistance.Redis
                         break;
                 }
 
-                var entry = string.Format("{0}:{1}", round.Block.BlockHash, round.Block.TransactionHash);
+                var entry = string.Format("{0}:{1}:{2}", round.Block.BlockHash, round.Block.TransactionHash, round.Block.Amount); // entry format: blockHash:txHash:Amount
 
                 //_client.StartPipeTransaction(); // batch the commands as atomic.
                 _client.ZRemRangeByScore(pendingKey, round.Block.Height, round.Block.Height);
@@ -372,7 +371,7 @@ namespace CoiniumServ.Persistance.Redis
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting {0:l} blocks: {1:l}", status.ToString(), e.Message);
+                _logger.Error("An exception occured while getting {0:l} blocks: {1:l}", status.ToString().ToLower(), e.Message);
             }
 
             return blocks.Values.ToList();
