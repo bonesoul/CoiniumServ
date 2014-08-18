@@ -25,7 +25,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using CoiniumServ.Utils.Platform;
 using Serilog;
 
@@ -35,7 +34,7 @@ namespace CoiniumServ.Utils.Helpers.IO
     {
         public static string AssemblyRoot
         {
-            get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); }
+            get { return AppDomain.CurrentDomain.BaseDirectory; }
         }
 
         public static string GetAbsolutePath(string file)
