@@ -214,7 +214,6 @@
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
     <Compile Include="Server\Web\IWebServerConfig.cs" />
     <Compile Include="Server\Web\Modules\Api.cs" />
-    <Compile Include="Server\Web\Models\ErrorModel.cs" />
     <Compile Include="Server\Web\Models\JsonError.cs" />
     <Compile Include="Server\Web\Modules\Pool.cs" />
     <Compile Include="Server\Web\WebServer.cs" />
