@@ -25,6 +25,7 @@ using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
 using Nancy;
+using Nancy.CustomErrors;
 
 namespace CoiniumServ.Server.Web.Modules
 {
@@ -44,7 +45,7 @@ namespace CoiniumServ.Server.Web.Modules
                     ViewBag.Title = "Error";
                     ViewBag.Heading = "An error occured!";
 
-                    return View["error", new ErrorModel
+                    return View["error", new ErrorViewModel
                     {
                         Summary = "Pool not found",
                         Details = string.Format("The requested pool does not exist: {0}", _.slug)
@@ -73,7 +74,7 @@ namespace CoiniumServ.Server.Web.Modules
                     ViewBag.Title = "Error";
                     ViewBag.Heading = "An error occured!";
 
-                    return View["error", new ErrorModel
+                    return View["error", new ErrorViewModel
                     {
                         Summary = "Pool not found",
                         Details = string.Format("The requested pool does not exist: {0}", _.slug)
@@ -102,7 +103,7 @@ namespace CoiniumServ.Server.Web.Modules
                     ViewBag.Title = "Error";
                     ViewBag.Heading = "An error occured!";
 
-                    return View["error", new ErrorModel
+                    return View["error", new ErrorViewModel
                     {
                         Summary = "Pool not found",
                         Details = string.Format("The requested pool does not exist: {0}", _.slug)
