@@ -70,9 +70,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Nancy.0.23.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.CustomErrors, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy.CustomErrors, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Nancy.CustomErrors.1.0.5.0\lib\net40\Nancy.CustomErrors.dll</HintPath>
+      <HintPath>..\..\build\packages\Nancy.CustomErrors.1.0.6.0\lib\net40\Nancy.CustomErrors.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.Hosting.Self, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
