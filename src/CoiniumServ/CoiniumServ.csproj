@@ -62,21 +62,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
     </Reference>
-    <Reference Include="Metrics, Version=0.1.11.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Metrics, Version=0.1.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Metrics.NET.0.1.11\lib\net45\Metrics.dll</HintPath>
+      <HintPath>..\..\build\packages\Metrics.NET.0.1.10\lib\net45\Metrics.dll</HintPath>
     </Reference>
     <Reference Include="Nancy, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Nancy.0.23.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.CustomErrors, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy.CustomErrors, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Nancy.CustomErrors.1.0.6.0\lib\net40\Nancy.CustomErrors.dll</HintPath>
+      <HintPath>..\..\build\packages\Nancy.CustomErrors.1.0.5.0\lib\net40\Nancy.CustomErrors.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.Hosting.Self, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Nancy.Hosting.Self.0.23.2\lib\net40\Nancy.Hosting.Self.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Metrics, Version=0.1.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\packages\NancyFx.Metrics.0.1.10\lib\net45\Nancy.Metrics.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.ViewEngines.Razor, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

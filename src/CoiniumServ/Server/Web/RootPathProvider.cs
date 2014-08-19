@@ -26,11 +26,16 @@ using Nancy;
 
 namespace CoiniumServ.Server.Web
 {
-    public class CustomRootPathProvider : IRootPathProvider
+    public class RootPathProvider : IRootPathProvider
     {
+        private string _rootPath; // root path of the web files.
+
         public string GetRootPath()
         {
-            return FileHelpers.GetAbsolutePath("web/default");
+            if (string.IsNullOrEmpty(_rootPath)) // make sure we already determined the absolute root path
+                _rootPath = FileHelpers.GetAbsolutePath("web/default"); // if not yet do so.
+
+            return _rootPath;
         }
     }
 }
