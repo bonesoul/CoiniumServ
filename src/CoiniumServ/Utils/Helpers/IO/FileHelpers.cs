@@ -39,7 +39,7 @@ namespace CoiniumServ.Utils.Helpers.IO
 
         public static string GetAbsolutePath(string file)
         {
-            var path = string.Format("{0}{1}", AssemblyRoot, file); // first get the path as *unix paths.
+            var path = Path.Combine(AssemblyRoot, file); // first get the path as *unix paths.
 
             if (PlatformManager.Framework == Frameworks.DotNet) // if we are running on windows,
                 path = path.Replace('/', '\\'); // replace to windows-native paths.
