@@ -21,24 +21,30 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Payments;
-using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Shares;
+using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Layers.Mpos;
+using CoiniumServ.Persistance.Providers;
+using CoiniumServ.Persistance.Providers.MySql;
+using CoiniumServ.Persistance.Providers.Redis;
+using CoiniumServ.Repository.Context;
 
-namespace CoiniumServ.Persistance.Layers
+namespace CoiniumServ.Repository.Registries
 {
-    /// <summary>
-    /// Interface that exposes services for storing blocks
-    /// </summary>
-    public interface IBlockStorage
+    public class StorageRegistry: IRegistry
     {
-        void AddBlock(IShare share);
+        private readonly IApplicationContext _applicationContext;
 
-        void UpdateBlock(IPaymentRound round);
+        public StorageRegistry(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
 
-        IDictionary<string, int> GetTotalBlocks();
-
-        IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
+        public void RegisterInstances()
+        {
+            _applicationContext.Container.Register<IStorageOld, RedisOld>(Storages.Redis).AsMultiInstance();
+            _applicationContext.Container.Register<IStorageProvider, MySqlProvider>(Storages.MySql).AsMultiInstance();
+            _applicationContext.Container.Register<IStorageLayer, MposStorage>(Storages.MPOS).AsMultiInstance();
+        }
     }
 }

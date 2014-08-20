@@ -21,10 +21,31 @@
 // 
 #endregion
 
+using CoiniumServ.Pools.Config;
+using MySql.Data.MySqlClient;
+using Serilog;
+
 namespace CoiniumServ.Persistance.Providers.MySql
 {
-    public class MySqlProvider : IStorageProvider
+    // TODO: dapper doesn't manage connections life-cyle - check this pattern: http://stackoverflow.com/questions/23023534/managing-connection-with-non-buffered-queries-in-dapper
+
+    public class MySqlProvider : IMySqlProvider
     {
         public bool IsConnected { get; private set; }
+        public MySqlConnection Connection { get; private set; }
+
+        private readonly ILogger _logger;
+
+        public MySqlProvider(PoolConfig poolConfig)
+        {
+            _logger = Log.ForContext<MySqlProvider>().ForContext("Component", poolConfig.Coin.Name);
+
+            Initialize();
+        }
+        private void Initialize()
+        {
+            Connection = new MySqlConnection("Server=10.0.0.13;Port=3306;Database=mpos;Uid=root;Password=123456");
+            Connection.Open();
+        }
     }
 }

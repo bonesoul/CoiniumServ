@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System.Collections.Generic;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
 using CoiniumServ.Cryptology.Algorithms;
@@ -32,6 +33,9 @@ using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Providers;
+using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
@@ -146,13 +150,14 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IJobTracker>();
         }
 
-        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageOld storage, IBlockProcessor blockProcessor)
+        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IStorageOld storage, IBlockProcessor blockProcessor)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
                 {"jobTracker", jobTracker},
+                {"storageLayer", storageLayer},
                 {"storage", storage},
                 {"blockProcessor", blockProcessor}
             };
@@ -309,9 +314,9 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region other objects
+        #region storage objects
 
-        public IStorageOld GetStorage(string type, IPoolConfig poolConfig)
+        public IStorageOld GetOldStorage(string type, IPoolConfig poolConfig)
         {
             var @params = new NamedParameterOverloads
             {
@@ -320,6 +325,31 @@ namespace CoiniumServ.Factories
 
             return _applicationContext.Container.Resolve<IStorageOld>(type, @params);
         }
+
+        public IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig}
+            };
+
+            return _applicationContext.Container.Resolve<IStorageProvider>(type, @params);
+        }
+
+        public IStorageLayer GetStorageLayer(string type, IEnumerable<IStorageProvider> providers, IPoolConfig poolConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"providers", providers},
+                {"poolConfig", poolConfig}
+            };
+
+            return _applicationContext.Container.Resolve<IStorageLayer>(type, @params);
+        }
+
+        #endregion
+
+        #region other objects        
 
         public ILogManager GetLogManager()
         {

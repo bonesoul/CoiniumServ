@@ -21,9 +21,57 @@
 // 
 #endregion
 
+using System;
+using System.Collections.Generic;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Shares;
+
 namespace CoiniumServ.Persistance.Layers
 {
     public interface IStorageLayer
     {
+
+        #region share storage
+
+        bool SupportsShareStorage { get; }
+
+        void AddShare(IShare share);
+
+        void RemoveShares(IPaymentRound round);
+
+        Dictionary<string, double> GetCurrentShares();
+
+        Dictionary<UInt32, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds);
+
+        #endregion
+
+        #region block storage
+
+        bool SupportsBlockStorage { get; }
+
+        void AddBlock(IShare share);
+
+        void UpdateBlock(IPaymentRound round);
+
+        IDictionary<string, int> GetTotalBlocks();
+
+        IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
+
+        #endregion
+
+        #region worker storage
+
+        bool SupportsWorkerStorage { get; }
+
+        void GetWorker(string username);
+
+        #endregion
+
+        #region payments storage
+
+        bool SupoortsPaymentsStorage { get; }
+
+        #endregion
     }
 }

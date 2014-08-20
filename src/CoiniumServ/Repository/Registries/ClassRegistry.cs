@@ -70,9 +70,6 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
             _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
 
-            // storage
-            _applicationContext.Container.Register<IStorageOld, RedisOld>(Storages.Redis).AsMultiInstance();
-
             // web
             _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();
         }

@@ -21,24 +21,12 @@
 // 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using CoiniumServ.Payments;
-using CoiniumServ.Shares;
+using MySql.Data.MySqlClient;
 
-namespace CoiniumServ.Persistance.Layers
+namespace CoiniumServ.Persistance.Providers.MySql
 {
-    /// <summary>
-    /// Interface that exposes services for storing shares
-    /// </summary>
-    public interface IShareStorage
+    public interface IMySqlProvider : IStorageProvider
     {
-        void AddShare(IShare share);
-
-        void RemoveShares(IPaymentRound round);
-
-        Dictionary<string, double> GetCurrentShares();
-
-        Dictionary<UInt32, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds);
+        MySqlConnection Connection { get; }
     }
 }

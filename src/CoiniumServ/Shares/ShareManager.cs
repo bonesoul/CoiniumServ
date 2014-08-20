@@ -29,6 +29,7 @@ using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Errors;
@@ -50,6 +51,8 @@ namespace CoiniumServ.Shares
 
         private readonly IStorageOld _storage;
 
+        private readonly IStorageLayer _storageLayer;
+
         private readonly IBlockProcessor _blockProcessor;
 
         private readonly IPoolConfig _poolConfig;
@@ -64,11 +67,12 @@ namespace CoiniumServ.Shares
         /// <param name="jobTracker"></param>
         /// <param name="storage"></param>
         /// <param name="blockProcessor"></param>
-        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageOld storage, IBlockProcessor blockProcessor)
+        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IStorageOld storage, IBlockProcessor blockProcessor)
         {
             _poolConfig = poolConfig;
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
+            _storageLayer = storageLayer;
             _storage = storage;
             _blockProcessor = blockProcessor;
             _logger = Log.ForContext<ShareManager>().ForContext("Component", poolConfig.Coin.Name);
@@ -113,6 +117,7 @@ namespace CoiniumServ.Shares
             miner.ValidShares++;
 
             _storage.AddShare(share); // commit the share.
+            _storageLayer.AddShare(share);
             _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);
 
             // check if share is a block candidate

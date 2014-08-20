@@ -28,8 +28,10 @@ using CoiniumServ.Shares;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
 {
-    public class HybridStorage : IStorageLayer, IShareStorage, IBlockStorage, IPaymentStorage
+    public class HybridStorage : IStorageLayer
     {
+        public bool SupportsShareStorage { get; private set; }
+
         public void AddShare(IShare share)
         {
             throw new System.NotImplementedException();
@@ -50,6 +52,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             throw new System.NotImplementedException();
         }
 
+        public bool SupportsBlockStorage { get; private set; }
+
         public void AddBlock(IShare share)
         {
             throw new System.NotImplementedException();
@@ -69,5 +73,14 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
         {
             throw new System.NotImplementedException();
         }
+
+        public bool SupportsWorkerStorage { get; private set; }
+
+        public void GetWorker(string username)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool SupoortsPaymentsStorage { get; private set; }
     }
 }

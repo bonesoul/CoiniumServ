@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System.Collections.Generic;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
 using CoiniumServ.Cryptology.Algorithms;
@@ -32,6 +33,9 @@ using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Providers;
+using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining;
@@ -79,7 +83,7 @@ namespace CoiniumServ.Factories
 
         IJobTracker GetJobTracker();
 
-        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageOld storage, IBlockProcessor blockProcessor);
+        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IStorageOld storage, IBlockProcessor blockProcessor);
 
         IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageOld storage, IBlockProcessor blockProcessor);
 
@@ -122,8 +126,17 @@ namespace CoiniumServ.Factories
 
         #endregion
 
+        #region storage objects
+
+        IStorageOld GetOldStorage(string type, IPoolConfig poolConfig);
+
+        IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig);
+
+        IStorageLayer GetStorageLayer(string type, IEnumerable<IStorageProvider> providers, IPoolConfig poolConfig);
+
+        #endregion
+
         #region other objects
-        IStorageOld GetStorage(string type, IPoolConfig poolConfig);
 
         ILogManager GetLogManager();
 

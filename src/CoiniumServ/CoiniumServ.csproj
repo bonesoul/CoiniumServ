@@ -58,6 +58,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\CryptSharpOfficial.2.0.0.0\lib\CryptSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper">
+      <HintPath>..\..\build\packages\Dapper.1.30\lib\net45\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="HashLib, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
@@ -102,17 +105,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Serilog.1.3.43\lib\net45\Serilog.FullNetFx.dll</HintPath>
     </Reference>
-    <Reference Include="Simple.Data">
-      <HintPath>..\..\build\packages\Simple.Data.Core.0.19.0.0\lib\net40\Simple.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Simple.Data.Ado">
-      <HintPath>..\..\build\packages\Simple.Data.Ado.0.19.0.0\lib\net40\Simple.Data.Ado.dll</HintPath>
-    </Reference>
-    <Reference Include="Simple.Data.Mysql">
-      <HintPath>..\..\build\packages\Simple.Data.Mysql.0.19.0.4\lib\net40\Simple.Data.Mysql.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Net" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Runtime, Version=4.0.0.0, Culture=neutral,    PublicKeyToken=b03f5f7f11d50a3a" />
@@ -160,21 +155,19 @@
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Persistance\Blocks\PersistedBlock.cs" />
     <Compile Include="Persistance\Layers\Hybrid\HybridStorage.cs" />
-    <Compile Include="Persistance\Layers\IBlockStorage.cs" />
-    <Compile Include="Persistance\Layers\IPaymentStorage.cs" />
-    <Compile Include="Persistance\Layers\IShareStorage.cs" />
     <Compile Include="Persistance\IStorageConfig.cs" />
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
     <Compile Include="Payments\WalletConfig.cs" />
     <Compile Include="Persistance\Layers\IStorageLayer.cs" />
     <Compile Include="Persistance\Providers\IStorageProvider.cs" />
-    <Compile Include="Persistance\Layers\IWorkerStorage.cs" />
     <Compile Include="Persistance\Layers\Mpos\MposStorage.cs" />
+    <Compile Include="Persistance\Providers\MySql\IMySqlProvider.cs" />
     <Compile Include="Persistance\Providers\MySql\MySqlProvider.cs" />
     <Compile Include="Persistance\Providers\Redis\IRedisProvider.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisOld.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisProvider.cs" />
+    <Compile Include="Repository\Registries\StorageRegistry.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
     <Compile Include="Server\Web\Models\CurrentRoundModel.cs" />
     <Compile Include="Server\Web\Models\WorkersModel.cs" />

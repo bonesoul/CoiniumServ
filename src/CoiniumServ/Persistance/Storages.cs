@@ -25,5 +25,7 @@ namespace CoiniumServ.Persistance
     public static class Storages
     {
         public const string Redis = "redis";
+        public const string MySql = "mysql";
+        public const string MPOS = "mpos";
     }
 }
