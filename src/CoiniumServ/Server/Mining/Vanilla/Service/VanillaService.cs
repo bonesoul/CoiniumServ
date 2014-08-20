@@ -26,7 +26,6 @@ using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using Serilog;

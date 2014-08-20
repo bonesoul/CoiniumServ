@@ -27,7 +27,6 @@ using System.Net;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla

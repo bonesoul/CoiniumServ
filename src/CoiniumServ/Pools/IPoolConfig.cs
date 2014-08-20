@@ -32,9 +32,9 @@ using CoiniumServ.Persistance;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Vanilla;
 
-namespace CoiniumServ.Pools.Config
+namespace CoiniumServ.Pools
 {
-    public interface IPoolConfig:IConfig
+    public interface IPoolConfig : IConfig
     {
         /// <summary>
         /// Is the configuration enabled?

@@ -27,7 +27,7 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Extensions;

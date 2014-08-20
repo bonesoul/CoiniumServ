@@ -37,7 +37,6 @@ using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;

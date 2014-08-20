@@ -22,7 +22,7 @@
 #endregion
 
 using System;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CSRedis;
 using Serilog;
 

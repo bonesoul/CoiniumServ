@@ -34,7 +34,7 @@ using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Vanilla;
 using Serilog;
 
-namespace CoiniumServ.Pools.Config
+namespace CoiniumServ.Pools
 {
     /// <summary>
     /// Reads and serves the configuration for a pool.

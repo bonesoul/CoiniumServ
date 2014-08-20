@@ -28,7 +28,6 @@ using CoiniumServ.Banning;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using Serilog;
 

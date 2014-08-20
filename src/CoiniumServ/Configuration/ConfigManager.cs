@@ -28,7 +28,7 @@ using System.Linq;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Factories;
 using CoiniumServ.Logging;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Utils.Helpers.IO;
 using Serilog;

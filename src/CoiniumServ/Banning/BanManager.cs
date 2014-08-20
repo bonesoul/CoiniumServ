@@ -27,7 +27,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using CoiniumServ.Miners;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Shares;

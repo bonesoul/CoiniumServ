@@ -31,7 +31,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Miners;
 using CoiniumServ.Persistance;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Utils.Helpers.Time;
 using Newtonsoft.Json;
 

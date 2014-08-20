@@ -34,7 +34,6 @@ using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Providers;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;

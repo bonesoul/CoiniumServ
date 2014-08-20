@@ -23,7 +23,7 @@
 
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Repository.Context;
 using Nancy.TinyIoc;
 

@@ -31,7 +31,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using Serilog;
 
 namespace CoiniumServ.Payments

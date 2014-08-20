@@ -167,6 +167,7 @@
     <Compile Include="Persistance\Providers\Redis\IRedisProvider.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisOld.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisProvider.cs" />
+    <Compile Include="Pools\IPoolConfig.cs" />
     <Compile Include="Repository\Registries\StorageRegistry.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
     <Compile Include="Server\Web\Models\CurrentRoundModel.cs" />
@@ -321,7 +322,6 @@
     <Compile Include="Jobs\Manager\JobManager.cs" />
     <Compile Include="Miners\MinerManager.cs" />
     <Compile Include="Pools\IPool.cs" />
-    <Compile Include="Pools\Config\IPoolConfig.cs" />
     <Compile Include="Pools\IPoolManager.cs" />
     <Compile Include="Pools\Pool.cs" />
     <Compile Include="Shares\IShareManager.cs" />
@@ -332,7 +332,7 @@
     <Compile Include="Server\Mining\Stratum\IStratumServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\IVanillaServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaMiner.cs" />
-    <Compile Include="Pools\Config\PoolConfig.cs" />
+    <Compile Include="Pools\PoolConfig.cs" />
     <Compile Include="Pools\PoolManager.cs" />
     <Compile Include="Server\Mining\Vanilla\Service\HttpServiceContext.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaServer.cs" />

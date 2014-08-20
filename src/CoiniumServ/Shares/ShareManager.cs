@@ -30,7 +30,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Errors;
 using CoiniumServ.Server.Mining.Vanilla;

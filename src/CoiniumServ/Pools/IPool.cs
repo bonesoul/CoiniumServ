@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Statistics;
 
 namespace CoiniumServ.Pools

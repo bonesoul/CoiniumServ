@@ -38,7 +38,7 @@ using CoiniumServ.Daemon.Responses;
 
 // Original bitcoin api call list: https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_Calls_list
 // Rpc error codes: https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 
 namespace CoiniumServ.Daemon
 {

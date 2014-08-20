@@ -27,7 +27,7 @@ using System.Globalization;
 using System.Linq;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Time;

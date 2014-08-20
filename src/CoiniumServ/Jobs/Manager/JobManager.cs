@@ -29,7 +29,7 @@ using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Shares;

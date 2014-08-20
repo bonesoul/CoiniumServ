@@ -23,7 +23,7 @@
 
 using AustinHarris.JsonRpc;
 using CoiniumServ.Jobs;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Mining.Stratum.Responses;
 using CoiniumServ.Shares;

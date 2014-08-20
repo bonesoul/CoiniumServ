@@ -30,7 +30,6 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Providers.Redis;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Statistics;

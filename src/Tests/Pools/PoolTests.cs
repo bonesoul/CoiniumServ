@@ -26,7 +26,6 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Factories;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using NSubstitute;
 using Should.Fluent;
 using Xunit;

@@ -23,7 +23,7 @@
 
 using System;
 using System.Collections.Generic;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 
 namespace CoiniumServ.Statistics
 {

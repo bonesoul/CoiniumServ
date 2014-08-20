@@ -30,7 +30,6 @@ using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Factories;
 using CoiniumServ.Logging;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;

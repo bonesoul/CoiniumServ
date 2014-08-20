@@ -21,7 +21,7 @@
 // 
 #endregion
 
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using MySql.Data.MySqlClient;
 using Serilog;
 
