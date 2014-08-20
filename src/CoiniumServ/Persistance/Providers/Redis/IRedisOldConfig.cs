@@ -20,12 +20,33 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Persistance
+
+using System;
+
+namespace CoiniumServ.Persistance.Providers.Redis
 {
-    public static class Storages
+    public interface IRedisOldConfig : IStorageConfigOld
     {
-        public const string Redis = "redis";
-        public const string MySql = "mysql";
-        public const string MPOS = "mpos";
+        bool Enabled { get; }
+
+        /// <summary>
+        /// redis host.
+        /// </summary>
+        string Host { get; }
+
+        /// <summary>
+        /// redis port.
+        /// </summary>
+        Int32 Port { get;  }
+
+        /// <summary>
+        /// the password if redis installation requires one.
+        /// </summary>
+        string Password { get;  }
+
+        /// <summary>
+        /// redis database instance id
+        /// </summary>
+        int DatabaseId { get;  }
     }
 }

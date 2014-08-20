@@ -34,14 +34,14 @@ namespace CoiniumServ.Persistance.Providers.Redis
 
         public RedisClient Client { get; private set; }
 
-        private readonly IRedisConfig _redisConfig;      
+        private readonly IRedisOldConfig _redisConfig;      
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
         private readonly ILogger _logger;
 
         public RedisProvider(PoolConfig poolConfig)
         {
             _logger = Log.ForContext<RedisProvider>().ForContext("Component", poolConfig.Coin.Name);
-            _redisConfig = (IRedisConfig)poolConfig.Storage; // redis config.
+            _redisConfig = (IRedisOldConfig)poolConfig.StorageOld; // redis config.
 
             Initialize();
         }

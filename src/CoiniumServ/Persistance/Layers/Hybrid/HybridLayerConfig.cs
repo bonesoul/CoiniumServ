@@ -22,33 +22,40 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using CoiniumServ.Persistance.Providers;
+using CoiniumServ.Persistance.Providers.MySql;
+using CoiniumServ.Persistance.Providers.Redis;
 using Serilog;
 
-namespace CoiniumServ.Persistance.Providers.Redis
+namespace CoiniumServ.Persistance.Layers.Hybrid
 {
-    public class RedisConfig:IRedisConfig
+    public class HybridLayerConfig : IStorageLayerConfig
     {
         public bool Valid { get; private set; }
-        public string Host { get; private set; }
-        public int Port { get; private set; }
-        public string Password { get; private set; }
-        public int DatabaseId { get; private set; }
+        public bool Enabled { get; private set; }
+        public IList<IStorageProviderConfig> Providers { get; private set; }
 
-        public RedisConfig(dynamic config)
+        public HybridLayerConfig(dynamic config)
         {
             try
             {
-                // load the config data.
-                Host = string.IsNullOrEmpty(config.host) ? "127.0.0.1" : config.host;
-                Port = config.port == 0 ? 6379 : config.port;
-                Password = config.password;
-                DatabaseId = config.databaseId;
-                Valid = true;
+                Enabled = config.enabled;
+
+                Providers = new List<IStorageProviderConfig>
+                {
+                    new MySqlConfig(config.mysql),
+                    new RedisConfig(config.redis)
+                };
+
+                // make sure all supplied provider configs are valid
+                Valid = Providers.All(provider => provider.Valid);
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<RedisConfig>().Error(e, "Error loading redis configuration");
+                Log.Logger.ForContext<HybridLayerConfig>().Error(e, "Error loading hybrid storage layer configuration");
             }
         }
     }

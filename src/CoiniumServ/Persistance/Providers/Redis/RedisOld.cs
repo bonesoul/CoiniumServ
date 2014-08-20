@@ -45,7 +45,7 @@ namespace CoiniumServ.Persistance.Providers.Redis
         public bool IsConnected { get { return _client != null && _client.Connected; } }
 
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
-        private readonly IRedisConfig _redisConfig;
+        private readonly IRedisOldConfig _redisConfig;
         private readonly IPoolConfig _poolConfig;
 
         private readonly string _coin;
@@ -59,7 +59,7 @@ namespace CoiniumServ.Persistance.Providers.Redis
             _logger = Log.ForContext<RedisOld>().ForContext("Component", poolConfig.Coin.Name);
 
             _poolConfig = poolConfig; // the pool config.
-            _redisConfig = (IRedisConfig)poolConfig.Storage; // redis config.
+            _redisConfig = (IRedisOldConfig)poolConfig.StorageOld; // redis config.
             _coin = _poolConfig.Coin.Name.ToLower(); // pool's associated coin name.
 
             IsEnabled = _redisConfig.Enabled;

@@ -23,6 +23,7 @@
 
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Layers.Mpos;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
@@ -42,9 +43,15 @@ namespace CoiniumServ.Repository.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IStorageOld, RedisOld>(Storages.Redis).AsMultiInstance();
-            _applicationContext.Container.Register<IStorageProvider, MySqlProvider>(Storages.MySql).AsMultiInstance();
-            _applicationContext.Container.Register<IStorageLayer, MposStorage>(Storages.MPOS).AsMultiInstance();
+            _applicationContext.Container.Register<IStorageOld, RedisOld>(StorageProviders.Redis).AsMultiInstance();
+
+            // providers
+            _applicationContext.Container.Register<IStorageProvider, MySqlProvider>(StorageProviders.MySql).AsMultiInstance();
+            _applicationContext.Container.Register<IStorageProvider, RedisProvider>(StorageProviders.Redis).AsMultiInstance();
+
+            // layers
+            _applicationContext.Container.Register<IStorageLayer, HybridStorageLayer>(StorageLayers.Hybrid).AsMultiInstance();
+            _applicationContext.Container.Register<IStorageLayer, MposStorageLayer>(StorageLayers.Mpos).AsMultiInstance();            
         }
     }
 }

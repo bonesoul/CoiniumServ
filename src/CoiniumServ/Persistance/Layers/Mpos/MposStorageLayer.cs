@@ -36,15 +36,15 @@ using Serilog;
 
 namespace CoiniumServ.Persistance.Layers.Mpos
 {
-    public class MposStorage : IStorageLayer
+    public class MposStorageLayer : IStorageLayer
     {
         private readonly IMySqlProvider _mySqlProvider;
 
         private readonly ILogger _logger;
 
-        public MposStorage(IEnumerable<IStorageProvider> providers, PoolConfig poolConfig)
+        public MposStorageLayer(IEnumerable<IStorageProvider> providers, PoolConfig poolConfig)
         {
-            _logger = Log.ForContext<MposStorage>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<MposStorageLayer>().ForContext("Component", poolConfig.Coin.Name);
 
             foreach (var provider in providers)
             {

@@ -29,6 +29,7 @@ using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Vanilla;
 
@@ -60,6 +61,8 @@ namespace CoiniumServ.Pools
         IStratumServerConfig Stratum { get; }
 
         IBanConfig Banning { get; }
+
+        IStorageConfigOld StorageOld { get; }
 
         IStorageConfig Storage { get; }
 

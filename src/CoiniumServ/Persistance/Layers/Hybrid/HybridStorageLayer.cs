@@ -28,7 +28,7 @@ using CoiniumServ.Shares;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
 {
-    public class HybridStorage : IStorageLayer
+    public class HybridStorageLayer : IStorageLayer
     {
         public bool SupportsShareStorage { get; private set; }
 

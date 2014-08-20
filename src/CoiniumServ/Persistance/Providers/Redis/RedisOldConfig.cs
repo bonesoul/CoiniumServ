@@ -22,29 +22,36 @@
 #endregion
 
 using System;
+using Serilog;
 
 namespace CoiniumServ.Persistance.Providers.Redis
 {
-    public interface IRedisConfig:IStorageProviderConfig
+    public class RedisOldConfig:IRedisOldConfig
     {
-        /// <summary>
-        /// redis host.
-        /// </summary>
-        string Host { get; }
+        public bool Enabled { get; private set; }
+        public string Host { get; private set; }
+        public Int32 Port { get; private set; }
+        public string Password { get; private set; }
+        public int DatabaseId { get; private set; }
+        public bool Valid { get; private set; }
 
-        /// <summary>
-        /// redis port.
-        /// </summary>
-        Int32 Port { get; }
-
-        /// <summary>
-        /// the password if redis installation requires one.
-        /// </summary>
-        string Password { get; }
-
-        /// <summary>
-        /// redis database instance id
-        /// </summary>
-        int DatabaseId { get; }
+        public RedisOldConfig(dynamic config)
+        {
+            try
+            {
+                // load the config data.
+                Enabled = config.enabled;
+                Host = string.IsNullOrEmpty(config.host) ? "127.0.0.1" : config.host;
+                Port = config.port == 0 ? 6379 : config.port;
+                Password = config.password;
+                DatabaseId = config.databaseId;
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<RedisOldConfig>().Error(e, "Error loading redis configuration");
+            }
+        }
     }
 }

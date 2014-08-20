@@ -22,29 +22,36 @@
 #endregion
 
 using System;
+using Serilog;
 
-namespace CoiniumServ.Persistance.Providers.Redis
+namespace CoiniumServ.Persistance.Providers.MySql
 {
-    public interface IRedisConfig:IStorageProviderConfig
+    public class MySqlConfig : IMySqlConfig
     {
-        /// <summary>
-        /// redis host.
-        /// </summary>
-        string Host { get; }
+        public bool Valid { get; private set; }
+        public string Host { get; private set; }
+        public int Port { get; private set; }
+        public string Username { get; private set; }
+        public string Password { get; private set; }
+        public string Name { get; private set; }
 
-        /// <summary>
-        /// redis port.
-        /// </summary>
-        Int32 Port { get; }
-
-        /// <summary>
-        /// the password if redis installation requires one.
-        /// </summary>
-        string Password { get; }
-
-        /// <summary>
-        /// redis database instance id
-        /// </summary>
-        int DatabaseId { get; }
+        public MySqlConfig(dynamic config)
+        {
+            try
+            {
+                // load the config data.
+                Host = string.IsNullOrEmpty(config.host) ? "127.0.0.1" : config.host;
+                Port = config.port == 0 ? 3306 : config.port;
+                Username = config.user;
+                Password = config.password;
+                Name = config.name;
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<MySqlConfig>().Error(e, "Error loading mysql configuration");
+            }
+        }
     }
 }

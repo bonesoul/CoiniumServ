@@ -21,13 +21,11 @@
 // 
 #endregion
 
-using CoiniumServ.Configuration;
-using CoiniumServ.Persistance.Layers;
-
-namespace CoiniumServ.Persistance
+namespace CoiniumServ.Persistance.Providers
 {
-    public interface IStorageConfig : IConfig
+    public static class StorageProviders
     {
-        IStorageLayerConfig Layer { get; }
+        public const string Redis = "redis";
+        public const string MySql = "mysql";
     }
 }

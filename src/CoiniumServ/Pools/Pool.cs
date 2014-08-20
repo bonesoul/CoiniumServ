@@ -33,6 +33,7 @@ using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
@@ -152,14 +153,14 @@ namespace CoiniumServ.Pools
         {
             try
             {
-                var storage = _objectFactory.GetOldStorage(Storages.Redis, Config);
+                var storage = _objectFactory.GetOldStorage(StorageProviders.Redis, Config);
 
                 var providers = new List<IStorageProvider>
                 {
-                    _objectFactory.GetStorageProvider(Storages.MySql, Config)
+                    _objectFactory.GetStorageProvider(StorageProviders.MySql, Config)
                 };
 
-                var storageLayer = _objectFactory.GetStorageLayer(Storages.MPOS, providers, Config);
+                var storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Config);
 
                 _minerManager = _objectFactory.GetMinerManager(Config, _daemonClient);
 

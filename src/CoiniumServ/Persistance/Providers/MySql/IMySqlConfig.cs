@@ -21,13 +21,16 @@
 // 
 #endregion
 
-using CoiniumServ.Configuration;
-using CoiniumServ.Persistance.Layers;
+using System;
 
-namespace CoiniumServ.Persistance
+namespace CoiniumServ.Persistance.Providers.MySql
 {
-    public interface IStorageConfig : IConfig
+    public interface IMySqlConfig : IStorageProviderConfig
     {
-        IStorageLayerConfig Layer { get; }
+        string Host { get;  }
+        Int32 Port { get;}
+        string Username { get; }
+        string Password { get; }
+        string Name { get; }
     }
 }

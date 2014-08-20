@@ -22,12 +22,10 @@
 #endregion
 
 using CoiniumServ.Configuration;
-using CoiniumServ.Persistance.Layers;
 
-namespace CoiniumServ.Persistance
+namespace CoiniumServ.Persistance.Providers
 {
-    public interface IStorageConfig : IConfig
+    public interface IStorageProviderConfig:IConfig
     {
-        IStorageLayerConfig Layer { get; }
     }
 }

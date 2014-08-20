@@ -21,13 +21,16 @@
 // 
 #endregion
 
+using System.Collections.Generic;
 using CoiniumServ.Configuration;
-using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Providers;
 
-namespace CoiniumServ.Persistance
+namespace CoiniumServ.Persistance.Layers
 {
-    public interface IStorageConfig : IConfig
+    public interface IStorageLayerConfig : IConfig
     {
-        IStorageLayerConfig Layer { get; }
+        bool Enabled { get; }
+
+        IList<IStorageProviderConfig> Providers { get; }
     }
 }

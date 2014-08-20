@@ -21,13 +21,11 @@
 // 
 #endregion
 
-using CoiniumServ.Configuration;
-using CoiniumServ.Persistance.Layers;
-
-namespace CoiniumServ.Persistance
+namespace CoiniumServ.Persistance.Layers
 {
-    public interface IStorageConfig : IConfig
+    public static class StorageLayers
     {
-        IStorageLayerConfig Layer { get; }
+        public const string Mpos = "mpos";
+        public const string Hybrid = "hybrid";        
     }
 }

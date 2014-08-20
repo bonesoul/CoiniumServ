@@ -94,13 +94,13 @@
 	"storage": {
         "hybrid": {
             "enabled": false,
-            "database": {
+            "mysql": {
 			    "name": "db-name"
 		    }
         },
         "mpos": {
 		    "enabled": false,
-		    "database": {
+		    "mysql": {
 			    "name": "db-name"
 		    }
         },
