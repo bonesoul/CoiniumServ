@@ -21,39 +21,44 @@
 // 
 #endregion
 
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using CoiniumServ.Persistance;
-using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Payments;
+using CoiniumServ.Shares;
+using Simple.Data;
 
-namespace CoiniumServ.Statistics
+namespace CoiniumServ.Persistance.Layers.Mpos
 {
-    public class LatestBlocks:ILatestBlocks
+    public class MposStorage : IStorageLayer, IShareStorage, IWorkerStorage
     {
-        private IEnumerable<IPersistedBlock> _blocks;
-
-        private readonly IStorageOld _storage;
-
-        public LatestBlocks(IStorageOld storage)
+        public void Test()
         {
-            _storage = storage;
+            var db = Database.OpenConnection("Server=localhost;Port=3306;Database=mpos;Uid=root;provider=MySql.Data");
+            var test =db.Settings.FindByName("DB_VERSION");
         }
 
-        public IEnumerator<IPersistedBlock> GetEnumerator()
+        public void AddShare(IShare share)
         {
-            return _blocks.GetEnumerator();
+            throw new System.NotImplementedException();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public void RemoveShares(IPaymentRound round)
         {
-            return GetEnumerator();
+            throw new System.NotImplementedException();
         }
 
-        public void Recache(object state)
+        public Dictionary<string, double> GetCurrentShares()
         {
-            // read latest blocks            
-            _blocks = _storage.GetAllBlocks().OrderByDescending(x => x.Key).Take(20).Select(item => item.Value).ToList();
+            throw new System.NotImplementedException();
+        }
+
+        public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void GetWorker(string username)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

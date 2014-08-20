@@ -146,7 +146,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IJobTracker>();
         }
 
-        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, IBlockProcessor blockProcessor)
+        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageOld storage, IBlockProcessor blockProcessor)
         {
             var @params = new NamedParameterOverloads
             {
@@ -160,7 +160,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IShareManager>(@params);
         }
 
-        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage, IBlockProcessor blockProcessor)
+        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageOld storage, IBlockProcessor blockProcessor)
         {
             var @params = new NamedParameterOverloads
             {
@@ -230,7 +230,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IPools>();
         }
 
-        public IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorage storage)
+        public IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorageOld storage)
         {
             var @params = new NamedParameterOverloads
             {
@@ -245,7 +245,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IPerPool>(@params);
         }
 
-        public ILatestBlocks GetLatestBlocks(IStorage storage)
+        public ILatestBlocks GetLatestBlocks(IStorageOld storage)
         {
             var @params = new NamedParameterOverloads
             {
@@ -255,7 +255,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<ILatestBlocks>(@params);
         }
 
-        public IBlocksCount GetBlockStats(ILatestBlocks latestBlocks, IStorage storage)
+        public IBlocksCount GetBlockStats(ILatestBlocks latestBlocks, IStorageOld storage)
         {
             var @params = new NamedParameterOverloads
             {
@@ -311,14 +311,14 @@ namespace CoiniumServ.Factories
 
         #region other objects
 
-        public IStorage GetStorage(string type, IPoolConfig poolConfig)
+        public IStorageOld GetStorage(string type, IPoolConfig poolConfig)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig}
             };
 
-            return _applicationContext.Container.Resolve<IStorage>(type, @params);
+            return _applicationContext.Container.Resolve<IStorageOld>(type, @params);
         }
 
         public ILogManager GetLogManager()

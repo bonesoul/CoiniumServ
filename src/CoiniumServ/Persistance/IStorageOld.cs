@@ -21,39 +21,44 @@
 // 
 #endregion
 
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using CoiniumServ.Persistance;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Shares;
 
-namespace CoiniumServ.Statistics
+namespace CoiniumServ.Persistance
 {
-    public class LatestBlocks:ILatestBlocks
+    public interface IStorageOld
     {
-        private IEnumerable<IPersistedBlock> _blocks;
+        bool IsEnabled { get; }
 
-        private readonly IStorageOld _storage;
+        void AddShare(IShare share);
 
-        public LatestBlocks(IStorageOld storage)
-        {
-            _storage = storage;
-        }
+        void AddBlock(IShare share);
 
-        public IEnumerator<IPersistedBlock> GetEnumerator()
-        {
-            return _blocks.GetEnumerator();
-        }
+        void SetRemainingBalances(IList<IWorkerBalance> workerBalances);
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        void DeleteShares(IPaymentRound round);
 
-        public void Recache(object state)
-        {
-            // read latest blocks            
-            _blocks = _storage.GetAllBlocks().OrderByDescending(x => x.Key).Take(20).Select(item => item.Value).ToList();
-        }
+        void MoveSharesToCurrentRound(IPaymentRound round);
+
+        void MoveBlock(IPaymentRound round);
+
+        IDictionary<string, int> GetBlockCounts();
+
+        void DeleteExpiredHashrateData(int until);
+
+        IDictionary<string, double> GetHashrateData(int since);
+
+        IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
+
+        IDictionary<UInt32, IPersistedBlock> GetAllBlocks();
+
+        Dictionary<string, double> GetSharesForCurrentRound();
+
+        Dictionary<UInt32, Dictionary<string, double>> GetSharesForRounds(IList<IPaymentRound> rounds);
+
+        Dictionary<string, double> GetPreviousBalances();
     }
 }

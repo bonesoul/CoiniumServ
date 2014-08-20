@@ -28,7 +28,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
-using CoiniumServ.Persistance.Redis;
+using CoiniumServ.Persistance.Providers.Redis;
 using CoiniumServ.Pools;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Repository.Context;
@@ -71,7 +71,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
 
             // storage
-            _applicationContext.Container.Register<IStorage, Redis>(Storages.Redis).AsMultiInstance();
+            _applicationContext.Container.Register<IStorageOld, RedisOld>(Storages.Redis).AsMultiInstance();
 
             // web
             _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();

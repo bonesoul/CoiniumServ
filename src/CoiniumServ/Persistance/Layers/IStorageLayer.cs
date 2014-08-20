@@ -21,10 +21,9 @@
 // 
 #endregion
 
-namespace CoiniumServ.Persistance.Redis
+namespace CoiniumServ.Persistance.Layers
 {
-    public interface IRedis
+    public interface IStorageLayer
     {
-        bool IsConnected { get; }
     }
 }

@@ -22,35 +22,23 @@
 #endregion
 
 using System;
-using Serilog;
+using System.Collections.Generic;
+using CoiniumServ.Payments;
+using CoiniumServ.Shares;
 
-namespace CoiniumServ.Persistance.Redis
+namespace CoiniumServ.Persistance.Layers
 {
-    public class RedisConfig:IRedisConfig
+    /// <summary>
+    /// Interface that exposes services for storing shares
+    /// </summary>
+    public interface IShareStorage
     {
-        public bool Enabled { get; private set; }
-        public string Host { get; private set; }
-        public Int32 Port { get; private set; }
-        public string Password { get; private set; }
-        public int DatabaseId { get; private set; }
-        public bool Valid { get; private set; }
+        void AddShare(IShare share);
 
-        public RedisConfig(dynamic config)
-        {
-            try
-            {
-                // load the config data.
-                Enabled = config.enabled;
-                Host = string.IsNullOrEmpty(config.host) ? "127.0.0.1" : config.host;
-                Port = config.port == 0 ? 6379 : config.port;
-                Password = config.password;
-                DatabaseId = config.databaseId;
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<RedisConfig>().Error(e, "Error loading redis configuration");
-            }
-        }
+        void RemoveShares(IPaymentRound round);
+
+        Dictionary<string, double> GetCurrentShares();
+
+        Dictionary<UInt32, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds);
     }
 }

@@ -29,17 +29,17 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Pools.Config;
 using CoiniumServ.Shares;
-using CoiniumServ.Utils.Helpers.Time;
 using CoiniumServ.Utils.Extensions;
+using CoiniumServ.Utils.Helpers.Time;
 using CSRedis;
 using Serilog;
 
-namespace CoiniumServ.Persistance.Redis
+namespace CoiniumServ.Persistance.Providers.Redis
 {
     /// <summary>
     /// CSRedis based redis client.
     /// </summary>
-    public class Redis:IStorage, IRedis
+    public class RedisOld:IStorageOld, IRedisOld
     {
         public bool IsEnabled { get; private set; }
         public bool IsConnected { get { return _client != null && _client.Connected; } }
@@ -54,9 +54,9 @@ namespace CoiniumServ.Persistance.Redis
 
         private readonly ILogger _logger;
 
-        public Redis(PoolConfig poolConfig)
+        public RedisOld(PoolConfig poolConfig)
         {
-            _logger = Log.ForContext<Redis>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<RedisOld>().ForContext("Component", poolConfig.Coin.Name);
 
             _poolConfig = poolConfig; // the pool config.
             _redisConfig = (IRedisConfig)poolConfig.Storage; // redis config.

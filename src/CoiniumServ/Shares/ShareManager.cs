@@ -48,7 +48,7 @@ namespace CoiniumServ.Shares
 
         private readonly IDaemonClient _daemonClient;
 
-        private readonly IStorage _storage;
+        private readonly IStorageOld _storage;
 
         private readonly IBlockProcessor _blockProcessor;
 
@@ -64,7 +64,7 @@ namespace CoiniumServ.Shares
         /// <param name="jobTracker"></param>
         /// <param name="storage"></param>
         /// <param name="blockProcessor"></param>
-        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, IBlockProcessor blockProcessor)
+        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageOld storage, IBlockProcessor blockProcessor)
         {
             _poolConfig = poolConfig;
             _daemonClient = daemonClient;

@@ -33,9 +33,9 @@ namespace CoiniumServ.Statistics
         public int Total { get; private set; }
         public ILatestBlocks Latest { get; private set; }
 
-        private readonly IStorage _storage;
+        private readonly IStorageOld _storage;
 
-        public BlocksCount(ILatestBlocks latestBlocks, IStorage storage)
+        public BlocksCount(ILatestBlocks latestBlocks, IStorageOld storage)
         {
             _storage = storage;
             Latest = latestBlocks;

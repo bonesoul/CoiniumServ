@@ -44,7 +44,7 @@ namespace CoiniumServ.Payments
 
         private readonly IDaemonClient _daemonClient;
 
-        private readonly IStorage _storage;
+        private readonly IStorageOld _storage;
 
         private IPaymentConfig _config;
 
@@ -65,7 +65,7 @@ namespace CoiniumServ.Payments
 
         private readonly ILogger _logger;
 
-        public PaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage, IBlockProcessor blockProcessor)
+        public PaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageOld storage, IBlockProcessor blockProcessor)
         {
             _daemonClient = daemonClient;
             _storage = storage;

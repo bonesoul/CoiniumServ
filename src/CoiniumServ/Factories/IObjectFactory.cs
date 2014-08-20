@@ -79,9 +79,9 @@ namespace CoiniumServ.Factories
 
         IJobTracker GetJobTracker();
 
-        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, IBlockProcessor blockProcessor);
+        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageOld storage, IBlockProcessor blockProcessor);
 
-        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage, IBlockProcessor blockProcessor);
+        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageOld storage, IBlockProcessor blockProcessor);
 
         IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient);
 
@@ -101,11 +101,11 @@ namespace CoiniumServ.Factories
 
         IPools GetPoolStats();
 
-        IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorage storage);
+        IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorageOld storage);
 
-        IBlocksCount GetBlockStats(ILatestBlocks latestBlocks, IStorage storage);
+        IBlocksCount GetBlockStats(ILatestBlocks latestBlocks, IStorageOld storage);
 
-        ILatestBlocks GetLatestBlocks(IStorage storage);
+        ILatestBlocks GetLatestBlocks(IStorageOld storage);
 
         #endregion
 
@@ -123,7 +123,7 @@ namespace CoiniumServ.Factories
         #endregion
 
         #region other objects
-        IStorage GetStorage(string type, IPoolConfig poolConfig);
+        IStorageOld GetStorage(string type, IPoolConfig poolConfig);
 
         ILogManager GetLogManager();
 

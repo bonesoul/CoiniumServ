@@ -23,7 +23,7 @@
 
 using System;
 
-namespace CoiniumServ.Persistance.Redis
+namespace CoiniumServ.Persistance.Providers.Redis
 {
     public interface IRedisConfig : IStorageConfig
     {

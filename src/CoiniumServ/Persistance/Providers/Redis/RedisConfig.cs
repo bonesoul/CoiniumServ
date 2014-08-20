@@ -21,39 +21,36 @@
 // 
 #endregion
 
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using CoiniumServ.Persistance;
-using CoiniumServ.Persistance.Blocks;
+using System;
+using Serilog;
 
-namespace CoiniumServ.Statistics
+namespace CoiniumServ.Persistance.Providers.Redis
 {
-    public class LatestBlocks:ILatestBlocks
+    public class RedisConfig:IRedisConfig
     {
-        private IEnumerable<IPersistedBlock> _blocks;
+        public bool Enabled { get; private set; }
+        public string Host { get; private set; }
+        public Int32 Port { get; private set; }
+        public string Password { get; private set; }
+        public int DatabaseId { get; private set; }
+        public bool Valid { get; private set; }
 
-        private readonly IStorageOld _storage;
-
-        public LatestBlocks(IStorageOld storage)
+        public RedisConfig(dynamic config)
         {
-            _storage = storage;
-        }
-
-        public IEnumerator<IPersistedBlock> GetEnumerator()
-        {
-            return _blocks.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void Recache(object state)
-        {
-            // read latest blocks            
-            _blocks = _storage.GetAllBlocks().OrderByDescending(x => x.Key).Take(20).Select(item => item.Value).ToList();
+            try
+            {
+                // load the config data.
+                Enabled = config.enabled;
+                Host = string.IsNullOrEmpty(config.host) ? "127.0.0.1" : config.host;
+                Port = config.port == 0 ? 6379 : config.port;
+                Password = config.password;
+                DatabaseId = config.databaseId;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<RedisConfig>().Error(e, "Error loading redis configuration");
+            }
         }
     }
 }

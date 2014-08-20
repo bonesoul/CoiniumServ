@@ -56,7 +56,7 @@ namespace CoiniumServ.Statistics
         public string CurrentRoundJson { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
-        private readonly IStorage _storage;
+        private readonly IStorageOld _storage;
         private readonly IMinerManager _minerManager;
         private readonly IStatisticsConfig _statisticsConfig;
 
@@ -64,7 +64,7 @@ namespace CoiniumServ.Statistics
 
         private readonly double _shareMultiplier;
 
-        public PerPool(IPoolConfig poolConfig, IConfigManager configManager, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorage storage)
+        public PerPool(IPoolConfig poolConfig, IConfigManager configManager, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorageOld storage)
         {
             Config = poolConfig;
             _statisticsConfig = configManager.WebServerConfig.Statistics;

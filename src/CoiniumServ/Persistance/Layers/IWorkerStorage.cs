@@ -21,39 +21,10 @@
 // 
 #endregion
 
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using CoiniumServ.Persistance;
-using CoiniumServ.Persistance.Blocks;
-
-namespace CoiniumServ.Statistics
+namespace CoiniumServ.Persistance.Layers
 {
-    public class LatestBlocks:ILatestBlocks
+    public interface IWorkerStorage
     {
-        private IEnumerable<IPersistedBlock> _blocks;
-
-        private readonly IStorageOld _storage;
-
-        public LatestBlocks(IStorageOld storage)
-        {
-            _storage = storage;
-        }
-
-        public IEnumerator<IPersistedBlock> GetEnumerator()
-        {
-            return _blocks.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void Recache(object state)
-        {
-            // read latest blocks            
-            _blocks = _storage.GetAllBlocks().OrderByDescending(x => x.Key).Take(20).Select(item => item.Value).ToList();
-        }
+        void GetWorker(string username);
     }
 }
