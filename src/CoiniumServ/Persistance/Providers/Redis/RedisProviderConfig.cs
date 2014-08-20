@@ -22,40 +22,33 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using CoiniumServ.Persistance.Providers;
-using CoiniumServ.Persistance.Providers.MySql;
-using CoiniumServ.Persistance.Providers.Redis;
 using Serilog;
 
-namespace CoiniumServ.Persistance.Layers.Hybrid
+namespace CoiniumServ.Persistance.Providers.Redis
 {
-    public class HybridLayerConfig : IStorageLayerConfig
+    public class RedisProviderConfig:IRedisProviderConfig
     {
         public bool Valid { get; private set; }
-        public bool Enabled { get; private set; }
-        public IList<IStorageProviderConfig> Providers { get; private set; }
+        public string Host { get; private set; }
+        public int Port { get; private set; }
+        public string Password { get; private set; }
+        public int DatabaseId { get; private set; }
 
-        public HybridLayerConfig(dynamic config)
+        public RedisProviderConfig(dynamic config)
         {
             try
             {
-                Enabled = config.enabled;
-
-                Providers = new List<IStorageProviderConfig>
-                {
-                    new MySqlConfig(config.mysql),
-                    new RedisConfig(config.redis)
-                };
-
-                // make sure all supplied provider configs are valid
-                Valid = Providers.All(provider => provider.Valid);
+                // load the config data.
+                Host = string.IsNullOrEmpty(config.host) ? "127.0.0.1" : config.host;
+                Port = config.port == 0 ? 6379 : config.port;
+                Password = config.password;
+                DatabaseId = config.databaseId;
+                Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<HybridLayerConfig>().Error(e, "Error loading hybrid storage layer configuration");
+                Log.Logger.ForContext<RedisProviderConfig>().Error(e, "Error loading redis configuration");
             }
         }
     }

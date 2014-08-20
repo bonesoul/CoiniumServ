@@ -129,7 +129,7 @@ namespace CoiniumServ.Factories
 
         IStorageOld GetOldStorage(string type, IPoolConfig poolConfig);
 
-        IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig);
+        IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig, IStorageProviderConfig config);
 
         IStorageLayer GetStorageLayer(string type, IEnumerable<IStorageProvider> providers, IPoolConfig poolConfig);
 

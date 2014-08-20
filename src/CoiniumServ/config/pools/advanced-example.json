@@ -167,7 +167,7 @@
     # port: database port.
     # username: username for connecting the database.
     # password: password for connecting the database.
-    # name: database-name.
+    # database: database name.
 
 	"storage": {
         "hybrid": {
@@ -183,7 +183,7 @@
 			    "port": 3306,
 			    "user": "username",
 			    "password": "password",
-                "name": "db-name"
+                "database": "db-name"
 		    }
         },
         "mpos": {
@@ -193,7 +193,7 @@
 			    "port": 3306,
 			    "user": "username",
 			    "password": "password",
-                "name": "db-name"
+                "database": "db-name"
 		    }
         },
 		"redis": {

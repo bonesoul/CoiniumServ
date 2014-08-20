@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using CoiniumServ.Banning;
 using CoiniumServ.Coin.Helpers;
@@ -34,7 +35,11 @@ using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Layers.Empty;
+using CoiniumServ.Persistance.Layers.Hybrid;
+using CoiniumServ.Persistance.Layers.Mpos;
 using CoiniumServ.Persistance.Providers;
+using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
@@ -63,6 +68,7 @@ namespace CoiniumServ.Pools
         private IShareManager _shareManager;
         private IHashAlgorithm _hashAlgorithm;
         private IBanManager _banningManager;
+        private IStorageLayer _storageLayer;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
@@ -96,6 +102,7 @@ namespace CoiniumServ.Pools
             GenerateInstanceId();
 
             InitDaemon();
+            InitStorage();
             InitManagers();
             InitServers();
         }
@@ -149,18 +156,30 @@ namespace CoiniumServ.Pools
             }
         }
 
+        private void InitStorage()
+        {
+            // load the providers for the current storage layer.
+            var providers =
+                Config.Storage.Layer.Providers.Select(
+                    providerConfig =>
+                        _objectFactory.GetStorageProvider(
+                            providerConfig is IMySqlProviderConfig ? StorageProviders.MySql : StorageProviders.Redis,
+                            Config, providerConfig)).ToList();
+
+            // load the storage layer.
+            if (Config.Storage.Layer is HybridStorageLayerConfig)
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, Config);
+            else if (Config.Storage.Layer is MposStorageLayerConfig)
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Config);
+            else if (Config.Storage.Layer is EmptyStorageLayerConfig)
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, Config);
+        }
+
         private void InitManagers()
         {
             try
             {
                 var storage = _objectFactory.GetOldStorage(StorageProviders.Redis, Config);
-
-                var providers = new List<IStorageProvider>
-                {
-                    _objectFactory.GetStorageProvider(StorageProviders.MySql, Config)
-                };
-
-                var storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Config);
 
                 _minerManager = _objectFactory.GetMinerManager(Config, _daemonClient);
 
@@ -168,7 +187,7 @@ namespace CoiniumServ.Pools
 
                 var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
 
-                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, storageLayer, storage, blockProcessor);
+                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, _storageLayer, storage, blockProcessor);
 
                 var vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
 

@@ -23,6 +23,7 @@
 
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Layers.Empty;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Layers.Mpos;
 using CoiniumServ.Persistance.Providers;
@@ -51,7 +52,8 @@ namespace CoiniumServ.Repository.Registries
 
             // layers
             _applicationContext.Container.Register<IStorageLayer, HybridStorageLayer>(StorageLayers.Hybrid).AsMultiInstance();
-            _applicationContext.Container.Register<IStorageLayer, MposStorageLayer>(StorageLayers.Mpos).AsMultiInstance();            
+            _applicationContext.Container.Register<IStorageLayer, MposStorageLayer>(StorageLayers.Mpos).AsMultiInstance();
+            _applicationContext.Container.Register<IStorageLayer, EmptyStorageLayer>(StorageLayers.Empty).AsSingleton();
         }
     }
 }

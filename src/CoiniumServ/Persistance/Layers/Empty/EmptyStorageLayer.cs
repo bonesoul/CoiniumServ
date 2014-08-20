@@ -21,74 +21,64 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Persistance.Providers;
-using CoiniumServ.Pools;
 using CoiniumServ.Shares;
-using Serilog;
 
-namespace CoiniumServ.Persistance.Layers.Hybrid
+namespace CoiniumServ.Persistance.Layers.Empty
 {
-    public class HybridStorageLayer : IStorageLayer
+    public class EmptyStorageLayer : IStorageLayer
     {
-        public bool SupportsShareStorage { get { return true; } }
-        public bool SupportsBlockStorage { get { return true; } }
+        public bool SupportsShareStorage { get { return false; } }
+        public bool SupportsBlockStorage { get { return false; } }
         public bool SupportsWorkerStorage { get { return false; } }
-        public bool SupportsPaymentsStorage { get { return true; } }
-
-        private readonly ILogger _logger;
-
-        public HybridStorageLayer(IEnumerable<IStorageProvider> providers, PoolConfig poolConfig)
-        {
-            _logger = Log.ForContext<HybridStorageLayer>().ForContext("Component", poolConfig.Coin.Name);
-
-        }
+        public bool SupportsPaymentsStorage { get { return false; } }
 
         public void AddShare(IShare share)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void RemoveShares(IPaymentRound round)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Dictionary<string, double> GetCurrentShares()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void AddBlock(IShare share)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void UpdateBlock(IPaymentRound round)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IDictionary<string, int> GetTotalBlocks()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void GetWorker(string username)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

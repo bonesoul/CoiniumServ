@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System;
 using CoiniumServ.Pools;
 using MySql.Data.MySqlClient;
 using Serilog;
@@ -33,19 +34,34 @@ namespace CoiniumServ.Persistance.Providers.MySql
     {
         public bool IsConnected { get; private set; }
         public MySqlConnection Connection { get; private set; }
+        public IMySqlProviderConfig Config { get; private set; }
 
         private readonly ILogger _logger;
 
-        public MySqlProvider(PoolConfig poolConfig)
+        public MySqlProvider(PoolConfig poolConfig, IMySqlProviderConfig config)
         {
             _logger = Log.ForContext<MySqlProvider>().ForContext("Component", poolConfig.Coin.Name);
+
+            Config = config;
 
             Initialize();
         }
         private void Initialize()
         {
-            Connection = new MySqlConnection("Server=10.0.0.13;Port=3306;Database=mpos;Uid=root;Password=123456");
-            Connection.Open();
+            try
+            {
+                var connectionString = string.Format("Server={0};Port={1};Uid={2};Password={3};Database={4};",
+                    Config.Host, Config.Port, Config.Username, Config.Password, Config.Database);
+
+                Connection = new MySqlConnection(connectionString);
+                Connection.Open();
+
+                _logger.Information("Mysql storage initialized: {0:l}:{1}, database: {2:l}.", Config.Host, Config.Port, Config.Database);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Mysql storage initialization failed: {0:l}:{1}, database: {2:l} - {3:l}", Config.Host, Config.Port, Config.Database, e.Message);
+            }
         }
     }
 }

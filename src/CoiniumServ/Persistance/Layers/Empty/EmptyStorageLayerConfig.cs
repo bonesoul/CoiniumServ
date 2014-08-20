@@ -21,57 +21,26 @@
 // 
 #endregion
 
-using System;
 using System.Collections.Generic;
-using CoiniumServ.Payments;
-using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Shares;
+using CoiniumServ.Persistance.Providers;
 
-namespace CoiniumServ.Persistance.Layers
+namespace CoiniumServ.Persistance.Layers.Empty
 {
-    public interface IStorageLayer
+    public class EmptyStorageLayerConfig:IStorageLayerConfig
     {
+        public bool Valid { get; private set; }
+        public bool Enabled { get; private set; }
+        public IList<IStorageProviderConfig> Providers { get; private set; }
 
-        #region share storage
+        public static EmptyStorageLayerConfig Empty = new EmptyStorageLayerConfig();
 
-        bool SupportsShareStorage { get; }
+        public EmptyStorageLayerConfig()
+        {
+            Enabled = true;
 
-        void AddShare(IShare share);
+            Providers = new List<IStorageProviderConfig>();
 
-        void RemoveShares(IPaymentRound round);
-
-        Dictionary<string, double> GetCurrentShares();
-
-        Dictionary<UInt32, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds);
-
-        #endregion
-
-        #region block storage
-
-        bool SupportsBlockStorage { get; }
-
-        void AddBlock(IShare share);
-
-        void UpdateBlock(IPaymentRound round);
-
-        IDictionary<string, int> GetTotalBlocks();
-
-        IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
-
-        #endregion
-
-        #region worker storage
-
-        bool SupportsWorkerStorage { get; }
-
-        void GetWorker(string username);
-
-        #endregion
-
-        #region payments storage
-
-        bool SupportsPaymentsStorage { get; }
-
-        #endregion
+            Valid = true;
+        }
     }
 }

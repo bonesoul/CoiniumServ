@@ -36,6 +36,7 @@ using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
+using CoiniumServ.Persistance.Providers.Redis;
 using CoiniumServ.Pools;
 using CoiniumServ.Repository.Context;
 using CoiniumServ.Server.Mining;
@@ -325,11 +326,12 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IStorageOld>(type, @params);
         }
 
-        public IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig)
+        public IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig, IStorageProviderConfig config)
         {
             var @params = new NamedParameterOverloads
             {
-                {"poolConfig", poolConfig}
+                {"poolConfig", poolConfig},
+                {"config", config}
             };
 
             return _applicationContext.Container.Resolve<IStorageProvider>(type, @params);
@@ -343,7 +345,9 @@ namespace CoiniumServ.Factories
                 {"poolConfig", poolConfig}
             };
 
-            return _applicationContext.Container.Resolve<IStorageLayer>(type, @params);
+            return type != StorageLayers.Empty
+                ? _applicationContext.Container.Resolve<IStorageLayer>(type, @params)
+                : _applicationContext.Container.Resolve<IStorageLayer>(type);
         }
 
         #endregion

@@ -23,28 +23,14 @@
 
 using System;
 
-namespace CoiniumServ.Persistance.Providers.Redis
+namespace CoiniumServ.Persistance.Providers.MySql
 {
-    public interface IRedisConfig:IStorageProviderConfig
+    public interface IMySqlProviderConfig : IStorageProviderConfig
     {
-        /// <summary>
-        /// redis host.
-        /// </summary>
-        string Host { get; }
-
-        /// <summary>
-        /// redis port.
-        /// </summary>
-        Int32 Port { get; }
-
-        /// <summary>
-        /// the password if redis installation requires one.
-        /// </summary>
+        string Host { get;  }
+        Int32 Port { get;}
+        string Username { get; }
         string Password { get; }
-
-        /// <summary>
-        /// redis database instance id
-        /// </summary>
-        int DatabaseId { get; }
+        string Database { get; }
     }
 }

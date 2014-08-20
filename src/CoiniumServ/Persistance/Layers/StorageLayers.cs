@@ -26,6 +26,7 @@ namespace CoiniumServ.Persistance.Layers
     public static class StorageLayers
     {
         public const string Mpos = "mpos";
-        public const string Hybrid = "hybrid";        
+        public const string Hybrid = "hybrid";
+        public const string Empty = "empty";
     }
 }

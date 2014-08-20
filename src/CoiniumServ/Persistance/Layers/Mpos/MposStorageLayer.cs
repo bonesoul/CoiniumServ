@@ -38,6 +38,11 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 {
     public class MposStorageLayer : IStorageLayer
     {
+        public bool SupportsShareStorage { get { return true; } }
+        public bool SupportsBlockStorage { get { return false; } }
+        public bool SupportsWorkerStorage { get { return true; } }
+        public bool SupportsPaymentsStorage { get { return false; } }
+
         private readonly IMySqlProvider _mySqlProvider;
 
         private readonly ILogger _logger;
@@ -52,27 +57,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                     _mySqlProvider = (IMySqlProvider) provider;
             }
         }
-
-//            connection.Execute(
-//                @"insert shares(rem_host, username, our_result, upstream_result, reason, solution, difficulty,time) 
-//                    values (@rem_host, @username, @our_result, @upstream_result, @reason, @solution, @difficulty, @time)",
-//                new
-//                {
-//                    rem_host = "127.0.0.1",
-//                    username = "test",
-//                    our_result = 'Y',
-//                    upstream_result = 'Y',
-//                    reason = "test",
-//                    solution = "test",
-//                    difficulty = 5,
-//                    time = DateTime.Now
-//                });
-
-            //var db = Database.OpenConnection("Server=localhost;Port=3306;Database=mpos;Uid=root;provider=MySql.Data");
-            //var test =db.Settings.FindByName("DB_VERSION");
-
-
-        public bool SupportsShareStorage { get { return true; } }
 
         public void AddShare(IShare share)
         {
@@ -123,8 +107,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public bool SupportsBlockStorage { get { return false; } }
-
         public void AddBlock(IShare share)
         {
             throw new NotImplementedException();
@@ -144,14 +126,10 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             throw new NotImplementedException();
         }
-
-        public bool SupportsWorkerStorage { get { return true; } }
-
+       
         public void GetWorker(string username)
         {
             throw new NotImplementedException();
         }
-
-        public bool SupoortsPaymentsStorage { get { return false; } }
     }
 }

@@ -95,13 +95,13 @@
         "hybrid": {
             "enabled": false,
             "mysql": {
-			    "name": "db-name"
+			    "database": "db-name"
 		    }
         },
         "mpos": {
 		    "enabled": false,
 		    "mysql": {
-			    "name": "db-name"
+			    "database": "db-name"
 		    }
         },
 		"redis": {

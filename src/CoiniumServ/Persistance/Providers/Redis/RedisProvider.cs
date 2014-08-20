@@ -69,11 +69,11 @@ namespace CoiniumServ.Persistance.Providers.Redis
                 if (version < _requiredMinimumVersion)
                     throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
 
-                _logger.Information("Storage initialized: {0:l}:{1}, v{2:l}.", _redisConfig.Host, _redisConfig.Port, version);
+                _logger.Information("Redis storage initialized: {0:l}:{1}, v{2:l}.", _redisConfig.Host, _redisConfig.Port, version);
             }
             catch (Exception e)
             {
-                _logger.Error("Storage initialization failed: {0:l}:{1} - {2:l}", _redisConfig.Host, _redisConfig.Port, e.Message);
+                _logger.Error("Redis storage initialization failed: {0:l}:{1} - {2:l}", _redisConfig.Host, _redisConfig.Port, e.Message);
             }
         }
 

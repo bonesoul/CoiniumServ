@@ -22,38 +22,35 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using CoiniumServ.Persistance.Providers;
-using CoiniumServ.Persistance.Providers.MySql;
 using Serilog;
 
-namespace CoiniumServ.Persistance.Layers.Mpos
+namespace CoiniumServ.Persistance.Providers.MySql
 {
-    public class MposLayerConfig:IStorageLayerConfig
+    public class MySqlProviderConfig : IMySqlProviderConfig
     {
         public bool Valid { get; private set; }
-        public bool Enabled { get; private set; }
-        public IList<IStorageProviderConfig> Providers { get; private set; }
+        public string Host { get; private set; }
+        public int Port { get; private set; }
+        public string Username { get; private set; }
+        public string Password { get; private set; }
+        public string Database { get; private set; }
 
-        public MposLayerConfig(dynamic config)
+        public MySqlProviderConfig(dynamic config)
         {
             try
             {
-                Enabled = config.enabled;
-
-                Providers = new List<IStorageProviderConfig>
-                {
-                    new MySqlConfig(config.mysql)
-                };
-
-                // make sure all supplied provider configs are valid
-                Valid = Providers.All(provider => provider.Valid);                
+                // load the config data.
+                Host = string.IsNullOrEmpty(config.host) ? "127.0.0.1" : config.host;
+                Port = config.port == 0 ? 3306 : config.port;
+                Username = config.user;
+                Password = config.password;
+                Database = config.database;
+                Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<MposLayerConfig>().Error(e, "Error loading mpos storage layer configuration");
+                Log.Logger.ForContext<MySqlProviderConfig>().Error(e, "Error loading mysql configuration");
             }
         }
     }
