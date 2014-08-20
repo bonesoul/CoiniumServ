@@ -150,14 +150,52 @@
     # Per-pool Storage Configuration
     # -------------------------------
 
-    # redis:
-    # enabled: is redis enabled?
+    # hybrid storage layer
+    # enabled: set this true to enable hybrid storage mode where redis and mysql is used together.
+
+    # mpos layer
+    # enabled: set this true to enable mpos compatibility mode - make sure to internal disable payment-processor!
+
+    # redis
     # host: redis host.
     # port: redis port.
     # password: set the password if your redis installation requires one.
     # databaseId: redis database instance id (optional)
 
+    # mysql
+    # host: database host.
+    # port: database port.
+    # username: username for connecting the database.
+    # password: password for connecting the database.
+    # name: database-name.
+
 	"storage": {
+        "hybrid": {
+            "enabled": false,
+		    "redis": {
+			    "host": "127.0.0.1",
+			    "port": 6379,
+                "password": "",
+                "databaseId": 0
+		    },
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "username",
+			    "password": "password",
+                "name": "db-name"
+		    }
+        },
+        "mpos": {
+            "enabled": false,
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "username",
+			    "password": "password",
+                "name": "db-name"
+		    }
+        },
 		"redis": {
 			"enabled": true,
 			"host": "127.0.0.1",
@@ -165,30 +203,7 @@
             "password": "",
             "databaseId": 0
 		}
-	},
-
-    # -------------------------------
-    # MPOS Compatibility Mode
-    # -------------------------------
-
-    # NOT-IMPLEMENTED-YET!
-    # enabled: set this true to enable mpos compatibility mode - make sure to internal disable payment-processor!
-    # host: database host.
-    # port: database port.
-    # name: database-name.
-    # username: username for connecting the database.
-    # password: password for connecting the database.
-
-	"mpos": {
-		"enabled": false,
-		"database": {
-			"host": "127.0.0.1",
-			"port": 3306,
-			"name": "db-name",
-			"user": "username",
-			"password": "password"
-		}
-	},
+	},  
 
     # -------------------------------
     # Getwork Server Configuration
