@@ -34,7 +34,7 @@ namespace CoiniumServ.Coin.Config
         public string Symbol { get; private set; }
         public string Algorithm { get; private set; }
         public bool SupportsTxMessages { get; private set; }
-        public bool IsPOS { get; private set; }
+        public bool IsPOS { get; set; }
         public string BlockExplorer { get; private set; }
         public dynamic Options { get; private set; }
 

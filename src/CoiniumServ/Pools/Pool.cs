@@ -110,6 +110,7 @@ namespace CoiniumServ.Pools
             _daemonClient = _objectFactory.GetDaemonClient(Config);
             _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
 
+            // read getinfo().
             try
             {
                 var info = _daemonClient.GetInfo();
@@ -132,6 +133,7 @@ namespace CoiniumServ.Pools
                 return;
             }
 
+            // read getmininginfo().
             try
             {
                 // try reading mininginfo(), some coins may not support it.
@@ -145,6 +147,24 @@ namespace CoiniumServ.Pools
             catch (RpcException e)
             {
                 _logger.Error("Can not read mininginfo() - the coin may not support the request: {0:l}", e.Message);
+            }
+
+            // read getdifficulty() to determine if it's POS coin.
+            try
+            {
+                /*  By default proof-of-work coins return a floating point as difficulty (https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_calls_lis).
+                 *  Though proof-of-stake coins returns a json-object;
+                 *  { "proof-of-work" : 41867.16992903, "proof-of-stake" : 0.00390625, "search-interval" : 0 }
+                 *  So basically we can use this info to determine if assigned coin is a proof-of-stake one.
+                 */
+
+                var response = _daemonClient.MakeRawRequest("getdifficulty");
+                if (response.Contains("proof-of-stake")) // if response contains proof-of-stake field
+                    Config.Coin.IsPOS = true; // then automatically set coin-config.IsPOS to true.
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Can not read getdifficulty() - the coin may not support the request: {0:l}", e.Message);
             }
         }
 

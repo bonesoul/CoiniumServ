@@ -50,7 +50,7 @@ namespace CoiniumServ.Coin.Config
         /// <summary>
         /// Is the coin a proof-of-stake coin?
         /// </summary>
-        bool IsPOS { get; }
+        bool IsPOS { get; set; }
 
         /// <summary>
         /// Block explorer for the coin.
