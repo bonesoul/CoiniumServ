@@ -52,7 +52,7 @@ namespace CoiniumServ.Coin.Config
                 if (string.IsNullOrEmpty(config.reward)) // if no value is set, behave it as a proof-of-work coin by default.
                     IsPOS = false;
                 else // if we have a reward value set.
-                    IsPOS = config.reward.ToString().ToLower() == "pos"; // see if it's set to 'POS'.
+                    IsPOS = config.reward.ToString().ToLower() == "pos"; // see if it's a proof-of-stake coin or proof-of-work coin.
 
                 BlockExplorer = string.IsNullOrEmpty(config.blockExplorer) ? "https://altexplorer.net" : config.blockExplorer;
                 Options = config;
