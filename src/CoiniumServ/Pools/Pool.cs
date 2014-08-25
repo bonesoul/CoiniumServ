@@ -115,7 +115,7 @@ namespace CoiniumServ.Pools
                 var info = _daemonClient.GetInfo();
 
                 _logger.Information("Coin symbol: {0:l} algorithm: {1:l} " +
-                                    "Coin version: {2} protocol: {3} wallet: {4} " +
+                                    "Coin version: {2:l} protocol: {3} wallet: {4} " +
                                     "Daemon network: {5:l} peers: {6} blocks: {7} errors: {8:l} ",
                     Config.Coin.Symbol,
                     Config.Coin.Algorithm,
