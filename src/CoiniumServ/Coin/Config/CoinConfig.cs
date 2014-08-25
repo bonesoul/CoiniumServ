@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Runtime.Remoting.Lifetime;
 using Serilog;
 
 namespace CoiniumServ.Coin.Config
@@ -33,6 +34,7 @@ namespace CoiniumServ.Coin.Config
         public string Symbol { get; private set; }
         public string Algorithm { get; private set; }
         public bool SupportsTxMessages { get; private set; }
+        public bool IsPOS { get; private set; }
         public string BlockExplorer { get; private set; }
         public dynamic Options { get; private set; }
 
@@ -40,10 +42,18 @@ namespace CoiniumServ.Coin.Config
         {
             try
             {
+                // set the coin data.
                 Name = config.name;
                 Symbol = config.symbol;
                 Algorithm = config.algorithm;
                 SupportsTxMessages = config.txMessages;
+
+                // check the coin type.
+                if (string.IsNullOrEmpty(config.reward)) // if no value is set, behave it as a proof-of-work coin by default.
+                    IsPOS = false;
+                else // if we have a reward value set.
+                    IsPOS = config.reward.ToString().ToLower() == "pos"; // see if it's set to 'POS'.
+
                 BlockExplorer = string.IsNullOrEmpty(config.blockExplorer) ? "https://altexplorer.net" : config.blockExplorer;
                 Options = config;
 
