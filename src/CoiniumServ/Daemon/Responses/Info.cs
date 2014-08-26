@@ -24,7 +24,7 @@ namespace CoiniumServ.Daemon.Responses
 {
     public class Info
     {
-        public int Version { get; set; }
+        public string Version { get; set; }
         public int ProtocolVersion { get; set; }
         public int WalletVersion { get; set; }
         public decimal Balance { get; set; }

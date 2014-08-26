@@ -142,8 +142,8 @@ namespace CoiniumServ.Shares
             if (Job.Target >= HeaderValue)
             {
                 IsBlockCandidate = true;
-                BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer);
-                BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer(); // TODO: make sure this is okay!
+                BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer, miner.Pool.Config.Coin.IsPOS);
+                BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
             }
             else
             {

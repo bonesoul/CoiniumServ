@@ -122,7 +122,7 @@ namespace CoiniumServ.Configuration
 
                 if (!coinConfig.Valid) // make sure the configuration for referenced coin is valid.
                 {
-                    _logger.Error("coins/{0:l}.json doesnt't contain a valid configuration, skipping pool configuration: pools/{1:l}.json", coinName, filename);
+                    _logger.Error("coins/{0:l}.json doesnt't contain a valid coin configuration, skipping pool configuration: pools/{1:l}.json", coinName, filename);
                     continue;
                 }
 

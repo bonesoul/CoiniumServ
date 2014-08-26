@@ -24,14 +24,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
-using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
 using CoiniumServ.Transactions;
@@ -122,8 +123,19 @@ namespace CoiniumServ.Tests.Shares
             _outputs = Substitute.For<Outputs>(_daemonClient);
             double blockReward = 5000000000; // the amount rewarded by the block.
 
-            // sample reward recipient
+            // pool config
+            var poolConfig = Substitute.For<IPoolConfig>();
+
+            // create coin config.
+            var coinConfig = Substitute.For<ICoinConfig>();
+            coinConfig.SupportsTxMessages.Returns(false);
+            coinConfig.IsPOS.Returns(false);
+            poolConfig.Coin.Returns(coinConfig);
+
+            // create rewards config.
             var rewardsConfig = Substitute.For<IRewardsConfig>();
+            poolConfig.Rewards.Returns(rewardsConfig);
+
             var amount = blockReward * 0.01;
             blockReward -= amount;
             var rewards = new Dictionary<string, float> { { "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji", (float)amount } };
@@ -134,15 +146,16 @@ namespace CoiniumServ.Tests.Shares
                 _outputs.AddRecipient(pair.Key, pair.Value);
             }
 
-            // sample pool wallet
+            // create wallet config.
             var walletConfig = Substitute.For<IWalletConfig>();
+            poolConfig.Wallet.Returns(walletConfig);
+
+            // create sample pool central wallet output.
             walletConfig.Adress.Returns("mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq");
             _outputs.AddPoolWallet(walletConfig.Adress, blockReward);
 
-            var metaConfig = Substitute.For<IMetaConfig>();              
-
             // generation transaction
-            _generationTransaction = Substitute.For<GenerationTransaction>(_extraNonce, _daemonClient, _blockTemplate, walletConfig, rewardsConfig, metaConfig, false);
+            _generationTransaction = Substitute.For<GenerationTransaction>(_extraNonce, _daemonClient, _blockTemplate, poolConfig);
             _generationTransaction.Inputs.First().SignatureScript = _signatureScript;
             _generationTransaction.Outputs = _outputs;
             _generationTransaction.Create();

@@ -24,11 +24,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
-using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Pools.Config;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Extensions;
@@ -72,6 +73,8 @@ using Xunit;
 
 namespace CoiniumServ.Tests.Transactions
 {
+    // TODO: tests below target non-POS coins with no txMessage support. Implement tests for those specific conditions too.
+
     public class GenerationTransactionTests
     {
         // object mocks.
@@ -80,9 +83,7 @@ namespace CoiniumServ.Tests.Transactions
         private readonly IExtraNonce _extraNonce;
         private readonly ISignatureScript _signatureScript;
         private readonly IOutputs _outputs;
-        private readonly IWalletConfig _walletConfig;
-        private readonly IRewardsConfig _rewardsConfig;
-        private readonly IMetaConfig _metaConfig;
+        private readonly IPoolConfig _poolConfig;
 
         public GenerationTransactionTests()
         {
@@ -110,32 +111,44 @@ namespace CoiniumServ.Tests.Transactions
             _outputs = Substitute.For<Outputs>(_daemonClient);
             double blockReward = 5000000000; // the amount rewarded by the block.
 
-            // sample reward recipient
-            _rewardsConfig = Substitute.For<IRewardsConfig>();
+            // pool config
+            _poolConfig = Substitute.For<IPoolConfig>();
+
+            // create coin config.
+            var coinConfig = Substitute.For<ICoinConfig>();
+            coinConfig.SupportsTxMessages.Returns(false);
+            coinConfig.IsPOS.Returns(false);
+            _poolConfig.Coin.Returns(coinConfig);
+
+            // create rewards config.
+            var rewardsConfig = Substitute.For<IRewardsConfig>();
+            _poolConfig.Rewards.Returns(rewardsConfig);            
+
+            // create sample reward
             var amount = blockReward * 0.01;
             blockReward -= amount;
             var rewards = new Dictionary<string, float> { { "mrwhWEDnU6dUtHZJ2oBswTpEdbBHgYiMji", (float)amount } };
 
-            _rewardsConfig.GetEnumerator().Returns(rewards.GetEnumerator());
+            rewardsConfig.GetEnumerator().Returns(rewards.GetEnumerator());
             foreach (var pair in rewards)
             {
                 _outputs.AddRecipient(pair.Key, pair.Value);
             }
 
-            // sample pool wallet
-            _walletConfig = Substitute.For<IWalletConfig>();
-            _walletConfig.Adress.Returns("mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq");
-            _outputs.AddPoolWallet(_walletConfig.Adress, blockReward);
+            // create wallet config.
+            var walletConfig = Substitute.For<IWalletConfig>();
+            _poolConfig.Wallet.Returns(walletConfig);
 
-            // sample meta config
-            _metaConfig = Substitute.For<IMetaConfig>();
+            // create sample pool central wallet output.
+            walletConfig.Adress.Returns("mk8JqN1kNWju8o3DXEijiJyn7iqkwktAWq");
+            _outputs.AddPoolWallet(walletConfig.Adress, blockReward);            
         }
 
         [Fact]
         public void CreateGenerationTransactionTest()
         {
             // create the test object.
-            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, _walletConfig, _rewardsConfig, _metaConfig, false);
+            var generationTransaction = new GenerationTransaction(_extraNonce, _daemonClient, _blockTemplate, _poolConfig);
 
             // use the exactly same input script data within our sample data.
             generationTransaction.Inputs.First().SignatureScript = _signatureScript;
