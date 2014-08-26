@@ -35,8 +35,6 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Providers;
-using CoiniumServ.Persistance.Providers.MySql;
-using CoiniumServ.Persistance.Providers.Redis;
 using CoiniumServ.Pools;
 using CoiniumServ.Repository.Context;
 using CoiniumServ.Server.Mining;
@@ -118,12 +116,12 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IDaemonClient>(@params);
         }
 
-        public IMinerManager GetMinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient)
+        public IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
-                {"daemonClient", daemonClient},
+                {"storageLayer", storageLayer},
             };
 
             return _applicationContext.Container.Resolve<IMinerManager>(@params);
@@ -337,11 +335,12 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IStorageProvider>(type, @params);
         }
 
-        public IStorageLayer GetStorageLayer(string type, IEnumerable<IStorageProvider> providers, IPoolConfig poolConfig)
+        public IStorageLayer GetStorageLayer(string type, IEnumerable<IStorageProvider> providers, IDaemonClient daemonClient, IPoolConfig poolConfig)
         {
             var @params = new NamedParameterOverloads
             {
                 {"providers", providers},
+                {"daemonClient", daemonClient},
                 {"poolConfig", poolConfig}
             };
 

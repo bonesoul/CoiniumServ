@@ -23,6 +23,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
@@ -40,7 +42,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
     {
         public bool SupportsShareStorage { get { return true; } }
         public bool SupportsBlockStorage { get { return false; } }
-        public bool SupportsWorkerStorage { get { return true; } }
         public bool SupportsPaymentsStorage { get { return false; } }
 
         private readonly IMySqlProvider _mySqlProvider;
@@ -119,17 +120,23 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
         public IDictionary<string, int> GetTotalBlocks()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
         {
             throw new NotImplementedException();
         }
-       
-        public void GetWorker(string username)
+
+        public bool Authenticate(IMiner miner)
         {
-            throw new NotImplementedException();
+            // query the username against mpos pool_worker table.
+            var result = _mySqlProvider.Connection.Query<string>("SELECT password FROM pool_worker where username = @username",
+                    new {username = miner.Username}).FirstOrDefault();
+
+            // if matching record exists for given miner username, then authenticate the miner.
+            // note: we don't check for password on purpose.
+            return result != null;           
         }
     }
 }

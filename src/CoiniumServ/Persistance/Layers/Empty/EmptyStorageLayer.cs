@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Shares;
@@ -33,7 +34,6 @@ namespace CoiniumServ.Persistance.Layers.Empty
     {
         public bool SupportsShareStorage { get { return false; } }
         public bool SupportsBlockStorage { get { return false; } }
-        public bool SupportsWorkerStorage { get { return false; } }
         public bool SupportsPaymentsStorage { get { return false; } }
 
         public void AddShare(IShare share)
@@ -76,9 +76,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
             throw new NotImplementedException();
         }
 
-        public void GetWorker(string username)
+        public bool Authenticate(IMiner miner)
         {
-            throw new NotImplementedException();
+            // empty storage layer is only used when no valid storage-layer configuration is available.
+            // just authenticate all requests as basically we can't validate nor pay miners actually.
+            return true;
         }
     }
 }

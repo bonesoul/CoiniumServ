@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Shares;
@@ -60,11 +61,9 @@ namespace CoiniumServ.Persistance.Layers
 
         #endregion
 
-        #region worker storage
+        #region user storage
 
-        bool SupportsWorkerStorage { get; }
-
-        void GetWorker(string username);
+        bool Authenticate(IMiner miner);
 
         #endregion
 

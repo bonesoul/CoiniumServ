@@ -35,7 +35,6 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Providers;
-using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
@@ -75,7 +74,7 @@ namespace CoiniumServ.Factories
         /// <returns></returns>
         IDaemonClient GetDaemonClient(IPoolConfig poolConfig);
 
-        IMinerManager GetMinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient);
+        IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
         IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
             IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
@@ -131,7 +130,7 @@ namespace CoiniumServ.Factories
 
         IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig, IStorageProviderConfig config);
 
-        IStorageLayer GetStorageLayer(string type, IEnumerable<IStorageProvider> providers, IPoolConfig poolConfig);
+        IStorageLayer GetStorageLayer(string type, IEnumerable<IStorageProvider> providers, IDaemonClient daemonClient, IPoolConfig poolConfig);
 
         #endregion
 

@@ -188,11 +188,11 @@ namespace CoiniumServ.Pools
 
             // load the storage layer.
             if (Config.Storage.Layer is HybridStorageLayerConfig)
-                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, Config);
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, _daemonClient, Config);
             else if (Config.Storage.Layer is MposStorageLayerConfig)
-                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Config);
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, _daemonClient, Config);
             else if (Config.Storage.Layer is EmptyStorageLayerConfig)
-                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, Config);
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, _daemonClient, Config);
         }
 
         private void InitManagers()
@@ -201,7 +201,7 @@ namespace CoiniumServ.Pools
             {
                 var storage = _objectFactory.GetOldStorage(StorageProviders.Redis, Config);
 
-                _minerManager = _objectFactory.GetMinerManager(Config, _daemonClient);
+                _minerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
                 var jobTracker = _objectFactory.GetJobTracker();
 

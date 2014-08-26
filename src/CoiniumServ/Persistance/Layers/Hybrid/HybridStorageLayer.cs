@@ -21,7 +21,11 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
+using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
@@ -35,60 +39,71 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
     {
         public bool SupportsShareStorage { get { return true; } }
         public bool SupportsBlockStorage { get { return true; } }
-        public bool SupportsWorkerStorage { get { return false; } }
         public bool SupportsPaymentsStorage { get { return true; } }
+
+        private readonly IDaemonClient _daemonClient;
 
         private readonly ILogger _logger;
 
-        public HybridStorageLayer(IEnumerable<IStorageProvider> providers, PoolConfig poolConfig)
+        public HybridStorageLayer(IEnumerable<IStorageProvider> providers, IDaemonClient daemonClient, PoolConfig poolConfig)
         {
+            _daemonClient = daemonClient;
             _logger = Log.ForContext<HybridStorageLayer>().ForContext("Component", poolConfig.Coin.Name);
-
         }
 
         public void AddShare(IShare share)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void RemoveShares(IPaymentRound round)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Dictionary<string, double> GetCurrentShares()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void AddBlock(IShare share)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void UpdateBlock(IPaymentRound round)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IDictionary<string, int> GetTotalBlocks()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public void GetWorker(string username)
+        public bool Authenticate(IMiner miner)
         {
-            throw new System.NotImplementedException();
+            // within current implementation of hybrid storage layer, we don't have users registered to a pool but they
+            // just mine with supplying a valid coin wallet address as username. So we just need to make sure the username
+            // is valid address against the coin network.
+            try
+            {
+                return _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
+            }
+            catch (RpcException)
+            {
+                return false;
+            }
         }
     }
 }
