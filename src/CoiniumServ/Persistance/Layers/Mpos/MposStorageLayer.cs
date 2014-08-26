@@ -138,5 +138,10 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             // note: we don't check for password on purpose.
             return result != null;           
         }
+
+        public void UpdateDifficulty(IMiner miner)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

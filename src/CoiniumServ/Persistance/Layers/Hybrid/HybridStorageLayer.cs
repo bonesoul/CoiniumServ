@@ -105,5 +105,11 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 return false;
             }
         }
+
+        public void UpdateDifficulty(IMiner miner)
+        {
+            // with-in our current hybrid-storage-layer, we don't need to write difficulty to persistance layer.
+            return;
+        }
     }
 }

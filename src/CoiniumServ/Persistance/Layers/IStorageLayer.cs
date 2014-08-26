@@ -65,6 +65,8 @@ namespace CoiniumServ.Persistance.Layers
 
         bool Authenticate(IMiner miner);
 
+        void UpdateDifficulty(IMiner miner);
+
         #endregion
 
         #region payments storage

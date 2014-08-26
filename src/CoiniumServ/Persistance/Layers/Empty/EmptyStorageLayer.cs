@@ -82,5 +82,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
             // just authenticate all requests as basically we can't validate nor pay miners actually.
             return true;
         }
+
+        public void UpdateDifficulty(IMiner miner)
+        {
+            // as we don't have an actual persistance layer, we can't write difficulty update information.
+            return;
+        }
     }
 }
