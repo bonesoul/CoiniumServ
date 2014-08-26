@@ -30,6 +30,7 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
 using Serilog;
 
@@ -106,7 +107,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public void UpdateDifficulty(IMiner miner)
+        public void UpdateDifficulty(IStratumMiner miner)
         {
             // with-in our current hybrid-storage-layer, we don't need to write difficulty to persistance layer.
             return;

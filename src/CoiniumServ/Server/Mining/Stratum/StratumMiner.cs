@@ -30,6 +30,7 @@ using AustinHarris.JsonRpc;
 using CoiniumServ.Jobs;
 using CoiniumServ.Logging;
 using CoiniumServ.Miners;
+using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Errors;
 using CoiniumServ.Server.Mining.Stratum.Service;
@@ -90,6 +91,8 @@ namespace CoiniumServ.Server.Mining.Stratum
 
         private readonly IMinerManager _minerManager;
 
+        private readonly IStorageLayer _storageLayer;
+
         private readonly ILogger _logger;
 
         private readonly ILogger _packetLogger;
@@ -108,13 +111,15 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="connection"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
-        public StratumMiner(int id, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager)
+        /// <param name="storageLayer"></param>
+        public StratumMiner(int id, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager, IStorageLayer storageLayer)
         {
             Id = id; // the id of the miner.
             ExtraNonce = extraNonce;
             Connection = connection; // the underlying connection.
-            _minerManager = minerManager;
             Pool = pool;
+            _minerManager = minerManager;
+            _storageLayer = storageLayer;
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
@@ -247,7 +252,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         }
 
         /// <summary>
-        /// Sends difficulty to the miner.
+        /// Sets a new difficulty to the miner and sends it.
         /// </summary>
         public void SetDifficulty(float difficulty)
         {
@@ -264,7 +269,8 @@ namespace CoiniumServ.Server.Mining.Stratum
                 Params = new List<object>{ Difficulty }
             };
 
-            Send(notification);
+            Send(notification); //send the difficulty update message.
+            _storageLayer.UpdateDifficulty(this); // store the new difficulty within persistance layer.
         }
 
         /// <summary>

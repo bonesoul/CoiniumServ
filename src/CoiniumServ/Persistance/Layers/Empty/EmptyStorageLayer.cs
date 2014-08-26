@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
 
 namespace CoiniumServ.Persistance.Layers.Empty
@@ -83,7 +84,7 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return true;
         }
 
-        public void UpdateDifficulty(IMiner miner)
+        public void UpdateDifficulty(IStratumMiner miner)
         {
             // as we don't have an actual persistance layer, we can't write difficulty update information.
             return;

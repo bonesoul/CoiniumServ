@@ -30,6 +30,7 @@ using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Extensions;
@@ -89,7 +90,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while comitting share: {0:l}", e.Message);
+                _logger.Error("An exception occured while comitting share; {0:l}", e.Message);
             }
         }
 
@@ -130,18 +131,39 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
         public bool Authenticate(IMiner miner)
         {
-            // query the username against mpos pool_worker table.
-            var result = _mySqlProvider.Connection.Query<string>("SELECT password FROM pool_worker where username = @username",
-                    new {username = miner.Username}).FirstOrDefault();
+            try
+            {
+                // query the username against mpos pool_worker table.
+                var result = _mySqlProvider.Connection.Query<string>(
+                    "SELECT password FROM pool_worker where username = @username",
+                        new {username = miner.Username}).FirstOrDefault();
 
-            // if matching record exists for given miner username, then authenticate the miner.
-            // note: we don't check for password on purpose.
-            return result != null;           
+                // if matching record exists for given miner username, then authenticate the miner.
+                // note: we don't check for password on purpose.
+                return result != null;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while reading pool_worker table; {0:l}", e.Message);
+                return false;
+            }
         }
 
-        public void UpdateDifficulty(IMiner miner)
+        public void UpdateDifficulty(IStratumMiner miner)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _mySqlProvider.Connection.Execute(
+                    "update pool_worker set difficulty = @difficulty where username = @username", new
+                    {
+                        difficulty = miner.Difficulty,
+                        username = miner.Username
+                    });
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while updating difficulty for miner; {0:l}",e.Message);
+            }
         }
     }
 }

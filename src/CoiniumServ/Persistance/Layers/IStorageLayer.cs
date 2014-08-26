@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
 
 namespace CoiniumServ.Persistance.Layers
@@ -65,7 +66,7 @@ namespace CoiniumServ.Persistance.Layers
 
         bool Authenticate(IMiner miner);
 
-        void UpdateDifficulty(IMiner miner);
+        void UpdateDifficulty(IStratumMiner miner);
 
         #endregion
 

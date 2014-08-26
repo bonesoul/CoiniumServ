@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CoiniumServ.Daemon;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
@@ -95,8 +94,9 @@ namespace CoiniumServ.Miners
                 _counter++, 
                 extraNonce, 
                 connection, 
-                pool, 
-                this
+                pool,
+                this,
+                _storageLayer
             };
 
             var instance = Activator.CreateInstance(typeof(T), @params);  // create an instance of the miner.
@@ -129,7 +129,7 @@ namespace CoiniumServ.Miners
             if (!miner.Authenticated) 
                 return;
 
-            if (miner is IStratumMiner)
+            if (miner is IStratumMiner) // if we are handling a stratum-miner, apply stratum specific stuff.
             {
                 var stratumMiner = (IStratumMiner) miner;
                 stratumMiner.SetDifficulty(_poolConfig.Stratum.Diff); // set the initial difficulty for the miner and send it.
