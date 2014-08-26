@@ -48,6 +48,11 @@ namespace CoiniumServ.Coin.Config
         bool SupportsTxMessages { get; }
 
         /// <summary>
+        /// Is the coin a proof-of-stake coin?
+        /// </summary>
+        bool IsPOS { get; set; }
+
+        /// <summary>
         /// Block explorer for the coin.
         /// </summary>
         string BlockExplorer { get; }

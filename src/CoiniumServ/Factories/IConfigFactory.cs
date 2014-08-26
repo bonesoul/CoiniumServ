@@ -23,9 +23,7 @@
 
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
-using CoiniumServ.Logging;
 using CoiniumServ.Pools;
-using CoiniumServ.Server.Web;
 
 namespace CoiniumServ.Factories
 {

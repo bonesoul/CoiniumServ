@@ -30,8 +30,7 @@ using CoiniumServ.Cryptology;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
-using CoiniumServ.Miners;
-using CoiniumServ.Payments;
+using CoiniumServ.Pools;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Helpers.Time;
 using Gibbed.IO;
@@ -109,7 +108,7 @@ namespace CoiniumServ.Transactions
 
         public IExtraNonce ExtraNonce { get; private set; }
 
-        public bool TxMessageEnabled { get; private set; }
+        public IPoolConfig PoolConfig { get; private set; }
 
         /// <summary>
         /// Creates a new instance of generation transaction.
@@ -117,26 +116,23 @@ namespace CoiniumServ.Transactions
         /// <param name="extraNonce">The extra nonce.</param>
         /// <param name="daemonClient">The daemon client.</param>
         /// <param name="blockTemplate">The block template.</param>
-        /// <param name="walletConfig"></param>
-        /// <param name="rewardsConfig"></param>
-        /// <param name="metaConfig"></param>
-        /// <param name="txMessageEnabled">tx messages supported by the coin?</param>
+        /// <param name="poolConfig">The associated pool's configuration</param>
         /// <remarks>
         /// Reference implementations:
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
         /// </remarks>
-        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, IWalletConfig walletConfig, IRewardsConfig rewardsConfig, IMetaConfig metaConfig, bool txMessageEnabled)
+        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, IPoolConfig poolConfig)
         {
             // TODO: we need a whole refactoring here.
             // we should use DI and it shouldn't really require daemonClient connection to function.
 
             BlockTemplate = blockTemplate;
             ExtraNonce = extraNonce;
-            TxMessageEnabled = txMessageEnabled;
+            PoolConfig = poolConfig;
 
-            Version = (UInt32)(txMessageEnabled ? 2 : 1);
-            TxMessage = Serializers.SerializeString(metaConfig.TxMessage);
+            Version = (UInt32)(poolConfig.Coin.SupportsTxMessages ? 2 : 1);
+            TxMessage = Serializers.SerializeString(poolConfig.Meta.TxMessage);
             LockTime = 0;
 
             // transaction inputs
@@ -166,7 +162,7 @@ namespace CoiniumServ.Transactions
             double blockReward = BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
 
             // generate output transactions for recipients (set in config).
-            foreach (var pair in rewardsConfig)
+            foreach (var pair in poolConfig.Rewards)
             {
                 var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
                 blockReward -= amount;
@@ -175,7 +171,7 @@ namespace CoiniumServ.Transactions
             }
 
             // send the remaining coins to pool's central wallet.
-            Outputs.AddPoolWallet(walletConfig.Adress, blockReward); 
+            Outputs.AddPoolWallet(poolConfig.Wallet.Adress, blockReward); 
         }
 
         public void Create()
@@ -185,7 +181,8 @@ namespace CoiniumServ.Transactions
             {
                 stream.WriteValueU32(Version.LittleEndian()); // write version
 
-                // for proof-of-stake coins we need here timestamp - https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js#L210
+                if(PoolConfig.Coin.IsPOS) // if coin is a proof-of-stake coin
+                    stream.WriteValueU32(BlockTemplate.CurTime); // include time-stamp in the transaction.
 
                 // write transaction input.
                 stream.WriteBytes(Serializers.VarInt(InputsCount));
@@ -220,7 +217,7 @@ namespace CoiniumServ.Transactions
 
                 stream.WriteValueU32(LockTime.LittleEndian());
 
-                if (TxMessageEnabled)
+                if (PoolConfig.Coin.SupportsTxMessages)
                     stream.WriteBytes(TxMessage);
 
                 Final = stream.ToArray();
