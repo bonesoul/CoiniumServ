@@ -79,7 +79,7 @@ Can run on these platforms;
 * Generation transaction builder.
 * Share processor.
 * Payment processor.
-* Proof of Work (PoW) and Proof of Stake (PoS) [in-development] support.
+* Proof of Work (PoW) and Proof of Stake (PoS) support.
 * Transaction messages support.
 * Vardiff support.
 * Ban manager support that can handles miners flooding with invalid shares.
