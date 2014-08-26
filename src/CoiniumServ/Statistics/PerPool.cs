@@ -124,15 +124,21 @@ namespace CoiniumServ.Statistics
 
         private void RecacheWorkers()
         {
-            Workers.Clear();
-            var shares = _storage.GetSharesForCurrentRound();
+            var shares = _storage.GetSharesForCurrentRound(); // get shares for current round
 
+            Workers.Clear();
             foreach (var miner in _minerManager.Miners)
             {
+                // skip un-authenticated miners
                 if (!miner.Authenticated)
                     continue;
 
-                Workers.Add(miner.Username, shares.ContainsKey(miner.Username) ? shares[miner.Username] : 0);
+                // miners with same username may get connected multi-times, so make sure we only count them in collection once.
+                if (Workers.ContainsKey(miner.Username))                    
+                    continue;
+
+                var amount = shares.ContainsKey(miner.Username) ? shares[miner.Username] : 0; // determine amount of shares that belongs to miner.
+                Workers.Add(miner.Username, amount); // add miners the shares.
             }
 
             WorkersJson = JsonConvert.SerializeObject(Workers);
