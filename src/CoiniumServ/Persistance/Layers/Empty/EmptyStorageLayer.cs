@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
@@ -39,42 +38,42 @@ namespace CoiniumServ.Persistance.Layers.Empty
 
         public void AddShare(IShare share)
         {
-            throw new NotImplementedException();
+            return; // just skip.
         }
 
         public void RemoveShares(IPaymentRound round)
         {
-            throw new NotImplementedException();
+            return; // just skip.
         }
 
         public Dictionary<string, double> GetCurrentShares()
         {
-            throw new NotImplementedException();
+            return new Dictionary<string, double>(); // return an empty dictionary.
         }
 
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
-            throw new NotImplementedException();
+            return new Dictionary<uint, Dictionary<string, double>>(); // return an empty dictionary.
         }
 
         public void AddBlock(IShare share)
         {
-            throw new NotImplementedException();
+            return; // just skip.
         }
 
         public void UpdateBlock(IPaymentRound round)
         {
-            throw new NotImplementedException();
+            return; // just skip.
         }
 
         public IDictionary<string, int> GetTotalBlocks()
         {
-            throw new NotImplementedException();
+            return new Dictionary<string, int>(); // return an empty dictionary.
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
         {
-            throw new NotImplementedException();
+            return new List<IPersistedBlock>(); // return an empty list.
         }
 
         public bool Authenticate(IMiner miner)

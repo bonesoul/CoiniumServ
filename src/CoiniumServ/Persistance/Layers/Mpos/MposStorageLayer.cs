@@ -96,7 +96,8 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
         public void RemoveShares(IPaymentRound round)
         {
-            throw new NotImplementedException();
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
+            throw new NotImplementedException(); 
         }
 
         public Dictionary<string, double> GetCurrentShares()
@@ -106,16 +107,18 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
         }
 
         public void AddBlock(IShare share)
         {
-            throw new NotImplementedException();
+            // Blocks are handled by MPOS by itself, we don't need to persist found block data.
         }
 
         public void UpdateBlock(IPaymentRound round)
         {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
         }
 
