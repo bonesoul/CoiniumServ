@@ -38,7 +38,7 @@ namespace CoiniumServ.Server.Web.Modules
                 ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
                 ViewBag.Pools = statistics.Pools;
 
-                var pool = poolManager.GetBySymbol(_.slug); // find the requested pool. TODO: use IStatistics instead
+                var pool = poolManager.Get(_.slug); // find the requested pool. TODO: use IStatistics instead
 
                 if (pool == null) // make sure queried pool exists.
                 {

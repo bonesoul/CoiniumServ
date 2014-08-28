@@ -33,7 +33,6 @@ using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
-using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Empty;
 using CoiniumServ.Persistance.Layers.Hybrid;
@@ -45,6 +44,7 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers.Validation;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace CoiniumServ.Pools
@@ -52,8 +52,10 @@ namespace CoiniumServ.Pools
     /// <summary>
     /// Contains pool services and server.
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public class Pool : IPool
     {
+        [JsonProperty("config")]
         public IPoolConfig Config { get; private set; }
 
         public IPerPool Statistics { get; private set; }

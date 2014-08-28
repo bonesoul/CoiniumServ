@@ -23,6 +23,7 @@
 
 using System.Linq;
 using CoiniumServ.Coin.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
 using Nancy;
@@ -32,7 +33,8 @@ namespace CoiniumServ.Server.Web.Modules
 {
     public class ApiModule: NancyModule
     {
-        public ApiModule(IStatistics statistics)
+        // TODO: use base("/api");
+        public ApiModule(IStatistics statistics, IPoolManager poolManager)
         {
             Get["/api/"] = _ =>
             {
@@ -48,6 +50,14 @@ namespace CoiniumServ.Server.Web.Modules
                     BaseUrl = Request.Url.SiteBase,
                     Coin = statistics.Pools.First().Value.Config.Coin
                 }];
+            };
+
+
+            Get["/api/new/pools"] = _ =>
+            {
+                var response = (Response) poolManager.ServiceResponse;
+                response.ContentType = "application/json";
+                return response;
             };
 
             Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());

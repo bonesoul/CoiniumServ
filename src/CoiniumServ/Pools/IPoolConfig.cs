@@ -29,12 +29,13 @@ using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
-using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Vanilla;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Pools
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public interface IPoolConfig : IConfig
     {
         /// <summary>
@@ -42,6 +43,7 @@ namespace CoiniumServ.Pools
         /// </summary>
         bool Enabled { get; }
 
+        [JsonProperty("coin")]
         ICoinConfig Coin { get; }
 
         IDaemonConfig Daemon { get; }

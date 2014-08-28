@@ -53,7 +53,7 @@ namespace CoiniumServ.Statistics
                 pair.Value.Reset();
             }
 
-            foreach (var pool in _poolManager.Pools)
+            foreach (var pool in _poolManager.GetAll())
             {
                 if (!_algorithms.ContainsKey(pool.Config.Coin.Algorithm))
                     _algorithms.Add(pool.Config.Coin.Algorithm, new PerAlgorithm(pool.Config.Coin.Algorithm));

@@ -21,16 +21,18 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
-using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Statistics.Repository;
+using System.Linq;
+using System.Linq.Expressions;
 
-namespace CoiniumServ.Pools
+namespace CoiniumServ.Statistics.Repository
 {
-    public interface IPoolManager : IRepository<IPool>, IJsonService
+    public interface IRepository<T>
     {
-        IPool Get(string symbol);
-
-        void Run();
+        IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
+        IEnumerable<T> GetAll();
+        IQueryable<T> GetAllAsQueryable();
+        IReadOnlyCollection<T> GetAllAsReadOnly();
     }
 }

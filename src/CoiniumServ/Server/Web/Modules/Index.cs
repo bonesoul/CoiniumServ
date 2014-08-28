@@ -42,7 +42,7 @@ namespace CoiniumServ.Server.Web.Modules
                 // return our view
                 return View["index", new IndexModel
                 {
-                    Pools = poolManager.Pools,
+                    Pools = poolManager.GetAllAsReadOnly(),
                     Statistics = statistics
                 }];
             };
