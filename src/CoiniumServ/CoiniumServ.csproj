@@ -197,7 +197,6 @@
     <Compile Include="Statistics\IBlockStats.cs" />
     <Compile Include="Statistics\IJsonResponse.cs" />
     <Compile Include="Statistics\ILatestBlocks.cs" />
-    <Compile Include="Statistics\Repository\IEntity.cs" />
     <Compile Include="Statistics\Repository\IRepository.cs" />
     <Compile Include="Statistics\IStatisticsConfig.cs" />
     <Compile Include="Statistics\LatestBlocks.cs" />
