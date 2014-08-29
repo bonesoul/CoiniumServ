@@ -167,7 +167,7 @@ namespace CoiniumServ.Tests.Jobs
             _generationTransaction.Create();     
 
             // hash algorithm
-            _hashAlgorithm = Substitute.For<Scrypt>();
+            _hashAlgorithm = new Scrypt();
         }
 
         [Fact]

@@ -103,10 +103,7 @@
 		    "mysql": {
 			    "database": "db-name"
 		    }
-        },
-		"redis": {
-			"enabled": true
-		}
+        }
 	},
 
     # -------------------------------

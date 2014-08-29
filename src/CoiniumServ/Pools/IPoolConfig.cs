@@ -64,8 +64,6 @@ namespace CoiniumServ.Pools
 
         IBanConfig Banning { get; }
 
-        IStorageConfigOld StorageOld { get; }
-
         IStorageConfig Storage { get; }
 
         IVanillaServerConfig Vanilla { get; }

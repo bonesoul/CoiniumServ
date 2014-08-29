@@ -31,9 +31,19 @@ namespace CoiniumServ.Persistance.Layers.Empty
 {
     public class EmptyStorageLayer : IStorageLayer
     {
+        public bool IsEnabled { get; private set; }
         public bool SupportsShareStorage { get { return false; } }
         public bool SupportsBlockStorage { get { return false; } }
         public bool SupportsPaymentsStorage { get { return false; } }
+        public Dictionary<string, double> GetPreviousBalances()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetBalances(IList<IWorkerBalance> workerBalances)
+        {
+            throw new System.NotImplementedException();
+        }
 
         public void AddShare(IShare share)
         {
@@ -43,6 +53,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
         public void RemoveShares(IPaymentRound round)
         {
             return; // just skip.
+        }
+
+        public void MoveSharesToCurrentRound(IPaymentRound round)
+        {
+            throw new System.NotImplementedException();
         }
 
         public Dictionary<string, double> GetCurrentShares()
@@ -68,6 +83,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
         public IDictionary<string, int> GetTotalBlocks()
         {
             return new Dictionary<string, int>(); // return an empty dictionary.
+        }
+
+        public IEnumerable<IPersistedBlock> GetBlocks()
+        {
+            throw new System.NotImplementedException();
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)

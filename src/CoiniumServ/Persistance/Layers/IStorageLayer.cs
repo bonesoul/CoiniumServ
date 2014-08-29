@@ -33,6 +33,8 @@ namespace CoiniumServ.Persistance.Layers
     public interface IStorageLayer
     {
 
+        bool IsEnabled { get; }
+
         #region share storage
 
         bool SupportsShareStorage { get; }
@@ -40,6 +42,8 @@ namespace CoiniumServ.Persistance.Layers
         void AddShare(IShare share);
 
         void RemoveShares(IPaymentRound round);
+
+        void MoveSharesToCurrentRound(IPaymentRound round);
 
         Dictionary<string, double> GetCurrentShares();
 
@@ -57,6 +61,7 @@ namespace CoiniumServ.Persistance.Layers
 
         IDictionary<string, int> GetTotalBlocks();
 
+        IEnumerable<IPersistedBlock> GetBlocks();
         IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
 
         #endregion
@@ -72,6 +77,10 @@ namespace CoiniumServ.Persistance.Layers
         #region payments storage
 
         bool SupportsPaymentsStorage { get; }
+
+        Dictionary<string, double> GetPreviousBalances();
+
+        void SetBalances(IList<IWorkerBalance> workerBalances);
 
         #endregion
     }

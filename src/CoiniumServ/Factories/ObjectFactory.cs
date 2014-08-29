@@ -147,7 +147,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IJobTracker>();
         }
 
-        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IStorageOld storage, IBlockProcessor blockProcessor)
+        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor)
         {
             var @params = new NamedParameterOverloads
             {
@@ -155,20 +155,19 @@ namespace CoiniumServ.Factories
                 {"daemonClient", daemonClient},
                 {"jobTracker", jobTracker},
                 {"storageLayer", storageLayer},
-                {"storage", storage},
                 {"blockProcessor", blockProcessor}
             };
 
             return _applicationContext.Container.Resolve<IShareManager>(@params);
         }
 
-        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageOld storage, IBlockProcessor blockProcessor)
+        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer, IBlockProcessor blockProcessor)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
-                {"storage", storage},
+                {"storageLayer", storageLayer},
                 {"blockProcessor", blockProcessor},
             };
 
@@ -223,11 +222,11 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IAlgorithmManager>();
         }
 
-        public IBlocksCache GetBlocksCache(IStorageOld storageOld)
+        public IBlocksCache GetBlocksCache(IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
-                {"storageOld", storageOld},
+                {"storageLayer", storageLayer},
             };
 
             return _applicationContext.Container.Resolve<IBlocksCache>(@params);
@@ -282,16 +281,6 @@ namespace CoiniumServ.Factories
         #endregion
 
         #region storage objects
-
-        public IStorageOld GetOldStorage(string type, IPoolConfig poolConfig)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"poolConfig", poolConfig}
-            };
-
-            return _applicationContext.Container.Resolve<IStorageOld>(type, @params);
-        }
 
         public IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig, IStorageProviderConfig config)
         {

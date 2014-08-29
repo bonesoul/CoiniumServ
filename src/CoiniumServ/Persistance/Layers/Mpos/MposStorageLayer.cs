@@ -40,9 +40,19 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 {
     public class MposStorageLayer : IStorageLayer
     {
+        public bool IsEnabled { get; private set; }
         public bool SupportsShareStorage { get { return true; } }
-        public bool SupportsBlockStorage { get { return false; } }
-        public bool SupportsPaymentsStorage { get { return false; } }
+        public bool SupportsBlockStorage { get { return true; } }
+        public bool SupportsPaymentsStorage { get { return true; } }
+        public Dictionary<string, double> GetPreviousBalances()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetBalances(IList<IWorkerBalance> workerBalances)
+        {
+            throw new NotImplementedException();
+        }
 
         private readonly IMySqlProvider _mySqlProvider;
 
@@ -99,6 +109,11 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException(); 
         }
 
+        public void MoveSharesToCurrentRound(IPaymentRound round)
+        {
+            throw new NotImplementedException();
+        }
+
         public Dictionary<string, double> GetCurrentShares()
         {
             throw new NotImplementedException();
@@ -122,6 +137,11 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         }
 
         public IDictionary<string, int> GetTotalBlocks()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IPersistedBlock> GetBlocks()
         {
             throw new NotImplementedException();
         }

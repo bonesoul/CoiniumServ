@@ -27,7 +27,5 @@ namespace CoiniumServ.Persistance.Providers.MySql
     public interface IMySqlProvider : IStorageProvider
     {
         MySqlConnection Connection { get; }
-
-        IMySqlProviderConfig Config { get; }
     }
 }

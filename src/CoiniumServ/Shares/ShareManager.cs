@@ -48,8 +48,6 @@ namespace CoiniumServ.Shares
 
         private readonly IDaemonClient _daemonClient;
 
-        private readonly IStorageOld _storage;
-
         private readonly IStorageLayer _storageLayer;
 
         private readonly IBlockProcessor _blockProcessor;
@@ -64,15 +62,14 @@ namespace CoiniumServ.Shares
         /// <param name="poolConfig"></param>
         /// <param name="daemonClient"></param>
         /// <param name="jobTracker"></param>
-        /// <param name="storage"></param>
+        /// <param name="storageLayer"></param>
         /// <param name="blockProcessor"></param>
-        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IStorageOld storage, IBlockProcessor blockProcessor)
+        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor)
         {
             _poolConfig = poolConfig;
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _storageLayer = storageLayer;
-            _storage = storage;
             _blockProcessor = blockProcessor;
             _logger = Log.ForContext<ShareManager>().ForContext("Component", poolConfig.Coin.Name);
         }
@@ -115,8 +112,7 @@ namespace CoiniumServ.Shares
             var miner = (IStratumMiner) share.Miner;
             miner.ValidShares++;
 
-            _storage.AddShare(share); // commit the share.
-            _storageLayer.AddShare(share);
+            _storageLayer.AddShare(share); // commit the share.
             _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);
 
             // check if share is a block candidate
@@ -138,7 +134,7 @@ namespace CoiniumServ.Shares
 
             OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
 
-            _storage.AddBlock(share); // commit the block details to storage.
+            _storageLayer.AddBlock(share); // commit the block details to storage.
         }
 
         private void HandleInvalidShare(IShare share)

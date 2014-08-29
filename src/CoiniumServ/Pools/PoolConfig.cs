@@ -53,7 +53,6 @@ namespace CoiniumServ.Pools
         public IJobConfig Job { get; private set; }
         public IStratumServerConfig Stratum { get; private set; }
         public IBanConfig Banning { get; private set; }
-        public IStorageConfigOld StorageOld { get; private set; }
         public IStorageConfig Storage { get; private set; }
         public IVanillaServerConfig Vanilla { get; private set; }
 
@@ -83,7 +82,6 @@ namespace CoiniumServ.Pools
                 Job = new JobConfig(config.job);
                 Stratum = new StratumServerConfig(config.stratum);
                 Banning = new BanConfig(config.banning);
-                StorageOld = new RedisOldConfig(config.storage.redis);
                 Storage = new StorageConfig(config.storage);
                 Vanilla = new VanillaServerConfig(config.vanilla);
 

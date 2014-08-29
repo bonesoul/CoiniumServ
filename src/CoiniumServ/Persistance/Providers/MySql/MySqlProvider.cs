@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using System.Data;
 using CoiniumServ.Pools;
 using MySql.Data.MySqlClient;
 using Serilog;
@@ -31,17 +32,18 @@ namespace CoiniumServ.Persistance.Providers.MySql
 
     public class MySqlProvider : IMySqlProvider
     {
-        public bool IsConnected { get; private set; }
+        public bool IsConnected { get { return Connection.State == ConnectionState.Open; } }
         public MySqlConnection Connection { get; private set; }
-        public IMySqlProviderConfig Config { get; private set; }
+
+        private readonly IMySqlProviderConfig _config;
 
         private readonly ILogger _logger;
 
-        public MySqlProvider(PoolConfig poolConfig, IMySqlProviderConfig config)
+        public MySqlProvider(IPoolConfig poolConfig, IMySqlProviderConfig config)
         {
             _logger = Log.ForContext<MySqlProvider>().ForContext("Component", poolConfig.Coin.Name);
 
-            Config = config;
+            _config = config;
 
             Initialize();
         }
@@ -50,16 +52,16 @@ namespace CoiniumServ.Persistance.Providers.MySql
             try
             {
                 var connectionString = string.Format("Server={0};Port={1};Uid={2};Password={3};Database={4};",
-                    Config.Host, Config.Port, Config.Username, Config.Password, Config.Database);
+                    _config.Host, _config.Port, _config.Username, _config.Password, _config.Database);
 
                 Connection = new MySqlConnection(connectionString);
                 Connection.Open();
 
-                _logger.Information("Mysql storage initialized: {0:l}:{1}, database: {2:l}.", Config.Host, Config.Port, Config.Database);
+                _logger.Information("Mysql storage initialized: {0:l}:{1}, database: {2:l}.", _config.Host, _config.Port, _config.Database);
             }
             catch (Exception e)
             {
-                _logger.Error("Mysql storage initialization failed: {0:l}:{1}, database: {2:l} - {3:l}", Config.Host, Config.Port, Config.Database, e.Message);
+                _logger.Error("Mysql storage initialization failed: {0:l}:{1}, database: {2:l} - {3:l}", _config.Host, _config.Port, _config.Database, e.Message);
             }
         }
     }

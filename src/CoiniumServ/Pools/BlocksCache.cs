@@ -28,6 +28,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Persistance.Layers;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Pools
@@ -43,13 +44,13 @@ namespace CoiniumServ.Pools
             get { return _storage.ToDictionary(b => b.Height); }
         } 
 
-        private readonly IStorageOld _storageOld;
-
         private readonly IList<IPersistedBlock> _storage;
 
-        public BlocksCache(IStorageOld storageOld)
+        private readonly IStorageLayer _storageLayer;
+
+        public BlocksCache(IStorageLayer storageLayer)
         {
-            _storageOld = storageOld;
+            _storageLayer = storageLayer;
             _storage = new List<IPersistedBlock>();
         }
 
@@ -92,14 +93,14 @@ namespace CoiniumServ.Pools
             _storage.Clear();
             
             // recache blocks.
-            var blocks = _storageOld.GetAllBlocks().OrderByDescending(x => x.Key).Take(20).Select(item => item.Value).ToList();
+            var blocks = _storageLayer.GetBlocks();
             foreach (var block in blocks)
             {
                 _storage.Add(block);
             }
 
             // recache block counts.
-            var blockCounts = _storageOld.GetBlockCounts();
+            var blockCounts = _storageLayer.GetTotalBlocks();
             Pending = blockCounts.ContainsKey("pending") ? blockCounts["pending"] : 0;
             Confirmed = blockCounts.ContainsKey("confirmed") ? blockCounts["confirmed"] : 0;
             Orphaned = blockCounts.ContainsKey("orphaned") ? blockCounts["orphaned"] : 0;

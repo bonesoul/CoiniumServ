@@ -43,8 +43,6 @@ namespace CoiniumServ.Container.Registries
 
         public void RegisterInstances()
         {
-            _applicationContext.Container.Register<IStorageOld, RedisOld>(StorageProviders.Redis).AsMultiInstance();
-
             // providers
             _applicationContext.Container.Register<IStorageProvider, MySqlProvider>(StorageProviders.MySql).AsMultiInstance();
             _applicationContext.Container.Register<IStorageProvider, RedisProvider>(StorageProviders.Redis).AsMultiInstance();

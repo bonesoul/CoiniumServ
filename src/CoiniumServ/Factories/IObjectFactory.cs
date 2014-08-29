@@ -80,9 +80,9 @@ namespace CoiniumServ.Factories
 
         IJobTracker GetJobTracker();
 
-        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IStorageOld storage, IBlockProcessor blockProcessor);
+        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
 
-        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageOld storage, IBlockProcessor blockProcessor);
+        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
 
         IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient);
 
@@ -94,7 +94,7 @@ namespace CoiniumServ.Factories
 
         IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
 
-        IBlocksCache GetBlocksCache(IStorageOld storageOld);
+        IBlocksCache GetBlocksCache(IStorageLayer storageLayer);
 
         IStatisticsManager GetStatisticsManager();
 
@@ -114,8 +114,6 @@ namespace CoiniumServ.Factories
         #endregion
 
         #region storage objects
-
-        IStorageOld GetOldStorage(string type, IPoolConfig poolConfig);
 
         IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig, IStorageProviderConfig config);
 

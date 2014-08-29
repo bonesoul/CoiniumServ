@@ -76,8 +76,6 @@ namespace CoiniumServ.Pools
         
         private IStorageLayer _storageLayer;
 
-        private IStorageOld _storageOld;
-
         private Dictionary<IMiningServer, IRpcService> _servers;
 
         private readonly ILogger _logger;
@@ -207,29 +205,20 @@ namespace CoiniumServ.Pools
         {
             try
             {
-                _storageOld = _objectFactory.GetOldStorage(StorageProviders.Redis, Config);
-
-                BlocksCache = _objectFactory.GetBlocksCache(_storageOld);
-
+                BlocksCache = _objectFactory.GetBlocksCache(_storageLayer);
                 MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
-
                 NetworkStats = _objectFactory.GetNetworkStats(_daemonClient);
 
                 var jobTracker = _objectFactory.GetJobTracker();
-
                 var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
-
-                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, _storageLayer, _storageOld, blockProcessor);
-
+                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, _storageLayer, blockProcessor);
                 var vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
-
                 _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
-
                 _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, MinerManager, HashAlgorithm);
                 _jobManager.Initialize(InstanceId);
 
-                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, _storageOld, blockProcessor);
-                paymentProcessor.Initialize(Config.Payments);
+                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, _storageLayer, blockProcessor);
+                paymentProcessor.Initialize();
             }
             catch (Exception e)
             {
@@ -308,7 +297,7 @@ namespace CoiniumServ.Pools
 
         private void RecacheRound()
         {
-            RoundShares = _storageOld.GetSharesForCurrentRound();
+            RoundShares = _storageLayer.GetCurrentShares();
         }
 
         private void CalculateHashrate()

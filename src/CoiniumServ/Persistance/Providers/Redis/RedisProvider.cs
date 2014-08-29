@@ -29,18 +29,20 @@ namespace CoiniumServ.Persistance.Providers.Redis
 {
     public class RedisProvider : IRedisProvider
     {
-        public bool IsConnected { get; private set; }
+        public bool IsConnected { get { return Client.Connected; } }
 
         public RedisClient Client { get; private set; }
-
-        private readonly IRedisOldConfig _redisConfig;      
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
+
+        private readonly IRedisProviderConfig _config;        
+
         private readonly ILogger _logger;
 
-        public RedisProvider(PoolConfig poolConfig)
+        public RedisProvider(IPoolConfig poolConfig, IRedisProviderConfig config)
         {
             _logger = Log.ForContext<RedisProvider>().ForContext("Component", poolConfig.Coin.Name);
-            _redisConfig = (IRedisOldConfig)poolConfig.StorageOld; // redis config.
+
+            _config = config;
 
             Initialize();
         }
@@ -50,29 +52,29 @@ namespace CoiniumServ.Persistance.Providers.Redis
             try
             {
                 // create the connection
-                Client = new RedisClient(_redisConfig.Host, _redisConfig.Port)
+                Client = new RedisClient(_config.Host, _config.Port)
                 {
                     ReconnectAttempts = 3,
                     ReconnectTimeout = 200
                 };
 
                 // select the database
-                Client.Select(_redisConfig.DatabaseId);
+                Client.Select(_config.DatabaseId);
 
                 // authenticate if needed.
-                if (!string.IsNullOrEmpty(_redisConfig.Password))
-                    Client.Auth(_redisConfig.Password);
+                if (!string.IsNullOrEmpty(_config.Password))
+                    Client.Auth(_config.Password);
 
                 // check the version
                 var version = GetVersion();
                 if (version < _requiredMinimumVersion)
                     throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
 
-                _logger.Information("Redis storage initialized: {0:l}:{1}, v{2:l}.", _redisConfig.Host, _redisConfig.Port, version);
+                _logger.Information("Redis storage initialized: {0:l}:{1}, v{2:l}.", _config.Host, _config.Port, version);
             }
             catch (Exception e)
             {
-                _logger.Error("Redis storage initialization failed: {0:l}:{1} - {2:l}", _redisConfig.Host, _redisConfig.Port, e.Message);
+                _logger.Error("Redis storage initialization failed: {0:l}:{1} - {2:l}", _config.Host, _config.Port, e.Message);
             }
         }
 

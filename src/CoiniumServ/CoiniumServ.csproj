@@ -165,7 +165,6 @@
     <Compile Include="Persistance\Layers\Empty\EmptyStorageLayerConfig.cs" />
     <Compile Include="Persistance\Layers\Hybrid\HybridStorageLayerConfig.cs" />
     <Compile Include="Persistance\Layers\Hybrid\HybridStorageLayer.cs" />
-    <Compile Include="Persistance\IStorageConfigOld.cs" />
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
     <Compile Include="Payments\WalletConfig.cs" />
@@ -183,7 +182,6 @@
     <Compile Include="Persistance\Providers\Redis\IRedisProviderConfig.cs" />
     <Compile Include="Persistance\Providers\Redis\IRedisProvider.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisProviderConfig.cs" />
-    <Compile Include="Persistance\Providers\Redis\RedisOld.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisProvider.cs" />
     <Compile Include="Persistance\StorageConfig.cs" />
     <Compile Include="Pools\BlocksCache.cs" />
@@ -234,8 +232,6 @@
     <Compile Include="Payments\WorkerBalance.cs" />
     <Compile Include="Persistance\Blocks\BlockStatus.cs" />
     <Compile Include="Persistance\Blocks\IPersistedBlock.cs" />
-    <Compile Include="Persistance\Providers\Redis\IRedisOldConfig.cs" />
-    <Compile Include="Persistance\Providers\Redis\RedisOldConfig.cs" />
     <Compile Include="Container\Registries\AlgorithmRegistry.cs" />
     <Compile Include="Server\Mining\Vanilla\IVanillaMiner.cs" />
     <Compile Include="Server\Web\IWebServer.cs" />
@@ -254,7 +250,6 @@
     <Compile Include="Shares\IShare.cs" />
     <Compile Include="Shares\Share.cs" />
     <Compile Include="Shares\ShareError.cs" />
-    <Compile Include="Persistance\Providers\Redis\IRedisOld.cs" />
     <Compile Include="Persistance\Providers\StorageProviders.cs" />
     <Compile Include="Server\Mining\Stratum\Errors\AuthenticationError.cs" />
     <Compile Include="Server\Mining\Stratum\Errors\DuplicateShareError.cs" />
@@ -264,7 +259,6 @@
     <Compile Include="Server\Mining\Stratum\Errors\NotSubscriberError.cs" />
     <Compile Include="Server\Mining\Stratum\Errors\OtherError.cs" />
     <Compile Include="Jobs\IJob.cs" />
-    <Compile Include="Persistance\IStorageOld.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
