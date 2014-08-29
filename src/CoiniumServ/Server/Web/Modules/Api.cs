@@ -25,7 +25,6 @@ using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
-using CoiniumServ.Statistics;
 using CoiniumServ.Statistics.New;
 using Nancy;
 using Newtonsoft.Json;
@@ -37,21 +36,21 @@ namespace CoiniumServ.Server.Web.Modules
         private static readonly Response PoolNotFound = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
 
         // TODO: use base("/api");
-        public ApiModule(IStatistics statistics, IPoolManager poolManager, IAlgorithmManager algorithmManager, IStatisticsManager statisticsManager)
+        public ApiModule(IStatisticsManager statisticsManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
         {
             Get["/api/"] = _ =>
             {
                 // include common data required by layout.
                 ViewBag.Title = "API";
                 ViewBag.Heading = "Public API";
-                ViewBag.Pools = statistics.Pools;
-                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = poolManager;
+                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 
                 // return our view
                 return View["api", new ApiModel
                 {
                     BaseUrl = Request.Url.SiteBase,
-                    Coin = statistics.Pools.First().Value.Config.Coin
+                    Coin = poolManager.First().Config.Coin
                 }];
             };
 
@@ -93,73 +92,7 @@ namespace CoiniumServ.Server.Web.Modules
                 var response = (Response) statisticsManager.ServiceResponse;
                 response.ContentType = "application/json";
                 return response;
-            };
-
-            Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());
-            
-            Get["/api/pools"] = _ => Response.AsJson(statistics.Pools.GetResponseObject());
-
-            Get["/api/pool/{slug}"] = _ =>
-            {
-                var pool = statistics.Pools.GetBySymbol(_.slug);
-
-                Response response;
-
-                if (pool == null)
-                    response = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
-                else
-                    response = (Response)pool.Json;
-
-                response.ContentType = "application/json";
-                return response; 
-            };
-
-            Get["/api/pool/{slug}/workers"] = _ =>
-            {
-                var pool = statistics.Pools.GetBySymbol(_.slug);
-
-                Response response;
-
-                if (pool == null)
-                    response = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
-                else
-                    response = (Response)pool.WorkersJson;
-
-                response.ContentType = "application/json";
-                return response;
-            };
-
-            Get["/api/pool/{slug}/round"] = _ =>
-            {
-                var pool = statistics.Pools.GetBySymbol(_.slug);
-
-                Response response;
-
-                if (pool == null)
-                    response = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
-                else
-                    response = (Response)pool.CurrentRoundJson;
-
-                response.ContentType = "application/json";
-                return response;
-            };
-
-            Get["/api/algorithms"] = _ => Response.AsJson(statistics.Algorithms.GetResponseObject());
-
-            Get["/api/algorithm/{slug}"] = _ =>
-            {
-                var algorithm = statistics.Algorithms.GetByName(_.slug);
-
-                Response response;
-
-                if (algorithm == null)
-                    response = JsonConvert.SerializeObject(new JsonError("Algorithm not found!"));
-                else
-                    response = (Response)algorithm.Json;                                      
-                    
-                response.ContentType = "application/json";
-                return response;                
-            };
+            };          
         }
     }
 

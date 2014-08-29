@@ -23,26 +23,27 @@
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
+using CoiniumServ.Statistics.New;
 using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules
 {
     public class IndexModule : NancyModule
     {
-        public IndexModule(IPoolManager poolManager, IStatistics statistics)
+        public IndexModule(IStatisticsManager statisticsManager, IPoolManager poolManager)
         {
             Get["/"] = _ =>
             {
                 // include common data required by layout.
                 ViewBag.Heading = "Welcome";
-                ViewBag.Pools = statistics.Pools;
-                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = poolManager;
+                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 
                 // return our view
                 return View["index", new IndexModel
                 {
                     Pools = poolManager.GetAllAsReadOnly(),
-                    Statistics = statistics
+                    StatisticsManager = statisticsManager
                 }];
             };
         }

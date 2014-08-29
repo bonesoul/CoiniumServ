@@ -241,66 +241,6 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region pool statistics objects
-
-        public IStatistics GetStatistics()
-        {
-            return _applicationContext.Container.Resolve<IStatistics>();
-        }
-
-        public IGlobal GetGlobalStatistics()
-        {
-            return _applicationContext.Container.Resolve<IGlobal>();
-        }
-
-        public IAlgorithms GetAlgorithmStatistics()
-        {
-            return _applicationContext.Container.Resolve<IAlgorithms>();
-        }
-
-        public IPools GetPoolStats()
-        {
-            return _applicationContext.Container.Resolve<IPools>();
-        }
-
-        public IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorageOld storage)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"poolConfig", poolConfig},
-                {"daemonClient", daemonClient},
-                {"minerManager",minerManager},
-                {"hashAlgorithm", hashAlgorithm},
-                {"blockStatistics", blockStatistics},
-                {"storage", storage},
-            };
-
-            return _applicationContext.Container.Resolve<IPerPool>(@params);
-        }
-
-        public ILatestBlocks GetLatestBlocks(IStorageOld storage)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"storage", storage}
-            };
-
-            return _applicationContext.Container.Resolve<ILatestBlocks>(@params);
-        }
-
-        public IBlocksCount GetBlockStats(ILatestBlocks latestBlocks, IStorageOld storage)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"latestBlocks", latestBlocks},
-                {"storage", storage},
-            };
-
-            return _applicationContext.Container.Resolve<IBlocksCount>(@params);
-        }
-
-        #endregion
-
         #region server & service objects
 
         public IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,

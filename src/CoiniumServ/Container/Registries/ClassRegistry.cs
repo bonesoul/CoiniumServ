@@ -48,24 +48,16 @@ namespace CoiniumServ.Container.Registries
         public void RegisterInstances()
         {
             // pool
-            _applicationContext.Container.Register<IPools, Statistics.Pools>().AsSingleton();  
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
-            _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
             _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<INetworkStats, NetworkStats>().AsMultiInstance();
             _applicationContext.Container.Register<IBlocksCache, BlocksCache>().AsMultiInstance();
 
             // statistics
             _applicationContext.Container.Register<IStatisticsManager, StatisticsManager>().AsSingleton();
-
-            _applicationContext.Container.Register<IStatistics, Statistics.Statistics>().AsSingleton();
-            _applicationContext.Container.Register<IGlobal, Global>().AsSingleton();
-            _applicationContext.Container.Register<IPerPool, PerPool>().AsMultiInstance();
-            _applicationContext.Container.Register<IBlocksCount, BlocksCount>().AsMultiInstance();
-            _applicationContext.Container.Register<ILatestBlocks, LatestBlocks>().AsMultiInstance();
 
             // config
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();

@@ -56,8 +56,6 @@ namespace CoiniumServ.Pools
     public class Pool : IPool
     {
         public IPoolConfig Config { get; private set; }
-
-        public IPerPool Statistics { get; private set; }
         public ulong Hashrate { get; private set; }
         public Dictionary<string, double> RoundShares { get; private set; }
         public IHashAlgorithm HashAlgorithm { get; private set; }
@@ -235,10 +233,6 @@ namespace CoiniumServ.Pools
 
                 var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, _storageOld, blockProcessor);
                 paymentProcessor.Initialize(Config.Payments);
-
-                var latestBlocks = _objectFactory.GetLatestBlocks(_storageOld);
-                var blockStats = _objectFactory.GetBlockStats(latestBlocks, _storageOld);
-                Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, MinerManager, HashAlgorithm, blockStats, _storageOld);
             }
             catch (Exception e)
             {

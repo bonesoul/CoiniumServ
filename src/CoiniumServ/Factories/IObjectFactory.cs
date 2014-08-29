@@ -101,24 +101,6 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region pool statistics objects
-
-        IStatistics GetStatistics();
-
-        IGlobal GetGlobalStatistics();
-
-        IAlgorithms GetAlgorithmStatistics();
-
-        IPools GetPoolStats();
-
-        IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorageOld storage);
-
-        IBlocksCount GetBlockStats(ILatestBlocks latestBlocks, IStorageOld storage);
-
-        ILatestBlocks GetLatestBlocks(IStorageOld storage);
-
-        #endregion
-
         #region server & service objects
 
         IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,

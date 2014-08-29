@@ -23,6 +23,7 @@
 using System.Collections.Generic;
 using CoiniumServ.Pools;
 using CoiniumServ.Statistics;
+using CoiniumServ.Statistics.New;
 
 namespace CoiniumServ.Server.Web.Models
 {
@@ -30,6 +31,6 @@ namespace CoiniumServ.Server.Web.Models
     {
         public IReadOnlyCollection<IPool> Pools { get; set; }
 
-        public IStatistics Statistics { get; set; }
+        public IStatisticsManager StatisticsManager { get; set; }
     }
 }

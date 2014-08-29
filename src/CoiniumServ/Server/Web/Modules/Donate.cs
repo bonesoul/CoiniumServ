@@ -20,22 +20,25 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Pools;
 using CoiniumServ.Statistics;
+using CoiniumServ.Statistics.New;
 using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules
 {
     public class DonateModule : NancyModule
     {
-        public DonateModule(IStatistics statistics)
+        public DonateModule(IStatisticsManager statisticsManager, IPoolManager poolManager)
         {
             Get["/donate/"] = _ =>
             {
                 // include common data required by layout.
                 ViewBag.Title = "Donation";
                 ViewBag.Heading = "Donation";
-                ViewBag.Pools = statistics.Pools;
-                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = poolManager;
+                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 
                 // return our view
                 return View["donate"];

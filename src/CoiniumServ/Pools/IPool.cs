@@ -36,8 +36,6 @@ namespace CoiniumServ.Pools
         [JsonProperty("config")]
         IPoolConfig Config { get; }
 
-        IPerPool Statistics { get; }
-
         [JsonProperty("hashrate")]
         UInt64 Hashrate { get; }
 
