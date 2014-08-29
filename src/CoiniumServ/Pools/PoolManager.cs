@@ -75,6 +75,11 @@ namespace CoiniumServ.Pools
 
         public void Recache()
         {
+            foreach (var pool in _storage) // recache per-pool stats
+            {
+                pool.Recache();
+            }
+
             var cache = _storage.ToDictionary(pool => pool.Config.Coin.Symbol);
             ServiceResponse = JsonConvert.SerializeObject(cache);
         }

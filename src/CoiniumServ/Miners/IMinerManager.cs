@@ -27,12 +27,16 @@ using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Server.Mining.Vanilla;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Miners
 {
     public interface IMinerManager
     {
         event EventHandler MinerAuthenticated;
+
+        [JsonProperty("count")]
+        int Count { get; }
 
         IList<IMiner> Miners { get; }
 

@@ -29,12 +29,15 @@ using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Server.Mining.Vanilla;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace CoiniumServ.Miners
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class MinerManager : IMinerManager
-    {
+    {        
+        public int Count { get { return _miners.Count(kvp => kvp.Value.Authenticated); } }
         public IList<IMiner> Miners { get { return _miners.Values.ToList(); } }
 
         public event EventHandler MinerAuthenticated;

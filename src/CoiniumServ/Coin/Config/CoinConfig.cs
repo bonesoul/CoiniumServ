@@ -22,25 +22,18 @@
 #endregion
 
 using System;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace CoiniumServ.Coin.Config
 {
-    [JsonObject(MemberSerialization.OptIn)]
     public class CoinConfig : ICoinConfig
     {
         public bool Valid { get; private set; }
-        [JsonProperty("name")]
         public string Name { get; private set; }
-        [JsonProperty("symbol")]
         public string Symbol { get; private set; }
-        [JsonProperty("algorithm")]
         public string Algorithm { get; private set; }
         public bool SupportsTxMessages { get; private set; }
-        [JsonProperty("pos")]
         public bool IsPOS { get; set; }
-        [JsonProperty("blockexplorer")]
         public string BlockExplorer { get; private set; }
         public dynamic Options { get; private set; }
 

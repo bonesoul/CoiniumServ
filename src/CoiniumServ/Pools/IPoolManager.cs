@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System.Collections.Generic;
 using CoiniumServ.Server.Web.Service;
 using CoiniumServ.Statistics.Repository;
 

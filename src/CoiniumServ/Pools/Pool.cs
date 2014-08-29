@@ -43,6 +43,7 @@ using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
+using CoiniumServ.Utils.Helpers.Time;
 using CoiniumServ.Utils.Helpers.Validation;
 using Newtonsoft.Json;
 using Serilog;
@@ -55,16 +56,18 @@ namespace CoiniumServ.Pools
     [JsonObject(MemberSerialization.OptIn)]
     public class Pool : IPool
     {
-        [JsonProperty("config")]
         public IPoolConfig Config { get; private set; }
 
         public IPerPool Statistics { get; private set; }
+        public ulong Hashrate { get; private set; }
 
         // object factory.
         private readonly IObjectFactory _objectFactory;
 
         // dependent objects.
         private IDaemonClient _daemonClient;
+        
+        [JsonProperty("miners")]
         private IMinerManager _minerManager;
         private IJobManager _jobManager;
         private IShareManager _shareManager;
@@ -286,6 +289,23 @@ namespace CoiniumServ.Pools
             rndGenerator.GetNonZeroBytes(randomBytes); // create cryptographically random array of bytes.
             InstanceId = BitConverter.ToUInt32(randomBytes, 0); // convert them to instance Id.
             _logger.Debug("Generated cryptographically random instance Id: {0}", InstanceId);
+        }
+
+        public string ServiceResponse { get; private set; }
+        public void Recache()
+        {
+            CalculateHashrate();
+        }
+
+        private void CalculateHashrate()
+        {
+            //// read hashrate stats.
+            //var windowTime = TimeHelpers.NowInUnixTime() - _statisticsConfig.HashrateWindow;
+            //_storage.DeleteExpiredHashrateData(windowTime);
+            //var hashrates = _storage.GetHashrateData(windowTime);
+
+            //double total = hashrates.Sum(pair => pair.Value);
+            //Hashrate = Convert.ToUInt64(_shareMultiplier * total / _statisticsConfig.HashrateWindow);
         }
     }
 }

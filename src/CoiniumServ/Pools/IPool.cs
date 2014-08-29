@@ -21,15 +21,22 @@
 // 
 #endregion
 
+using System;
+using CoiniumServ.Server.Web.Service;
 using CoiniumServ.Statistics;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Pools
 {
-    public interface IPool
+    public interface IPool: IJsonService
     {
+        [JsonProperty("config")]
         IPoolConfig Config { get; }
 
         IPerPool Statistics { get; }
+
+        [JsonProperty("hashrate")]
+        UInt64 Hashrate { get; }
 
         void Start();
 

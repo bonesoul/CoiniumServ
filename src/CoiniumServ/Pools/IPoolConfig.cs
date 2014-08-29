@@ -60,6 +60,7 @@ namespace CoiniumServ.Pools
 
         IJobConfig Job { get; }
 
+        [JsonProperty("stratum")]
         IStratumServerConfig Stratum { get; }
 
         IBanConfig Banning { get; }
