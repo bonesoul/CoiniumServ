@@ -128,6 +128,11 @@ namespace CoiniumServ.Cryptology.Algorithms
             ServiceResponse = JsonConvert.SerializeObject(cache, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
 
+        public IHashAlgorithm Get(string name)
+        {
+            return _storage.FirstOrDefault(p => p.GetType().Name.ToLower().Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
         public IEnumerator<IHashAlgorithm> GetEnumerator()
         {
             return _storage.GetEnumerator();

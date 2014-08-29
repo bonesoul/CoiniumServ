@@ -22,10 +22,12 @@
 #endregion
 using CoiniumServ.Server.Web.Service;
 using CoiniumServ.Statistics.Repository;
+using HashLib;
 
 namespace CoiniumServ.Cryptology.Algorithms
 {
     public interface IAlgorithmManager : IRepository<IHashAlgorithm>, IJsonService
     {
+        IHashAlgorithm Get(string name);
     }
 }

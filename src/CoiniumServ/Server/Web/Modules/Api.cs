@@ -78,6 +78,15 @@ namespace CoiniumServ.Server.Web.Modules
                 return response;
             };
 
+            Get["/api/new/algorithm/{slug}"] = _ =>
+            {
+                var algorithm = algorithmManager.Get(_.slug); // query the requested pool.
+
+                var response = algorithm != null ? (Response)algorithm.ServiceResponse : PoolNotFound;
+                response.ContentType = "application/json";
+                return response;
+            };
+
 
             Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());
             
