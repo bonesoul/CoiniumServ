@@ -200,7 +200,7 @@
     <Compile Include="Statistics\IJsonResponse.cs" />
     <Compile Include="Statistics\ILatestBlocks.cs" />
     <Compile Include="Statistics\Repository\IRepository.cs" />
-    <Compile Include="Statistics\IStatisticsConfig.cs" />
+    <Compile Include="Statistics\New\IStatisticsConfig.cs" />
     <Compile Include="Statistics\LatestBlocks.cs" />
     <Compile Include="Statistics\Algorithms.cs" />
     <Compile Include="Statistics\Global.cs" />
@@ -224,7 +224,7 @@
     <Compile Include="Server\Web\Service\IJsonService.cs" />
     <Compile Include="Statistics\Statistics.cs" />
     <Compile Include="Shares\ShareEventArgs.cs" />
-    <Compile Include="Statistics\StatisticsConfig.cs" />
+    <Compile Include="Statistics\New\StatisticsConfig.cs" />
     <Compile Include="Vardiff\IVardiffMiner.cs" />
     <Compile Include="Vardiff\IVardiffConfig.cs" />
     <Compile Include="Vardiff\IVardiffManager.cs" />

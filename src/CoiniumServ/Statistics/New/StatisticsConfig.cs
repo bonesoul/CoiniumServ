@@ -20,11 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using Serilog;
 
-namespace CoiniumServ.Statistics
+namespace CoiniumServ.Statistics.New
 {
     public class StatisticsConfig:IStatisticsConfig
     {

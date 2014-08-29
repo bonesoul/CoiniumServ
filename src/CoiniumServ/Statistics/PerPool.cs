@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -32,6 +31,7 @@ using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Miners;
 using CoiniumServ.Persistance;
 using CoiniumServ.Pools;
+using CoiniumServ.Statistics.New;
 using CoiniumServ.Utils.Helpers.Time;
 using Newtonsoft.Json;
 

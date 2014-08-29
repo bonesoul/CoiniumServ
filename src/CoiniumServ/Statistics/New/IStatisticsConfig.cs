@@ -20,10 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Statistics
+namespace CoiniumServ.Statistics.New
 {
     public interface IStatisticsConfig:IConfig
     {
