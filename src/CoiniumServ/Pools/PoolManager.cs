@@ -81,7 +81,10 @@ namespace CoiniumServ.Pools
             }
 
             var cache = _storage.ToDictionary(pool => pool.Config.Coin.Symbol);
-            ServiceResponse = JsonConvert.SerializeObject(cache);
+            ServiceResponse = JsonConvert.SerializeObject(cache, Formatting.Indented, new JsonSerializerSettings // cache the json-service response.
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore // ignore circular dependencies
+            });           
         }
 
         public IPool Get(string symbol)

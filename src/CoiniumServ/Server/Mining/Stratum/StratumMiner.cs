@@ -55,11 +55,13 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Unique subscription id for identifying the miner.
         /// </summary>
+        [JsonProperty("id")]
         public int Id { get; private set; }
 
         /// <summary>
         /// Username of the miner.
         /// </summary>
+        [JsonProperty("username")]
         public string Username { get; private set; }
 
         /// <summary>
@@ -70,13 +72,17 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Is the miner authenticated?
         /// </summary>
+        [JsonProperty("authenticated")]
         public bool Authenticated { get; set; }
 
+        [JsonProperty("valid")]
         public int ValidShares { get; set; }
+        [JsonProperty("invalid")]
         public int InvalidShares { get; set; }
 
         public IPool Pool { get; private set; }
 
+        [JsonProperty("difficulty")]
         public float Difficulty { get; set; }
         public float PreviousDifficulty { get; set; }
 

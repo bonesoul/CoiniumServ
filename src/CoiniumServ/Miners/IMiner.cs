@@ -23,12 +23,14 @@
 
 using System;
 using CoiniumServ.Pools;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Miners
 {
     /// <summary>
     /// Miner interface that any implementations should extend.
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public interface IMiner
     {
         /// <summary>

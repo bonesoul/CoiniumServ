@@ -31,6 +31,7 @@ using Newtonsoft.Json;
 
 namespace CoiniumServ.Miners
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public interface IMinerManager
     {
         event EventHandler MinerAuthenticated;
@@ -38,6 +39,7 @@ namespace CoiniumServ.Miners
         [JsonProperty("count")]
         int Count { get; }
 
+        [JsonProperty("list")]
         IList<IMiner> Miners { get; }
 
         IMiner GetMiner(Int32 id);

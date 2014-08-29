@@ -336,8 +336,14 @@ namespace CoiniumServ.Payments
 
         private void GetPoolAccount()
         {
-            var result = _daemonClient.GetAccount(_walletConfig.Adress);
-            _poolAccount = result;
+            try
+            {
+                _poolAccount = _daemonClient.GetAccount(_walletConfig.Adress);
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Cannot determine pool's central wallet account: {0:l}", e.Message);
+            }
         }
 
         private bool ValidatePoolAddress()

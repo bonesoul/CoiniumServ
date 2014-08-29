@@ -33,6 +33,8 @@ namespace CoiniumServ.Server.Web.Modules
 {
     public class ApiModule: NancyModule
     {
+        private static readonly Response PoolNotFound = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
+
         // TODO: use base("/api");
         public ApiModule(IStatistics statistics, IPoolManager poolManager)
         {
@@ -56,6 +58,15 @@ namespace CoiniumServ.Server.Web.Modules
             Get["/api/new/pools"] = _ =>
             {
                 var response = (Response) poolManager.ServiceResponse;
+                response.ContentType = "application/json";
+                return response;
+            };
+
+            Get["/api/new/pool/{slug}"] = _ =>
+            {
+                var pool = poolManager.Get(_.slug); // query the requested pool.
+
+                var response = pool != null ? (Response)pool.ServiceResponse : PoolNotFound;
                 response.ContentType = "application/json";
                 return response;
             };

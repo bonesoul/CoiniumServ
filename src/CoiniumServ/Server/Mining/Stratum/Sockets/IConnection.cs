@@ -24,12 +24,14 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
     /// <summary>
     /// Connection interface.
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public interface IConnection
     {
         /// <summary>

@@ -303,9 +303,13 @@ namespace CoiniumServ.Pools
         public string ServiceResponse { get; private set; }
         public void Recache()
         {
-            _networkStats.Recache();
+            _networkStats.Recache(); // let network statistics recache.
+            CalculateHashrate(); // calculate the pool hashrate.
 
-            CalculateHashrate();
+            ServiceResponse = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings // cache the json-service response.
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore // ignore circular dependencies
+            });  
         }
 
         private void CalculateHashrate()
