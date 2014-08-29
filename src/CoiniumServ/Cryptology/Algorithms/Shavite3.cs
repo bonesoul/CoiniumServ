@@ -24,9 +24,9 @@ using HashLib;
 
 namespace CoiniumServ.Cryptology.Algorithms
 {
-    public class Shavite3 : IHashAlgorithm
+    public sealed class Shavite3 : HashAlgorithmBase
     {
-        public uint Multiplier { get; private set; }
+        public override uint Multiplier { get; protected set; }
 
         private readonly IHash _hasher;
 
@@ -37,7 +37,7 @@ namespace CoiniumServ.Cryptology.Algorithms
             Multiplier = 1;
         }
 
-        public byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input, dynamic config)
         {
             return _hasher.ComputeBytes(input).GetBytes();
         }

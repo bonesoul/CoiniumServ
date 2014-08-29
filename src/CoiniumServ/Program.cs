@@ -84,6 +84,8 @@ namespace CoiniumServ
             var poolManager = objectFactory.GetPoolManager();
             poolManager.Run();
 
+            var algorithmManager = objectFactory.GetAlgorithmManager(poolManager);
+
             // start web server.
             objectFactory.GetWebServer();
 

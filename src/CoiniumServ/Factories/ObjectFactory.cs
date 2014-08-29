@@ -41,6 +41,7 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
+using CoiniumServ.Statistics.New;
 using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
@@ -216,6 +217,11 @@ namespace CoiniumServ.Factories
             };
 
             return _applicationContext.Container.Resolve<INetworkStats>(@params);
+        }
+
+        public IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager)
+        {
+            return _applicationContext.Container.Resolve<IAlgorithmManager>();
         }
 
         #endregion

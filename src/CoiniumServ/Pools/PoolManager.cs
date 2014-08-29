@@ -70,6 +70,8 @@ namespace CoiniumServ.Pools
             return new ReadOnlyCollection<IPool>(_storage);
         }
 
+        public int Count { get { return _storage.Count; } }
+
         public string ServiceResponse { get; private set; }
 
         public void Recache()
@@ -79,11 +81,9 @@ namespace CoiniumServ.Pools
                 pool.Recache();
             }
 
-            var cache = _storage.ToDictionary(pool => pool.Config.Coin.Symbol);
-            ServiceResponse = JsonConvert.SerializeObject(cache, Formatting.Indented, new JsonSerializerSettings // cache the json-service response.
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore // ignore circular dependencies
-            });           
+            // cache the json-service response
+            var cache = _storage.ToDictionary(pool => pool.Config.Coin.Symbol.ToLower());
+            ServiceResponse = JsonConvert.SerializeObject(cache, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
 
         public IPool Get(string symbol)

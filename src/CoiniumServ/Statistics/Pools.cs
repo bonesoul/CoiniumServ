@@ -25,6 +25,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Statistics.Repository;
 using Newtonsoft.Json;
@@ -37,11 +38,13 @@ namespace CoiniumServ.Statistics
 
         private readonly Dictionary<string, IPerPool> _pools;
         private readonly IPoolManager _poolManager;
+        private readonly IAlgorithmManager _algorithmManager;
         private readonly Dictionary<string, ExpandoObject> _response;
 
-        public Pools(IPoolManager poolManager)
+        public Pools(IPoolManager poolManager, IAlgorithmManager algorithmManager)
         {
             _poolManager = poolManager;
+            _algorithmManager = algorithmManager;
             _pools = new Dictionary<string, IPerPool>();
             _response = new Dictionary<string, ExpandoObject>();
 
@@ -69,6 +72,7 @@ namespace CoiniumServ.Statistics
         public void Recache(object state)
         {
             _poolManager.Recache();
+            _algorithmManager.Recache();
 
             // recache data.
             foreach (var pool in _poolManager.GetAll())

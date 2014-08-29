@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 
 namespace CoiniumServ.Statistics
 {
-    public interface IAlgorithms: IEnumerable<KeyValuePair<string, IPerAlgorithm>>, IJsonResponse, IStatisticsProvider
+    public interface IAlgorithms: IEnumerable<KeyValuePair<string, IAlgorithm>>, IJsonResponse, IStatisticsProvider
     {
-        IPerAlgorithm GetByName(string name);
+        IAlgorithm GetByName(string name);
     }
 }

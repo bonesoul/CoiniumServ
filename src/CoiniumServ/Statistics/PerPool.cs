@@ -64,7 +64,7 @@ namespace CoiniumServ.Statistics
 
         private readonly double _shareMultiplier;
 
-        public PerPool(IPoolConfig poolConfig, IConfigManager configManager, IDaemonClient daemonClient,IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorageOld storage)
+        public PerPool(IPoolConfig poolConfig, IConfigManager configManager, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorageOld storage)
         {
             Config = poolConfig;
             _statisticsConfig = configManager.WebServerConfig.Statistics;

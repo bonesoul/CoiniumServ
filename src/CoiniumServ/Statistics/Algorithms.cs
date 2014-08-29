@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,14 +34,14 @@ namespace CoiniumServ.Statistics
     {
         public string Json { get; private set; }
 
-        private readonly Dictionary<string, IPerAlgorithm> _algorithms;
+        private readonly Dictionary<string, IAlgorithm> _algorithms;
         private readonly Dictionary<string, object> _response;
         private readonly IPoolManager _poolManager;
 
         public Algorithms(IPoolManager poolManager)
         {
             _poolManager = poolManager;
-            _algorithms = new Dictionary<string, IPerAlgorithm>();
+            _algorithms = new Dictionary<string, IAlgorithm>();
             _response = new Dictionary<string, object>();
         }
 
@@ -55,7 +56,7 @@ namespace CoiniumServ.Statistics
             foreach (var pool in _poolManager.GetAll())
             {
                 if (!_algorithms.ContainsKey(pool.Config.Coin.Algorithm))
-                    _algorithms.Add(pool.Config.Coin.Algorithm, new PerAlgorithm(pool.Config.Coin.Algorithm));
+                    _algorithms.Add(pool.Config.Coin.Algorithm, new Algorithm(pool.Config.Coin.Algorithm));
 
                 _algorithms[pool.Config.Coin.Algorithm].Recache(pool.Statistics.Hashrate, pool.Statistics.WorkerCount);                
             }
@@ -72,12 +73,12 @@ namespace CoiniumServ.Statistics
             Json = JsonConvert.SerializeObject(_response);
         }
 
-        public IPerAlgorithm GetByName(string name)
+        public IAlgorithm GetByName(string name)
         {
             return _algorithms.Values.FirstOrDefault(pair => pair.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public IEnumerator<KeyValuePair<string, IPerAlgorithm>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, IAlgorithm>> GetEnumerator()
         {
             return _algorithms.GetEnumerator();
         }

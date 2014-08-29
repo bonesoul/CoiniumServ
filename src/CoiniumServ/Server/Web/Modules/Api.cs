@@ -22,6 +22,7 @@
 #endregion
 using System.Linq;
 using CoiniumServ.Coin.Config;
+using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
@@ -35,7 +36,7 @@ namespace CoiniumServ.Server.Web.Modules
         private static readonly Response PoolNotFound = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
 
         // TODO: use base("/api");
-        public ApiModule(IStatistics statistics, IPoolManager poolManager)
+        public ApiModule(IStatistics statistics, IPoolManager poolManager, IAlgorithmManager algorithmManager)
         {
             Get["/api/"] = _ =>
             {
@@ -69,6 +70,14 @@ namespace CoiniumServ.Server.Web.Modules
                 response.ContentType = "application/json";
                 return response;
             };
+
+            Get["/api/new/algorithms"] = _ =>
+            {
+                var response = (Response)algorithmManager.ServiceResponse;
+                response.ContentType = "application/json";
+                return response;
+            };
+
 
             Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());
             

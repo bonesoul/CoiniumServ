@@ -25,9 +25,9 @@ using HashLib;
 
 namespace CoiniumServ.Cryptology.Algorithms
 {
-    public class Fugue : IHashAlgorithm
+    public sealed class Fugue : HashAlgorithmBase
     {
-        public uint Multiplier { get; private set; }
+        public override uint Multiplier { get; protected set; }
 
         private readonly IHash _hasher;
 
@@ -38,7 +38,7 @@ namespace CoiniumServ.Cryptology.Algorithms
             Multiplier = (UInt32)Math.Pow(2, 8);
         }
 
-        public byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input, dynamic config)
         {
             return _hasher.ComputeBytes(input).GetBytes();
         }

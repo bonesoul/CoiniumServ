@@ -20,20 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
+using CoiniumServ.Server.Web.Service;
+using CoiniumServ.Statistics.Repository;
 
-namespace CoiniumServ.Statistics
+namespace CoiniumServ.Cryptology.Algorithms
 {
-    public interface IPerAlgorithm:IJsonResponse
+    public interface IAlgorithmManager : IRepository<IHashAlgorithm>, IJsonService
     {
-        string Name { get; }
-
-        Int32 WorkerCount { get; }
-
-        UInt64 Hashrate { get; }
-
-        void Reset();
-
-        void Recache(UInt64 hashrate, int workerCount);
     }
 }

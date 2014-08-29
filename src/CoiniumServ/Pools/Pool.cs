@@ -43,6 +43,7 @@ using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
+using CoiniumServ.Statistics.New;
 using CoiniumServ.Utils.Helpers.Validation;
 using Newtonsoft.Json;
 using Serilog;
@@ -52,7 +53,6 @@ namespace CoiniumServ.Pools
     /// <summary>
     /// Contains pool services and server.
     /// </summary>
-    [JsonObject(MemberSerialization.OptIn)]
     public class Pool : IPool
     {
         public IPoolConfig Config { get; private set; }
@@ -60,24 +60,21 @@ namespace CoiniumServ.Pools
         public IPerPool Statistics { get; private set; }
         public ulong Hashrate { get; private set; }
         public Dictionary<string, double> RoundShares { get; private set; }
+        public IHashAlgorithm HashAlgorithm { get; private set; }
+        public IMinerManager MinerManager { get; private set; }
 
         // object factory.
         private readonly IObjectFactory _objectFactory;
 
         // dependent objects.
-        private IDaemonClient _daemonClient;
-        
-        [JsonProperty("miners")]
-        private IMinerManager _minerManager;
+        private IDaemonClient _daemonClient;       
 
         [JsonProperty("network")]
         private INetworkStats _networkStats;
         
         private IJobManager _jobManager;
         
-        private IShareManager _shareManager;
-        
-        private IHashAlgorithm _hashAlgorithm;
+        private IShareManager _shareManager;       
         
         private IBanManager _banningManager;
         
@@ -131,7 +128,7 @@ namespace CoiniumServ.Pools
             }
 
             _daemonClient = _objectFactory.GetDaemonClient(Config);
-            _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
+            HashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
 
             // read getinfo().
             try
@@ -164,7 +161,7 @@ namespace CoiniumServ.Pools
 
                 _logger.Information("Network difficulty: {0:0.00000000} block difficulty: {1:0.00} Network hashrate: {2:l} ",
                     miningInfo.Difficulty,
-                    miningInfo.Difficulty * _hashAlgorithm.Multiplier,
+                    miningInfo.Difficulty * HashAlgorithm.Multiplier,
                     miningInfo.NetworkHashps.GetReadableHashrate());
             }
             catch (RpcException e)
@@ -216,7 +213,7 @@ namespace CoiniumServ.Pools
             {
                 _storageOld = _objectFactory.GetOldStorage(StorageProviders.Redis, Config);
 
-                _minerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
+                MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
                 _networkStats = _objectFactory.GetNetworkStats(_daemonClient);
 
@@ -230,7 +227,7 @@ namespace CoiniumServ.Pools
 
                 _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
 
-                _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, _minerManager, _hashAlgorithm);
+                _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, MinerManager, HashAlgorithm);
                 _jobManager.Initialize(InstanceId);
 
                 var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, _storageOld, blockProcessor);
@@ -238,7 +235,7 @@ namespace CoiniumServ.Pools
 
                 var latestBlocks = _objectFactory.GetLatestBlocks(_storageOld);
                 var blockStats = _objectFactory.GetBlockStats(latestBlocks, _storageOld);
-                Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, _storageOld);
+                Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, MinerManager, HashAlgorithm, blockStats, _storageOld);
             }
             catch (Exception e)
             {
@@ -254,7 +251,7 @@ namespace CoiniumServ.Pools
 
             if (Config.Stratum != null && Config.Stratum.Enabled)
             {
-                var stratumServer = _objectFactory.GetMiningServer("Stratum", Config, this, _minerManager, _jobManager, _banningManager);
+                var stratumServer = _objectFactory.GetMiningServer("Stratum", Config, this, MinerManager, _jobManager, _banningManager);
                 var stratumService = _objectFactory.GetMiningService("Stratum", Config, _shareManager, _daemonClient);
                 stratumServer.Initialize(Config.Stratum);
 
@@ -263,7 +260,7 @@ namespace CoiniumServ.Pools
 
             if (Config.Vanilla != null && Config.Vanilla.Enabled)
             {
-                var vanillaServer = _objectFactory.GetMiningServer("Vanilla", Config, this, _minerManager, _jobManager, _banningManager);
+                var vanillaServer = _objectFactory.GetMiningServer("Vanilla", Config, this, MinerManager, _jobManager, _banningManager);
                 var vanillaService = _objectFactory.GetMiningService("Vanilla", Config, _shareManager, _daemonClient);
 
                 vanillaServer.Initialize(Config.Vanilla);
@@ -310,10 +307,8 @@ namespace CoiniumServ.Pools
             CalculateHashrate(); // calculate the pool hashrate.
             RecacheRound(); // recache current round.
 
-            ServiceResponse = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings // cache the json-service response.
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore // ignore circular dependencies
-            });  
+            // cache the json-service response
+            ServiceResponse = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
 
         private void RecacheRound()

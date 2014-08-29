@@ -40,6 +40,7 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
+using CoiniumServ.Statistics.New;
 using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 
@@ -91,6 +92,8 @@ namespace CoiniumServ.Factories
         IVardiffManager GetVardiffManager(IPoolConfig poolConfig, IShareManager shareManager);
 
         INetworkStats GetNetworkStats(IDaemonClient daemonClient);
+
+        IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
 
         #endregion
 

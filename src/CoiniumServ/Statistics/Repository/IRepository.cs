@@ -33,5 +33,7 @@ namespace CoiniumServ.Statistics.Repository
         IEnumerable<T> GetAll();
         IQueryable<T> GetAllAsQueryable();
         IReadOnlyCollection<T> GetAllAsReadOnly();
+
+        int Count { get; }
     }
 }

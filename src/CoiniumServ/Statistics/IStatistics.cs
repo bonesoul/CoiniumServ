@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using CoiniumServ.Statistics.New;
 
 namespace CoiniumServ.Statistics
 {

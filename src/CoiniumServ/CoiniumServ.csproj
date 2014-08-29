@@ -130,6 +130,8 @@
     <Compile Include="Cryptology\Algorithms\Blake.cs" />
     <Compile Include="Cryptology\Algorithms\Fugue.cs" />
     <Compile Include="Cryptology\Algorithms\Groestl.cs" />
+    <Compile Include="Cryptology\Algorithms\HashAlgorithmBase.cs" />
+    <Compile Include="Cryptology\Algorithms\IAlgorithmManager.cs" />
     <Compile Include="Cryptology\Algorithms\Keccak.cs" />
     <Compile Include="Cryptology\Algorithms\Sha256.cs" />
     <Compile Include="Cryptology\Algorithms\Shavite3.cs" />
@@ -184,7 +186,7 @@
     <Compile Include="Persistance\Providers\Redis\RedisOld.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisProvider.cs" />
     <Compile Include="Persistance\StorageConfig.cs" />
-    <Compile Include="Pools\INetworkStats.cs" />
+    <Compile Include="Statistics\New\INetworkStats.cs" />
     <Compile Include="Pools\IPoolConfig.cs" />
     <Compile Include="Pools\NetworkStats.cs" />
     <Compile Include="Repository\Registries\StorageRegistry.cs" />
@@ -213,12 +215,12 @@
     <Compile Include="Jobs\Tracker\JobTracker.cs" />
     <Compile Include="Miners\MinerEventArgs.cs" />
     <Compile Include="Statistics\IGlobal.cs" />
-    <Compile Include="Statistics\IPerAlgorithm.cs" />
+    <Compile Include="Statistics\IAlgorithm.cs" />
     <Compile Include="Statistics\IPerPool.cs" />
     <Compile Include="Statistics\IPools.cs" />
     <Compile Include="Statistics\IStatistics.cs" />
     <Compile Include="Statistics\IStatisticsProvider.cs" />
-    <Compile Include="Statistics\PerAlgorithm.cs" />
+    <Compile Include="Statistics\Algorithm.cs" />
     <Compile Include="Statistics\PerPool.cs" />
     <Compile Include="Statistics\Pools.cs" />
     <Compile Include="Server\Web\Service\IJsonService.cs" />
@@ -305,7 +307,7 @@
     <Compile Include="Utils\Platform\PlatformManager.cs" />
     <Compile Include="Utils\Buffers\RingBuffer.cs" />
     <Compile Include="Utils\Versions\VersionInfo.cs" />
-    <Compile Include="Cryptology\Algorithms\Algorithms.cs" />
+    <Compile Include="Cryptology\Algorithms\AlgorithmManager.cs" />
     <Compile Include="Cryptology\Algorithms\IHashAlgorithm.cs" />
     <Compile Include="Cryptology\Algorithms\Scrypt.cs" />
     <Compile Include="Coin\Address\Base58.cs" />

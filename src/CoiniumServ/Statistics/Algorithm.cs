@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Dynamic;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Statistics
 {
-    public class PerAlgorithm:IPerAlgorithm
+    public class Algorithm:IAlgorithm
     {
         public string Json { get; private set; }
         public string Name { get; private set; }
@@ -35,7 +36,7 @@ namespace CoiniumServ.Statistics
 
         private readonly dynamic _response;
 
-        public PerAlgorithm(string algorithm)
+        public Algorithm(string algorithm)
         {
             Name = algorithm;
 

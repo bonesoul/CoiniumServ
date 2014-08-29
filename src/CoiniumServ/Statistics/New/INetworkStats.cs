@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using CoiniumServ.Server.Web.Service;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Pools
+namespace CoiniumServ.Statistics.New
 {
     [JsonObject(MemberSerialization.OptIn)]
     public interface INetworkStats: IJsonService

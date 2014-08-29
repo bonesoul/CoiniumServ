@@ -132,7 +132,7 @@ namespace CoiniumServ.Shares
             HeaderValue = new BigInteger(HeaderHash);
 
             // calculate the share difficulty
-            Difficulty = ((double)new BigRational(Algorithms.Diff1, HeaderValue)) * Job.HashAlgorithm.Multiplier;
+            Difficulty = ((double)new BigRational(AlgorithmManager.Diff1, HeaderValue)) * Job.HashAlgorithm.Multiplier;
 
             // calculate the block difficulty
             BlockDiffAdjusted = Job.Difficulty * Job.HashAlgorithm.Multiplier;
