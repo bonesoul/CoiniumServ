@@ -138,12 +138,26 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
         public IDictionary<string, int> GetTotalBlocks()
         {
-            throw new NotImplementedException();
+            var blocks = new Dictionary<string, int> {{"pending", 0}, {"orphaned", 0}, {"confirmed", 0}, {"total", 0}};
+
+            /* query
+                select
+                count(*),
+                (select count(*) from blocks where confirmations >= 0 and confirmations < 120) as pending,
+                (select count(*) from blocks where confirmations < 0) as orphaned,
+                (select count(*) from blocks where confirmations >= 120) as confirmed
+                from blocks
+             */
+
+            return blocks;
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks()
         {
-            throw new NotImplementedException();
+            var blocks = _mySqlProvider.Connection.Query<PersistedBlock>(
+                "select height, blockhash, amount, confirmations from blocks order by height DESC LIMIT 20");
+
+            return blocks;
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
