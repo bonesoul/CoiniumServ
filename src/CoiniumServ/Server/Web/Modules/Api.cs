@@ -34,6 +34,7 @@ namespace CoiniumServ.Server.Web.Modules
     public class ApiModule: NancyModule
     {
         private static readonly Response PoolNotFound = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
+        private static readonly Response AlgorithmNotFound = JsonConvert.SerializeObject(new JsonError("Algorithm not found!"));
 
         // TODO: use base("/api");
         public ApiModule(IStatisticsManager statisticsManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
@@ -83,7 +84,7 @@ namespace CoiniumServ.Server.Web.Modules
             {
                 var algorithm = algorithmManager.Get(_.slug); // query the requested pool.
 
-                var response = algorithm != null ? (Response)algorithm.ServiceResponse : PoolNotFound;
+                var response = algorithm != null ? (Response)algorithm.ServiceResponse : AlgorithmNotFound;
                 response.ContentType = "application/json";
                 return response;
             };
@@ -95,11 +96,5 @@ namespace CoiniumServ.Server.Web.Modules
                 return response;
             };          
         }
-    }
-
-    public class ApiModel
-    {
-        public string BaseUrl { get; set; }
-        public ICoinConfig Coin { get; set; }
     }
 }

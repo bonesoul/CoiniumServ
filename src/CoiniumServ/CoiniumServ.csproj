@@ -188,6 +188,7 @@
     <Compile Include="Persistance\StorageConfig.cs" />
     <Compile Include="Pools\BlocksCache.cs" />
     <Compile Include="Pools\IBlocksCache.cs" />
+    <Compile Include="Server\Web\Models\ApiModel.cs" />
     <Compile Include="Statistics\INetworkStats.cs" />
     <Compile Include="Pools\IPoolConfig.cs" />
     <Compile Include="Pools\NetworkStats.cs" />

@@ -47,6 +47,9 @@ namespace CoiniumServ.Pools
         [JsonProperty("miners")]
         IMinerManager MinerManager { get; }
 
+        [JsonProperty("network")]
+        INetworkStats NetworkStats { get; }
+
         [JsonProperty("blocks")]
         IBlocksCache BlocksCache { get; }
 

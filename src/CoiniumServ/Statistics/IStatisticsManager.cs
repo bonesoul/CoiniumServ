@@ -21,6 +21,8 @@
 // 
 #endregion
 using System;
+using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Service;
 using Newtonsoft.Json;
 
@@ -37,5 +39,9 @@ namespace CoiniumServ.Statistics
 
         [JsonProperty("lastUpdate")]
         DateTime LastUpdate { get; }
+
+        IAlgorithmManager Algorithms { get; }
+
+        IPoolManager Pools { get; }
     }
 }

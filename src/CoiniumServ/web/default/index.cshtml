@@ -3,37 +3,101 @@
 
 @{ Layout = "layout.cshtml"; }
 
+
 <div class="row">
-    
-    <!-- overall stats -->
-    <div class="col-md-6">
-        <div class="panel panel-primary">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-success">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money"></i> Overall Statistics</h3>
-            </div>
-            <div class="panel-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-striped tablesorter">
-                        <thead>
-                            <tr>
-                                <th>Workers <i class="fa fa-sort"></i></th>
-                                <th>Hashrate <i class="fa fa-sort"></i></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>@Model.Statistics.Global.WorkerCount</td>
-                                <td>@Model.Statistics.Global.Hashrate.GetReadableHashrate()</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-tasks fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Model.Statistics.Hashrate.GetReadableHashrate()</div>
+                        <div>Hashrate</div>
+                    </div>
                 </div>
             </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
         </div>
-    </div>    
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-users fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Model.Statistics.MinerCount</div>
+                        <div>Miners</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-cloud fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Model.Statistics.Pools.Count</div>
+                        <div>Pools</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-gears fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Model.Statistics.Algorithms.Count</div>
+                        <div>Algorithms</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
 
+<div class="row">     
     <!-- algorithms -->
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-money"></i> Per Algorithm Statistics</h3>
@@ -46,15 +110,17 @@
                                 <th>Algorithm <i class="fa fa-sort"></i></th>
                                 <th>Workers <i class="fa fa-sort"></i></th>
                                 <th>Hashrate <i class="fa fa-sort"></i></th>
+                                <th>Pools <i class="fa fa-sort"></i></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var algorithm in Model.Statistics.Algorithms)
                             {
                                 <tr>
-                                    <td>@algorithm.Value.Name</td>
-                                    <td>@algorithm.Value.WorkerCount</td>
-                                    <td>@algorithm.Value.Hashrate.GetReadableHashrate()</td>
+                                    <td>@algorithm.Name</td>
+                                    <td>@algorithm.MinerCount</td>
+                                    <td>@algorithm.Hashrate.GetReadableHashrate()</td>
+                                    <td>@algorithm.Count</td>
                                 </tr>
                             }
                         </tbody>
@@ -93,12 +159,12 @@
                             {
                                 <tr>
                                     <td><a href="/pool/@pool.Config.Coin.Symbol/">@pool.Config.Coin.Name</a></td>
-                                    <td>@pool.Statistics.Hashrate.GetReadableHashrate()</td>
-                                    <td>@pool.Statistics.NetworkHashrate.GetReadableHashrate()</td>
-                                    <td>@pool.Statistics.Difficulty</td>
-                                    <td>@pool.Statistics.WorkerCount</td>
+                                    <td>@pool.Hashrate.GetReadableHashrate()</td>
+                                    <td>@pool.NetworkStats.Hashrate.GetReadableHashrate()</td>
+                                    <td>@pool.NetworkStats.Difficulty</td>
+                                    <td>@pool.MinerManager.Count</td>
                                     <td>@pool.Config.Coin.Algorithm</td>
-                                    <td>@pool.Statistics.Round</td>
+                                    <td>@pool.NetworkStats.Round</td>
                                 </tr>
                             }
                         </tbody>

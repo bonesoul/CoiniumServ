@@ -33,14 +33,18 @@ namespace CoiniumServ.Cryptology.Algorithms
 {
     public class HashAlgorithmBase : IHashAlgorithm
     {
+        public string Name { get; private set; }
+
+        public virtual uint Multiplier { get; protected set; }
+
         private readonly IList<IPool> _storage;
 
         public HashAlgorithmBase()
         {
-            _storage = new List<IPool>(); // initialize the pool storage.
+            Name = this.GetType().Name.ToLower(); // set the algorithm name.
+            _storage = new List<IPool>(); // initialize the pool storage.            
         }
-
-        public virtual uint Multiplier { get; protected set; }
+        
         public virtual byte[] Hash(byte[] input, dynamic config)
         {
             throw new NotImplementedException();

@@ -59,6 +59,7 @@ namespace CoiniumServ.Pools
         public Dictionary<string, double> RoundShares { get; private set; }
         public IHashAlgorithm HashAlgorithm { get; private set; }
         public IMinerManager MinerManager { get; private set; }
+        public INetworkStats NetworkStats { get; private set; }
         public IBlocksCache BlocksCache { get; private set; }
 
         // object factory.
@@ -66,9 +67,6 @@ namespace CoiniumServ.Pools
 
         // dependent objects.
         private IDaemonClient _daemonClient;       
-
-        [JsonProperty("network")]
-        private INetworkStats _networkStats;
         
         private IJobManager _jobManager;
         
@@ -215,7 +213,7 @@ namespace CoiniumServ.Pools
 
                 MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
-                _networkStats = _objectFactory.GetNetworkStats(_daemonClient);
+                NetworkStats = _objectFactory.GetNetworkStats(_daemonClient);
 
                 var jobTracker = _objectFactory.GetJobTracker();
 
@@ -299,8 +297,8 @@ namespace CoiniumServ.Pools
         public string ServiceResponse { get; private set; }
         public void Recache()
         {
-            BlocksCache.Recache();
-            _networkStats.Recache(); // let network statistics recache.
+            BlocksCache.Recache(); // recache the blocks.
+            NetworkStats.Recache(); // let network statistics recache.
             CalculateHashrate(); // calculate the pool hashrate.
             RecacheRound(); // recache current round.
 

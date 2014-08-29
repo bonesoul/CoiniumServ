@@ -36,14 +36,12 @@ namespace CoiniumServ.Statistics
         public ulong Hashrate { get; private set; }
         public int MinerCount { get; private set; }
         public DateTime LastUpdate { get; private set; }
+        public IAlgorithmManager Algorithms { get; private set; }
+        public IPoolManager Pools { get; private set; }
 
         private readonly Timer _recacheTimer; // timer for recaching stastics.
 
         private readonly Stopwatch _stopWatch = new Stopwatch();
-
-        private readonly IPoolManager _poolManager;
-
-        private readonly IAlgorithmManager _algorithmManager;
 
         private readonly IStatisticsConfig _config;
 
@@ -52,8 +50,8 @@ namespace CoiniumServ.Statistics
         public StatisticsManager(IConfigManager configManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
         {
             _config = configManager.WebServerConfig.Statistics;
-            _poolManager = poolManager;
-            _algorithmManager = algorithmManager;
+            Pools = poolManager;
+            Algorithms = algorithmManager;
 
             _logger = Log.ForContext<StatisticsManager>();
 
@@ -68,8 +66,8 @@ namespace CoiniumServ.Statistics
             _stopWatch.Start();
 
             // recache data.
-            _poolManager.Recache();
-            _algorithmManager.Recache();
+            Pools.Recache();
+            Algorithms.Recache();
             RecacheGlobal();            
 
             LastUpdate = DateTime.Now;
@@ -93,7 +91,7 @@ namespace CoiniumServ.Statistics
             Hashrate = 0;
             MinerCount = 0;
 
-            foreach (var pool in _poolManager)
+            foreach (var pool in Pools)
             {
                 Hashrate += pool.Hashrate;
                 MinerCount += pool.MinerManager.Count;

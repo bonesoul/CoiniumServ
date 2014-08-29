@@ -30,6 +30,6 @@ namespace CoiniumServ.Server.Web.Models
     {
         public IReadOnlyCollection<IPool> Pools { get; set; }
 
-        public IStatisticsManager StatisticsManager { get; set; }
+        public IStatisticsManager Statistics { get; set; }
     }
 }

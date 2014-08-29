@@ -17,19 +17,19 @@
                         <i class="fa fa-calendar"></i> Symbol
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.Hashrate.GetReadableHashrate()</span>
+                        <span class="badge">@Model.Pool.Hashrate.GetReadableHashrate()</span>
                         <i class="fa fa-calendar"></i> Hashrate
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.NetworkHashrate.GetReadableHashrate()</span>
+                        <span class="badge">@Model.Pool.NetworkStats.Hashrate.GetReadableHashrate()</span>
                         <i class="fa fa-calendar"></i> Network Hashrate
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.Difficulty</span>
+                        <span class="badge">@Model.Pool.NetworkStats.Difficulty</span>
                         <i class="fa fa-calendar"></i> Difficulty
                     </a>
                     <a href="/pool/@Model.Pool.Config.Coin.Symbol/workers" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.WorkerCount</span>
+                        <span class="badge">@Model.Pool.MinerManager.Count</span>
                         <i class="fa fa-calendar"></i> Workers
                     </a>
                     <a href="#" class="list-group-item">
@@ -37,7 +37,7 @@
                         <i class="fa fa-calendar"></i> Algorithm
                     </a>
                     <a href="/pool/@Model.Pool.Config.Coin.Symbol/round" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.Round</span>
+                        <span class="badge">@Model.Pool.NetworkStats.Round</span>
                         <i class="fa fa-calendar"></i> Round
                     </a>
                 </div>
@@ -52,19 +52,19 @@
             <div class="panel-body">
                 <div class="list-group">
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.Blocks.Total</span>
+                        <span class="badge">@Model.Pool.BlocksCache.Total</span>
                         <i class="fa fa-refresh"></i> Total
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.Blocks.Pending</span>
+                        <span class="badge">@Model.Pool.BlocksCache.Pending</span>
                         <i class="fa fa-refresh fa-spin"></i> Pending
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.Blocks.Confirmed</span>
+                        <span class="badge">@Model.Pool.BlocksCache.Confirmed</span>
                         <i class="fa fa-check"></i> Confirmed
                     </a>
                     <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Statistics.Blocks.Orphaned</span>
+                        <span class="badge">@Model.Pool.BlocksCache.Orphaned</span>
                         <i class="fa fa-question"></i> Orphaned
                     </a>
                 </div>
@@ -90,7 +90,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var block in Model.Pool.Statistics.Blocks.Latest)
+                            @foreach (var block in Model.Pool.BlocksCache)
                             {
                                 <tr>
                                     <td><a href="@Model.Pool.Config.Coin.BlockExplorer/block/@block.BlockHash" target="_blank">@block.Height</a></td>
