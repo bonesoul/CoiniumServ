@@ -91,6 +91,8 @@ namespace CoiniumServ.Factories
 
         IVardiffManager GetVardiffManager(IPoolConfig poolConfig, IShareManager shareManager);
 
+        INetworkStats GetNetworkStats(IDaemonClient daemonClient);
+
         #endregion
 
         #region pool statistics objects

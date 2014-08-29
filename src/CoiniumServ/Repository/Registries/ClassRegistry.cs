@@ -56,6 +56,7 @@ namespace CoiniumServ.Repository.Registries
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<IAlgorithms, Algorithms>().AsSingleton();
             _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
+            _applicationContext.Container.Register<INetworkStats, NetworkStats>().AsMultiInstance();
 
             // statistics
             _applicationContext.Container.Register<IStatistics, Statistics.Statistics>().AsSingleton();

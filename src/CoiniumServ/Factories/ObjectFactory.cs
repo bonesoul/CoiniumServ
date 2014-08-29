@@ -209,6 +209,16 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IVardiffManager>(@params);
         }
 
+        public INetworkStats GetNetworkStats(IDaemonClient daemonClient)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"daemonClient", daemonClient},
+            };
+
+            return _applicationContext.Container.Resolve<INetworkStats>(@params);
+        }
+
         #endregion
 
         #region pool statistics objects

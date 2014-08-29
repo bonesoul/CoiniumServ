@@ -43,7 +43,6 @@ using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
-using CoiniumServ.Utils.Helpers.Time;
 using CoiniumServ.Utils.Helpers.Validation;
 using Newtonsoft.Json;
 using Serilog;
@@ -69,10 +68,18 @@ namespace CoiniumServ.Pools
         
         [JsonProperty("miners")]
         private IMinerManager _minerManager;
+
+        [JsonProperty("network")]
+        private INetworkStats _networkStats;
+        
         private IJobManager _jobManager;
+        
         private IShareManager _shareManager;
+        
         private IHashAlgorithm _hashAlgorithm;
+        
         private IBanManager _banningManager;
+        
         private IStorageLayer _storageLayer;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
@@ -208,6 +215,8 @@ namespace CoiniumServ.Pools
 
                 _minerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
+                _networkStats = _objectFactory.GetNetworkStats(_daemonClient);
+
                 var jobTracker = _objectFactory.GetJobTracker();
 
                 var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
@@ -294,6 +303,8 @@ namespace CoiniumServ.Pools
         public string ServiceResponse { get; private set; }
         public void Recache()
         {
+            _networkStats.Recache();
+
             CalculateHashrate();
         }
 

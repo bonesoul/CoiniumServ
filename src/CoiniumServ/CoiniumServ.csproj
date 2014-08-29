@@ -184,7 +184,9 @@
     <Compile Include="Persistance\Providers\Redis\RedisOld.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisProvider.cs" />
     <Compile Include="Persistance\StorageConfig.cs" />
+    <Compile Include="Pools\INetworkStats.cs" />
     <Compile Include="Pools\IPoolConfig.cs" />
+    <Compile Include="Pools\NetworkStats.cs" />
     <Compile Include="Repository\Registries\StorageRegistry.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
     <Compile Include="Server\Web\Models\CurrentRoundModel.cs" />
