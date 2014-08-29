@@ -24,6 +24,7 @@
 using System;
 using CoiniumServ.Configuration;
 using CoiniumServ.Statistics;
+using CoiniumServ.Statistics.New;
 
 namespace CoiniumServ.Server.Web
 {

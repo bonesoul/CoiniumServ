@@ -24,6 +24,7 @@
 using System;
 using CoiniumServ.Server.Web.Modules;
 using CoiniumServ.Statistics;
+using CoiniumServ.Statistics.New;
 using Serilog;
 
 namespace CoiniumServ.Server.Web

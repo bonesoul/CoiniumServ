@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Threading;
 using CoiniumServ.Configuration;
 using CoiniumServ.Factories;
+using CoiniumServ.Statistics.New;
 using Serilog;
 
 namespace CoiniumServ.Statistics

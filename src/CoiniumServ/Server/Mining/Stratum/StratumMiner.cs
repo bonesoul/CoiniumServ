@@ -75,9 +75,9 @@ namespace CoiniumServ.Server.Mining.Stratum
         [JsonProperty("authenticated")]
         public bool Authenticated { get; set; }
 
-        [JsonProperty("validShares")]
+        [JsonProperty("validSharesSubmissions")]
         public int ValidShares { get; set; }
-        [JsonProperty("invalidShares")]
+        [JsonProperty("invalidSharesSubmissions")]
         public int InvalidShares { get; set; }
 
         public IPool Pool { get; private set; }
