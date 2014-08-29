@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -52,6 +53,16 @@ namespace CoiniumServ.Cryptology.Algorithms
         }
 
         public int Count { get { return _storage.Count; } }
+
+        public IEnumerator<IPool> GetEnumerator()
+        {
+            return _storage.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public int MinerCount { get; private set; }
         public ulong Hashrate { get; private set; }

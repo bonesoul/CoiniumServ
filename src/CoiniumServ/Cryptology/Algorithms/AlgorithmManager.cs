@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -108,7 +109,7 @@ namespace CoiniumServ.Cryptology.Algorithms
             return new ReadOnlyCollection<IHashAlgorithm>(_storage);
         }
 
-        public int Count { get { return _storage.Count; } }
+        public int Count { get { return _storage.Count; }}
 
         public string ServiceResponse { get; private set; }
 
@@ -125,6 +126,16 @@ namespace CoiniumServ.Cryptology.Algorithms
             // cache the json-service response
             var cache = _storage.ToDictionary(algo => algo.GetType().Name.ToLower());
             ServiceResponse = JsonConvert.SerializeObject(cache, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+        }
+
+        public IEnumerator<IHashAlgorithm> GetEnumerator()
+        {
+            return _storage.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

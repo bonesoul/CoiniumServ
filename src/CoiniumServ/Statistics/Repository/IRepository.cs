@@ -27,11 +27,14 @@ using System.Linq.Expressions;
 
 namespace CoiniumServ.Statistics.Repository
 {
-    public interface IRepository<T>
+    public interface IRepository<T>:IEnumerable<T>
     {
         IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
+
         IEnumerable<T> GetAll();
+
         IQueryable<T> GetAllAsQueryable();
+
         IReadOnlyCollection<T> GetAllAsReadOnly();
 
         int Count { get; }

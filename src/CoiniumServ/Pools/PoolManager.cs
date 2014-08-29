@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -55,6 +56,7 @@ namespace CoiniumServ.Pools
         {
             return _storage.AsQueryable().Where(predicate);
         }
+
         public IEnumerable<IPool> GetAll()
         {
             return _storage;
@@ -97,6 +99,16 @@ namespace CoiniumServ.Pools
             {
                 pool.Start();
             }
+        }
+
+        public IEnumerator<IPool> GetEnumerator()
+        {
+            return _storage.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
