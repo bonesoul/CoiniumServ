@@ -33,6 +33,7 @@ using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
+using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Empty;
 using CoiniumServ.Persistance.Layers.Hybrid;
@@ -59,6 +60,7 @@ namespace CoiniumServ.Pools
 
         public IPerPool Statistics { get; private set; }
         public ulong Hashrate { get; private set; }
+        public Dictionary<string, double> RoundShares { get; private set; }
 
         // object factory.
         private readonly IObjectFactory _objectFactory;
@@ -81,6 +83,8 @@ namespace CoiniumServ.Pools
         private IBanManager _banningManager;
         
         private IStorageLayer _storageLayer;
+
+        private IStorageOld _storageOld;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
@@ -211,7 +215,7 @@ namespace CoiniumServ.Pools
         {
             try
             {
-                var storage = _objectFactory.GetOldStorage(StorageProviders.Redis, Config);
+                _storageOld = _objectFactory.GetOldStorage(StorageProviders.Redis, Config);
 
                 _minerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
@@ -221,7 +225,7 @@ namespace CoiniumServ.Pools
 
                 var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
 
-                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, _storageLayer, storage, blockProcessor);
+                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, _storageLayer, _storageOld, blockProcessor);
 
                 var vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
 
@@ -230,12 +234,12 @@ namespace CoiniumServ.Pools
                 _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, _minerManager, _hashAlgorithm);
                 _jobManager.Initialize(InstanceId);
 
-                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, storage, blockProcessor);
+                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, _storageOld, blockProcessor);
                 paymentProcessor.Initialize(Config.Payments);
 
-                var latestBlocks = _objectFactory.GetLatestBlocks(storage);
-                var blockStats = _objectFactory.GetBlockStats(latestBlocks, storage);
-                Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, storage);
+                var latestBlocks = _objectFactory.GetLatestBlocks(_storageOld);
+                var blockStats = _objectFactory.GetBlockStats(latestBlocks, _storageOld);
+                Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, _storageOld);
             }
             catch (Exception e)
             {
@@ -305,11 +309,17 @@ namespace CoiniumServ.Pools
         {
             _networkStats.Recache(); // let network statistics recache.
             CalculateHashrate(); // calculate the pool hashrate.
+            RecacheRound(); // recache current round.
 
             ServiceResponse = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings // cache the json-service response.
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore // ignore circular dependencies
             });  
+        }
+
+        private void RecacheRound()
+        {
+            RoundShares = _storageOld.GetSharesForCurrentRound();
         }
 
         private void CalculateHashrate()

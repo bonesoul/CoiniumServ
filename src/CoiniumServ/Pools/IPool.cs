@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using CoiniumServ.Server.Web.Service;
 using CoiniumServ.Statistics;
 using Newtonsoft.Json;
@@ -37,6 +38,9 @@ namespace CoiniumServ.Pools
 
         [JsonProperty("hashrate")]
         UInt64 Hashrate { get; }
+
+        [JsonProperty("round")]
+        Dictionary<string, double> RoundShares { get; }
 
         void Start();
 
