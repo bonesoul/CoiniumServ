@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,6 +29,7 @@ using AustinHarris.JsonRpc;
 using CoiniumServ.Jobs;
 using CoiniumServ.Logging;
 using CoiniumServ.Miners;
+using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Errors;
 using CoiniumServ.Server.Mining.Stratum.Service;
@@ -54,11 +54,13 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Unique subscription id for identifying the miner.
         /// </summary>
+        [JsonProperty("id")]
         public int Id { get; private set; }
 
         /// <summary>
         /// Username of the miner.
         /// </summary>
+        [JsonProperty("username")]
         public string Username { get; private set; }
 
         /// <summary>
@@ -69,13 +71,17 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Is the miner authenticated?
         /// </summary>
+        [JsonProperty("authenticated")]
         public bool Authenticated { get; set; }
 
+        [JsonProperty("validSharesSubmissions")]
         public int ValidShares { get; set; }
+        [JsonProperty("invalidSharesSubmissions")]
         public int InvalidShares { get; set; }
 
         public IPool Pool { get; private set; }
 
+        [JsonProperty("difficulty")]
         public float Difficulty { get; set; }
         public float PreviousDifficulty { get; set; }
 
@@ -89,6 +95,8 @@ namespace CoiniumServ.Server.Mining.Stratum
         public IRingBuffer VardiffBuffer { get; set; }
 
         private readonly IMinerManager _minerManager;
+
+        private readonly IStorageLayer _storageLayer;
 
         private readonly ILogger _logger;
 
@@ -108,13 +116,15 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="connection"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
-        public StratumMiner(int id, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager)
+        /// <param name="storageLayer"></param>
+        public StratumMiner(int id, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager, IStorageLayer storageLayer)
         {
             Id = id; // the id of the miner.
             ExtraNonce = extraNonce;
             Connection = connection; // the underlying connection.
-            _minerManager = minerManager;
             Pool = pool;
+            _minerManager = minerManager;
+            _storageLayer = storageLayer;
 
             Subscribed = false; // miner has to subscribe.
             Authenticated = false; // miner has to authenticate.
@@ -247,7 +257,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         }
 
         /// <summary>
-        /// Sends difficulty to the miner.
+        /// Sets a new difficulty to the miner and sends it.
         /// </summary>
         public void SetDifficulty(float difficulty)
         {
@@ -264,7 +274,8 @@ namespace CoiniumServ.Server.Mining.Stratum
                 Params = new List<object>{ Difficulty }
             };
 
-            Send(notification);
+            Send(notification); //send the difficulty update message.
+            _storageLayer.UpdateDifficulty(this); // store the new difficulty within persistance layer.
         }
 
         /// <summary>

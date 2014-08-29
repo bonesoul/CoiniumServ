@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
@@ -31,14 +30,15 @@ namespace CoiniumServ.Server.Web.Modules
 {
     public class PoolModule : NancyModule
     {
-        public PoolModule(IPoolManager poolManager, IStatistics statistics)
+        public PoolModule(IStatisticsManager statisticsManager, IPoolManager poolManager)
+            :base("/pool")
         {
-            Get["/pool/{slug}/"] = _ =>
+            Get["/{slug}"] = _ =>
             {
-                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
-                ViewBag.Pools = statistics.Pools;
+                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = poolManager;
 
-                var pool = poolManager.GetBySymbol(_.slug); // find the requested pool. TODO: use IStatistics instead
+                var pool = poolManager.Get(_.slug); // find the requested pool. TODO: use IStatistics instead
 
                 if (pool == null) // make sure queried pool exists.
                 {
@@ -62,12 +62,12 @@ namespace CoiniumServ.Server.Web.Modules
                 }];
             };
 
-            Get["/pool/{slug}/workers"] = _ =>
+            Get["/{slug}/workers"] = _ =>
             {
-                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
-                ViewBag.Pools = statistics.Pools;
+                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = poolManager;
 
-                var pool = statistics.Pools.GetBySymbol(_.slug); // find the requested pool.                
+                var pool = poolManager.Get(_.slug); // find the requested pool.                
 
                 if (pool == null) // make sure queried pool exists.
                 {
@@ -91,12 +91,12 @@ namespace CoiniumServ.Server.Web.Modules
                 }];
             };
 
-            Get["/pool/{slug}/round"] = _ =>
+            Get["/{slug}/round"] = _ =>
             {
-                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
-                ViewBag.Pools = statistics.Pools;
+                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = poolManager;
 
-                var pool = statistics.Pools.GetBySymbol(_.slug); // find the requested pool.                
+                var pool = poolManager.Get(_.slug); // find the requested pool.                
 
                 if (pool == null) // make sure queried pool exists.
                 {

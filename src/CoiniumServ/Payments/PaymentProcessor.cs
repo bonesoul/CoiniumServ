@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,7 +30,8 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Pools;
 using Serilog;
 
 namespace CoiniumServ.Payments
@@ -40,13 +40,11 @@ namespace CoiniumServ.Payments
 
     public class PaymentProcessor : IPaymentProcessor
     {
-        public bool IsEnabled { get; private set; }
+        private readonly IPoolConfig _poolConfig;
 
         private readonly IDaemonClient _daemonClient;
 
-        private readonly IStorage _storage;
-
-        private IPaymentConfig _config;
+        private readonly IStorageLayer _storageLayer;
 
         private readonly IBlockProcessor _blockProcessor;
 
@@ -59,30 +57,23 @@ namespace CoiniumServ.Payments
         private readonly object _paymentsLock = new object();
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
-        private readonly IWalletConfig _walletConfig;
-
         private string _poolAccount = string.Empty;
 
         private readonly ILogger _logger;
 
-        public PaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage, IBlockProcessor blockProcessor)
+        public PaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient, IBlockProcessor blockProcessor)
         {
+            _poolConfig = poolConfig;
             _daemonClient = daemonClient;
-            _storage = storage;
+            _storageLayer = storageLayer;
             _blockProcessor = blockProcessor;
-
-            _walletConfig = poolConfig.Wallet;
 
             _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", poolConfig.Coin.Name);
         }
 
-        public void Initialize(IPaymentConfig config)
+        public void Initialize()
         {
-            _config = config;
-
-            IsEnabled = _config.Enabled;
-
-            if (!IsEnabled) 
+            if (!_poolConfig.Payments.Enabled) 
                 return;
 
             // validate the pool wallet.
@@ -97,22 +88,22 @@ namespace CoiniumServ.Payments
                 return;
 
             // calculate the minimum amount of payments in satoshis.
-            _paymentThresholdInSatoshis = (decimal) (_magnitude*config.Minimum);
+            _paymentThresholdInSatoshis = (decimal) (_magnitude*_poolConfig.Payments.Minimum);
 
             // if we reached here, then we can just setup the timer to run payments.  
-            _timer = new Timer(RunPayments, null, _config.Interval * 1000, Timeout.Infinite);
+            _timer = new Timer(RunPayments, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
         }
 
         private void RunPayments(object state)
         {
-            if (!IsEnabled)
+            if (!_poolConfig.Payments.Enabled)
                 return;
 
             lock (_paymentsLock)
             {
                 _stopWatch.Start();
 
-                var pendingBlocks = _storage.GetBlocks(BlockStatus.Pending); // get all the pending blocks.
+                var pendingBlocks = _storageLayer.GetBlocks(BlockStatus.Pending); // get all the pending blocks.
                 var nonPendingBlocks = GetNonPendingBlocks(pendingBlocks); // get the confirmed blocks that are either orphan or mature.
                 var rounds = GetPaymentRounds(nonPendingBlocks); // get the list of rounds that should be paid.
                 AssignSharesToRounds(rounds); // process the rounds, calculate shares and payouts per rounds.
@@ -126,13 +117,13 @@ namespace CoiniumServ.Payments
                 
                 _stopWatch.Reset();
 
-                _timer.Change(_config.Interval*1000, Timeout.Infinite); // reset the payments timer.
+                _timer.Change(_poolConfig.Payments.Interval*1000, Timeout.Infinite); // reset the payments timer.
             }
         }
 
         private Dictionary<string, double> GetPreviousBalances()
         {
-            var previousBalances = _storage.GetPreviousBalances();
+            var previousBalances = _storageLayer.GetPreviousBalances();
             return previousBalances;
         }
 
@@ -211,7 +202,7 @@ namespace CoiniumServ.Payments
 
         private void ProcessRemainingBalances(IList<IWorkerBalance> workerBalances)
         {
-            _storage.SetRemainingBalances(workerBalances); // commit remaining balances to storage.
+            _storageLayer.SetBalances(workerBalances); // commit remaining balances to storage.
         }
 
         private void ProcessRounds(IEnumerable<IPaymentRound> rounds)
@@ -224,12 +215,12 @@ namespace CoiniumServ.Payments
                 switch (round.Block.Status)
                 {
                     case BlockStatus.Confirmed:
-                        _storage.DeleteShares(round); // delete the associated shares.
-                        _storage.MoveBlock(round); // move pending block to appropriate place.  
+                        _storageLayer.RemoveShares(round); // delete the associated shares.
+                        _storageLayer.UpdateBlock(round); // update block status.
                         break;
                     case BlockStatus.Orphaned:
-                        _storage.MoveSharesToCurrentRound(round); // move shares to current round so the work of miners aren't gone to void.
-                        _storage.MoveBlock(round); // move pending block to appropriate place.                      
+                        _storageLayer.MoveSharesToCurrentRound(round); // move shares to current round so the work of miners aren't gone to void.
+                        _storageLayer.UpdateBlock(round); // update block status.                    
                         break;
                 }
             }
@@ -238,7 +229,7 @@ namespace CoiniumServ.Payments
         private void AssignSharesToRounds(IList<IPaymentRound> rounds)
         {
             // get shares for the rounds.
-            var shares = _storage.GetSharesForRounds(rounds);
+            var shares = _storageLayer.GetShares(rounds);
 
             // assign shares to the rounds.
             foreach (var round in rounds)
@@ -336,21 +327,27 @@ namespace CoiniumServ.Payments
 
         private void GetPoolAccount()
         {
-            var result = _daemonClient.GetAccount(_walletConfig.Adress);
-            _poolAccount = result;
+            try
+            {
+                _poolAccount = _daemonClient.GetAccount(_poolConfig.Wallet.Adress);
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Cannot determine pool's central wallet account: {0:l}", e.Message);
+            }
         }
 
         private bool ValidatePoolAddress()
         {
             try
             {
-                var result = _daemonClient.ValidateAddress(_walletConfig.Adress);
+                var result = _daemonClient.ValidateAddress(_poolConfig.Wallet.Adress);
 
                 // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
                 if (result.IsValid && result.IsMine)
                     return true;
 
-                _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.",_walletConfig.Adress);
+                _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.",_poolConfig.Wallet.Adress);
                 return false;
             }
             catch (RpcException e)

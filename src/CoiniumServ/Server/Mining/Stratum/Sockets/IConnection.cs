@@ -20,16 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Server.Mining.Stratum.Sockets
 {
     /// <summary>
     /// Connection interface.
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public interface IConnection
     {
         /// <summary>

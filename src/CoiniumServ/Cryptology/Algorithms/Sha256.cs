@@ -20,14 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System.Security.Cryptography;
 
 namespace CoiniumServ.Cryptology.Algorithms
 {
-    public class Sha256:IHashAlgorithm
+    public sealed class Sha256:HashAlgorithmBase
     {
-        public uint Multiplier { get; private set; }
+        public override uint Multiplier { get; protected set; }
 
         private readonly SHA256Managed _algorithm;
 
@@ -38,7 +37,7 @@ namespace CoiniumServ.Cryptology.Algorithms
             Multiplier = 1;           
         }
 
-        public byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input, dynamic config)
         {
             return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
         }

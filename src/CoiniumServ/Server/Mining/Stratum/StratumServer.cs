@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -28,7 +27,6 @@ using CoiniumServ.Banning;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using Serilog;
 

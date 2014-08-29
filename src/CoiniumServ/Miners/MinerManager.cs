@@ -20,14 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CoiniumServ.Daemon;
-using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Server.Mining.Vanilla;
@@ -36,7 +33,8 @@ using Serilog;
 namespace CoiniumServ.Miners
 {
     public class MinerManager : IMinerManager
-    {
+    {        
+        public int Count { get { return _miners.Count(kvp => kvp.Value.Authenticated); } }
         public IList<IMiner> Miners { get { return _miners.Values.ToList(); } }
 
         public event EventHandler MinerAuthenticated;
@@ -45,22 +43,16 @@ namespace CoiniumServ.Miners
 
         private int _counter = 0; // counter for assigining unique id's to miners.
 
-        private readonly IMinerConfig _minerConfig;
+        private readonly IPoolConfig _poolConfig;
 
-        private readonly IMetaConfig _metaConfig;
-
-        private readonly IDaemonClient _daemonClient;
-
-        private readonly IStratumServerConfig _stratumServerConfig;
+        private readonly IStorageLayer _storageLayer;
 
         private readonly ILogger _logger;        
 
-        public MinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient)
+        public MinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer)
         {
-            _minerConfig = poolConfig.Miner;
-            _metaConfig = poolConfig.Meta;
-            _daemonClient = daemonClient;
-            _stratumServerConfig = poolConfig.Stratum;
+            _poolConfig = poolConfig;
+            _storageLayer = storageLayer;
 
             _miners = new Dictionary<int, IMiner>();
             _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);
@@ -102,8 +94,9 @@ namespace CoiniumServ.Miners
                 _counter++, 
                 extraNonce, 
                 connection, 
-                pool, 
-                this
+                pool,
+                this,
+                _storageLayer
             };
 
             var instance = Activator.CreateInstance(typeof(T), @params);  // create an instance of the miner.
@@ -126,17 +119,8 @@ namespace CoiniumServ.Miners
 
         public void Authenticate(IMiner miner)
         {
-            if (_minerConfig.ValidateUsername) // should we validate miner username?
-                try
-                {
-                    miner.Authenticated = _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
-                }
-                catch (RpcException)
-                {
-                    miner.Authenticated = false;
-                }
-            else
-                miner.Authenticated = true; // else just accept him.
+            // if username validation is not on just authenticate the miner, else ask the current storage layer to do so.
+            miner.Authenticated = !_poolConfig.Miner.ValidateUsername || _storageLayer.Authenticate(miner);
 
             _logger.Information(
                 miner.Authenticated ? "Authenticated miner: {0:l} [{1:l}]" : "Miner authentication failed: {0:l} [{1:l}]",
@@ -145,11 +129,11 @@ namespace CoiniumServ.Miners
             if (!miner.Authenticated) 
                 return;
 
-            if (miner is IStratumMiner)
+            if (miner is IStratumMiner) // if we are handling a stratum-miner, apply stratum specific stuff.
             {
                 var stratumMiner = (IStratumMiner) miner;
-                stratumMiner.SetDifficulty(_stratumServerConfig.Diff); // set the initial difficulty for the miner and send it.
-                stratumMiner.SendMessage(_metaConfig.MOTD); // send the motd.
+                stratumMiner.SetDifficulty(_poolConfig.Stratum.Diff); // set the initial difficulty for the miner and send it.
+                stratumMiner.SendMessage(_poolConfig.Meta.MOTD); // send the motd.
             }
            
             OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.            

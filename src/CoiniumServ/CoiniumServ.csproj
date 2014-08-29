@@ -58,6 +58,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\CryptSharpOfficial.2.0.0.0\lib\CryptSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper">
+      <HintPath>..\..\build\packages\Dapper.1.30\lib\net45\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="HashLib, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
@@ -65,6 +68,10 @@
     <Reference Include="Metrics, Version=0.1.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Metrics.NET.0.1.10\lib\net45\Metrics.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\packages\MySql.Data.6.8.3\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Nancy, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -100,13 +107,18 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Net" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Runtime, Version=4.0.0.0, Culture=neutral,    PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Microsoft.AspNet.Razor.3.2.0\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blocks\BlockProcessor.cs" />
@@ -118,6 +130,8 @@
     <Compile Include="Cryptology\Algorithms\Blake.cs" />
     <Compile Include="Cryptology\Algorithms\Fugue.cs" />
     <Compile Include="Cryptology\Algorithms\Groestl.cs" />
+    <Compile Include="Cryptology\Algorithms\HashAlgorithmBase.cs" />
+    <Compile Include="Cryptology\Algorithms\IAlgorithmManager.cs" />
     <Compile Include="Cryptology\Algorithms\Keccak.cs" />
     <Compile Include="Cryptology\Algorithms\Sha256.cs" />
     <Compile Include="Cryptology\Algorithms\Shavite3.cs" />
@@ -147,10 +161,36 @@
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Persistance\Blocks\PersistedBlock.cs" />
     <Compile Include="Persistance\IStorageConfig.cs" />
+    <Compile Include="Persistance\Layers\Empty\EmptyStorageLayer.cs" />
+    <Compile Include="Persistance\Layers\Empty\EmptyStorageLayerConfig.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorageLayerConfig.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorageLayer.cs" />
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
     <Compile Include="Payments\WalletConfig.cs" />
-    <Compile Include="Persistance\Redis\Redis.cs" />
+    <Compile Include="Persistance\Layers\IStorageLayer.cs" />
+    <Compile Include="Persistance\Layers\IStorageLayerConfig.cs" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorageLayerConfig.cs" />
+    <Compile Include="Persistance\Layers\StorageLayers.cs" />
+    <Compile Include="Persistance\Providers\IStorageProvider.cs" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorageLayer.cs" />
+    <Compile Include="Persistance\Providers\IStorageProviderConfig.cs" />
+    <Compile Include="Persistance\Providers\MySql\IMySqlProviderConfig.cs" />
+    <Compile Include="Persistance\Providers\MySql\IMySqlProvider.cs" />
+    <Compile Include="Persistance\Providers\MySql\MySqlProviderConfig.cs" />
+    <Compile Include="Persistance\Providers\MySql\MySqlProvider.cs" />
+    <Compile Include="Persistance\Providers\Redis\IRedisProviderConfig.cs" />
+    <Compile Include="Persistance\Providers\Redis\IRedisProvider.cs" />
+    <Compile Include="Persistance\Providers\Redis\RedisProviderConfig.cs" />
+    <Compile Include="Persistance\Providers\Redis\RedisProvider.cs" />
+    <Compile Include="Persistance\StorageConfig.cs" />
+    <Compile Include="Pools\BlocksCache.cs" />
+    <Compile Include="Pools\IBlocksCache.cs" />
+    <Compile Include="Server\Web\Models\ApiModel.cs" />
+    <Compile Include="Statistics\INetworkStats.cs" />
+    <Compile Include="Pools\IPoolConfig.cs" />
+    <Compile Include="Pools\NetworkStats.cs" />
+    <Compile Include="Container\Registries\StorageRegistry.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
     <Compile Include="Server\Web\Models\CurrentRoundModel.cs" />
     <Compile Include="Server\Web\Models\WorkersModel.cs" />
@@ -158,15 +198,10 @@
     <Compile Include="Server\Web\Modules\Donate.cs" />
     <Compile Include="Server\Web\Models\IndexModel.cs" />
     <Compile Include="Server\Web\Models\PoolModel.cs" />
-    <Compile Include="Statistics\BlockStats.cs" />
-    <Compile Include="Statistics\IBlockStats.cs" />
-    <Compile Include="Statistics\IJsonResponse.cs" />
-    <Compile Include="Statistics\ILatestBlocks.cs" />
+    <Compile Include="Statistics\IStatisticsManager.cs" />
+    <Compile Include="Statistics\StatisticsManager.cs" />
+    <Compile Include="Utils\Repository\IRepository.cs" />
     <Compile Include="Statistics\IStatisticsConfig.cs" />
-    <Compile Include="Statistics\LatestBlocks.cs" />
-    <Compile Include="Statistics\Algorithms.cs" />
-    <Compile Include="Statistics\Global.cs" />
-    <Compile Include="Statistics\IAlgorithms.cs" />
     <Compile Include="Daemon\DaemonErrorResponse.cs" />
     <Compile Include="Daemon\Exceptions\RpcException.cs" />
     <Compile Include="Daemon\IDaemonBase.cs" />
@@ -174,16 +209,7 @@
     <Compile Include="Jobs\Tracker\IJobTracker.cs" />
     <Compile Include="Jobs\Tracker\JobTracker.cs" />
     <Compile Include="Miners\MinerEventArgs.cs" />
-    <Compile Include="Statistics\IGlobal.cs" />
-    <Compile Include="Statistics\IPerAlgorithm.cs" />
-    <Compile Include="Statistics\IPerPool.cs" />
-    <Compile Include="Statistics\IPools.cs" />
-    <Compile Include="Statistics\IStatistics.cs" />
-    <Compile Include="Statistics\IStatisticsProvider.cs" />
-    <Compile Include="Statistics\PerAlgorithm.cs" />
-    <Compile Include="Statistics\PerPool.cs" />
-    <Compile Include="Statistics\Pools.cs" />
-    <Compile Include="Statistics\Statistics.cs" />
+    <Compile Include="Server\Web\Service\IJsonService.cs" />
     <Compile Include="Shares\ShareEventArgs.cs" />
     <Compile Include="Statistics\StatisticsConfig.cs" />
     <Compile Include="Vardiff\IVardiffMiner.cs" />
@@ -206,9 +232,7 @@
     <Compile Include="Payments\WorkerBalance.cs" />
     <Compile Include="Persistance\Blocks\BlockStatus.cs" />
     <Compile Include="Persistance\Blocks\IPersistedBlock.cs" />
-    <Compile Include="Persistance\Redis\IRedisConfig.cs" />
-    <Compile Include="Persistance\Redis\RedisConfig.cs" />
-    <Compile Include="Repository\Registries\AlgorithmRegistry.cs" />
+    <Compile Include="Container\Registries\AlgorithmRegistry.cs" />
     <Compile Include="Server\Mining\Vanilla\IVanillaMiner.cs" />
     <Compile Include="Server\Web\IWebServer.cs" />
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
@@ -226,8 +250,7 @@
     <Compile Include="Shares\IShare.cs" />
     <Compile Include="Shares\Share.cs" />
     <Compile Include="Shares\ShareError.cs" />
-    <Compile Include="Persistance\Redis\IRedis.cs" />
-    <Compile Include="Persistance\Storages.cs" />
+    <Compile Include="Persistance\Providers\StorageProviders.cs" />
     <Compile Include="Server\Mining\Stratum\Errors\AuthenticationError.cs" />
     <Compile Include="Server\Mining\Stratum\Errors\DuplicateShareError.cs" />
     <Compile Include="Server\Mining\Stratum\Errors\IStratumError.cs" />
@@ -236,7 +259,6 @@
     <Compile Include="Server\Mining\Stratum\Errors\NotSubscriberError.cs" />
     <Compile Include="Server\Mining\Stratum\Errors\OtherError.cs" />
     <Compile Include="Jobs\IJob.cs" />
-    <Compile Include="Persistance\IStorage.cs" />
     <Compile Include="Transactions\IGenerationTransaction.cs" />
     <Compile Include="Transactions\IOutputs.cs" />
     <Compile Include="Transactions\OutPoint.cs" />
@@ -245,7 +267,7 @@
     <Compile Include="Transactions\Script\SignatureScript.cs" />
     <Compile Include="Transactions\TxIn.cs" />
     <Compile Include="Transactions\TxOut.cs" />
-    <Compile Include="Repository\Context\ApplicationContext.cs" />
+    <Compile Include="Container\Context\ApplicationContext.cs" />
     <Compile Include="Configuration\JsonConfigReader.cs" />
     <Compile Include="Utils\Helpers\Validation\Enforce.cs" />
     <Compile Include="Server\Mining\Service\Services.cs" />
@@ -266,7 +288,7 @@
     <Compile Include="Utils\Platform\PlatformManager.cs" />
     <Compile Include="Utils\Buffers\RingBuffer.cs" />
     <Compile Include="Utils\Versions\VersionInfo.cs" />
-    <Compile Include="Cryptology\Algorithms\Algorithms.cs" />
+    <Compile Include="Cryptology\Algorithms\AlgorithmManager.cs" />
     <Compile Include="Cryptology\Algorithms\IHashAlgorithm.cs" />
     <Compile Include="Cryptology\Algorithms\Scrypt.cs" />
     <Compile Include="Coin\Address\Base58.cs" />
@@ -281,18 +303,18 @@
     <Compile Include="Coin\Address\Exceptions\InvalidWalletAddressException.cs" />
     <Compile Include="Transactions\GenerationTransaction.cs" />
     <Compile Include="Coin\Helpers\Amount.cs" />
-    <Compile Include="Repository\Bootstrapper.cs" />
+    <Compile Include="Container\Bootstrapper.cs" />
     <Compile Include="Configuration\IConfig.cs" />
-    <Compile Include="Repository\Registries\ClassRegistry.cs" />
-    <Compile Include="Repository\Registries\IRegistry.cs" />
-    <Compile Include="Repository\Registries\FactoryRegistry.cs" />
-    <Compile Include="Repository\Registries\ManagerRegistry.cs" />
-    <Compile Include="Repository\Registries\ServerRegistry.cs" />
+    <Compile Include="Container\Registries\ClassRegistry.cs" />
+    <Compile Include="Container\Registries\IRegistry.cs" />
+    <Compile Include="Container\Registries\FactoryRegistry.cs" />
+    <Compile Include="Container\Registries\ManagerRegistry.cs" />
+    <Compile Include="Container\Registries\ServerRegistry.cs" />
     <Compile Include="Cryptology\Hash.cs" />
     <Compile Include="Utils\Commands\CommandAttributes.cs" />
     <Compile Include="Utils\Commands\CommandGroup.cs" />
     <Compile Include="Utils\Commands\CommandManager.cs" />
-    <Compile Include="Repository\Registries\Registry.cs" />
+    <Compile Include="Container\Registries\Registry.cs" />
     <Compile Include="Cryptology\Utils.cs" />
     <Compile Include="Jobs\ExtraNonce.cs" />
     <Compile Include="Jobs\IExtraNonce.cs" />
@@ -304,7 +326,6 @@
     <Compile Include="Jobs\Manager\JobManager.cs" />
     <Compile Include="Miners\MinerManager.cs" />
     <Compile Include="Pools\IPool.cs" />
-    <Compile Include="Pools\Config\IPoolConfig.cs" />
     <Compile Include="Pools\IPoolManager.cs" />
     <Compile Include="Pools\Pool.cs" />
     <Compile Include="Shares\IShareManager.cs" />
@@ -315,7 +336,7 @@
     <Compile Include="Server\Mining\Stratum\IStratumServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\IVanillaServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaMiner.cs" />
-    <Compile Include="Pools\Config\PoolConfig.cs" />
+    <Compile Include="Pools\PoolConfig.cs" />
     <Compile Include="Pools\PoolManager.cs" />
     <Compile Include="Server\Mining\Vanilla\Service\HttpServiceContext.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaServer.cs" />
@@ -330,7 +351,7 @@
     <Compile Include="Server\Mining\Stratum\StratumMiner.cs" />
     <Compile Include="Server\Mining\Stratum\Service\StratumService.cs" />
     <Compile Include="Daemon\Responses\Getwork.cs" />
-    <Compile Include="Repository\Context\IApplicationContext.cs" />
+    <Compile Include="Container\Context\IApplicationContext.cs" />
     <Compile Include="Server\Mining\Vanilla\HttpServer.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\Mining\Stratum\Sockets\ConnectionEventArgs.cs" />

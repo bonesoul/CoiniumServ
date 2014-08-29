@@ -20,15 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System.Collections.Generic;
 using HashLib;
 
 namespace CoiniumServ.Cryptology.Algorithms
 {
-    public class X15 : IHashAlgorithm
+    public sealed class X15 : HashAlgorithmBase
     {
-        public uint Multiplier { get; private set; }
+        public override uint Multiplier { get; protected set; }
 
         private readonly List<IHash> _hashers;
 
@@ -56,7 +55,7 @@ namespace CoiniumServ.Cryptology.Algorithms
             Multiplier = 1;
         }
 
-        public byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input, dynamic config)
         {
             var buffer = input;
 

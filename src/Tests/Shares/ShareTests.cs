@@ -32,7 +32,7 @@ using CoiniumServ.Jobs;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Payments;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
 using CoiniumServ.Transactions;
@@ -161,7 +161,7 @@ namespace CoiniumServ.Tests.Shares
             _generationTransaction.Create();
 
             // hash algorithm
-            _hashAlgorithm = Substitute.For<Scrypt>();
+            _hashAlgorithm = new Scrypt();
 
             // the job.
             _job = new Job(2,_hashAlgorithm, _blockTemplate, _generationTransaction)

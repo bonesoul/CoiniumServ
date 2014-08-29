@@ -20,13 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using CryptSharp.Utility;
 
 namespace CoiniumServ.Cryptology.Algorithms
 {
-    public class Scrypt : IHashAlgorithm
+    public sealed class Scrypt : HashAlgorithmBase
     {
         /// <summary>
         /// Gets the multiplier.
@@ -34,7 +33,7 @@ namespace CoiniumServ.Cryptology.Algorithms
         /// <value>
         /// The multiplier.
         /// </value>
-        public UInt32 Multiplier { get; private set; }
+        public override UInt32 Multiplier { get; protected set; }
 
         /// <summary>
         /// N parameter - CPU/memory cost parameter.
@@ -61,7 +60,7 @@ namespace CoiniumServ.Cryptology.Algorithms
             Multiplier = (UInt32) Math.Pow(2, 16);
         }
 
-        public byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input, dynamic config)
         {
             return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
         }

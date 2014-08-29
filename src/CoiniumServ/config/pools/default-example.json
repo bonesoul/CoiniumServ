@@ -108,38 +108,47 @@
     # Per-pool Storage Configuration
     # -------------------------------
 
-    # redis:
+    # hybrid storage layer
+    # enabled: set this true to enable hybrid storage mode where redis and mysql is used together.
+    
+    # mpos layer
+    # enabled: set this true to enable mpos compatibility mode - make sure to internal disable payment-processor!
+
+    # redis
     # host: redis host.
     # port: redis port.
     # password: set the password if your redis installation requires one.
     # databaseId: redis database instance id (optional)
 
-	"storage": {
-		"redis": {
-			"host": "127.0.0.1",
-			"port": 6379,
-            "password": "",
-            "databaseId": 0
-		}
-	},
-
-    # -------------------------------
-    # MPOS Compatibility Mode
-    # -------------------------------
-
-    # NOT-IMPLEMENTED-YET!
+    # mysql
     # host: database host.
     # port: database port.
     # username: username for connecting the database.
     # password: password for connecting the database.
 
-	"mpos": {
-		"database": {
-			"host": "127.0.0.1",
-			"port": 3306,
-			"user": "username",
-			"password": "password"
-		}
+	"storage": {
+        "hybrid": {
+		    "redis": {
+			    "host": "127.0.0.1",
+			    "port": 6379,
+                "password": "",
+                "databaseId": 0
+		    },
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "username",
+			    "password": "password"
+		    }
+        },
+        "mpos": {
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "username",
+			    "password": "password"
+		    }
+        }
 	},
 
     # -------------------------------

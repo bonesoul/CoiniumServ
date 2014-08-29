@@ -20,13 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using AustinHarris.JsonRpc;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using Serilog;

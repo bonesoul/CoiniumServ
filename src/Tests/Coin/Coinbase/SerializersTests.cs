@@ -31,7 +31,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Payments;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Extensions;

@@ -30,7 +30,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Payments;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Script;
 using Newtonsoft.Json;
@@ -167,7 +167,7 @@ namespace CoiniumServ.Tests.Jobs
             _generationTransaction.Create();     
 
             // hash algorithm
-            _hashAlgorithm = Substitute.For<Scrypt>();
+            _hashAlgorithm = new Scrypt();
         }
 
         [Fact]

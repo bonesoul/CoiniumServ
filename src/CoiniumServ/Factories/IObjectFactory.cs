@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
+using System.Collections.Generic;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
 using CoiniumServ.Cryptology.Algorithms;
@@ -32,8 +32,9 @@ using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
+using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
@@ -72,16 +73,16 @@ namespace CoiniumServ.Factories
         /// <returns></returns>
         IDaemonClient GetDaemonClient(IPoolConfig poolConfig);
 
-        IMinerManager GetMinerManager(IPoolConfig poolConfig, IDaemonClient daemonClient);
+        IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
         IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
             IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
 
         IJobTracker GetJobTracker();
 
-        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorage storage, IBlockProcessor blockProcessor);
+        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
 
-        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorage storage, IBlockProcessor blockProcessor);
+        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
 
         IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient);
 
@@ -89,23 +90,13 @@ namespace CoiniumServ.Factories
 
         IVardiffManager GetVardiffManager(IPoolConfig poolConfig, IShareManager shareManager);
 
-        #endregion
+        INetworkStats GetNetworkStats(IDaemonClient daemonClient);
 
-        #region pool statistics objects
+        IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
 
-        IStatistics GetStatistics();
+        IBlocksCache GetBlocksCache(IStorageLayer storageLayer);
 
-        IGlobal GetGlobalStatistics();
-
-        IAlgorithms GetAlgorithmStatistics();
-
-        IPools GetPoolStats();
-
-        IPerPool GetPerPoolStats(IPoolConfig poolConfig, IDaemonClient daemonClient, IMinerManager minerManager, IHashAlgorithm hashAlgorithm, IBlocksCount blockStatistics, IStorage storage);
-
-        IBlocksCount GetBlockStats(ILatestBlocks latestBlocks, IStorage storage);
-
-        ILatestBlocks GetLatestBlocks(IStorage storage);
+        IStatisticsManager GetStatisticsManager();
 
         #endregion
 
@@ -122,8 +113,15 @@ namespace CoiniumServ.Factories
 
         #endregion
 
+        #region storage objects
+
+        IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig, IStorageProviderConfig config);
+
+        IStorageLayer GetStorageLayer(string type, IEnumerable<IStorageProvider> providers, IDaemonClient daemonClient, IPoolConfig poolConfig);
+
+        #endregion
+
         #region other objects
-        IStorage GetStorage(string type, IPoolConfig poolConfig);
 
         ILogManager GetLogManager();
 

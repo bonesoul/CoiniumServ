@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System.Collections.Generic;
 using CoiniumServ.Pools;
 using CoiniumServ.Statistics;
@@ -31,6 +30,6 @@ namespace CoiniumServ.Server.Web.Models
     {
         public IReadOnlyCollection<IPool> Pools { get; set; }
 
-        public IStatistics Statistics { get; set; }
+        public IStatisticsManager Statistics { get; set; }
     }
 }

@@ -20,13 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using CoiniumServ.Container;
 using CoiniumServ.Factories;
-using CoiniumServ.Repository;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
 using CoiniumServ.Utils.Platform;
@@ -83,6 +82,9 @@ namespace CoiniumServ
             // start pool manager.
             var poolManager = objectFactory.GetPoolManager();
             poolManager.Run();
+
+            var algorithmManager = objectFactory.GetAlgorithmManager(poolManager);
+            var statistics = objectFactory.GetStatisticsManager();
 
             // start web server.
             objectFactory.GetWebServer();
