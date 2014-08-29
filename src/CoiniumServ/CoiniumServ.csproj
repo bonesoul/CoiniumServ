@@ -188,7 +188,7 @@
     <Compile Include="Persistance\StorageConfig.cs" />
     <Compile Include="Pools\BlocksCache.cs" />
     <Compile Include="Pools\IBlocksCache.cs" />
-    <Compile Include="Statistics\New\INetworkStats.cs" />
+    <Compile Include="Statistics\INetworkStats.cs" />
     <Compile Include="Pools\IPoolConfig.cs" />
     <Compile Include="Pools\NetworkStats.cs" />
     <Compile Include="Container\Registries\StorageRegistry.cs" />
@@ -199,10 +199,10 @@
     <Compile Include="Server\Web\Modules\Donate.cs" />
     <Compile Include="Server\Web\Models\IndexModel.cs" />
     <Compile Include="Server\Web\Models\PoolModel.cs" />
-    <Compile Include="Statistics\New\IStatisticsManager.cs" />
-    <Compile Include="Statistics\New\StatisticsManager.cs" />
+    <Compile Include="Statistics\IStatisticsManager.cs" />
+    <Compile Include="Statistics\StatisticsManager.cs" />
     <Compile Include="Utils\Repository\IRepository.cs" />
-    <Compile Include="Statistics\New\IStatisticsConfig.cs" />
+    <Compile Include="Statistics\IStatisticsConfig.cs" />
     <Compile Include="Daemon\DaemonErrorResponse.cs" />
     <Compile Include="Daemon\Exceptions\RpcException.cs" />
     <Compile Include="Daemon\IDaemonBase.cs" />
@@ -212,7 +212,7 @@
     <Compile Include="Miners\MinerEventArgs.cs" />
     <Compile Include="Server\Web\Service\IJsonService.cs" />
     <Compile Include="Shares\ShareEventArgs.cs" />
-    <Compile Include="Statistics\New\StatisticsConfig.cs" />
+    <Compile Include="Statistics\StatisticsConfig.cs" />
     <Compile Include="Vardiff\IVardiffMiner.cs" />
     <Compile Include="Vardiff\IVardiffConfig.cs" />
     <Compile Include="Vardiff\IVardiffManager.cs" />

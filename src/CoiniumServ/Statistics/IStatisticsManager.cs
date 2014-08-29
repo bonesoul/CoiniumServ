@@ -21,27 +21,21 @@
 // 
 #endregion
 using System;
-using CoiniumServ.Configuration;
-using CoiniumServ.Statistics;
+using CoiniumServ.Server.Web.Service;
+using Newtonsoft.Json;
 
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Statistics
 {
-    public interface IWebServerConfig:IConfig
+    [JsonObject(MemberSerialization.OptIn)]
+    public interface IStatisticsManager:IJsonService
     {
-        bool Enabled { get; }
+        [JsonProperty("hashrate")]
+        UInt64 Hashrate { get; }
 
-        /// <summary>
-        /// interface to bind webserver.
-        /// </summary>
-        string BindInterface { get; }
+        [JsonProperty("miners")]
+        Int32 MinerCount { get; }
 
-        /// <summary>
-        /// port to listen for http connections.
-        /// </summary>
-        int Port { get; }
-
-        IStatisticsConfig Statistics { get; }
-
-        IBackendConfig Backend { get; }
+        [JsonProperty("lastUpdate")]
+        DateTime LastUpdate { get; }
     }
 }

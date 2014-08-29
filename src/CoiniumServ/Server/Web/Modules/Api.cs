@@ -25,7 +25,7 @@ using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
-using CoiniumServ.Statistics.New;
+using CoiniumServ.Statistics;
 using Nancy;
 using Newtonsoft.Json;
 
@@ -37,8 +37,9 @@ namespace CoiniumServ.Server.Web.Modules
 
         // TODO: use base("/api");
         public ApiModule(IStatisticsManager statisticsManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
+            :base("/api")
         {
-            Get["/api/"] = _ =>
+            Get["/"] = _ =>
             {
                 // include common data required by layout.
                 ViewBag.Title = "API";
@@ -55,14 +56,14 @@ namespace CoiniumServ.Server.Web.Modules
             };
 
 
-            Get["/api/new/pools"] = _ =>
+            Get["/pools"] = _ =>
             {
                 var response = (Response) poolManager.ServiceResponse;
                 response.ContentType = "application/json";
                 return response;
             };
 
-            Get["/api/new/pool/{slug}"] = _ =>
+            Get["/pool/{slug}"] = _ =>
             {
                 var pool = poolManager.Get(_.slug); // query the requested pool.
 
@@ -71,14 +72,14 @@ namespace CoiniumServ.Server.Web.Modules
                 return response;
             };
 
-            Get["/api/new/algorithms"] = _ =>
+            Get["/algorithms"] = _ =>
             {
                 var response = (Response)algorithmManager.ServiceResponse;
                 response.ContentType = "application/json";
                 return response;
             };
 
-            Get["/api/new/algorithm/{slug}"] = _ =>
+            Get["/algorithm/{slug}"] = _ =>
             {
                 var algorithm = algorithmManager.Get(_.slug); // query the requested pool.
 
@@ -87,7 +88,7 @@ namespace CoiniumServ.Server.Web.Modules
                 return response;
             };
 
-            Get["/api/new/global"] = _ =>
+            Get["/global"] = _ =>
             {
                 var response = (Response) statisticsManager.ServiceResponse;
                 response.ContentType = "application/json";

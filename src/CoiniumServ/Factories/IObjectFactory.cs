@@ -40,7 +40,6 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
-using CoiniumServ.Statistics.New;
 using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 

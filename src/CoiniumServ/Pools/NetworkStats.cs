@@ -22,7 +22,7 @@
 #endregion
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Statistics.New;
+using CoiniumServ.Statistics;
 
 namespace CoiniumServ.Pools
 {

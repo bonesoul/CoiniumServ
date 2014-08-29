@@ -20,20 +20,32 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Configuration;
+using System;
+using Serilog;
 
-namespace CoiniumServ.Statistics.New
+namespace CoiniumServ.Statistics
 {
-    public interface IStatisticsConfig:IConfig
+    public class StatisticsConfig:IStatisticsConfig
     {
-        /// <summary>
-        /// interval for recaching statistics.
-        /// </summary>
-        int UpdateInterval { get; }
+        public bool Valid { get; private set; }
+        public int UpdateInterval { get; private set; }
+        public int HashrateWindow { get; private set; }
 
-        /// <summary>
-        /// how many seconds worth of shares should be gathered to generate hashrate.
-        /// </summary>
-        int HashrateWindow { get; }
+        public StatisticsConfig(dynamic config)
+        {
+            try
+            {
+                // load the config data.
+                UpdateInterval = config.updateInterval == 0 ? 60 : config.updateInterval;
+                HashrateWindow = config.hashrateWindow == 0 ? 300 : config.hashrateWindow;
+
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<StatisticsConfig>().Error(e, "Error loading website statistics configuration");
+            }
+        }
     }
 }

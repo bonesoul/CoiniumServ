@@ -23,7 +23,6 @@
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
-using CoiniumServ.Statistics.New;
 using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules

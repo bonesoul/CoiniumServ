@@ -21,31 +21,21 @@
 // 
 #endregion
 using System;
-using Serilog;
+using CoiniumServ.Server.Web.Service;
+using Newtonsoft.Json;
 
-namespace CoiniumServ.Statistics.New
+namespace CoiniumServ.Statistics
 {
-    public class StatisticsConfig:IStatisticsConfig
+    [JsonObject(MemberSerialization.OptIn)]
+    public interface INetworkStats: IJsonService
     {
-        public bool Valid { get; private set; }
-        public int UpdateInterval { get; private set; }
-        public int HashrateWindow { get; private set; }
+        [JsonProperty("difficulty")]
+        double Difficulty { get; }
 
-        public StatisticsConfig(dynamic config)
-        {
-            try
-            {
-                // load the config data.
-                UpdateInterval = config.updateInterval == 0 ? 60 : config.updateInterval;
-                HashrateWindow = config.hashrateWindow == 0 ? 300 : config.hashrateWindow;
+        [JsonProperty("round")]
+        int Round { get; }
 
-                Valid = true;
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<StatisticsConfig>().Error(e, "Error loading website statistics configuration");
-            }
-        }
+        [JsonProperty("hashrate")]
+        UInt64 Hashrate { get; }
     }
 }

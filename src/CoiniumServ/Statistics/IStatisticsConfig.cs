@@ -20,23 +20,20 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using CoiniumServ.Configuration;
 
-using System;
-using CoiniumServ.Server.Web.Service;
-using Newtonsoft.Json;
-
-namespace CoiniumServ.Statistics.New
+namespace CoiniumServ.Statistics
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface INetworkStats: IJsonService
+    public interface IStatisticsConfig:IConfig
     {
-        [JsonProperty("difficulty")]
-        double Difficulty { get; }
+        /// <summary>
+        /// interval for recaching statistics.
+        /// </summary>
+        int UpdateInterval { get; }
 
-        [JsonProperty("round")]
-        int Round { get; }
-
-        [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
+        /// <summary>
+        /// how many seconds worth of shares should be gathered to generate hashrate.
+        /// </summary>
+        int HashrateWindow { get; }
     }
 }

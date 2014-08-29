@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using CoiniumServ.Blocks;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
@@ -31,7 +30,6 @@ using CoiniumServ.Payments;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Statistics;
-using CoiniumServ.Statistics.New;
 using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Container.Registries

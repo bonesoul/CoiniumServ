@@ -43,7 +43,6 @@ using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
-using CoiniumServ.Statistics.New;
 using CoiniumServ.Utils.Helpers.Validation;
 using Newtonsoft.Json;
 using Serilog;

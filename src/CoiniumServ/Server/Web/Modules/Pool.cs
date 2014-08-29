@@ -23,7 +23,6 @@
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
-using CoiniumServ.Statistics.New;
 using Nancy;
 using Nancy.CustomErrors;
 
@@ -32,8 +31,9 @@ namespace CoiniumServ.Server.Web.Modules
     public class PoolModule : NancyModule
     {
         public PoolModule(IStatisticsManager statisticsManager, IPoolManager poolManager)
+            :base("/pool")
         {
-            Get["/pool/{slug}/"] = _ =>
+            Get["/{slug}"] = _ =>
             {
                 ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
                 ViewBag.Pools = poolManager;
@@ -62,7 +62,7 @@ namespace CoiniumServ.Server.Web.Modules
                 }];
             };
 
-            Get["/pool/{slug}/workers"] = _ =>
+            Get["/{slug}/workers"] = _ =>
             {
                 ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
                 ViewBag.Pools = poolManager;
@@ -91,7 +91,7 @@ namespace CoiniumServ.Server.Web.Modules
                 }];
             };
 
-            Get["/pool/{slug}/round"] = _ =>
+            Get["/{slug}/round"] = _ =>
             {
                 ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
                 ViewBag.Pools = poolManager;
