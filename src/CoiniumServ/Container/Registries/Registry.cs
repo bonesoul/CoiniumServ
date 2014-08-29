@@ -20,23 +20,37 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+using CoiniumServ.Container.Context;
+using Nancy.TinyIoc;
 
-namespace CoiniumServ.Statistics.Repository
+namespace CoiniumServ.Container.Registries
 {
-    public interface IRepository<T>:IEnumerable<T>
+    public class Registry : IRegistry
     {
-        IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
+        private readonly TinyIoCContainer _kernel;
 
-        IEnumerable<T> GetAll();
+        public Registry(TinyIoCContainer kernel)
+        {
+            _kernel = kernel;
+        }
 
-        IQueryable<T> GetAllAsQueryable();
+        public void RegisterInstances()
+        {
+            _kernel.Register<IApplicationContext, ApplicationContext>().AsSingleton();
 
-        IReadOnlyCollection<T> GetAllAsReadOnly();
-
-        int Count { get; }
+            _kernel.RegisterMultiple<IRegistry>(
+                new List<Type>
+                {
+                    typeof(ManagerRegistry),
+                    typeof(ServerRegistry),
+                    typeof(ClassRegistry),
+                    typeof(FactoryRegistry),
+                    typeof(AlgorithmRegistry),
+                    typeof(StorageRegistry)
+                });
+        }
     }
 }

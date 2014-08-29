@@ -20,15 +20,24 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Utils.Repository;
 
-namespace CoiniumServ.Pools
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+
+namespace CoiniumServ.Utils.Repository
 {
-    public interface IPoolManager : IRepository<IPool>, IJsonService
+    public interface IRepository<T>:IEnumerable<T>
     {
-        IPool Get(string symbol);
+        IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
 
-        void Run();
+        IEnumerable<T> GetAll();
+
+        IQueryable<T> GetAllAsQueryable();
+
+        IReadOnlyCollection<T> GetAllAsReadOnly();
+
+        int Count { get; }
     }
 }

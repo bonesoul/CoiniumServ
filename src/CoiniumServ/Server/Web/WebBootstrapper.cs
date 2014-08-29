@@ -21,7 +21,7 @@
 // 
 #endregion
 using CoiniumServ.Configuration;
-using CoiniumServ.Repository.Context;
+using CoiniumServ.Container.Context;
 using Metrics;
 using Nancy;
 using Nancy.Bootstrapper;

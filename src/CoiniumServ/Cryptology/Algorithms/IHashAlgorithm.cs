@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Statistics.Repository;
+using CoiniumServ.Utils.Repository;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Cryptology.Algorithms

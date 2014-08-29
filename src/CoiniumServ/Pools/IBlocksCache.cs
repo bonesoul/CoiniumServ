@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Statistics.Repository;
+using CoiniumServ.Utils.Repository;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Pools

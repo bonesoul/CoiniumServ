@@ -20,15 +20,25 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Utils.Repository;
 
-namespace CoiniumServ.Pools
+using CoiniumServ.Container.Context;
+using CoiniumServ.Factories;
+
+namespace CoiniumServ.Container.Registries
 {
-    public interface IPoolManager : IRepository<IPool>, IJsonService
+    public class FactoryRegistry : IRegistry
     {
-        IPool Get(string symbol);
+        private readonly IApplicationContext _applicationContext;
 
-        void Run();
+        public FactoryRegistry(IApplicationContext applicationContext)
+        {
+            _applicationContext = applicationContext;
+        }
+
+        public void RegisterInstances()
+        {
+            _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
+            _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
+        }
     }
 }

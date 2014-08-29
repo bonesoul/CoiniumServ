@@ -23,6 +23,7 @@
 using System.Collections.Generic;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
+using CoiniumServ.Container.Context;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Manager;
@@ -35,7 +36,6 @@ using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Pools;
-using CoiniumServ.Repository.Context;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;

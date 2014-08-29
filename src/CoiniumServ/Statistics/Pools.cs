@@ -27,7 +27,6 @@ using System.Dynamic;
 using System.Linq;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Pools;
-using CoiniumServ.Statistics.Repository;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Statistics
