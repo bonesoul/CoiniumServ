@@ -186,6 +186,8 @@
     <Compile Include="Persistance\Providers\Redis\RedisOld.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisProvider.cs" />
     <Compile Include="Persistance\StorageConfig.cs" />
+    <Compile Include="Pools\BlocksCache.cs" />
+    <Compile Include="Pools\IBlocksCache.cs" />
     <Compile Include="Statistics\New\INetworkStats.cs" />
     <Compile Include="Pools\IPoolConfig.cs" />
     <Compile Include="Pools\NetworkStats.cs" />
@@ -201,6 +203,8 @@
     <Compile Include="Statistics\IBlockStats.cs" />
     <Compile Include="Statistics\IJsonResponse.cs" />
     <Compile Include="Statistics\ILatestBlocks.cs" />
+    <Compile Include="Statistics\New\IStatisticsManager.cs" />
+    <Compile Include="Statistics\New\StatisticsManager.cs" />
     <Compile Include="Statistics\Repository\IRepository.cs" />
     <Compile Include="Statistics\New\IStatisticsConfig.cs" />
     <Compile Include="Statistics\LatestBlocks.cs" />

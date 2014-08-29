@@ -23,7 +23,6 @@
 using System;
 using System.Dynamic;
 using CoiniumServ.Configuration;
-using CoiniumServ.Statistics.New;
 using Metrics;
 using Newtonsoft.Json;
 

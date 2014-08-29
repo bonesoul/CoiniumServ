@@ -95,6 +95,10 @@ namespace CoiniumServ.Factories
 
         IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
 
+        IBlocksCache GetBlocksCache(IStorageOld storageOld);
+
+        IStatisticsManager GetStatisticsManager();
+
         #endregion
 
         #region pool statistics objects

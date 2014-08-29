@@ -27,5 +27,6 @@ namespace CoiniumServ.Statistics
 {
     public interface ILatestBlocks: IEnumerable<IPersistedBlock>, IStatisticsProvider
     {
+
     }
 }

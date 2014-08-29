@@ -71,9 +71,6 @@ namespace CoiniumServ.Statistics
 
         public void Recache(object state)
         {
-            _poolManager.Recache();
-            _algorithmManager.Recache();
-
             // recache data.
             foreach (var pool in _poolManager.GetAll())
             {

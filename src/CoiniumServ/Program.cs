@@ -25,7 +25,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using CoiniumServ.Factories;
-using CoiniumServ.Persistance.Layers.Mpos;
 using CoiniumServ.Repository;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
@@ -85,6 +84,7 @@ namespace CoiniumServ
             poolManager.Run();
 
             var algorithmManager = objectFactory.GetAlgorithmManager(poolManager);
+            var statistics = objectFactory.GetStatisticsManager();
 
             // start web server.
             objectFactory.GetWebServer();

@@ -224,6 +224,21 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IAlgorithmManager>();
         }
 
+        public IBlocksCache GetBlocksCache(IStorageOld storageOld)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"storageOld", storageOld},
+            };
+
+            return _applicationContext.Container.Resolve<IBlocksCache>(@params);
+        }
+
+        public IStatisticsManager GetStatisticsManager()
+        {
+            return _applicationContext.Container.Resolve<IStatisticsManager>();
+        }
+
         #endregion
 
         #region pool statistics objects

@@ -26,6 +26,7 @@ using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
+using CoiniumServ.Statistics.New;
 using Nancy;
 using Newtonsoft.Json;
 
@@ -36,7 +37,7 @@ namespace CoiniumServ.Server.Web.Modules
         private static readonly Response PoolNotFound = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
 
         // TODO: use base("/api");
-        public ApiModule(IStatistics statistics, IPoolManager poolManager, IAlgorithmManager algorithmManager)
+        public ApiModule(IStatistics statistics, IPoolManager poolManager, IAlgorithmManager algorithmManager, IStatisticsManager statisticsManager)
         {
             Get["/api/"] = _ =>
             {
@@ -87,6 +88,12 @@ namespace CoiniumServ.Server.Web.Modules
                 return response;
             };
 
+            Get["/api/new/global"] = _ =>
+            {
+                var response = (Response) statisticsManager.ServiceResponse;
+                response.ContentType = "application/json";
+                return response;
+            };
 
             Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());
             
