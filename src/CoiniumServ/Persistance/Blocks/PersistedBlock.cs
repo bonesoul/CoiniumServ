@@ -20,7 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
 using System.Diagnostics;
+using CoiniumServ.Server.Commands;
 
 namespace CoiniumServ.Persistance.Blocks
 {
@@ -48,6 +51,21 @@ namespace CoiniumServ.Persistance.Blocks
             BlockHash = blockHash;
             TransactionHash = transactionHash;
             Amount = amount;
+        }
+
+        public PersistedBlock(UInt32 height, String blockhash, Double amount, Int32 confirmations)
+        {
+            // used by mpos storage layer.
+
+            // determine the block status
+            if (confirmations == -1)
+                Status = BlockStatus.Orphaned;
+            else
+                Status = confirmations > 120 ? BlockStatus.Confirmed : BlockStatus.Pending;
+            
+            Height = height;
+            BlockHash = blockhash;
+            Amount = (decimal)amount;
         }
 
         public void SetReward(decimal reward)

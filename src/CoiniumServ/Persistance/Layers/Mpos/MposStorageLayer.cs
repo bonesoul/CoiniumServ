@@ -44,15 +44,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         public bool SupportsShareStorage { get { return true; } }
         public bool SupportsBlockStorage { get { return true; } }
         public bool SupportsPaymentsStorage { get { return true; } }
-        public Dictionary<string, double> GetPreviousBalances()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetBalances(IList<IWorkerBalance> workerBalances)
-        {
-            throw new NotImplementedException();
-        }
 
         private readonly IMySqlProvider _mySqlProvider;
 
@@ -111,12 +102,23 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
         public void MoveSharesToCurrentRound(IPaymentRound round)
         {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
         }
 
         public Dictionary<string, double> GetCurrentShares()
         {
-            throw new NotImplementedException();
+            var shares = new Dictionary<string, double>();
+
+            var results = _mySqlProvider.Connection.Query(
+                    @"select username, sum(difficulty) as diff from shares group by username");
+
+            foreach (var row in results)
+            {
+                shares.Add(row.username, row.diff);
+            }
+
+            return shares;
         }
 
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
@@ -138,16 +140,62 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
         public IDictionary<string, int> GetTotalBlocks()
         {
-            throw new NotImplementedException();
+            var blocks = new Dictionary<string, int> {{"total", 0}, {"pending", 0}, {"orphaned", 0}, {"confirmed", 0}};
+
+            var result = _mySqlProvider.Connection.Query(@"select count(*),
+                (select count(*) from blocks where confirmations >= 0 and confirmations < 120) as pending,
+                (select count(*) from blocks where confirmations < 0) as orphaned,
+                (select count(*) from blocks where confirmations >= 120) as confirmed
+                from blocks");
+
+            var data = result.First();
+            blocks["pending"] = (int)data.pending;
+            blocks["orphaned"] = (int)data.orphaned;
+            blocks["confirmed"] = (int)data.confirmed;
+
+            return blocks;
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks()
         {
-            throw new NotImplementedException();
+            var blocks = _mySqlProvider.Connection.Query<PersistedBlock>(
+                "select height, blockhash, amount, confirmations from blocks order by height DESC LIMIT 20");
+
+            return blocks;
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
         {
+            string filter = string.Empty;
+
+            switch (status)
+            {
+                case BlockStatus.Pending:
+                    filter = "confirmations >= 0 and confirmations < 120";
+                    break;
+                case BlockStatus.Orphaned:
+                    filter = "confirmations = -1";
+                    break;
+                case BlockStatus.Confirmed:
+                    filter = "confirmations >= 120";
+                    break;
+            }
+
+            var blocks = _mySqlProvider.Connection.Query<PersistedBlock>(string.Format(
+                "select height, blockhash, amount, confirmations from blocks where {0} order by height DESC LIMIT 20", filter));
+
+            return blocks;
+        }
+
+        public Dictionary<string, double> GetPreviousBalances()
+        {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
+            throw new NotImplementedException();
+        }
+
+        public void SetBalances(IList<IWorkerBalance> workerBalances)
+        {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
         }
 
@@ -158,7 +206,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 // query the username against mpos pool_worker table.
                 var result = _mySqlProvider.Connection.Query<string>(
                     "SELECT password FROM pool_worker where username = @username",
-                        new {username = miner.Username}).FirstOrDefault();
+                        new { username = miner.Username }).FirstOrDefault();
 
                 // if matching record exists for given miner username, then authenticate the miner.
                 // note: we don't check for password on purpose.
@@ -184,7 +232,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while updating difficulty for miner; {0:l}",e.Message);
+                _logger.Error("An exception occured while updating difficulty for miner; {0:l}", e.Message);
             }
         }
     }

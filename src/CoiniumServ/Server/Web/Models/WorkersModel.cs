@@ -21,11 +21,12 @@
 // 
 #endregion
 using System.Collections.Generic;
+using CoiniumServ.Miners;
 
 namespace CoiniumServ.Server.Web.Models
 {
     public class WorkersModel
     {
-        public IDictionary<string,double> Workers { get; set; }
+        public IList<IMiner> Workers { get; set; }
     }
 }

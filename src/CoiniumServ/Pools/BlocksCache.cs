@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
-using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using Newtonsoft.Json;
@@ -104,6 +103,7 @@ namespace CoiniumServ.Pools
             Pending = blockCounts.ContainsKey("pending") ? blockCounts["pending"] : 0;
             Confirmed = blockCounts.ContainsKey("confirmed") ? blockCounts["confirmed"] : 0;
             Orphaned = blockCounts.ContainsKey("orphaned") ? blockCounts["orphaned"] : 0;
+            Total = Pending + Confirmed + Orphaned;
 
             // cache the json-service response
             ServiceResponse = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });

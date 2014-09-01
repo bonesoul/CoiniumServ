@@ -49,5 +49,10 @@ namespace CoiniumServ.Payments
                 Log.Logger.ForContext<PaymentConfig>().Error(e, "Error loading payment configuration");
             }
         }
+
+        public void Disable()
+        {
+            Enabled = false;
+        }
     }
 }
