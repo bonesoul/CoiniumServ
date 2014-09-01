@@ -31,9 +31,10 @@ using CoiniumServ.Logging;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Layers.Hybrid.Migrations;
 using CoiniumServ.Persistance.Providers;
+using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
@@ -118,6 +119,8 @@ namespace CoiniumServ.Factories
         IStorageProvider GetStorageProvider(string type, IPoolConfig poolConfig, IStorageProviderConfig config);
 
         IStorageLayer GetStorageLayer(string type, IEnumerable<IStorageProvider> providers, IDaemonClient daemonClient, IPoolConfig poolConfig);
+
+        IMigrationManager GetMigrationManager(IMySqlProvider provider, IPoolConfig poolConfig);
 
         #endregion
 
