@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using System.Diagnostics;
 using CoiniumServ.Banning;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
@@ -29,6 +30,7 @@ using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Layers.Mpos;
 using CoiniumServ.Persistance.Providers.Redis;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Vanilla;
@@ -56,6 +58,8 @@ namespace CoiniumServ.Pools
         public IStorageConfig Storage { get; private set; }
         public IVanillaServerConfig Vanilla { get; private set; }
 
+        private readonly ILogger _logger;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PoolConfig"/> class.
         /// </summary>
@@ -65,6 +69,8 @@ namespace CoiniumServ.Pools
         {
             try
             {
+                _logger = Log.ForContext<PoolConfig>().ForContext("Component", coinConfig.Name);
+
                 Enabled = config.enabled ? config.enabled : false;
 
                 if (Enabled == false) // if the configuration is not enabled
@@ -85,12 +91,22 @@ namespace CoiniumServ.Pools
                 Storage = new StorageConfig(config.storage);
                 Vanilla = new VanillaServerConfig(config.vanilla);
 
+                // process extra checks
+                if (Storage.Layer is MposStorageLayerConfig)
+                {
+                    if (Payments.Enabled)
+                    {
+                        Payments.Disable();
+                        _logger.Information("Disabled payments processor as it can not be enabled when MPOS mode is on");
+                    }
+                }
+
                 Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<PoolConfig>().Error(e, "Error loading pool configuration");
+                _logger.Error(e, "Error loading pool configuration");
             }
         }
     }

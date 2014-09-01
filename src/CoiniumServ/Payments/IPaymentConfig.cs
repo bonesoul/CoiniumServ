@@ -38,5 +38,7 @@ namespace CoiniumServ.Payments
         /// minimum amount of coins before a miner is eligable for getting a payment.
         /// </summary>
         double Minimum { get; }
+
+        void Disable();
     }
 }

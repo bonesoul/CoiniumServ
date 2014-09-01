@@ -87,7 +87,7 @@ namespace CoiniumServ.Server.Web.Modules
                 // return our view
                 return View["workers", new WorkersModel
                 {
-                    Workers = pool.Workers
+                    Workers = pool.MinerManager.Miners
                 }];
             };
 
@@ -116,8 +116,8 @@ namespace CoiniumServ.Server.Web.Modules
                 // return our view
                 return View["round", new CurrentRoundModel
                 {
-                    Round = pool.Round,
-                    Shares = pool.CurrentRoundShares
+                    Round = pool.NetworkStats.Round,
+                    Shares = pool.RoundShares
                 }];
             };
         }

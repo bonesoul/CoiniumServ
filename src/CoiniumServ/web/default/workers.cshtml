@@ -20,8 +20,8 @@
                             @foreach (var worker in Model.Workers)
                             {
                                 <tr>
-                                    <td>@worker.Key</td>
-                                    <td>@worker.Value</td>
+                                    <td>@worker.Username</td>
+                                    <td>@worker.ValidShares</td>
                                 </tr>
                             }
                         </tbody>
