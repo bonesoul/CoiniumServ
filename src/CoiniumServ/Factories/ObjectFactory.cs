@@ -32,9 +32,10 @@ using CoiniumServ.Logging;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Layers.Hybrid.Migrations;
 using CoiniumServ.Persistance.Providers;
+using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
@@ -305,6 +306,17 @@ namespace CoiniumServ.Factories
             return type != StorageLayers.Empty
                 ? _applicationContext.Container.Resolve<IStorageLayer>(type, @params)
                 : _applicationContext.Container.Resolve<IStorageLayer>(type);
+        }
+
+        public IMigrationManager GetMigrationManager(IMySqlProvider provider, IPoolConfig poolConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"provider", provider},
+                {"poolConfig", poolConfig},
+            };
+
+            return _applicationContext.Container.Resolve<IMigrationManager>(@params);
         }
 
         #endregion

@@ -25,6 +25,7 @@ using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Empty;
 using CoiniumServ.Persistance.Layers.Hybrid;
+using CoiniumServ.Persistance.Layers.Hybrid.Migrations;
 using CoiniumServ.Persistance.Layers.Mpos;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
@@ -51,6 +52,9 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IStorageLayer, HybridStorageLayer>(StorageLayers.Hybrid).AsMultiInstance();
             _applicationContext.Container.Register<IStorageLayer, MposStorageLayer>(StorageLayers.Mpos).AsMultiInstance();
             _applicationContext.Container.Register<IStorageLayer, EmptyStorageLayer>(StorageLayers.Empty).AsSingleton();
+
+            // migrators
+            _applicationContext.Container.Register<IMigrationManager, MigrationManager>().AsMultiInstance();
         }
     }
 }

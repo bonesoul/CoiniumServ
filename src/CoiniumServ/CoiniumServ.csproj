@@ -168,6 +168,8 @@
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
     <Compile Include="Payments\WalletConfig.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\Migrations\IMigrationManager.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\Migrations\MigrationManager.cs" />
     <Compile Include="Persistance\Layers\IStorageLayer.cs" />
     <Compile Include="Persistance\Layers\IStorageLayerConfig.cs" />
     <Compile Include="Persistance\Layers\Mpos\MposStorageLayerConfig.cs" />
