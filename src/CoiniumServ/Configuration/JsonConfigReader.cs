@@ -58,8 +58,7 @@ namespace CoiniumServ.Configuration
             try
             {
                 // try to validate the json.
-                var @object = JsonConvert.DeserializeObject<dynamic>(json);
-
+                JsonConvert.DeserializeObject<dynamic>(json);
                 return true;
             }
             catch (JsonReaderException e)

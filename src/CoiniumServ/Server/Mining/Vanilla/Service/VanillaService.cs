@@ -38,13 +38,10 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
     {
         private readonly IDaemonClient _daemonClient; // TODO: remove this!
 
-        private readonly IShareManager _shareManager;
-
         public VanillaService(IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient):
             base(poolConfig.Coin.Name)
         {
             _daemonClient = daemonClient;
-            _shareManager = shareManager;
         }
 
         /// <summary>
