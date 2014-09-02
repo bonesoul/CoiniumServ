@@ -43,6 +43,8 @@ namespace CoiniumServ.Persistance.Layers
 
         void RemoveShares(IPaymentRound round);
 
+        void MoveShares(IShare share);
+
         void MoveSharesToCurrentRound(IPaymentRound round);
 
         Dictionary<string, double> GetCurrentShares();

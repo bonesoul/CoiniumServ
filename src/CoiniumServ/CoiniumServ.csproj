@@ -174,7 +174,7 @@
     <Compile Include="Payments\IWalletConfig.cs" />
     <Compile Include="Payments\RewardsConfig.cs" />
     <Compile Include="Payments\WalletConfig.cs" />
-    <Compile Include="Persistance\Layers\Hybrid\Migrations\M001CreateTables.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\Migrations\M001CreateBlocksTable.cs" />
     <Compile Include="Persistance\Layers\Hybrid\IMigrationManager.cs" />
     <Compile Include="Persistance\Layers\Hybrid\MigrationManager.cs" />
     <Compile Include="Persistance\Layers\IStorageLayer.cs" />

@@ -46,6 +46,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return; // just skip.
         }
 
+        public void MoveShares(IShare share)
+        {
+            return; // just skip.
+        }
+
         public void MoveSharesToCurrentRound(IPaymentRound round)
         {
             return; // just skip.
