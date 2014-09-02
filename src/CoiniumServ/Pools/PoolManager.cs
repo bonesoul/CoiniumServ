@@ -78,14 +78,21 @@ namespace CoiniumServ.Pools
 
         public void Recache()
         {
-            foreach (var pool in _storage) // recache per-pool stats
+            try
             {
-                pool.Recache();
-            }
+                foreach (var pool in _storage) // recache per-pool stats
+                {
+                    pool.Recache();
+                }
 
-            // cache the json-service response
-            var cache = _storage.ToDictionary(pool => pool.Config.Coin.Symbol.ToLower());
-            ServiceResponse = JsonConvert.SerializeObject(cache, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                // cache the json-service response
+                var cache = _storage.ToDictionary(pool => pool.Config.Coin.Symbol.ToLower());
+                ServiceResponse = JsonConvert.SerializeObject(cache, Formatting.Indented, new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Error recaching statistics; {0:l}", e.Message);
+            }
         }
 
         public IPool Get(string symbol)
