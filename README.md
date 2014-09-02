@@ -15,6 +15,7 @@ Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) 
 You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
 
 * Official site: [coiniumserv.com](http://www.coiniumserv.com)
+* [Paid support & consulting options](https://github.com/CoiniumServ/CoiniumServ#consulting)
 * [Support forums](http://forum.coinium.org/forum/19-support/)
 * IRC (**irc.freenode.net**):
   - **#coiniumserv** [user support](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde)
@@ -68,13 +69,14 @@ Can run on these platforms;
 ###### Multiplexed Structure
 * Multiple pools & ports.
 * Multiple coin daemon connection support.
-* Multiple database layers.
+* Multiple storage layers.
 
 ###### Functionality
 * Stratum server (over TCP sockets).
 * Stratum show_message support (MOTD & messages).
 * Vanilla server (getwork over http server). [experimental]
 * Daemon RPC interface.
+* Storage layers support
 * Block template / job managment.
 * Generation transaction builder.
 * Share processor.
@@ -111,6 +113,13 @@ _Under Development_
 * ✓ __NIST5__
 * ✓ __Qubit__
 * ✓ __Hefty1__
+ 
+###### Persistance & Storage Layers
+
+CoiniumServ supports storage layer interfaces that you can extend to implement your own persistance logic. By default, it supports two layers; a high performance hybrid layer and mpos compatibility layer.
+
+* __Hybrid Layer__: a custom hybrid layer that utilizes redis + mysql together that is carefully designed for high performance persistance support.
+* __MPOS Layer__: a compatibility layer based on mysql that supports MPOS whenever you want payments to be handled by MPOS.
 
 ###### Development Model
 * Strictly [follows](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) the [Test Driven Development](http://en.wikipedia.org/wiki/Test-driven_development) model. We have implemented extensive [tests](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) for all important functionality and never merge in code that breaks tests and stuff. Yet again, when a new functionality is introduced we also expect proper tests to be implemented within the PR. In simple words, most probably you won't notice any functionality-breaking changes within the repository.
@@ -139,6 +148,10 @@ Start reading by these;
 
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
+
+### Consulting
+
+Additional to free [support](https://github.com/CoiniumServ/CoiniumServ/blob/develop/README.md#support) methods, we offer paid remote support & consulting services for whom would like to get professional support. Contact us over [here](http://blog.coinium.org/consulting/) and we will get back to you to discuss your needs.
 
 ### License
 
