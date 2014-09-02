@@ -76,9 +76,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
     </Reference>
-    <Reference Include="Metrics, Version=0.1.11.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Metrics">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Metrics.NET.0.1.11\lib\net45\Metrics.dll</HintPath>
+      <HintPath>..\..\build\packages\Metrics.NET.0.1.11\lib\net45\Metrics.dll</HintPath>      
     </Reference>
     <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,7 +96,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Nancy.Hosting.Self.0.23.2\lib\net40\Nancy.Hosting.Self.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Metrics, Version=0.1.11.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy.Metrics">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\NancyFx.Metrics.0.1.11\lib\net45\Nancy.Metrics.dll</HintPath>
     </Reference>
