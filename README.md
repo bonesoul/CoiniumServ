@@ -15,6 +15,7 @@ Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) 
 You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
 
 * Official site: [coiniumserv.com](http://www.coiniumserv.com)
+* [Paid support & consulting options](https://github.com/CoiniumServ/CoiniumServ#consulting)
 * [Support forums](http://forum.coinium.org/forum/19-support/)
 * IRC (**irc.freenode.net**):
   - **#coiniumserv** [user support](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde)
