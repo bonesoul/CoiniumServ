@@ -151,7 +151,7 @@ Start reading by these;
 
 ### Consulting
 
-Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#support) methods, we offer paid remote support & consulting services for whom would like to get professional support. Contact us over [here](http://blog.coinium.org/consulting/) and we will get back to you to discuss your needs.
+Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#support) methods, we offer paid remote support & consulting services for whom would like to get professional support. Contact us over [here](http://blog.coinium.org/coiniumserv/consulting/) and we will get back to you to discuss your needs.
 
 ### License
 
