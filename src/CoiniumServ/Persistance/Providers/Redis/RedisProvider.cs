@@ -29,7 +29,7 @@ namespace CoiniumServ.Persistance.Providers.Redis
 {
     public class RedisProvider : IRedisProvider
     {
-        public bool IsConnected { get { return Client.Connected; } }
+        public bool IsConnected { get { return Client.IsConnected; } }
 
         public RedisClient Client { get; private set; }
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
@@ -55,7 +55,7 @@ namespace CoiniumServ.Persistance.Providers.Redis
                 Client = new RedisClient(_config.Host, _config.Port)
                 {
                     ReconnectAttempts = 3,
-                    ReconnectTimeout = 200
+                    ReconnectWait = 200
                 };
 
                 // select the database
