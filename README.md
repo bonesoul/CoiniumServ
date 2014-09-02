@@ -6,7 +6,7 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 * Official pools: [coinium.org](http://www.coinium.org)
 
-![CoiniumServ running over mono & ubuntu](http://i.imgur.com/izIB5nq.png)
+![CoiniumServ running over mono & ubuntu](http://i.imgur.com/HvaPVrZ.png)
 
 ### Support
 
