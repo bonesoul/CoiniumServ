@@ -117,13 +117,8 @@ _Under Development_
 
 CoiniumServ supports storage layer interfaces that you can extend to implement your own persistance logic. By default, it supports two layers; a high performance hybrid layer and mpos compatibility layer.
 
-####### Hybrid Layer
-
-A custom hybrid layer that utilizes redis + mysql together that is carefully designed for high performance persistance support.
-
-####### MPOS Layer
-
-A compatibility layer based on mysql that supports MPOS whenever you want payments to be handled by MPOS.
+* __Hybrid Layer__: a custom hybrid layer that utilizes redis + mysql together that is carefully designed for high performance persistance support.
+* __MPOS Layer__: a compatibility layer based on mysql that supports MPOS whenever you want payments to be handled by MPOS.
 
 ###### Development Model
 * Strictly [follows](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) the [Test Driven Development](http://en.wikipedia.org/wiki/Test-driven_development) model. We have implemented extensive [tests](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) for all important functionality and never merge in code that breaks tests and stuff. Yet again, when a new functionality is introduced we also expect proper tests to be implemented within the PR. In simple words, most probably you won't notice any functionality-breaking changes within the repository.
