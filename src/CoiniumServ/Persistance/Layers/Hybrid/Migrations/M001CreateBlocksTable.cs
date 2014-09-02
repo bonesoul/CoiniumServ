@@ -21,9 +21,29 @@
 // 
 #endregion
 
+using FluentMigrator;
+
 namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
 {
-    public interface IMigrationManager
+    [Migration(20140901)]
+    public class M001CreateBlocksTable : Migration
     {
+        public override void Up()
+        {
+            Create.Table("blocks")
+                .WithColumn("id").AsInt32().NotNullable().PrimaryKey().Identity()
+                .WithColumn("height").AsInt32().NotNullable()
+                .WithColumn("orphaned").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("confirmed").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("blockHash").AsString(65).NotNullable()
+                .WithColumn("txHash").AsString(65).NotNullable()
+                .WithColumn("amount").AsDecimal().NotNullable()
+                .WithColumn("time").AsDateTime().NotNullable();
+        }
+
+        public override void Down()
+        {
+            Delete.Table("blocks");
+        }
     }
 }

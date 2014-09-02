@@ -64,6 +64,9 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             try
             {
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return;
+
                 var ourResult = share.IsValid ? 'Y' : 'N';
                 var upstreamResult = share.IsBlockCandidate ? 'Y' : 'N';
 
@@ -100,6 +103,11 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException(); 
         }
 
+        public void MoveShares(IShare share)
+        {
+            // The function is not supported as MPOS mode doesn't require the functionality.
+        }
+
         public void MoveSharesToCurrentRound(IPaymentRound round)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
@@ -110,12 +118,22 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             var shares = new Dictionary<string, double>();
 
-            var results = _mySqlProvider.Connection.Query(
+            try
+            {
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return shares;
+
+                var results = _mySqlProvider.Connection.Query(
                     @"select username, sum(difficulty) as diff from shares group by username");
 
-            foreach (var row in results)
+                foreach (var row in results)
+                {
+                    shares.Add(row.username, row.diff);
+                }
+            }
+            catch (Exception e)
             {
-                shares.Add(row.username, row.diff);
+                _logger.Error("An exception occured while getting shares for current round: {0:l}", e.Message);
             }
 
             return shares;
@@ -142,47 +160,86 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             var blocks = new Dictionary<string, int> {{"total", 0}, {"pending", 0}, {"orphaned", 0}, {"confirmed", 0}};
 
-            var result = _mySqlProvider.Connection.Query(@"select count(*),
+            try
+            {
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return blocks;
+
+                var result = _mySqlProvider.Connection.Query(@"select count(*),
                 (select count(*) from blocks where confirmations >= 0 and confirmations < 120) as pending,
                 (select count(*) from blocks where confirmations < 0) as orphaned,
                 (select count(*) from blocks where confirmations >= 120) as confirmed
                 from blocks");
 
-            var data = result.First();
-            blocks["pending"] = (int)data.pending;
-            blocks["orphaned"] = (int)data.orphaned;
-            blocks["confirmed"] = (int)data.confirmed;
+                var data = result.First();
+                blocks["pending"] = (int) data.pending;
+                blocks["orphaned"] = (int) data.orphaned;
+                blocks["confirmed"] = (int) data.confirmed;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting block totals: {0:l}", e.Message);
+            }
 
             return blocks;
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks()
         {
-            var blocks = _mySqlProvider.Connection.Query<PersistedBlock>(
-                "select height, blockhash, amount, confirmations from blocks order by height DESC LIMIT 20");
+            var blocks = new List<IPersistedBlock>();
+
+            try
+            {
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return blocks;
+
+                var results = _mySqlProvider.Connection.Query<PersistedBlock>(
+                    "select height, blockhash, amount, confirmations, time from blocks order by height DESC LIMIT 20");
+
+                blocks.AddRange(results);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting blocks: {0:l}", e.Message);
+            }
 
             return blocks;
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
-        {
-            string filter = string.Empty;
+        {            
+            var blocks = new List<IPersistedBlock>();
 
-            switch (status)
+            try
             {
-                case BlockStatus.Pending:
-                    filter = "confirmations >= 0 and confirmations < 120";
-                    break;
-                case BlockStatus.Orphaned:
-                    filter = "confirmations = -1";
-                    break;
-                case BlockStatus.Confirmed:
-                    filter = "confirmations >= 120";
-                    break;
-            }
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return blocks;
 
-            var blocks = _mySqlProvider.Connection.Query<PersistedBlock>(string.Format(
-                "select height, blockhash, amount, confirmations from blocks where {0} order by height DESC LIMIT 20", filter));
+                string filter = string.Empty;
+
+                switch (status)
+                {
+                    case BlockStatus.Pending:
+                        filter = "confirmations >= 0 and confirmations < 120";
+                        break;
+                    case BlockStatus.Orphaned:
+                        filter = "confirmations = -1";
+                        break;
+                    case BlockStatus.Confirmed:
+                        filter = "confirmations >= 120";
+                        break;
+                }
+
+                var results = _mySqlProvider.Connection.Query<PersistedBlock>(string.Format(
+                    "select height, blockhash, amount, confirmations, time from blocks where {0} order by height DESC LIMIT 20",
+                    filter));
+
+                blocks.AddRange(results);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting blocks: {0:l} blocks: {1:l}", status.ToString().ToLower(), e.Message);
+            }
 
             return blocks;
         }

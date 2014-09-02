@@ -86,6 +86,7 @@
                             <tr>
                                 <th>Block <i class="fa fa-sort"></i></th>
                                 <th>Status <i class="fa fa-sort"></i></th>
+                                <th>Time <i class="fa fa-sort"></i></th>
                                 <th>Amount <i class="fa fa-sort"></i></th>
                             </tr>
                         </thead>
@@ -101,13 +102,14 @@
                                                 <span class="label btn-warning">@block.Status</span>
                                                 break;
                                             case BlockStatus.Orphaned:
-                                            <span class="label btn-danger">@block.Status</span>
+                                                <span class="label btn-danger">@block.Status</span>
                                                 break;
                                             case BlockStatus.Confirmed:
-                                            <span class="label btn-info">@block.Status</span>
+                                                <span class="label btn-info">@block.Status</span>
                                                 break;
                                         }
                                     </td>
+                                    <td>@block.Time</td>
                                     <td>@block.Amount</td>
                                 </tr>
                             }

@@ -21,11 +21,16 @@
 // 
 #endregion
 
+using System.Reflection;
 using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;
+using FluentMigrator;
+using FluentMigrator.Runner;
+using FluentMigrator.Runner.Announcers;
+using FluentMigrator.Runner.Initialization;
 using Serilog;
 
-namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
+namespace CoiniumServ.Persistance.Layers.Hybrid
 {
     public class MigrationManager:IMigrationManager
     {
@@ -36,12 +41,36 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
         public MigrationManager(IMySqlProvider provider, IPoolConfig poolConfig)
         {
             _provider = provider;
-            _logger = Log.ForContext<HybridStorageLayer>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<MigrationManager>().ForContext("Component", poolConfig.Coin.Name);
+
+            Check();
         }
 
         private void Check()
         {
-            
+            var announcer = new TextWriterAnnouncer(WriteLog);
+            var assembly = Assembly.GetExecutingAssembly();
+            var migrationContext = new RunnerContext(announcer);
+
+            var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };
+            var factory = new FluentMigrator.Runner.Processors.MySql.MySqlProcessorFactory();
+            var processor = factory.Create(_provider.Connection.ConnectionString, announcer, options);
+            var runner = new MigrationRunner(assembly, migrationContext, processor);
+
+            runner.MigrateUp(true);
         }
+
+        private void WriteLog(string s)
+        {
+            if (!string.IsNullOrWhiteSpace(s)) // filter out empty lines
+                _logger.Debug(s);
+        }
+    }
+
+    public class MigrationOptions : IMigrationProcessorOptions
+    {
+        public bool PreviewOnly { get; set; }
+        public string ProviderSwitches { get; set; }
+        public int Timeout { get; set; }
     }
 }

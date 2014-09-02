@@ -32,7 +32,7 @@ using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Layers;
-using CoiniumServ.Persistance.Layers.Hybrid.Migrations;
+using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;

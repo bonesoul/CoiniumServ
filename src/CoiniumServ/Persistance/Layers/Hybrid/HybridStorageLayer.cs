@@ -26,6 +26,7 @@ using System.Globalization;
 using System.Linq;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
@@ -35,7 +36,9 @@ using CoiniumServ.Persistance.Providers.Redis;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
+using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Time;
+using Dapper;
 using Serilog;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
@@ -132,6 +135,27 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
+        public void MoveShares(IShare share)
+        {
+            try
+            {
+                if (!IsEnabled || !_redisProvider.IsConnected)
+                    return;
+
+                if (!share.IsBlockAccepted)
+                    return;
+
+                // rename round.
+                var currentKey = string.Format("{0}:shares:round:current", _coin);
+                var roundKey = string.Format("{0}:shares:round:{1}", _coin, share.Height);
+                _redisProvider.Client.Rename(currentKey, roundKey);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while moving shares for new block: {0:l}", e.Message);
+            }
+        }
+
         public void MoveSharesToCurrentRound(IPaymentRound round)
         {
             try
@@ -182,7 +206,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting shares for current round", e.Message);
+                _logger.Error("An exception occured while getting shares for current round: {0:l}", e.Message);
             }
 
             return shares;
@@ -216,38 +240,134 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
         public void AddBlock(IShare share)
         {
-            // TODO - implement using mysql
-            return;
+            try
+            {
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return;
+
+                _mySqlProvider.Connection.Execute(
+                    @"insert blocks(height, blockHash, txHash, amount, time) values (@height, @blockHash, @txHash, @amount, @time)",
+                    new
+                    {
+                        height = share.Block.Height,
+                        blockHash = share.BlockHash.ToHexString(),
+                        txHash = share.Block.Tx.First(),
+                        amount = share.GenerationTransaction.TotalAmount,
+                        time = share.Block.Time.UnixTimeToDateTime()
+                    });
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while adding block; {0:l}", e.Message);
+            }            
         }
 
         public void UpdateBlock(IPaymentRound round)
         {
-            // TODO - implement using mysql
-            return;
+            try
+            {
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return;
+
+                _mySqlProvider.Connection.Execute(
+                    @"update blocks orphaned = @orphaned, confirmed = @confirmed where height = @height",
+                    new
+                    {
+                        orphaned = round.Block.Status == BlockStatus.Orphaned,
+                        confirmed = round.Block.Status == BlockStatus.Confirmed,
+                        height = round.Block.Status
+                    });
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while updating block; {0:l}", e.Message);
+            }
         }
 
         public IDictionary<string, int> GetTotalBlocks()
         {
-            // TODO - implement using mysql
+            var blocks = new Dictionary<string, int> { { "total", 0 }, { "pending", 0 }, { "orphaned", 0 }, { "confirmed", 0 } };
 
-            var blocks = new Dictionary<string, int>();
+            try
+            {
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return blocks;
+
+                var result = _mySqlProvider.Connection.Query(@"select count(*),
+                (select count(*) from blocks where orphaned = false and confirmed = false) as pending,
+                (select count(*) from blocks where orphaned = true) as orphaned,
+                (select count(*) from blocks where confirmed = true) as confirmed
+                from blocks");
+
+                var data = result.First();
+                blocks["pending"] = (int) data.pending;
+                blocks["orphaned"] = (int) data.orphaned;
+                blocks["confirmed"] = (int) data.confirmed;                
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting block totals: {0:l}", e.Message);
+            }
+
             return blocks;
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks()
         {
-            // TODO - implement using mysql
-            // TODO order blocks by height and sort them DESC!;            
-
             var blocks = new List<IPersistedBlock>();
+
+            try
+            {
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return blocks;
+
+                var results = _mySqlProvider.Connection.Query<PersistedBlock>(
+                    "select height, orphaned, confirmed, blockHash, txHash, amount, time from blocks order by height DESC LIMIT 20");
+
+                blocks.AddRange(results);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting blocks: {0:l}", e.Message);
+            }
+
             return blocks;
         }
 
         public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
         {
-            // TODO - implement using mysql
-
             var blocks = new List<IPersistedBlock>();
+
+            try
+            {
+                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                    return blocks;
+
+                string filter = string.Empty;
+
+                switch (status)
+                {
+                    case BlockStatus.Pending:
+                        filter = "orphaned = false and confirmed = false";
+                        break;
+                    case BlockStatus.Orphaned:
+                        filter = "orphaned = true";
+                        break;
+                    case BlockStatus.Confirmed:
+                        filter = "confirmed = true";
+                        break;
+                }
+
+                var results = _mySqlProvider.Connection.Query<PersistedBlock>(string.Format(
+                    "select height, orphaned, confirmed, blockHash, txHash, amount, time from blocks where {0} order by height DESC LIMIT 20", filter));
+
+                blocks.AddRange(results);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting blocks: {0:l} blocks: {1:l}", status.ToString().ToLower(), e.Message);
+            }
+
             return blocks;
         }
 
