@@ -59,7 +59,7 @@ namespace CoiniumServ.Persistance.Providers.Redis
                 };
 
                 // select the database
-                // Client.Select(_config.DatabaseId); - disabled until csrdis & mono bug gets fixed: https://github.com/ctstone/csredis/issues/22
+                Client.Select(_config.DatabaseId);
 
                 // authenticate if needed.
                 if (!string.IsNullOrEmpty(_config.Password))
