@@ -61,13 +61,10 @@ namespace CoiniumServ.Cryptology.Algorithms
             Diff1 = BigInteger.Parse("00000000ffff0000000000000000000000000000000000000000000000000000", NumberStyles.HexNumber);                                    
         }
 
-        private readonly IPoolManager _poolManager;
-
         private readonly IList<IHashAlgorithm> _storage; 
 
         public AlgorithmManager(IPoolManager poolManager)
         {
-            _poolManager = poolManager;
             _storage = new List<IHashAlgorithm>();
 
             // add algorithms

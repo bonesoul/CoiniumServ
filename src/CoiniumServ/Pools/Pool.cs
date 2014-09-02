@@ -32,7 +32,6 @@ using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
-using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Empty;
 using CoiniumServ.Persistance.Layers.Hybrid;
@@ -214,7 +213,7 @@ namespace CoiniumServ.Pools
                 var jobTracker = _objectFactory.GetJobTracker();
                 var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
                 _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, _storageLayer, blockProcessor);
-                var vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
+                _objectFactory.GetVardiffManager(Config, _shareManager);
                 _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
                 _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, MinerManager, HashAlgorithm);
                 _jobManager.Initialize(InstanceId);

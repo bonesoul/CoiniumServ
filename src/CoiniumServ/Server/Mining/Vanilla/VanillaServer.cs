@@ -36,8 +36,6 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
         private readonly IMinerManager _minerManager;
 
-        private readonly IJobManager _jobManager;
-
         private readonly IPool _pool;
 
         private readonly ILogger _logger;
@@ -46,7 +44,6 @@ namespace CoiniumServ.Server.Mining.Vanilla
         {
             _pool = pool;
             _minerManager = minerManager;
-            _jobManager = jobManager;
             _logger = Log.ForContext<VanillaServer>().ForContext("Component", poolConfig.Coin.Name);
         }
 
