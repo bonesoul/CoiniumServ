@@ -21,9 +21,24 @@
 // 
 #endregion
 
+using FluentMigrator;
+
 namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
 {
-    public interface IMigrationManager
+    [Migration(20140901)]
+    public class M001CreateTables : Migration
     {
+        public override void Up()
+        {
+            Create.Table("shares")
+                .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
+                .WithColumn("Miner").AsString(255).NotNullable()
+                .WithColumn("Difficulty").AsInt64().NotNullable();
+        }
+
+        public override void Down()
+        {
+            Delete.Table("shares");
+        }
     }
 }

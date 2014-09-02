@@ -90,9 +90,7 @@ namespace CoiniumServ.Pools
         /// </summary>
         /// <param name="poolConfig"></param>
         /// <param name="objectFactory"></param>
-        public Pool(
-            IPoolConfig poolConfig,
-            IObjectFactory objectFactory)
+        public Pool(IPoolConfig poolConfig, IObjectFactory objectFactory)
         {
             Enforce.ArgumentNotNull(() => poolConfig); // make sure we have a config instance supplied.
             Enforce.ArgumentNotNull(() => objectFactory); // make sure we have a objectFactory instance supplied.
@@ -192,6 +190,10 @@ namespace CoiniumServ.Pools
                             providerConfig is IMySqlProviderConfig ? StorageProviders.MySql : StorageProviders.Redis,
                             Config, providerConfig)).ToList();
 
+            // start the migration manager if needed
+            if (Config.Storage.Layer is HybridStorageLayerConfig)
+                _objectFactory.GetMigrationManager((IMySqlProvider)providers.First(p => p is MySqlProvider), Config); // run migration manager.
+
             // load the storage layer.
             if (Config.Storage.Layer is HybridStorageLayerConfig)
                 _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, _daemonClient, Config);
@@ -284,6 +286,7 @@ namespace CoiniumServ.Pools
         }
 
         public string ServiceResponse { get; private set; }
+
         public void Recache()
         {
             BlocksCache.Recache(); // recache the blocks.
