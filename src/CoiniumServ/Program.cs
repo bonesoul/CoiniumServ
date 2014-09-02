@@ -76,15 +76,18 @@ namespace CoiniumServ
             // initialize config manager.
             configManager.Initialize();
 
-            // initialize metrics support    
-            objectFactory.GetMetricsManager();
-
             // start pool manager.
             var poolManager = objectFactory.GetPoolManager();
             poolManager.Run();
 
-            var algorithmManager = objectFactory.GetAlgorithmManager(poolManager);
-            var statistics = objectFactory.GetStatisticsManager();
+            // run algorithm manager.
+            objectFactory.GetAlgorithmManager(poolManager);
+
+            // run statistics manager.
+            objectFactory.GetStatisticsManager();
+
+            // initialize metrics support    
+            objectFactory.GetMetricsManager();
 
             // start web server.
             objectFactory.GetWebServer();
