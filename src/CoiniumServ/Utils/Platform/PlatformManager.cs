@@ -52,18 +52,14 @@ namespace CoiniumServ.Utils.Platform
 		/// <value>The mono version.</value>
 		public static string MonoVersion { get; private set; }
 
-        private static readonly ILogger Logger;
-
         static PlatformManager()
         {
-            Logger = Log.ForContext<PlatformManager>();
-
             IdentifyPlatform();
         }
 
         public static void PrintPlatformBanner()
         {
-            Logger.Information("Running over {0:l}, framework: {1:l} (v{2:l}).",
+            Log.ForContext<PlatformManager>().Information("Running over {0:l}, framework: {1:l} (v{2:l}).",
                 Framework == Frameworks.DotNet ? ".Net" : string.Format("Mono {0}", MonoVersion),
                 IsDotNet45 ? "4.5" : "4", FrameworkVersion);
         }
