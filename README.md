@@ -130,12 +130,6 @@ CoiniumServ supports storage layer interfaces that you can extend to implement y
 
 Make sure you check our [Getting Started](https://github.com/CoiniumServ/CoiniumServ/wiki/Getting-Started) guide for installation instructions for *nix and Windows.
 
-For Ubuntu, you can simply use our installer script;
-
-```
-wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/contrib/installers/ubuntu.sh | bash
-```
-
 ### Documentation
 
 * [Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
