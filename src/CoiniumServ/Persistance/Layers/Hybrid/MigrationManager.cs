@@ -54,7 +54,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
             var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };
             var factory = new FluentMigrator.Runner.Processors.MySql.MySqlProcessorFactory();
-            var processor = factory.Create(_provider.Connection.ConnectionString, announcer, options);
+            var processor = factory.Create(_provider.ConnectionString, announcer, options);
             var runner = new MigrationRunner(assembly, migrationContext, processor);
 
             runner.MigrateUp(true);

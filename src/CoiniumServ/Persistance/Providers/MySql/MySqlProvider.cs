@@ -32,8 +32,7 @@ namespace CoiniumServ.Persistance.Providers.MySql
 
     public class MySqlProvider : IMySqlProvider
     {
-        public bool IsConnected { get { return Connection.State == ConnectionState.Open; } }
-        public MySqlConnection Connection { get; private set; }
+        public string ConnectionString { get; private set; }
 
         private readonly IMySqlProviderConfig _config;
 
@@ -51,13 +50,14 @@ namespace CoiniumServ.Persistance.Providers.MySql
         {
             try
             {
-                var connectionString = string.Format("Server={0};Port={1};Uid={2};Password={3};Database={4};Persist Security Info=True;",
+                ConnectionString = string.Format("Server={0};Port={1};Uid={2};Password={3};Database={4};",
                     _config.Host, _config.Port, _config.Username, _config.Password, _config.Database);
 
-                Connection = new MySqlConnection(connectionString);
-                Connection.Open();
-
-                _logger.Information("Mysql storage initialized: {0:l}:{1}, database: {2:l}.", _config.Host, _config.Port, _config.Database);
+                using (var connection = new MySqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    _logger.Information("Mysql storage initialized: {0:l}:{1}, database: {2:l}.", _config.Host, _config.Port, _config.Database);
+                }                
             }
             catch (Exception e)
             {

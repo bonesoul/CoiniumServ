@@ -34,6 +34,7 @@ using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Extensions;
 using Dapper;
+using MySql.Data.MySqlClient;
 using Serilog;
 
 namespace CoiniumServ.Persistance.Layers.Mpos
@@ -64,7 +65,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return;
 
                 var ourResult = share.IsValid ? 'Y' : 'N';
@@ -76,20 +77,23 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 else
                     errorReason = null;
 
-                _mySqlProvider.Connection.Execute(
-                    @"insert shares(rem_host, username, our_result, upstream_result, reason, solution, difficulty,time)
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    connection.Execute(
+                        @"insert shares(rem_host, username, our_result, upstream_result, reason, solution, difficulty,time)
                 values (@rem_host, @username, @our_result, @upstream_result, @reason, @solution, @difficulty, @time)",
-                    new
-                    {
-                        rem_host = ((IClient) share.Miner).Connection.RemoteEndPoint.Address.ToString(),
-                        username = share.Miner.Username,
-                        our_result = ourResult,
-                        upstream_result = upstreamResult,
-                        reason = errorReason,
-                        solution = share.BlockHash.ToHexString(),
-                        difficulty = share.Difficulty, // should we consider mpos difficulty multiplier here?
-                        time = DateTime.Now
-                    });
+                        new
+                        {
+                            rem_host = ((IClient) share.Miner).Connection.RemoteEndPoint.Address.ToString(),
+                            username = share.Miner.Username,
+                            our_result = ourResult,
+                            upstream_result = upstreamResult,
+                            reason = errorReason,
+                            solution = share.BlockHash.ToHexString(),
+                            difficulty = share.Difficulty, // should we consider mpos difficulty multiplier here?
+                            time = DateTime.Now
+                        });
+                }
             }
             catch (Exception e)
             {
@@ -120,15 +124,18 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return shares;
 
-                var results = _mySqlProvider.Connection.Query(
-                    @"select username, sum(difficulty) as diff from shares group by username");
-
-                foreach (var row in results)
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    shares.Add(row.username, row.diff);
+                    var results = connection.Query(
+                        @"select username, sum(difficulty) as diff from shares group by username");
+
+                    foreach (var row in results)
+                    {
+                        shares.Add(row.username, row.diff);
+                    }
                 }
             }
             catch (Exception e)
@@ -162,19 +169,22 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return blocks;
 
-                var result = _mySqlProvider.Connection.Query(@"select count(*),
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var result = connection.Query(@"select count(*),
                 (select count(*) from blocks where confirmations >= 0 and confirmations < 120) as pending,
                 (select count(*) from blocks where confirmations < 0) as orphaned,
                 (select count(*) from blocks where confirmations >= 120) as confirmed
                 from blocks");
 
-                var data = result.First();
-                blocks["pending"] = (int) data.pending;
-                blocks["orphaned"] = (int) data.orphaned;
-                blocks["confirmed"] = (int) data.confirmed;
+                    var data = result.First();
+                    blocks["pending"] = (int) data.pending;
+                    blocks["orphaned"] = (int) data.orphaned;
+                    blocks["confirmed"] = (int) data.confirmed;
+                }
             }
             catch (Exception e)
             {
@@ -190,13 +200,16 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return blocks;
 
-                var results = _mySqlProvider.Connection.Query<PersistedBlock>(
-                    "select height, blockhash, amount, confirmations, time from blocks order by height DESC LIMIT 20");
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<PersistedBlock>(
+                        "select height, blockhash, amount, confirmations, time from blocks order by height DESC LIMIT 20");
 
-                blocks.AddRange(results);
+                    blocks.AddRange(results);
+                }
             }
             catch (Exception e)
             {
@@ -212,7 +225,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return blocks;
 
                 string filter = string.Empty;
@@ -230,11 +243,14 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                         break;
                 }
 
-                var results = _mySqlProvider.Connection.Query<PersistedBlock>(string.Format(
-                    "select height, blockhash, amount, confirmations, time from blocks where {0} order by height DESC LIMIT 20",
-                    filter));
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<PersistedBlock>(string.Format(
+                        "select height, blockhash, amount, confirmations, time from blocks where {0} order by height DESC LIMIT 20",
+                        filter));
 
-                blocks.AddRange(results);
+                    blocks.AddRange(results);
+                }
             }
             catch (Exception e)
             {
@@ -260,14 +276,17 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             try
             {
-                // query the username against mpos pool_worker table.
-                var result = _mySqlProvider.Connection.Query<string>(
-                    "SELECT password FROM pool_worker where username = @username",
-                        new { username = miner.Username }).FirstOrDefault();
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    // query the username against mpos pool_worker table.
+                    var result = connection.Query<string>(
+                        "SELECT password FROM pool_worker where username = @username",
+                        new {username = miner.Username}).FirstOrDefault();
 
-                // if matching record exists for given miner username, then authenticate the miner.
-                // note: we don't check for password on purpose.
-                return result != null;
+                    // if matching record exists for given miner username, then authenticate the miner.
+                    // note: we don't check for password on purpose.
+                    return result != null;
+                }
             }
             catch (Exception e)
             {
@@ -280,12 +299,15 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             try
             {
-                _mySqlProvider.Connection.Execute(
-                    "update pool_worker set difficulty = @difficulty where username = @username", new
-                    {
-                        difficulty = miner.Difficulty,
-                        username = miner.Username
-                    });
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    connection.Execute(
+                        "update pool_worker set difficulty = @difficulty where username = @username", new
+                        {
+                            difficulty = miner.Difficulty,
+                            username = miner.Username
+                        });
+                }
             }
             catch (Exception e)
             {
