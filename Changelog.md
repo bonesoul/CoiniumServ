@@ -1,4 +1,4 @@
-##### [v0.1.3 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.2-alpha) - 03.09.2014
+##### [v0.1.3 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.3-alpha) - 03.09.2014
 
 **Storage**
 * Implemented storage layers support; hybrid-storage (redis+mysql) and mpos compatibility (mysql).
