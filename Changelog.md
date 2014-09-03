@@ -1,3 +1,28 @@
+##### [v0.1.3 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.2-alpha) - 03.09.2014
+
+**Storage**
+* Implemented storage layers support; hybrid-storage (redis+mysql) and mpos compatibility (mysql).
+* Major changes in storage configuration - you need to update per-pool configuration files.
+* Added migration support, CoiniumServ will manage required tables on it's own in hybrid-storage mode.
+ 
+**Coin**
+* Fixed a bug with coin's that was returning non-standard version reply in getinfo().
+* Added initial proof-of-stake coin support.
+* Added automatic detection support for proof-of-stake coins.
+
+**Statistics & API**
+* Re-developed statistics & api sub-system from stratch.
+* Pool api now can expose more details.
+* Fixed a bug where authenticated miner count was reported incorrectly.
+ 
+**Web**
+* Improved index page layout.
+
+**Misc**
+* Updated dependency packages.
+* File path handling improvements.
+* Fixed app.config.
+
 ##### [v0.1.2 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.2-alpha) - 14.08.2014
 
 **Payments**
