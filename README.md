@@ -56,7 +56,7 @@ You can send tips and furher support the project or get tips for contributing by
 
 ### Status
 
-[v0.1.2 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.2-alpha) released
+[v0.1.3 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.3-alpha) released
 
 ### Features
 
@@ -129,12 +129,6 @@ CoiniumServ supports storage layer interfaces that you can extend to implement y
 ### Getting Started
 
 Make sure you check our [Getting Started](https://github.com/CoiniumServ/CoiniumServ/wiki/Getting-Started) guide for installation instructions for *nix and Windows.
-
-For Ubuntu, you can simply use our installer script;
-
-```
-wget -O - https://raw.githubusercontent.com/CoiniumServ/CoiniumServ/develop/contrib/installers/ubuntu.sh | bash
-```
 
 ### Documentation
 
