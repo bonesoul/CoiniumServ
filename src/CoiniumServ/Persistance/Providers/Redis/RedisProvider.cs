@@ -30,7 +30,7 @@ namespace CoiniumServ.Persistance.Providers.Redis
 {
     public class RedisProvider : IRedisProvider
     {
-        public bool IsConnected { get { return Client.IsConnected; } }
+        public bool IsConnected { get { return Client.Connected; } }
 
         public RedisClient Client { get; private set; }
         private readonly Version _requiredMinimumVersion = new Version(2, 6);
@@ -52,14 +52,11 @@ namespace CoiniumServ.Persistance.Providers.Redis
         {
             try
             {
-                // for mono compatibility, we need to define an endpoint.
-                var endpoint = new IPEndPoint(IPAddress.Parse(_config.Host), _config.Port); 
-
                 // create the connection
-                Client = new RedisClient(endpoint)
+                Client = new RedisClient(_config.Host, _config.Port)
                 {
                     ReconnectAttempts = 3,
-                    ReconnectWait = 200
+                    ReconnectTimeout = 200
                 };
 
                 // select the database
