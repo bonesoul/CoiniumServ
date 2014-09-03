@@ -20,10 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using CoiniumServ.Configuration;
-using CoiniumServ.Server.Web;
 using CoiniumServ.Utils.Helpers.IO;
 using CoiniumServ.Utils.Platform;
 using Metrics;
@@ -33,15 +31,11 @@ namespace CoiniumServ.Metrics
 {
     public class MetricsManager : IMetricsManager
     {
-        private readonly IBackendConfig _config;
-
         private readonly ILogger _logger;
 
         public MetricsManager(IConfigManager configManager)
         {
-            _config = configManager.WebServerConfig.Backend;
-
-            if (!_config.MetricsEnabled)
+            if (!configManager.WebServerConfig.Backend.MetricsEnabled)
                 return;
 
             _logger = Log.ForContext<MetricsManager>();

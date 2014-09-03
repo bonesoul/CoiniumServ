@@ -85,28 +85,25 @@
     # Per-pool Storage Configuration
     # -------------------------------
 
-    # redis:
-    # enabled: is redis enabled?
+    # hybrid storage layer
+    # enabled: set this true to enable hybrid storage mode where redis and mysql is used together.
+
+    # mpos layer
+    # enabled: set this true to enable mpos compatibility mode - make sure to internal disable payment-processor!
 
 	"storage": {
-		"redis": {
-			"enabled": true
-		}
-	},
-
-    # -------------------------------
-    # MPOS Compatibility Mode
-    # -------------------------------
-
-    # NOT-IMPLEMENTED-YET!
-    # enabled: set this true to enable mpos compatibility mode - make sure to internal disable payment-processor!
-    # name: database-name.
-
-	"mpos": {
-		"enabled": false,
-		"database": {
-			"name": "db-name"
-		}
+        "hybrid": {
+            "enabled": false,
+            "mysql": {
+			    "database": "db-name"
+		    }
+        },
+        "mpos": {
+		    "enabled": false,
+		    "mysql": {
+			    "database": "db-name"
+		    }
+        }
 	},
 
     # -------------------------------

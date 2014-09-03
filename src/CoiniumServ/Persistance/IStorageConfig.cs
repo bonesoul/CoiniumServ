@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using CoiniumServ.Configuration;
+using CoiniumServ.Persistance.Layers;
 
 namespace CoiniumServ.Persistance
 {
-    public interface IStorageConfig:IConfig
+    public interface IStorageConfig : IConfig
     {
+        IStorageLayerConfig Layer { get; }
     }
 }

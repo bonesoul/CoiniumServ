@@ -36,13 +36,16 @@
                 <div class="navbar-collapse collapse" id="navbar-main">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Pools <span class="caret"></span></a>
-                            <ul class="dropdown-menu" aria-labelledby="themes">
-                                @foreach (var kvp in ViewBag.Pools.Value) // there exists a bug in nancy&razor@mono where we have to explity use Value for DynamicDictionaryValue
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Pools <span class="caret"></span></a>                            
+                                @if (@ViewBag.Pools)
                                 {
-                                    <li><a href="/pool/@kvp.Value.Config.Coin.Symbol">@kvp.Value.Config.Coin.Name</a></li>
-                                }
-                            </ul>
+                                    @:<ul class="dropdown-menu" aria-labelledby="themes">
+                                        foreach (var pool in ViewBag.Pools.Value) // there exists a bug in nancy&razor@mono where we have to explity use Value for DynamicDictionaryValue
+                                        {
+                                        <li><a href="/pool/@pool.Config.Coin.Symbol">@pool.Config.Coin.Name</a></li>
+                                        }
+                                    @:</ul>
+                                }                            
                         </li>
                         <li>
                             <a href="/donate/"><i class="fa fa-bitcoin"></i> Donate</a>
@@ -79,7 +82,10 @@
                                 If you would like to do so, check our white-labeling solutions: https://github.com/CoiniumServ/CoiniumServ/blob/develop/licenses/commercial.md
                             -->
                             Powered by open source <a href="https://github.com/CoiniumServ/CoiniumServ" target="_blank">CoiniumServ</a> project created by <a href="http://www.coinium.org" target="_blank">coinium.org</a>.
-                            Data last updated @@ @ViewBag.LastUpdate.
+                            @if(@ViewBag.LastUpdate)
+                            {
+                                @:Data last updated @@ @ViewBag.LastUpdate.
+                            }
                         </p>
                         <div>
                             <i class="fa fa-comment"></i> <a target="_blank" href="http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde">#coiniumserv</a>

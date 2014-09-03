@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Threading;
 using CoiniumServ.Cryptology.Algorithms;
@@ -28,8 +27,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Miners;
-using CoiniumServ.Payments;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Shares;
@@ -155,7 +153,7 @@ namespace CoiniumServ.Jobs.Manager
                 var blockTemplate = _daemonClient.GetBlockTemplate();
 
                 // TODO: convert generation transaction to ioc & DI based.
-                var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate,_poolConfig.Wallet, _poolConfig.Rewards,_poolConfig.Meta, _poolConfig.Coin.SupportsTxMessages);
+                var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate, _poolConfig);
                 generationTransaction.Create();
 
                 // create the job notification.

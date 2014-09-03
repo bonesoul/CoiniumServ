@@ -1,9 +1,3 @@
-[submodule "deps/gibbed.io"]
-	path = deps/gibbed.io
-	url = https://github.com/CoiniumServ/Gibbed.IO.git
-[submodule "deps/jsonconfig"]
-	path = deps/jsonconfig
-	url = https://github.com/CoiniumServ/JsonConfig.git
 [submodule "deps/csredis"]
 	path = deps/csredis
 	url = https://github.com/CoiniumServ/csredis.git

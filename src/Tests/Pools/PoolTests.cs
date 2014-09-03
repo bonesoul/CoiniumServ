@@ -26,7 +26,6 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Factories;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using NSubstitute;
 using Should.Fluent;
 using Xunit;
@@ -77,19 +76,15 @@ namespace CoiniumServ.Tests.Pools
         [Fact]
         public void ConstructorTest_NullParams_ShouldThrowException()
         {
-            var configException = Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
-                var pool = new Pool(null, _objectFactory);
-            });
+                new Pool(null, _objectFactory);
+            }).Message.Should().Contain("poolConfig");
 
-            configException.Message.Should().Contain("poolConfig");
-
-            var factoryException = Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
-                var pool = new Pool(_config, null);
-            });
-
-            factoryException.Message.Should().Contain("objectFactory");
+                new Pool(_config, null);
+            }).Message.Should().Contain("objectFactory");
         }
     }
 }

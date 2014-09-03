@@ -20,46 +20,102 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using CoiniumServ.Configuration;
 using CoiniumServ.Factories;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace CoiniumServ.Pools
 {
     public class PoolManager : IPoolManager
     {
-        public IReadOnlyCollection<IPool> Pools { get { return _pools.Values.ToList(); } }
-
-        private readonly Dictionary<string, IPool> _pools; 
+        private readonly IList<IPool> _storage; 
 
         private readonly ILogger _logger;
 
         public PoolManager(IObjectFactory objectFactory , IConfigManager configManager)
         {
             _logger = Log.ForContext<PoolManager>();
-            _pools = new Dictionary<string, IPool>();
 
-            foreach (var config in configManager.PoolConfigs)
+            _storage = new List<IPool>(); // initialize the pool storage.
+
+            foreach (var config in configManager.PoolConfigs) // loop through all enabled pool configurations.
             {
-                _pools.Add(config.Coin.Symbol, objectFactory.GetPool(config));
+                var pool = objectFactory.GetPool(config); // create pool for the given configuration.
+                _storage.Add(pool); // add it to storage.
             }
         }
 
-        public IPool GetBySymbol(string symbol)
+        public IQueryable<IPool> SearchFor(Expression<Func<IPool, bool>> predicate)
         {
-            return _pools.Values.FirstOrDefault(pair => pair.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
+            return _storage.AsQueryable().Where(predicate);
+        }
+
+        public IEnumerable<IPool> GetAll()
+        {
+            return _storage;
+        }
+
+        public IQueryable<IPool> GetAllAsQueryable()
+        {
+            return _storage.AsQueryable();
+        }
+
+        public IReadOnlyCollection<IPool> GetAllAsReadOnly()
+        {
+            return new ReadOnlyCollection<IPool>(_storage);
+        }
+
+        public int Count { get { return _storage.Count; } }
+
+        public string ServiceResponse { get; private set; }
+
+        public void Recache()
+        {
+            try
+            {
+                foreach (var pool in _storage) // recache per-pool stats
+                {
+                    pool.Recache();
+                }
+
+                // cache the json-service response
+                var cache = _storage.ToDictionary(pool => pool.Config.Coin.Symbol.ToLower());
+                ServiceResponse = JsonConvert.SerializeObject(cache, Formatting.Indented, new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Error recaching statistics; {0:l}", e.Message);
+            }
+        }
+
+        public IPool Get(string symbol)
+        {
+            return _storage.FirstOrDefault(p => p.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
         }
 
         public void Run()
         {
-            foreach (var kvp in _pools)
+            foreach (var pool in _storage)
             {
-                kvp.Value.Start();
+                pool.Start();
             }
+        }
+
+        public IEnumerator<IPool> GetEnumerator()
+        {
+            return _storage.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

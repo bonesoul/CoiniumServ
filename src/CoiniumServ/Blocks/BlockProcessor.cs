@@ -20,12 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System.Linq;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Daemon.Responses;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using Serilog;
 
 namespace CoiniumServ.Blocks

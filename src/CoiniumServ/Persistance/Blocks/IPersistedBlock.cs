@@ -20,19 +20,30 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace CoiniumServ.Persistance.Blocks
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public interface IPersistedBlock
     {
+        [JsonProperty("height")]
         UInt32 Height { get; }
+        [JsonProperty("status")]
+        [JsonConverter(typeof(StringEnumConverter))]
         BlockStatus Status { get; set; }
+        [JsonProperty("blockHash")]
         string BlockHash { get; }
+        [JsonProperty("txHash")]
         string TransactionHash { get; }
+        [JsonProperty("amount")]
         decimal Amount { get; }
         decimal Reward { get; }
+        [JsonProperty("time")]
+        DateTime Time { get; }
+
         bool IsPending { get; }
 
         void SetReward(decimal reward);

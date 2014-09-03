@@ -20,13 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using AustinHarris.JsonRpc;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using Serilog;
@@ -40,13 +38,10 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
     {
         private readonly IDaemonClient _daemonClient; // TODO: remove this!
 
-        private readonly IShareManager _shareManager;
-
         public VanillaService(IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient):
             base(poolConfig.Coin.Name)
         {
             _daemonClient = daemonClient;
-            _shareManager = shareManager;
         }
 
         /// <summary>

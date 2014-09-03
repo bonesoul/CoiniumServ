@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -169,7 +168,7 @@ namespace CoiniumServ.Jobs
                 : BigInteger.Parse(blockTemplate.Target, NumberStyles.HexNumber);
 
             // set the block diff
-            Difficulty = ((double)new BigRational(Algorithms.Diff1, Target));
+            Difficulty = ((double)new BigRational(AlgorithmManager.Diff1, Target));
 
             // set the ntime
             nTime = BitConverter.GetBytes(blockTemplate.CurTime.BigEndian()).ToHexString();

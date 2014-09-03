@@ -20,15 +20,30 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
+using System.Collections.Generic;
+using CoiniumServ.Pools;
+using CoiniumServ.Server.Web.Service;
+using CoiniumServ.Utils.Repository;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Cryptology.Algorithms
 {
-    public interface IHashAlgorithm
+    [JsonObject(MemberSerialization.OptIn)]
+    public interface IHashAlgorithm: IRepository<IPool>, IJsonService
     {
+        string Name { get; }
+
         UInt32 Multiplier { get; }
 
+        [JsonProperty("miners")]
+        Int32 MinerCount { get; }
+
+        [JsonProperty("hashrate")]
+        UInt64 Hashrate { get; }
+
         byte[] Hash(byte[] input, dynamic config);
+
+        void AssignPools(IEnumerable<IPool> pools);
     }
 }

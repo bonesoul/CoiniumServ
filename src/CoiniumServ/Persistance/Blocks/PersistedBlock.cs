@@ -21,7 +21,9 @@
 // 
 #endregion
 
+using System;
 using System.Diagnostics;
+using CoiniumServ.Utils.Helpers.Time;
 
 namespace CoiniumServ.Persistance.Blocks
 {
@@ -40,15 +42,43 @@ namespace CoiniumServ.Persistance.Blocks
 
         public decimal Reward { get; private set; }
 
+        public DateTime Time { get; private set; }
+
         public bool IsPending { get { return Status != BlockStatus.Orphaned && Status != BlockStatus.Confirmed; } }
 
-        public PersistedBlock(BlockStatus status, uint height, string blockHash, string transactionHash, decimal amount)
+        public PersistedBlock(Int32 height, Boolean orphaned, Boolean confirmed, String blockHash, String txHash, Decimal amount, DateTime time)
         {
-            Status = status;
-            Height = height;
+            // used by hybrid storage layer.
+
+            // determine the block status
+            if(orphaned)
+                Status = BlockStatus.Orphaned;
+            else if(confirmed)
+                Status = BlockStatus.Confirmed;
+            else
+                Status = BlockStatus.Pending;
+
+            Height = (uint)height;
             BlockHash = blockHash;
-            TransactionHash = transactionHash;
+            TransactionHash = txHash;
             Amount = amount;
+            Time = time;
+        }
+
+        public PersistedBlock(UInt32 height, String blockhash, Double amount, Int32 confirmations, Int32 time)
+        {
+            // used by mpos storage layer.
+
+            // determine the block status
+            if (confirmations == -1)
+                Status = BlockStatus.Orphaned;
+            else
+                Status = confirmations > 120 ? BlockStatus.Confirmed : BlockStatus.Pending;
+            
+            Height = height;
+            BlockHash = blockhash;
+            Amount = (decimal)amount;
+            Time = time.UnixTimeToDateTime();
         }
 
         public void SetReward(decimal reward)

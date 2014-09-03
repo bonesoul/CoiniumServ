@@ -20,9 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System.Linq;
 using CoiniumServ.Coin.Config;
+using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
 using Nancy;
@@ -32,95 +33,68 @@ namespace CoiniumServ.Server.Web.Modules
 {
     public class ApiModule: NancyModule
     {
-        public ApiModule(IStatistics statistics)
+        private static readonly Response PoolNotFound = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
+        private static readonly Response AlgorithmNotFound = JsonConvert.SerializeObject(new JsonError("Algorithm not found!"));
+
+        // TODO: use base("/api");
+        public ApiModule(IStatisticsManager statisticsManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
+            :base("/api")
         {
-            Get["/api/"] = _ =>
+            Get["/"] = _ =>
             {
                 // include common data required by layout.
                 ViewBag.Title = "API";
                 ViewBag.Heading = "Public API";
-                ViewBag.Pools = statistics.Pools;
-                ViewBag.LastUpdate = statistics.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ViewBag.Pools = poolManager;
+                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 
                 // return our view
                 return View["api", new ApiModel
                 {
                     BaseUrl = Request.Url.SiteBase,
-                    Coin = statistics.Pools.First().Value.Config.Coin
+                    Coin = poolManager.First().Config.Coin
                 }];
             };
 
-            Get["/api/global"] = _ => Response.AsJson(statistics.Global.GetResponseObject());
-            
-            Get["/api/pools"] = _ => Response.AsJson(statistics.Pools.GetResponseObject());
 
-            Get["/api/pool/{slug}"] = _ =>
+            Get["/pools"] = _ =>
             {
-                var pool = statistics.Pools.GetBySymbol(_.slug);
-
-                Response response;
-
-                if (pool == null)
-                    response = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
-                else
-                    response = (Response)pool.Json;
-
-                response.ContentType = "application/json";
-                return response; 
-            };
-
-            Get["/api/pool/{slug}/workers"] = _ =>
-            {
-                var pool = statistics.Pools.GetBySymbol(_.slug);
-
-                Response response;
-
-                if (pool == null)
-                    response = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
-                else
-                    response = (Response)pool.WorkersJson;
-
+                var response = (Response) poolManager.ServiceResponse;
                 response.ContentType = "application/json";
                 return response;
             };
 
-            Get["/api/pool/{slug}/round"] = _ =>
+            Get["/pool/{slug}"] = _ =>
             {
-                var pool = statistics.Pools.GetBySymbol(_.slug);
+                var pool = poolManager.Get(_.slug); // query the requested pool.
 
-                Response response;
-
-                if (pool == null)
-                    response = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
-                else
-                    response = (Response)pool.CurrentRoundJson;
-
+                var response = pool != null ? (Response)pool.ServiceResponse : PoolNotFound;
                 response.ContentType = "application/json";
                 return response;
             };
 
-            Get["/api/algorithms"] = _ => Response.AsJson(statistics.Algorithms.GetResponseObject());
-
-            Get["/api/algorithm/{slug}"] = _ =>
+            Get["/algorithms"] = _ =>
             {
-                var algorithm = statistics.Algorithms.GetByName(_.slug);
-
-                Response response;
-
-                if (algorithm == null)
-                    response = JsonConvert.SerializeObject(new JsonError("Algorithm not found!"));
-                else
-                    response = (Response)algorithm.Json;                                      
-                    
+                var response = (Response)algorithmManager.ServiceResponse;
                 response.ContentType = "application/json";
-                return response;                
+                return response;
             };
+
+            Get["/algorithm/{slug}"] = _ =>
+            {
+                var algorithm = algorithmManager.Get(_.slug); // query the requested pool.
+
+                var response = algorithm != null ? (Response)algorithm.ServiceResponse : AlgorithmNotFound;
+                response.ContentType = "application/json";
+                return response;
+            };
+
+            Get["/global"] = _ =>
+            {
+                var response = (Response) statisticsManager.ServiceResponse;
+                response.ContentType = "application/json";
+                return response;
+            };          
         }
-    }
-
-    public class ApiModel
-    {
-        public string BaseUrl { get; set; }
-        public ICoinConfig Coin { get; set; }
     }
 }

@@ -20,9 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using CoiniumServ.Configuration;
-using CoiniumServ.Repository.Context;
+using CoiniumServ.Container.Context;
 using Metrics;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -49,7 +48,7 @@ namespace CoiniumServ.Server.Web
             var configManager = container.Resolve<IConfigManager>();
 
             // todo: enable authentication support
-            if(configManager.WebServerConfig.Backend.MetricsEnabled)
+            if (configManager.WebServerConfig.Backend.MetricsEnabled)
                 Metric.Config.WithNancy(config => config.WithMetricsModule("/admin/metrics"));
 
             CustomErrors.Enable(pipelines, new ErrorConfiguration());
@@ -57,7 +56,7 @@ namespace CoiniumServ.Server.Web
 
         protected override IRootPathProvider RootPathProvider
         {
-            get { return new CustomRootPathProvider(); }
+            get { return new RootPathProvider(); }
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)

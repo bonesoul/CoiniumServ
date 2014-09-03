@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -59,8 +58,7 @@ namespace CoiniumServ.Configuration
             try
             {
                 // try to validate the json.
-                var @object = JsonConvert.DeserializeObject<dynamic>(json);
-
+                JsonConvert.DeserializeObject<dynamic>(json);
                 return true;
             }
             catch (JsonReaderException e)

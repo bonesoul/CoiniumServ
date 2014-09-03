@@ -20,9 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using CoiniumServ.Banning;
 using CoiniumServ.Coin.Helpers;
@@ -32,13 +32,18 @@ using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
-using CoiniumServ.Persistance;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Layers.Empty;
+using CoiniumServ.Persistance.Layers.Hybrid;
+using CoiniumServ.Persistance.Layers.Mpos;
+using CoiniumServ.Persistance.Providers;
+using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers.Validation;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace CoiniumServ.Pools
@@ -49,19 +54,26 @@ namespace CoiniumServ.Pools
     public class Pool : IPool
     {
         public IPoolConfig Config { get; private set; }
-
-        public IPerPool Statistics { get; private set; }
+        public ulong Hashrate { get; private set; }
+        public Dictionary<string, double> RoundShares { get; private set; }
+        public IHashAlgorithm HashAlgorithm { get; private set; }
+        public IMinerManager MinerManager { get; private set; }
+        public INetworkStats NetworkStats { get; private set; }
+        public IBlocksCache BlocksCache { get; private set; }
 
         // object factory.
         private readonly IObjectFactory _objectFactory;
 
         // dependent objects.
-        private IDaemonClient _daemonClient;
-        private IMinerManager _minerManager;
+        private IDaemonClient _daemonClient;       
+        
         private IJobManager _jobManager;
-        private IShareManager _shareManager;
-        private IHashAlgorithm _hashAlgorithm;
+        
+        private IShareManager _shareManager;       
+        
         private IBanManager _banningManager;
+        
+        private IStorageLayer _storageLayer;
 
         private Dictionary<IMiningServer, IRpcService> _servers;
 
@@ -77,9 +89,7 @@ namespace CoiniumServ.Pools
         /// </summary>
         /// <param name="poolConfig"></param>
         /// <param name="objectFactory"></param>
-        public Pool(
-            IPoolConfig poolConfig,
-            IObjectFactory objectFactory)
+        public Pool(IPoolConfig poolConfig, IObjectFactory objectFactory)
         {
             Enforce.ArgumentNotNull(() => poolConfig); // make sure we have a config instance supplied.
             Enforce.ArgumentNotNull(() => objectFactory); // make sure we have a objectFactory instance supplied.
@@ -95,6 +105,7 @@ namespace CoiniumServ.Pools
             GenerateInstanceId();
 
             InitDaemon();
+            InitStorage();
             InitManagers();
             InitServers();
         }
@@ -108,14 +119,15 @@ namespace CoiniumServ.Pools
             }
 
             _daemonClient = _objectFactory.GetDaemonClient(Config);
-            _hashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
+            HashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
 
+            // read getinfo().
             try
             {
                 var info = _daemonClient.GetInfo();
 
                 _logger.Information("Coin symbol: {0:l} algorithm: {1:l} " +
-                                    "Coin version: {2} protocol: {3} wallet: {4} " +
+                                    "Coin version: {2:l} protocol: {3} wallet: {4} " +
                                     "Daemon network: {5:l} peers: {6} blocks: {7} errors: {8:l} ",
                     Config.Coin.Symbol,
                     Config.Coin.Algorithm,
@@ -132,6 +144,7 @@ namespace CoiniumServ.Pools
                 return;
             }
 
+            // read getmininginfo().
             try
             {
                 // try reading mininginfo(), some coins may not support it.
@@ -139,42 +152,74 @@ namespace CoiniumServ.Pools
 
                 _logger.Information("Network difficulty: {0:0.00000000} block difficulty: {1:0.00} Network hashrate: {2:l} ",
                     miningInfo.Difficulty,
-                    miningInfo.Difficulty * _hashAlgorithm.Multiplier,
+                    miningInfo.Difficulty * HashAlgorithm.Multiplier,
                     miningInfo.NetworkHashps.GetReadableHashrate());
             }
             catch (RpcException e)
             {
                 _logger.Error("Can not read mininginfo() - the coin may not support the request: {0:l}", e.Message);
             }
+
+            // read getdifficulty() to determine if it's POS coin.
+            try
+            {
+                /*  By default proof-of-work coins return a floating point as difficulty (https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_calls_lis).
+                 *  Though proof-of-stake coins returns a json-object;
+                 *  { "proof-of-work" : 41867.16992903, "proof-of-stake" : 0.00390625, "search-interval" : 0 }
+                 *  So basically we can use this info to determine if assigned coin is a proof-of-stake one.
+                 */
+
+                var response = _daemonClient.MakeRawRequest("getdifficulty");
+                if (response.Contains("proof-of-stake")) // if response contains proof-of-stake field
+                    Config.Coin.IsPOS = true; // then automatically set coin-config.IsPOS to true.
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Can not read getdifficulty() - the coin may not support the request: {0:l}", e.Message);
+            }
+        }
+
+        private void InitStorage()
+        {
+            // load the providers for the current storage layer.
+            var providers =
+                Config.Storage.Layer.Providers.Select(
+                    providerConfig =>
+                        _objectFactory.GetStorageProvider(
+                            providerConfig is IMySqlProviderConfig ? StorageProviders.MySql : StorageProviders.Redis,
+                            Config, providerConfig)).ToList();
+
+            // start the migration manager if needed
+            if (Config.Storage.Layer is HybridStorageLayerConfig)
+                _objectFactory.GetMigrationManager((IMySqlProvider)providers.First(p => p is MySqlProvider), Config); // run migration manager.
+
+            // load the storage layer.
+            if (Config.Storage.Layer is HybridStorageLayerConfig)
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, _daemonClient, Config);
+            else if (Config.Storage.Layer is MposStorageLayerConfig)
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, _daemonClient, Config);
+            else if (Config.Storage.Layer is EmptyStorageLayerConfig)
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, _daemonClient, Config);
         }
 
         private void InitManagers()
         {
             try
             {
-                var storage = _objectFactory.GetStorage(Storages.Redis, Config);
-
-                _minerManager = _objectFactory.GetMinerManager(Config, _daemonClient);
+                BlocksCache = _objectFactory.GetBlocksCache(_storageLayer);
+                MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
+                NetworkStats = _objectFactory.GetNetworkStats(_daemonClient);
 
                 var jobTracker = _objectFactory.GetJobTracker();
-
                 var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
-
-                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, storage, blockProcessor);
-
-                var vardiffManager = _objectFactory.GetVardiffManager(Config, _shareManager);
-
+                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, _storageLayer, blockProcessor);
+                _objectFactory.GetVardiffManager(Config, _shareManager);
                 _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
-
-                _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, _minerManager, _hashAlgorithm);
+                _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, MinerManager, HashAlgorithm);
                 _jobManager.Initialize(InstanceId);
 
-                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, storage, blockProcessor);
-                paymentProcessor.Initialize(Config.Payments);
-
-                var latestBlocks = _objectFactory.GetLatestBlocks(storage);
-                var blockStats = _objectFactory.GetBlockStats(latestBlocks, storage);
-                Statistics = _objectFactory.GetPerPoolStats(Config, _daemonClient, _minerManager, _hashAlgorithm, blockStats, storage);
+                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, _storageLayer, blockProcessor);
+                paymentProcessor.Initialize();
             }
             catch (Exception e)
             {
@@ -190,7 +235,7 @@ namespace CoiniumServ.Pools
 
             if (Config.Stratum != null && Config.Stratum.Enabled)
             {
-                var stratumServer = _objectFactory.GetMiningServer("Stratum", Config, this, _minerManager, _jobManager, _banningManager);
+                var stratumServer = _objectFactory.GetMiningServer("Stratum", Config, this, MinerManager, _jobManager, _banningManager);
                 var stratumService = _objectFactory.GetMiningService("Stratum", Config, _shareManager, _daemonClient);
                 stratumServer.Initialize(Config.Stratum);
 
@@ -199,7 +244,7 @@ namespace CoiniumServ.Pools
 
             if (Config.Vanilla != null && Config.Vanilla.Enabled)
             {
-                var vanillaServer = _objectFactory.GetMiningServer("Vanilla", Config, this, _minerManager, _jobManager, _banningManager);
+                var vanillaServer = _objectFactory.GetMiningServer("Vanilla", Config, this, MinerManager, _jobManager, _banningManager);
                 var vanillaService = _objectFactory.GetMiningService("Vanilla", Config, _shareManager, _daemonClient);
 
                 vanillaServer.Initialize(Config.Vanilla);
@@ -237,6 +282,35 @@ namespace CoiniumServ.Pools
             rndGenerator.GetNonZeroBytes(randomBytes); // create cryptographically random array of bytes.
             InstanceId = BitConverter.ToUInt32(randomBytes, 0); // convert them to instance Id.
             _logger.Debug("Generated cryptographically random instance Id: {0}", InstanceId);
+        }
+
+        public string ServiceResponse { get; private set; }
+
+        public void Recache()
+        {
+            BlocksCache.Recache(); // recache the blocks.
+            NetworkStats.Recache(); // let network statistics recache.
+            CalculateHashrate(); // calculate the pool hashrate.
+            RecacheRound(); // recache current round.
+
+            // cache the json-service response
+            ServiceResponse = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+        }
+
+        private void RecacheRound()
+        {
+            RoundShares = _storageLayer.GetCurrentShares();
+        }
+
+        private void CalculateHashrate()
+        {
+            //// read hashrate stats.
+            //var windowTime = TimeHelpers.NowInUnixTime() - _statisticsConfig.HashrateWindow;
+            //_storage.DeleteExpiredHashrateData(windowTime);
+            //var hashrates = _storage.GetHashrateData(windowTime);
+
+            //double total = hashrates.Sum(pair => pair.Value);
+            //Hashrate = Convert.ToUInt64(_shareMultiplier * total / _statisticsConfig.HashrateWindow);
         }
     }
 }

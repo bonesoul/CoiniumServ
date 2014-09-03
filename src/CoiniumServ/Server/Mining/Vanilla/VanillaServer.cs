@@ -20,14 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System.Net;
 
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
-using CoiniumServ.Pools.Config;
 using Serilog;
 
 namespace CoiniumServ.Server.Mining.Vanilla
@@ -38,8 +36,6 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
         private readonly IMinerManager _minerManager;
 
-        private readonly IJobManager _jobManager;
-
         private readonly IPool _pool;
 
         private readonly ILogger _logger;
@@ -48,7 +44,6 @@ namespace CoiniumServ.Server.Mining.Vanilla
         {
             _pool = pool;
             _minerManager = minerManager;
-            _jobManager = jobManager;
             _logger = Log.ForContext<VanillaServer>().ForContext("Component", poolConfig.Coin.Name);
         }
 

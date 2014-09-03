@@ -54,7 +54,7 @@ namespace CoiniumServ.Tests.Coin
             [Fact]
             public void TestInvalidAddress()
             {
-                Exception ex = Assert.Throws<AddressFormatException>(() => Base58.Decode("This isn't valid base58"));
+                Assert.Throws<AddressFormatException>(() => Base58.Decode("This isn't valid base58"));
             }
         }
 }

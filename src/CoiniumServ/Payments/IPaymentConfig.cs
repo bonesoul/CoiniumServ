@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using CoiniumServ.Configuration;
 
@@ -39,5 +38,7 @@ namespace CoiniumServ.Payments
         /// minimum amount of coins before a miner is eligable for getting a payment.
         /// </summary>
         double Minimum { get; }
+
+        void Disable();
     }
 }

@@ -20,14 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using CoiniumServ.Miners;
-using CoiniumServ.Pools.Config;
+using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Shares;

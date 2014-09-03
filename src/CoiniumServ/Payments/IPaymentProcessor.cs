@@ -24,8 +24,6 @@ namespace CoiniumServ.Payments
 {
     public interface IPaymentProcessor
     {
-        void Initialize(IPaymentConfig config);
-
-        bool IsEnabled { get; }
+        void Initialize();
     }
 }

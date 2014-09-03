@@ -20,20 +20,25 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Server.Mining.Vanilla;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Miners
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public interface IMinerManager
     {
         event EventHandler MinerAuthenticated;
 
+        [JsonProperty("count")]
+        int Count { get; }
+
+        [JsonProperty("list")]
         IList<IMiner> Miners { get; }
 
         IMiner GetMiner(Int32 id);

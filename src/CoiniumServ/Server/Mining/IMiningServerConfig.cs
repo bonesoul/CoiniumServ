@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using CoiniumServ.Configuration;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Server.Mining
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public interface IServerConfig:IConfig 
     {
         bool Enabled { get; }
@@ -38,6 +39,7 @@ namespace CoiniumServ.Server.Mining
         /// <summary>
         /// port to listen for connections.
         /// </summary>
+        [JsonProperty("port")]
         Int32 Port { get; }
     }
 }

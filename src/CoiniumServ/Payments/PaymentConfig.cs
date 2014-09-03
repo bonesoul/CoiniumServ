@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using Serilog;
 
@@ -49,6 +48,11 @@ namespace CoiniumServ.Payments
                 Valid = false;
                 Log.Logger.ForContext<PaymentConfig>().Error(e, "Error loading payment configuration");
             }
+        }
+
+        public void Disable()
+        {
+            Enabled = false;
         }
     }
 }

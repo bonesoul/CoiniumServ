@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.IO;
 using System.Text;
@@ -42,8 +41,9 @@ namespace CoiniumServ.Coin.Coinbase
         /// <param name="job"></param>
         /// <param name="header"></param>
         /// <param name="coinbase"></param>
+        /// <param name="IsPOSCoin">Are we serializing a proof-of-stake coin block</param>
         /// <returns></returns>
-        public static byte[] SerializeBlock(IJob job, byte[] header, byte[] coinbase)
+        public static byte[] SerializeBlock(IJob job, byte[] header, byte[] coinbase, bool IsPOSCoin = false)
         {
             byte[] result;
 
@@ -58,7 +58,8 @@ namespace CoiniumServ.Coin.Coinbase
                     stream.WriteBytes(transaction.Data.HexToByteArray());
                 }
 
-                // need to implement POS support too.
+                if (IsPOSCoin) // check if we are serializing a block for proof-of-stake coin.
+                    stream.WriteByte(0); // proof-of-stake coins require a zero byte appended to block which the daemon replaces with signature.
 
                 result = stream.ToArray();
             }
