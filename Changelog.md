@@ -1,4 +1,9 @@
-##### [v0.1.3 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.3-alpha) - 03.09.2014
+##### [v0.1.4 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.4-alpha) - 03.09.2014
+
+**Storage**
+* Downgraded csredis package at it was causing problems with mono.
+
+##### [v0.1.3 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.3-alpha) - 03.09.2014
 
 **Storage**
 * Implemented storage layers support; hybrid-storage (redis+mysql) and mpos compatibility (mysql).
@@ -23,13 +28,13 @@
 * File path handling improvements.
 * Fixed app.config.
 
-##### [v0.1.2 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.2-alpha) - 14.08.2014
+##### [v0.1.2 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.2-alpha) - 14.08.2014
 
 **Payments**
 * Fixed a major bug in payment processor which was preventing payments to miners.
 * Fixed a bug in statistics manager.
 
-##### [v0.1.1 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.1-alpha) - 10.08.2014
+##### [v0.1.1 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.1-alpha) - 10.08.2014
 **Mining**
 * Improved SocketServiceContext and removed unnecessary overhead.
 * New block found message is no more sent to miners as the miner software can already determine itself.
@@ -53,6 +58,6 @@
 * Double.parse() and float.parse() calls will now correctly use CultureInfo.InvariantCulture - basically fixing potential problems with non en-US systems.
 
 
-##### [v0.1.0 alpha - Piri Reis](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.0-alpha) - 08.08.2014
+##### [v0.1.0 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.0-alpha) - 08.08.2014
 
 Initial release which is fully functional with a basic feature set.
