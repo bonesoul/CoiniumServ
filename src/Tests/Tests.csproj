@@ -97,10 +97,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\deps\gibbed.io\Gibbed.IO.csproj">
-      <Project>{047857ba-daa3-4ca7-afb8-a1b082b28c6a}</Project>
-      <Name>Gibbed.IO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CoiniumServ\CoiniumServ.csproj">
       <Project>{5fca1e48-0751-4625-9532-cb804df55db5}</Project>
       <Name>CoiniumServ</Name>

@@ -26,7 +26,6 @@ using System.Globalization;
 using System.Linq;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
@@ -39,6 +38,7 @@ using CoiniumServ.Shares;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Time;
 using Dapper;
+using MySql.Data.MySqlClient;
 using Serilog;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
@@ -242,19 +242,22 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
         {
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return;
 
-                _mySqlProvider.Connection.Execute(
-                    @"insert blocks(height, blockHash, txHash, amount, time) values (@height, @blockHash, @txHash, @amount, @time)",
-                    new
-                    {
-                        height = share.Block.Height,
-                        blockHash = share.BlockHash.ToHexString(),
-                        txHash = share.Block.Tx.First(),
-                        amount = share.GenerationTransaction.TotalAmount,
-                        time = share.Block.Time.UnixTimeToDateTime()
-                    });
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    connection.Execute(
+                        @"insert blocks(height, blockHash, txHash, amount, time) values (@height, @blockHash, @txHash, @amount, @time)",
+                        new
+                        {
+                            height = share.Block.Height,
+                            blockHash = share.BlockHash.ToHexString(),
+                            txHash = share.Block.Tx.First(),
+                            amount = share.GenerationTransaction.TotalAmount,
+                            time = share.Block.Time.UnixTimeToDateTime()
+                        });
+                }
             }
             catch (Exception e)
             {
@@ -266,17 +269,20 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
         {
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return;
 
-                _mySqlProvider.Connection.Execute(
-                    @"update blocks orphaned = @orphaned, confirmed = @confirmed where height = @height",
-                    new
-                    {
-                        orphaned = round.Block.Status == BlockStatus.Orphaned,
-                        confirmed = round.Block.Status == BlockStatus.Confirmed,
-                        height = round.Block.Status
-                    });
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    connection.Execute(
+                        @"update blocks set orphaned = @orphaned, confirmed = @confirmed where height = @height",
+                        new
+                        {
+                            orphaned = round.Block.Status == BlockStatus.Orphaned,
+                            confirmed = round.Block.Status == BlockStatus.Confirmed,
+                            height = round.Block.Status
+                        });
+                }
             }
             catch (Exception e)
             {
@@ -290,19 +296,22 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return blocks;
 
-                var result = _mySqlProvider.Connection.Query(@"select count(*),
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var result = connection.Query(@"select count(*),
                 (select count(*) from blocks where orphaned = false and confirmed = false) as pending,
                 (select count(*) from blocks where orphaned = true) as orphaned,
                 (select count(*) from blocks where confirmed = true) as confirmed
                 from blocks");
 
-                var data = result.First();
-                blocks["pending"] = (int) data.pending;
-                blocks["orphaned"] = (int) data.orphaned;
-                blocks["confirmed"] = (int) data.confirmed;                
+                    var data = result.First();
+                    blocks["pending"] = (int) data.pending;
+                    blocks["orphaned"] = (int) data.orphaned;
+                    blocks["confirmed"] = (int) data.confirmed;
+                }
             }
             catch (Exception e)
             {
@@ -318,13 +327,16 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return blocks;
 
-                var results = _mySqlProvider.Connection.Query<PersistedBlock>(
-                    "select height, orphaned, confirmed, blockHash, txHash, amount, time from blocks order by height DESC LIMIT 20");
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<PersistedBlock>(
+                        "select height, orphaned, confirmed, blockHash, txHash, amount, time from blocks order by height DESC LIMIT 20");
 
-                blocks.AddRange(results);
+                    blocks.AddRange(results);
+                }
             }
             catch (Exception e)
             {
@@ -340,7 +352,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
             try
             {
-                if (!IsEnabled || !_mySqlProvider.IsConnected)
+                if (!IsEnabled)
                     return blocks;
 
                 string filter = string.Empty;
@@ -358,10 +370,14 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         break;
                 }
 
-                var results = _mySqlProvider.Connection.Query<PersistedBlock>(string.Format(
-                    "select height, orphaned, confirmed, blockHash, txHash, amount, time from blocks where {0} order by height DESC LIMIT 20", filter));
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<PersistedBlock>(string.Format(
+                        "select height, orphaned, confirmed, blockHash, txHash, amount, time from blocks where {0} order by height DESC LIMIT 20",
+                        filter));
 
-                blocks.AddRange(results);
+                    blocks.AddRange(results);
+                }
             }
             catch (Exception e)
             {

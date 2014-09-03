@@ -23,7 +23,5 @@
 namespace CoiniumServ.Persistance.Providers
 {
     public interface IStorageProvider
-    {
-        bool IsConnected { get; }
-    }
+    { }
 }
