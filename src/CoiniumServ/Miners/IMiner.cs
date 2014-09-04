@@ -35,11 +35,13 @@ namespace CoiniumServ.Miners
         /// <summary>
         /// Unique subscription id for identifying the miner.
         /// </summary>
+        [JsonProperty("id")]
         int Id { get; }
 
         /// <summary>
         /// Username of the miner.
         /// </summary>
+        [JsonProperty("username")]
         string Username { get; }
 
         /// <summary>
@@ -50,6 +52,7 @@ namespace CoiniumServ.Miners
         /// <summary>
         /// Is the miner authenticated.
         /// </summary>
+        [JsonProperty("authenticated")]
         bool Authenticated { get; set; }
 
         int ValidShares { get; set; }

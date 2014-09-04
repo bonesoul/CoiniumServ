@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using CoiniumServ.Configuration;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Factories;
@@ -37,6 +38,7 @@ namespace CoiniumServ.Tests.Pools
         // object mocks.
         private readonly IObjectFactory _objectFactory;
         private readonly IDaemonClient _daemonClient;
+        private readonly IConfigManager _configManager;
         private readonly IPoolConfig _config;
 
         /// <summary>
@@ -46,6 +48,9 @@ namespace CoiniumServ.Tests.Pools
         {
             // factory mockup.
             _objectFactory = Substitute.For<IObjectFactory>();
+
+            // config-manager mockup
+            _configManager = Substitute.For<IConfigManager>();
 
             // pool-config mockup.
             _config = Substitute.For<IPoolConfig>();
@@ -64,7 +69,7 @@ namespace CoiniumServ.Tests.Pools
         [Fact]
         public void ConstructorTest_NonNullParams_ShouldSuccess()
         {
-            var pool = new Pool(_config, _objectFactory); // create the pool instance.
+            var pool = new Pool(_config,_configManager, _objectFactory); // create the pool instance.
 
             pool.Should().Not.Be.Null();
             pool.InstanceId.Should().Be.GreaterThan((UInt32)0); // pool should be already created an instance id.
@@ -78,12 +83,17 @@ namespace CoiniumServ.Tests.Pools
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                new Pool(null, _objectFactory);
+                new Pool(null, _configManager, _objectFactory);
             }).Message.Should().Contain("poolConfig");
 
             Assert.Throws<ArgumentNullException>(() =>
             {
-                new Pool(_config, null);
+                new Pool(_config, null, _objectFactory);
+            }).Message.Should().Contain("configManager");
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                new Pool(_config, _configManager, null);
             }).Message.Should().Contain("objectFactory");
         }
     }

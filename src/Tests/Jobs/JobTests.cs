@@ -197,7 +197,7 @@ namespace CoiniumServ.Tests.Jobs
             job.EncodedDifficulty.Should().Equal("1d2bd7c3");
 
             // test the current time
-            job.nTime.Should().Equal("539ee666");
+            job.NTime.Should().Equal("539ee666");
 
             // test the clean jobs flag
             job.CleanJobs.Should().Equal(true);
