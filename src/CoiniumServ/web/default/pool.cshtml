@@ -5,67 +5,112 @@
 @{ Layout = "layout.cshtml"; }
 
 <div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-primary">
+    <div class="col-md-4">
+        <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money"></i> @Model.Pool.Config.Coin.Name Statistics</h3>
+                <h3 class="panel-title"><i class="fa fa-flask"></i> Coin & Network</h3>
             </div>
             <div class="panel-body">
                 <div class="list-group">
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Config.Coin.Symbol</span>
-                        <i class="fa fa-calendar"></i> Symbol
+                    <a href="#" class="list-group-item" title="The symbol of the coin">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-dollar"></i> Symbol</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.Config.Coin.Symbol</div></div>
+                        </div>
                     </a>
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Hashrate.GetReadableHashrate()</span>
-                        <i class="fa fa-calendar"></i> Hashrate
+                    <a href="#" class="list-group-item" title="The hash algorithm that coin uses">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-cog"></i> Algorithm</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.Config.Coin.Algorithm</div></div>
+                        </div>                        
                     </a>
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.NetworkStats.Hashrate.GetReadableHashrate()</span>
-                        <i class="fa fa-calendar"></i> Network Hashrate
+                    <a href="#" class="list-group-item" title="Version of the coin">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-code-fork"></i> Version</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.NetworkInfo.CoinVersion</div></div>
+                        </div>
                     </a>
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.NetworkStats.Difficulty</span>
-                        <i class="fa fa-calendar"></i> Difficulty
+                    <a href="#" class="list-group-item" title="Is the pool's network connection healthy?">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-check"></i> Healthy</div>
+                            <div class="col-xs-6 text-right"><div><span class="badge @(Model.Pool.NetworkInfo.Healthy? "btn-success" : "btn-danger")">@Model.Pool.NetworkInfo.Healthy</span></div></div>
+                        </div>
                     </a>
-                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/workers" class="list-group-item">
-                        <span class="badge">@Model.Pool.MinerManager.Count</span>
-                        <i class="fa fa-calendar"></i> Workers
+                </div>
+            </div>
+        </div>
+    </div>    
+    <div class="col-md-4">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Statistics</h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    <a href="#" class="list-group-item" title="Overall hashrate of miners connect to pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-flask"></i> Pool</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.Hashrate.GetReadableHashrate()</div></div>
+                        </div>
                     </a>
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.Config.Coin.Algorithm</span>
-                        <i class="fa fa-calendar"></i> Algorithm
+                    <a href="#" class="list-group-item" title="Overall hashrate of network">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-flash"></i> Network</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.NetworkInfo.Hashrate.GetReadableHashrate()</div></div>
+                        </div>
                     </a>
-                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/round" class="list-group-item">
-                        <span class="badge">@Model.Pool.NetworkStats.Round</span>
-                        <i class="fa fa-calendar"></i> Round
+                    <a href="#" class="list-group-item" title="Network difficulty">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-random"></i> Difficulty</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.NetworkInfo.Difficulty</div></div>
+                        </div>
+                    </a>
+                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/workers" class="list-group-item" title="Total of number of workers connected to pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-users"></i> Workers</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.MinerManager.Count</div></div>
+                        </div>
+                    </a>
+                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/round" class="list-group-item" title="Current round within the network">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-circle-o"></i> Round</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.NetworkInfo.Round</div></div>
+                        </div>
                     </a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="panel panel-info">
+    <div class="col-md-4">
+        <div class="panel panel-danger">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money"></i> Block Stats</h3>
+                <h3 class="panel-title"><i class="fa fa-hdd-o"></i> Block Stats</h3>
             </div>
             <div class="panel-body">
                 <div class="list-group">
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.BlocksCache.Total</span>
-                        <i class="fa fa-refresh"></i> Total
+                    <a href="#" class="list-group-item" title="Total number of blocks found by the pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-hdd-o"></i> Total</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.BlocksCache.Total</div></div>
+                        </div>
                     </a>
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.BlocksCache.Pending</span>
-                        <i class="fa fa-refresh fa-spin"></i> Pending
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.BlocksCache.Confirmed</span>
-                        <i class="fa fa-check"></i> Confirmed
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <span class="badge">@Model.Pool.BlocksCache.Orphaned</span>
-                        <i class="fa fa-question"></i> Orphaned
+                    <a href="#" class="list-group-item" title="Pending blocks found by the pool waiting to get confirmed">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-adjust"></i> Pending</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.BlocksCache.Pending</div></div>
+                        </div>
+                    </a> 
+                    <a href="#" class="list-group-item" title="Confirmed blocks found by the pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-check"></i> Confirmed</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.BlocksCache.Confirmed</div></div>
+                        </div>
+                    </a> 
+                    <a href="#" class="list-group-item" title="Orphaned blocks found by the pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-times"></i> Orphaned</div>
+                            <div class="col-xs-6 text-right"><div>@Model.Pool.BlocksCache.Orphaned</div></div>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -77,7 +122,7 @@
     <div class="col-md-12">
         <div class="panel panel-warning">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money"></i> Latest Blocks</h3>
+                <h3 class="panel-title"><i class="fa fa-hdd-o"></i> Latest Blocks</h3>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">

@@ -20,22 +20,74 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using CoiniumServ.Server.Web.Service;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Statistics
+namespace CoiniumServ.Pools
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public interface INetworkStats: IJsonService
+    public interface INetworkInfo: IJsonService
     {
+        /// <summary>
+        /// Network difficulty
+        /// </summary>
         [JsonProperty("difficulty")]
         double Difficulty { get; }
 
+        /// <summary>
+        /// Current round.
+        /// </summary>
         [JsonProperty("round")]
         int Round { get; }
 
+        /// <summary>
+        /// Network hashrate
+        /// </summary>
         [JsonProperty("hashrate")]
         UInt64 Hashrate { get; }
+
+        /// <summary>
+        /// Coin version.
+        /// </summary>
+        [JsonProperty("version")]
+        string CoinVersion { get; }
+
+        /// <summary>
+        /// Protocol version
+        /// </summary>
+        [JsonProperty("protocol")]
+        int ProtocolVersion { get; }
+
+        /// <summary>
+        /// Wallet version
+        /// </summary>
+        [JsonProperty("wallet")]
+        int WalletVersion { get; }
+
+        /// <summary>
+        /// Is testnet?
+        /// </summary>
+        [JsonProperty("testnet")]
+        bool Testnet { get; }
+
+        /// <summary>
+        /// Count of connected peers.
+        /// </summary>
+        [JsonProperty("connections")]
+        long Connections { get; }
+
+        /// <summary>
+        /// Any errors reported by coin network
+        /// </summary>
+        [JsonProperty("errors")]
+        string Errors { get; }
+
+        /// <summary>
+        /// Is the network connection healthy?
+        /// </summary>
+        [JsonProperty("healthy")]
+        bool Healthy { get; }
     }
 }

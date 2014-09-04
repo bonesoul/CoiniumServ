@@ -58,7 +58,7 @@ namespace CoiniumServ.Pools
         public Dictionary<string, double> RoundShares { get; private set; }
         public IHashAlgorithm HashAlgorithm { get; private set; }
         public IMinerManager MinerManager { get; private set; }
-        public INetworkStats NetworkStats { get; private set; }
+        public INetworkInfo NetworkInfo { get; private set; }
         public IBlocksCache BlocksCache { get; private set; }
 
         // object factory.
@@ -120,63 +120,7 @@ namespace CoiniumServ.Pools
 
             _daemonClient = _objectFactory.GetDaemonClient(Config);
             HashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
-
-            // read getinfo().
-            try
-            {
-                var info = _daemonClient.GetInfo();
-
-                _logger.Information("Coin symbol: {0:l} algorithm: {1:l} " +
-                                    "Coin version: {2:l} protocol: {3} wallet: {4} " +
-                                    "Daemon network: {5:l} peers: {6} blocks: {7} errors: {8:l} ",
-                    Config.Coin.Symbol,
-                    Config.Coin.Algorithm,
-                    info.Version,
-                    info.ProtocolVersion,
-                    info.WalletVersion,
-                    info.Testnet ? "testnet" : "mainnet",
-                    info.Connections, info.Blocks,
-                    string.IsNullOrEmpty(info.Errors) ? "none" : info.Errors);
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read getinfo(): {0:l}", e.Message);
-                return;
-            }
-
-            // read getmininginfo().
-            try
-            {
-                // try reading mininginfo(), some coins may not support it.
-                var miningInfo = _daemonClient.GetMiningInfo();
-
-                _logger.Information("Network difficulty: {0:0.00000000} block difficulty: {1:0.00} Network hashrate: {2:l} ",
-                    miningInfo.Difficulty,
-                    miningInfo.Difficulty * HashAlgorithm.Multiplier,
-                    miningInfo.NetworkHashps.GetReadableHashrate());
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read mininginfo() - the coin may not support the request: {0:l}", e.Message);
-            }
-
-            // read getdifficulty() to determine if it's POS coin.
-            try
-            {
-                /*  By default proof-of-work coins return a floating point as difficulty (https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_calls_lis).
-                 *  Though proof-of-stake coins returns a json-object;
-                 *  { "proof-of-work" : 41867.16992903, "proof-of-stake" : 0.00390625, "search-interval" : 0 }
-                 *  So basically we can use this info to determine if assigned coin is a proof-of-stake one.
-                 */
-
-                var response = _daemonClient.MakeRawRequest("getdifficulty");
-                if (response.Contains("proof-of-stake")) // if response contains proof-of-stake field
-                    Config.Coin.IsPOS = true; // then automatically set coin-config.IsPOS to true.
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read getdifficulty() - the coin may not support the request: {0:l}", e.Message);
-            }
+            NetworkInfo = _objectFactory.GetNetworkInfo(_daemonClient, HashAlgorithm, Config);            
         }
 
         private void InitStorage()
@@ -208,7 +152,6 @@ namespace CoiniumServ.Pools
             {
                 BlocksCache = _objectFactory.GetBlocksCache(_storageLayer);
                 MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
-                NetworkStats = _objectFactory.GetNetworkStats(_daemonClient);
 
                 var jobTracker = _objectFactory.GetJobTracker();
                 var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
@@ -289,7 +232,7 @@ namespace CoiniumServ.Pools
         public void Recache()
         {
             BlocksCache.Recache(); // recache the blocks.
-            NetworkStats.Recache(); // let network statistics recache.
+            NetworkInfo.Recache(); // let network statistics recache.
             CalculateHashrate(); // calculate the pool hashrate.
             RecacheRound(); // recache current round.
 

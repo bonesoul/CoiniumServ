@@ -53,7 +53,7 @@ namespace CoiniumServ.Server.Web.Modules
                 }
              
                 ViewBag.Title = string.Format("{0} Pool", pool.Config.Coin.Name);
-                ViewBag.Heading = string.Format("{0} Pool Details", pool.Config.Coin.Name);
+                ViewBag.Heading = string.Format("{0} Pool", pool.Config.Coin.Name);
 
                 // return our view
                 return View["pool", new PoolModel
