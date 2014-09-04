@@ -28,6 +28,7 @@ using FluentMigrator;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Announcers;
 using FluentMigrator.Runner.Initialization;
+using MySql.Data.MySqlClient;
 using Serilog;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
@@ -48,16 +49,23 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
         private void Check()
         {
-            var announcer = new TextWriterAnnouncer(WriteLog);
-            var assembly = Assembly.GetExecutingAssembly();
-            var migrationContext = new RunnerContext(announcer);
+            try
+            {
+                var announcer = new TextWriterAnnouncer(WriteLog);
+                var assembly = Assembly.GetExecutingAssembly();
+                var migrationContext = new RunnerContext(announcer);
 
-            var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };
-            var factory = new FluentMigrator.Runner.Processors.MySql.MySqlProcessorFactory();
-            var processor = factory.Create(_provider.ConnectionString, announcer, options);
-            var runner = new MigrationRunner(assembly, migrationContext, processor);
+                var options = new MigrationOptions {PreviewOnly = false, Timeout = 60};
+                var factory = new FluentMigrator.Runner.Processors.MySql.MySqlProcessorFactory();
+                var processor = factory.Create(_provider.ConnectionString, announcer, options);
+                var runner = new MigrationRunner(assembly, migrationContext, processor);
 
-            runner.MigrateUp(true);
+                runner.MigrateUp(true);
+            }
+            catch (MySqlException e)
+            {
+                _logger.Error("An exception occured while running migration manager. Please ensure your mysql settings are correct; {0:l}", e.Message);
+            }
         }
 
         private void WriteLog(string s)
