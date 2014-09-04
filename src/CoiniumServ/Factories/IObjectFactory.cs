@@ -42,6 +42,7 @@ using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
 using CoiniumServ.Vardiff;
+using HashLib;
 using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Factories
@@ -91,7 +92,7 @@ namespace CoiniumServ.Factories
 
         IVardiffManager GetVardiffManager(IPoolConfig poolConfig, IShareManager shareManager);
 
-        INetworkStats GetNetworkStats(IDaemonClient daemonClient);
+        INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig);
 
         IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
 

@@ -208,14 +208,16 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IVardiffManager>(@params);
         }
 
-        public INetworkStats GetNetworkStats(IDaemonClient daemonClient)
+        public INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig)
         {
             var @params = new NamedParameterOverloads
             {
                 {"daemonClient", daemonClient},
+                {"hashAlgorithm", hashAlgorithm},
+                {"poolConfig", poolConfig},
             };
 
-            return _applicationContext.Container.Resolve<INetworkStats>(@params);
+            return _applicationContext.Container.Resolve<INetworkInfo>(@params);
         }
 
         public IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager)

@@ -280,7 +280,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         {
                             orphaned = round.Block.Status == BlockStatus.Orphaned,
                             confirmed = round.Block.Status == BlockStatus.Confirmed,
-                            height = round.Block.Status
+                            height = round.Block.Height
                         });
                 }
             }
