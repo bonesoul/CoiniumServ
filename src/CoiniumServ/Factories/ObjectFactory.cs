@@ -143,9 +143,14 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IJobManager>(@params);
         }
 
-        public IJobTracker GetJobTracker()
+        public IJobTracker GetJobTracker(IPoolConfig poolConfig)
         {
-            return _applicationContext.Container.Resolve<IJobTracker>();
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+            };
+
+            return _applicationContext.Container.Resolve<IJobTracker>(@params);
         }
 
         public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor)

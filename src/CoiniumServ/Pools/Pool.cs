@@ -52,12 +52,17 @@ namespace CoiniumServ.Pools
     /// </summary>
     public class Pool : IPool
     {
-        public IPoolConfig Config { get; private set; }
         public ulong Hashrate { get; private set; }
         public Dictionary<string, double> RoundShares { get; private set; }
+
+        public IPoolConfig Config { get; private set; }
+
         public IHashAlgorithm HashAlgorithm { get; private set; }
+
         public IMinerManager MinerManager { get; private set; }
+
         public INetworkInfo NetworkInfo { get; private set; }
+
         public IBlocksCache BlocksCache { get; private set; }
 
         // object factory.
@@ -161,7 +166,7 @@ namespace CoiniumServ.Pools
                 BlocksCache = _objectFactory.GetBlocksCache(_storageLayer);
                 MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
-                var jobTracker = _objectFactory.GetJobTracker();
+                var jobTracker = _objectFactory.GetJobTracker(Config);
                 var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
                 _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, _storageLayer, blockProcessor);
                 _objectFactory.GetVardiffManager(Config, _shareManager);

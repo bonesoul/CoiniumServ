@@ -24,9 +24,11 @@ using System;
 using CoiniumServ.Jobs;
 using CoiniumServ.Miners;
 using CoiniumServ.Vardiff;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Server.Mining.Stratum
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public interface IStratumMiner:IMiner, IVardiffMiner
     {
         /// <summary>
@@ -39,6 +41,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         bool Subscribed { get; }
 
+        [JsonProperty("difficulty")]
         float Difficulty { get; }
 
         float PreviousDifficulty { get; }

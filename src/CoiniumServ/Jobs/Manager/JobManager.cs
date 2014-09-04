@@ -52,8 +52,6 @@ namespace CoiniumServ.Jobs.Manager
 
         private readonly IPoolConfig _poolConfig;
 
-        private readonly IJobConfig _jobConfig;
-
         private IExtraNonce _extraNonce; // todo: check this.
 
         private readonly ILogger _logger;
@@ -72,9 +70,7 @@ namespace CoiniumServ.Jobs.Manager
             _shareManager = shareManager;
             _minerManager = minerManager;
             _hashAlgorithm = hashAlgorithm;
-
             _poolConfig = poolConfig;
-            _jobConfig = poolConfig.Job;
             
             _jobCounter = new JobCounter(); // todo make this ioc based too.
 
@@ -123,7 +119,7 @@ namespace CoiniumServ.Jobs.Manager
             }
             catch (RpcException) { } // just skip any exceptions caused by the block-pooler queries.
 
-            _blockPollerTimer.Change(_jobConfig.BlockRefreshInterval, Timeout.Infinite); // reset the block-poller timer so we can keep polling.
+            _blockPollerTimer.Change(_poolConfig.Job.BlockRefreshInterval, Timeout.Infinite); // reset the block-poller timer so we can keep polling.
         }
 
         private void CreateAndBroadcastNewJob(bool initiatedByTimer)
@@ -134,16 +130,16 @@ namespace CoiniumServ.Jobs.Manager
             {
                 var count = BroadcastJob(job); // broadcast to miners.  
 
-                _blockPollerTimer.Change(_jobConfig.BlockRefreshInterval, Timeout.Infinite); // reset the block-poller timer so we can start or keep polling for a new block in the network.
+                _blockPollerTimer.Change(_poolConfig.Job.BlockRefreshInterval, Timeout.Infinite); // reset the block-poller timer so we can start or keep polling for a new block in the network.
 
                 if (initiatedByTimer)
-                    _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds", job.Id, count, _jobConfig.RebroadcastTimeout);
+                    _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds", job.Id, count, _poolConfig.Job.RebroadcastTimeout);
                 else
                     _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as network found a new block {2}", job.Id, count, job.Height);
             }
 
             // no matter we created a job successfully or not, reset the rebroadcast timer, so we can keep trying. 
-            _reBroadcastTimer.Change(_jobConfig.RebroadcastTimeout * 1000, Timeout.Infinite);
+            _reBroadcastTimer.Change(_poolConfig.Job.RebroadcastTimeout * 1000, Timeout.Infinite);
         }
 
         private IJob GetNewJob()

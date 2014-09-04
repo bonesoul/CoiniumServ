@@ -74,7 +74,7 @@ namespace CoiniumServ.Factories
 
         IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
 
-        IJobTracker GetJobTracker();
+        IJobTracker GetJobTracker(IPoolConfig poolConfig);
 
         IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
 
