@@ -33,6 +33,8 @@ namespace CoiniumServ.Server.Web
         public WebServer(INancyBootstrapper webBootstrapper, IConfigManager configManager)
             : base(webBootstrapper)
         {
+            // todo: instead require webserver config.
+
             var config = configManager.WebServerConfig;
             BindIP = config.BindInterface;
             Port = config.Port;

@@ -25,10 +25,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using CoiniumServ.Banning;
-using CoiniumServ.Coin.Helpers;
+using CoiniumServ.Configuration;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
-using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
@@ -41,7 +40,7 @@ using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
-using CoiniumServ.Statistics;
+using CoiniumServ.Utils.Helpers.Time;
 using CoiniumServ.Utils.Helpers.Validation;
 using Newtonsoft.Json;
 using Serilog;
@@ -75,7 +74,11 @@ namespace CoiniumServ.Pools
         
         private IStorageLayer _storageLayer;
 
+        private readonly IConfigManager _configManager;
+
         private Dictionary<IMiningServer, IRpcService> _servers;
+
+        private double _shareMultiplier; // share multiplier to be used in hashrate calculation.
 
         private readonly ILogger _logger;
 
@@ -88,12 +91,15 @@ namespace CoiniumServ.Pools
         /// Initializes a new instance of the <see cref="Pool" /> class.
         /// </summary>
         /// <param name="poolConfig"></param>
+        /// <param name="configManager"></param>
         /// <param name="objectFactory"></param>
-        public Pool(IPoolConfig poolConfig, IObjectFactory objectFactory)
+        public Pool(IPoolConfig poolConfig, IConfigManager configManager, IObjectFactory objectFactory)
         {
-            Enforce.ArgumentNotNull(() => poolConfig); // make sure we have a config instance supplied.
+            Enforce.ArgumentNotNull(() => poolConfig); // make sure we have a pool-config instance supplied.
+            Enforce.ArgumentNotNull(() => configManager); // make sure we have a config-manager instance supplied.
             Enforce.ArgumentNotNull(() => objectFactory); // make sure we have a objectFactory instance supplied.
 
+            _configManager = configManager;
             _objectFactory = objectFactory;
 
             // TODO: validate pool central wallet & rewards within the startup.
@@ -120,7 +126,9 @@ namespace CoiniumServ.Pools
 
             _daemonClient = _objectFactory.GetDaemonClient(Config);
             HashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
-            NetworkInfo = _objectFactory.GetNetworkInfo(_daemonClient, HashAlgorithm, Config);            
+            NetworkInfo = _objectFactory.GetNetworkInfo(_daemonClient, HashAlgorithm, Config);
+            
+            _shareMultiplier = Math.Pow(2, 32) / HashAlgorithm.Multiplier; // will be used in hashrate calculation.
         }
 
         private void InitStorage()
@@ -247,13 +255,13 @@ namespace CoiniumServ.Pools
 
         private void CalculateHashrate()
         {
-            //// read hashrate stats.
-            //var windowTime = TimeHelpers.NowInUnixTime() - _statisticsConfig.HashrateWindow;
-            //_storage.DeleteExpiredHashrateData(windowTime);
-            //var hashrates = _storage.GetHashrateData(windowTime);
+            // read hashrate stats.
+            var windowTime = TimeHelpers.NowInUnixTime() - _configManager.WebServerConfig.Statistics.HashrateWindow;
+            _storageLayer.DeleteExpiredHashrateData(windowTime);
+            var hashrates = _storageLayer.GetHashrateData(windowTime);
 
-            //double total = hashrates.Sum(pair => pair.Value);
-            //Hashrate = Convert.ToUInt64(_shareMultiplier * total / _statisticsConfig.HashrateWindow);
+            double total = hashrates.Sum(pair => pair.Value);
+            Hashrate = Convert.ToUInt64(_shareMultiplier * total / _configManager.WebServerConfig.Statistics.HashrateWindow);
         }
     }
 }

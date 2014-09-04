@@ -32,7 +32,7 @@ namespace CoiniumServ.Server.Web
         public bool Enabled { get; private set; }
         public string BindInterface { get; private set; }
         public int Port { get; private set; }
-        public IStatisticsConfig Statistics { get; private set; }
+        public IStatisticsConfig Statistics { get; private set; } // todo: move this out of webserver config.
         public IBackendConfig Backend { get; private set; }
         public bool Valid { get; private set; }
         public WebServerConfig(dynamic config)

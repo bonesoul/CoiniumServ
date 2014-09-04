@@ -42,9 +42,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
     public class MposStorageLayer : IStorageLayer
     {
         public bool IsEnabled { get; private set; }
-        public bool SupportsShareStorage { get { return true; } }
-        public bool SupportsBlockStorage { get { return true; } }
-        public bool SupportsPaymentsStorage { get { return true; } }
 
         private readonly IMySqlProvider _mySqlProvider;
 
@@ -149,6 +146,16 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
+            throw new NotImplementedException();
+        }
+
+        public void DeleteExpiredHashrateData(int until)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<string, double> GetHashrateData(int since)
+        {
             throw new NotImplementedException();
         }
 
