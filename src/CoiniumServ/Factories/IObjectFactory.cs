@@ -42,7 +42,6 @@ using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
 using CoiniumServ.Vardiff;
-using HashLib;
 using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Factories
@@ -52,20 +51,16 @@ namespace CoiniumServ.Factories
     /// </summary>
     public interface IObjectFactory
     {
-        #region hash algorithms
+        #region global objects
+        IPoolManager GetPoolManager();
 
-        /// <summary>
-        /// Returns instance of the given hash algorithm
-        /// </summary>
-        /// <param name="algorithm"></param>
-        /// <returns></returns>
-        IHashAlgorithm GetHashAlgorithm(string algorithm);
+        IStatisticsManager GetStatisticsManager();
+
+        ILogManager GetLogManager();
 
         #endregion
 
         #region pool objects
-
-        IPoolManager GetPoolManager();
 
         IPool GetPool(IPoolConfig poolConfig);
 
@@ -77,8 +72,7 @@ namespace CoiniumServ.Factories
 
         IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
-        IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
-            IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
+        IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
 
         IJobTracker GetJobTracker();
 
@@ -94,24 +88,24 @@ namespace CoiniumServ.Factories
 
         INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig);
 
-        IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
-
         IBlocksCache GetBlocksCache(IStorageLayer storageLayer);
 
-        IStatisticsManager GetStatisticsManager();
-
-        #endregion
-
-        #region server & service objects
-
-        IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,
-            IBanManager banManager);
+        IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,IBanManager banManager);
 
         IRpcService GetMiningService(string type, IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient);
 
-        IWebServer GetWebServer();
+        #endregion        
 
-        INancyBootstrapper GetWebBootstrapper();
+        #region hash algorithms
+
+        /// <summary>
+        /// Returns instance of the given hash algorithm
+        /// </summary>
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
+        IHashAlgorithm GetHashAlgorithm(string algorithm);
+
+        IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
 
         #endregion
 
@@ -125,9 +119,11 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region other objects
+        #region web-server objects
 
-        ILogManager GetLogManager();
+        IWebServer GetWebServer();
+
+        INancyBootstrapper GetWebBootstrapper();
 
         IMetricsManager GetMetricsManager();
 

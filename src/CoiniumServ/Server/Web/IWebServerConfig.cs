@@ -20,9 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
+
 using CoiniumServ.Configuration;
-using CoiniumServ.Statistics;
 
 namespace CoiniumServ.Server.Web
 {
@@ -39,8 +38,6 @@ namespace CoiniumServ.Server.Web
         /// port to listen for http connections.
         /// </summary>
         int Port { get; }
-
-        IStatisticsConfig Statistics { get; }
 
         IBackendConfig Backend { get; }
     }

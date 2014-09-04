@@ -32,7 +32,6 @@ namespace CoiniumServ.Server.Web
         public bool Enabled { get; private set; }
         public string BindInterface { get; private set; }
         public int Port { get; private set; }
-        public IStatisticsConfig Statistics { get; private set; } // todo: move this out of webserver config.
         public IBackendConfig Backend { get; private set; }
         public bool Valid { get; private set; }
         public WebServerConfig(dynamic config)
@@ -43,9 +42,7 @@ namespace CoiniumServ.Server.Web
                 Enabled = config.enabled;
                 BindInterface = string.IsNullOrEmpty(config.bind) ? "127.0.0.1" : config.bind;
                 Port = config.port == 0 ? 80 : config.port;
-                Statistics = new StatisticsConfig(config.stats);
                 Backend = new BackendConfig(config.backend);
-
                 Valid = true;
             }
             catch (Exception e)

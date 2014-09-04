@@ -256,12 +256,12 @@ namespace CoiniumServ.Pools
         private void CalculateHashrate()
         {
             // read hashrate stats.
-            var windowTime = TimeHelpers.NowInUnixTime() - _configManager.WebServerConfig.Statistics.HashrateWindow;
+            var windowTime = TimeHelpers.NowInUnixTime() - _configManager.StatisticsConfig.HashrateWindow;
             _storageLayer.DeleteExpiredHashrateData(windowTime);
             var hashrates = _storageLayer.GetHashrateData(windowTime);
 
             double total = hashrates.Sum(pair => pair.Value);
-            Hashrate = Convert.ToUInt64(_shareMultiplier * total / _configManager.WebServerConfig.Statistics.HashrateWindow);
+            Hashrate = Convert.ToUInt64(_shareMultiplier * total / _configManager.StatisticsConfig.HashrateWindow);
         }
     }
 }

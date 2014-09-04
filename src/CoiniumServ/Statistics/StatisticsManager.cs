@@ -34,22 +34,25 @@ namespace CoiniumServ.Statistics
     public class StatisticsManager:IStatisticsManager
     {
         public ulong Hashrate { get; private set; }
+
         public int MinerCount { get; private set; }
         public DateTime LastUpdate { get; private set; }
+
         public IAlgorithmManager Algorithms { get; private set; }
+
         public IPoolManager Pools { get; private set; }
+
+        private readonly IStatisticsConfig _config;
 
         private readonly Timer _recacheTimer; // timer for recaching stastics.
 
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
-        private readonly IStatisticsConfig _config;
-
         private readonly ILogger _logger;
 
         public StatisticsManager(IConfigManager configManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
         {
-            _config = configManager.WebServerConfig.Statistics;
+            _config = configManager.StatisticsConfig;
             Pools = poolManager;
             Algorithms = algorithmManager;
 

@@ -71,22 +71,26 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region hash algorithms
-
-        /// <summary>
-        /// Returns instance of the given hash algorithm.
-        /// </summary>
-        /// <param name="algorithm"></param>
-        /// <returns></returns>
-        public IHashAlgorithm GetHashAlgorithm(string algorithm)
-        {
-            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
-        }
+        #region global objects
 
         public IPoolManager GetPoolManager()
         {
             return _applicationContext.Container.Resolve<IPoolManager>();
         }
+
+        public IStatisticsManager GetStatisticsManager()
+        {
+            return _applicationContext.Container.Resolve<IStatisticsManager>();
+        }
+
+        public ILogManager GetLogManager()
+        {
+            return _applicationContext.Container.Resolve<ILogManager>();
+        }
+
+        #endregion
+
+        #region pool objects
 
         public IPool GetPool(IPoolConfig poolConfig)
         {
@@ -97,10 +101,6 @@ namespace CoiniumServ.Factories
 
             return _applicationContext.Container.Resolve<IPool>(@params);
         }
-
-        #endregion
-
-        #region pool objects
 
         /// <summary>
         /// Returns a new instance of daemon client.
@@ -220,11 +220,6 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<INetworkInfo>(@params);
         }
 
-        public IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager)
-        {
-            return _applicationContext.Container.Resolve<IAlgorithmManager>();
-        }
-
         public IBlocksCache GetBlocksCache(IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
@@ -235,17 +230,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IBlocksCache>(@params);
         }
 
-        public IStatisticsManager GetStatisticsManager()
-        {
-            return _applicationContext.Container.Resolve<IStatisticsManager>();
-        }
-
-        #endregion
-
-        #region server & service objects
-
-        public IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,
-            IBanManager banManager)
+        public IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager)
         {
             var @params = new NamedParameterOverloads
             {
@@ -271,14 +256,23 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IRpcService>(type, @params);
         }
 
-        public IWebServer GetWebServer()
+        #endregion
+
+        #region hash algorithms
+
+        /// <summary>
+        /// Returns instance of the given hash algorithm.
+        /// </summary>
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
+        public IHashAlgorithm GetHashAlgorithm(string algorithm)
         {
-            return _applicationContext.Container.Resolve<IWebServer>();
+            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
         }
 
-        public INancyBootstrapper GetWebBootstrapper()
+        public IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager)
         {
-            return _applicationContext.Container.Resolve<INancyBootstrapper>();
+            return _applicationContext.Container.Resolve<IAlgorithmManager>();
         }
 
         #endregion
@@ -323,11 +317,16 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region other objects        
+        #region web-server objects
 
-        public ILogManager GetLogManager()
+        public IWebServer GetWebServer()
         {
-            return _applicationContext.Container.Resolve<ILogManager>();
+            return _applicationContext.Container.Resolve<IWebServer>();
+        }
+
+        public INancyBootstrapper GetWebBootstrapper()
+        {
+            return _applicationContext.Container.Resolve<INancyBootstrapper>();
         }
 
         public IMetricsManager GetMetricsManager()
