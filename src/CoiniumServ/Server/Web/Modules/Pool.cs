@@ -114,9 +114,9 @@ namespace CoiniumServ.Server.Web.Modules
                 ViewBag.Heading = string.Format("{0} Current Round", pool.Config.Coin.Name);
 
                 // return our view
-                return View["round", new CurrentRoundModel
+                return View["round", new RoundModel
                 {
-                    Round = pool.NetworkStats.Round,
+                    Round = pool.NetworkInfo.Round,
                     Shares = pool.RoundShares
                 }];
             };

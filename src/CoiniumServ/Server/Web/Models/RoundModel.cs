@@ -24,7 +24,7 @@ using System.Collections.Generic;
 
 namespace CoiniumServ.Server.Web.Models
 {
-    public class CurrentRoundModel
+    public class RoundModel
     {
         public int Round { get; set; }
         public IDictionary<string, double> Shares { get; set; }
