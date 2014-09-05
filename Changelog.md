@@ -1,3 +1,28 @@
+##### [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha) - 05.09.2014
+
+**Payments**
+* Fixed a bug in hybrid-storage layer where blocks were not correctly set as confirmed once they were actually so.
+
+**Web**
+* Fixed a bug in embedded web-server where some users were not able to use the interface.
+* Updated web-site tempaltes which reflects newest API changes.
+
+**Storage**
+* Fixed a bug in migration-manager where if it couldn't connect to MySQL would cause program to crash & terminate.
+
+**API**
+* Improved pool API.
+ 
+**Pools**
+* Pools can now determine if connection to coin network is healthy.
+* Fixed hashrate calculation bug.
+
+**Jobs**
+* JobTracker can now clean expired jobs.
+ 
+**Configuration**
+* Moved config.json "website:stats" section to upper level and renamed as "statistics". You have to apply the change to your existing config.json file!
+
 ##### [v0.1.4 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.4-alpha) - 03.09.2014
 
 **Storage**
