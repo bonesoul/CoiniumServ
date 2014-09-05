@@ -56,6 +56,8 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 if (provider is IMySqlProvider)
                     _mySqlProvider = (IMySqlProvider) provider;
             }
+
+            IsEnabled = _mySqlProvider != null;
         }
 
         public void AddShare(IShare share)
@@ -151,12 +153,34 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
         public void DeleteExpiredHashrateData(int until)
         {
-            throw new NotImplementedException();
+            // MPOS doesn't use another hashrate data structure except the shares, which are already handled by MPOS.
         }
 
         public IDictionary<string, double> GetHashrateData(int since)
         {
-            throw new NotImplementedException();
+            var hashrateData = new Dictionary<string, double>();
+
+            try
+            {
+                if (!IsEnabled)
+                    return hashrateData;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query(@"select username, sum(difficulty) as shares from shares where our_result='Y' group by username");
+
+                    foreach (var row in results)
+                    {
+                        hashrateData.Add(row.username, row.shares);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting share data: {0:l}", e.Message);
+            }
+
+            return hashrateData;
         }
 
         public void AddBlock(IShare share)
@@ -283,6 +307,9 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             try
             {
+                if (!IsEnabled)
+                    return false;
+
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     // query the username against mpos pool_worker table.
@@ -306,6 +333,9 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             try
             {
+                if (!IsEnabled)
+                    return;
+
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
