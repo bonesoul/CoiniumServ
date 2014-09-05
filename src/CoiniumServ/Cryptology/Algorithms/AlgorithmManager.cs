@@ -36,11 +36,15 @@ namespace CoiniumServ.Cryptology.Algorithms
     public class AlgorithmManager:IAlgorithmManager
     {
         public const string Blake = "blake";
+        public const string Fresh = "fresh";
         public const string Fugue = "fugue";
         public const string Groestl = "groestl";
         public const string Keccak = "keccak";
+        public const string Nist5 = "nist5";
+        public const string Qubit = "qubit";
         public const string Scrypt = "scrypt";
         public const string ScryptOg = "scrypt-og";
+        public const string Sha1 = "sha1";
         public const string Sha256 = "sha256";
         public const string Shavite3 = "shavite3";
         public const string Skein = "skein";

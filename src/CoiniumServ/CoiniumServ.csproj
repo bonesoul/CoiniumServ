@@ -149,12 +149,15 @@
     <Compile Include="Configuration\IStackConfig.cs" />
     <Compile Include="Configuration\StackConfig.cs" />
     <Compile Include="Cryptology\Algorithms\Blake.cs" />
+    <Compile Include="Cryptology\Algorithms\Fresh.cs" />
     <Compile Include="Cryptology\Algorithms\Fugue.cs" />
     <Compile Include="Cryptology\Algorithms\Groestl.cs" />
     <Compile Include="Cryptology\Algorithms\HashAlgorithmBase.cs" />
     <Compile Include="Cryptology\Algorithms\IAlgorithmManager.cs" />
     <Compile Include="Cryptology\Algorithms\Keccak.cs" />
+    <Compile Include="Cryptology\Algorithms\Nist5.cs" />
     <Compile Include="Cryptology\Algorithms\ScryptOg.cs" />
+    <Compile Include="Cryptology\Algorithms\Sha1.cs" />
     <Compile Include="Cryptology\Algorithms\Sha256.cs" />
     <Compile Include="Cryptology\Algorithms\Shavite3.cs" />
     <Compile Include="Cryptology\Algorithms\Skein.cs" />
