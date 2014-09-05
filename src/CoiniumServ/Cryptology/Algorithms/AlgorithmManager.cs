@@ -40,6 +40,7 @@ namespace CoiniumServ.Cryptology.Algorithms
         public const string Groestl = "groestl";
         public const string Keccak = "keccak";
         public const string Scrypt = "scrypt";
+        public const string ScryptOg = "scrypt-og";
         public const string Sha256 = "sha256";
         public const string Shavite3 = "shavite3";
         public const string Skein = "skein";

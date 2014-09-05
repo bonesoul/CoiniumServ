@@ -43,6 +43,7 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IHashAlgorithm, Groestl>(AlgorithmManager.Groestl).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Keccak>(AlgorithmManager.Keccak).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(AlgorithmManager.Scrypt).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, ScryptOg>(AlgorithmManager.ScryptOg).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Sha256>(AlgorithmManager.Sha256).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Shavite3>(AlgorithmManager.Shavite3).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Skein>(AlgorithmManager.Skein).AsSingleton();

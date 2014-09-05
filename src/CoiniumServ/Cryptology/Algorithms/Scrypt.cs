@@ -27,12 +27,6 @@ namespace CoiniumServ.Cryptology.Algorithms
 {
     public sealed class Scrypt : HashAlgorithmBase
     {
-        /// <summary>
-        /// Gets the multiplier.
-        /// </summary>
-        /// <value>
-        /// The multiplier.
-        /// </value>
         public override UInt32 Multiplier { get; protected set; }
 
         /// <summary>

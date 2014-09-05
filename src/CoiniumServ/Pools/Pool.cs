@@ -53,7 +53,9 @@ namespace CoiniumServ.Pools
     public class Pool : IPool
     {
         public bool Enabled { get; private set; }
+
         public ulong Hashrate { get; private set; }
+
         public Dictionary<string, double> RoundShares { get; private set; }
 
         public IPoolConfig Config { get; private set; }

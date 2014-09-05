@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -20,49 +20,42 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using System.Collections.Generic;
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Utils.Repository;
-using Newtonsoft.Json;
+using CryptSharp.Utility;
 
 namespace CoiniumServ.Cryptology.Algorithms
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IHashAlgorithm: IRepository<IPool>, IJsonService
+    public sealed class ScryptOg : HashAlgorithmBase
     {
         /// <summary>
-        /// Algorithm name.
+        /// N parameter - CPU/memory cost parameter.
         /// </summary>
-        string Name { get; }
+        private readonly int _n;
 
         /// <summary>
-        /// Gets the multiplier.
+        /// R parameter - block size.
         /// </summary>
-        /// <value>
-        /// The multiplier.
-        /// </value>
-        UInt32 Multiplier { get; }
-
-        [JsonProperty("miners")]
-        Int32 MinerCount { get; }
-
-        [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
+        private readonly int _r;
 
         /// <summary>
-        /// Hashes the input data.
+        /// P - parallelization parameter -  a large value of p can increase computational 
+        /// cost of scrypt without increasing the memory usage.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        byte[] Hash(byte[] input, dynamic config);
+        private readonly int _p;
 
-        /// <summary>
-        /// Assigns pools that runs on the algorithm.
-        /// </summary>
-        /// <param name="pools"></param>
-        void AssignPools(IEnumerable<IPool> pools);
+        public ScryptOg()
+        {
+            _n = 64;
+            _r = 1;
+            _p = 1;
+
+            Multiplier = (UInt32)Math.Pow(2, 16);
+        }
+
+        public override byte[] Hash(byte[] input, dynamic config)
+        {
+            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
+        }
     }
 }
