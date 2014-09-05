@@ -32,6 +32,8 @@ namespace CoiniumServ.Pools
     [JsonObject(MemberSerialization.OptIn)]
     public interface IPool: IJsonService
     {
+        bool Enabled { get; }
+
         [JsonProperty("hashrate")]
         UInt64 Hashrate { get; }
 

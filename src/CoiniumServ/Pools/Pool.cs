@@ -52,6 +52,7 @@ namespace CoiniumServ.Pools
     /// </summary>
     public class Pool : IPool
     {
+        public bool Enabled { get; private set; }
         public ulong Hashrate { get; private set; }
         public Dictionary<string, double> RoundShares { get; private set; }
 
@@ -104,21 +105,28 @@ namespace CoiniumServ.Pools
             Enforce.ArgumentNotNull(() => configManager); // make sure we have a config-manager instance supplied.
             Enforce.ArgumentNotNull(() => objectFactory); // make sure we have a objectFactory instance supplied.
 
-            _configManager = configManager;
-            _objectFactory = objectFactory;
-
             // TODO: validate pool central wallet & rewards within the startup.
 
+            _configManager = configManager;
+            _objectFactory = objectFactory;
             Config = poolConfig;
-            
-            _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);
+            _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);                                   
 
-            GenerateInstanceId();
+            GenerateInstanceId(); // generate unique instance id for the pool.
 
-            InitDaemon();
-            InitStorage();
-            InitManagers();
-            InitServers();
+            try
+            {
+                InitDaemon(); // init coin daemon.
+                InitStorage(); // init storage support.
+                InitManagers(); // init managers.
+                InitServers(); // init servers.
+                Enabled = true;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Error initializing pool; {0:l}", e.Message);
+                Enabled = false;
+            }
         }
 
         private void InitDaemon()
@@ -211,6 +219,9 @@ namespace CoiniumServ.Pools
 
         public void Start()
         {
+            if (Enabled == false)
+                return;
+
             if (!Config.Valid)
             {
                 _logger.Error("Can't start pool as configuration is not valid.");
@@ -225,6 +236,9 @@ namespace CoiniumServ.Pools
 
         public void Stop()
         {
+            if (Enabled == false)
+                return;
+
             throw new NotImplementedException();
         }
 
@@ -247,15 +261,11 @@ namespace CoiniumServ.Pools
             BlocksCache.Recache(); // recache the blocks.
             NetworkInfo.Recache(); // let network statistics recache.
             CalculateHashrate(); // calculate the pool hashrate.
-            RecacheRound(); // recache current round.
+
+            RoundShares = _storageLayer.GetCurrentShares(); // recache current round.
 
             // cache the json-service response
             ServiceResponse = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
-        }
-
-        private void RecacheRound()
-        {
-            RoundShares = _storageLayer.GetCurrentShares();
         }
 
         private void CalculateHashrate()
