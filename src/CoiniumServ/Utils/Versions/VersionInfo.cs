@@ -41,7 +41,7 @@ namespace CoiniumServ.Utils.Versions
             /// <summary>
             /// Main assemby version.
             /// </summary>
-            public const string Version = "0.1.4.*";
+            public const string Version = "0.1.5.*";
         }
     }
 }
