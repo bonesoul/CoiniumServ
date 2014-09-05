@@ -69,22 +69,42 @@ Can run on these platforms;
 * Multiple coin daemon connection support.
 * Multiple storage layers.
 
-###### Functionality
-* Stratum server (over TCP sockets).
-* Stratum show_message support (MOTD & messages).
-* Vanilla server (getwork over http server). [experimental]
-* Daemon RPC interface.
+###### Protocols
+* Stratum
+* |-> show_message support
+* |-> block-template support
+* |-> generation transaction support
+* |-> transaction message support
+* Vanilla (getwork) [experimental]
+
+###### Coins
+* proof-of-work (PoW) support
+* proof-of-stake (PoS) support
+
+###### Connectivity
+
+* Daemon RPC interface
+ 
+###### Managers
+
+* Job manager
+* Ban manager (that can handle miners flooding with invalid shares)
+
+###### Processors
+
+* Share processor
+* Payment processor
+ 
+###### Additional
+
+* VarDiff support (variable difficulty support)
 * Storage layers support
-* Block template / job managment.
-* Generation transaction builder.
-* Share processor.
-* Payment processor.
-* Proof of Work (PoW) and Proof of Stake (PoS) support.
-* Transaction messages support.
-* Vardiff support.
-* Ban manager support that can handles miners flooding with invalid shares.
+* |-> hybrid storage (redis + mysql)
+* |-> MPOS support (mysql)
+ 
+###### Web
 * Embedded web-server & front-end
-* Full-stack API
+* Full-stack json-API
 
 ###### Hashing Algorithms
 
