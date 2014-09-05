@@ -20,42 +20,27 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using CoiniumServ.Cryptology.Algorithms;
-using CoiniumServ.Miners;
-using CoiniumServ.Server.Web.Service;
-using Newtonsoft.Json;
 
-namespace CoiniumServ.Pools
+using HashLib;
+
+namespace CoiniumServ.Cryptology.Algorithms
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IPool: IJsonService
+    public sealed class Sha1 : HashAlgorithmBase
     {
-        bool Enabled { get; }
+        public override uint Multiplier { get; protected set; }
 
-        [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
+        private readonly IHash _hasher;
 
-        [JsonProperty("round")]
-        Dictionary<string, double> RoundShares { get; }
+        public Sha1()
+        {
+            _hasher = HashFactory.Crypto.CreateSHA512();
 
-        [JsonProperty("config")]
-        IPoolConfig Config { get; }
+            Multiplier = 1;
+        }
 
-        IHashAlgorithm HashAlgorithm { get; }
-
-        [JsonProperty("miners")]
-        IMinerManager MinerManager { get; }
-
-        [JsonProperty("network")]
-        INetworkInfo NetworkInfo { get; }
-
-        [JsonProperty("blocks")]
-        IBlocksCache BlocksCache { get; }
-
-        void Start();
-
-        void Stop();
+        public override byte[] Hash(byte[] input, dynamic config)
+        {
+            return _hasher.ComputeBytes(input).GetBytes();
+        }
     }
 }

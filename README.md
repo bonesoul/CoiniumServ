@@ -94,23 +94,12 @@ _Working_
 _Needs Testing_
 
 * ✓ __SHA256__ 
-* ✓ __Blake__
-* ✓ __Fugue__
-* ✓ __Groestl__
-* ✓ __Keccak__ 
-* ✓ __SHAvite3__
-* ✓ __Skein__ 
 * ✓ __multi-algos: X11, X13, X14, X15, X17__
+* ✓ __more: Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, SHA1, SHAvite3, Skein, Qubit__ 
 
 _Under Development_
 
-* ✓ __Scrypt-Jane__ 
-* ✓ __Scrypt-N__ 
-* ✓ __Scrypt-OG__ 
-* ✓ __Quark__ 
-* ✓ __NIST5__
-* ✓ __Qubit__
-* ✓ __Hefty1__
+* ✓ __Scrypt-Jane, Scrypt-N, Quark, Hefty1__ 
  
 ###### Persistance & Storage Layers
 

@@ -20,42 +20,41 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
 using System.Collections.Generic;
-using CoiniumServ.Cryptology.Algorithms;
-using CoiniumServ.Miners;
-using CoiniumServ.Server.Web.Service;
-using Newtonsoft.Json;
+using HashLib;
 
-namespace CoiniumServ.Pools
+namespace CoiniumServ.Cryptology.Algorithms
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IPool: IJsonService
+    public sealed class Qubit : HashAlgorithmBase
     {
-        bool Enabled { get; }
+        public override uint Multiplier { get; protected set; }
 
-        [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
+        private readonly List<IHash> _hashers;
 
-        [JsonProperty("round")]
-        Dictionary<string, double> RoundShares { get; }
+        public Qubit()
+        {
+            _hashers = new List<IHash>
+            {
+                HashFactory.Crypto.SHA3.CreateLuffa512(),
+                HashFactory.Crypto.SHA3.CreateCubeHash512(),
+                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
+                HashFactory.Crypto.SHA3.CreateSIMD512(),
+                HashFactory.Crypto.SHA3.CreateEcho512()
+            };
 
-        [JsonProperty("config")]
-        IPoolConfig Config { get; }
+            Multiplier = 1;
+        }
 
-        IHashAlgorithm HashAlgorithm { get; }
+        public override byte[] Hash(byte[] input, dynamic config)
+        {
+            var buffer = input;
 
-        [JsonProperty("miners")]
-        IMinerManager MinerManager { get; }
+            foreach (var hasher in _hashers)
+            {
+                buffer = hasher.ComputeBytes(buffer).GetBytes();
+            }
 
-        [JsonProperty("network")]
-        INetworkInfo NetworkInfo { get; }
-
-        [JsonProperty("blocks")]
-        IBlocksCache BlocksCache { get; }
-
-        void Start();
-
-        void Stop();
+            return buffer;
+        }
     }
 }

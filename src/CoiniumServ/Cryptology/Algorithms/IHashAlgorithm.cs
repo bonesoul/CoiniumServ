@@ -32,8 +32,17 @@ namespace CoiniumServ.Cryptology.Algorithms
     [JsonObject(MemberSerialization.OptIn)]
     public interface IHashAlgorithm: IRepository<IPool>, IJsonService
     {
+        /// <summary>
+        /// Algorithm name.
+        /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// Gets the multiplier.
+        /// </summary>
+        /// <value>
+        /// The multiplier.
+        /// </value>
         UInt32 Multiplier { get; }
 
         [JsonProperty("miners")]
@@ -42,8 +51,18 @@ namespace CoiniumServ.Cryptology.Algorithms
         [JsonProperty("hashrate")]
         UInt64 Hashrate { get; }
 
+        /// <summary>
+        /// Hashes the input data.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
         byte[] Hash(byte[] input, dynamic config);
 
+        /// <summary>
+        /// Assigns pools that runs on the algorithm.
+        /// </summary>
+        /// <param name="pools"></param>
         void AssignPools(IEnumerable<IPool> pools);
     }
 }

@@ -20,42 +20,42 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using System.Collections.Generic;
-using CoiniumServ.Cryptology.Algorithms;
-using CoiniumServ.Miners;
-using CoiniumServ.Server.Web.Service;
-using Newtonsoft.Json;
+using CryptSharp.Utility;
 
-namespace CoiniumServ.Pools
+namespace CoiniumServ.Cryptology.Algorithms
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IPool: IJsonService
+    public sealed class ScryptOg : HashAlgorithmBase
     {
-        bool Enabled { get; }
+        /// <summary>
+        /// N parameter - CPU/memory cost parameter.
+        /// </summary>
+        private readonly int _n;
 
-        [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
+        /// <summary>
+        /// R parameter - block size.
+        /// </summary>
+        private readonly int _r;
 
-        [JsonProperty("round")]
-        Dictionary<string, double> RoundShares { get; }
+        /// <summary>
+        /// P - parallelization parameter -  a large value of p can increase computational 
+        /// cost of scrypt without increasing the memory usage.
+        /// </summary>
+        private readonly int _p;
 
-        [JsonProperty("config")]
-        IPoolConfig Config { get; }
+        public ScryptOg()
+        {
+            _n = 64;
+            _r = 1;
+            _p = 1;
 
-        IHashAlgorithm HashAlgorithm { get; }
+            Multiplier = (UInt32)Math.Pow(2, 16);
+        }
 
-        [JsonProperty("miners")]
-        IMinerManager MinerManager { get; }
-
-        [JsonProperty("network")]
-        INetworkInfo NetworkInfo { get; }
-
-        [JsonProperty("blocks")]
-        IBlocksCache BlocksCache { get; }
-
-        void Start();
-
-        void Stop();
+        public override byte[] Hash(byte[] input, dynamic config)
+        {
+            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
+        }
     }
 }

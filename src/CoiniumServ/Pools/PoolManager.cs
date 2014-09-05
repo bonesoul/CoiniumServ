@@ -48,7 +48,9 @@ namespace CoiniumServ.Pools
             foreach (var config in configManager.PoolConfigs) // loop through all enabled pool configurations.
             {
                 var pool = objectFactory.GetPool(config); // create pool for the given configuration.
-                _storage.Add(pool); // add it to storage.
+                
+                if(pool.Enabled) // make sure pool was succesfully initialized.
+                    _storage.Add(pool); // add it to storage.
             }
         }
 
