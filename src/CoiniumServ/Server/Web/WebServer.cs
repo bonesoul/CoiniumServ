@@ -41,8 +41,6 @@ namespace CoiniumServ.Server.Web
 
             if (config.Enabled)
                 Start();
-            else
-                _logger.Verbose("Skipping web-server initialization as it disabled.");
         }
     }
 }

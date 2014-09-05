@@ -37,8 +37,6 @@ namespace CoiniumServ.Persistance.Layers
 
         #region share storage
 
-        bool SupportsShareStorage { get; }
-
         void AddShare(IShare share);
 
         void RemoveShares(IPaymentRound round);
@@ -51,11 +49,13 @@ namespace CoiniumServ.Persistance.Layers
 
         Dictionary<UInt32, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds);
 
+        void DeleteExpiredHashrateData(int until);
+
+        IDictionary<string, double> GetHashrateData(int since);
+
         #endregion
 
         #region block storage
-
-        bool SupportsBlockStorage { get; }
 
         void AddBlock(IShare share);
 
@@ -77,8 +77,6 @@ namespace CoiniumServ.Persistance.Layers
         #endregion
 
         #region payments storage
-
-        bool SupportsPaymentsStorage { get; }
 
         Dictionary<string, double> GetPreviousBalances();
 

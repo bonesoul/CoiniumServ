@@ -71,22 +71,26 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region hash algorithms
-
-        /// <summary>
-        /// Returns instance of the given hash algorithm.
-        /// </summary>
-        /// <param name="algorithm"></param>
-        /// <returns></returns>
-        public IHashAlgorithm GetHashAlgorithm(string algorithm)
-        {
-            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
-        }
+        #region global objects
 
         public IPoolManager GetPoolManager()
         {
             return _applicationContext.Container.Resolve<IPoolManager>();
         }
+
+        public IStatisticsManager GetStatisticsManager()
+        {
+            return _applicationContext.Container.Resolve<IStatisticsManager>();
+        }
+
+        public ILogManager GetLogManager()
+        {
+            return _applicationContext.Container.Resolve<ILogManager>();
+        }
+
+        #endregion
+
+        #region pool objects
 
         public IPool GetPool(IPoolConfig poolConfig)
         {
@@ -97,10 +101,6 @@ namespace CoiniumServ.Factories
 
             return _applicationContext.Container.Resolve<IPool>(@params);
         }
-
-        #endregion
-
-        #region pool objects
 
         /// <summary>
         /// Returns a new instance of daemon client.
@@ -143,9 +143,14 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IJobManager>(@params);
         }
 
-        public IJobTracker GetJobTracker()
+        public IJobTracker GetJobTracker(IPoolConfig poolConfig)
         {
-            return _applicationContext.Container.Resolve<IJobTracker>();
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+            };
+
+            return _applicationContext.Container.Resolve<IJobTracker>(@params);
         }
 
         public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor)
@@ -208,19 +213,16 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IVardiffManager>(@params);
         }
 
-        public INetworkStats GetNetworkStats(IDaemonClient daemonClient)
+        public INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig)
         {
             var @params = new NamedParameterOverloads
             {
                 {"daemonClient", daemonClient},
+                {"hashAlgorithm", hashAlgorithm},
+                {"poolConfig", poolConfig},
             };
 
-            return _applicationContext.Container.Resolve<INetworkStats>(@params);
-        }
-
-        public IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager)
-        {
-            return _applicationContext.Container.Resolve<IAlgorithmManager>();
+            return _applicationContext.Container.Resolve<INetworkInfo>(@params);
         }
 
         public IBlocksCache GetBlocksCache(IStorageLayer storageLayer)
@@ -233,17 +235,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IBlocksCache>(@params);
         }
 
-        public IStatisticsManager GetStatisticsManager()
-        {
-            return _applicationContext.Container.Resolve<IStatisticsManager>();
-        }
-
-        #endregion
-
-        #region server & service objects
-
-        public IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,
-            IBanManager banManager)
+        public IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager)
         {
             var @params = new NamedParameterOverloads
             {
@@ -269,14 +261,23 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IRpcService>(type, @params);
         }
 
-        public IWebServer GetWebServer()
+        #endregion
+
+        #region hash algorithms
+
+        /// <summary>
+        /// Returns instance of the given hash algorithm.
+        /// </summary>
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
+        public IHashAlgorithm GetHashAlgorithm(string algorithm)
         {
-            return _applicationContext.Container.Resolve<IWebServer>();
+            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
         }
 
-        public INancyBootstrapper GetWebBootstrapper()
+        public IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager)
         {
-            return _applicationContext.Container.Resolve<INancyBootstrapper>();
+            return _applicationContext.Container.Resolve<IAlgorithmManager>();
         }
 
         #endregion
@@ -321,11 +322,16 @@ namespace CoiniumServ.Factories
 
         #endregion
 
-        #region other objects        
+        #region web-server objects
 
-        public ILogManager GetLogManager()
+        public IWebServer GetWebServer()
         {
-            return _applicationContext.Container.Resolve<ILogManager>();
+            return _applicationContext.Container.Resolve<IWebServer>();
+        }
+
+        public INancyBootstrapper GetWebBootstrapper()
+        {
+            return _applicationContext.Container.Resolve<INancyBootstrapper>();
         }
 
         public IMetricsManager GetMetricsManager()

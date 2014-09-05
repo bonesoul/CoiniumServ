@@ -22,18 +22,35 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using CoiniumServ.Pools;
+using CoiniumServ.Utils.Helpers.Time;
+using Serilog;
 
 namespace CoiniumServ.Jobs.Tracker
 {
     public class JobTracker:IJobTracker
     {
-        private readonly Dictionary<UInt64, IJob> _jobs;
+        private Dictionary<UInt64, IJob> _jobs;
+
+        private readonly Timer _cleanupTimer; // timer for cleaning old jobs.
+
+        private readonly ILogger _logger;
 
         public IJob Current { get; private set; }
 
-        public JobTracker()
+        private const int MinimumJobBacklog = 3; // number of jobs to leave in. 
+        private readonly int _cleanupFrequency; // frequency to cleanup jobs in seconds.
+
+        public JobTracker(IPoolConfig poolConfig)
         {
             _jobs = new Dictionary<UInt64, IJob>();
+            _logger = Log.ForContext<JobTracker>().ForContext("Component", poolConfig.Coin.Name);
+
+            _cleanupFrequency = MinimumJobBacklog*poolConfig.Job.RebroadcastTimeout; // calculate the cleanup frequency = number of jobs in backlog * rebroad-timeout
+            _cleanupTimer = new Timer(CleanUp, null, Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
+            _cleanupTimer.Change(_cleanupFrequency * 1000, Timeout.Infinite); // adjust the timer's next run.
         }
 
         public IJob Get(UInt64 id)
@@ -47,6 +64,23 @@ namespace CoiniumServ.Jobs.Tracker
             Current = job;
         }
 
-        // TODO: remove expired jobs.
+        private void CleanUp(object state)
+        {
+            var startingCount = _jobs.Count;
+
+            // calculate the cleanup delta time - jobs created before this will be cleaned up.
+            var delta = TimeHelpers.NowInUnixTime() - _cleanupFrequency;
+
+            // find expired jobs that were created before our calcualted delta time.
+            _jobs = _jobs.Where(j => j.Value.CreationTime >= delta || j.Value == Current)
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            var cleanedCount = startingCount - _jobs.Count;
+
+            if(cleanedCount > 0)
+                _logger.Debug("Cleaned-up {0} expired jobs", cleanedCount);
+
+            _cleanupTimer.Change(_cleanupFrequency * 1000, Timeout.Infinite); // reset the cleanup timer.
+        }
     }
 }

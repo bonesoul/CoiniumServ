@@ -32,9 +32,6 @@ namespace CoiniumServ.Persistance.Layers.Empty
     public class EmptyStorageLayer : IStorageLayer
     {
         public bool IsEnabled { get; private set; }
-        public bool SupportsShareStorage { get { return false; } }
-        public bool SupportsBlockStorage { get { return false; } }
-        public bool SupportsPaymentsStorage { get { return false; } }
 
         public void AddShare(IShare share)
         {
@@ -64,6 +61,16 @@ namespace CoiniumServ.Persistance.Layers.Empty
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
             return new Dictionary<uint, Dictionary<string, double>>(); // return an empty dictionary.
+        }
+
+        public void DeleteExpiredHashrateData(int until)
+        {
+            return; // just skip.
+        }
+
+        public IDictionary<string, double> GetHashrateData(int since)
+        {
+            return new Dictionary<string, double>(); // return an empty dictionary.
         }
 
         public void AddBlock(IShare share)

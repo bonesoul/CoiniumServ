@@ -24,16 +24,19 @@ using System.Collections.Generic;
 using CoiniumServ.Logging;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
+using CoiniumServ.Statistics;
 
 namespace CoiniumServ.Configuration
 {
     public interface IConfigManager
     {
+        IStackConfig StackConfig { get; }
+
+        IStatisticsConfig StatisticsConfig { get; }
+
         IWebServerConfig WebServerConfig { get; }
 
         ILogConfig LogConfig { get; }
-
-        IStackConfig StackConfig { get; }
 
         List<IPoolConfig> PoolConfigs { get; }
 

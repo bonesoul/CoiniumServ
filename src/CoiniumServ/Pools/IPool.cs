@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Miners;
 using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Statistics;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Pools
@@ -33,14 +32,14 @@ namespace CoiniumServ.Pools
     [JsonObject(MemberSerialization.OptIn)]
     public interface IPool: IJsonService
     {
-        [JsonProperty("config")]
-        IPoolConfig Config { get; }
-
         [JsonProperty("hashrate")]
         UInt64 Hashrate { get; }
 
         [JsonProperty("round")]
         Dictionary<string, double> RoundShares { get; }
+
+        [JsonProperty("config")]
+        IPoolConfig Config { get; }
 
         IHashAlgorithm HashAlgorithm { get; }
 
@@ -48,7 +47,7 @@ namespace CoiniumServ.Pools
         IMinerManager MinerManager { get; }
 
         [JsonProperty("network")]
-        INetworkStats NetworkStats { get; }
+        INetworkInfo NetworkInfo { get; }
 
         [JsonProperty("blocks")]
         IBlocksCache BlocksCache { get; }

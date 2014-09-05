@@ -54,7 +54,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-cloud fa-5x"></i>
+                        <i class="fa fa-flask fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">@Model.Statistics.Pools.Count</div>
@@ -100,7 +100,7 @@
     <div class="col-md-12">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money"></i> Per Algorithm Statistics</h3>
+                <h3 class="panel-title"><i class="fa fa-cog"></i> Per Algorithm Statistics</h3>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -133,12 +133,11 @@
 </div>
 
 <div class="row">
-
     <!-- pools -->
     <div class="col-md-12">
         <div class="panel panel-warning">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money"></i> Per Pool Statistics</h3>
+                <h3 class="panel-title"><i class="fa fa-flask"></i> Per Pool Statistics</h3>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -152,6 +151,7 @@
                                 <th>Workers <i class="fa fa-sort"></i></th>
                                 <th>Algorithm <i class="fa fa-sort"></i></th>
                                 <th>Current Block <i class="fa fa-sort"></i></th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -160,14 +160,14 @@
                                 <tr>
                                     <td><a href="/pool/@pool.Config.Coin.Symbol/">@pool.Config.Coin.Name</a></td>
                                     <td>@pool.Hashrate.GetReadableHashrate()</td>
-                                    <td>@pool.NetworkStats.Hashrate.GetReadableHashrate()</td>
-                                    <td>@pool.NetworkStats.Difficulty</td>
+                                    <td>@pool.NetworkInfo.Hashrate.GetReadableHashrate()</td>
+                                    <td>@pool.NetworkInfo.Difficulty</td>
                                     <td>@pool.MinerManager.Count</td>
                                     <td>@pool.Config.Coin.Algorithm</td>
-                                    <td>@pool.NetworkStats.Round</td>
+                                    <td>@pool.NetworkInfo.Round</td>
+                                    <td><span class="badge @(pool.NetworkInfo.Healthy? "btn-success" : "btn-danger")">@(pool.NetworkInfo.Healthy ? "healty" : "warnings!")</span></td>
                                 </tr>
-                            }
-                        </tbody>
+                            }</tbody>
                     </table>
                 </div>
             </div>

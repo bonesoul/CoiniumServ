@@ -45,17 +45,14 @@ namespace CoiniumServ.Container.Registries
 
         public void RegisterInstances()
         {
-            // pool
+            // per-pool objects
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
-            _applicationContext.Container.Register<INetworkStats, NetworkStats>().AsMultiInstance();
+            _applicationContext.Container.Register<INetworkInfo, NetworkInfo>().AsMultiInstance();
             _applicationContext.Container.Register<IBlocksCache, BlocksCache>().AsMultiInstance();
-
-            // statistics
-            _applicationContext.Container.Register<IStatisticsManager, StatisticsManager>().AsSingleton();
 
             // config
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();

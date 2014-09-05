@@ -29,6 +29,7 @@ using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
 using CoiniumServ.Shares;
+using CoiniumServ.Statistics;
 using CoiniumServ.Vardiff;
 
 namespace CoiniumServ.Container.Registries
@@ -44,16 +45,20 @@ namespace CoiniumServ.Container.Registries
 
         public void RegisterInstances()
         {
+            // global singleton managers.            
+            _applicationContext.Container.Register<IPoolManager, PoolManager>().AsSingleton();
+            _applicationContext.Container.Register<IConfigManager, ConfigManager>().AsSingleton();
+            _applicationContext.Container.Register<IStatisticsManager, StatisticsManager>().AsSingleton();
+            _applicationContext.Container.Register<ILogManager, LogManager>().AsSingleton();
+            _applicationContext.Container.Register<IMetricsManager, MetricsManager>().AsSingleton();
+
+            // per-pool managers
             _applicationContext.Container.Register<IShareManager, ShareManager>().AsMultiInstance();
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
             _applicationContext.Container.Register<IJobManager, JobManager>().AsMultiInstance();
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IPoolManager, PoolManager>().AsSingleton();
             _applicationContext.Container.Register<IVardiffManager, VardiffManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IBanManager, BanManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IConfigManager, ConfigManager>().AsSingleton();
-            _applicationContext.Container.Register<ILogManager, LogManager>().AsSingleton();
-            _applicationContext.Container.Register<IMetricsManager, MetricsManager>().AsSingleton();
+            _applicationContext.Container.Register<IBanManager, BanManager>().AsMultiInstance();                                   
         }
     }
 }

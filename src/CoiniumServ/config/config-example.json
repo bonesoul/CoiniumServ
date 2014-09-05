@@ -10,28 +10,32 @@
     },
 
     # -------------------------------
+    # Statistics Configuration
+    # -------------------------------
+    
+    # updateInterval: interval for recaching statistics.
+    # hashrateWindow: how many seconds worth of shares should be gathered to generate hashrate.
+
+    "statistics": {
+        "updateInterval": 60,
+        "hashrateWindow": 300
+    },
+
+    # -------------------------------
     # Website Configuration
     # -------------------------------
 
     # enabled: set this true to enable frontend.
     # bind: interface to bind webserver.
     # port: port to listen for http connections.
-    # stats: 
-    # updateInterval: interval for recaching statistics.
-    # hashrateWindow: how many seconds worth of shares should be gathered to generate hashrate.
     # backend: 
     # enabled: set this true to enable admin backend.
     # password: password for enabling administrator 
 
-    # website configuration
 	"website": {
 		"enabled": true,
 		"bind": "127.0.0.1",
 		"port": 80,
-        "stats": {
-            "updateInterval": 60,
-            "hashrateWindow": 300
-        },
         "backend" : {
             "metrics": {
                 "enabled": false

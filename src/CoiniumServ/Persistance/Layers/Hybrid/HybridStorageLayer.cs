@@ -46,9 +46,6 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
     public class HybridStorageLayer : IStorageLayer
     {
         public bool IsEnabled { get; private set; }
-        public bool SupportsShareStorage { get { return true; } }
-        public bool SupportsBlockStorage { get { return true; } }
-        public bool SupportsPaymentsStorage { get { return true; } }
 
         private readonly IDaemonClient _daemonClient;
 
@@ -238,6 +235,55 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return sharesForRounds;
         }
 
+        public void DeleteExpiredHashrateData(int until)
+        {
+            try
+            {
+                if (!IsEnabled || !_redisProvider.IsConnected)
+                    return;
+
+                var key = string.Format("{0}:hashrate", _coin); 
+                _redisProvider.Client.ZRemRangeByScore(key, double.NegativeInfinity, until);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while deleting expired hashrate data: {0:l}", e.Message);
+            }
+        }
+
+        public IDictionary<string, double> GetHashrateData(int since)
+        {
+            var hashrates = new Dictionary<string, double>();
+
+            try
+            {
+                if (!IsEnabled || !_redisProvider.IsConnected)
+                    return hashrates;
+
+                var key = string.Format("{0}:hashrate", _coin);
+
+                var results = _redisProvider.Client.ZRangeByScore(key, since, double.PositiveInfinity);
+
+                foreach (var result in results)
+                {
+                    var data = result.Split(':');
+                    var share = double.Parse(data[0].Replace(',', '.'), CultureInfo.InvariantCulture);
+                    var worker = data[1];
+
+                    if (!hashrates.ContainsKey(worker))
+                        hashrates.Add(worker, 0);
+
+                    hashrates[worker] += share;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting hashrate data: {0:l}", e.Message);
+            }
+
+            return hashrates;
+        }
+
         public void AddBlock(IShare share)
         {
             try
@@ -280,7 +326,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         {
                             orphaned = round.Block.Status == BlockStatus.Orphaned,
                             confirmed = round.Block.Status == BlockStatus.Confirmed,
-                            height = round.Block.Status
+                            height = round.Block.Height
                         });
                 }
             }

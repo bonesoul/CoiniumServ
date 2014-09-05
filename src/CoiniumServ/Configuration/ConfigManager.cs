@@ -29,6 +29,7 @@ using CoiniumServ.Factories;
 using CoiniumServ.Logging;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
+using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers.IO;
 using Serilog;
 
@@ -36,9 +37,10 @@ namespace CoiniumServ.Configuration
 {
     public class ConfigManager:IConfigManager
     {
+        public IStackConfig StackConfig { get; private set; }
+        public IStatisticsConfig StatisticsConfig { get; private set; }
         public IWebServerConfig WebServerConfig { get; private set; }
         public ILogConfig LogConfig { get; private set; }
-        public IStackConfig StackConfig { get; private set; }
         public List<IPoolConfig> PoolConfigs { get; private set; }
 
         private const string GlobalConfigFilename = "config/config.json"; // global config filename.
@@ -76,6 +78,7 @@ namespace CoiniumServ.Configuration
             }
 
             StackConfig = new StackConfig(data.stack);
+            StatisticsConfig = new StatisticsConfig(data.statistics);
             WebServerConfig = new WebServerConfig(data.website);
             LogConfig = new LogConfig(data.logging);
         }
