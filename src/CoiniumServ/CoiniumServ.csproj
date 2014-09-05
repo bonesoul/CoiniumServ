@@ -156,6 +156,7 @@
     <Compile Include="Cryptology\Algorithms\IAlgorithmManager.cs" />
     <Compile Include="Cryptology\Algorithms\Keccak.cs" />
     <Compile Include="Cryptology\Algorithms\Nist5.cs" />
+    <Compile Include="Cryptology\Algorithms\Qubit.cs" />
     <Compile Include="Cryptology\Algorithms\ScryptOg.cs" />
     <Compile Include="Cryptology\Algorithms\Sha1.cs" />
     <Compile Include="Cryptology\Algorithms\Sha256.cs" />
