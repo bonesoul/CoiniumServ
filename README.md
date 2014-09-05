@@ -1,10 +1,8 @@
 # ![Screenshot](http://coinium.org/assets/images/logo/coinium-icon-48.png) CoiniumServ [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
  
-[CoiniumServ](https://github.com/CoiniumServ/CoiniumServ) is a high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features stratum and vanilla services, reward, payment, share processors, vardiff & ban managers, user-friendly embedded web-server & front-end and a full-stack API.
+[CoiniumServ](http://www.coiniumserv.com) is a high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features stratum and vanilla services, reward, payment, share processors, vardiff & ban managers, user-friendly embedded web-server & front-end and a full-stack API.
 
 CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) mining pool network at first hand. You can check [some of pools](https://github.com/CoiniumServ/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
-
-* Official pools: [coinium.org](http://www.coinium.org)
 
 ![CoiniumServ running over mono & ubuntu](http://i.imgur.com/HvaPVrZ.png)
 
@@ -14,7 +12,7 @@ Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) 
 
 You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
 
-* Official site: [coiniumserv.com](http://www.coiniumserv.com)
+* Official site: [CoiniumServ.com](http://www.coiniumserv.com)
 * [Paid support & consulting options](https://github.com/CoiniumServ/CoiniumServ#consulting)
 * [Support forums](http://forum.coinium.org/forum/19-support/)
 * IRC (**irc.freenode.net**):
@@ -145,7 +143,7 @@ Start reading by these;
 
 ### Consulting
 
-Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#support) methods, we offer paid remote support & consulting services for whom would like to get professional support. Contact us over [here](http://blog.coinium.org/coiniumserv/consulting/) and we will get back to you to discuss your needs.
+Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#support) methods, we offer paid remote support & consulting services for whom would like to get professional support. Contact us over [here](http://www.coiniumserv.com/support/consulting/) and we will get back to you to discuss your needs.
 
 ### License
 
