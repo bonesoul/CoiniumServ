@@ -45,12 +45,24 @@ namespace CoiniumServ.Pools
 
             _storage = new List<IPool>(); // initialize the pool storage.
 
-            foreach (var config in configManager.PoolConfigs) // loop through all enabled pool configurations.
+            // loop through all enabled pool configurations and initialize pools.
+            foreach (var config in configManager.PoolConfigs)
             {
                 var pool = objectFactory.GetPool(config); // create pool for the given configuration.
                 
                 if(pool.Enabled) // make sure pool was succesfully initialized.
                     _storage.Add(pool); // add it to storage.
+            }
+
+            Run(); // run the initialized pools.
+        }
+
+        private void Run()
+        {
+            // run the initialized pools
+            foreach (var pool in _storage)
+            {
+                pool.Start();
             }
         }
 
@@ -100,14 +112,6 @@ namespace CoiniumServ.Pools
         public IPool Get(string symbol)
         {
             return _storage.FirstOrDefault(p => p.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public void Run()
-        {
-            foreach (var pool in _storage)
-            {
-                pool.Start();
-            }
         }
 
         public IEnumerator<IPool> GetEnumerator()

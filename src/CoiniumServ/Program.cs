@@ -89,8 +89,7 @@ namespace CoiniumServ
         private static void RunGlobalManagers(IObjectFactory objectFactory)
         {
             // start pool manager.
-            var poolManager = objectFactory.GetPoolManager();
-            poolManager.Run();
+            objectFactory.GetPoolManager();
 
             // run algorithm manager.
             objectFactory.GetAlgorithmManager();
@@ -101,11 +100,11 @@ namespace CoiniumServ
             // run statistics manager.
             objectFactory.GetStatisticsManager();
 
-            // initialize metrics support    
-            objectFactory.GetMetricsManager();
-
             // start web server.
             objectFactory.GetWebServer();
+
+            // initialize metrics support    
+            objectFactory.GetMetricsManager();
         }
 
         #region unhandled exception emitter
