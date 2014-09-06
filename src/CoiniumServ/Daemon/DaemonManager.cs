@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using CoiniumServ.Configuration;
 using CoiniumServ.Pools;
 using Serilog;
 
@@ -34,18 +35,24 @@ namespace CoiniumServ.Daemon
 {
     public class DaemonManager :IDaemonManager
     {
-        private readonly IList<IDaemonClient> _storage;
         private readonly IPoolManager _poolManager;
+        private readonly IConfigManager _configManager;
+
+        private readonly IDictionary<string, IDaemonClient> _storage;        
 
         private readonly ILogger _logger;
 
-        public DaemonManager(IPoolManager poolManager)
+        public DaemonManager(IPoolManager poolManager, IConfigManager configManager)
         {
             _logger = Log.ForContext<PoolManager>();
-            _storage = new List<IDaemonClient>(); // initialize the daemon storage.
+            
             _poolManager = poolManager;
+            _configManager = configManager;
 
-            ReadPoolDaemons();
+            _storage = new Dictionary<string, IDaemonClient>(); // initialize the daemon storage.
+
+            ReadPoolDaemons(); // read pool daemons.
+            LoadPaymentDaemons(); // load payment daemons.
         }
 
         private void ReadPoolDaemons()
@@ -53,13 +60,18 @@ namespace CoiniumServ.Daemon
             // loop through enabled pools and get their daemons.
             foreach (var pool in _poolManager)
             {
-                _storage.Add(pool.Daemon);
+                _storage.Add(pool.Config.Coin.Name, pool.Daemon);
             }
+        }
+
+        private void LoadPaymentDaemons()
+        {
+            
         }
 
         public IEnumerator<IDaemonClient> GetEnumerator()
         {
-            return _storage.GetEnumerator();
+            return _storage.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -69,22 +81,22 @@ namespace CoiniumServ.Daemon
 
         public IQueryable<IDaemonClient> SearchFor(Expression<Func<IDaemonClient, bool>> predicate)
         {
-            return _storage.AsQueryable().Where(predicate);
+            return _storage.Values.AsQueryable().Where(predicate);
         }
 
         public IEnumerable<IDaemonClient> GetAll()
         {
-            return _storage;
+            return _storage.Values;
         }
 
         public IQueryable<IDaemonClient> GetAllAsQueryable()
         {
-            return _storage.AsQueryable();
+            return _storage.Values.AsQueryable();
         }
 
         public IReadOnlyCollection<IDaemonClient> GetAllAsReadOnly()
         {
-            return new ReadOnlyCollection<IDaemonClient>(_storage);
+            return new ReadOnlyCollection<IDaemonClient>(_storage.Values.ToList());
         }
 
         public int Count { get; private set; }
