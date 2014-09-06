@@ -89,6 +89,9 @@ namespace CoiniumServ.Blocks
 
         public TransactionDetail GetPoolOutput(Transaction transaction)
         {
+            if (transaction == null)
+                return null;
+
             return transaction.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount);
         }
     }

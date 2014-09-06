@@ -221,7 +221,7 @@
     <Compile Include="Pools\NetworkInfo.cs" />
     <Compile Include="Container\Registries\StorageRegistry.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
-    <Compile Include="Server\Web\Models\CurrentRoundModel.cs" />
+    <Compile Include="Server\Web\Models\RoundModel.cs" />
     <Compile Include="Server\Web\Models\WorkersModel.cs" />
     <Compile Include="Server\Web\Modules\BackendConfig.cs" />
     <Compile Include="Server\Web\Modules\Donate.cs" />
