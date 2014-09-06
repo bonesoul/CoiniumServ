@@ -21,7 +21,6 @@ You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues)
   - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
 * [Twitter](http://twitter.com/coinium)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
-* [Bitcoin wiki](https://en.bitcoin.it/wiki/CoiniumServ)
 
 ### Donation
 
