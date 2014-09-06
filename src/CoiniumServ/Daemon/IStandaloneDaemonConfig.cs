@@ -20,29 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using CoiniumServ.Daemon;
-using CoiniumServ.Logging;
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Web;
-using CoiniumServ.Statistics;
 
-namespace CoiniumServ.Configuration
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Configuration;
+using CoiniumServ.Daemon.Config;
+
+namespace CoiniumServ.Daemon
 {
-    public interface IConfigManager
+    public interface IStandaloneDaemonConfig :IConfig
     {
-        IStackConfig StackConfig { get; }
+        bool Enabled { get; }
 
-        IStatisticsConfig StatisticsConfig { get; }
+        ICoinConfig Coin { get; }
 
-        IWebServerConfig WebServerConfig { get; }
-
-        ILogConfig LogConfig { get; }
-
-        List<IPoolConfig> PoolConfigs { get; }
-
-        IDaemonManagerConfig DaemonManagerConfig { get; }
-
-        void Initialize();
+        IDaemonConfig Daemon { get; }
     }
 }

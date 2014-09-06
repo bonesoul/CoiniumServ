@@ -20,34 +20,41 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using CoiniumServ.Server.Web.Modules;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Payments;
 using Serilog;
 
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Daemon
 {
-    public class WebServerConfig : IWebServerConfig
+    public class StandaloneDaemonConfig:IStandaloneDaemonConfig
     {
-        public bool Enabled { get; private set; }
-        public string BindInterface { get; private set; }
-        public int Port { get; private set; }
-        public IBackendConfig Backend { get; private set; }
         public bool Valid { get; private set; }
-        public WebServerConfig(dynamic config)
+        public bool Enabled { get; private set; }
+        public ICoinConfig Coin { get; private set; }
+        public IDaemonConfig Daemon { get; private set; }
+
+        public StandaloneDaemonConfig(dynamic config)
         {
             try
             {
-                // load the config data.
-                Enabled = config.enabled;
-                BindInterface = string.IsNullOrEmpty(config.bind) ? "127.0.0.1" : config.bind;
-                Port = config.port == 0 ? 80 : config.port;
-                Backend = new BackendConfig(config.backend);
+                Enabled = config.enabled ? config.enabled : false;
+
+                if (Enabled == false) // if the configuration is not enabled
+                    return; // just skip reading rest of the parameters.
+                
+                // load the sections.
+                //Coin = coinConfig; // assign the coin config.
+                Daemon = new DaemonConfig(config.daemon);
+
                 Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<WebServerConfig>().Error(e, "Error loading web-server configuration");
+                Log.Logger.ForContext<WalletConfig>().Error(e, "Error loading wallet configuration");
             }
         }
     }

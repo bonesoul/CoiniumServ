@@ -41,6 +41,10 @@ namespace CoiniumServ.Configuration
             {
                 var path = FileHelpers.GetAbsolutePath(fileName);
                 var json = ReadJsonFromFile(path); // read the json.
+
+                if (json == null) // make sure we were able to load the json file.
+                    return null;
+
                 json = CleanComments(json); // strip out comment lines that starts with # as they'll be preventing validation.
                 var valid = ValidateJson(json, fileName); // check if it's valid.
 
@@ -77,7 +81,7 @@ namespace CoiniumServ.Configuration
             }
             catch (FileNotFoundException e)
             {
-                Log.Error("Can not read json file {0:l} - {1:l}", fileName, e.Message);
+                Log.Error("Can not read json file; {0:l}", e.Message);
                 return null;
             }
         }

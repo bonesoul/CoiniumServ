@@ -65,7 +65,7 @@ namespace CoiniumServ
             // load the config-manager.
             var configManager = configFactory.GetConfigManager();
 
-            // initialize log-manager as we'll need it below.
+            // initialize log-manager as we'll need it below for the loading rest of the configuration files.
             objectFactory.GetLogManager();
 
             // print a version banner.
@@ -73,7 +73,7 @@ namespace CoiniumServ
             _logger.Information("CoiniumServ {0:l} {1:l} warming-up..", VersionInfo.CodeName, Assembly.GetAssembly(typeof(Program)).GetName().Version);
             PlatformManager.PrintPlatformBanner();
 
-            // initialize config manager.
+            // rest of configurations need access to log-manager being already initialized.
             configManager.Initialize();
 
             // run global managers

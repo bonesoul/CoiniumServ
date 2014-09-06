@@ -76,9 +76,8 @@ namespace CoiniumServ.Pools
                 if (Enabled == false) // if the configuration is not enabled
                     return; // just skip reading rest of the parameters.
 
-                Coin = coinConfig; // assign the coin config.
-
                 // load the sections.
+                Coin = coinConfig; // assign the coin config.
                 Daemon = new DaemonConfig(config.daemon);
                 Meta = new MetaConfig(config.meta);
                 Wallet = new WalletConfig(config.wallet);

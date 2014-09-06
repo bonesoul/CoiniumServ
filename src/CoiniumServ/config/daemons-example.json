@@ -13,14 +13,16 @@
     # username: username for rpc connection.
     # password: password for rpc connection.
 
-    "payment-daemon": {
-        "enabled": false,	
-        "coin": "litecoin.json", 
-	    "daemon": {
-		    "host": "127.0.0.1",
-		    "port": 9333,
-		    "username": "user",
-		    "password": "password"
-	    }
-    }
+    "daemons": [
+        {
+            "enabled": false,	
+            "coin": "litecoin.json", 
+            "daemon": {
+                "host": "127.0.0.1",
+                "port": 9333,
+                "username": "user",
+                "password": "password"
+            }
+        }
+    ]
 }

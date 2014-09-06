@@ -167,6 +167,8 @@
     <Compile Include="Cryptology\Algorithms\X14.cs" />
     <Compile Include="Cryptology\Algorithms\X15.cs" />
     <Compile Include="Cryptology\Algorithms\X17.cs" />
+    <Compile Include="Daemon\DaemonManagerConfig.cs" />
+    <Compile Include="Daemon\IDaemonManagerConfig.cs" />
     <Compile Include="Factories\ConfigFactory.cs" />
     <Compile Include="Factories\IConfigFactory.cs" />
     <Compile Include="Factories\IObjectFactory.cs" />
@@ -184,9 +186,11 @@
     <Compile Include="Miners\MinerSoftware.cs" />
     <Compile Include="Daemon\IDaemonManager.cs" />
     <Compile Include="Daemon\DaemonManager.cs" />
+    <Compile Include="Daemon\IStandaloneDaemonConfig.cs" />
     <Compile Include="Payments\IRewardsConfig.cs" />
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
+    <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
     <Compile Include="Persistance\Blocks\PersistedBlock.cs" />
     <Compile Include="Persistance\IStorageConfig.cs" />
     <Compile Include="Persistance\Layers\Empty\EmptyStorageLayer.cs" />
@@ -845,7 +849,7 @@
     <None Include="config\coins\zzcoin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\payments\daemons-example.json">
+    <None Include="config\daemons-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\pools\default-example.json">
@@ -1040,9 +1044,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Payments\Daemon\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

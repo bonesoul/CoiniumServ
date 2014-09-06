@@ -36,7 +36,7 @@ namespace CoiniumServ.Payments
         /// <summary>
         /// list of addresses that gets a percentage from each mined block (ie, pool fee.)
         /// </summary>
-        private readonly Dictionary<string, float> _rewards;
+        private readonly IDictionary<string, float> _rewards;
 
         public RewardsConfig(dynamic config)
         {
@@ -44,7 +44,7 @@ namespace CoiniumServ.Payments
             {
                 _rewards = new Dictionary<string, float>();
 
-                // weird stuff going below because of JsonConfig libraries handling of dictionaries.            
+                // weird stuff going below because of JsonConfig libraries handling of dictionaries.
                 foreach (ConfigObject kvp in config)
                     foreach (KeyValuePair<string, object> pair in kvp)
                         _rewards.Add(pair.Key, float.Parse(pair.Value.ToString(), CultureInfo.InvariantCulture));
