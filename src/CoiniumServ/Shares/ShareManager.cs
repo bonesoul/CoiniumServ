@@ -122,13 +122,6 @@ namespace CoiniumServ.Shares
             // submit block candidate to daemon.
             var accepted = SubmitBlock(share);
 
-            // log about the acceptance status of the block.
-            _logger.Information(
-                accepted
-                    ? "Found block [{0}] with hash: {1:l}"
-                    : "Submit block [{0}] failed with hash: {1:l}",
-                share.Height, share.BlockHash.ToHexString());
-
             if (!accepted) // if block wasn't accepted
                 return; // just return as we don't need to notify about it and store it.
 
@@ -189,7 +182,7 @@ namespace CoiniumServ.Shares
 
                 if (block.Confirmations == -1) // make sure the block is accepted.
                 {
-                    _logger.Debug("Submitted block {0:l} is orphaned", block.Hash);
+                    _logger.Debug("Submitted block [{0}] is orphaned; [{1:l}]", block.Height, block.Hash);
                     return false;
                 }
 
@@ -198,29 +191,38 @@ namespace CoiniumServ.Shares
 
                 if (expectedTxHash != genTxHash) // make sure our calculated generated transaction and one reported by coin daemon matches.
                 {
-                    _logger.Debug("Submitted block {0:l} doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Hash, genTxHash, expectedTxHash);
+                    _logger.Debug("Submitted block [{0}] doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Height, genTxHash, expectedTxHash);
                     return false;
                 }
 
                 var genTx = _blockProcessor.GetGenerationTransaction(block); // get the generation transaction.
+
+                // make sure we were able to read the generation transaction
+                if (genTx == null)
+                {
+                    _logger.Debug("Submitted block [{0}] doesn't seem to belong us as we can't read the generation transaction on our records [{1:l}]", block.Height, block.Tx.First());
+                    return false;
+                }
 
                 var poolOutput = _blockProcessor.GetPoolOutput(genTx); // get the output that targets pool's central address.
 
                 // make sure the blocks generation transaction contains our central pool wallet address
                 if (poolOutput == null)
                 {
-                    _logger.Debug("Submitted block doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", _poolConfig.Wallet.Adress);
+                    _logger.Debug("Submitted block [{0}] doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", block.Height, _poolConfig.Wallet.Adress);
                     return false;
                 }
 
                 // if the code flows here, then it means the block was succesfully submitted and belongs to us.
                 share.SetFoundBlock(block, genTx); // assign the block to share.
 
+                _logger.Information("Found block [{0}] with hash [{1:l}]", share.Height, share.BlockHash.ToHexString());
+
                 return true;
             }
             catch (Exception e)
             {
-                _logger.Error("Submit block failed - height: {0}, hash: {1:l} - {2:l}", share.Height, share.BlockHash.ToHexString(), e.Message);
+                _logger.Error("Submit block [{0}] failed with hash [{1:l}] - reason; {2:l}", share.Height, share.BlockHash.ToHexString(), e.Message);
                 return false;
             }
         }
