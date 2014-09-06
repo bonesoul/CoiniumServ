@@ -31,6 +31,7 @@ using CoiniumServ.Logging;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.Daemon;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Providers;
@@ -57,6 +58,8 @@ namespace CoiniumServ.Factories
         IStatisticsManager GetStatisticsManager();
 
         ILogManager GetLogManager();
+
+        IPaymentDaemonManager GetPaymentDaemonManager();
 
         #endregion
 
@@ -105,7 +108,7 @@ namespace CoiniumServ.Factories
         /// <returns></returns>
         IHashAlgorithm GetHashAlgorithm(string algorithm);
 
-        IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
+        IAlgorithmManager GetAlgorithmManager();
 
         #endregion
 

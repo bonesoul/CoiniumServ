@@ -182,6 +182,8 @@
     <Compile Include="Miners\IMinerConfig.cs" />
     <Compile Include="Miners\MetaConfig.cs" />
     <Compile Include="Miners\MinerSoftware.cs" />
+    <Compile Include="Payments\Daemon\IPaymentDaemonManager.cs" />
+    <Compile Include="Payments\Daemon\PaymentDaemonManager.cs" />
     <Compile Include="Payments\IRewardsConfig.cs" />
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />

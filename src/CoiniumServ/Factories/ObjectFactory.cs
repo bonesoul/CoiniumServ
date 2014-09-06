@@ -32,6 +32,7 @@ using CoiniumServ.Logging;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.Daemon;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Providers;
@@ -86,6 +87,11 @@ namespace CoiniumServ.Factories
         public ILogManager GetLogManager()
         {
             return _applicationContext.Container.Resolve<ILogManager>();
+        }
+
+        public IPaymentDaemonManager GetPaymentDaemonManager()
+        {
+            return _applicationContext.Container.Resolve<IPaymentDaemonManager>();
         }
 
         #endregion
@@ -275,7 +281,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
         }
 
-        public IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager)
+        public IAlgorithmManager GetAlgorithmManager()
         {
             return _applicationContext.Container.Resolve<IAlgorithmManager>();
         }

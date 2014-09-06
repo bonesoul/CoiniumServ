@@ -76,12 +76,27 @@ namespace CoiniumServ
             // initialize config manager.
             configManager.Initialize();
 
+            // run global managers
+            RunGlobalManagers(objectFactory);
+
+            while (true) // idle loop & command parser
+            {
+                var line = Console.ReadLine();
+                CommandManager.Parse(line);
+            }
+        }
+
+        private static void RunGlobalManagers(IObjectFactory objectFactory)
+        {
             // start pool manager.
             var poolManager = objectFactory.GetPoolManager();
             poolManager.Run();
 
             // run algorithm manager.
-            objectFactory.GetAlgorithmManager(poolManager);
+            objectFactory.GetAlgorithmManager();
+
+            // run payment manager
+            objectFactory.GetPaymentDaemonManager();
 
             // run statistics manager.
             objectFactory.GetStatisticsManager();
@@ -91,12 +106,6 @@ namespace CoiniumServ
 
             // start web server.
             objectFactory.GetWebServer();
-
-            while (true) // idle loop & command parser
-            {
-                var line = Console.ReadLine();
-                CommandManager.Parse(line);
-            }
         }
 
         #region unhandled exception emitter
