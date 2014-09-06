@@ -182,8 +182,8 @@
     <Compile Include="Miners\IMinerConfig.cs" />
     <Compile Include="Miners\MetaConfig.cs" />
     <Compile Include="Miners\MinerSoftware.cs" />
-    <Compile Include="Payments\Daemon\IPaymentDaemonManager.cs" />
-    <Compile Include="Payments\Daemon\PaymentDaemonManager.cs" />
+    <Compile Include="Daemon\IDaemonManager.cs" />
+    <Compile Include="Daemon\DaemonManager.cs" />
     <Compile Include="Payments\IRewardsConfig.cs" />
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
@@ -1036,6 +1036,9 @@
     <None Include="web\default\js\tablesorter\tables.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Payments\Daemon\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

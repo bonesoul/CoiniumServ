@@ -21,12 +21,14 @@
 // 
 #endregion
 
-namespace CoiniumServ.Payments.Daemon
+using CoiniumServ.Utils.Repository;
+
+namespace CoiniumServ.Daemon
 {
     /// <summary>
     /// Manages payment daemons.
     /// </summary>
-    public interface IPaymentDaemonManager
+    public interface IDaemonManager : IRepository<IDaemonClient>
     {
     }
 }

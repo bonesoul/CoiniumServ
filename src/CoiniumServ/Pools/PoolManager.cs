@@ -42,7 +42,6 @@ namespace CoiniumServ.Pools
         public PoolManager(IObjectFactory objectFactory , IConfigManager configManager)
         {
             _logger = Log.ForContext<PoolManager>();
-
             _storage = new List<IPool>(); // initialize the pool storage.
 
             // loop through all enabled pool configurations and initialize pools.
