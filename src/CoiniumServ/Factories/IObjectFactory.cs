@@ -23,8 +23,10 @@
 using System.Collections.Generic;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
@@ -70,7 +72,7 @@ namespace CoiniumServ.Factories
         /// Returns a new instance of daemon client.
         /// </summary>
         /// <returns></returns>
-        IDaemonClient GetDaemonClient(IPoolConfig poolConfig);
+        IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
 
         IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer);
 

@@ -140,7 +140,7 @@ namespace CoiniumServ.Pools
                 return;
             }
 
-            Daemon = _objectFactory.GetDaemonClient(Config);
+            Daemon = _objectFactory.GetDaemonClient(Config.Daemon, Config.Coin);
             HashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
             NetworkInfo = _objectFactory.GetNetworkInfo(Daemon, HashAlgorithm, Config);
             

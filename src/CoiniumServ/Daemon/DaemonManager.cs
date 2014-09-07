@@ -27,6 +27,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using CoiniumServ.Configuration;
+using CoiniumServ.Factories;
 using CoiniumServ.Pools;
 using Serilog;
 
@@ -36,17 +37,21 @@ namespace CoiniumServ.Daemon
     {
         private readonly IPoolManager _poolManager;
         private readonly IConfigManager _configManager;
+        private readonly IObjectFactory _objectFactory;
 
         private readonly IDictionary<string, IDaemonClient> _storage;        
 
         private readonly ILogger _logger;
 
-        public DaemonManager(IPoolManager poolManager, IConfigManager configManager)
+        public DaemonManager(IPoolManager poolManager, IConfigManager configManager, IObjectFactory objectFactory)
         {
-            _logger = Log.ForContext<PoolManager>();
+            // TODO: let all daemon's initialzied by daemon-manager.
+
+            _logger = Log.ForContext<DaemonManager>();
             
             _poolManager = poolManager;
             _configManager = configManager;
+            _objectFactory = objectFactory;
 
             _storage = new Dictionary<string, IDaemonClient>(); // initialize the daemon storage.
 
@@ -59,13 +64,26 @@ namespace CoiniumServ.Daemon
             // loop through enabled pools and get their daemons.
             foreach (var pool in _poolManager)
             {
-                _storage.Add(pool.Config.Coin.Name, pool.Daemon);
+                _storage.Add(pool.Config.Coin.Symbol, pool.Daemon);
             }
         }
 
         private void LoadPaymentDaemons()
         {
-            
+            foreach (var config in _configManager.DaemonManagerConfig.Configs)
+            {
+                if (!config.Enabled)
+                    continue;
+
+                if (_storage.ContainsKey(config.Coin.Symbol))
+                {
+                    _logger.Error("Can not add stand-alone daemon config as there already exists a daemon connection for {0:l}", config.Coin.Name);
+                    continue;
+                }
+
+                var daemon = _objectFactory.GetDaemonClient(config.Daemon, config.Coin);
+                _storage.Add(config.Coin.Symbol, daemon);
+            }
         }
 
         public IEnumerator<IDaemonClient> GetEnumerator()

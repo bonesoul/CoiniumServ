@@ -23,9 +23,11 @@
 using System.Collections.Generic;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
@@ -111,11 +113,12 @@ namespace CoiniumServ.Factories
         /// Returns a new instance of daemon client.
         /// </summary>
         /// <returns></returns>
-        public IDaemonClient GetDaemonClient(IPoolConfig poolConfig)
+        public IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig)
         {
             var @params = new NamedParameterOverloads
             {
-                {"poolConfig", poolConfig}              
+                {"daemonConfig", daemonConfig},
+                {"coinConfig", coinConfig}
             };
 
             return _applicationContext.Container.Resolve<IDaemonClient>(@params);

@@ -24,6 +24,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Logging;
 using CoiniumServ.Pools;
@@ -42,13 +44,13 @@ namespace CoiniumServ.Daemon
 
         private readonly ILogger _logger;
 
-        public DaemonBase(IPoolConfig poolConfig)
+        public DaemonBase(IDaemonConfig daemonConfig, ICoinConfig coinConfig)
         {
-            RpcUrl = string.Format("http://{0}:{1}", poolConfig.Daemon.Host, poolConfig.Daemon.Port);
-            RpcUser = poolConfig.Daemon.Username;
-            RpcPassword = poolConfig.Daemon.Password;
+            RpcUrl = string.Format("http://{0}:{1}", daemonConfig.Host, daemonConfig.Port);
+            RpcUser = daemonConfig.Username;
+            RpcPassword = daemonConfig.Password;
             RequestCounter = 0;
-            _logger = LogManager.PacketLogger.ForContext<DaemonClient>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = LogManager.PacketLogger.ForContext<DaemonClient>().ForContext("Component", coinConfig.Name);
         }
 
         /// <summary>
