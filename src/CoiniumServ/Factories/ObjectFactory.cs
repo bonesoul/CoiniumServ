@@ -31,6 +31,7 @@ using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
+using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
@@ -345,6 +346,11 @@ namespace CoiniumServ.Factories
         public IMetricsManager GetMetricsManager()
         {
             return _applicationContext.Container.Resolve<IMetricsManager>();
+        }
+
+        public IMarketManager GetMarketManager()
+        {
+            return _applicationContext.Container.Resolve<IMarketManager>();
         }
 
         #endregion

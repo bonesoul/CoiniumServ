@@ -100,6 +100,9 @@ namespace CoiniumServ
             // run statistics manager.
             objectFactory.GetStatisticsManager();
 
+            // run market manager.
+            objectFactory.GetMarketManager();
+
             // start web server.
             objectFactory.GetWebServer();
 

@@ -178,6 +178,8 @@
     <Compile Include="Banning\BanConfig.cs" />
     <Compile Include="Banning\IBanConfig.cs" />
     <Compile Include="Jobs\Manager\IJobConfig.cs" />
+    <Compile Include="Markets\IMarketManager.cs" />
+    <Compile Include="Markets\MarketManager.cs" />
     <Compile Include="Metrics\IMetricsManager.cs" />
     <Compile Include="Metrics\MetricsManager.cs" />
     <Compile Include="Miners\IMetaConfig.cs" />

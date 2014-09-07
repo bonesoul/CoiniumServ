@@ -26,6 +26,7 @@ using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
+using CoiniumServ.Markets;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
@@ -62,6 +63,9 @@ namespace CoiniumServ.Container.Registries
 
             // web
             _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();
+
+            // markets
+            _applicationContext.Container.Register<IMarketManager, MarketManager>().AsSingleton();
         }
     }
 }

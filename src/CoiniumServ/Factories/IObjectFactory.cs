@@ -30,6 +30,7 @@ using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
+using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
@@ -130,6 +131,12 @@ namespace CoiniumServ.Factories
         INancyBootstrapper GetWebBootstrapper();
 
         IMetricsManager GetMetricsManager();
+
+        #endregion
+
+        #region market objects
+
+        IMarketManager GetMarketManager();
 
         #endregion
     }
