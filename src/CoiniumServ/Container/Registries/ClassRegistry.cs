@@ -29,7 +29,6 @@ using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
-using CoiniumServ.Statistics;
 using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Container.Registries
@@ -57,6 +56,8 @@ namespace CoiniumServ.Container.Registries
             // config
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
             _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<IDaemonManagerConfig, DaemonManagerConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<IStandaloneDaemonConfig, StandaloneDaemonConfig>().AsMultiInstance();
             _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
 
             // web

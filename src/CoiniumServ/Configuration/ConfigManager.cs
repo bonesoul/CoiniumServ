@@ -102,7 +102,7 @@ namespace CoiniumServ.Configuration
             if (data == null) // if we can't read daemon manager config file.
                 data = new ExpandoObject(); // create a fake object.                
 
-            DaemonManagerConfig = new DaemonManagerConfig(data);
+            DaemonManagerConfig = _configFactory.GetDaemonManagerConfig(data);
         }
 
         private void LoadPoolConfigs()
@@ -155,7 +155,7 @@ namespace CoiniumServ.Configuration
                 PoolConfigs.Select(config => config.Coin.Name).ToList());
         }
 
-        private ICoinConfig GetCoinConfig(string name)
+        public ICoinConfig GetCoinConfig(string name)
         {
             var fileName = string.Format("{0}/{1}.json", CoinConfigRoot, name);
             var data = _jsonConfigReader.Read(fileName);

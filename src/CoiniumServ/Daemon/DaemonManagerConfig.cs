@@ -22,7 +22,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using CoiniumServ.Payments;
+using CoiniumServ.Factories;
 using Serilog;
 
 namespace CoiniumServ.Daemon
@@ -31,9 +31,11 @@ namespace CoiniumServ.Daemon
     {
         public bool Valid { get; private set; }
 
-        private readonly IList<IStandaloneDaemonConfig> _configs;
+        public IList<IStandaloneDaemonConfig> Configs { get { return _configs; }}
 
-        public DaemonManagerConfig(dynamic config)
+        private readonly List<IStandaloneDaemonConfig> _configs; 
+
+        public DaemonManagerConfig(IConfigFactory configFactory, dynamic config)
         {
             try
             {
@@ -42,12 +44,14 @@ namespace CoiniumServ.Daemon
                 // weird stuff going below because of JsonConfig libraries handling of dictionaries.
                 foreach (var kvp in config)
                     foreach (var entry in kvp.Value)
-                        _configs.Add(new StandaloneDaemonConfig(entry));
+                    {
+                        _configs.Add(configFactory.GetStandaloneDaemonConfig(entry));
+                    }
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<DaemonManagerConfig>().Error(e, "Error loading web-server configuration");
+                Log.Logger.ForContext<DaemonManagerConfig>().Error(e, "Error loading daemon manager configuration");
             }            
         }
     }

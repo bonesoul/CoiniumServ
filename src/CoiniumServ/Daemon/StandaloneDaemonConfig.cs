@@ -21,9 +21,10 @@
 // 
 #endregion
 using System;
+using System.IO;
 using CoiniumServ.Coin.Config;
+using CoiniumServ.Configuration;
 using CoiniumServ.Daemon.Config;
-using CoiniumServ.Payments;
 using Serilog;
 
 namespace CoiniumServ.Daemon
@@ -35,17 +36,39 @@ namespace CoiniumServ.Daemon
         public ICoinConfig Coin { get; private set; }
         public IDaemonConfig Daemon { get; private set; }
 
-        public StandaloneDaemonConfig(dynamic config)
+        private readonly ILogger _logger;
+
+        public StandaloneDaemonConfig(IConfigManager configManager, dynamic config)
         {
             try
             {
+                _logger = Log.ForContext<StandaloneDaemonConfig>();
+
                 Enabled = config.enabled ? config.enabled : false;
 
                 if (Enabled == false) // if the configuration is not enabled
                     return; // just skip reading rest of the parameters.
                 
                 // load the sections.
-                //Coin = coinConfig; // assign the coin config.
+
+                var coinName = Path.GetFileNameWithoutExtension(config.coin); // get the coin-name assigned to pool.
+                var coinConfig = configManager.GetCoinConfig(coinName); // get the coin config.
+
+                if (coinConfig == null) // make sure a configuration file for referenced coin exists.
+                {
+                    _logger.Error("Referenced coin configuration file coins/{0:l}.json doesn't exist, skipping stand-alone daemon configuration", coinName);
+                    Valid = false;
+                    return;
+                }
+
+                if (!coinConfig.Valid) // make sure the configuration for referenced coin is valid.
+                {
+                    _logger.Error("coins/{0:l}.json doesnt't contain a valid coin configuration, skipping stand-alone daemon configuration", coinName);
+                    Valid = false;
+                    return;
+                }
+
+                Coin = coinConfig; // assign the coin config.
                 Daemon = new DaemonConfig(config.daemon);
 
                 Valid = true;
@@ -53,7 +76,7 @@ namespace CoiniumServ.Daemon
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<WalletConfig>().Error(e, "Error loading wallet configuration");
+                _logger.Error(e, "Error loading wallet configuration");
             }
         }
     }
