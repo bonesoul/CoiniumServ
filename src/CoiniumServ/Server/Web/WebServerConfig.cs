@@ -39,7 +39,7 @@ namespace CoiniumServ.Server.Web
             {
                 // load the config data.
                 Enabled = config.enabled;
-                BindInterface = string.IsNullOrEmpty(config.bind) ? "127.0.0.1" : config.bind;
+                BindInterface = string.IsNullOrEmpty(config.bind) ? "localhost" : config.bind;
                 Port = config.port == 0 ? 80 : config.port;
                 Backend = new BackendConfig(config.backend);
                 Valid = true;

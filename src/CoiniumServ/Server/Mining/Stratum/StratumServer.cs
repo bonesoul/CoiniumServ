@@ -74,7 +74,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         public void Initialize(IServerConfig config)
         {
             Config = config;
-            BindIP = config.BindInterface;
+            BindInterface = config.BindInterface;
             Port = config.Port;
 
             ClientConnected += OnClientConnection;
@@ -89,8 +89,8 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <returns></returns>
         public override bool Start()
         {
-            var success = Listen(BindIP, Port);
-            _logger.Information("Stratum server listening on {0:l}:{1}", BindIP, Port);
+            var success = Listen(BindInterface, Port);
+            _logger.Information("Stratum server listening on {0:l}:{1}", BindInterface, Port);
             return success;
         }
 

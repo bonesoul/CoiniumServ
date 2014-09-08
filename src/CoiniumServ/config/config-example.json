@@ -26,7 +26,7 @@
     # -------------------------------
 
     # enabled: set this true to enable frontend.
-    # bind: interface to bind webserver.
+    # bind: interface to bind webserver, leave empty to listen on all available interfaces.
     # port: port to listen for http connections.
     # backend: 
     # enabled: set this true to enable admin backend.
@@ -34,7 +34,7 @@
 
 	"website": {
 		"enabled": true,
-		"bind": "127.0.0.1",
+		"bind": "",
 		"port": 80,
         "backend" : {
             "metrics": {
