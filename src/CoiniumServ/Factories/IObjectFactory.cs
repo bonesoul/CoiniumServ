@@ -105,7 +105,7 @@ namespace CoiniumServ.Factories
         /// <returns></returns>
         IHashAlgorithm GetHashAlgorithm(string algorithm);
 
-        IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
+        IAlgorithmManager GetAlgorithmManager();
 
         #endregion
 

@@ -65,7 +65,7 @@ namespace CoiniumServ
             // load the config-manager.
             var configManager = configFactory.GetConfigManager();
 
-            // initialize log-manager as we'll need it below.
+            // initialize log-manager as we'll need it below for the loading rest of the configuration files.
             objectFactory.GetLogManager();
 
             // print a version banner.
@@ -73,30 +73,35 @@ namespace CoiniumServ
             _logger.Information("CoiniumServ {0:l} {1:l} warming-up..", VersionInfo.CodeName, Assembly.GetAssembly(typeof(Program)).GetName().Version);
             PlatformManager.PrintPlatformBanner();
 
-            // initialize config manager.
+            // rest of configurations need access to log-manager being already initialized.
             configManager.Initialize();
 
-            // start pool manager.
-            var poolManager = objectFactory.GetPoolManager();
-            poolManager.Run();
-
-            // run algorithm manager.
-            objectFactory.GetAlgorithmManager(poolManager);
-
-            // run statistics manager.
-            objectFactory.GetStatisticsManager();
-
-            // initialize metrics support    
-            objectFactory.GetMetricsManager();
-
-            // start web server.
-            objectFactory.GetWebServer();
+            // run global managers
+            RunGlobalManagers(objectFactory);
 
             while (true) // idle loop & command parser
             {
                 var line = Console.ReadLine();
                 CommandManager.Parse(line);
             }
+        }
+
+        private static void RunGlobalManagers(IObjectFactory objectFactory)
+        {
+            // start pool manager.
+            objectFactory.GetPoolManager();
+
+            // run algorithm manager.
+            objectFactory.GetAlgorithmManager();
+
+            // run statistics manager.
+            objectFactory.GetStatisticsManager();
+
+            // start web server.
+            objectFactory.GetWebServer();
+
+            // initialize metrics support    
+            objectFactory.GetMetricsManager();
         }
 
         #region unhandled exception emitter

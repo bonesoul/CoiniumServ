@@ -28,7 +28,5 @@ namespace CoiniumServ.Pools
     public interface IPoolManager : IRepository<IPool>, IJsonService
     {
         IPool Get(string symbol);
-
-        void Run();
     }
 }
