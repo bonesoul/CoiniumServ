@@ -193,6 +193,8 @@
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
+    <Compile Include="Payments\New\AwaitingPayment.cs" />
+    <Compile Include="Payments\New\IAwaitingPayment.cs" />
     <Compile Include="Payments\New\IPaymentCalculator.cs" />
     <Compile Include="Payments\New\PaymentCalculator.cs" />
     <Compile Include="Persistance\Blocks\PersistedBlock.cs" />

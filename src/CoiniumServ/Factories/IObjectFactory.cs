@@ -35,6 +35,7 @@ using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Payments.New;
+using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Providers;
@@ -100,9 +101,15 @@ namespace CoiniumServ.Factories
 
         IRpcService GetMiningService(string type, IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient);
 
+        #endregion        
+
+        #region payment objects 
+
         IPaymentCalculator GetPaymentCalculator(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
-        #endregion        
+        IAwaitingPayment GetAwaitingPayment(IPersistedBlock block, IStorageLayer storageLayer);
+
+        #endregion
 
         #region hash algorithms
 

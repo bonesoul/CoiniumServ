@@ -21,8 +21,10 @@
 // 
 #endregion
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
-using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Factories;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
@@ -35,13 +37,16 @@ namespace CoiniumServ.Payments.New
 
         private readonly IPoolConfig _poolConfig;
 
+        private readonly IObjectFactory _objectFactory;
+
         private readonly IStorageLayer _storageLayer;
 
         private readonly ILogger _logger;
 
-        public PaymentCalculator(IPoolConfig poolConfig, IStorageLayer storageLayer)
+        public PaymentCalculator(IPoolConfig poolConfig, IObjectFactory objectFactory, IStorageLayer storageLayer)
         {
             _poolConfig = poolConfig;
+            _objectFactory = objectFactory;
             _storageLayer = storageLayer;
 
             _logger = Log.ForContext<PaymentCalculator>().ForContext("Component", poolConfig.Coin.Name);
@@ -59,7 +64,11 @@ namespace CoiniumServ.Payments.New
 
             // TODO: in our new payment-subsystem, block confirmations are no longer handled by the payment-processor but it should be done via block-processor.
 
-            var unpaidBlocks = _storageLayer.GetAllUnpaidBlocks(); // find that blocks that were confirmed but still unpaid.
+            // find that blocks that were confirmed but still unpaid.
+            var unpaidBlocks = _storageLayer.GetAllUnpaidBlocks(); 
+
+            // create the awaiting payment objects.
+            var awaitingPayments = unpaidBlocks.Select(block => _objectFactory.GetAwaitingPayment(block, _storageLayer)).ToList();
         }
     }
 }
