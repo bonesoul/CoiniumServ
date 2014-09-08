@@ -63,7 +63,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (MySqlException e)
             {
-                _logger.Error("An exception occured while running migration manager. Please ensure your mysql settings are correct; {0:l}", e.Message);
+                _logger.Error("An exception occured while running migration manager; {0:l}", e.Message);
             }
         }
 

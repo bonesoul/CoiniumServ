@@ -20,30 +20,25 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using FluentMigrator;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
 {
-    [Migration(20140901)]
-    public class M001CreateBlocksTable : Migration
+    [Migration(20140908)]
+    public class M002Payments : Migration
     {
         public override void Up()
         {
-            // create the blocks table.
-            Create.Table("blocks")
-                .WithColumn("id").AsInt32().NotNullable().PrimaryKey().Identity()
-                .WithColumn("height").AsInt32().NotNullable()
-                .WithColumn("orphaned").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("confirmed").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("blockHash").AsString(65).NotNullable()
-                .WithColumn("txHash").AsString(65).NotNullable()
-                .WithColumn("amount").AsDecimal().NotNullable()
-                .WithColumn("time").AsDateTime().NotNullable();
+            // we'll be using block height as our foreign keys in payments tables, so set it as primary-key.
+            Delete.PrimaryKey("id").FromTable("blocks");
+            Alter.Table("blocks").AlterColumn("height").AsInt32().NotNullable().PrimaryKey(); 
         }
 
         public override void Down()
         {
-            Delete.Table("blocks");
+            Alter.Table("blocks").AddColumn("id").AsInt32().NotNullable().PrimaryKey().Identity();
+            Alter.Table("blocks").AlterColumn("height").AsInt32().NotNullable();
         }
     }
 }

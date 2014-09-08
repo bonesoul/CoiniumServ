@@ -207,6 +207,7 @@
     <Compile Include="Persistance\Layers\Hybrid\Migrations\M001CreateBlocksTable.cs" />
     <Compile Include="Persistance\Layers\Hybrid\IMigrationManager.cs" />
     <Compile Include="Persistance\Layers\Hybrid\MigrationManager.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\Migrations\M002Payments.cs" />
     <Compile Include="Persistance\Layers\IStorageLayer.cs" />
     <Compile Include="Persistance\Layers\IStorageLayerConfig.cs" />
     <Compile Include="Persistance\Layers\Mpos\MposStorageLayerConfig.cs" />
