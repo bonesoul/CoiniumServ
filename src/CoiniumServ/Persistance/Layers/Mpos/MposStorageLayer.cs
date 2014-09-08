@@ -225,7 +225,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetBlocks()
+        public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20)
         {
             var blocks = new List<IPersistedBlock>();
 
@@ -237,7 +237,9 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(
-                        "select height, blockhash, amount, confirmations, time from blocks order by height DESC LIMIT 20");
+                        string.Format(
+                            "select height, blockhash, amount, confirmations, time from blocks order by height DESC LIMIT {0}",
+                            count));
 
                     blocks.AddRange(results);
                 }
@@ -250,7 +252,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
+        public IEnumerable<IPersistedBlock> GetLastBlocks(BlockStatus status, int count = 20)
         {            
             var blocks = new List<IPersistedBlock>();
 
@@ -277,8 +279,8 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(string.Format(
-                        "select height, blockhash, amount, confirmations, time from blocks where {0} order by height DESC LIMIT 20",
-                        filter));
+                        "select height, blockhash, amount, confirmations, time from blocks where {0} order by height DESC LIMIT {1}",
+                        filter, count));
 
                     blocks.AddRange(results);
                 }

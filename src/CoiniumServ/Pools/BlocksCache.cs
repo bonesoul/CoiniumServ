@@ -92,7 +92,7 @@ namespace CoiniumServ.Pools
             _storage.Clear();
             
             // recache blocks.
-            var blocks = _storageLayer.GetBlocks();
+            var blocks = _storageLayer.GetLastBlocks();
             foreach (var block in blocks)
             {
                 _storage.Add(block);

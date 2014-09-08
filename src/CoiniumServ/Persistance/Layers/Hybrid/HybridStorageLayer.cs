@@ -367,7 +367,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetBlocks()
+        public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20)
         {
             var blocks = new List<IPersistedBlock>();
 
@@ -379,7 +379,10 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(
-                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt from Block order by Height DESC LIMIT 20");
+                        string.Format(
+                            "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt from Block order by Height DESC LIMIT {0}",
+                            count)
+                        );
 
                     blocks.AddRange(results);
                 }
@@ -392,7 +395,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
+        public IEnumerable<IPersistedBlock> GetLastBlocks(BlockStatus status, int count = 20)
         {
             var blocks = new List<IPersistedBlock>();
 
@@ -419,8 +422,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(string.Format(
-                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt from Block where {0} order by Height DESC LIMIT 20",
-                        filter));
+                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt from Block where {0} order by Height DESC LIMIT {1}",
+                        filter, count));
 
                     blocks.AddRange(results);
                 }

@@ -88,12 +88,12 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return new Dictionary<string, int>(); // return an empty dictionary.
         }
 
-        public IEnumerable<IPersistedBlock> GetBlocks()
+        public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20)
         {
             return new List<IPersistedBlock>();  // return an empty list.
         }
 
-        public IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status)
+        public IEnumerable<IPersistedBlock> GetLastBlocks(BlockStatus status, int count = 20)
         {
             return new List<IPersistedBlock>(); // return an empty list.
         }

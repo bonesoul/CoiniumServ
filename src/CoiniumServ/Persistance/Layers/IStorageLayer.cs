@@ -63,8 +63,8 @@ namespace CoiniumServ.Persistance.Layers
 
         IDictionary<string, int> GetTotalBlocks();
 
-        IEnumerable<IPersistedBlock> GetBlocks();
-        IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
+        IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20);
+        IEnumerable<IPersistedBlock> GetLastBlocks(BlockStatus status, int count = 20);
 
         #endregion
 

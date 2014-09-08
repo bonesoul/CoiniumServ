@@ -102,7 +102,7 @@ namespace CoiniumServ.Payments
             {
                 _stopWatch.Start();
 
-                var pendingBlocks = _storageLayer.GetBlocks(BlockStatus.Pending); // get all the pending blocks.
+                var pendingBlocks = _storageLayer.GetLastBlocks(BlockStatus.Pending); // get all the pending blocks.
                 var nonPendingBlocks = GetNonPendingBlocks(pendingBlocks); // get the confirmed blocks that are either orphan or mature.
                 var rounds = GetPaymentRounds(nonPendingBlocks); // get the list of rounds that should be paid.
                 AssignSharesToRounds(rounds); // process the rounds, calculate shares and payouts per rounds.

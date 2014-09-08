@@ -57,7 +57,7 @@ namespace CoiniumServ.Payments.New
             if (!_poolConfig.Payments.Enabled)
                 return;
 
-            var confirmedBlocks = _storageLayer.GetBlocks(BlockStatus.Confirmed); // get all the pending blocks.
+            var confirmedBlocks = _storageLayer.GetLastBlocks(BlockStatus.Confirmed); // get all the pending blocks.
         }
     }
 }
