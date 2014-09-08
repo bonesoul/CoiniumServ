@@ -39,7 +39,7 @@ namespace CoiniumServ.Configuration
         {
             try
             {
-                var path = FileHelpers.GetAbsolutePath(fileName);
+                var path = FileHelpers.GetAbsolutePath(fileName); // get the absolute path for the config file.
                 var json = ReadJsonFromFile(path); // read the json.
 
                 if (json == null) // make sure we were able to load the json file.
@@ -79,9 +79,9 @@ namespace CoiniumServ.Configuration
                 var json = File.ReadAllText(fileName);
                 return json;
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
-                Log.Error("Can not read json file; {0:l}", e.Message);
+                Log.Error("Can not read json file {0:l}", fileName);
                 return null;
             }
         }
