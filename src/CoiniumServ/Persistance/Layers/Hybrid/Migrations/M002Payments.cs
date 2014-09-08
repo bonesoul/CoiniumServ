@@ -30,15 +30,20 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
     {
         public override void Up()
         {
-            // we'll be using block height as our foreign keys in payments tables, so set it as primary-key.
-            Delete.PrimaryKey("id").FromTable("blocks");
-            Alter.Table("blocks").AlterColumn("height").AsInt32().NotNullable().PrimaryKey(); 
+            // we'll be using block height as our foreign keys in payments tables, 
+            // so we need to first set the new primary key as height column.
+            Alter.Table("blocks").AlterColumn("id").AsInt32().NotNullable(); // remove primary key property from 'id' column.
+            Delete.PrimaryKey("id").FromTable("blocks"); // remove primary key on 'id'.
+            Create.PrimaryKey("height").OnTable("blocks").Column("height"); // create new primary key on 'height' column.
+            Delete.Column("id").FromTable("blocks"); // delete the 'id' column as we don't need it anymore.
         }
 
         public override void Down()
         {
-            Alter.Table("blocks").AddColumn("id").AsInt32().NotNullable().PrimaryKey().Identity();
+            // revert back the changes on blocks height & id columns
             Alter.Table("blocks").AlterColumn("height").AsInt32().NotNullable();
+            Delete.PrimaryKey("height").FromTable("blocks");
+            Alter.Table("blocks").AddColumn("id").AsInt32().NotNullable().PrimaryKey().Identity();
         }
     }
 }
