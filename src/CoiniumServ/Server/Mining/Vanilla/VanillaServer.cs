@@ -50,13 +50,13 @@ namespace CoiniumServ.Server.Mining.Vanilla
         public void Initialize(IServerConfig config)
         {
             Config = config;
-            BindIP = config.BindInterface;
+            BindInterface = config.BindInterface;
             Port = config.Port;
 
             Initialize();
             ProcessRequest += ProcessHttpRequest;
 
-            _logger.Information("Vanilla server listening on {0:l}:{1}", BindIP, Port);
+            _logger.Information("Vanilla server listening on {0:l}:{1}", BindInterface, Port);
         }
 
         private void ProcessHttpRequest(HttpListenerContext context)
