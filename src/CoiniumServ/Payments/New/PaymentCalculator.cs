@@ -57,7 +57,9 @@ namespace CoiniumServ.Payments.New
             if (!_poolConfig.Payments.Enabled)
                 return;
 
-            var confirmedBlocks = _storageLayer.GetLastBlocks(BlockStatus.Confirmed); // get all the pending blocks.
+            // TODO: in our new payment-subsystem, block confirmations are no longer handled by the payment-processor but it should be done via block-processor.
+
+            var unpaidBlocks = _storageLayer.GetAllUnpaidBlocks(); // find that blocks that were confirmed but still unpaid.
         }
     }
 }

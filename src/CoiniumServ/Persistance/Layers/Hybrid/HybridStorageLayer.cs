@@ -367,6 +367,33 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return blocks;
         }
 
+        public IEnumerable<IPersistedBlock> GetAllUnpaidBlocks()
+        {
+            var blocks = new List<IPersistedBlock>();
+
+            try
+            {
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    // we need to find the blocks that were confirmed by the coin network
+                    // but still not processed by payment calculator (by creating an AwaitingPayment entry for it)
+                    var results =
+                        connection.Query<PersistedBlock>(
+                            @"SELECT Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt FROM Block WHERE NOT EXISTS 
+                            (SELECT id FROM AwaitingPayment WHERE Block.Height = AwaitingPayment.Block ) 
+                            AND Confirmed = true ORDER BY Height DESC");
+
+                    blocks.AddRange(results);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting un-paid blocks: {0:l}", e.Message);
+            }
+
+            return blocks;
+        }
+
         public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20)
         {
             var blocks = new List<IPersistedBlock>();
@@ -389,7 +416,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting blocks: {0:l}", e.Message);
+                _logger.Error("An exception occured while getting last blocks: {0:l}", e.Message);
             }
 
             return blocks;
@@ -430,7 +457,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting blocks: {0:l} blocks: {1:l}", status.ToString().ToLower(), e.Message);
+                _logger.Error("An exception occured while getting last {0:l} blocks: {1:l}", status.ToString().ToLower(), e.Message);
             }
 
             return blocks;

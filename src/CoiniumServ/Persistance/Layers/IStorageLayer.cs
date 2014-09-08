@@ -63,6 +63,7 @@ namespace CoiniumServ.Persistance.Layers
 
         IDictionary<string, int> GetTotalBlocks();
 
+        IEnumerable<IPersistedBlock> GetAllUnpaidBlocks();
         IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20);
         IEnumerable<IPersistedBlock> GetLastBlocks(BlockStatus status, int count = 20);
 

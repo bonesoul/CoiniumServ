@@ -225,6 +225,12 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return blocks;
         }
 
+        public IEnumerable<IPersistedBlock> GetAllUnpaidBlocks()
+        {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20)
         {
             var blocks = new List<IPersistedBlock>();
@@ -246,7 +252,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting blocks: {0:l}", e.Message);
+                _logger.Error("An exception occured while getting last blocks: {0:l}", e.Message);
             }
 
             return blocks;
@@ -287,7 +293,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting blocks: {0:l} blocks: {1:l}", status.ToString().ToLower(), e.Message);
+                _logger.Error("An exception occured while getting last {0:l} blocks: {1:l}", status.ToString().ToLower(), e.Message);
             }
 
             return blocks;
