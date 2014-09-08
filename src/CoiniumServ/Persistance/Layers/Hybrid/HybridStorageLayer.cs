@@ -209,6 +209,31 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return shares;
         }
 
+        public Dictionary<string, double> GetShares(IPersistedBlock block)
+        {
+            var shares = new Dictionary<string, double>();
+
+            try
+            {
+                if (!IsEnabled || !_redisProvider.IsConnected)
+                    return shares;
+
+                var key = string.Format("{0}:shares:round:{1}", _coin, block.Height);
+                var hashes = _redisProvider.Client.HGetAll(key);
+
+                foreach (var hash in hashes)
+                {
+                    shares.Add(hash.Key, double.Parse(hash.Value, CultureInfo.InvariantCulture));
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting shares for round; {0:l}", e.Message);
+            }
+
+            return shares;
+        }
+
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
             var sharesForRounds = new Dictionary<UInt32, Dictionary<string, double>>(); // dictionary of block-height <-> shares.

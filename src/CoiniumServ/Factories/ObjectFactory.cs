@@ -287,7 +287,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IPaymentCalculator>(@params);
         }
 
-        public IAwaitingPayment GetAwaitingPayment(IPersistedBlock block, IStorageLayer storageLayer)
+        public INewPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
@@ -295,7 +295,7 @@ namespace CoiniumServ.Factories
                 {"storageLayer", storageLayer}
             };
 
-            return _applicationContext.Container.Resolve<IAwaitingPayment>(@params);
+            return _applicationContext.Container.Resolve<INewPaymentRound>(@params);
         }
 
         #endregion

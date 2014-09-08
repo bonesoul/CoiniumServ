@@ -107,7 +107,7 @@ namespace CoiniumServ.Factories
 
         IPaymentCalculator GetPaymentCalculator(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
-        IAwaitingPayment GetAwaitingPayment(IPersistedBlock block, IStorageLayer storageLayer);
+        INewPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer);
 
         #endregion
 

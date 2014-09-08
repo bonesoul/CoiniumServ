@@ -80,7 +80,7 @@ namespace CoiniumServ.Persistance.Blocks
             CreatedAt = time.UnixTimeToDateTime();
         }
 
-        public void SetReward(decimal reward)
+        public void SetReward(decimal reward) // todo: remove this once we switch to new payment system.
         {
             Reward = reward;
         }

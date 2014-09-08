@@ -68,7 +68,7 @@ namespace CoiniumServ.Payments.New
             var unpaidBlocks = _storageLayer.GetAllUnpaidBlocks(); 
 
             // create the awaiting payment objects.
-            var awaitingPayments = unpaidBlocks.Select(block => _objectFactory.GetAwaitingPayment(block, _storageLayer)).ToList();
+            var awaitingPayments = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer)).ToList();
         }
     }
 }

@@ -58,6 +58,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return new Dictionary<string, double>(); // return an empty dictionary.
         }
 
+        public Dictionary<string, double> GetShares(IPersistedBlock block)
+        {
+            return new Dictionary<string, double>(); // return an empty dictionary.
+        }
+
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
             return new Dictionary<uint, Dictionary<string, double>>(); // return an empty dictionary.

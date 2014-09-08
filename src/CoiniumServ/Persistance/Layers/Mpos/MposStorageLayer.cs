@@ -145,6 +145,12 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return shares;
         }
 
+        public Dictionary<string, double> GetShares(IPersistedBlock block)
+        {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
+            throw new NotImplementedException();
+        }
+
         public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.

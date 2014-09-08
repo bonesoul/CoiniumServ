@@ -47,6 +47,8 @@ namespace CoiniumServ.Persistance.Layers
 
         Dictionary<string, double> GetCurrentShares();
 
+        Dictionary<string, double> GetShares(IPersistedBlock block);
+
         Dictionary<UInt32, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds);
 
         void DeleteExpiredHashrateData(int until);

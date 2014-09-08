@@ -21,18 +21,49 @@
 // 
 #endregion
 
+using System.Collections.Generic;
+using System.Linq;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 
 namespace CoiniumServ.Payments.New
 {
-    public class AwaitingPayment : IAwaitingPayment
+    public class NewPaymentRound : INewPaymentRound
     {
         public IPersistedBlock Block { get; private set; }
 
-        public AwaitingPayment(IPersistedBlock block, IStorageLayer storageLayer)
+        private readonly IStorageLayer _storageLayer;
+
+        private readonly IDictionary<string, double> _shares;
+
+        public IDictionary<string, decimal> Payouts { get; private set; }
+
+        public NewPaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
         {
             Block = block;
+            _storageLayer = storageLayer;
+
+            Payouts = new Dictionary<string, decimal>();
+            _shares = _storageLayer.GetShares(Block); // load the shares for the round.
+            CalculatePayments(); // calculate the per-user payments.
+        }
+
+        private void CalculatePayments()
+        {
+            if (_shares.Count == 0) // make sure we have valid shares.
+                return;
+
+            // find total shares within the round.
+            var totalShares = _shares.Sum(pair => pair.Value);
+
+            // loop through user shares and calculate the payouts.
+            foreach (var pair in _shares)
+            {
+                var percent = pair.Value / totalShares;
+                var amount = (decimal)percent * Block.Reward;
+
+                Payouts.Add(pair.Key, amount);
+            }
         }
     }
 }
