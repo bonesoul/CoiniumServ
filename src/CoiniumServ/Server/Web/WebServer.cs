@@ -34,7 +34,7 @@ namespace CoiniumServ.Server.Web
             : base(webBootstrapper)
         {
             var config = configManager.WebServerConfig;
-            BindIP = config.BindInterface;
+            BindInterface = config.BindInterface;
             Port = config.Port;
 
             _logger = Log.ForContext<WebServer>();

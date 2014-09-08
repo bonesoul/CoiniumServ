@@ -34,7 +34,7 @@ namespace CoiniumServ.Server.Mining.Vanilla
         /// <summary>
         /// The IP address of the interface the server binded.
         /// </summary>
-        public string BindIP { get; protected set; }
+        public string BindInterface { get; protected set; }
 
         /// <summary>
         /// The listening port for the server.
@@ -75,7 +75,7 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
         public bool Start()
         {
-            _listener.Prefixes.Add(String.Format(@"http://{0}:{1}/", BindIP, Port));
+            _listener.Prefixes.Add(String.Format(@"http://{0}:{1}/", BindInterface, Port));
             _listener.Start();
             _listenerThread.Start();
 

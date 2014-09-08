@@ -34,7 +34,7 @@ namespace CoiniumServ.Server.Web
         /// <summary>
         /// The IP address of the interface the server binded.
         /// </summary>
-        public string BindIP { get; protected set; }
+        public string BindInterface { get; protected set; }
 
         /// <summary>
         /// The listening port for the server.
@@ -58,13 +58,18 @@ namespace CoiniumServ.Server.Web
 
         public bool Start()
         {
-            var uri = new Uri(string.Format("http://{0}:{1}", BindIP, Port));
+            // if BindInterface is configured as empty, nacy to listen on all available interfaces thanks to RewriteLocalhost
+            var uri = new Uri(string.Format("http://{0}:{1}", BindInterface, Port));            
 
-            var hostConfiguration = new HostConfiguration();
-            hostConfiguration.UrlReservations.CreateAutomatically = true;
+            var hostConfiguration = new HostConfiguration
+            {
+                UrlReservations = {CreateAutomatically = true},
+                RewriteLocalhost = true
+            };
+
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
 
-            var host = new NancyHost(_webBootstrapper, hostConfiguration, uri);
+            var host = new NancyHost(_webBootstrapper, hostConfiguration, uri); // create nancy host.
 
             try
             {
@@ -82,7 +87,7 @@ namespace CoiniumServ.Server.Web
 				return false;  
 			}
             catch (HttpListenerException e) {
-                _logger.Error("Can not listen on requested interface: {0:l} - {1:l}",BindIP, e.Message);
+                _logger.Error("Can not listen on requested interface: {0:l} - {1:l}",BindInterface, e.Message);
                 IsListening = false;
                 return false;
             }
