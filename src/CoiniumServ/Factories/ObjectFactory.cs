@@ -275,7 +275,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
         }
 
-        public IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager)
+        public IAlgorithmManager GetAlgorithmManager()
         {
             return _applicationContext.Container.Resolve<IAlgorithmManager>();
         }

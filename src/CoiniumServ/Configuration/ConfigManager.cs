@@ -61,10 +61,10 @@ namespace CoiniumServ.Configuration
 
             PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
 
-            ReadGlobalConfig(); // read the global config.
+            LoadGlobalConfig(); // read the global config.
         }
 
-        private void ReadGlobalConfig()
+        private void LoadGlobalConfig()
         {
             var data = _jsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
 
@@ -85,7 +85,9 @@ namespace CoiniumServ.Configuration
 
         public void Initialize()
         {
-            LoadPoolConfigs();
+            // these config files below need to access log-manager, that's why we wait it's configuration initialized with in ctor().
+
+            LoadPoolConfigs(); // load the per-pool config files.
         }
 
         private void LoadPoolConfigs()
