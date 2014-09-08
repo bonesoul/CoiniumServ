@@ -42,7 +42,7 @@ namespace CoiniumServ.Persistance.Blocks
         decimal Amount { get; }
         decimal Reward { get; }
         [JsonProperty("time")]
-        DateTime Time { get; }
+        DateTime CreatedAt { get; }
 
         bool IsPending { get; }
 

@@ -294,14 +294,14 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"insert blocks(height, blockHash, txHash, amount, time) values (@height, @blockHash, @txHash, @amount, @time)",
+                        @"insert Block(Height, BlockHash, TxHash, Amount, CreatedAt) values (@height, @blockHash, @txHash, @amount, @createdAt)",
                         new
                         {
                             height = share.Block.Height,
                             blockHash = share.BlockHash.ToHexString(),
                             txHash = share.Block.Tx.First(),
                             amount = share.GenerationTransaction.TotalAmount,
-                            time = share.Block.Time.UnixTimeToDateTime()
+                            createdAt = share.Block.Time.UnixTimeToDateTime()
                         });
                 }
             }
@@ -321,7 +321,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"update blocks set orphaned = @orphaned, confirmed = @confirmed where height = @height",
+                        @"update Block set Orphaned = @orphaned, Confirmed = @confirmed where Height = @height",
                         new
                         {
                             orphaned = round.Block.Status == BlockStatus.Orphaned,
@@ -348,10 +348,10 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var result = connection.Query(@"select count(*),
-                (select count(*) from blocks where orphaned = false and confirmed = false) as pending,
-                (select count(*) from blocks where orphaned = true) as orphaned,
-                (select count(*) from blocks where confirmed = true) as confirmed
-                from blocks");
+                (select count(*) from Block where Orphaned = false and Confirmed = false) as pending,
+                (select count(*) from Block where Orphaned = true) as orphaned,
+                (select count(*) from Block where Confirmed = true) as confirmed
+                from Block");
 
                     var data = result.First();
                     blocks["pending"] = (int) data.pending;
@@ -379,7 +379,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(
-                        "select height, orphaned, confirmed, blockHash, txHash, amount, time from blocks order by height DESC LIMIT 20");
+                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt from Block order by Height DESC LIMIT 20");
 
                     blocks.AddRange(results);
                 }
@@ -406,20 +406,20 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 switch (status)
                 {
                     case BlockStatus.Pending:
-                        filter = "orphaned = false and confirmed = false";
+                        filter = "Orphaned = false and Confirmed = false";
                         break;
                     case BlockStatus.Orphaned:
-                        filter = "orphaned = true";
+                        filter = "Orphaned = true";
                         break;
                     case BlockStatus.Confirmed:
-                        filter = "confirmed = true";
+                        filter = "Confirmed = true";
                         break;
                 }
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(string.Format(
-                        "select height, orphaned, confirmed, blockHash, txHash, amount, time from blocks where {0} order by height DESC LIMIT 20",
+                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt from Block where {0} order by Height DESC LIMIT 20",
                         filter));
 
                     blocks.AddRange(results);
