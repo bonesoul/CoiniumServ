@@ -35,6 +35,7 @@ using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Providers;
@@ -268,6 +269,17 @@ namespace CoiniumServ.Factories
             };
 
             return _applicationContext.Container.Resolve<IRpcService>(type, @params);
+        }
+
+        public IPaymentCalculator GetPaymentCalculator(IPoolConfig poolConfig, IStorageLayer storageLayer)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+                {"storageLayer", storageLayer}
+            };
+
+            return _applicationContext.Container.Resolve<IPaymentCalculator>(@params);
         }
 
         #endregion

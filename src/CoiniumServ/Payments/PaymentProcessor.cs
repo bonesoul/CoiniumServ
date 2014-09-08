@@ -28,7 +28,6 @@ using System.Threading;
 using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;

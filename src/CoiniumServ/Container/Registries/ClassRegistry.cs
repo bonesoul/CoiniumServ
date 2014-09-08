@@ -28,6 +28,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Markets;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
 using Nancy.Bootstrapper;
@@ -53,6 +54,7 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<INetworkInfo, NetworkInfo>().AsMultiInstance();
             _applicationContext.Container.Register<IBlocksCache, BlocksCache>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentCalculator, PaymentCalculator>().AsMultiInstance();
 
             // config
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();

@@ -34,6 +34,7 @@ using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Providers;
@@ -98,6 +99,8 @@ namespace CoiniumServ.Factories
         IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,IBanManager banManager);
 
         IRpcService GetMiningService(string type, IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient);
+
+        IPaymentCalculator GetPaymentCalculator(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
         #endregion        
 
