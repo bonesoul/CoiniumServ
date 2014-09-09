@@ -29,7 +29,7 @@ using CoiniumServ.Factories;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
 using CoiniumServ.Utils.Platform;
-using CoiniumServ.Utils.Versions;
+using libCoiniumServ.Versions;
 using Nancy.TinyIoc;
 using Serilog;
 

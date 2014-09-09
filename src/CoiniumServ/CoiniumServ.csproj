@@ -329,7 +329,6 @@
     <Compile Include="Utils\Platform\Frameworks.cs" />
     <Compile Include="Utils\Platform\PlatformManager.cs" />
     <Compile Include="Utils\Buffers\RingBuffer.cs" />
-    <Compile Include="Utils\Versions\VersionInfo.cs" />
     <Compile Include="Cryptology\Algorithms\AlgorithmManager.cs" />
     <Compile Include="Cryptology\Algorithms\IHashAlgorithm.cs" />
     <Compile Include="Cryptology\Algorithms\Scrypt.cs" />
@@ -986,6 +985,10 @@
     <ProjectReference Include="..\..\deps\csredis\CSRedis\CSRedis.csproj">
       <Project>{d35e185e-a7e1-41e1-846c-21944f56074f}</Project>
       <Name>CSRedis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libCoiniumServ\libCoiniumServ.csproj">
+      <Project>{f908636c-bc75-4b93-a774-e4878f3d39af}</Project>
+      <Name>libCoiniumServ</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -20,7 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Utils.Versions
+namespace libCoiniumServ.Versions
 {
     /// <summary>
     /// Supported Versions Info.

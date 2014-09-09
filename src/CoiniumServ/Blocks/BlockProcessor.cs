@@ -118,6 +118,13 @@ namespace CoiniumServ.Blocks
             // get the generation transaction.
             var genTx = GetGenerationTransaction(blockInfo);
 
+            // make sure we were able to read the generation transaction
+            if (genTx == null)
+            {
+                block.Status = BlockStatus.Orphaned;
+                return;
+            }
+
             // get the output transaction that targets pools central wallet.
             var poolOutput = GetPoolOutput(genTx);
 
