@@ -21,6 +21,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoiniumServ.Tests", "..\src
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoiniumServGui", "..\src\CoiniumServGui\CoiniumServGui.csproj", "{1E2AF218-156A-40A0-8DA3-95DD13D93810}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F908636C-BC75-4B93-A774-E4878F3D39AF} = {F908636C-BC75-4B93-A774-E4878F3D39AF}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRedis", "..\deps\csredis\CSRedis\CSRedis.csproj", "{D35E185E-A7E1-41E1-846C-21944F56074F}"
 EndProject
