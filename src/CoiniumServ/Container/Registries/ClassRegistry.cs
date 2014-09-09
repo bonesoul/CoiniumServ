@@ -29,7 +29,6 @@ using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
-using CoiniumServ.Statistics;
 using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Container.Registries
