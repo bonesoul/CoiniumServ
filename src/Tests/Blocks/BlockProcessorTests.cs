@@ -54,9 +54,9 @@ namespace CoiniumServ.Tests.Blocks
         [Fact]
         private void QueryBlockTest_WithInvalidBlockHash_ShouldBeOrphaned()
         {
-            // create a test case where coin daemon reports block hash as invalid.
+            // test case: coin daemon reports block hash as invalid.
             var block = new PersistedBlock(1, false, false, "INVALID_HASH", "TX_HASH", 0, 0, DateTime.Now);
-            _daemonClient.GetBlock(Arg.Any<string>()).Returns(info => null);            
+            _daemonClient.GetBlock("INVALID_HASH").Returns(info => null);            
             
             // query the block.
             var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
@@ -69,9 +69,9 @@ namespace CoiniumServ.Tests.Blocks
         [Fact]
         private void QueryBlockTest_WithNegativeConfirmations_ShouldBeOrphaned()
         {
-            // create a test case where coin daemon returns block-info with negative confirmations.
+            // test case: coin daemon returns block-info with negative confirmations.
             var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
-            _daemonClient.GetBlock(Arg.Any<string>()).Returns(info => new Block { Confirmations = -1 });            
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Confirmations = -1 });            
 
             // query the block.
             var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
@@ -84,9 +84,9 @@ namespace CoiniumServ.Tests.Blocks
         [Fact]
         private void QueryBlockTest_WithInvalidTransactionHash_ShouldBeOrphaned()
         {
-            // create a test case where coin reports a different tx-hash then the one in block.
+            // test case: coin daemon reports a different tx-hash then the one in block.
             var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
-            _daemonClient.GetBlock(Arg.Any<string>()).Returns(info => new Block {Tx = new List<string>() {"DIFFERENT"}});
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "DIFFERENT" } });
 
             // query the block.
             var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
@@ -99,10 +99,10 @@ namespace CoiniumServ.Tests.Blocks
         [Fact]
         private void QueryBlockTest_WithNonExistingGenerationTransaction_ShouldBeOrphaned()
         {
-            // create a test case where coin reports generation transaction hash as invalid.
+            // test case: coin reports generation transaction hash as invalid.
             var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
-            _daemonClient.GetBlock(Arg.Any<string>()).Returns(info => new Block { Tx = new List<string>() { "TX_HASH" } });
-            _daemonClient.GetTransaction(Arg.Any<string>()).Returns(info => null);            
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => null);            
 
             // query the block.
             var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
@@ -115,10 +115,10 @@ namespace CoiniumServ.Tests.Blocks
         [Fact]
         private void QueryBlockTest_WithNonExistingPoolOutput_ShouldBeOrphaned()
         {
-            // create a test case where generation transaction doesn't contain an output for the pool.
+            // test case: generation transaction doesn't contain an output for the pool.
             var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
-            _daemonClient.GetBlock(Arg.Any<string>()).Returns(info => new Block { Tx = new List<string>() { "TX_HASH" } });
-            _daemonClient.GetTransaction(Arg.Any<string>()).Returns(info => new Transaction());
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction());
 
             // query the block.
             var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
@@ -131,11 +131,12 @@ namespace CoiniumServ.Tests.Blocks
         [Fact]
         private void QueryBlockTest_WithIncorrectPoolOutputAddress_ShouldBeOrphaned()
         {
-            // create a test case where generation transaction output doesn't match pool output address.
+            // test case: generation transaction output doesn't match pool output address.
             var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
-            _daemonClient.GetBlock(Arg.Any<string>()).Returns(info => new Block { Tx = new List<string>() { "TX_HASH" } });
             _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
-            _daemonClient.GetTransaction(Arg.Any<string>()).Returns(info => new Transaction
+
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
             {
                 Details = new List<TransactionDetail> { new TransactionDetail { Address = "DIFFERENT_ADDRESS" } }
             });
@@ -151,45 +152,164 @@ namespace CoiniumServ.Tests.Blocks
         [Fact]
         private void QueryBlockTest_WithIncorrectPoolOutputAccount_ShouldBeOrphaned()
         {
-            // create a test case where generation transaction output doesn't match pool output account.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);            
-            _daemonClient.GetBlock(Arg.Any<string>()).Returns(info => new Block { Tx = new List<string>() { "TX_HASH" } });
-            _daemonClient.GetTransaction(Arg.Any<string>()).Returns(info => new Transaction
+            // test case: generation transaction output doesn't match pool output account.
+            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
             {
                 Details = new List<TransactionDetail> { new TransactionDetail { Account = "DIFFERENT_ACCOUNT" } }
             });
-            var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
-            exposed._poolAccount = "POOL_ACCOUNT";
 
-            // query the block.           
+            // query the block.
+            var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
+            exposed._poolAccount = "POOL_ACCOUNT";          
             exposed.QueryBlock(block);
 
             // block should be marked as orphaned.
             block.Status.Should().Equal(BlockStatus.Orphaned);
         }
 
+        [Fact]
         private void QueryBlockTest_WithPoolOutputAddress_ShouldEqual()
         {
-            // create a test case and find pool output by address
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
-            _daemonClient.GetBlock(Arg.Any<string>()).Returns(info => new Block { Tx = new List<string>() { "TX_HASH" } });
+            // test case: find pool output by address
             _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
-            var output = new TransactionDetail {Address = "POOL_ADDRESS"};
-            _daemonClient.GetTransaction(Arg.Any<string>()).Returns(info => new Transaction
+
+            var expectedOutput = new TransactionDetail
             {
-                Details = new List<TransactionDetail> { output }
+                Address = "POOL_ADDRESS",
+                Account = string.Empty,
+                Amount = 999,
+                Category = "immature",
+                Fee = 1
+            };
+
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
+            {
+                Details = new List<TransactionDetail> {expectedOutput}
             });
 
             // query the pool output.
             var blockProcessor = new BlockProcessor(_poolConfig, _daemonClient, _storageLayer);
-            //var transaction = _daemonClient.GetTransaction("")
-            //blockProcessor.GetPoolOutput()
+            var transaction = _daemonClient.GetTransaction("TX_HASH");
+            var output = blockProcessor.GetPoolOutput(transaction);
 
+            // output should equal our expected value.
+            output.Should().Equal(expectedOutput);
         }
 
-        private void QueryBlockTest_SetReward()
+        [Fact]
+        private void QueryBlockTest_WithPoolOutputAccount_ShouldEqual()
         {
-            // create a test case and set block reward based on pool output value.
+            // test case: find pool output by address
+            var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
+            exposed._poolAccount = "POOL_ACCOUNT";
+
+            var expectedOutput = new TransactionDetail
+            {
+                Address = string.Empty,
+                Account = "POOL_ACCOUNT",
+                Amount = 999,
+                Category = "immature",
+                Fee = 1
+            };
+
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
+            {
+                Details = new List<TransactionDetail> { expectedOutput }
+            });
+
+            // query the pool output.
+            var transaction = _daemonClient.GetTransaction("TX_HASH");
+            var output = exposed.GetPoolOutput(transaction);
+
+            // output should equal our expected value.
+            ((object) output).Should().Equal(expectedOutput);
+        }
+
+        [Fact]
+        private void QueryBlockTest_ShouldSetReward()
+        {
+            // test case: set block reward based on pool output value.
+            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
+
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
+            {
+                Details = new List<TransactionDetail> { new TransactionDetail { Address = "POOL_ADDRESS", Amount = 999 } }
+            });
+
+            // query the block.
+            var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
+            exposed.QueryBlock(block);
+
+            // block reward should be set to 999
+            block.Reward.Should().Equal((decimal)999);
+        }
+
+        [Fact]
+        private void QueryBlockTest_WithImmaturePoolOutputCategory_ShouldStayPending()
+        {
+            // test case: we supply a pending block which should stay as pending as pool output category is still 'immature'.
+            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
+
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
+            {
+                Details = new List<TransactionDetail> { new TransactionDetail { Address = "POOL_ADDRESS", Category = "immature"} }
+            });
+
+            // query the block.
+            var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
+            exposed.QueryBlock(block);
+
+            // block should still stay as pending
+            block.Status.Should().Equal(BlockStatus.Pending);
+        }
+
+        [Fact]
+        private void QueryBlockTest_WithGeneratePoolOutputCategory_ShouldGetConfirmed()
+        {
+            // test case: we supply a pending block which should stay as pending as pool output category is still 'immature'.
+            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
+
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
+            {
+                Details = new List<TransactionDetail> { new TransactionDetail { Address = "POOL_ADDRESS", Category = "generate" } }
+            });
+
+            // query the block.
+            var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
+            exposed.QueryBlock(block);
+
+            // block should still stay as pending
+            block.Status.Should().Equal(BlockStatus.Confirmed);
+        }
+
+        [Fact]
+        private void QueryBlockTest_WithOprhanedPoolOutputCategory_ShouldGetOrphaned()
+        {
+            // test case: we supply a pending block which should stay as pending as pool output category is still 'immature'.
+            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
+
+            _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
+            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
+            {
+                Details = new List<TransactionDetail> { new TransactionDetail { Address = "POOL_ADDRESS", Category = "orphan" } }
+            });
+
+            // query the block.
+            var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
+            exposed.QueryBlock(block);
+
+            // block should still stay as pending
+            block.Status.Should().Equal(BlockStatus.Orphaned);
         }
     }
 }
