@@ -178,7 +178,7 @@ namespace CoiniumServ.Pools
                 MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
                 var jobTracker = _objectFactory.GetJobTracker(Config);
-                var blockProcessor = _objectFactory.GetBlockProcessor(Config, Daemon);
+                var blockProcessor = _objectFactory.GetBlockProcessor(Config, Daemon, _storageLayer);
                 _shareManager = _objectFactory.GetShareManager(Config, Daemon, jobTracker, _storageLayer, blockProcessor);
                 _objectFactory.GetVardiffManager(Config, _shareManager);
                 _banningManager = _objectFactory.GetBanManager(Config, _shareManager);

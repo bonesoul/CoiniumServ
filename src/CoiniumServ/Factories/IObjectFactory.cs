@@ -87,7 +87,7 @@ namespace CoiniumServ.Factories
 
         IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
 
-        IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient);
+        IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer);
 
         IBanManager GetBanManager(IPoolConfig poolConfig, IShareManager shareManager);
 

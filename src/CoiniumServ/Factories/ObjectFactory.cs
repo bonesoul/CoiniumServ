@@ -191,12 +191,13 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
         }
 
-        public IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient)
+        public IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
-                {"daemonClient", daemonClient},           
+                {"daemonClient", daemonClient},
+                {"storageLayer", storageLayer},
             };
 
             return _applicationContext.Container.Resolve<IBlockProcessor>(@params);

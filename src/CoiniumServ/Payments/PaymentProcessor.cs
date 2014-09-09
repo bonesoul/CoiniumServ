@@ -90,7 +90,7 @@ namespace CoiniumServ.Payments
             _paymentThresholdInSatoshis = (decimal) (_magnitude*_poolConfig.Payments.Minimum);
 
             // if we reached here, then we can just setup the timer to run payments.  
-            _timer = new Timer(RunPayments, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
+            //_timer = new Timer(RunPayments, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
         }
 
         private void RunPayments(object state)
@@ -302,13 +302,7 @@ namespace CoiniumServ.Payments
                 case "generate":
                     block.Status = BlockStatus.Confirmed;
                     break;
-            }
-
-
-            // TODO: add back these.
-            // total amount of coins contained in the block.
-            // candidate.Amount = transaction.Details.Sum(output => (decimal)output.Amount);
-            // candidate.Reward = (decimal) poolOutput.Amount;               
+            }            
         }
 
         private IList<IPaymentRound> GetPaymentRounds(IEnumerable<IPersistedBlock> blocks)

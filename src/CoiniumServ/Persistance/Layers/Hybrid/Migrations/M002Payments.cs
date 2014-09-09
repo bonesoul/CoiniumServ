@@ -48,6 +48,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             Create.PrimaryKey("Height").OnTable("Block").Column("Height"); // create new primary key on 'height' column.
             Delete.Column("Id").FromTable("Block"); // delete the 'id' column as we don't need it anymore.
 
+            // add reward column to block table - need to use SQL here as we are adding the column after 'Amount'.
+            Execute.Sql("ALTER TABLE Block ADD Reward DECIMAL NOT NULL AFTER Amount");
+
             // create the users table.
             Create.Table("User")                
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
@@ -93,6 +96,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             Rename.Column("TxHash").OnTable("blocks").To("txHash");
             Rename.Column("Amount").OnTable("blocks").To("amount");
             Rename.Column("CreatedAt").OnTable("blocks").To("time");
+
+            // delete the reward column from block table
+            Delete.Column("Reward").FromTable("Block");
 
             // delete the newly created tables.
             Delete.Table("User");

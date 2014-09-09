@@ -24,6 +24,7 @@ using System.Linq;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
 
@@ -31,18 +32,21 @@ namespace CoiniumServ.Blocks
 {
     public class BlockProcessor:IBlockProcessor
     {
+        private readonly IPoolConfig _poolConfig;
+
         private readonly IDaemonClient _daemonClient;
 
-        private readonly IPoolConfig _poolConfig;
+        private readonly IStorageLayer _storageLayer;
 
         private readonly ILogger _logger;
 
         private string _poolAccount;
 
-        public BlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient)
+        public BlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer)
         {
             _poolConfig = poolConfig;
             _daemonClient = daemonClient;
+            _storageLayer = storageLayer;
             _logger = Log.ForContext<BlockProcessor>().ForContext("Component", poolConfig.Coin.Name);
 
             FindPoolAccount();
