@@ -20,10 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
@@ -38,6 +42,10 @@ namespace CoiniumServ.Blocks
 
         private readonly IStorageLayer _storageLayer;
 
+        private readonly Timer _timer;
+
+        private readonly Stopwatch _stopWatch = new Stopwatch();
+
         private readonly ILogger _logger;
 
         private string _poolAccount;
@@ -50,6 +58,92 @@ namespace CoiniumServ.Blocks
             _logger = Log.ForContext<BlockProcessor>().ForContext("Component", poolConfig.Coin.Name);
 
             FindPoolAccount();
+
+            // setup the timer to run calculations.  
+            _timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);            
+        }
+
+        private void Run(object state)
+        {
+            _stopWatch.Start();
+
+            var pendingBlocks = _storageLayer.GetAllPendingBlocks();
+            var pendingCount = 0;
+            var confirmedCount = 0;
+            var orphanedCount = 0;
+
+            foreach (var block in pendingBlocks)
+            {
+                pendingCount++;
+
+                QueryBlock(block); // query the block status
+
+                if (block.Status != BlockStatus.Pending) // if the block is no more pending.
+                    _storageLayer.UpdateBlock(block); // update it in our persistance layer.
+
+                if (block.Status == BlockStatus.Confirmed)
+                    confirmedCount++;
+                else if(block.Status == BlockStatus.Orphaned)
+                    orphanedCount++;                
+            }
+
+            _logger.Information("Updated {0} pending blocks; {1} got confirmed, {2} got orphaned; took {3:0.000} seconds", pendingCount, confirmedCount, orphanedCount, (float)_stopWatch.ElapsedMilliseconds / 1000);
+
+            _stopWatch.Reset();
+
+            _timer.Change(_poolConfig.Payments.Interval * 1000, Timeout.Infinite); // reset the timer.
+        }
+
+        private void QueryBlock(IPersistedBlock block)
+        {
+            var blockInfo = GetBlockInfo(block.BlockHash); // query the block.
+
+            if (blockInfo == null || blockInfo.Confirmations == -1) // make sure the block exists and is accepted.
+            {
+                block.Status = BlockStatus.Orphaned;
+                return;
+            }
+
+            // calculate our expected generation transactions's hash
+            var expectedTxHash = block.TransactionHash; // expected transaction hash
+            var genTxHash = blockInfo.Tx.First(); // read the hash of very first (generation transaction) of the block
+
+            // make sure our calculated and reported generation tx hashes match.
+            if (expectedTxHash != genTxHash)
+            {
+                block.Status = BlockStatus.Orphaned;
+                return;
+            }
+
+            // get the generation transaction.
+            var genTx = GetGenerationTransaction(blockInfo);
+
+            // get the output transaction that targets pools central wallet.
+            var poolOutput = GetPoolOutput(genTx);
+
+            // make sure we have a valid reference to poolOutput
+            if (poolOutput == null)
+            {
+                block.Status = BlockStatus.Orphaned;
+                return;
+            }
+
+            // set the reward of the block to miners.
+            block.Reward = (decimal) poolOutput.Amount;
+
+            // find the block status
+            switch (poolOutput.Category)
+            {
+                case "immature":
+                    block.Status = BlockStatus.Pending;
+                    break;
+                case "orphan":
+                    block.Status = BlockStatus.Orphaned;
+                    break;
+                case "generate":
+                    block.Status = BlockStatus.Confirmed;
+                    break;
+            }
         }
 
         private void FindPoolAccount()
@@ -64,7 +158,7 @@ namespace CoiniumServ.Blocks
             }
         }
 
-        public Block GetBlock(string blockHash)
+        public Block GetBlockInfo(string blockHash)
         {
             try
             {

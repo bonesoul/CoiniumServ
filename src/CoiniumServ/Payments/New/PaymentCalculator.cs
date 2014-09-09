@@ -53,7 +53,6 @@ namespace CoiniumServ.Payments.New
 
             // setup the timer to run calculations.  
             //_timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
-
             Run(null);
         }
 

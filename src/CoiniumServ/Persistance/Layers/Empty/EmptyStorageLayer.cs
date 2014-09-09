@@ -88,12 +88,22 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return; // just skip.
         }
 
+        public void UpdateBlock(IPersistedBlock block)
+        {
+            return; // just skip.
+        }
+
         public IDictionary<string, int> GetTotalBlocks()
         {
             return new Dictionary<string, int>(); // return an empty dictionary.
         }
 
         public IEnumerable<IPersistedBlock> GetAllUnpaidBlocks()
+        {
+            return new List<IPersistedBlock>(); // return an empty list.
+        }
+
+        public IEnumerable<IPersistedBlock> GetAllPendingBlocks()
         {
             return new List<IPersistedBlock>(); // return an empty list.
         }

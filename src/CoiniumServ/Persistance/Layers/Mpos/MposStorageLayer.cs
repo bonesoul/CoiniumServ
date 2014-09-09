@@ -200,6 +200,12 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
+        public void UpdateBlock(IPersistedBlock block)
+        {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
+            throw new NotImplementedException();
+        }
+
         public IDictionary<string, int> GetTotalBlocks()
         {
             var blocks = new Dictionary<string, int> {{"total", 0}, {"pending", 0}, {"orphaned", 0}, {"confirmed", 0}};
@@ -235,6 +241,31 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<IPersistedBlock> GetAllPendingBlocks()
+        {
+            var blocks = new List<IPersistedBlock>();
+
+            try
+            {
+                if (!IsEnabled)
+                    return blocks;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<PersistedBlock>(
+                        "select height, blockhash, amount, confirmations, time from blocks where confirmations >= 0 and confirmations < 120 order by height ASC");
+
+                    blocks.AddRange(results);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting pending blocks; {0:l}", e.Message);
+            }
+
+            return blocks;
         }
 
         public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20)

@@ -39,13 +39,13 @@ namespace CoiniumServ.Persistance.Blocks
 
         public decimal Amount { get; private set; }
 
-        public decimal Reward { get; private set; }
+        public decimal Reward { get; set; }
 
         public DateTime CreatedAt { get; private set; }
 
         public bool IsPending { get { return Status != BlockStatus.Orphaned && Status != BlockStatus.Confirmed; } }
 
-        public PersistedBlock(Int32 height, Boolean orphaned, Boolean confirmed, String blockHash, String txHash, Decimal amount, DateTime createdAt)
+        public PersistedBlock(Int32 height, Boolean orphaned, Boolean confirmed, String blockHash, String txHash, Decimal amount, Decimal reward, DateTime createdAt)
         {
             // used by hybrid storage layer.
 
@@ -61,6 +61,7 @@ namespace CoiniumServ.Persistance.Blocks
             BlockHash = blockHash;
             TransactionHash = txHash;
             Amount = amount;
+            Reward = reward;
             CreatedAt = createdAt;
         }
 
@@ -78,11 +79,6 @@ namespace CoiniumServ.Persistance.Blocks
             BlockHash = blockhash;
             Amount = (decimal)amount;
             CreatedAt = time.UnixTimeToDateTime();
-        }
-
-        public void SetReward(decimal reward) // todo: remove this once we switch to new payment system.
-        {
-            Reward = reward;
         }
     }
 }

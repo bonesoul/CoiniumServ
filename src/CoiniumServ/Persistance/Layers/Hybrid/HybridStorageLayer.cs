@@ -325,7 +325,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                             height = share.Block.Height,
                             blockHash = share.BlockHash.ToHexString(),
                             txHash = share.Block.Tx.First(),
-                            amount = share.GenerationTransaction.TotalAmount,
+                            amount = (decimal)share.GenerationTransaction.TotalAmount,
                             createdAt = share.Block.Time.UnixTimeToDateTime()
                         });
                 }
@@ -352,6 +352,32 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                             orphaned = round.Block.Status == BlockStatus.Orphaned,
                             confirmed = round.Block.Status == BlockStatus.Confirmed,
                             height = round.Block.Height
+                        });
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while updating block; {0:l}", e.Message);
+            }
+        }
+
+        public void UpdateBlock(IPersistedBlock block)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    connection.Execute(
+                        @"UPDATE Block SET Orphaned = @orphaned, Confirmed = @confirmed, Reward = @reward WHERE Height = @height",
+                        new
+                        {
+                            orphaned = block.Status == BlockStatus.Orphaned,
+                            confirmed = block.Status == BlockStatus.Confirmed,
+                            reward = block.Reward,
+                            height = block.Height
                         });
                 }
             }
@@ -404,7 +430,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     // but still not processed by payment calculator (by creating an AwaitingPayment entry for it)
                     var results =
                         connection.Query<PersistedBlock>(
-                            @"SELECT Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt FROM Block WHERE NOT EXISTS 
+                            @"SELECT Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, Reward, CreatedAt FROM Block WHERE NOT EXISTS 
                             (SELECT id FROM AwaitingPayment WHERE Block.Height = AwaitingPayment.Block ) 
                             AND Confirmed = true ORDER BY Height DESC");
 
@@ -414,6 +440,32 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             catch (Exception e)
             {
                 _logger.Error("An exception occured while getting un-paid blocks: {0:l}", e.Message);
+            }
+
+            return blocks;
+        }
+
+        public IEnumerable<IPersistedBlock> GetAllPendingBlocks()
+        {
+            var blocks = new List<IPersistedBlock>();
+
+            try
+            {
+                if (!IsEnabled)
+                    return blocks;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<PersistedBlock>(
+                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, Reward, CreatedAt from Block where Orphaned = false and Confirmed = false order by Height ASC"
+                 );
+
+                    blocks.AddRange(results);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting pending blocks: {0:l}", e.Message);
             }
 
             return blocks;
@@ -432,7 +484,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     var results = connection.Query<PersistedBlock>(
                         string.Format(
-                            "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt from Block order by Height DESC LIMIT {0}",
+                            "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, Reward, CreatedAt from Block order by Height DESC LIMIT {0}",
                             count)
                         );
 
@@ -474,7 +526,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(string.Format(
-                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, CreatedAt from Block where {0} order by Height DESC LIMIT {1}",
+                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, Reward, CreatedAt from Block where {0} order by Height DESC LIMIT {1}",
                         filter, count));
 
                     blocks.AddRange(results);

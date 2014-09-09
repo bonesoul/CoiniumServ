@@ -258,7 +258,7 @@ namespace CoiniumServ.Payments
 
         private void QueryBlock(ref IPersistedBlock block)
         {
-            var blockInfo = _blockProcessor.GetBlock(block.BlockHash); // query the block.
+            var blockInfo = _blockProcessor.GetBlockInfo(block.BlockHash); // query the block.
 
             if (blockInfo == null || blockInfo.Confirmations == -1) // make sure the block exists and is accepted.
             {
@@ -289,7 +289,7 @@ namespace CoiniumServ.Payments
                 return;
             }
 
-            block.SetReward((decimal)poolOutput.Amount); // set the reward of the block to miners.
+            //block.SetReward((decimal)poolOutput.Amount); // set the reward of the block to miners.
 
             switch (poolOutput.Category)
             {

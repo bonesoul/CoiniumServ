@@ -175,7 +175,7 @@ namespace CoiniumServ.Shares
             {
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
 
-                var block = _blockProcessor.GetBlock(share.BlockHash.ToHexString()); // query the block.
+                var block = _blockProcessor.GetBlockInfo(share.BlockHash.ToHexString()); // query the block.
 
                 if (block == null) // make sure the block exists
                     return false;

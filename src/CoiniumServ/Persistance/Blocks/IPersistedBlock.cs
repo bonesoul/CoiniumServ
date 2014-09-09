@@ -40,12 +40,10 @@ namespace CoiniumServ.Persistance.Blocks
         string TransactionHash { get; }
         [JsonProperty("amount")]
         decimal Amount { get; }
-        decimal Reward { get; }
+        decimal Reward { get; set; }
         [JsonProperty("time")]
         DateTime CreatedAt { get; }
 
         bool IsPending { get; }
-
-        void SetReward(decimal reward);
     }
 }

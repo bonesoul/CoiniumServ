@@ -63,9 +63,13 @@ namespace CoiniumServ.Persistance.Layers
 
         void UpdateBlock(IPaymentRound round);
 
+        void UpdateBlock(IPersistedBlock block);
+
         IDictionary<string, int> GetTotalBlocks();
 
         IEnumerable<IPersistedBlock> GetAllUnpaidBlocks();
+
+        IEnumerable<IPersistedBlock> GetAllPendingBlocks(); 
         IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20);
         IEnumerable<IPersistedBlock> GetLastBlocks(BlockStatus status, int count = 20);
 
