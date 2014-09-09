@@ -2,6 +2,8 @@
  
 [CoiniumServ](http://www.coiniumserv.com) is a high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features stratum and vanilla services, reward, payment, share processors, vardiff & ban managers, user-friendly embedded web-server & front-end and a full-stack API.
 
+Even better multi-pool & auto-exchange module is being developed which once completed will allow you to setup pools that can pay users in any crypto-currency that can be traded over exchanges.
+
 CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) mining pool network at first hand. You can check [some of pools](https://github.com/CoiniumServ/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
 ![CoiniumServ running over mono & ubuntu](http://i.imgur.com/HvaPVrZ.png)
@@ -65,15 +67,18 @@ Can run on these platforms;
 
 ###### Multiplexed Structure
 * Multiple pools & ports.
-* Multiple coin daemon connection support.
+* Multiple coin daemon connections.
 * Multiple storage layers.
+ 
+###### Auto Exchange & Multipool
+* Being developed, stay tuned!
 
 ###### Protocols
 * Stratum
-* |-> show_message support
-* |-> block-template support
-* |-> generation transaction support
-* |-> transaction message support
+ * show_message support
+ * block-template support
+ * generation transaction support
+ * transaction message support
 * Vanilla (getwork) [experimental]
 
 ###### Coins
@@ -98,8 +103,8 @@ Can run on these platforms;
 
 * VarDiff support (variable difficulty support)
 * Storage layers support
-* |-> hybrid storage (redis + mysql)
-* |-> MPOS support (mysql)
+ * hybrid storage (redis + mysql)
+ * MPOS support (mysql)
  
 ###### Web
 * Embedded web-server & front-end
@@ -108,17 +113,17 @@ Can run on these platforms;
 ###### Hashing Algorithms
 
 _Working_
-* ✓ __Scrypt__ 
+* ✓ Scrypt
 
 _Needs Testing_
 
-* ✓ __SHA256__ 
-* ✓ __multi-algos: X11, X13, X14, X15, X17__
-* ✓ __more: Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, SHA1, SHAvite3, Skein, Qubit__ 
+* ✓ SHA256
+* ✓ multi-algos: X11, X13, X14, X15, X17
+* ✓ more: Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, SHA1, SHAvite3, Skein, Qubit
 
 _Under Development_
 
-* ✓ __Scrypt-Jane, Scrypt-N, Quark, Hefty1__ 
+* ✓ Scrypt-Jane, Scrypt-N, Quark, Hefty1 
  
 ###### Persistance & Storage Layers
 
