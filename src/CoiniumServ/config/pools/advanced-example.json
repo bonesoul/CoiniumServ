@@ -21,13 +21,13 @@
     # password: password for rpc connection.
     # timeout: timeout for rpc connections in seconds.
 
-	"daemon": {
-		"host": "127.0.0.1",
-		"port": 9333,
-		"username": "user",
+    "daemon": {
+        "host": "127.0.0.1",
+        "port": 9333,
+        "username": "user",
         "password": "password",
         "timeout": 5
-	},
+    },
 
     # -------------------------------
     # Meta Configuration
