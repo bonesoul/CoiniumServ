@@ -42,15 +42,21 @@ namespace CoiniumServ.Daemon
         public string RpcPassword { get; private set; }
         public Int32 RequestCounter { get; private set; }
 
+        private readonly Int32 _timeout;
+
         private readonly ILogger _logger;
 
         public DaemonBase(IDaemonConfig daemonConfig, ICoinConfig coinConfig)
         {
+            _logger = LogManager.PacketLogger.ForContext<DaemonClient>().ForContext("Component", coinConfig.Name);
+
+        	_timeout = daemonConfig.Timeout*1000; // set the daemon timeout.
+        	
             RpcUrl = string.Format("http://{0}:{1}", daemonConfig.Host, daemonConfig.Port);
             RpcUser = daemonConfig.Username;
             RpcPassword = daemonConfig.Password;
+            
             RequestCounter = 0;
-            _logger = LogManager.PacketLogger.ForContext<DaemonClient>().ForContext("Component", coinConfig.Name);
         }
 
         /// <summary>
@@ -120,7 +126,7 @@ namespace CoiniumServ.Daemon
             // Important, otherwise the service can't deserialse your request properly
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
-            webRequest.Timeout = 1000;
+            webRequest.Timeout = _timeout;
 
             _logger.Verbose("tx: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
 

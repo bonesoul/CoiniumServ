@@ -29,10 +29,15 @@ namespace CoiniumServ.Server.Web
     public class WebServerConfig : IWebServerConfig
     {
         public bool Enabled { get; private set; }
+
         public string BindInterface { get; private set; }
+
         public int Port { get; private set; }
+
         public IBackendConfig Backend { get; private set; }
+
         public bool Valid { get; private set; }
+
         public WebServerConfig(dynamic config)
         {
             try

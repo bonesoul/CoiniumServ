@@ -46,5 +46,10 @@ namespace CoiniumServ.Daemon.Config
         /// password for rpc connection.
         /// </summary>
         string Password { get; }
+
+        /// <summary>
+        /// Timeout for daemon rpc connections in seconds.
+        /// </summary>
+        int Timeout { get; }
     }
 }

@@ -76,7 +76,7 @@ Can run on these platforms;
 ###### Protocols
 * Stratum
  * show_message support
- * block-template support
+ * block template support
  * generation transaction support
  * transaction message support
 * Vanilla (getwork) [experimental]
