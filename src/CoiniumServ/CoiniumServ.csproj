@@ -361,7 +361,7 @@
     <Compile Include="Shares\ShareManager.cs" />
     <Compile Include="Server\Mining\Service\IRpcService.cs" />
     <Compile Include="Server\Mining\IMiningServer.cs" />
-    <Compile Include="Server\Mining\IMiningServerConfig.cs" />
+    <Compile Include="Server\IServerConfig.cs" />
     <Compile Include="Server\Mining\Stratum\IStratumServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\IVanillaServerConfig.cs" />
     <Compile Include="Server\Mining\Vanilla\VanillaMiner.cs" />

@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using CoiniumServ.Configuration;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Server.Mining
+namespace CoiniumServ.Server
 {
     [JsonObject(MemberSerialization.OptIn)]
     public interface IServerConfig:IConfig 
