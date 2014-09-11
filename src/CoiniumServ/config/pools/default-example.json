@@ -7,9 +7,11 @@
     # -------------------------------
 
 	# host: ip/hostname of coin-daemon.
+    # timeout: timeout for rpc connections in seconds.
 
 	"daemon": {
-		"host": "127.0.0.1"
+        "host": "127.0.0.1",
+        "timeout": 5
 	},
 
     # -------------------------------

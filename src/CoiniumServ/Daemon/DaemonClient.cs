@@ -23,7 +23,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Requests;
 using CoiniumServ.Daemon.Responses;
 /* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */

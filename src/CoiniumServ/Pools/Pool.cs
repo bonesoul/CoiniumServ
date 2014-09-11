@@ -126,7 +126,7 @@ namespace CoiniumServ.Pools
             }
             catch (Exception e)
             {
-                _logger.Error("Error initializing pool; {0:l}", e.Message);
+                _logger.Error("Error initializing pool; {0:l}", e);
                 Enabled = false;
             }
         }

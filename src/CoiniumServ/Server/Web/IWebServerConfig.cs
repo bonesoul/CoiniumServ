@@ -20,24 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Configuration;
 
 namespace CoiniumServ.Server.Web
 {
-    public interface IWebServerConfig:IConfig
+    public interface IWebServerConfig : IServerConfig
     {
-        bool Enabled { get; }
-
-        /// <summary>
-        /// interface to bind webserver.
-        /// </summary>
-        string BindInterface { get; }
-
-        /// <summary>
-        /// port to listen for http connections.
-        /// </summary>
-        int Port { get; }
-
         IBackendConfig Backend { get; }
     }
 }
