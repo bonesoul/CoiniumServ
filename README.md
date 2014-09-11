@@ -1,4 +1,4 @@
-# ![Screenshot](http://coinium.org/assets/images/logo/coinium-icon-48.png) CoiniumServ [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv)
+# ![Screenshot](http://coinium.org/assets/images/logo/coinium-icon-48.png) CoiniumServ [![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv) [![Stories in Ready](https://badge.waffle.io/CoiniumServ/CoiniumServ.png?label=ready&title=Ready)](http://waffle.io/CoiniumServ/CoiniumServ)
  
 [CoiniumServ](http://www.coiniumserv.com) is a high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features stratum and vanilla services, reward, payment, share processors, vardiff & ban managers, user-friendly embedded web-server & front-end and a full-stack API.
 
@@ -8,7 +8,7 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 ![CoiniumServ running over mono & ubuntu](http://i.imgur.com/HvaPVrZ.png)
 
-### Support
+### User Support
 
 Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coiniumserv@freenode](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde).
 
@@ -24,7 +24,7 @@ You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues)
 * [Twitter](http://twitter.com/coinium)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
-### Donation
+### Support the project
 
 You can contribute the development of the project by donating; 
 
@@ -43,7 +43,7 @@ Here is a list of our generous donors that keep the project ongoing;
 
 ###### Bounties
 
-BountySource integration available over [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
+You can set bounties for the issues [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
 
 [![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1)
 
@@ -55,7 +55,8 @@ You can send tips and furher support the project or get tips for contributing by
 
 ### Status
 
-[v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha) released
+* [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha) released
+* List of issues & features currently we are working on [![Stories in Ready](https://badge.waffle.io/CoiniumServ/CoiniumServ.png?label=ready&title=Ready)](http://waffle.io/CoiniumServ/CoiniumServ)
 
 ### Features
 
