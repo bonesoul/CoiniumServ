@@ -26,7 +26,7 @@ Start by checking our [Getting Started](https://github.com/CoiniumServ/CoiniumSe
 
 Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coiniumserv@freenode](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde). You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
 
-#### Where to get support?
+##### Where to get support?
 
 * Official site: [CoiniumServ.com](http://www.coiniumserv.com)
 * [Support forums](http://forum.coinium.org/forum/19-support/)
@@ -37,7 +37,7 @@ Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) 
 * [Facebook](https://www.facebook.com/pages/Coinium/639179226128343)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
-#### Services
+##### Services
 
 Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#user-support) methods, we offer [paid support](http://www.coiniumserv.com/services/paid-support/) & [consulting](http://www.coiniumserv.com/services/consulting/) services for whom would like to get professional help. 
 
@@ -48,7 +48,7 @@ You can support the development of the project with different methods;
 
 [![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1) [![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)
 
-###### Donations
+##### Donations
 
 You can contribute the development of the project by donating; 
 
@@ -59,7 +59,7 @@ You can contribute the development of the project by donating;
 
 If you would like to automatically donate a percentage of your pool's earning to support the project, check the [donation setup](https://github.com/CoiniumServ/CoiniumServ/wiki/Donation) guide.
 
-###### Donors
+##### Donors
 
 Here is a list of our generous donors that keep the project ongoing;
 
@@ -72,21 +72,21 @@ Here is a list of our generous donors that keep the project ongoing;
 * __Free & Open-Source__; Best of all CoiniumServ is open source and free-to-use. You can get it running for free in minutes.
 * __Easy to Setup__; We got your back covered with our [guides & how-to's](https://github.com/CoiniumServ/CoiniumServ/wiki), [support forums](http://forum.coinium.org/forum/19-support/), [irc channel](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde). On top that, we do also provide [paid support & consulting services](https://github.com/CoiniumServ/CoiniumServ#consulting).
 
-###### General
+##### General
 
 * Multiple pools & ports
 * Multiple coin daemon connections
 * Supports POW (proof-of-work) coins
 * Supports POS (proof-of-stake) coins
  
-###### Auto Exchange & Multipool
+##### Auto Exchange & Multipool
 * Being developed, stay tuned!
 
-###### Algorithms
+##### Algorithms
 
 * __Scrypt__, __SHA256d__, __X11__, __X13__, X14, X15, X17, Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, SHA1, SHAvite3, Skein, Qubit
 
-###### Protocols
+##### Protocols
 
 * Stratum
  * show_message support
@@ -95,17 +95,17 @@ Here is a list of our generous donors that keep the project ongoing;
  * transaction message (txMessage) support
 * Getwork [experimental]
 
-###### Storage Layers
+##### Storage Layers
 
 * Hybrid mode (redis + mysql)
 * [MPOS](https://github.com/MPOS/php-mpos) compatibility (mysql)
 
-###### Embedded Web Server
+##### Embedded Web Server
 
 * Customizable front-end
 * Full stack json-api
 
-###### Addititional Features
+##### Addititional Features
 
 * ✔ Vardiff support
 * ✔ Ban manager (that can handle miners flooding with invalid shares)
@@ -113,11 +113,12 @@ Here is a list of our generous donors that keep the project ongoing;
 
 ### Development
 
-#### Model
+##### Model
+
 * We have implemented extensive [tests](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) for all important functionality and never merge in code that breaks tests and stuff. Yet again, when a new functionality is introduced we also expect proper tests to be implemented within the PR. In simple words, most probably you won't notice any functionality-breaking changes within the repository.
 * A strict ruleset for the [Development Model](https://github.com/CoiniumServ/CoiniumServ/wiki/Development-Model). You can follow our bleeding-edge [Develop](https://github.com/CoiniumServ/CoiniumServ) branch or stay with-in the stable [Master](https://github.com/CoiniumServ/CoiniumServ/tree/master) branch.
 
-#### Contributing
+##### Contributing
 
 Start reading by these;
 
