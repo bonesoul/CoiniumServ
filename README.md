@@ -37,7 +37,7 @@ Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) 
 * [Facebook](https://www.facebook.com/pages/Coinium/639179226128343)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
-### Services
+#### Services
 
 Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#user-support) methods, we offer [paid support](http://www.coiniumserv.com/services/paid-support/) & [consulting](http://www.coiniumserv.com/services/consulting/) services for whom would like to get professional help. 
 
