@@ -80,7 +80,7 @@ Here is a list of our generous donors that keep the project ongoing;
 
 ###### Algorithms
 
-__Scrypt__, __SHA256d__, __X11__, __X13__, X14, X15, X17, Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, SHA1, SHAvite3, Skein, Qubit
+* __Scrypt__, __SHA256d__, __X11__, __X13__, X14, X15, X17, Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, SHA1, SHAvite3, Skein, Qubit
 
 ###### Protocols
 
@@ -105,14 +105,7 @@ __Scrypt__, __SHA256d__, __X11__, __X13__, X14, X15, X17, Blake, Fresh, Fugue, G
 
 * ✔ Vardiff support
 * ✔ Ban manager (that can handle miners flooding with invalid shares)
-* ✔ Share, Payment processor & Job Manager
- 
-###### Persistance & Storage Layers
-
-CoiniumServ supports storage layer interfaces that you can extend to implement your own persistance logic. By default, it supports two layers; a high performance hybrid layer and mpos compatibility layer.
-
-* __Hybrid Layer__: a custom hybrid layer that utilizes redis + mysql together that is carefully designed for high performance persistance support.
-* __MPOS Layer__: a compatibility layer based on mysql that supports MPOS whenever you want payments to be handled by MPOS.
+* ✔ Share & Payment processor, Job Manager
 
 ### Development
 
