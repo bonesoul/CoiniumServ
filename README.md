@@ -149,7 +149,7 @@ Start reading by these;
 
 ### Consulting
 
-Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#support) methods, we offer [paid support](http://www.coiniumserv.com/services/paid-support/) & [consulting](http://www.coiniumserv.com/services/consulting/) services for whom would like to get professional help.
+Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#user-support) methods, we offer [paid support](http://www.coiniumserv.com/services/paid-support/) & [consulting](http://www.coiniumserv.com/services/consulting/) services for whom would like to get professional help.
 
 ### License
 
