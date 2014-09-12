@@ -27,6 +27,12 @@ You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues)
 
 ### Support the project
 
+You can support the development of the project with different methods;
+
+[![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1) [![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)
+
+###### Donations
+
 You can contribute the development of the project by donating; 
 
 * BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
@@ -41,18 +47,6 @@ If you would like to automatically donate a percentage of your pool's earning to
 Here is a list of our generous donors that keep the project ongoing;
 
 * [reddapi.com](https://www.reddapi.com)
-
-###### Bounties
-
-You can set bounties for the issues [here](https://www.bountysource.com/trackers/401667-coiniumserv). You can set bounties and solve them.
-
-[![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1)
-
-###### Tips
-
-You can send tips and furher support the project or get tips for contributing by commiting.
-
-[![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)
 
 ### Status
 
