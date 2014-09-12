@@ -9,6 +9,10 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 ![CoiniumServ running over mono & ubuntu](http://i.imgur.com/HvaPVrZ.png)
 
+### Status
+
+Latest release: [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha)
+
 ### User Support
 
 Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coiniumserv@freenode](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde).
@@ -47,10 +51,6 @@ If you would like to automatically donate a percentage of your pool's earning to
 Here is a list of our generous donors that keep the project ongoing;
 
 * [reddapi.com](https://www.reddapi.com)
-
-### Status
-
-Latest release: [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha)
 
 ### Features
 
