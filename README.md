@@ -62,72 +62,50 @@ Here is a list of our generous donors that keep the project ongoing;
 * [reddapi.com](https://www.reddapi.com)
 
 ### Features
+* __Platform Agnostic__; unlike other pool-servers, CoiniumServ doesn't dictate platforms and can run on anything including Windows, Linux or MacOS.
+* __High Performance__; Designed to be fast & efficient, CoiniumServ can handle dozens of pools together.
+* __Modular & Flexible__; Designed to be modular since day one so that you can implement your very own ideas.
+* __Free & Open-Source__; Best of all CoiniumServ is open source and free-to-use. You can get it running for free in minutes.
+* __Easy to Setup__; We got your back covered with our [guides & how-to's](https://github.com/CoiniumServ/CoiniumServ/wiki), [support forums](http://forum.coinium.org/forum/19-support/), [irc channel](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde). On top that, we do also provide [paid support & consulting services](https://github.com/CoiniumServ/CoiniumServ#consulting).
 
-###### Platform Agnostic
-Can run on these platforms;
-* Linux/Unix over [mono](http://www.mono-project.com/).
-* MacOS over [mono](http://www.mono-project.com/).
-* Windows over [.Net](http://www.microsoft.com/net).
+###### General
 
-###### Multiplexed Structure
-* Multiple pools & ports.
-* Multiple coin daemon connections.
-* Multiple storage layers.
+* Multiple pools & ports
+* Multiple coin daemon connections
+* Supports POW (proof-of-work) coins
+* Supports POS (proof-of-stake) coins
  
 ###### Auto Exchange & Multipool
 * Being developed, stay tuned!
 
+###### Algorithms
+
+__Scrypt__, __SHA256d__, __X11__, __X13__, X14, X15, X17, Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, SHA1, SHAvite3, Skein, Qubit
+
 ###### Protocols
+
 * Stratum
  * show_message support
  * block template support
  * generation transaction support
- * transaction message support
-* Vanilla (getwork) [experimental]
+ * transaction message (txMessage) support
+* Getwork [experimental]
 
-###### Coins
-* proof-of-work (PoW) support
-* proof-of-stake (PoS) support
+###### Storage Layers
 
-###### Connectivity
+* Hybrid mode (redis + mysql)
+* [MPOS](https://github.com/MPOS/php-mpos) compatibility (mysql)
 
-* Daemon RPC interface
- 
-###### Managers
+###### Embedded Web Server
 
-* Job manager
-* Ban manager (that can handle miners flooding with invalid shares)
+* Customizable front-end
+* Full stack json-api
 
-###### Processors
+###### Addititional Features
 
-* Share processor
-* Payment processor
- 
-###### Additional
-
-* VarDiff support (variable difficulty support)
-* Storage layers support
- * hybrid storage (redis + mysql)
- * MPOS support (mysql)
- 
-###### Web
-* Embedded web-server & front-end
-* Full-stack json-API
-
-###### Hashing Algorithms
-
-_Working_
-* ✓ Scrypt
-
-_Needs Testing_
-
-* ✓ SHA256
-* ✓ multi-algos: X11, X13, X14, X15, X17
-* ✓ more: Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, SHA1, SHAvite3, Skein, Qubit
-
-_Under Development_
-
-* ✓ Scrypt-Jane, Scrypt-N, Quark, Hefty1 
+* ✔ Vardiff support
+* ✔ Ban manager (that can handle miners flooding with invalid shares)
+* ✔ Share, Payment processor & Job Manager
  
 ###### Persistance & Storage Layers
 
@@ -136,11 +114,13 @@ CoiniumServ supports storage layer interfaces that you can extend to implement y
 * __Hybrid Layer__: a custom hybrid layer that utilizes redis + mysql together that is carefully designed for high performance persistance support.
 * __MPOS Layer__: a compatibility layer based on mysql that supports MPOS whenever you want payments to be handled by MPOS.
 
-###### Development Model
+### Development
+
+#### Model
 * We have implemented extensive [tests](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) for all important functionality and never merge in code that breaks tests and stuff. Yet again, when a new functionality is introduced we also expect proper tests to be implemented within the PR. In simple words, most probably you won't notice any functionality-breaking changes within the repository.
 * A strict ruleset for the [Development Model](https://github.com/CoiniumServ/CoiniumServ/wiki/Development-Model). You can follow our bleeding-edge [Develop](https://github.com/CoiniumServ/CoiniumServ) branch or stay with-in the stable [Master](https://github.com/CoiniumServ/CoiniumServ/tree/master) branch.
 
-### Contributing
+#### Contributing
 
 Start reading by these;
 
