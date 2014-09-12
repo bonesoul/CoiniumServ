@@ -29,7 +29,7 @@ Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) 
 You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
 
 * Official site: [CoiniumServ.com](http://www.coiniumserv.com)
-* [Paid support & consulting options](https://github.com/CoiniumServ/CoiniumServ#consulting)
+* [Paid support & consulting services](https://github.com/CoiniumServ/CoiniumServ#consulting)
 * [Support forums](http://forum.coinium.org/forum/19-support/)
 * IRC (**irc.freenode.net**):
   - **#coiniumserv** [user support](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde)
@@ -149,7 +149,7 @@ Start reading by these;
 
 ### Consulting
 
-Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#support) methods, we offer paid remote support & consulting services for whom would like to get professional support. Contact us over [here](http://www.coiniumserv.com/services/consulting/) and we will get back to you to discuss your needs.
+Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#support) methods, we offer [paid support](http://www.coiniumserv.com/services/paid-support/) & [consulting](http://www.coiniumserv.com/services/consulting/) services for whom would like to get professional help.
 
 ### License
 
