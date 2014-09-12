@@ -24,19 +24,23 @@ Start by checking our [Getting Started](https://github.com/CoiniumServ/CoiniumSe
 
 ### User Support
 
-Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coiniumserv@freenode](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde).
+Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coiniumserv@freenode](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde). You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
 
-You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
+#### Where to get support?
 
 * Official site: [CoiniumServ.com](http://www.coiniumserv.com)
-* [Paid support & consulting services](https://github.com/CoiniumServ/CoiniumServ#consulting)
 * [Support forums](http://forum.coinium.org/forum/19-support/)
 * IRC (**irc.freenode.net**):
   - **#coiniumserv** [user support](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde)
   - **#coiniumserv-dev** [dev talk](http://webchat.freenode.net/?channels=%23coiniumserv-dev&prompt=1&uio=OT10cnVlde)
-  - **#coinium** [official pools](http://webchat.freenode.net/?channels=%23coinium&prompt=1&uio=OT10cnVlde)
 * [Twitter](http://twitter.com/coinium)
+* [Facebook](https://www.facebook.com/pages/Coinium/639179226128343)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
+
+### Services
+
+Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#user-support) methods, we offer [paid support](http://www.coiniumserv.com/services/paid-support/) & [consulting](http://www.coiniumserv.com/services/consulting/) services for whom would like to get professional help. 
+
 
 ### Support the project
 
@@ -119,10 +123,6 @@ Start reading by these;
 
 * [Developer's Guide](https://github.com/CoiniumServ/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/CoiniumServ/CoiniumServ/wiki/Technical-Documentation)
-
-### Consulting
-
-Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#user-support) methods, we offer [paid support](http://www.coiniumserv.com/services/paid-support/) & [consulting](http://www.coiniumserv.com/services/consulting/) services for whom would like to get professional help.
 
 ### License
 
