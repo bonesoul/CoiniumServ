@@ -48,6 +48,10 @@ You can support the development of the project with different methods;
 
 [![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1) [![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)  [![Gratipay](http://img.shields.io/badge/gratipay-donate-brightgreen.svg)](https://gratipay.com/on/github/CoiniumServ)
 
+##### Binary distributions
+
+If you like you can also help the project buy purchasing a [binary distribution](http://www.coiniumserv.com/shop/releases/coiniumserv/).
+
 ##### Donations
 
 You can contribute the development of the project by donating; 
