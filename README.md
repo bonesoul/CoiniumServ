@@ -13,6 +13,15 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 Latest release: [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha)
 
+### Getting Started
+
+Start by checking our [Getting Started](https://github.com/CoiniumServ/CoiniumServ/wiki/Getting-Started) guide for installation instructions for *nix and Windows.
+
+### Documentation
+
+* [Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
+* [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
+
 ### User Support
 
 Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coiniumserv@freenode](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde).
@@ -130,17 +139,6 @@ CoiniumServ supports storage layer interfaces that you can extend to implement y
 ###### Development Model
 * We have implemented extensive [tests](https://github.com/CoiniumServ/CoiniumServ/tree/develop/src/Tests) for all important functionality and never merge in code that breaks tests and stuff. Yet again, when a new functionality is introduced we also expect proper tests to be implemented within the PR. In simple words, most probably you won't notice any functionality-breaking changes within the repository.
 * A strict ruleset for the [Development Model](https://github.com/CoiniumServ/CoiniumServ/wiki/Development-Model). You can follow our bleeding-edge [Develop](https://github.com/CoiniumServ/CoiniumServ) branch or stay with-in the stable [Master](https://github.com/CoiniumServ/CoiniumServ/tree/master) branch.
-   
-
-### Getting Started
-
-Make sure you check our [Getting Started](https://github.com/CoiniumServ/CoiniumServ/wiki/Getting-Started) guide for installation instructions for *nix and Windows.
-
-### Documentation
-
-* [Wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/)
-* [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ)
-* [Master Plan](https://github.com/CoiniumServ/CoiniumServ/wiki/Master-Plan)
 
 ### Contributing
 
