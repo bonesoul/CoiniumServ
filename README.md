@@ -24,7 +24,7 @@ You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues)
 * [Twitter](http://twitter.com/coinium)
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
-### Support the project
+### Support the project [![Project Stats](https://www.openhub.net/p/CoiniumServ/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CoiniumServ)
 
 You can contribute the development of the project by donating; 
 
