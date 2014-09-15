@@ -23,6 +23,7 @@
 using System.Collections.Generic;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
@@ -124,6 +125,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
         }
 
         public void SetBalances(IList<IWorkerBalance> workerBalances)
+        {
+            return;
+        }
+
+        public void CommitPaymentsForRound(INewPaymentRound round)
         {
             return;
         }

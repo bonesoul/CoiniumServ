@@ -51,6 +51,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             // add reward column to block table - need to use SQL here as we are adding the column after 'Amount'.
             Execute.Sql("ALTER TABLE Block ADD Reward DECIMAL NOT NULL AFTER Amount");
 
+            // add accounted column to block table
+            Execute.Sql("ALTER TABLE Block ADD Accounted Boolean NOT NULL AFTER Confirmed");
+
             // create the users table.
             Create.Table("User")                
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
@@ -68,7 +71,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
 
             // create the completedPayments table.
-            Create.Table("CompletedPayments")
+            Create.Table("CompletedPayment")
                 .WithColumn("Id").AsInt32().ForeignKey("AwaitingPayment", "Id").PrimaryKey()
                 .WithColumn("User").AsInt32().ForeignKey("User", "Id")
                 .WithColumn("OriginalAmmount").AsDecimal().NotNullable()

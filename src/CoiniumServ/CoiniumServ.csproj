@@ -196,8 +196,8 @@
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
     <Compile Include="Payments\New\NewPaymentRound.cs" />
     <Compile Include="Payments\New\INewPaymentRound.cs" />
-    <Compile Include="Payments\New\IPaymentCalculator.cs" />
-    <Compile Include="Payments\New\PaymentCalculator.cs" />
+    <Compile Include="Payments\New\IBlockAccounter.cs" />
+    <Compile Include="Payments\New\BlockAccounter.cs" />
     <Compile Include="Persistance\Blocks\PersistedBlock.cs" />
     <Compile Include="Persistance\IStorageConfig.cs" />
     <Compile Include="Persistance\Layers\Empty\EmptyStorageLayer.cs" />

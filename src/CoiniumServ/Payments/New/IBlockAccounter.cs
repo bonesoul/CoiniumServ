@@ -23,7 +23,7 @@
 
 namespace CoiniumServ.Payments.New
 {
-    public interface IPaymentCalculator
+    public interface IBlockAccounter
     {
     }
 }

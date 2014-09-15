@@ -28,6 +28,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
@@ -346,11 +347,12 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"update Block set Orphaned = @orphaned, Confirmed = @confirmed where Height = @height",
+                        @"update Block set Orphaned = @orphaned, Confirmed = @confirmed, Accounted = @accounted where Height = @height",
                         new
                         {
                             orphaned = round.Block.Status == BlockStatus.Orphaned,
                             confirmed = round.Block.Status == BlockStatus.Confirmed,
+                            accounted = round.Block.Accounted,
                             height = round.Block.Height
                         });
                 }
@@ -371,11 +373,12 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"UPDATE Block SET Orphaned = @orphaned, Confirmed = @confirmed, Reward = @reward WHERE Height = @height",
+                        @"UPDATE Block SET Orphaned = @orphaned, Confirmed = @confirmed, Accounted = @accounted, Reward = @reward WHERE Height = @height",
                         new
                         {
                             orphaned = block.Status == BlockStatus.Orphaned,
                             confirmed = block.Status == BlockStatus.Confirmed,
+                            accounted = block.Accounted,
                             reward = block.Reward,
                             height = block.Height
                         });
@@ -430,8 +433,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     // but still not processed by payment calculator (by creating an AwaitingPayment entry for it)
                     var results =
                         connection.Query<PersistedBlock>(
-                            @"SELECT Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, Reward, CreatedAt FROM Block WHERE NOT EXISTS 
-                            (SELECT id FROM AwaitingPayment WHERE Block.Height = AwaitingPayment.Block ) 
+                            @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt FROM Block WHERE Accounted = false 
                             AND Confirmed = true ORDER BY Height DESC");
 
                     blocks.AddRange(results);
@@ -585,6 +587,24 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             catch (Exception e)
             {
                 _logger.Error("An exception occured while setting remaining balance: {0:l}", e.Message);
+            }
+        }
+
+        public void CommitPaymentsForRound(INewPaymentRound round)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while committing paymetns for round; {0:l}", e.Message);
             }
         }
 

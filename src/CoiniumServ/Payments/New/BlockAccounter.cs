@@ -31,7 +31,7 @@ using Serilog;
 
 namespace CoiniumServ.Payments.New
 {
-    public class PaymentCalculator : IPaymentCalculator
+    public class BlockAccounter : IBlockAccounter
     {
         private Timer _timer;
 
@@ -43,13 +43,13 @@ namespace CoiniumServ.Payments.New
 
         private readonly ILogger _logger;
 
-        public PaymentCalculator(IPoolConfig poolConfig, IObjectFactory objectFactory, IStorageLayer storageLayer)
+        public BlockAccounter(IPoolConfig poolConfig, IObjectFactory objectFactory, IStorageLayer storageLayer)
         {
             _poolConfig = poolConfig;
             _objectFactory = objectFactory;
             _storageLayer = storageLayer;
 
-            _logger = Log.ForContext<PaymentCalculator>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<BlockAccounter>().ForContext("Component", poolConfig.Coin.Name);
 
             // setup the timer to run calculations.  
             //_timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
@@ -61,13 +61,17 @@ namespace CoiniumServ.Payments.New
             if (!_poolConfig.Payments.Enabled)
                 return;
 
-            // TODO: in our new payment-subsystem, block confirmations are no longer handled by the payment-processor but it should be done via block-processor.
-
             // find that blocks that were confirmed but still unpaid.
             var unpaidBlocks = _storageLayer.GetAllUnpaidBlocks(); 
 
             // create the awaiting payment objects.
             var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer)).ToList();
+
+            // commit payments for the round.
+            foreach (var round in rounds)
+            {
+                _storageLayer.CommitPaymentsForRound(round);
+            }
         }
     }
 }

@@ -32,8 +32,6 @@ namespace CoiniumServ.Payments.New
     {
         public IPersistedBlock Block { get; private set; }
 
-        private readonly IStorageLayer _storageLayer;
-
         private readonly IDictionary<string, double> _shares;
 
         public IDictionary<string, decimal> Payouts { get; private set; }
@@ -41,10 +39,9 @@ namespace CoiniumServ.Payments.New
         public NewPaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
         {
             Block = block;
-            _storageLayer = storageLayer;
 
             Payouts = new Dictionary<string, decimal>();
-            _shares = _storageLayer.GetShares(Block); // load the shares for the round.
+            _shares = storageLayer.GetShares(Block); // load the shares for the round.
             CalculatePayments(); // calculate the per-user payments.
         }
 

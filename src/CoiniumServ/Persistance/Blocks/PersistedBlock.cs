@@ -33,6 +33,8 @@ namespace CoiniumServ.Persistance.Blocks
 
         public BlockStatus Status { get; set; }
 
+        public bool Accounted { get; set; }
+
         public string BlockHash { get; private set; }
 
         public string TransactionHash { get; private set; }
@@ -45,7 +47,7 @@ namespace CoiniumServ.Persistance.Blocks
 
         public bool IsPending { get { return Status != BlockStatus.Orphaned && Status != BlockStatus.Confirmed; } }
 
-        public PersistedBlock(Int32 height, Boolean orphaned, Boolean confirmed, String blockHash, String txHash, Decimal amount, Decimal reward, DateTime createdAt)
+        public PersistedBlock(Int32 height, Boolean orphaned, Boolean confirmed, Boolean accounted, String blockHash, String txHash, Decimal amount, Decimal reward, DateTime createdAt)
         {
             // used by hybrid storage layer.
 
@@ -58,6 +60,7 @@ namespace CoiniumServ.Persistance.Blocks
                 Status = BlockStatus.Pending;
 
             Height = (uint)height;
+            Accounted = accounted;
             BlockHash = blockHash;
             TransactionHash = txHash;
             Amount = amount;

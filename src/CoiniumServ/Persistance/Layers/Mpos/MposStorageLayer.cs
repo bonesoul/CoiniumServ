@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
@@ -343,6 +344,12 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         }
 
         public void SetBalances(IList<IWorkerBalance> workerBalances)
+        {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
+            throw new NotImplementedException();
+        }
+
+        public void CommitPaymentsForRound(INewPaymentRound round)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();

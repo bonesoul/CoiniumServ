@@ -55,7 +55,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithInvalidBlockHash_ShouldBeOrphaned()
         {
             // test case: coin daemon reports block hash as invalid.
-            var block = new PersistedBlock(1, false, false, "INVALID_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "INVALID_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _daemonClient.GetBlock("INVALID_HASH").Returns(info => null);            
             
             // query the block.
@@ -70,7 +70,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithNegativeConfirmations_ShouldBeOrphaned()
         {
             // test case: coin daemon returns block-info with negative confirmations.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Confirmations = -1 });            
 
             // query the block.
@@ -85,7 +85,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithInvalidTransactionHash_ShouldBeOrphaned()
         {
             // test case: coin daemon reports a different tx-hash then the one in block.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "DIFFERENT" } });
 
             // query the block.
@@ -100,7 +100,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithNonExistingGenerationTransaction_ShouldBeOrphaned()
         {
             // test case: coin reports generation transaction hash as invalid.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
             _daemonClient.GetTransaction("TX_HASH").Returns(info => null);            
 
@@ -116,7 +116,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithNonExistingPoolOutput_ShouldBeOrphaned()
         {
             // test case: generation transaction doesn't contain an output for the pool.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
             _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction());
 
@@ -132,7 +132,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithIncorrectPoolOutputAddress_ShouldBeOrphaned()
         {
             // test case: generation transaction output doesn't match pool output address.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
 
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
@@ -153,7 +153,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithIncorrectPoolOutputAccount_ShouldBeOrphaned()
         {
             // test case: generation transaction output doesn't match pool output account.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
 
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
             _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
@@ -232,7 +232,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_ShouldSetReward()
         {
             // test case: set block reward based on pool output value.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
 
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
@@ -253,7 +253,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithImmaturePoolOutputCategory_ShouldStayPending()
         {
             // test case: we supply a pending block which should stay as pending as pool output category is still 'immature'.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
 
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
@@ -274,7 +274,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithGeneratePoolOutputCategory_ShouldGetConfirmed()
         {
             // test case: we supply a pending block which should stay as pending as pool output category is still 'immature'.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
 
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
@@ -295,7 +295,7 @@ namespace CoiniumServ.Tests.Blocks
         private void QueryBlockTest_WithOprhanedPoolOutputCategory_ShouldGetOrphaned()
         {
             // test case: we supply a pending block which should stay as pending as pool output category is still 'immature'.
-            var block = new PersistedBlock(1, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
+            var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
 
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
