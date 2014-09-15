@@ -80,8 +80,8 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"insert shares(rem_host, username, our_result, upstream_result, reason, solution, difficulty,time)
-                values (@rem_host, @username, @our_result, @upstream_result, @reason, @solution, @difficulty, @time)",
+                        @"INSERT INTO shares(rem_host, username, our_result, upstream_result, reason, solution, difficulty,time)
+                            VALUES (@rem_host, @username, @our_result, @upstream_result, @reason, @solution, @difficulty, @time)",
                         new
                         {
                             rem_host = ((IClient) share.Miner).Connection.RemoteEndPoint.Address.ToString(),
@@ -130,7 +130,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query(
-                        @"select username, sum(difficulty) as diff from shares group by username");
+                        @"SELECT username, sum(difficulty) AS diff FROM shares GROUP BY username");
 
                     foreach (var row in results)
                     {
@@ -174,7 +174,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query(@"select username, sum(difficulty) as shares from shares where our_result='Y' group by username");
+                    var results = connection.Query(@"SELECT username, sum(difficulty) AS shares FROM shares WHERE our_result='Y' GROUP BY username");
 
                     foreach (var row in results)
                     {
@@ -218,11 +218,11 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var result = connection.Query(@"select count(*),
-                (select count(*) from blocks where confirmations >= 0 and confirmations < 120) as pending,
-                (select count(*) from blocks where confirmations < 0) as orphaned,
-                (select count(*) from blocks where confirmations >= 120) as confirmed
-                from blocks");
+                    var result = connection.Query(@"SELECT COUNT(*),
+                        (SELECT COUNT(*) FROM blocks WHERE confirmations >= 0 AND confirmations < 120) AS pending,
+                        (SELECT COUNT(*) FROM blocks WHERE confirmations < 0) AS orphaned,
+                        (SELECT COUNT(*) FROM blocks WHERE confirmations >= 120) AS confirmed
+                        from blocks");
 
                     var data = result.First();
                     blocks["pending"] = (int) data.pending;
@@ -255,8 +255,8 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<PersistedBlock>(
-                        "select height, blockhash, amount, confirmations, time from blocks where confirmations >= 0 and confirmations < 120 order by height ASC");
+                    var results = connection.Query<PersistedBlock>(@"SELECT height, blockhash, amount, confirmations, time 
+                    FROM blocks WHERE confirmations >= 0 and confirmations < 120 ORDER BY height ASC");
 
                     blocks.AddRange(results);
                 }
@@ -281,8 +281,8 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(
-                        string.Format(
-                            "select height, blockhash, amount, confirmations, time from blocks order by height DESC LIMIT {0}",
+                        string.Format(@"SELECT height, blockhash, amount, confirmations, time 
+                            FROM blocks ORDER BY height DESC LIMIT {0}",
                             count));
 
                     blocks.AddRange(results);
@@ -310,7 +310,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 switch (status)
                 {
                     case BlockStatus.Pending:
-                        filter = "confirmations >= 0 and confirmations < 120";
+                        filter = "confirmations >= 0 AND confirmations < 120";
                         break;
                     case BlockStatus.Orphaned:
                         filter = "confirmations = -1";
@@ -322,8 +322,8 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<PersistedBlock>(string.Format(
-                        "select height, blockhash, amount, confirmations, time from blocks where {0} order by height DESC LIMIT {1}",
+                    var results = connection.Query<PersistedBlock>(string.Format(@"SELECT height, blockhash, amount, confirmations, time 
+                        FROM blocks WHERE {0} ORDER BY height DESC LIMIT {1}",
                         filter, count));
 
                     blocks.AddRange(results);
@@ -378,7 +378,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 {
                     // query the username against mpos pool_worker table.
                     var result = connection.Query<string>(
-                        "SELECT password FROM pool_worker where username = @username",
+                        "SELECT password FROM pool_worker WHERE username = @username",
                         new {username = miner.Username}).FirstOrDefault();
 
                     // if matching record exists for given miner username, then authenticate the miner.
@@ -403,7 +403,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        "update pool_worker set difficulty = @difficulty where username = @username", new
+                        "UPDATE pool_worker SET difficulty = @difficulty WHERE username = @username", new
                         {
                             difficulty = miner.Difficulty,
                             username = miner.Username

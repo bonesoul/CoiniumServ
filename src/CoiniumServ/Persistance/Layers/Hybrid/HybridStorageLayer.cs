@@ -320,7 +320,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"insert Block(Height, BlockHash, TxHash, Amount, CreatedAt) values (@height, @blockHash, @txHash, @amount, @createdAt)",
+                        @"INSERT INTO Block(Height, BlockHash, TxHash, Amount, CreatedAt) VALUES (@height, @blockHash, @txHash, @amount, @createdAt)",
                         new
                         {
                             height = share.Block.Height,
@@ -347,7 +347,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"update Block set Orphaned = @orphaned, Confirmed = @confirmed, Accounted = @accounted where Height = @height",
+                        @"UPDATE Block SET Orphaned = @orphaned, Confirmed = @confirmed, Accounted = @accounted WHERE Height = @height",
                         new
                         {
                             orphaned = round.Block.Status == BlockStatus.Orphaned,
@@ -401,10 +401,10 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var result = connection.Query(@"select count(*),
-                (select count(*) from Block where Orphaned = false and Confirmed = false) as pending,
-                (select count(*) from Block where Orphaned = true) as orphaned,
-                (select count(*) from Block where Confirmed = true) as confirmed
+                    var result = connection.Query(@"SELECT COUNT(*),
+                (SELECT COUNT(*) FROM Block WHERE Orphaned = false AND Confirmed = false) AS pending,
+                (SELECT COUNT(*) FROM Block WHERE Orphaned = true) AS orphaned,
+                (SELECT COUNT(*) FROM Block WHERE Confirmed = true) AS confirmed
                 from Block");
 
                     var data = result.First();
@@ -432,8 +432,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     // we need to find the blocks that were confirmed by the coin network but still not accounted.
                     var results =
                         connection.Query<PersistedBlock>(
-                            @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt FROM Block WHERE Accounted = false 
-                            AND Confirmed = true ORDER BY Height DESC");
+                            @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt 
+                                FROM Block WHERE Accounted = false AND Confirmed = true ORDER BY Height DESC");
 
                     blocks.AddRange(results);
                 }
@@ -458,7 +458,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(
-                        "select Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt from Block where Orphaned = false and Confirmed = false order by Height ASC"
+                        @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt 
+                            FROM Block WHERE Orphaned = false AND Confirmed = false ORDER BY Height ASC"
                  );
 
                     blocks.AddRange(results);
@@ -485,7 +486,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     var results = connection.Query<PersistedBlock>(
                         string.Format(
-                            "select Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt from Block order by Height DESC LIMIT {0}",
+                            @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt 
+                                FROM Block ORDER BY Height DESC LIMIT {0}",
                             count)
                         );
 
@@ -514,7 +516,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 switch (status)
                 {
                     case BlockStatus.Pending:
-                        filter = "Orphaned = false and Confirmed = false";
+                        filter = "Orphaned = false AND Confirmed = false";
                         break;
                     case BlockStatus.Orphaned:
                         filter = "Orphaned = true";
@@ -527,7 +529,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(string.Format(
-                        "select Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt from Block where {0} order by Height DESC LIMIT {1}",
+                        @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt 
+                            FROM Block WHERE {0} ORDER BY Height DESC LIMIT {1}",
                         filter, count));
 
                     blocks.AddRange(results);
@@ -551,7 +554,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var id = connection.Query<int>(
-                        @"INSERT User(Username, CreatedAt) VALUES (@username, @createdAt); 
+                        @"INSERT INTO User(Username, CreatedAt) VALUES (@username, @createdAt); 
                         SELECT LAST_INSERT_ID();",
                         new
                         {
