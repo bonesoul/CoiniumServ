@@ -41,7 +41,7 @@ namespace CoiniumServ.Miners
         /// <summary>
         /// Persisted id for the miner.
         /// </summary>
-        int PersistedId { get; set; }
+        int UserId { get; set; }
 
         /// <summary>
         /// Username of the miner.

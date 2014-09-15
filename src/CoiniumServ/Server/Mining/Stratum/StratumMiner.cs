@@ -56,7 +56,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         public int SubscriptionId { get; private set; }
 
-        public int PersistedId { get; set; }
+        public int UserId { get; set; }
 
         /// <summary>
         /// Username of the miner.

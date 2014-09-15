@@ -459,7 +459,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(
-                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, Reward, CreatedAt from Block where Orphaned = false and Confirmed = false order by Height ASC"
+                        "select Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt from Block where Orphaned = false and Confirmed = false order by Height ASC"
                  );
 
                     blocks.AddRange(results);
@@ -486,7 +486,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     var results = connection.Query<PersistedBlock>(
                         string.Format(
-                            "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, Reward, CreatedAt from Block order by Height DESC LIMIT {0}",
+                            "select Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt from Block order by Height DESC LIMIT {0}",
                             count)
                         );
 
@@ -528,7 +528,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(string.Format(
-                        "select Height, Orphaned, Confirmed, BlockHash, TxHash, Amount, Reward, CreatedAt from Block where {0} order by Height DESC LIMIT {1}",
+                        "select Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt from Block where {0} order by Height DESC LIMIT {1}",
                         filter, count));
 
                     blocks.AddRange(results);
@@ -541,6 +541,54 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
             return blocks;
         }
+
+        public int CreateUser(IMiner miner)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return -1;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var id = connection.Query<int>(
+                        @"INSERT User(Username, CreatedAt) VALUES (@username, @createdAt); 
+                        SELECT LAST_INSERT_ID();",
+                        new
+                        {
+                            username = miner.Username,
+                            createdAt = DateTime.Now
+                        }).Single();
+
+                    return id;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while creating user; {0:l}", e.Message);
+                return -1;
+            }
+        }
+
+        public int GetUserId(string username)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return -1;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    return connection.Query<int>("SELECT Id FROM User WHERE Username = @username",
+                        new { username }).Single();                  
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting user; {0:l}", e.Message);
+                return -1;
+            }
+        }       
 
         public Dictionary<string, double> GetPreviousBalances()
         {
@@ -590,7 +638,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public void CommitPaymentsForRound(INewPaymentRound round)
+        public void AddAwaitingPaymentsForRound(INewPaymentRound round)
         {
             try
             {
@@ -599,12 +647,25 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    
+                    foreach (var entry in round.Payouts)
+                    {
+                        connection.Execute(
+                            @"INSERT INTO AwaitingPayment(Block,User, Amount, OriginalCurrency,PaymentCurrency,CreatedAt) VALUES(@blockId, @userId, @amount, @originalCurrency, @paymentCurrency, @createdAt)",
+                            new
+                            {
+                                blockId = round.Block.Height,
+                                userId = entry.UserId,
+                                amount = entry.Amount,
+                                originalCurrency = entry.OriginalCurrency,
+                                paymentCurrency = entry.PaymentCurrency,
+                                createdAt = DateTime.Now
+                            });
+                    }
                 }
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while committing paymetns for round; {0:l}", e.Message);
+                _logger.Error("An exception occured while committing awaiting payments for round; {0:l}", e.Message);
             }
         }
 

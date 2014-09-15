@@ -87,7 +87,7 @@ namespace CoiniumServ.Blocks
                     orphanedCount++;                
             }
 
-            _logger.Information("Updated {0} pending blocks; {1} got confirmed, {2} got orphaned; took {3:0.000} seconds", pendingCount, confirmedCount, orphanedCount, (float)_stopWatch.ElapsedMilliseconds / 1000);
+            _logger.Information("Queried {0} pending blocks; {1} got confirmed, {2} got orphaned; took {3:0.000} seconds", pendingCount, confirmedCount, orphanedCount, (float)_stopWatch.ElapsedMilliseconds / 1000);
 
             _stopWatch.Reset();
 

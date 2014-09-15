@@ -21,15 +21,21 @@
 // 
 #endregion
 
-using System.Collections.Generic;
+using CoiniumServ.Miners;
 using CoiniumServ.Persistance.Blocks;
 
 namespace CoiniumServ.Payments.New
 {
-    public interface INewPaymentRound
+    public interface IAwaitingPayment
     {
         IPersistedBlock Block { get; }
 
-        IList<IAwaitingPayment> Payouts { get; }                
+        int UserId { get; }
+
+        decimal Amount { get; }
+
+        string OriginalCurrency { get; }
+
+        string PaymentCurrency { get; }
     }
 }

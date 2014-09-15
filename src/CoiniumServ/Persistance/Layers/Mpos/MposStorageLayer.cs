@@ -337,6 +337,18 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return blocks;
         }
 
+        public int CreateUser(IMiner miner)
+        {
+            // The function is not supported as user managment is handled by MPOS itself.
+            throw new NotImplementedException();
+        }
+
+        public int GetUserId(string username)
+        {
+            // TODO: implement me!
+            throw new NotImplementedException();
+        }
+
         public Dictionary<string, double> GetPreviousBalances()
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
@@ -349,7 +361,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public void CommitPaymentsForRound(INewPaymentRound round)
+        public void AddAwaitingPaymentsForRound(INewPaymentRound round)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();

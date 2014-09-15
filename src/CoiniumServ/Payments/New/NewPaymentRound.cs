@@ -31,17 +31,19 @@ namespace CoiniumServ.Payments.New
     public class NewPaymentRound : INewPaymentRound
     {
         public IPersistedBlock Block { get; private set; }
+        public IList<IAwaitingPayment> Payouts { get; private set; }
 
         private readonly IDictionary<string, double> _shares;
 
-        public IDictionary<string, decimal> Payouts { get; private set; }
+        private readonly IStorageLayer _storageLayer;
 
         public NewPaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
         {
             Block = block;
+            _storageLayer = storageLayer;
 
-            Payouts = new Dictionary<string, decimal>();
-            _shares = storageLayer.GetShares(Block); // load the shares for the round.
+            Payouts = new List<IAwaitingPayment>();
+            _shares = _storageLayer.GetShares(Block); // load the shares for the round.
             CalculatePayments(); // calculate the per-user payments.
         }
 
@@ -59,8 +61,18 @@ namespace CoiniumServ.Payments.New
                 var percent = pair.Value / totalShares;
                 var amount = (decimal)percent * Block.Reward;
 
-                Payouts.Add(pair.Key, amount);
+                // get the user id for the payment.
+                var userId = _storageLayer.GetUserId(pair.Key);
+
+                // if we can't find a user for the given username, just skip.
+                if (userId == -1)
+                    continue;
+
+                Payouts.Add(new AwaitingPayment(Block, userId, amount));
             }
+
+            // mark the block as accounted
+            Block.Accounted = true;
         }
     }
 }

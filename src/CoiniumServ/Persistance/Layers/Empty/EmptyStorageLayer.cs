@@ -119,6 +119,16 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return new List<IPersistedBlock>(); // return an empty list.
         }
 
+        public int CreateUser(IMiner miner)
+        {
+            return -1;
+        }
+
+        public int GetUserId(string username)
+        {
+            return -1;
+        }
+
         public Dictionary<string, double> GetPreviousBalances()
         {
             return new Dictionary<string, double>(); // return an empty dictionary.
@@ -129,7 +139,7 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return;
         }
 
-        public void CommitPaymentsForRound(INewPaymentRound round)
+        public void AddAwaitingPaymentsForRound(INewPaymentRound round)
         {
             return;
         }
