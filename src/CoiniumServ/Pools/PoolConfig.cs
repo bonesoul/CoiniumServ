@@ -32,8 +32,8 @@ using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Mpos;
 using CoiniumServ.Persistance.Providers.Redis;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Mining.Vanilla;
 using Serilog;
 
 namespace CoiniumServ.Pools
@@ -56,7 +56,7 @@ namespace CoiniumServ.Pools
         public IStratumServerConfig Stratum { get; private set; }
         public IBanConfig Banning { get; private set; }
         public IStorageConfig Storage { get; private set; }
-        public IVanillaServerConfig Vanilla { get; private set; }
+        public IGetworkServerConfig Getwork { get; private set; }
 
         private readonly ILogger _logger;
 
@@ -88,7 +88,7 @@ namespace CoiniumServ.Pools
                 Stratum = new StratumServerConfig(config.stratum);
                 Banning = new BanConfig(config.banning);
                 Storage = new StorageConfig(config.storage);
-                Vanilla = new VanillaServerConfig(config.vanilla);
+                Getwork = new GetworkServerConfig(config.getwork);
 
                 // process extra checks
                 if (Storage.Layer is MposStorageLayerConfig)

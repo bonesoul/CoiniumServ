@@ -54,7 +54,9 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Unique subscription id for identifying the miner.
         /// </summary>
-        public int Id { get; private set; }
+        public int SubscriptionId { get; private set; }
+
+        public int PersistedId { get; set; }
 
         /// <summary>
         /// Username of the miner.
@@ -109,15 +111,15 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Creates a new miner instance.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="subscriptionId"></param>
         /// <param name="extraNonce"></param>
         /// <param name="connection"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
         /// <param name="storageLayer"></param>
-        public StratumMiner(int id, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager, IStorageLayer storageLayer)
+        public StratumMiner(int subscriptionId, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager, IStorageLayer storageLayer)
         {
-            Id = id; // the id of the miner.
+            SubscriptionId = subscriptionId; // the id of the miner.
             ExtraNonce = extraNonce;
             Connection = connection; // the underlying connection.
             Pool = pool;

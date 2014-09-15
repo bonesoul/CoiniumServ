@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -27,7 +28,7 @@ using System.Threading;
 
 // source from: http://stackoverflow.com/a/4673210/170181
 
-namespace CoiniumServ.Server.Mining.Vanilla
+namespace CoiniumServ.Server.Mining.Getwork
 {
     public class HttpServer : IServer, IDisposable
     {

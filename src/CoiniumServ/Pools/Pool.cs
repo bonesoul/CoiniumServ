@@ -211,14 +211,14 @@ namespace CoiniumServ.Pools
                 _servers.Add(stratumServer, stratumService);
             }
 
-            if (Config.Vanilla != null && Config.Vanilla.Enabled)
+            if (Config.Getwork != null && Config.Getwork.Enabled)
             {
-                var vanillaServer = _objectFactory.GetMiningServer("Vanilla", Config, this, MinerManager, _jobManager, _banningManager);
-                var vanillaService = _objectFactory.GetMiningService("Vanilla", Config, _shareManager, Daemon);
+                var getworkServer = _objectFactory.GetMiningServer("Getwork", Config, this, MinerManager, _jobManager, _banningManager);
+                var getworkService = _objectFactory.GetMiningService("Getwork", Config, _shareManager, Daemon);
 
-                vanillaServer.Initialize(Config.Vanilla);
+                getworkServer.Initialize(Config.Getwork);
 
-                _servers.Add(vanillaServer, vanillaService);
+                _servers.Add(getworkServer, getworkService);
             }
         }
 

@@ -24,7 +24,7 @@ namespace CoiniumServ.Server.Mining.Service
 {
     public static class Services
     {
-        public const string Vanilla = "Vanilla";
+        public const string Getwork = "Getwork";
         public const string Stratum = "Stratum";
     }
 }

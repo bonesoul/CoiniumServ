@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Miners;
 
-namespace CoiniumServ.Server.Mining.Vanilla
+namespace CoiniumServ.Server.Mining.Getwork
 {
-    public interface IVanillaMiner : IMiner
+    public interface IGetworkMiner : IMiner
     {
     }
 }

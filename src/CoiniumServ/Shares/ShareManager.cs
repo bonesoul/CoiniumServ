@@ -30,9 +30,9 @@ using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Errors;
-using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Utils.Extensions;
 using Serilog;
 
@@ -102,7 +102,7 @@ namespace CoiniumServ.Shares
             return share;
         }
 
-        public IShare ProcessShare(IVanillaMiner miner, string data)
+        public IShare ProcessShare(IGetworkMiner miner, string data)
         {
             throw new NotImplementedException();
         }

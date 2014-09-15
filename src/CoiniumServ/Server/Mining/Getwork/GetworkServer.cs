@@ -20,17 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Net;
 
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
+using System.Net;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
 using Serilog;
 
-namespace CoiniumServ.Server.Mining.Vanilla
+namespace CoiniumServ.Server.Mining.Getwork
 {
-    public class VanillaServer : HttpServer, IMiningServer
+    public class GetworkServer : HttpServer, IMiningServer
     {
         public IServerConfig Config { get; private set; }
 
@@ -40,11 +40,11 @@ namespace CoiniumServ.Server.Mining.Vanilla
 
         private readonly ILogger _logger;
 
-        public VanillaServer(IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager)
+        public GetworkServer(IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager)
         {
             _pool = pool;
             _minerManager = minerManager;
-            _logger = Log.ForContext<VanillaServer>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<GetworkServer>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         public void Initialize(IServerConfig config)
@@ -56,12 +56,12 @@ namespace CoiniumServ.Server.Mining.Vanilla
             Initialize();
             ProcessRequest += ProcessHttpRequest;
 
-            _logger.Information("Vanilla server listening on {0:l}:{1}", BindInterface, Port);
+            _logger.Information("Getwork server listening on {0:l}:{1}", BindInterface, Port);
         }
 
         private void ProcessHttpRequest(HttpListenerContext context)
         {
-            var miner = _minerManager.Create<VanillaMiner>(_pool);
+            var miner = _minerManager.Create<GetworkMiner>(_pool);
             miner.Parse(context);                        
         }
     }

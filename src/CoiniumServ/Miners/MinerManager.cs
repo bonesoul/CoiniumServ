@@ -25,9 +25,9 @@ using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
-using CoiniumServ.Server.Mining.Vanilla;
 using Serilog;
 
 namespace CoiniumServ.Miners
@@ -71,7 +71,7 @@ namespace CoiniumServ.Miners
                 select pair.Value).FirstOrDefault();
         }
 
-        public T Create<T>(IPool pool) where T : IVanillaMiner
+        public T Create<T>(IPool pool) where T : IGetworkMiner
         {
             var @params = new object[]
             {
@@ -81,8 +81,8 @@ namespace CoiniumServ.Miners
             };
 
             var instance = Activator.CreateInstance(typeof(T), @params); // create an instance of the miner.
-            var miner = (IVanillaMiner)instance;
-            _miners.Add(miner.Id, miner); // add it to our collection.
+            var miner = (IGetworkMiner)instance;
+            _miners.Add(miner.SubscriptionId, miner); // add it to our collection.
 
             return (T)miner;
         }
@@ -101,7 +101,7 @@ namespace CoiniumServ.Miners
 
             var instance = Activator.CreateInstance(typeof(T), @params);  // create an instance of the miner.
             var miner = (IStratumMiner)instance;
-            _miners.Add(miner.Id, miner); // add it to our collection.           
+            _miners.Add(miner.SubscriptionId, miner); // add it to our collection.           
 
             return (T)miner;
         }
@@ -114,7 +114,7 @@ namespace CoiniumServ.Miners
                 select pair.Value).FirstOrDefault();
 
             if (miner != null)
-                _miners.Remove(miner.Id);
+                _miners.Remove(miner.SubscriptionId);
         }
 
         public void Authenticate(IMiner miner)
@@ -135,8 +135,14 @@ namespace CoiniumServ.Miners
                 stratumMiner.SetDifficulty(_poolConfig.Stratum.Diff); // set the initial difficulty for the miner and send it.
                 stratumMiner.SendMessage(_poolConfig.Meta.MOTD); // send the motd.
             }
-           
+
+            GetUserIdForMiner(miner);
             OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.            
+        }
+
+        private void GetUserIdForMiner(IMiner miner)
+        {
+            
         }
 
         // todo: consider exposing this event by miner object itself.

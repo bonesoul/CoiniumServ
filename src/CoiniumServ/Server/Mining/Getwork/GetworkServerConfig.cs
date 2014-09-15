@@ -20,10 +20,39 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Server.Mining.Vanilla
-{
-    public interface IVanillaServerConfig : IServerConfig
-    {
 
+using System;
+using Serilog;
+
+namespace CoiniumServ.Server.Mining.Getwork
+{
+    public class GetworkServerConfig : IGetworkServerConfig 
+    {
+        public bool Valid { get; private set; }
+
+        public bool Enabled { get; private set; }
+
+        public string BindInterface { get; private set; }
+
+        public Int32 Port { get; private set; }
+
+        public GetworkServerConfig(dynamic config)
+        {
+            try
+            {
+               // load the config data.
+                Enabled = config.enabled;
+                BindInterface = string.IsNullOrEmpty(config.bind) ? "0.0.0.0" : config.bind;
+                Port = config.port;
+
+                Valid = true;
+            }
+
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<GetworkServerConfig>().Error(e, "Error loading vannila server configuration");
+            }
+        }
     }
 }

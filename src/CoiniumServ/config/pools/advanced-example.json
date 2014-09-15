@@ -209,7 +209,7 @@
     # bind: interface to bind getwork server.
     # port: port to listen for getwork connections.
 
-	"vanilla": {
+	"getwork": {
 		"enabled": false,
 		"bind": "localhost",
 		"port": 2223

@@ -20,20 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using CoiniumServ.Server.Mining.Getwork;
-using CoiniumServ.Server.Mining.Stratum;
-
-namespace CoiniumServ.Shares
+namespace CoiniumServ.Server.Mining.Getwork
 {
-    public interface IShareManager
+    public interface IGetworkServerConfig : IServerConfig
     {
-        IShare ProcessShare(IStratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString);
 
-        IShare ProcessShare(IGetworkMiner miner, string data);
-
-        event EventHandler BlockFound;
-
-        event EventHandler ShareSubmitted;
     }
 }

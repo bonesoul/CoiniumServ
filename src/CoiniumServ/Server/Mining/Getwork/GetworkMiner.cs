@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Net;
@@ -28,19 +29,21 @@ using AustinHarris.JsonRpc;
 using CoiniumServ.Logging;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
-using CoiniumServ.Server.Mining.Vanilla.Service;
+using CoiniumServ.Server.Mining.Getwork.Service;
 using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace CoiniumServ.Server.Mining.Vanilla
+namespace CoiniumServ.Server.Mining.Getwork
 {
-    public class VanillaMiner : IVanillaMiner
+    public class GetworkMiner : IGetworkMiner
     {
         /// <summary>
         /// Unique subscription id for identifying the miner.
         /// </summary>
-        public int Id { get; private set; }
+        public int SubscriptionId { get; private set; }
+
+        public int PersistedId { get; set; }
 
         /// <summary>
         /// Username of the miner.
@@ -71,12 +74,12 @@ namespace CoiniumServ.Server.Mining.Vanilla
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="subscriptionId"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
-        public VanillaMiner(int id, IPool pool, IMinerManager minerManager)
+        public GetworkMiner(int subscriptionId, IPool pool, IMinerManager minerManager)
         {
-            Id = id; // the id of the miner.
+            SubscriptionId = subscriptionId; // the id of the miner.
             Pool = pool;
             _minerManager = minerManager;
 
@@ -85,8 +88,8 @@ namespace CoiniumServ.Server.Mining.Vanilla
             Software = MinerSoftware.Unknown;
             Version = new Version();
 
-            _logger = Log.ForContext<VanillaMiner>().ForContext("Component", pool.Config.Coin.Name);
-            _packetLogger = LogManager.PacketLogger.ForContext<VanillaMiner>().ForContext("Component", pool.Config.Coin.Name);
+            _logger = Log.ForContext<GetworkMiner>().ForContext("Component", pool.Config.Coin.Name);
+            _packetLogger = LogManager.PacketLogger.ForContext<GetworkMiner>().ForContext("Component", pool.Config.Coin.Name);
 
             _rpcResultHandler = callback =>
             {

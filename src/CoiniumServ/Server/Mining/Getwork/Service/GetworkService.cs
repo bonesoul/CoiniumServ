@@ -20,25 +20,24 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using AustinHarris.JsonRpc;
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
-using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using Serilog;
 
-namespace CoiniumServ.Server.Mining.Vanilla.Service
+namespace CoiniumServ.Server.Mining.Getwork.Service
 {
     /// <summary>
-    /// Vanilla protocol implementation.
+    /// Getwork protocol implementation.
     /// </summary>
-    public class VanillaService : JsonRpcService, IRpcService
+    public class GetworkService : JsonRpcService, IRpcService
     {
         private readonly IDaemonClient _daemonClient; // TODO: remove this!
 
-        public VanillaService(IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient):
+        public GetworkService(IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient):
             base(poolConfig.Coin.Name)
         {
             _daemonClient = daemonClient;
@@ -55,10 +54,10 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
         /// https://bitcointalk.org/index.php?topic=51281.0
         /// </remarks>
         [JsonRpcMethod("getwork")]
-        public Getwork Getwork(string data = null)
+        public Daemon.Responses.Getwork Getwork(string data = null)
         {
             var context = (HttpServiceContext) JsonRpcContext.Current().Value;
-            var miner = (IVanillaMiner) (context.Miner);
+            var miner = (IGetworkMiner) (context.Miner);
 
             // TODO: fixme! instead use jobmanager and sharemanager.
 
@@ -69,7 +68,7 @@ namespace CoiniumServ.Server.Mining.Vanilla.Service
             //TODO: fix this according https://bitcointalk.org/index.php?topic=51281.msg611897#msg611897
 
             if (result) // check his work.
-                Log.ForContext<VanillaMiner>().Verbose("Found block!: {0}", data);
+                Log.ForContext<GetworkMiner>().Verbose("Found block!: {0}", data);
 
             return null;
         }

@@ -160,7 +160,7 @@
     # EXPERIMENTAL!; This feature is still in development and not complete yet.
     # bind: interface to bind getwork server.
 
-	"vanilla": {
+	"getwork": {
 		"bind": "localhost"		
 	}
 }
