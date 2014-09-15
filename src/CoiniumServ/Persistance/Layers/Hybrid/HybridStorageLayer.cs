@@ -429,8 +429,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             {
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    // we need to find the blocks that were confirmed by the coin network
-                    // but still not processed by payment calculator (by creating an AwaitingPayment entry for it)
+                    // we need to find the blocks that were confirmed by the coin network but still not accounted.
                     var results =
                         connection.Query<PersistedBlock>(
                             @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt FROM Block WHERE Accounted = false 
@@ -583,6 +582,10 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         new { username }).Single();                  
                 }
             }
+            catch (InvalidOperationException e) // fired when no record is found for given username
+            {
+                return -1;
+            }
             catch (Exception e)
             {
                 _logger.Error("An exception occured while getting user; {0:l}", e.Message);
@@ -638,7 +641,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public void AddAwaitingPaymentsForRound(INewPaymentRound round)
+        public void CommitPayoutsForRound(INewPaymentRound round)
         {
             try
             {
@@ -650,7 +653,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     foreach (var entry in round.Payouts)
                     {
                         connection.Execute(
-                            @"INSERT INTO AwaitingPayment(Block,User, Amount, OriginalCurrency,PaymentCurrency,CreatedAt) VALUES(@blockId, @userId, @amount, @originalCurrency, @paymentCurrency, @createdAt)",
+                            @"INSERT INTO Payout(Block,User, Amount, OriginalCurrency,PaymentCurrency,CreatedAt) VALUES(@blockId, @userId, @amount, @originalCurrency, @paymentCurrency, @createdAt)",
                             new
                             {
                                 blockId = round.Block.Height,

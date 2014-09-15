@@ -74,7 +74,7 @@ namespace CoiniumServ.Payments.New
             // loop through rounds
             foreach (var round in rounds)
             {
-                _storageLayer.AddAwaitingPaymentsForRound(round); // commit awaiting payments for the round.
+                _storageLayer.CommitPayoutsForRound(round); // commit awaiting payments for the round.
                 _storageLayer.UpdateBlock(round.Block); // set the block for the round as accounted.
             }
 

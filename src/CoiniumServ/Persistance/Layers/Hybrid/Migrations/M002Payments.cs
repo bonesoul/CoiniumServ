@@ -60,24 +60,21 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
                 .WithColumn("Username").AsString().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
 
-            // create the awaitingPayments table.
-            Create.Table("AwaitingPayment")
+            // create the payout table.
+            Create.Table("Payout")
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
                 .WithColumn("Block").AsInt32().ForeignKey("Block", "height")
                 .WithColumn("User").AsInt32().ForeignKey("User", "Id")
                 .WithColumn("Amount").AsDecimal().NotNullable()
-                .WithColumn("OriginalCurrency").AsString(4).NotNullable()
-                .WithColumn("PaymentCurrency").AsString(4).NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
 
-            // create the completedPayments table.
-            Create.Table("CompletedPayment")
-                .WithColumn("Id").AsInt32().ForeignKey("AwaitingPayment", "Id").PrimaryKey()
+            // create the transaction table.
+            Create.Table("Transaction")
+                .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
                 .WithColumn("User").AsInt32().ForeignKey("User", "Id")
-                .WithColumn("OriginalAmmount").AsDecimal().NotNullable()
-                .WithColumn("OriginalCurrency").AsString(4).NotNullable()
-                .WithColumn("PaymentAmount").AsDecimal().NotNullable()
-                .WithColumn("PaymentCurrency").AsString(4).NotNullable()
+                .WithColumn("Payment").AsInt32().ForeignKey("Payout", "Id")
+                .WithColumn("Amount").AsDecimal().NotNullable()
+                .WithColumn("Currency").AsString(4).NotNullable()
                 .WithColumn("TxId").AsString(64).NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
         }
@@ -86,7 +83,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
         {
             // revert back the changes on blocks height & id columns
             Alter.Table("Block").AlterColumn("Height").AsInt32().NotNullable();
-            Delete.PrimaryKey("Height").FromTable("Blocks");
+            Delete.PrimaryKey("Height").FromTable("Block");
+            Delete.PrimaryKey("Reward").FromTable("Block");
+            Delete.PrimaryKey("Accounted").FromTable("Block");
             Alter.Table("Blocks").AddColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity();
 
             // revert back table & field names
@@ -105,8 +104,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
 
             // delete the newly created tables.
             Delete.Table("User");
-            Delete.Table("AwaitingPayment");
-            Delete.Table("CompletedPayment");
+            Delete.Table("Payout");
+            Delete.Table("Transaction");
         }
     }
 }

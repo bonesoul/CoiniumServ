@@ -139,7 +139,7 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return;
         }
 
-        public void AddAwaitingPaymentsForRound(INewPaymentRound round)
+        public void CommitPayoutsForRound(INewPaymentRound round)
         {
             return;
         }

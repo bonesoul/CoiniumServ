@@ -31,7 +31,7 @@ namespace CoiniumServ.Payments.New
     public class NewPaymentRound : INewPaymentRound
     {
         public IPersistedBlock Block { get; private set; }
-        public IList<IAwaitingPayment> Payouts { get; private set; }
+        public IList<IPayout> Payouts { get; private set; }
 
         private readonly IDictionary<string, double> _shares;
 
@@ -42,16 +42,13 @@ namespace CoiniumServ.Payments.New
             Block = block;
             _storageLayer = storageLayer;
 
-            Payouts = new List<IAwaitingPayment>();
+            Payouts = new List<IPayout>();
             _shares = _storageLayer.GetShares(Block); // load the shares for the round.
             CalculatePayments(); // calculate the per-user payments.
         }
 
         private void CalculatePayments()
         {
-            if (_shares.Count == 0) // make sure we have valid shares.
-                return;
-
             // find total shares within the round.
             var totalShares = _shares.Sum(pair => pair.Value);
 
@@ -68,7 +65,7 @@ namespace CoiniumServ.Payments.New
                 if (userId == -1)
                     continue;
 
-                Payouts.Add(new AwaitingPayment(Block, userId, amount));
+                Payouts.Add(new Payout(Block, userId, amount));
             }
 
             // mark the block as accounted

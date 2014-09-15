@@ -21,21 +21,25 @@
 // 
 #endregion
 
-using CoiniumServ.Miners;
 using CoiniumServ.Persistance.Blocks;
 
 namespace CoiniumServ.Payments.New
 {
-    public interface IAwaitingPayment
+    public class Payout : IPayout
     {
-        IPersistedBlock Block { get; }
+        public IPersistedBlock Block { get; private set; }
+        public int UserId { get; private set; }
+        public decimal Amount { get; private set; }
+        public string OriginalCurrency { get; private set; }
+        public string PaymentCurrency { get; private set; }
 
-        int UserId { get; }
-
-        decimal Amount { get; }
-
-        string OriginalCurrency { get; }
-
-        string PaymentCurrency { get; }
+        public Payout(IPersistedBlock block, int userId, decimal amount)
+        {
+            Block = block;
+            UserId = userId;
+            Amount = amount;
+            OriginalCurrency = "ORIG";
+            PaymentCurrency = "TRG";
+        }
     }
 }

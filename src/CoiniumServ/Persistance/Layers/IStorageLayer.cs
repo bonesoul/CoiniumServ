@@ -94,7 +94,7 @@ namespace CoiniumServ.Persistance.Layers
 
         void SetBalances(IList<IWorkerBalance> workerBalances);
 
-        void AddAwaitingPaymentsForRound(INewPaymentRound round);
+        void CommitPayoutsForRound(INewPaymentRound round);
 
         #endregion
     }

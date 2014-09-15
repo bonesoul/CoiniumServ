@@ -361,7 +361,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public void AddAwaitingPaymentsForRound(INewPaymentRound round)
+        public void CommitPayoutsForRound(INewPaymentRound round)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
