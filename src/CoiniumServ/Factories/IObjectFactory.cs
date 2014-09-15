@@ -105,9 +105,11 @@ namespace CoiniumServ.Factories
 
         #region payment objects 
 
-        IBlockAccounter GetPaymentCalculator(IPoolConfig poolConfig, IStorageLayer storageLayer);
-
         INewPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer);
+
+        IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer);
+
+        INewPaymentProcessor GetNewPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
         #endregion
 

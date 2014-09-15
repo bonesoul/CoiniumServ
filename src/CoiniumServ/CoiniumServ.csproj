@@ -194,6 +194,8 @@
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
+    <Compile Include="Payments\New\INewPaymentProcessor.cs" />
+    <Compile Include="Payments\New\NewPaymentProcessor.cs" />
     <Compile Include="Payments\New\Payout.cs" />
     <Compile Include="Payments\New\IPayout.cs" />
     <Compile Include="Payments\New\NewPaymentRound.cs" />

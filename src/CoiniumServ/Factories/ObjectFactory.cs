@@ -277,7 +277,7 @@ namespace CoiniumServ.Factories
 
         #region payment objects
 
-        public IBlockAccounter GetPaymentCalculator(IPoolConfig poolConfig, IStorageLayer storageLayer)
+        public IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
@@ -286,6 +286,17 @@ namespace CoiniumServ.Factories
             };
 
             return _applicationContext.Container.Resolve<IBlockAccounter>(@params);
+        }
+
+        public INewPaymentProcessor GetNewPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+                {"storageLayer", storageLayer}
+            };
+
+            return _applicationContext.Container.Resolve<INewPaymentProcessor>(@params);
         }
 
         public INewPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer)

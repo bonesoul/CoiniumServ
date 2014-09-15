@@ -22,16 +22,13 @@
 #endregion
 
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
-using CoiniumServ.Factories;
-using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
 
 namespace CoiniumServ.Payments.New
 {
-    public class BlockAccounter : IBlockAccounter
+    public class NewPaymentProcessor:INewPaymentProcessor
     {
         private Timer _timer;
 
@@ -39,48 +36,23 @@ namespace CoiniumServ.Payments.New
 
         private readonly IPoolConfig _poolConfig;
 
-        private readonly IObjectFactory _objectFactory;
-
-        private readonly IStorageLayer _storageLayer;
-
         private readonly ILogger _logger;
 
-        public BlockAccounter(IPoolConfig poolConfig, IObjectFactory objectFactory, IStorageLayer storageLayer)
+        public NewPaymentProcessor(IPoolConfig poolConfig)
         {
             _poolConfig = poolConfig;
-            _objectFactory = objectFactory;
-            _storageLayer = storageLayer;
             _logger = Log.ForContext<BlockAccounter>().ForContext("Component", poolConfig.Coin.Name);
 
             if (!_poolConfig.Payments.Enabled) // make sure payments are enabled.
                 return;
 
             // setup the timer to run calculations.  
-            _timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
+            //_timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
+            Run(null);
         }
 
         private void Run(object state)
         {
-            _stopWatch.Start();
-
-            // find that blocks that were confirmed but still unpaid.
-            var unpaidBlocks = _storageLayer.GetAllUnpaidBlocks(); 
-
-            // create the awaiting payment objects.
-            var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer)).ToList();
-
-            // loop through rounds
-            foreach (var round in rounds)
-            {
-                _storageLayer.CommitPayoutsForRound(round); // commit awaiting payments for the round.
-                _storageLayer.UpdateBlock(round.Block); // set the block for the round as accounted.
-            }
-
-            _logger.Information("Accounted {0} confirmed rounds, took {1:0.000} seconds", rounds.Count, (float) _stopWatch.ElapsedMilliseconds/1000);
-
-            _stopWatch.Reset();
-
-            _timer.Change(_poolConfig.Payments.Interval * 1000, Timeout.Infinite); // reset the timer.
         }
     }
 }

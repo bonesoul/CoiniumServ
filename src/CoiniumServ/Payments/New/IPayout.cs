@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using CoiniumServ.Miners;
 using CoiniumServ.Persistance.Blocks;
 
 namespace CoiniumServ.Payments.New
@@ -33,9 +32,5 @@ namespace CoiniumServ.Payments.New
         int UserId { get; }
 
         decimal Amount { get; }
-
-        string OriginalCurrency { get; }
-
-        string PaymentCurrency { get; }
     }
 }

@@ -188,7 +188,8 @@ namespace CoiniumServ.Pools
                 var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, Daemon, _storageLayer, blockProcessor);
                 paymentProcessor.Initialize();
 
-                _objectFactory.GetPaymentCalculator(Config, _storageLayer);
+                _objectFactory.GetBlockAccounter(Config, _storageLayer);
+                _objectFactory.GetNewPaymentProcessor(Config, _storageLayer);
             }
             catch (Exception e)
             {
