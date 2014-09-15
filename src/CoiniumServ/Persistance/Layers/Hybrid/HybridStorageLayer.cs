@@ -653,14 +653,12 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     foreach (var entry in round.Payouts)
                     {
                         connection.Execute(
-                            @"INSERT INTO Payout(Block,User, Amount, OriginalCurrency,PaymentCurrency,CreatedAt) VALUES(@blockId, @userId, @amount, @originalCurrency, @paymentCurrency, @createdAt)",
+                            @"INSERT INTO Payout(Block,User, Amount, CreatedAt) VALUES(@blockId, @userId, @amount, @createdAt)",
                             new
                             {
                                 blockId = round.Block.Height,
                                 userId = entry.UserId,
                                 amount = entry.Amount,
-                                originalCurrency = entry.OriginalCurrency,
-                                paymentCurrency = entry.PaymentCurrency,
                                 createdAt = DateTime.Now
                             });
                     }
@@ -668,7 +666,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while committing awaiting payments for round; {0:l}", e.Message);
+                _logger.Error("An exception occured while committing payouts for round; {0:l}", e.Message);
             }
         }
 
