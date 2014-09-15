@@ -41,14 +41,14 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             Rename.Column("amount").OnTable("Block").To("Amount");
             Rename.Column("time").OnTable("Block").To("CreatedAt");
 
-            // we'll be using block height as our foreign keys in payments tables, 
-            // so we need to first set the new primary key as height column.
-            Alter.Table("Block").AlterColumn("Id").AsInt32().NotNullable(); // remove primary key property from 'id' column.
-            Delete.PrimaryKey("Id").FromTable("Block"); // remove primary key on 'id'.
-            Create.PrimaryKey("Height").OnTable("Block").Column("Height"); // create new primary key on 'height' column.
-            Delete.Column("Id").FromTable("Block"); // delete the 'id' column as we don't need it anymore.
+            // new payment processor uses block height as the foreign key regularly.
+            // so we need to first drop the 'Id' column and set the new primary key as 'Height' column.
+            Alter.Table("Block").AlterColumn("Id").AsInt32().NotNullable(); // remove primary key property from 'Id' column.
+            Delete.PrimaryKey("Id").FromTable("Block"); // remove primary key on 'Id'.
+            Create.PrimaryKey("Height").OnTable("Block").Column("Height"); // create new primary key on 'Height' column.
+            Delete.Column("Id").FromTable("Block"); // delete the 'Id' column as we don't need it anymore.
 
-            // add reward column to block table - need to use SQL here as we are adding the column after 'Amount'.
+            // add reward column to block table.
             Execute.Sql("ALTER TABLE Block ADD Reward DECIMAL NOT NULL AFTER Amount");
 
             // add accounted column to block table
@@ -66,6 +66,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
                 .WithColumn("Block").AsInt32().ForeignKey("Block", "height")
                 .WithColumn("User").AsInt32().ForeignKey("User", "Id")
                 .WithColumn("Amount").AsDecimal().NotNullable()
+                .WithColumn("Completed").AsBoolean().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
 
             // create the transaction table.
@@ -82,11 +83,13 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
         public override void Down()
         {
             // revert back the changes on blocks height & id columns
-            Alter.Table("Block").AlterColumn("Height").AsInt32().NotNullable();
-            Delete.PrimaryKey("Height").FromTable("Block");
-            Delete.PrimaryKey("Reward").FromTable("Block");
-            Delete.PrimaryKey("Accounted").FromTable("Block");
-            Alter.Table("Blocks").AddColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity();
+            Alter.Table("Block").AlterColumn("Height").AsInt32().NotNullable(); // remove the private key property from 'Height' column.
+            Delete.PrimaryKey("Height").FromTable("Block"); // remove the primary key on 'Height'.
+            Alter.Table("Block").AddColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity(); // create the 'Id' column again and set is as primary key.            
+
+            // delete the new columns.
+            Delete.Column("Reward").FromTable("Block");
+            Delete.Column("Accounted").FromTable("Block");
 
             // revert back table & field names
             Rename.Table("Block").To("blocks");
@@ -98,9 +101,6 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             Rename.Column("TxHash").OnTable("blocks").To("txHash");
             Rename.Column("Amount").OnTable("blocks").To("amount");
             Rename.Column("CreatedAt").OnTable("blocks").To("time");
-
-            // delete the reward column from block table
-            Delete.Column("Reward").FromTable("Block");
 
             // delete the newly created tables.
             Delete.Table("User");
