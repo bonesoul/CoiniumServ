@@ -39,6 +39,7 @@ namespace CoiniumServ.Payments.New
             User = user;
             Payment = payout;
             Currency = currency;
+            CreatedAt = DateTime.Now;
         }
     }
 }

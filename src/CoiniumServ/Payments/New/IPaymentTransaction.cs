@@ -22,7 +22,6 @@
 #endregion
 
 using System;
-using System.Runtime.Serialization;
 
 namespace CoiniumServ.Payments.New
 {
@@ -36,7 +35,7 @@ namespace CoiniumServ.Payments.New
 
         string Currency { get; }
 
-        string TxId { get; }
+        string TxId { get; set; }
 
         DateTime CreatedAt { get; }
     }

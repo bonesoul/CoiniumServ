@@ -73,17 +73,17 @@ namespace CoiniumServ.Payments.New
 
         private void Run(object state)
         {
-            var paymentsToExecute = GetPaymentsToExecute(); // get the pending payments available for execution.            
-            var success = ExecutePayments(paymentsToExecute); // try to execute the payments.
+            var candidates = GetTransactionCandidates(); // get the pending payments available for execution.            
+            var executedPayments = ExecutePayments(candidates); // try to execute the payments.
 
-            if(success) // if we were able to execute the payments
-                CommitTransactions(paymentsToExecute); // commit them to storage layer.
+            //if(success) // if we were able to execute the payments
+                //CommitTransactions(paymentsToExecute); // commit them to storage layer.
         }
 
-        private IList<IPaymentTransaction> GetPaymentsToExecute()
+        private IEnumerable<KeyValuePair<string, List<IPaymentTransaction>>> GetTransactionCandidates()
         {
             var pendingPayments = _storageLayer.GetPendingPayouts(); // get all pending payments.
-            var paymentsToExecute = new List<IPaymentTransaction>();  // list of payments to be executed.
+            var perUserTransactions = new Dictionary<string, List<IPaymentTransaction>>();  // list of payments to be executed.
              
             foreach (var payment in pendingPayments)
             {
@@ -93,35 +93,54 @@ namespace CoiniumServ.Payments.New
                 if (user == null)
                     continue;
 
-                // see if user payout address is directly payable from the pool's main daemon connection
-                // which happens when a user connects an XYZ pool and want his payments in XYZ coin.
+                if (!perUserTransactions.ContainsKey(user.Username)) // check if our list of transactions to be executed already contains an entry for the user.
+                {
+                    // if not, create an entry that contains the list of transactions for the user.
 
-                var result = _daemonClient.ValidateAddress(user.Address); // does the user have a directly payable address set?
+                    // see if user payout address is directly payable from the pool's main daemon connection
+                    // which happens when a user connects an XYZ pool and want his payments in XYZ coin.
 
-                if (!result.IsValid) // if not skip the payment and let it handled by auto-exchange module.
-                    continue;
+                    var result = _daemonClient.ValidateAddress(user.Address); // does the user have a directly payable address set?
 
-                paymentsToExecute.Add(new PaymentTransaction(user, payment, _poolConfig.Coin.Symbol));
+                    if (!result.IsValid) // if not skip the payment and let it handled by auto-exchange module.
+                        continue;
+
+                    perUserTransactions.Add(user.Username, new List<IPaymentTransaction>());
+                }
+
+                perUserTransactions[user.Username].Add(new PaymentTransaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
             }
 
-            return paymentsToExecute;
+            return perUserTransactions;
         }
 
-        private bool ExecutePayments(IList<IPaymentTransaction> paymentsToExecute)
+        private IDictionary<string, List<IPaymentTransaction>> ExecutePayments(IEnumerable<KeyValuePair<string, List<IPaymentTransaction>>> paymentsToExecute)
         {
+            var filtered = new Dictionary<string, List<IPaymentTransaction>>();
+
             try
             {
-                if (paymentsToExecute.Count == 0) // make sure we have payments to execute.
-                    return true;
+                // filter out users whom total amount doesn't exceed the configured minimum payment amount.
+                filtered = paymentsToExecute.Where(
+                        x => x.Value.Sum(y => y.Payment.Amount) >= (decimal)_poolConfig.Payments.Minimum)
+                        .ToDictionary(x => x.Key, x => x.Value);
 
-                var payments = paymentsToExecute.ToDictionary(x => x.User.Address, x => x.Payment.Amount); // get dictionary of address<->amount pairs.
-                var result = _daemonClient.SendMany(_poolAccount, payments);
-                return true;
+                if (filtered.Count <= 0)  // make sure we have payments to execute even after our filter.
+                    return filtered;
+
+                // coin daemon expects us to handle outputs in <wallet_address,amount> format, create the data structure so.
+                var outputs = filtered.ToDictionary(x => x.Key, x => x.Value.Sum(y => y.Payment.Amount));
+                var txId = _daemonClient.SendMany(_poolAccount, outputs);
+
+                // set the transactionId to all executed payments.
+                filtered.ToList().ForEach(x => x.Value.ForEach(y => { y.TxId = txId; }));
+
+                return filtered;
             }
             catch (RpcException e)
             {
                 _logger.Error("An error occured while trying to execute payment; {0}", e.Message);
-                return false;
+                return filtered;
             }
         }
 

@@ -735,7 +735,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                                 amount = entry.Payment.Amount,
                                 currency = entry.Currency,
                                 txId = entry.TxId,
-                                createdAt = DateTime.Now
+                                createdAt = entry.CreatedAt
                             });
                     }
                 }
