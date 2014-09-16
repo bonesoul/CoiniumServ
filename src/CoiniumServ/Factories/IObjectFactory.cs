@@ -109,7 +109,7 @@ namespace CoiniumServ.Factories
 
         IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
-        INewPaymentProcessor GetNewPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer);
+        INewPaymentProcessor GetNewPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient);
 
         #endregion
 

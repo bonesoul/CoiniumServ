@@ -28,6 +28,7 @@ using System.Text;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Logging;
 using CoiniumServ.Miners;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Getwork.Service;
 using CoiniumServ.Utils.Extensions;
@@ -41,9 +42,9 @@ namespace CoiniumServ.Server.Mining.Getwork
         /// <summary>
         /// Unique subscription id for identifying the miner.
         /// </summary>
-        public int SubscriptionId { get; private set; }
+        public int Id { get; private set; }
 
-        public int UserId { get; set; }
+        public IUser User { get; set; }
 
         /// <summary>
         /// Username of the miner.
@@ -74,12 +75,12 @@ namespace CoiniumServ.Server.Mining.Getwork
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="subscriptionId"></param>
+        /// <param name="id"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
-        public GetworkMiner(int subscriptionId, IPool pool, IMinerManager minerManager)
+        public GetworkMiner(int id, IPool pool, IMinerManager minerManager)
         {
-            SubscriptionId = subscriptionId; // the id of the miner.
+            Id = id; // the id of the miner.
             Pool = pool;
             _minerManager = minerManager;
 

@@ -29,6 +29,7 @@ using AustinHarris.JsonRpc;
 using CoiniumServ.Jobs;
 using CoiniumServ.Logging;
 using CoiniumServ.Miners;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Errors;
@@ -54,9 +55,9 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Unique subscription id for identifying the miner.
         /// </summary>
-        public int SubscriptionId { get; private set; }
+        public int Id { get; private set; }
 
-        public int UserId { get; set; }
+        public IUser User { get; set; }
 
         /// <summary>
         /// Username of the miner.
@@ -111,15 +112,15 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Creates a new miner instance.
         /// </summary>
-        /// <param name="subscriptionId"></param>
+        /// <param name="id"></param>
         /// <param name="extraNonce"></param>
         /// <param name="connection"></param>
         /// <param name="pool"></param>
         /// <param name="minerManager"></param>
         /// <param name="storageLayer"></param>
-        public StratumMiner(int subscriptionId, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager, IStorageLayer storageLayer)
+        public StratumMiner(int id, UInt32 extraNonce, IConnection connection, IPool pool, IMinerManager minerManager, IStorageLayer storageLayer)
         {
-            SubscriptionId = subscriptionId; // the id of the miner.
+            Id = id; // the id of the miner.
             ExtraNonce = extraNonce;
             Connection = connection; // the underlying connection.
             Pool = pool;

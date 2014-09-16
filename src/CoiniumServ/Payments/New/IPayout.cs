@@ -21,16 +21,18 @@
 // 
 #endregion
 
-using CoiniumServ.Persistance.Blocks;
-
 namespace CoiniumServ.Payments.New
 {
     public interface IPayout
     {
-        IPersistedBlock Block { get; }
+        int Id { get; }
+
+        int BlockId { get; }
 
         int UserId { get; }
 
         decimal Amount { get; }
+
+        bool Completed { get; set; }
     }
 }

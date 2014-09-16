@@ -195,13 +195,17 @@
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
     <Compile Include="Payments\New\INewPaymentProcessor.cs" />
+    <Compile Include="Payments\New\IPaymentTransaction.cs" />
+    <Compile Include="Payments\New\IUser.cs" />
     <Compile Include="Payments\New\NewPaymentProcessor.cs" />
+    <Compile Include="Payments\New\PaymentTransaction.cs" />
     <Compile Include="Payments\New\Payout.cs" />
     <Compile Include="Payments\New\IPayout.cs" />
     <Compile Include="Payments\New\NewPaymentRound.cs" />
     <Compile Include="Payments\New\INewPaymentRound.cs" />
     <Compile Include="Payments\New\IBlockAccounter.cs" />
     <Compile Include="Payments\New\BlockAccounter.cs" />
+    <Compile Include="Payments\New\User.cs" />
     <Compile Include="Persistance\Blocks\PersistedBlock.cs" />
     <Compile Include="Persistance\IStorageConfig.cs" />
     <Compile Include="Persistance\Layers\Empty\EmptyStorageLayer.cs" />

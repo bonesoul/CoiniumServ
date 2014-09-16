@@ -78,9 +78,11 @@ namespace CoiniumServ.Persistance.Layers
 
         #region user storage
 
-        int CreateUser(IMiner miner);
+        void AddUser(IUser user);
 
-        int GetUserId(string username);
+        IUser GetUser(string username);
+
+        IUser GetUserById(int id);
 
         bool Authenticate(IMiner miner);
 
@@ -95,6 +97,10 @@ namespace CoiniumServ.Persistance.Layers
         void SetBalances(IList<IWorkerBalance> workerBalances);
 
         void CommitPayoutsForRound(INewPaymentRound round);
+
+        IList<IPayout> GetPendingPayouts();
+
+        void CommitExecutedPayments(IList<IPaymentTransaction> executedPayments);
 
         #endregion
     }

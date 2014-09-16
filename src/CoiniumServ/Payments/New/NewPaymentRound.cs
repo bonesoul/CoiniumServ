@@ -59,13 +59,13 @@ namespace CoiniumServ.Payments.New
                 var amount = (decimal)percent * Block.Reward;
 
                 // get the user id for the payment.
-                var userId = _storageLayer.GetUserId(pair.Key);
+                var user = _storageLayer.GetUser(pair.Key);
 
                 // if we can't find a user for the given username, just skip.
-                if (userId == -1)
+                if (user == null)
                     continue;
 
-                Payouts.Add(new Payout(Block, userId, amount));
+                Payouts.Add(new Payout(Block, user.Id, amount));
             }
 
             // mark the block as accounted

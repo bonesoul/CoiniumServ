@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Pools;
 using Newtonsoft.Json;
 
@@ -36,12 +37,12 @@ namespace CoiniumServ.Miners
         /// Unique subscription id for identifying the miner.
         /// </summary>
         [JsonProperty("id")]
-        int SubscriptionId { get; }
+        int Id { get; }
 
         /// <summary>
-        /// Persisted id for the miner.
+        /// User for the miner.
         /// </summary>
-        int UserId { get; set; }
+        IUser User { get; set; }
 
         /// <summary>
         /// Username of the miner.

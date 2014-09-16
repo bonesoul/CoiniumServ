@@ -22,33 +22,23 @@
 #endregion
 
 using System;
-using CoiniumServ.Persistance.Blocks;
 
 namespace CoiniumServ.Payments.New
 {
-    public class Payout : IPayout
+    public class PaymentTransaction:IPaymentTransaction
     {
         public int Id { get; private set; }
-        public int BlockId { get; private set; }
-        public int UserId { get; private set; }
-        public decimal Amount { get; private set; }
-        public bool Completed { get; set; }
+        public IUser User { get; private set; }
+        public IPayout Payment { get; private set; }
+        public string Currency { get; private set; }
+        public string TxId { get; set; }
+        public DateTime CreatedAt { get; private set; }
 
-        public Payout(IPersistedBlock block, int userId, decimal amount)
+        public PaymentTransaction(IUser user, IPayout payout, string currency)
         {
-            BlockId = (int)block.Height;
-            UserId = userId;
-            Amount = amount;
-            Completed = false;
-        }
-
-        public Payout(Int32 id, Int32 block, Int32 user, Decimal amount, bool completed)
-        {
-            Id = id;
-            BlockId = block;
-            UserId = user;
-            Amount = amount;
-            Completed = completed;
+            User = user;
+            Payment = payout;
+            Currency = currency;
         }
     }
 }

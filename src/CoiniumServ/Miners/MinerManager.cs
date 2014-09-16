@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Payments.New;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Getwork;
@@ -82,7 +83,7 @@ namespace CoiniumServ.Miners
 
             var instance = Activator.CreateInstance(typeof(T), @params); // create an instance of the miner.
             var miner = (IGetworkMiner)instance;
-            _miners.Add(miner.SubscriptionId, miner); // add it to our collection.
+            _miners.Add(miner.Id, miner); // add it to our collection.
 
             return (T)miner;
         }
@@ -101,7 +102,7 @@ namespace CoiniumServ.Miners
 
             var instance = Activator.CreateInstance(typeof(T), @params);  // create an instance of the miner.
             var miner = (IStratumMiner)instance;
-            _miners.Add(miner.SubscriptionId, miner); // add it to our collection.           
+            _miners.Add(miner.Id, miner); // add it to our collection.           
 
             return (T)miner;
         }
@@ -114,7 +115,7 @@ namespace CoiniumServ.Miners
                 select pair.Value).FirstOrDefault();
 
             if (miner != null)
-                _miners.Remove(miner.SubscriptionId);
+                _miners.Remove(miner.Id);
         }
 
         public void Authenticate(IMiner miner)
@@ -136,9 +137,12 @@ namespace CoiniumServ.Miners
                 stratumMiner.SendMessage(_poolConfig.Meta.MOTD); // send the motd.
             }
 
-            miner.UserId = _storageLayer.GetUserId(miner.Username); // set the persisted user id.
-            if (miner.UserId == -1) // if the user doesn't exist for miner.
-                miner.UserId = _storageLayer.CreateUser(miner); // create it.
+            miner.User = _storageLayer.GetUser(miner.Username); // query the user.
+            if (miner.User == null) // if the user doesn't exists.
+            {
+                _storageLayer.AddUser(new User(miner)); // create a new one.
+                miner.User =_storageLayer.GetUser(miner.Username); // re-query the newly created record.
+            }
 
             OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.            
         }

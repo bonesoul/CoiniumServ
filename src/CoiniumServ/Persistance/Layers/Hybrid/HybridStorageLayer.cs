@@ -544,57 +544,74 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return blocks;
         }
 
-        public int CreateUser(IMiner miner)
+        public void AddUser(IUser user)
         {
             try
             {
                 if (!IsEnabled)
-                    return -1;
+                    return;
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var id = connection.Query<int>(
-                        @"INSERT INTO User(Username, CreatedAt) VALUES (@username, @createdAt); 
-                        SELECT LAST_INSERT_ID();",
+                    connection.Execute(
+                        @"INSERT INTO User(Username, Address, CreatedAt) VALUES (@username, @address, @createdAt)",
                         new
                         {
-                            username = miner.Username,
+                            username = user.Username,
+                            address = user.Address,
                             createdAt = DateTime.Now
-                        }).Single();
-
-                    return id;
+                        });
                 }
             }
             catch (Exception e)
             {
                 _logger.Error("An exception occured while creating user; {0:l}", e.Message);
-                return -1;
             }
         }
 
-        public int GetUserId(string username)
+        public IUser GetUser(string username)
         {
             try
             {
                 if (!IsEnabled)
-                    return -1;
+                    return null;
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<int>("SELECT Id FROM User WHERE Username = @username",
-                        new { username }).Single();                  
+                    return connection.Query<User>("SELECT Id, Username FROM User WHERE Username = @username",
+                        new {username}).Single();
                 }
             }
-            catch (InvalidOperationException e) // fired when no record is found for given username
+            catch (InvalidOperationException) // fires when no result is found.
             {
-                return -1;
+                return null;
             }
             catch (Exception e)
             {
                 _logger.Error("An exception occured while getting user; {0:l}", e.Message);
-                return -1;
+                return null;
             }
-        }       
+        }
+
+        public IUser GetUserById(int id)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return null;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    return connection.Query<User>("SELECT Id, Username FROM User WHERE Id = @id",
+                        new { id }).Single();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting user; {0:l}", e.Message);
+                return null;
+            }
+        }
 
         public Dictionary<string, double> GetPreviousBalances()
         {
@@ -659,7 +676,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                             @"INSERT INTO Payout(Block,User, Amount, CreatedAt) VALUES(@blockId, @userId, @amount, @createdAt)",
                             new
                             {
-                                blockId = round.Block.Height,
+                                blockId = entry.BlockId,
                                 userId = entry.UserId,
                                 amount = entry.Amount,
                                 createdAt = DateTime.Now
@@ -670,6 +687,62 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             catch (Exception e)
             {
                 _logger.Error("An exception occured while committing payouts for round; {0:l}", e.Message);
+            }
+        }
+
+        public IList<IPayout> GetPendingPayouts()
+        {
+            var payouts = new List<IPayout>();
+
+            try
+            {
+                if (!IsEnabled)
+                    return payouts;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<Payout>(
+                            @"SELECT Id, Block, User, Amount, Completed FROM Payout Where Completed = false ORDER BY Id ASC");
+
+                    payouts.AddRange(results);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting pending blocks: {0:l}", e.Message);
+            }
+
+            return payouts;
+        }
+
+        public void CommitExecutedPayments(IList<IPaymentTransaction> executedPayments)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    foreach (var entry in executedPayments)
+                    {
+                        connection.Execute(
+                            @"INSERT INTO Transaction(User, Payment, Amount, Currency, TxId, CreatedAt) VALUES(@userId, @paymentId, @amount, @currency, @txId, @createdAt)",
+                            new
+                            {
+                                userId = entry.User.Id,
+                                paymentId = entry.Payment.Id,
+                                amount = entry.Payment.Amount,
+                                currency = entry.Currency,
+                                txId = entry.TxId,
+                                createdAt = DateTime.Now
+                            });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while committing transactions for executed payments; {0:l}", e.Message);
             }
         }
 
