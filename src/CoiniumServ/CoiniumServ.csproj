@@ -183,6 +183,8 @@
     <Compile Include="Miners\IMinerConfig.cs" />
     <Compile Include="Miners\MetaConfig.cs" />
     <Compile Include="Miners\MinerSoftware.cs" />
+    <Compile Include="Miners\Software\IMinerSoftware.cs" />
+    <Compile Include="Miners\Software\MinerSoftware.cs" />
     <Compile Include="Payments\IRewardsConfig.cs" />
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
