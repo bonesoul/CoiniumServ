@@ -30,6 +30,6 @@ namespace CoiniumServ.Payments
     {
         IPersistedBlock Block { get; }
 
-        IList<IPayment> Payouts { get; }                
+        IList<IPayment> Payments { get; }                
     }
 }

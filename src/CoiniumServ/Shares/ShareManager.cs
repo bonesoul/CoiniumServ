@@ -128,7 +128,7 @@ namespace CoiniumServ.Shares
             OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
 
             _storageLayer.AddBlock(share); // commit the block details to storage.
-            _storageLayer.MoveShares(share); // move associated shares.
+            _storageLayer.MoveCurrentShares(share.Height); // move associated shares to new key.
         }
 
         private void HandleInvalidShare(IShare share)

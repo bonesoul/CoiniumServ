@@ -116,6 +116,24 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
+        public void MoveCurrentShares(int height)
+        {
+            try
+            {
+                if (!IsEnabled || !_redisProvider.IsConnected)
+                    return;
+
+                // rename round.
+                var currentKey = string.Format("{0}:shares:round:current", _coin);
+                var roundKey = string.Format("{0}:shares:round:{1}", _coin, height);
+                _redisProvider.Client.Rename(currentKey, roundKey);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while moving shares for new block: {0:l}", e.Message);
+            }
+        }
+
         public void RemoveShares(IPaymentRound round)
         {
             try
@@ -133,28 +151,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public void MoveShares(IShare share)
-        {
-            try
-            {
-                if (!IsEnabled || !_redisProvider.IsConnected)
-                    return;
-
-                if (!share.IsBlockAccepted)
-                    return;
-
-                // rename round.
-                var currentKey = string.Format("{0}:shares:round:current", _coin);
-                var roundKey = string.Format("{0}:shares:round:{1}", _coin, share.Height);
-                _redisProvider.Client.Rename(currentKey, roundKey);
-            }
-            catch (Exception e)
-            {
-                _logger.Error("An exception occured while moving shares for new block: {0:l}", e.Message);
-            }
-        }
-
-        public void MoveSharesToCurrentRound(IPersistedBlock block)
+        public void MoveOrphanedShares(IPersistedBlock block)
         {
             try
             {
@@ -369,7 +366,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetAllUnpaidBlocks()
+        public IEnumerable<IPersistedBlock> GetUnpaidBlocks()
         {
             var blocks = new List<IPersistedBlock>();
 
@@ -394,7 +391,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetAllPendingBlocks()
+        public IEnumerable<IPersistedBlock> GetPendingBlocks()
         {
             var blocks = new List<IPersistedBlock>();
 
@@ -582,36 +579,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return previousBalances;
         }
 
-        public void CommitPayoutsForRound(IPaymentRound round)
-        {
-            try
-            {
-                if (!IsEnabled)
-                    return;
-
-                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
-                {
-                    foreach (var entry in round.Payouts)
-                    {
-                        connection.Execute(
-                            @"INSERT INTO Payout(Block,User, Amount, CreatedAt) VALUES(@blockId, @userId, @amount, @createdAt)",
-                            new
-                            {
-                                blockId = entry.BlockId,
-                                userId = entry.UserId,
-                                amount = entry.Amount,
-                                createdAt = DateTime.Now
-                            });
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error("An exception occured while committing payouts for round; {0:l}", e.Message);
-            }
-        }
-
-        public IList<IPayment> GetPendingPayouts()
+        public IList<IPayment> GetPendingPayments()
         {
             var payouts = new List<IPayment>();
 
@@ -636,7 +604,33 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return payouts;
         }
 
-        public void UpdatePayout(IPayment payout)
+        public void AddPayment(IPayment payment)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    connection.Execute(
+                        @"INSERT INTO Payout(Block,User, Amount, CreatedAt) VALUES(@blockId, @userId, @amount, @createdAt)",
+                        new
+                        {
+                            blockId = payment.BlockId,
+                            userId = payment.UserId,
+                            amount = payment.Amount,
+                            createdAt = DateTime.Now
+                        });
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while committing payment; {0:l}", e.Message);
+            }
+        }
+
+        public void UpdatePayment(IPayment payment)
         {
             try
             {
@@ -649,8 +643,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         @"UPDATE Payout SET Completed = @completed WHERE Id = @id",
                         new
                         {
-                            completed = payout.Completed,
-                            id = payout.Id
+                            completed = payment.Completed,
+                            id = payment.Id
                         });
                 }
             }

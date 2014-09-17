@@ -64,7 +64,7 @@ namespace CoiniumServ.Payments
             _stopWatch.Start();
 
             // find that blocks that were confirmed but still unpaid.
-            var unpaidBlocks = _storageLayer.GetAllUnpaidBlocks(); 
+            var unpaidBlocks = _storageLayer.GetUnpaidBlocks(); 
 
             // create the payouts.
             var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer)).ToList();
@@ -72,7 +72,12 @@ namespace CoiniumServ.Payments
             // loop through rounds
             foreach (var round in rounds)
             {
-                _storageLayer.CommitPayoutsForRound(round); // commit awaiting payments for the round.
+                // commit awaiting payments for the round.
+                foreach (var payment in round.Payments)
+                {
+                    _storageLayer.AddPayment(payment);
+                }
+
                 _storageLayer.RemoveShares(round); // remove the shares for the round.
                 _storageLayer.UpdateBlock(round.Block); // set the block for the round as accounted.
             }

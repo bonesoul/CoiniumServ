@@ -101,18 +101,23 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             }
         }
 
+        public void MoveCurrentShares(int height)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemoveShares(IPaymentRound round)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException(); 
         }
 
-        public void MoveShares(IShare share)
+        public void MoveCurrentShares(IShare share)
         {
             // The function is not supported as MPOS mode doesn't require the functionality.
         }
 
-        public void MoveSharesToCurrentRound(IPersistedBlock block)
+        public void MoveOrphanedShares(IPersistedBlock block)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
@@ -226,13 +231,13 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetAllUnpaidBlocks()
+        public IEnumerable<IPersistedBlock> GetUnpaidBlocks()
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IPersistedBlock> GetAllPendingBlocks()
+        public IEnumerable<IPersistedBlock> GetPendingBlocks()
         {
             var blocks = new List<IPersistedBlock>();
 
@@ -355,13 +360,18 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public IList<IPayment> GetPendingPayouts()
+        public IList<IPayment> GetPendingPayments()
         {
             // TODO: implement me!
             throw new NotImplementedException();
         }
 
-        public void UpdatePayout(IPayment payout)
+        public void AddPayment(IPayment payment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePayment(IPayment payment)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();

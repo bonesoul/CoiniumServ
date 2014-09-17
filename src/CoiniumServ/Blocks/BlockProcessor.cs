@@ -68,7 +68,7 @@ namespace CoiniumServ.Blocks
         {
             _stopWatch.Start();
 
-            var pendingBlocks = _storageLayer.GetAllPendingBlocks();
+            var pendingBlocks = _storageLayer.GetPendingBlocks();
             var pendingCount = 0;
             var confirmedCount = 0;
             var orphanedCount = 0;
@@ -85,7 +85,7 @@ namespace CoiniumServ.Blocks
                     case BlockStatus.Pending:
                         break;
                     case BlockStatus.Orphaned:
-                        _storageLayer.MoveSharesToCurrentRound(block); // move existing shares for contributed miners to current round.
+                        _storageLayer.MoveOrphanedShares(block); // move existing shares for contributed miners to current round.
                         _storageLayer.UpdateBlock(block); // update block in our persistance layer.
                         orphanedCount++;             
                         break;

@@ -89,7 +89,7 @@ namespace CoiniumServ.Payments
 
         private IEnumerable<KeyValuePair<string, List<ITransaction>>> GetTransactionCandidates()
         {
-            var pendingPayments = _storageLayer.GetPendingPayouts(); // get all pending payments.
+            var pendingPayments = _storageLayer.GetPendingPayments(); // get all pending payments.
             var perUserTransactions = new Dictionary<string, List<ITransaction>>();  // list of payments to be executed.
              
             foreach (var payment in pendingPayments)
@@ -166,7 +166,7 @@ namespace CoiniumServ.Payments
             foreach (var transaction in executedPayments)
             {
                 _storageLayer.AddTransaction(transaction);
-                _storageLayer.UpdatePayout(transaction.Payment);
+                _storageLayer.UpdatePayment(transaction.Payment);
             }
         }
 

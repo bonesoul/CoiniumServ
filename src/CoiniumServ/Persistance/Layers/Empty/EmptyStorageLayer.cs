@@ -39,17 +39,17 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return; // just skip.
         }
 
+        public void MoveCurrentShares(int height)
+        {
+            return; // just skip.
+        }
+
         public void RemoveShares(IPaymentRound round)
         {
             return; // just skip.
         }
 
-        public void MoveShares(IShare share)
-        {
-            return; // just skip.
-        }
-
-        public void MoveSharesToCurrentRound(IPersistedBlock block)
+        public void MoveOrphanedShares(IPersistedBlock block)
         {
             return; // just skip.
         }
@@ -89,12 +89,12 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return new Dictionary<string, int>(); // return an empty dictionary.
         }
 
-        public IEnumerable<IPersistedBlock> GetAllUnpaidBlocks()
+        public IEnumerable<IPersistedBlock> GetUnpaidBlocks()
         {
             return new List<IPersistedBlock>(); // return an empty list.
         }
 
-        public IEnumerable<IPersistedBlock> GetAllPendingBlocks()
+        public IEnumerable<IPersistedBlock> GetPendingBlocks()
         {
             return new List<IPersistedBlock>(); // return an empty list.
         }
@@ -134,12 +134,17 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return;
         }
 
-        public IList<IPayment> GetPendingPayouts()
+        public IList<IPayment> GetPendingPayments()
         {
             return new List<IPayment>();
         }
 
-        public void UpdatePayout(IPayment payout)
+        public void AddPayment(IPayment payment)
+        {
+            return;
+        }
+
+        public void UpdatePayment(IPayment payment)
         {
             return;
         }
