@@ -26,23 +26,23 @@ using System.Linq;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 
-namespace CoiniumServ.Payments.Round
+namespace CoiniumServ.Payments
 {
-    public class NewPaymentRound : INewPaymentRound
+    public class PaymentRound : IPaymentRound
     {
         public IPersistedBlock Block { get; private set; }
-        public IList<IPayout> Payouts { get; private set; }
+        public IList<IPayment> Payouts { get; private set; }
 
         private readonly IDictionary<string, double> _shares;
 
         private readonly IStorageLayer _storageLayer;
 
-        public NewPaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
+        public PaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
         {
             Block = block;
             _storageLayer = storageLayer;
 
-            Payouts = new List<IPayout>();
+            Payouts = new List<IPayment>();
             _shares = _storageLayer.GetShares(Block); // load the shares for the round.
             CalculatePayments(); // calculate the per-user payments.
         }
@@ -65,7 +65,7 @@ namespace CoiniumServ.Payments.Round
                 if (user == null)
                     continue;
 
-                Payouts.Add(new Payout(Block, user.Id, amount));
+                Payouts.Add(new Payment(Block, user.Id, amount));
             }
 
             // mark the block as accounted

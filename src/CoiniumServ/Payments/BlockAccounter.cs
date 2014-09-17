@@ -29,7 +29,7 @@ using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
 
-namespace CoiniumServ.Payments.Accounter
+namespace CoiniumServ.Payments
 {
     public class BlockAccounter : IBlockAccounter
     {

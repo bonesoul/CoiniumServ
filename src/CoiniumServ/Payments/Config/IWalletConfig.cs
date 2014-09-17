@@ -21,15 +21,15 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Payments.Round
+namespace CoiniumServ.Payments.Config
 {
-    public interface INewPaymentRound
+    public interface IWalletConfig:IConfig
     {
-        IPersistedBlock Block { get; }
-
-        IList<IPayout> Payouts { get; }                
+        /// <summary>
+        ///  Address that generated coins will arrive.
+        /// </summary>
+        string Adress { get; }
     }
 }

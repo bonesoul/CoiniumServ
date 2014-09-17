@@ -20,25 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using CoiniumServ.Configuration;
+
+using System.Collections.Generic;
+using CoiniumServ.Persistance.Blocks;
 
 namespace CoiniumServ.Payments
 {
-    public interface IPaymentConfig:IConfig
+    public interface IPaymentRound
     {
-        bool Enabled { get; }
+        IPersistedBlock Block { get; }
 
-        /// <summary>
-        /// interval in seconds that payment-processor will be running.
-        /// </summary>
-        Int32 Interval { get; }
-
-        /// <summary>
-        /// minimum amount of coins before a miner is eligable for getting a payment.
-        /// </summary>
-        double Minimum { get; }
-
-        void Disable();
+        IList<IPayment> Payouts { get; }                
     }
 }

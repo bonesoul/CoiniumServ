@@ -20,15 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Configuration;
 
 namespace CoiniumServ.Payments
 {
-    public interface IWalletConfig:IConfig
+    public interface IPaymentProcessor
     {
-        /// <summary>
-        ///  Address that generated coins will arrive.
-        /// </summary>
-        string Adress { get; }
     }
 }

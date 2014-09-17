@@ -31,6 +31,7 @@ using CoiniumServ.Jobs;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.Config;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;

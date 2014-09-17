@@ -20,39 +20,53 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using JsonConfig;
 using Serilog;
 
-namespace CoiniumServ.Payments
+namespace CoiniumServ.Payments.Config
 {
-    public class PaymentConfig:IPaymentConfig
+    public class RewardsConfig:IRewardsConfig
     {
         public bool Valid { get; private set; }
-        public bool Enabled { get; private set; }
-        public int Interval { get; private set; }
-        public double Minimum { get; private set; }
 
-        public PaymentConfig(dynamic config)
+        /// <summary>
+        /// list of addresses that gets a percentage from each mined block (ie, pool fee.)
+        /// </summary>
+        private readonly IDictionary<string, float> _rewards;
+
+        public RewardsConfig(dynamic config)
         {
             try
             {
-                // load the config data.
-                Enabled = config.enabled;
-                Interval = config.interval == 0 ? 60 : config.interval;
-                Minimum = config.minimum == 0 ? 0.01 : config.minimum;
+                _rewards = new Dictionary<string, float>();
+
+                // weird stuff going below because of JsonConfig libraries handling of dictionaries.
+                foreach (ConfigObject kvp in config)
+                    foreach (KeyValuePair<string, object> pair in kvp)
+                        _rewards.Add(pair.Key, float.Parse(pair.Value.ToString(), CultureInfo.InvariantCulture));
 
                 Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<PaymentConfig>().Error(e, "Error loading payment configuration");
+                Log.Logger.ForContext<RewardsConfig>().Error(e, "Error loading rewards configuration");
             }
         }
 
-        public void Disable()
+        public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
         {
-            Enabled = false;
+            return _rewards.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

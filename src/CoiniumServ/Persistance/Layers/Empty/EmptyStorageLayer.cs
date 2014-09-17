@@ -24,8 +24,6 @@ using System.Collections.Generic;
 using CoiniumServ.Accounts;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Payments.Processor;
-using CoiniumServ.Payments.Round;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
@@ -41,7 +39,7 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return; // just skip.
         }
 
-        public void RemoveShares(INewPaymentRound round)
+        public void RemoveShares(IPaymentRound round)
         {
             return; // just skip.
         }
@@ -131,22 +129,22 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return new Dictionary<string, double>(); // return an empty dictionary.
         }
 
-        public void CommitPayoutsForRound(INewPaymentRound round)
+        public void CommitPayoutsForRound(IPaymentRound round)
         {
             return;
         }
 
-        public IList<IPayout> GetPendingPayouts()
+        public IList<IPayment> GetPendingPayouts()
         {
-            return new List<IPayout>();
+            return new List<IPayment>();
         }
 
-        public void UpdatePayout(IPayout payout)
+        public void UpdatePayout(IPayment payout)
         {
             return;
         }
 
-        public void AddTransaction(IPaymentTransaction transaction)
+        public void AddTransaction(ITransaction transaction)
         {
             return;
         }

@@ -26,8 +26,6 @@ using System.Linq;
 using CoiniumServ.Accounts;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Payments.Processor;
-using CoiniumServ.Payments.Round;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
@@ -103,7 +101,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             }
         }
 
-        public void RemoveShares(INewPaymentRound round)
+        public void RemoveShares(IPaymentRound round)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException(); 
@@ -351,25 +349,25 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public void CommitPayoutsForRound(INewPaymentRound round)
+        public void CommitPayoutsForRound(IPaymentRound round)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
         }
 
-        public IList<IPayout> GetPendingPayouts()
+        public IList<IPayment> GetPendingPayouts()
         {
             // TODO: implement me!
             throw new NotImplementedException();
         }
 
-        public void UpdatePayout(IPayout payout)
+        public void UpdatePayout(IPayment payout)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
         }
 
-        public void AddTransaction(IPaymentTransaction transaction)
+        public void AddTransaction(ITransaction transaction)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();

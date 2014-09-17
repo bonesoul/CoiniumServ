@@ -20,29 +20,35 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using Serilog;
+using CoiniumServ.Persistance.Blocks;
 
 namespace CoiniumServ.Payments
 {
-    public class WalletConfig:IWalletConfig
+    public class Payment : IPayment
     {
-        public string Adress { get; private set; }
-        public bool Valid { get; private set; }
+        public int Id { get; private set; }
+        public int BlockId { get; private set; }
+        public int UserId { get; private set; }
+        public decimal Amount { get; private set; }
+        public bool Completed { get; set; }
 
-        public WalletConfig(dynamic config)
+        public Payment(IPersistedBlock block, int userId, decimal amount)
         {
-            try
-            {
-                Adress = config.address;
+            BlockId = (int)block.Height;
+            UserId = userId;
+            Amount = amount;
+            Completed = false;
+        }
 
-                Valid = true;
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<WalletConfig>().Error(e, "Error loading wallet configuration");
-            }
+        public Payment(Int32 id, Int32 block, Int32 user, Decimal amount, bool completed)
+        {
+            Id = id;
+            BlockId = block;
+            UserId = user;
+            Amount = amount;
+            Completed = completed;
         }
     }
 }

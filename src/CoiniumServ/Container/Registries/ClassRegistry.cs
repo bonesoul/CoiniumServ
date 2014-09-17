@@ -28,9 +28,6 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Markets;
 using CoiniumServ.Payments;
-using CoiniumServ.Payments.Accounter;
-using CoiniumServ.Payments.Processor;
-using CoiniumServ.Payments.Round;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
 using Nancy.Bootstrapper;
@@ -58,8 +55,8 @@ namespace CoiniumServ.Container.Registries
 
             // payment objects
             _applicationContext.Container.Register<IBlockAccounter, BlockAccounter>().AsMultiInstance();
-            _applicationContext.Container.Register<INewPaymentRound, NewPaymentRound>().AsMultiInstance();
-            _applicationContext.Container.Register<INewPaymentProcessor, NewPaymentProcessor>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentRound, PaymentRound>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
 
             // config
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();

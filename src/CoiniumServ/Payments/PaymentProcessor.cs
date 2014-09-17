@@ -31,9 +31,9 @@ using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
 
-namespace CoiniumServ.Payments.Processor
+namespace CoiniumServ.Payments
 {
-    public class NewPaymentProcessor:INewPaymentProcessor
+    public class PaymentProcessor:IPaymentProcessor
     {
         private Timer _timer;
 
@@ -49,12 +49,12 @@ namespace CoiniumServ.Payments.Processor
 
         private readonly ILogger _logger;
 
-        public NewPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient)
+        public PaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient)
         {
             _poolConfig = poolConfig;
             _storageLayer = storageLayer;
             _daemonClient = daemonClient;
-            _logger = Log.ForContext<NewPaymentProcessor>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", poolConfig.Coin.Name);
 
             if (!_poolConfig.Payments.Enabled) // make sure payments are enabled.
                 return;
@@ -87,10 +87,10 @@ namespace CoiniumServ.Payments.Processor
             _timer.Change(_poolConfig.Payments.Interval * 1000, Timeout.Infinite); // reset the timer.
         }
 
-        private IEnumerable<KeyValuePair<string, List<IPaymentTransaction>>> GetTransactionCandidates()
+        private IEnumerable<KeyValuePair<string, List<ITransaction>>> GetTransactionCandidates()
         {
             var pendingPayments = _storageLayer.GetPendingPayouts(); // get all pending payments.
-            var perUserTransactions = new Dictionary<string, List<IPaymentTransaction>>();  // list of payments to be executed.
+            var perUserTransactions = new Dictionary<string, List<ITransaction>>();  // list of payments to be executed.
              
             foreach (var payment in pendingPayments)
             {
@@ -112,18 +112,18 @@ namespace CoiniumServ.Payments.Processor
                     if (!result.IsValid) // if not skip the payment and let it handled by auto-exchange module.
                         continue;
 
-                    perUserTransactions.Add(user.Username, new List<IPaymentTransaction>());
+                    perUserTransactions.Add(user.Username, new List<ITransaction>());
                 }
 
-                perUserTransactions[user.Username].Add(new PaymentTransaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
+                perUserTransactions[user.Username].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
             }
 
             return perUserTransactions;
         }
 
-        private IList<IPaymentTransaction> ExecutePayments(IEnumerable<KeyValuePair<string, List<IPaymentTransaction>>> paymentsToExecute)
+        private IList<ITransaction> ExecutePayments(IEnumerable<KeyValuePair<string, List<ITransaction>>> paymentsToExecute)
         {
-            var executed = new List<IPaymentTransaction>();
+            var executed = new List<ITransaction>();
 
             try
             {
@@ -157,7 +157,7 @@ namespace CoiniumServ.Payments.Processor
             }
         }
 
-        private void CommitTransactions(IList<IPaymentTransaction> executedPayments)
+        private void CommitTransactions(IList<ITransaction> executedPayments)
         {
             if (executedPayments.Count == 0) // make sure we have payments to execute.
                 return;

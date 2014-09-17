@@ -22,23 +22,24 @@
 #endregion
 
 using System;
-using CoiniumServ.Accounts;
-using CoiniumServ.Payments.Round;
+using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Payments.Processor
+namespace CoiniumServ.Payments.Config
 {
-    public interface IPaymentTransaction
+    public interface IPaymentConfig:IConfig
     {
-        int Id { get; }
+        bool Enabled { get; }
 
-        IAccount User { get; }
+        /// <summary>
+        /// interval in seconds that payment-processor will be running.
+        /// </summary>
+        Int32 Interval { get; }
 
-        IPayout  Payment { get; }
+        /// <summary>
+        /// minimum amount of coins before a miner is eligable for getting a payment.
+        /// </summary>
+        double Minimum { get; }
 
-        string Currency { get; }
-
-        string TxId { get; set; }
-
-        DateTime CreatedAt { get; }
+        void Disable();
     }
 }

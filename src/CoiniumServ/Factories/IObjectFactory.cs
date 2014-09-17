@@ -33,9 +33,7 @@ using CoiniumServ.Logging;
 using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
-using CoiniumServ.Payments.Accounter;
-using CoiniumServ.Payments.Processor;
-using CoiniumServ.Payments.Round;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
@@ -104,11 +102,11 @@ namespace CoiniumServ.Factories
 
         #region payment objects 
 
-        INewPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer);
+        IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer);
 
         IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
-        INewPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient);
+        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient);
 
         #endregion
 

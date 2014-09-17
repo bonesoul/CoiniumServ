@@ -21,27 +21,12 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Accounts;
-using CoiniumServ.Payments.Round;
+using System.Collections.Generic;
+using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Payments.Processor
+namespace CoiniumServ.Payments.Config
 {
-    public class PaymentTransaction:IPaymentTransaction
+    public interface IRewardsConfig :IEnumerable<KeyValuePair<string, float>>,  IConfig 
     {
-        public int Id { get; private set; }
-        public IAccount User { get; private set; }
-        public IPayout Payment { get; private set; }
-        public string Currency { get; private set; }
-        public string TxId { get; set; }
-        public DateTime CreatedAt { get; private set; }
-
-        public PaymentTransaction(IAccount user, IPayout payout, string currency)
-        {
-            User = user;
-            Payment = payout;
-            Currency = currency;
-            CreatedAt = DateTime.Now;
-        }
     }
 }

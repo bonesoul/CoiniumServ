@@ -21,18 +21,9 @@
 // 
 #endregion
 
-namespace CoiniumServ.Payments.Round
+namespace CoiniumServ.Payments
 {
-    public interface IPayout
+    public interface IBlockAccounter
     {
-        int Id { get; }
-
-        int BlockId { get; }
-
-        int UserId { get; }
-
-        decimal Amount { get; }
-
-        bool Completed { get; set; }
     }
 }

@@ -28,8 +28,7 @@ using CoiniumServ.Accounts;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Miners;
-using CoiniumServ.Payments.Processor;
-using CoiniumServ.Payments.Round;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
@@ -117,7 +116,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public void RemoveShares(INewPaymentRound round)
+        public void RemoveShares(IPaymentRound round)
         {
             try
             {
@@ -583,7 +582,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return previousBalances;
         }
 
-        public void CommitPayoutsForRound(INewPaymentRound round)
+        public void CommitPayoutsForRound(IPaymentRound round)
         {
             try
             {
@@ -612,9 +611,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public IList<IPayout> GetPendingPayouts()
+        public IList<IPayment> GetPendingPayouts()
         {
-            var payouts = new List<IPayout>();
+            var payouts = new List<IPayment>();
 
             try
             {
@@ -623,7 +622,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<Payout>(
+                    var results = connection.Query<Payment>(
                             @"SELECT Id, Block, User, Amount, Completed FROM Payout Where Completed = false ORDER BY Id ASC");
 
                     payouts.AddRange(results);
@@ -637,7 +636,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return payouts;
         }
 
-        public void UpdatePayout(IPayout payout)
+        public void UpdatePayout(IPayment payout)
         {
             try
             {
@@ -661,7 +660,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public void AddTransaction(IPaymentTransaction transaction)
+        public void AddTransaction(ITransaction transaction)
         {
             try
             {

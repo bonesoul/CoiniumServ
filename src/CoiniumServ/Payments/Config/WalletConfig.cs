@@ -21,9 +21,29 @@
 // 
 #endregion
 
-namespace CoiniumServ.Payments.Accounter
+using System;
+using Serilog;
+
+namespace CoiniumServ.Payments.Config
 {
-    public interface IBlockAccounter
+    public class WalletConfig:IWalletConfig
     {
+        public string Adress { get; private set; }
+        public bool Valid { get; private set; }
+
+        public WalletConfig(dynamic config)
+        {
+            try
+            {
+                Adress = config.address;
+
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<WalletConfig>().Error(e, "Error loading wallet configuration");
+            }
+        }
     }
 }
