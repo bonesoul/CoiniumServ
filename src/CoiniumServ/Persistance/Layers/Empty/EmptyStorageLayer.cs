@@ -154,7 +154,12 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return new List<IPayout>();
         }
 
-        public void CommitExecutedPayments(IList<IPaymentTransaction> executedPayments)
+        public void UpdatePayout(IPayout payout)
+        {
+            return;
+        }
+
+        public void AddTransaction(IPaymentTransaction transaction)
         {
             return;
         }

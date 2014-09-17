@@ -379,7 +379,13 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public void CommitExecutedPayments(IList<IPaymentTransaction> executedPayments)
+        public void UpdatePayout(IPayout payout)
+        {
+            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
+            throw new NotImplementedException();
+        }
+
+        public void AddTransaction(IPaymentTransaction transaction)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();

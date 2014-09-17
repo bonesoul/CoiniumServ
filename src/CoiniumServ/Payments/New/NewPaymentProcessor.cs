@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -55,7 +54,7 @@ namespace CoiniumServ.Payments.New
             _poolConfig = poolConfig;
             _storageLayer = storageLayer;
             _daemonClient = daemonClient;
-            _logger = Log.ForContext<BlockAccounter>().ForContext("Component", poolConfig.Coin.Name);
+            _logger = Log.ForContext<NewPaymentProcessor>().ForContext("Component", poolConfig.Coin.Name);
 
             if (!_poolConfig.Payments.Enabled) // make sure payments are enabled.
                 return;
@@ -67,17 +66,25 @@ namespace CoiniumServ.Payments.New
                 return; // if we can't, stop the payment processor.
 
             // setup the timer to run calculations.  
-            //_timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
-            Run(null);
+            _timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
         }
 
         private void Run(object state)
         {
+            _stopWatch.Start();
+
             var candidates = GetTransactionCandidates(); // get the pending payments available for execution.            
             var executedPayments = ExecutePayments(candidates); // try to execute the payments.
+            CommitTransactions(executedPayments); // commit them to storage layer.
 
-            //if(success) // if we were able to execute the payments
-                //CommitTransactions(paymentsToExecute); // commit them to storage layer.
+            if (executedPayments.Count > 0)
+                _logger.Information("Executed {0} payments, took {1:0.000} seconds", executedPayments.Count, (float) _stopWatch.ElapsedMilliseconds/1000);
+            else
+                _logger.Information("No pending payments found");
+
+            _stopWatch.Reset();
+
+            _timer.Change(_poolConfig.Payments.Interval * 1000, Timeout.Infinite); // reset the timer.
         }
 
         private IEnumerable<KeyValuePair<string, List<IPaymentTransaction>>> GetTransactionCandidates()
@@ -114,33 +121,39 @@ namespace CoiniumServ.Payments.New
             return perUserTransactions;
         }
 
-        private IDictionary<string, List<IPaymentTransaction>> ExecutePayments(IEnumerable<KeyValuePair<string, List<IPaymentTransaction>>> paymentsToExecute)
+        private IList<IPaymentTransaction> ExecutePayments(IEnumerable<KeyValuePair<string, List<IPaymentTransaction>>> paymentsToExecute)
         {
-            var filtered = new Dictionary<string, List<IPaymentTransaction>>();
+            var executed = new List<IPaymentTransaction>();
 
             try
             {
                 // filter out users whom total amount doesn't exceed the configured minimum payment amount.
-                filtered = paymentsToExecute.Where(
+                var filtered = paymentsToExecute.Where(
                         x => x.Value.Sum(y => y.Payment.Amount) >= (decimal)_poolConfig.Payments.Minimum)
                         .ToDictionary(x => x.Key, x => x.Value);
 
                 if (filtered.Count <= 0)  // make sure we have payments to execute even after our filter.
-                    return filtered;
+                    return executed;
 
                 // coin daemon expects us to handle outputs in <wallet_address,amount> format, create the data structure so.
                 var outputs = filtered.ToDictionary(x => x.Key, x => x.Value.Sum(y => y.Payment.Amount));
                 var txId = _daemonClient.SendMany(_poolAccount, outputs);
 
-                // set the transactionId to all executed payments.
-                filtered.ToList().ForEach(x => x.Value.ForEach(y => { y.TxId = txId; }));
+                // loop through all executed payments
+                filtered.ToList().ForEach(x => x.Value.ForEach(y =>
+                {
+                    y.TxId = txId; // set transaction id.
+                    y.Payment.Completed = true; // set as completed.
+                }));
 
-                return filtered;
+                executed = filtered.SelectMany(x => x.Value).ToList();
+
+                return executed;
             }
             catch (RpcException e)
             {
                 _logger.Error("An error occured while trying to execute payment; {0}", e.Message);
-                return filtered;
+                return executed;
             }
         }
 
@@ -149,10 +162,11 @@ namespace CoiniumServ.Payments.New
             if (executedPayments.Count == 0) // make sure we have payments to execute.
                 return;
 
-            foreach (var entry in executedPayments)
+            // commit transactions & update payments.
+            foreach (var transaction in executedPayments)
             {
-                entry.Payment.Completed = true; // mark the payout as completed.
-
+                _storageLayer.AddTransaction(transaction);
+                _storageLayer.UpdatePayout(transaction.Payment);
             }
         }
 

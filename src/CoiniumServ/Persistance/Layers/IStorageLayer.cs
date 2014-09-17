@@ -100,7 +100,9 @@ namespace CoiniumServ.Persistance.Layers
 
         IList<IPayout> GetPendingPayouts();
 
-        void CommitExecutedPayments(IList<IPaymentTransaction> executedPayments);
+        void UpdatePayout(IPayout payout);
+
+        void AddTransaction(IPaymentTransaction transaction);
 
         #endregion
     }

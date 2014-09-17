@@ -709,13 +709,13 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting pending blocks: {0:l}", e.Message);
+                _logger.Error("An exception occured while getting pending payments: {0:l}", e.Message);
             }
 
             return payouts;
         }
 
-        public void CommitExecutedPayments(IList<IPaymentTransaction> executedPayments)
+        public void UpdatePayout(IPayout payout)
         {
             try
             {
@@ -724,25 +724,46 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    foreach (var entry in executedPayments)
-                    {
-                        connection.Execute(
-                            @"INSERT INTO Transaction(User, Payment, Amount, Currency, TxId, CreatedAt) VALUES(@userId, @paymentId, @amount, @currency, @txId, @createdAt)",
-                            new
-                            {
-                                userId = entry.User.Id,
-                                paymentId = entry.Payment.Id,
-                                amount = entry.Payment.Amount,
-                                currency = entry.Currency,
-                                txId = entry.TxId,
-                                createdAt = entry.CreatedAt
-                            });
-                    }
+                    connection.Execute(
+                        @"UPDATE Payout SET Completed = @completed WHERE Id = @id",
+                        new
+                        {
+                            completed = payout.Completed,
+                            id = payout.Id
+                        });
                 }
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while committing transactions for executed payments; {0:l}", e.Message);
+                _logger.Error("An exception occured while updating payment; {0:l}", e.Message);
+            }
+        }
+
+        public void AddTransaction(IPaymentTransaction transaction)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    connection.Execute(
+                        @"INSERT INTO Transaction(User, Payment, Amount, Currency, TxId, CreatedAt) VALUES(@userId, @paymentId, @amount, @currency, @txId, @createdAt)",
+                        new
+                        {
+                            userId = transaction.User.Id,
+                            paymentId = transaction.Payment.Id,
+                            amount = transaction.Payment.Amount,
+                            currency = transaction.Currency,
+                            txId = transaction.TxId,
+                            createdAt = transaction.CreatedAt
+                        });
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while committing transaction; {0:l}", e.Message);
             }
         }
 
