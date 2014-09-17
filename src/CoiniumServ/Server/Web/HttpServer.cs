@@ -122,12 +122,16 @@ namespace CoiniumServ.Server.Web
         /// <summary>
         /// Unhandled exception callback for nancy based web-server.
         /// </summary>
-        /// <param name="exception"></param>
-        private void UnhandledExceptionHandler(Exception exception)
+        /// <param name="e"></param>
+        private void UnhandledExceptionHandler(Exception e)
         {
-            _logger.Error("Unhandled web-server exception: {0:l}", exception.Message);
+            #if DEBUG
+                _logger.Error("Unhandled web-server exception: {0:l}", e);
+            #else
+                _logger.Error("Unhandled web-server exception: {0:l}", e.Message);
+            #endif
         }
- 
+
         public void Dispose()
         {
             Stop();
