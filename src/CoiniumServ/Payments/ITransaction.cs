@@ -30,7 +30,7 @@ namespace CoiniumServ.Payments
     {
         int Id { get; }
 
-        IAccount User { get; }
+        IAccount Account { get; }
 
         IPayment  Payment { get; }
 

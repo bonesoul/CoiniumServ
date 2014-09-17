@@ -29,15 +29,15 @@ namespace CoiniumServ.Payments
     public class Transaction:ITransaction
     {
         public int Id { get; private set; }
-        public IAccount User { get; private set; }
+        public IAccount Account { get; private set; }
         public IPayment Payment { get; private set; }
         public string Currency { get; private set; }
         public string TxId { get; set; }
         public DateTime CreatedAt { get; private set; }
 
-        public Transaction(IAccount user, IPayment payout, string currency)
+        public Transaction(IAccount account, IPayment payout, string currency)
         {
-            User = user;
+            Account = account;
             Payment = payout;
             Currency = currency;
             CreatedAt = DateTime.Now;

@@ -30,23 +30,23 @@ namespace CoiniumServ.Payments
     {
         public int Id { get; private set; }
         public int BlockId { get; private set; }
-        public int UserId { get; private set; }
+        public int AccountId { get; private set; }
         public decimal Amount { get; private set; }
         public bool Completed { get; set; }
 
-        public Payment(IPersistedBlock block, int userId, decimal amount)
+        public Payment(IPersistedBlock block, int accountId, decimal amount)
         {
             BlockId = (int)block.Height;
-            UserId = userId;
+            AccountId = accountId;
             Amount = amount;
             Completed = false;
         }
 
-        public Payment(Int32 id, Int32 block, Int32 user, Decimal amount, bool completed)
+        public Payment(Int32 id, Int32 block, Int32 accountId, Decimal amount, bool completed)
         {
             Id = id;
             BlockId = block;
-            UserId = user;
+            AccountId = accountId;
             Amount = amount;
             Completed = completed;
         }

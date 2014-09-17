@@ -41,11 +41,11 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"INSERT INTO Payout(Block,User, Amount, CreatedAt) VALUES(@blockId, @userId, @amount, @createdAt)",
+                        @"INSERT INTO Payment(Block, AccountId, Amount, CreatedAt) VALUES(@blockId, @accountId, @amount, @createdAt)",
                         new
                         {
                             blockId = payment.BlockId,
-                            userId = payment.UserId,
+                            accountId = payment.AccountId,
                             amount = payment.Amount,
                             createdAt = DateTime.Now
                         });
@@ -67,7 +67,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"UPDATE Payout SET Completed = @completed WHERE Id = @id",
+                        @"UPDATE Payment SET Completed = @completed WHERE Id = @id",
                         new
                         {
                             completed = payment.Completed,
@@ -93,7 +93,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<Payment>(
-                        @"SELECT Id, Block, User, Amount, Completed FROM Payout Where Completed = false ORDER BY Id ASC");
+                        @"SELECT Id, Block, AccountId, Amount, Completed FROM Payment Where Completed = false ORDER BY Id ASC");
 
                     payouts.AddRange(results);
                 }
@@ -116,10 +116,11 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"INSERT INTO Transaction(User, Payment, Amount, Currency, TxId, CreatedAt) VALUES(@userId, @paymentId, @amount, @currency, @txId, @createdAt)",
+                        @"INSERT INTO Transaction(AccountId, PaymentId, Amount, Currency, TxId, CreatedAt) 
+                            VALUES(@accountId, @paymentId, @amount, @currency, @txId, @createdAt)",
                         new
                         {
-                            userId = transaction.User.Id,
+                            accountId = transaction.Account.Id,
                             paymentId = transaction.Payment.Id,
                             amount = transaction.Payment.Amount,
                             currency = transaction.Currency,

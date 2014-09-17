@@ -52,7 +52,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while creating user; {0:l}", e.Message);
+                _logger.Error("An exception occured while creating account; {0:l}", e.Message);
             }
         }
 
@@ -75,7 +75,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting user; {0:l}", e.Message);
+                _logger.Error("An exception occured while getting account; {0:l}", e.Message);
                 return null;
             }
         }
@@ -95,7 +95,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting user; {0:l}", e.Message);
+                _logger.Error("An exception occured while getting account; {0:l}", e.Message);
                 return null;
             }
         }

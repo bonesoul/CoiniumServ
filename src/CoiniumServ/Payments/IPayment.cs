@@ -29,7 +29,7 @@ namespace CoiniumServ.Payments
 
         int BlockId { get; }
 
-        int UserId { get; }
+        int AccountId { get; }
 
         decimal Amount { get; }
 

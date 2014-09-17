@@ -28,7 +28,9 @@ namespace CoiniumServ.Accounts
     public class Account:IAccount
     {
         public int Id { get; private set; }
+
         public string Username { get; private set; }
+
         public string Address { get; private set; }
 
         public Account(int id, string username)
