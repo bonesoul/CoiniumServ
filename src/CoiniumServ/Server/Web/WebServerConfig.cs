@@ -34,6 +34,8 @@ namespace CoiniumServ.Server.Web
 
         public int Port { get; private set; }
 
+        public string Template { get; private set; }
+
         public IBackendConfig Backend { get; private set; }
 
         public bool Valid { get; private set; }
@@ -46,6 +48,7 @@ namespace CoiniumServ.Server.Web
                 Enabled = config.enabled;
                 BindInterface = string.IsNullOrEmpty(config.bind) ? "localhost" : config.bind;
                 Port = config.port == 0 ? 80 : config.port;
+                Template = string.IsNullOrEmpty(config.template) ? "default" : config.template;
                 Backend = new BackendConfig(config.backend);
                 Valid = true;
             }

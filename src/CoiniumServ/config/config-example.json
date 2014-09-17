@@ -28,6 +28,7 @@
     # enabled: set this true to enable frontend.
     # bind: interface to bind webserver, leave empty to listen on all available interfaces.
     # port: port to listen for http connections.
+    # folder: name of the template folder that exists in web/.
     # backend: 
     # enabled: set this true to enable admin backend.
     # password: password for enabling administrator 
@@ -35,7 +36,8 @@
 	"website": {
 		"enabled": true,
 		"bind": "",
-		"port": 80,
+        "port": 80,
+        "template": "default",
         "backend" : {
             "metrics": {
                 "enabled": false

@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using Nancy.Bootstrapper;
@@ -69,25 +70,37 @@ namespace CoiniumServ.Server.Web
 
             hostConfiguration.UnhandledExceptionCallback += UnhandledExceptionHandler;
 
-            var host = new NancyHost(_webBootstrapper, hostConfiguration, uri); // create nancy host.
-
             try
             {
+                var host = new NancyHost(_webBootstrapper, hostConfiguration, uri); // create nancy host.
                 host.Start();
                 IsListening = true;
             }
-            catch (InvalidOperationException e) { // nancy requires elevated privileges to run on port well known ports - thrown when we are on Windows.
-                _logger.Error("Need elevated privileges to listen on port {0}, try running as administrator - {1:l}", Port, e.Message);
+            catch (InvalidOperationException e)
+            {
+                // nancy requires elevated privileges to run on port well known ports - thrown when we are on Windows.
+                _logger.Error("Need elevated privileges to listen on port {0}, try running as administrator - {1:l}",
+                    Port, e.Message);
                 IsListening = false;
-                return false;                
+                return false;
             }
-			catch(SocketException e) { // nancy requires elevated privileges to run on port well known ports - thrown when we are on mono.
-                _logger.Error("Need elevated privileges to listen on port {0}, try running as root - {1:l}", Port, e.Message);
-				IsListening = false;
-				return false;  
-			}
-            catch (HttpListenerException e) {
-                _logger.Error("Can not listen on requested interface: {0:l} - {1:l}",BindInterface, e.Message);
+            catch (SocketException e)
+            {
+                // nancy requires elevated privileges to run on port well known ports - thrown when we are on mono.
+                _logger.Error("Need elevated privileges to listen on port {0}, try running as root - {1:l}", Port,
+                    e.Message);
+                IsListening = false;
+                return false;
+            }
+            catch (HttpListenerException e)
+            {
+                _logger.Error("Can not listen on requested interface: {0:l} - {1:l}", BindInterface, e.Message);
+                IsListening = false;
+                return false;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An error occured while starting web-server: {0:l}", e);
                 IsListening = false;
                 return false;
             }

@@ -38,9 +38,12 @@ namespace CoiniumServ.Server.Web
         /// </summary>
         private readonly IApplicationContext _applicationContext;
 
-        public WebBootstrapper(IApplicationContext applicationContext)
-        {            
-            _applicationContext = applicationContext;            
+        private readonly IConfigManager _configManager;
+
+        public WebBootstrapper(IApplicationContext applicationContext, IConfigManager configManager)
+        {
+            _applicationContext = applicationContext;
+            _configManager = configManager;
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
@@ -56,7 +59,7 @@ namespace CoiniumServ.Server.Web
 
         protected override IRootPathProvider RootPathProvider
         {
-            get { return new RootPathProvider(); }
+            get { return new RootPathProvider(_configManager.WebServerConfig.Template); }
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)

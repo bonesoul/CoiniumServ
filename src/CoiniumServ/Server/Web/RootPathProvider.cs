@@ -29,10 +29,17 @@ namespace CoiniumServ.Server.Web
     {
         private string _rootPath; // root path of the web files.
 
+        private string _template; // the template name.
+        
+        public RootPathProvider(string template)
+        {
+            _template = template;
+        }
+
         public string GetRootPath()
         {
             if (string.IsNullOrEmpty(_rootPath)) // make sure we already determined the absolute root path
-                _rootPath = FileHelpers.GetAbsolutePath("web/default"); // if not yet do so.
+                _rootPath = FileHelpers.GetAbsolutePath(string.Format("web/{0}", _template)); // if not yet do so.
 
             return _rootPath;
         }
