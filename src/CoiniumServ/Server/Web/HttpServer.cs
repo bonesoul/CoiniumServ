@@ -100,7 +100,12 @@ namespace CoiniumServ.Server.Web
             }
             catch (Exception e)
             {
-                _logger.Error("An error occured while starting web-server: {0:l}", e);
+                var baseException = e.GetBaseException();
+
+                if (baseException is DirectoryNotFoundException)
+                    _logger.Error("Invalid template path for web-server given; {0:l}", baseException.Message);
+                else
+                    _logger.Error("An error occured while starting web-server: {0:l}", e);
                 IsListening = false;
                 return false;
             }
