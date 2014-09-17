@@ -66,7 +66,7 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
 
             // web
-            _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();
+            _applicationContext.Container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();
         }
     }
 }

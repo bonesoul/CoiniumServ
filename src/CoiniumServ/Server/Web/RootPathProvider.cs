@@ -29,7 +29,7 @@ namespace CoiniumServ.Server.Web
     {
         private string _rootPath; // root path of the web files.
 
-        private string _template; // the template name.
+        private readonly string _template; // the template name.
         
         public RootPathProvider(string template)
         {

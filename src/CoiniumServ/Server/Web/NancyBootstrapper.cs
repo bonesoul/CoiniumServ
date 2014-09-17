@@ -25,22 +25,18 @@ using CoiniumServ.Container.Context;
 using Metrics;
 using Nancy;
 using Nancy.Bootstrapper;
-using Nancy.Conventions;
 using Nancy.CustomErrors;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Server.Web
 {
-    public class WebBootstrapper : DefaultNancyBootstrapper
+    public class NancyBootstrapper : DefaultNancyBootstrapper
     {
-        /// <summary>
-        /// The _application context
-        /// </summary>
         private readonly IApplicationContext _applicationContext;
 
         private readonly IConfigManager _configManager;
 
-        public WebBootstrapper(IApplicationContext applicationContext, IConfigManager configManager)
+        public NancyBootstrapper(IApplicationContext applicationContext, IConfigManager configManager)
         {
             _applicationContext = applicationContext;
             _configManager = configManager;
@@ -48,10 +44,8 @@ namespace CoiniumServ.Server.Web
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
-            var configManager = container.Resolve<IConfigManager>();
-
             // todo: enable authentication support
-            if (configManager.WebServerConfig.Backend.MetricsEnabled)
+            if (_configManager.WebServerConfig.Backend.MetricsEnabled)
                 Metric.Config.WithNancy(config => config.WithMetricsModule("/admin/metrics"));
 
             CustomErrors.Enable(pipelines, new ErrorConfiguration());
@@ -60,22 +54,6 @@ namespace CoiniumServ.Server.Web
         protected override IRootPathProvider RootPathProvider
         {
             get { return new RootPathProvider(_configManager.WebServerConfig.Template); }
-        }
-
-        protected override void ConfigureConventions(NancyConventions nancyConventions)
-        {
-            // static content
-            nancyConventions.StaticContentsConventions.Clear();
-            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("css", "/css"));
-            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("js", "/js"));
-            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("img", "/img"));
-            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("fonts", "/fonts"));
-            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("less", "/less"));
-
-            // view location
-            nancyConventions.ViewLocationConventions.Clear();
-            nancyConventions.ViewLocationConventions.Add((viewName, model, context) => string.Concat("/", viewName));
-            nancyConventions.ViewLocationConventions.Add((viewName, model, context) => string.Concat("/", context.ModuleName, "/", viewName));
         }
 
         protected override TinyIoCContainer GetApplicationContainer()

@@ -1,11 +1,12 @@
-﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.RoundModel>
-@{ Layout = "layout.cshtml"; }
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.WorkersModel>
+
+@{ Layout = "layout/main.cshtml"; }
 
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-warning">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money"></i> Shares for current round: @Model.Round</h3>
+                <h3 class="panel-title"><i class="fa fa-money"></i> Connected workers</h3>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -17,11 +18,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var worker in Model.Shares)
+                            @foreach (var worker in Model.Workers)
                             {
                                 <tr>
-                                    <td>@worker.Key</td>
-                                    <td>@worker.Value</td>
+                                    <td>@worker.Username</td>
+                                    <td>@worker.ValidShares</td>
                                 </tr>
                             }
                         </tbody>
