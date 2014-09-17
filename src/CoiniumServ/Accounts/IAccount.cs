@@ -21,25 +21,14 @@
 // 
 #endregion
 
-using CoiniumServ.Miners;
-
 namespace CoiniumServ.Accounts
 {
-    public class User:IUser
+    public interface IAccount
     {
-        public int Id { get; private set; }
-        public string Username { get; private set; }
-        public string Address { get; private set; }
+        int Id { get; }
 
-        public User(int id, string username)
-        {
-            Id = id;
-            Username = username;
-            Address = username;
-        }
+        string Username { get; }
 
-        public User(IMiner miner)
-            :this(-1, miner.Username)
-        { }
+        string Address { get; }
     }
 }

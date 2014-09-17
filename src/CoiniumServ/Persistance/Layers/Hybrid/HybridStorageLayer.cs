@@ -28,7 +28,6 @@ using CoiniumServ.Accounts;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Miners;
-using CoiniumServ.Payments;
 using CoiniumServ.Payments.Processor;
 using CoiniumServ.Payments.Round;
 using CoiniumServ.Persistance.Blocks;
@@ -494,7 +493,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return blocks;
         }
 
-        public void AddUser(IUser user)
+        public void AddAccount(IAccount user)
         {
             try
             {
@@ -504,7 +503,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"INSERT INTO User(Username, Address, CreatedAt) VALUES (@username, @address, @createdAt)",
+                        @"INSERT INTO Account(Username, Address, CreatedAt) VALUES (@username, @address, @createdAt)",
                         new
                         {
                             username = user.Username,
@@ -519,7 +518,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public IUser GetUser(string username)
+        public IAccount GetAccount(string username)
         {
             try
             {
@@ -528,7 +527,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<User>("SELECT Id, Username FROM User WHERE Username = @username",
+                    return connection.Query<Account>("SELECT Id, Username FROM Account WHERE Username = @username",
                         new {username}).Single();
                 }
             }
@@ -543,7 +542,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public IUser GetUserById(int id)
+        public IAccount GetAccountById(int id)
         {
             try
             {
@@ -552,7 +551,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<User>("SELECT Id, Username FROM User WHERE Id = @id",
+                    return connection.Query<Account>("SELECT Id, Username FROM Account WHERE Id = @id",
                         new { id }).Single();
                 }
             }

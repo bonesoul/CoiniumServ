@@ -30,13 +30,13 @@ namespace CoiniumServ.Payments.Processor
     public class PaymentTransaction:IPaymentTransaction
     {
         public int Id { get; private set; }
-        public IUser User { get; private set; }
+        public IAccount User { get; private set; }
         public IPayout Payment { get; private set; }
         public string Currency { get; private set; }
         public string TxId { get; set; }
         public DateTime CreatedAt { get; private set; }
 
-        public PaymentTransaction(IUser user, IPayout payout, string currency)
+        public PaymentTransaction(IAccount user, IPayout payout, string currency)
         {
             User = user;
             Payment = payout;

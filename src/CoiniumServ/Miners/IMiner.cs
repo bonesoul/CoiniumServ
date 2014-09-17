@@ -40,9 +40,9 @@ namespace CoiniumServ.Miners
         int Id { get; }
 
         /// <summary>
-        /// User for the miner.
+        /// Account for the miner.
         /// </summary>
-        IUser User { get; set; }
+        IAccount Account { get; set; }
 
         /// <summary>
         /// Username of the miner.

@@ -59,7 +59,7 @@ namespace CoiniumServ.Payments.Round
                 var amount = (decimal)percent * Block.Reward;
 
                 // get the user id for the payment.
-                var user = _storageLayer.GetUser(pair.Key);
+                var user = _storageLayer.GetAccount(pair.Key);
 
                 // if we can't find a user for the given username, just skip.
                 if (user == null)

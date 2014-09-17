@@ -95,7 +95,7 @@ namespace CoiniumServ.Payments.Processor
             foreach (var payment in pendingPayments)
             {
                 // query the user for the payment.
-                var user = _storageLayer.GetUserById(payment.UserId);
+                var user = _storageLayer.GetAccountById(payment.UserId);
 
                 if (user == null)
                     continue;

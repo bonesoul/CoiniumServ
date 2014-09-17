@@ -137,11 +137,11 @@ namespace CoiniumServ.Miners
                 stratumMiner.SendMessage(_poolConfig.Meta.MOTD); // send the motd.
             }
 
-            miner.User = _storageLayer.GetUser(miner.Username); // query the user.
+            miner.User = _storageLayer.GetAccount(miner.Username); // query the user.
             if (miner.User == null) // if the user doesn't exists.
             {
-                _storageLayer.AddUser(new User(miner)); // create a new one.
-                miner.User =_storageLayer.GetUser(miner.Username); // re-query the newly created record.
+                _storageLayer.AddAccount(new Account(miner)); // create a new one.
+                miner.User =_storageLayer.GetAccount(miner.Username); // re-query the newly created record.
             }
 
             OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.            

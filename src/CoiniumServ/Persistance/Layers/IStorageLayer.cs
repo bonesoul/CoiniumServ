@@ -68,18 +68,18 @@ namespace CoiniumServ.Persistance.Layers
         IEnumerable<IPersistedBlock> GetAllUnpaidBlocks();
 
         IEnumerable<IPersistedBlock> GetAllPendingBlocks(); 
+
         IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20);
-        IEnumerable<IPersistedBlock> GetLastBlocks(BlockStatus status, int count = 20);
 
         #endregion
 
-        #region user storage
+        #region account storage
 
-        void AddUser(IUser user);
+        void AddAccount(IAccount user);
 
-        IUser GetUser(string username);
+        IAccount GetAccount(string username);
 
-        IUser GetUserById(int id);
+        IAccount GetAccountById(int id);
 
         bool Authenticate(IMiner miner);
 
@@ -88,8 +88,6 @@ namespace CoiniumServ.Persistance.Layers
         #endregion
 
         #region payments storage
-
-        Dictionary<string, double> GetPreviousBalances();
 
         void CommitPayoutsForRound(INewPaymentRound round);
 

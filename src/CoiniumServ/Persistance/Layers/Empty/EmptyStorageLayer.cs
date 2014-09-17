@@ -111,17 +111,17 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return new List<IPersistedBlock>(); // return an empty list.
         }
 
-        public void AddUser(IUser user)
+        public void AddAccount(IAccount user)
         {
             return;
         }
 
-        public IUser GetUser(string username)
+        public IAccount GetAccount(string username)
         {
             return null;
         }
 
-        public IUser GetUserById(int id)
+        public IAccount GetAccountById(int id)
         {
             return null;
         }

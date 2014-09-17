@@ -31,7 +31,7 @@ namespace CoiniumServ.Payments.Processor
     {
         int Id { get; }
 
-        IUser User { get; }
+        IAccount User { get; }
 
         IPayout  Payment { get; }
 

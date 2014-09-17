@@ -55,17 +55,17 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             Execute.Sql("ALTER TABLE Block ADD Accounted Boolean NOT NULL AFTER Confirmed");
 
             // create the users table.
-            Create.Table("User")                
+            Create.Table("Account")                
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
                 .WithColumn("Username").AsString().NotNullable().Unique()
                 .WithColumn("Address").AsString(32).NotNullable().Unique()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
 
             // create the payout table.
-            Create.Table("Payout")
+            Create.Table("Payment")
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
-                .WithColumn("Block").AsInt32().ForeignKey("Block", "height")
-                .WithColumn("User").AsInt32().ForeignKey("User", "Id")
+                .WithColumn("Block").AsInt32().ForeignKey("Block", "Height")
+                .WithColumn("AccountId").AsInt32().ForeignKey("Account", "Id")
                 .WithColumn("Amount").AsDecimal().NotNullable()
                 .WithColumn("Completed").AsBoolean().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
@@ -73,8 +73,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             // create the transaction table.
             Create.Table("Transaction")
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
-                .WithColumn("User").AsInt32().ForeignKey("User", "Id")
-                .WithColumn("Payment").AsInt32().ForeignKey("Payout", "Id")
+                .WithColumn("AccountId").AsInt32().ForeignKey("Account", "Id")
+                .WithColumn("PaymentId").AsInt32().ForeignKey("Payment", "Id")
                 .WithColumn("Amount").AsDecimal().NotNullable()
                 .WithColumn("Currency").AsString(4).NotNullable()
                 .WithColumn("TxId").AsString(64).NotNullable()
@@ -104,8 +104,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             Rename.Column("CreatedAt").OnTable("blocks").To("time");
 
             // delete the newly created tables.
-            Delete.Table("User");
-            Delete.Table("Payout");
+            Delete.Table("Account");
+            Delete.Table("Payment");
             Delete.Table("Transaction");
         }
     }

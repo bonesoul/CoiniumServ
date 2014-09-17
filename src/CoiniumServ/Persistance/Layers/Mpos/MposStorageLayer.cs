@@ -327,19 +327,19 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return blocks;
         }
 
-        public void AddUser(IUser user)
+        public void AddAccount(IAccount user)
         {
             // The function is not supported as user managment is handled by MPOS itself.
             throw new NotImplementedException();
         }
 
-        public IUser GetUser(string username)
+        public IAccount GetAccount(string username)
         {
             // TODO: implement me!
             throw new NotImplementedException();
         }
 
-        public IUser GetUserById(int id)
+        public IAccount GetAccountById(int id)
         {
             // TODO: implement me!
             throw new NotImplementedException();

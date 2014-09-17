@@ -33,7 +33,6 @@ using CoiniumServ.Logging;
 using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
-using CoiniumServ.Payments;
 using CoiniumServ.Payments.Accounter;
 using CoiniumServ.Payments.Processor;
 using CoiniumServ.Payments.Round;
