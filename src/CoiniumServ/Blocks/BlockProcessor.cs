@@ -21,7 +21,6 @@
 // 
 #endregion
 
-using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -79,7 +78,6 @@ namespace CoiniumServ.Blocks
 
                 QueryBlock(block); // query the block status
 
-
                 switch (block.Status)
                 {
                     case BlockStatus.Pending:
@@ -96,7 +94,10 @@ namespace CoiniumServ.Blocks
                 }              
             }
 
-            _logger.Information("Queried {0} pending blocks; {1} got confirmed, {2} got orphaned; took {3:0.000} seconds", pendingCount, confirmedCount, orphanedCount, (float)_stopWatch.ElapsedMilliseconds / 1000);
+            if(pendingCount > 0)
+                _logger.Information("Queried {0} pending blocks; {1} got confirmed, {2} got orphaned; took {3:0.000} seconds", pendingCount, confirmedCount, orphanedCount, (float)_stopWatch.ElapsedMilliseconds / 1000);
+            else
+                _logger.Information("No pending blocks found");
 
             _stopWatch.Reset();
 

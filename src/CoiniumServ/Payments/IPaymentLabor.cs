@@ -23,7 +23,10 @@
 
 namespace CoiniumServ.Payments
 {
-    public interface IPaymentProcessor:IPaymentLabor
+    public interface IPaymentLabor
     {
+        bool Active { get; }
+
+        void Run();
     }
 }

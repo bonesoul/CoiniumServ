@@ -185,8 +185,9 @@ namespace CoiniumServ.Pools
                 _jobManager = _objectFactory.GetJobManager(Config, Daemon, jobTracker, _shareManager, MinerManager, HashAlgorithm);
                 _jobManager.Initialize(InstanceId);
 
-                _objectFactory.GetBlockAccounter(Config, _storageLayer);
-                _objectFactory.GetPaymentProcessor(Config, _storageLayer, Daemon);
+                var blockAccounter =_objectFactory.GetBlockAccounter(Config, _storageLayer);
+                var paymentProcessor =_objectFactory.GetPaymentProcessor(Config, _storageLayer, Daemon);
+                _objectFactory.GetPaymentManager(Config, blockAccounter, paymentProcessor);
             }
             catch (Exception e)
             {

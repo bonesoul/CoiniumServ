@@ -35,7 +35,7 @@ namespace CoiniumServ.Payments
 {
     public class PaymentProcessor:IPaymentProcessor
     {
-        private Timer _timer;
+        public bool Active { get; private set; }
 
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
@@ -65,11 +65,10 @@ namespace CoiniumServ.Payments
             if (!GetPoolAccount()) // get the pool's account name if any.
                 return; // if we can't, stop the payment processor.
 
-            // setup the timer to run calculations.  
-            _timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
+            Active = true;
         }
 
-        private void Run(object state)
+        public void Run()
         {
             _stopWatch.Start();
 
@@ -78,13 +77,11 @@ namespace CoiniumServ.Payments
             CommitTransactions(executedPayments); // commit them to storage layer.
 
             if (executedPayments.Count > 0)
-                _logger.Information("Executed {0} payments, took {1:0.000} seconds", executedPayments.Count, (float) _stopWatch.ElapsedMilliseconds/1000);
+                _logger.Information("Executed {0} payments, took {1:0.000} seconds", executedPayments.Count, (float)_stopWatch.ElapsedMilliseconds / 1000);
             else
                 _logger.Information("No pending payments found");
 
             _stopWatch.Reset();
-
-            _timer.Change(_poolConfig.Payments.Interval * 1000, Timeout.Infinite); // reset the timer.
         }
 
         private IEnumerable<KeyValuePair<string, List<ITransaction>>> GetTransactionCandidates()

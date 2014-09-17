@@ -263,6 +263,18 @@ namespace CoiniumServ.Factories
 
         #region payment objects
 
+        public IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+                {"blockAccounter", blockAccounter},
+                {"paymentProcessor", paymentProcessor}
+            };
+
+            return _applicationContext.Container.Resolve<IPaymentManager>(@params);
+        }
+
         public IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads

@@ -33,7 +33,7 @@ namespace CoiniumServ.Payments
 {
     public class BlockAccounter : IBlockAccounter
     {
-        private Timer _timer;
+        public bool Active { get; private set; }
 
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
@@ -55,16 +55,15 @@ namespace CoiniumServ.Payments
             if (!_poolConfig.Payments.Enabled) // make sure payments are enabled.
                 return;
 
-            // setup the timer to run calculations.  
-            _timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
+            Active = true;
         }
 
-        private void Run(object state)
+        public void Run()
         {
             _stopWatch.Start();
 
             // find that blocks that were confirmed but still unpaid.
-            var unpaidBlocks = _storageLayer.GetUnpaidBlocks(); 
+            var unpaidBlocks = _storageLayer.GetUnpaidBlocks();
 
             // create the payouts.
             var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer)).ToList();
@@ -82,11 +81,12 @@ namespace CoiniumServ.Payments
                 _storageLayer.UpdateBlock(round.Block); // set the block for the round as accounted.
             }
 
-            _logger.Information("Accounted {0} confirmed rounds, took {1:0.000} seconds", rounds.Count, (float) _stopWatch.ElapsedMilliseconds/1000);
+            if (rounds.Count > 0)
+                _logger.Information("Accounted {0} confirmed rounds, took {1:0.000} seconds", rounds.Count, (float)_stopWatch.ElapsedMilliseconds / 1000);
+            else
+                _logger.Information("No pending blocks waiting to get accounted found");
 
             _stopWatch.Reset();
-
-            _timer.Change(_poolConfig.Payments.Interval * 1000, Timeout.Infinite); // reset the timer.
         }
     }
 }

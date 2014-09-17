@@ -67,9 +67,6 @@ namespace CoiniumServ.Container.Registries
 
             // web
             _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();
-
-            // markets
-            _applicationContext.Container.Register<IMarketManager, MarketManager>().AsSingleton();
         }
     }
 }

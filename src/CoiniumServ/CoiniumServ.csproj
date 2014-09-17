@@ -194,9 +194,12 @@
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
+    <Compile Include="Payments\IPaymentLabor.cs" />
+    <Compile Include="Payments\IPaymentManager.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />
     <Compile Include="Payments\ITransaction.cs" />
     <Compile Include="Accounts\IAccount.cs" />
+    <Compile Include="Payments\PaymentManager.cs" />
     <Compile Include="Payments\PaymentProcessor.cs" />
     <Compile Include="Payments\Transaction.cs" />
     <Compile Include="Payments\Payment.cs" />
