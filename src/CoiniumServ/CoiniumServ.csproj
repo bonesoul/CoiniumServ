@@ -210,8 +210,7 @@
     <Compile Include="Persistance\IStorageConfig.cs" />
     <Compile Include="Persistance\Layers\Empty\EmptyStorageLayer.cs" />
     <Compile Include="Persistance\Layers\Empty\EmptyStorageLayerConfig.cs" />
-    <Compile Include="Persistance\Layers\Hybrid\HybridStorageLayerConfig.cs" />
-    <Compile Include="Persistance\Layers\Hybrid\HybridStorageLayer.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorageConfig.cs" />
     <Compile Include="Payments\Config\IWalletConfig.cs" />
     <Compile Include="Payments\Config\RewardsConfig.cs" />
     <Compile Include="Payments\Config\WalletConfig.cs" />
@@ -219,6 +218,13 @@
     <Compile Include="Persistance\Layers\Hybrid\IMigrationManager.cs" />
     <Compile Include="Persistance\Layers\Hybrid\MigrationManager.cs" />
     <Compile Include="Persistance\Layers\Hybrid\Migrations\M002Payments.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorage.Accounts.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorage.Blocks.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorage.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorage.Miners.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorage.Payments.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorage.Shares.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\HybridStorage.Statistics.cs" />
     <Compile Include="Persistance\Layers\IStorageLayer.cs" />
     <Compile Include="Persistance\Layers\IStorageLayerConfig.cs" />
     <Compile Include="Persistance\Layers\Mpos\MposStorageLayerConfig.cs" />

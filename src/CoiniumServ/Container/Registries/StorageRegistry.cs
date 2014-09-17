@@ -47,7 +47,7 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IStorageProvider, RedisProvider>(StorageProviders.Redis).AsMultiInstance();
 
             // layers
-            _applicationContext.Container.Register<IStorageLayer, HybridStorageLayer>(StorageLayers.Hybrid).AsMultiInstance();
+            _applicationContext.Container.Register<IStorageLayer, HybridStorage>(StorageLayers.Hybrid).AsMultiInstance();
             _applicationContext.Container.Register<IStorageLayer, MposStorageLayer>(StorageLayers.Mpos).AsMultiInstance();
             _applicationContext.Container.Register<IStorageLayer, EmptyStorageLayer>(StorageLayers.Empty).AsSingleton();
 

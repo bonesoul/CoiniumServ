@@ -49,7 +49,7 @@ namespace CoiniumServ.Persistance
 
                 var layers = new List<IStorageLayerConfig>
                 {
-                    new HybridStorageLayerConfig(config.hybrid),
+                    new HybridStorageConfig(config.hybrid),
                     new MposStorageLayerConfig(config.mpos)
                 };
 

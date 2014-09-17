@@ -20,41 +20,54 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using CoiniumServ.Daemon;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Persistance.Providers.Redis;
+using CoiniumServ.Pools;
 using Serilog;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
 {
-    public class HybridStorageLayerConfig : IStorageLayerConfig
+    public partial class HybridStorage : IStorageLayer
     {
-        public bool Valid { get; private set; }
-        public bool Enabled { get; private set; }
-        public IList<IStorageProviderConfig> Providers { get; private set; }
+        public bool IsEnabled { get; private set; }
 
-        public HybridStorageLayerConfig(dynamic config)
+        private readonly string _coin;
+
+        private readonly IDaemonClient _daemonClient;
+
+        private readonly IRedisProvider _redisProvider;
+
+        private readonly IMySqlProvider _mySqlProvider;
+
+        private readonly ILogger _logger;
+
+        public HybridStorage(IEnumerable<IStorageProvider> providers, IDaemonClient daemonClient, IPoolConfig poolConfig)
         {
+            _daemonClient = daemonClient;
+            _logger = Log.ForContext<HybridStorage>().ForContext("Component", poolConfig.Coin.Name);
+            _coin = poolConfig.Coin.Name.ToLower(); // pool's associated coin name.
+
+            // try loading providers.
             try
             {
-                Enabled = config.enabled;
-
-                Providers = new List<IStorageProviderConfig>
+                foreach (var provider in providers)
                 {
-                    new MySqlProviderConfig(config.mysql),
-                    new RedisProviderConfig(config.redis)
-                };
+                    if (provider is IRedisProvider)
+                        _redisProvider = (IRedisProvider)provider;
+                    else if (provider is IMySqlProvider)
+                        _mySqlProvider = (IMySqlProvider)provider;
+                }
 
-                // make sure all supplied provider configs are valid
-                Valid = Providers.All(provider => provider.Valid);
+                IsEnabled = (_redisProvider != null && _mySqlProvider != null);
             }
             catch (Exception e)
             {
-                Valid = false;
-                Log.Logger.ForContext<HybridStorageLayerConfig>().Error(e, "Error loading hybrid storage layer configuration");
+                _logger.Error("Error initializing hybrid storage; {0:l}", e.Message);
             }
         }
     }

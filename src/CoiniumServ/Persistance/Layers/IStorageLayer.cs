@@ -120,43 +120,6 @@ namespace CoiniumServ.Persistance.Layers
 
         #endregion
 
-        #region account storage
-
-        /// <summary>
-        /// Adds a new account.
-        /// </summary>
-        /// <param name="user"></param>
-        void AddAccount(IAccount user);
-
-        /// <summary>
-        /// Returns the account with given username.
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        IAccount GetAccount(string username);
-
-        /// <summary>
-        /// Returns the account with given Id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        IAccount GetAccountById(int id);
-
-        /// <summary>
-        /// Authenticates a miner.
-        /// </summary>
-        /// <param name="miner"></param>
-        /// <returns></returns>
-        bool Authenticate(IMiner miner);
-
-        /// <summary>
-        /// Updated difficulty for a stratum miner.
-        /// </summary>
-        /// <param name="miner"></param>
-        void UpdateDifficulty(IStratumMiner miner);
-
-        #endregion
-
         #region payments storage
 
         /// <summary>
@@ -182,6 +145,47 @@ namespace CoiniumServ.Persistance.Layers
         /// </summary>
         /// <param name="transaction"></param>
         void AddTransaction(ITransaction transaction);
+
+        #endregion
+
+        #region account storage
+
+        /// <summary>
+        /// Adds a new account.
+        /// </summary>
+        /// <param name="user"></param>
+        void AddAccount(IAccount user);
+
+        /// <summary>
+        /// Returns the account with given username.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        IAccount GetAccount(string username);
+
+        /// <summary>
+        /// Returns the account with given Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        IAccount GetAccountById(int id);
+
+        #endregion
+
+        #region worker storage
+
+        /// <summary>
+        /// Authenticates a miner.
+        /// </summary>
+        /// <param name="miner"></param>
+        /// <returns></returns>
+        bool Authenticate(IMiner miner);
+
+        /// <summary>
+        /// Updated difficulty for a stratum miner.
+        /// </summary>
+        /// <param name="miner"></param>
+        void UpdateDifficulty(IStratumMiner miner);
 
         #endregion
 

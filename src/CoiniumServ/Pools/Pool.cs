@@ -158,11 +158,11 @@ namespace CoiniumServ.Pools
                             Config, providerConfig)).ToList();
 
             // start the migration manager if needed
-            if (Config.Storage.Layer is HybridStorageLayerConfig)
+            if (Config.Storage.Layer is HybridStorageConfig)
                 _objectFactory.GetMigrationManager((IMySqlProvider)providers.First(p => p is MySqlProvider), Config); // run migration manager.
 
             // load the storage layer.
-            if (Config.Storage.Layer is HybridStorageLayerConfig)
+            if (Config.Storage.Layer is HybridStorageConfig)
                 _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, Daemon, Config);
             else if (Config.Storage.Layer is MposStorageLayerConfig)
                 _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Daemon, Config);
