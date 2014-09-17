@@ -164,9 +164,9 @@ namespace CoiniumServ.Pools
             // load the storage layer.
             if (Config.Storage.Layer is HybridStorageConfig)
                 _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, Daemon, Config);
-            else if (Config.Storage.Layer is MposStorageLayerConfig)
+            else if (Config.Storage.Layer is MposStorageConfig)
                 _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Daemon, Config);
-            else if (Config.Storage.Layer is EmptyStorageLayerConfig)
+            else if (Config.Storage.Layer is NullStorageConfig)
                 _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, Daemon, Config);
         }
 

@@ -20,26 +20,30 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using CoiniumServ.Persistance.Providers;
 
-namespace CoiniumServ.Persistance.Layers.Empty
+using System;
+using CoiniumServ.Accounts;
+
+namespace CoiniumServ.Persistance.Layers.Mpos
 {
-    public class EmptyStorageLayerConfig:IStorageLayerConfig
+    public partial class MposStorage
     {
-        public bool Valid { get; private set; }
-        public bool Enabled { get; private set; }
-        public IList<IStorageProviderConfig> Providers { get; private set; }
-
-        public static EmptyStorageLayerConfig Empty = new EmptyStorageLayerConfig();
-
-        public EmptyStorageLayerConfig()
+        public void AddAccount(IAccount user)
         {
-            Enabled = true;
+            // this function is not supported as this functionality is handled by mpos itself.
+			throw new NotSupportedException();
+        }
 
-            Providers = new List<IStorageProviderConfig>();
+        public IAccount GetAccount(string username)
+        {
+            // TODO: implement me!
+            throw new NotImplementedException();
+        }
 
-            Valid = true;
+        public IAccount GetAccountById(int id)
+        {
+            // TODO: implement me!
+            throw new NotImplementedException();
         }
     }
 }

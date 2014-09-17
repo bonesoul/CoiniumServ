@@ -45,7 +45,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
         private readonly IMySqlProvider _mySqlProvider;
 
         private readonly ILogger _logger;
-
+        
         public HybridStorage(IEnumerable<IStorageProvider> providers, IDaemonClient daemonClient, IPoolConfig poolConfig)
         {
             _daemonClient = daemonClient;

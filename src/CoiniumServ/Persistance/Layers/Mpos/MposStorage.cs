@@ -20,40 +20,34 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
+using CoiniumServ.Pools;
 using Serilog;
 
 namespace CoiniumServ.Persistance.Layers.Mpos
 {
-    public class MposStorageLayerConfig:IStorageLayerConfig
+    public partial class MposStorage : IStorageLayer
     {
-        public bool Valid { get; private set; }
-        public bool Enabled { get; private set; }
-        public IList<IStorageProviderConfig> Providers { get; private set; }
+        public bool IsEnabled { get; private set; }
 
-        public MposStorageLayerConfig(dynamic config)
+        private readonly IMySqlProvider _mySqlProvider;
+
+        private readonly ILogger _logger;
+
+        public MposStorage(IEnumerable<IStorageProvider> providers, PoolConfig poolConfig)
         {
-            try
-            {
-                Enabled = config.enabled;
+            _logger = Log.ForContext<MposStorage>().ForContext("Component", poolConfig.Coin.Name);
 
-                Providers = new List<IStorageProviderConfig>
-                {
-                    new MySqlProviderConfig(config.mysql)
-                };
-
-                // make sure all supplied provider configs are valid
-                Valid = Providers.All(provider => provider.Valid);                
-            }
-            catch (Exception e)
+            foreach (var provider in providers)
             {
-                Valid = false;
-                Log.Logger.ForContext<MposStorageLayerConfig>().Error(e, "Error loading mpos storage layer configuration");
+                if (provider is IMySqlProvider)
+                    _mySqlProvider = (IMySqlProvider) provider;
             }
+
+            IsEnabled = _mySqlProvider != null;
         }
     }
 }

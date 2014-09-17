@@ -208,8 +208,8 @@
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Persistance\Blocks\PersistedBlock.cs" />
     <Compile Include="Persistance\IStorageConfig.cs" />
-    <Compile Include="Persistance\Layers\Empty\EmptyStorageLayer.cs" />
-    <Compile Include="Persistance\Layers\Empty\EmptyStorageLayerConfig.cs" />
+    <Compile Include="Persistance\Layers\Empty\NullStorage.cs" />
+    <Compile Include="Persistance\Layers\Empty\NullStorageConfig.cs" />
     <Compile Include="Persistance\Layers\Hybrid\HybridStorageConfig.cs" />
     <Compile Include="Payments\Config\IWalletConfig.cs" />
     <Compile Include="Payments\Config\RewardsConfig.cs" />
@@ -227,10 +227,13 @@
     <Compile Include="Persistance\Layers\Hybrid\HybridStorage.Statistics.cs" />
     <Compile Include="Persistance\Layers\IStorageLayer.cs" />
     <Compile Include="Persistance\Layers\IStorageLayerConfig.cs" />
-    <Compile Include="Persistance\Layers\Mpos\MposStorageLayerConfig.cs" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorage.Blocks.cs" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorage.cs" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorage.Payments.cs" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorage.Shares.cs" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorageConfig.cs" />
     <Compile Include="Persistance\Layers\StorageLayers.cs" />
     <Compile Include="Persistance\Providers\IStorageProvider.cs" />
-    <Compile Include="Persistance\Layers\Mpos\MposStorageLayer.cs" />
     <Compile Include="Persistance\Providers\IStorageProviderConfig.cs" />
     <Compile Include="Persistance\Providers\MySql\IMySqlProviderConfig.cs" />
     <Compile Include="Persistance\Providers\MySql\IMySqlProvider.cs" />
@@ -877,6 +880,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorage.Accounts.cs" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorage.Miners.cs" />
+    <Compile Include="Persistance\Layers\Mpos\MposStorage.Statistics.cs" />
     <None Include="web.config" />
     <None Include="web\default\api.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

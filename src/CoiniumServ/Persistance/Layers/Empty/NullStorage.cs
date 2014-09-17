@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using CoiniumServ.Accounts;
 using CoiniumServ.Miners;
@@ -30,83 +31,88 @@ using CoiniumServ.Shares;
 
 namespace CoiniumServ.Persistance.Layers.Empty
 {
-    public class EmptyStorageLayer : IStorageLayer
+    public class NullStorage : IStorageLayer
     {
         public bool IsEnabled { get; private set; }
 
         public void AddShare(IShare share)
         {
-            return; // just skip.
+            return;
         }
 
         public void MoveCurrentShares(int height)
         {
-            return; // just skip.
-        }
-
-        public void RemoveShares(IPaymentRound round)
-        {
-            return; // just skip.
+            return;
         }
 
         public void MoveOrphanedShares(IPersistedBlock block)
         {
-            return; // just skip.
+            return;
+        }
+
+        public void RemoveShares(IPaymentRound round)
+        {
+            return;
         }
 
         public Dictionary<string, double> GetCurrentShares()
         {
-            return new Dictionary<string, double>(); // return an empty dictionary.
+            return new Dictionary<string, double>();
         }
 
         public Dictionary<string, double> GetShares(IPersistedBlock block)
         {
-            return new Dictionary<string, double>(); // return an empty dictionary.
-        }
-
-        public void DeleteExpiredHashrateData(int until)
-        {
-            return; // just skip.
-        }
-
-        public IDictionary<string, double> GetHashrateData(int since)
-        {
-            return new Dictionary<string, double>(); // return an empty dictionary.
+            return new Dictionary<string, double>();
         }
 
         public void AddBlock(IShare share)
         {
-            return; // just skip.
+            return;
         }
 
         public void UpdateBlock(IPersistedBlock block)
         {
-            return; // just skip.
+            return;
         }
 
         public IDictionary<string, int> GetTotalBlocks()
         {
-            return new Dictionary<string, int>(); // return an empty dictionary.
+            return new Dictionary<string, int>();
         }
 
         public IEnumerable<IPersistedBlock> GetUnpaidBlocks()
         {
-            return new List<IPersistedBlock>(); // return an empty list.
+            return new List<IPersistedBlock>();
         }
 
         public IEnumerable<IPersistedBlock> GetPendingBlocks()
         {
-            return new List<IPersistedBlock>(); // return an empty list.
+            return new List<IPersistedBlock>();
         }
 
         public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20)
         {
-            return new List<IPersistedBlock>();  // return an empty list.
+            return new List<IPersistedBlock>();
         }
 
-        public IEnumerable<IPersistedBlock> GetLastBlocks(BlockStatus status, int count = 20)
+        public void AddPayment(IPayment payment)
         {
-            return new List<IPersistedBlock>(); // return an empty list.
+            return;
+        }
+
+        public void UpdatePayment(IPayment payment)
+        {
+            return;
+        }
+
+        public IList<IPayment> GetPendingPayments()
+        {
+            return new List<IPayment>();
+        }
+
+        public void AddTransaction(ITransaction transaction)
+        {
+            return;
         }
 
         public void AddAccount(IAccount user)
@@ -124,36 +130,6 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return null;
         }
 
-        public Dictionary<string, double> GetPreviousBalances()
-        {
-            return new Dictionary<string, double>(); // return an empty dictionary.
-        }
-
-        public void CommitPayoutsForRound(IPaymentRound round)
-        {
-            return;
-        }
-
-        public IList<IPayment> GetPendingPayments()
-        {
-            return new List<IPayment>();
-        }
-
-        public void AddPayment(IPayment payment)
-        {
-            return;
-        }
-
-        public void UpdatePayment(IPayment payment)
-        {
-            return;
-        }
-
-        public void AddTransaction(ITransaction transaction)
-        {
-            return;
-        }
-
         public bool Authenticate(IMiner miner)
         {
             // empty storage layer is only used when no valid storage-layer configuration is available.
@@ -163,7 +139,16 @@ namespace CoiniumServ.Persistance.Layers.Empty
 
         public void UpdateDifficulty(IStratumMiner miner)
         {
-            // as we don't have an actual persistance layer, we can't write difficulty update information.
+            return;
+        }
+
+        public IDictionary<string, double> GetHashrateData(int since)
+        {
+            return new Dictionary<string, double>();
+        }
+
+        public void DeleteExpiredHashrateData(int until)
+        {
             return;
         }
     }

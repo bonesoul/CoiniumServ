@@ -92,7 +92,7 @@ namespace CoiniumServ.Pools
                 Getwork = new GetworkServerConfig(config.getwork);
 
                 // process extra checks
-                if (Storage.Layer is MposStorageLayerConfig)
+                if (Storage.Layer is MposStorageConfig)
                 {
                     if (Payments.Enabled)
                     {
