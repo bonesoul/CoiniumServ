@@ -23,11 +23,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Accounts;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
-using CoiniumServ.Server.Mining.Vanilla;
 using Serilog;
 
 namespace CoiniumServ.Miners
@@ -71,7 +72,7 @@ namespace CoiniumServ.Miners
                 select pair.Value).FirstOrDefault();
         }
 
-        public T Create<T>(IPool pool) where T : IVanillaMiner
+        public T Create<T>(IPool pool) where T : IGetworkMiner
         {
             var @params = new object[]
             {
@@ -81,7 +82,7 @@ namespace CoiniumServ.Miners
             };
 
             var instance = Activator.CreateInstance(typeof(T), @params); // create an instance of the miner.
-            var miner = (IVanillaMiner)instance;
+            var miner = (IGetworkMiner)instance;
             _miners.Add(miner.Id, miner); // add it to our collection.
 
             return (T)miner;
@@ -135,7 +136,14 @@ namespace CoiniumServ.Miners
                 stratumMiner.SetDifficulty(_poolConfig.Stratum.Diff); // set the initial difficulty for the miner and send it.
                 stratumMiner.SendMessage(_poolConfig.Meta.MOTD); // send the motd.
             }
-           
+
+            miner.Account = _storageLayer.GetAccount(miner.Username); // query the user.
+            if (miner.Account == null) // if the user doesn't exists.
+            {
+                _storageLayer.AddAccount(new Account(miner)); // create a new one.
+                miner.Account =_storageLayer.GetAccount(miner.Username); // re-query the newly created record.
+            }
+
             OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.            
         }
 

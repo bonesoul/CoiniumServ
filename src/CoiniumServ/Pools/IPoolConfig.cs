@@ -27,9 +27,10 @@ using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.Config;
 using CoiniumServ.Persistance;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Mining.Vanilla;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Pools
@@ -66,6 +67,6 @@ namespace CoiniumServ.Pools
 
         IStorageConfig Storage { get; }
 
-        IVanillaServerConfig Vanilla { get; }
+        IGetworkServerConfig Getwork { get; }
     }
 }

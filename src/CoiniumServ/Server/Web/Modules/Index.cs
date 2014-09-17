@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Configuration;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
@@ -29,12 +31,14 @@ namespace CoiniumServ.Server.Web.Modules
 {
     public class IndexModule : NancyModule
     {
-        public IndexModule(IStatisticsManager statisticsManager, IPoolManager poolManager)
+        public IndexModule(IStatisticsManager statisticsManager, IPoolManager poolManager, IConfigManager configManager)
         {
             Get["/"] = _ =>
             {
                 // include common data required by layout.
                 ViewBag.Heading = "Welcome";
+                ViewBag.Title = string.Format("{0} - {1}", configManager.StackConfig.Name, ViewBag.Heading);
+                ViewBag.StackName = configManager.StackConfig.Name;
                 ViewBag.Pools = poolManager;
                 ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 

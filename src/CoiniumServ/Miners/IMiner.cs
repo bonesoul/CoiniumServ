@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using CoiniumServ.Accounts;
 using CoiniumServ.Pools;
 using Newtonsoft.Json;
 
@@ -37,6 +38,11 @@ namespace CoiniumServ.Miners
         /// </summary>
         [JsonProperty("id")]
         int Id { get; }
+
+        /// <summary>
+        /// Account for the miner.
+        /// </summary>
+        IAccount Account { get; set; }
 
         /// <summary>
         /// Username of the miner.

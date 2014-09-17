@@ -22,6 +22,7 @@
 #endregion
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
+using CoiniumServ.Daemon;
 using CoiniumServ.Pools;
 
 namespace CoiniumServ.Factories
@@ -35,12 +36,12 @@ namespace CoiniumServ.Factories
 
         IJsonConfigReader GetJsonConfigReader();
 
-        #region per-pool configs
-
         IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
 
         ICoinConfig GetCoinConfig(dynamic config);
 
-        #endregion
+        IDaemonManagerConfig GetDaemonManagerConfig(dynamic config);
+
+        IStandaloneDaemonConfig GetStandaloneDaemonConfig(dynamic config);
     }
 }

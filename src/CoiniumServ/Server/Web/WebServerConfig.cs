@@ -22,7 +22,6 @@
 #endregion
 using System;
 using CoiniumServ.Server.Web.Modules;
-using CoiniumServ.Statistics;
 using Serilog;
 
 namespace CoiniumServ.Server.Web

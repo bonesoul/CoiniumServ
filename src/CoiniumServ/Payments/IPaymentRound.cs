@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using CoiniumServ.Persistance.Blocks;
 
@@ -29,10 +30,6 @@ namespace CoiniumServ.Payments
     {
         IPersistedBlock Block { get; }
 
-        Dictionary<string, double> Shares { get; }
-
-        Dictionary<string, decimal> Payouts { get; }
-
-        void AddShares(IDictionary<string, double> shares);
+        IList<IPayment> Payments { get; }                
     }
 }

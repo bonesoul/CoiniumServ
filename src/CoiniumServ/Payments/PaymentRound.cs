@@ -20,54 +20,56 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Persistance.Layers;
 
 namespace CoiniumServ.Payments
 {
-    public class PaymentRound:IPaymentRound
+    public class PaymentRound : IPaymentRound
     {
         public IPersistedBlock Block { get; private set; }
-        public Dictionary<string, double> Shares { get; private set; }
-        public Dictionary<string, decimal> Payouts { get; private set; }
+        public IList<IPayment> Payments { get; private set; }
 
+        private readonly IDictionary<string, double> _shares;
 
-        public PaymentRound(IPersistedBlock block)
+        private readonly IStorageLayer _storageLayer;
+
+        public PaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
         {
             Block = block;
-            Payouts = new Dictionary<string, decimal>();
-            Shares = new Dictionary<string, double>();
+            _storageLayer = storageLayer;
+
+            Payments = new List<IPayment>();
+            _shares = _storageLayer.GetShares(Block); // load the shares for the round.
+            CalculatePayments(); // calculate the per-user payments.
         }
 
-        public void AddShares(IDictionary<string, double> shares)
+        private void CalculatePayments()
         {
-            foreach (var pair in shares)
+            // find total shares within the round.
+            var totalShares = _shares.Sum(pair => pair.Value);
+
+            // loop through user shares and calculate the payouts.
+            foreach (var pair in _shares)
             {
-                Shares.Add(pair.Key, pair.Value);
+                var percent = pair.Value / totalShares;
+                var amount = (decimal)percent * Block.Reward;
+
+                // get the user id for the payment.
+                var user = _storageLayer.GetAccount(pair.Key);
+
+                // if we can't find a user for the given username, just skip.
+                if (user == null)
+                    continue;
+
+                Payments.Add(new Payment(Block, user.Id, amount));
             }
 
-            if(Block.Status == BlockStatus.Confirmed)
-                CalculatePayouts();
-        }
-
-        private void CalculatePayouts()
-        {
-            var totalShares = Shares.Sum(pair => pair.Value); // total shares.
-            
-            // calculate per worker amounts.
-            foreach (var pair in Shares)
-            {
-                var percent = pair.Value/totalShares;
-                var workerRewardInSatoshis = (decimal)percent * Block.Reward;
-
-                Payouts.Add(pair.Key, workerRewardInSatoshis);
-            }
-        }
-
-        public override string ToString()
-        {
-            return string.Format("Amount: {0}, Block: {1}", Block.Reward, Block);
+            // mark the block as accounted
+            Block.Accounted = true;
         }
     }
 }

@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using AustinHarris.JsonRpc;
+using CoiniumServ.Accounts;
 using CoiniumServ.Jobs;
 using CoiniumServ.Logging;
 using CoiniumServ.Miners;
@@ -55,6 +56,8 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// Unique subscription id for identifying the miner.
         /// </summary>
         public int Id { get; private set; }
+
+        public IAccount Account { get; set; }
 
         /// <summary>
         /// Username of the miner.

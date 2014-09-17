@@ -62,6 +62,9 @@ namespace CoiniumServ.Daemon.Responses
         /// <returns></returns>
         public TransactionDetail GetPoolOutput(string poolAddress, string poolAccount)
         {
+            if (Details == null) // make sure we have valid outputs.
+                return null;
+
             // check if coin includes output address data in transaction details.
             return Details.Any(x => x.Address == null)
                 ? Details.FirstOrDefault(x => x.Account == poolAccount) // some coins doesn't include address field in outputs, so try to determine using the associated account name.

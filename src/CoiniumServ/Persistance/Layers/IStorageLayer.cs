@@ -20,8 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
+
 using System.Collections.Generic;
+using CoiniumServ.Accounts;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
@@ -32,55 +33,167 @@ namespace CoiniumServ.Persistance.Layers
 {
     public interface IStorageLayer
     {
-
+        /// <summary>
+        /// Is the storage layer enabled?
+        /// </summary>
         bool IsEnabled { get; }
 
         #region share storage
 
+        /// <summary>
+        /// Adds a new share.
+        /// </summary>
+        /// <param name="share"></param>
         void AddShare(IShare share);
 
+        /// <summary>
+        /// Move shares in current round to a new key with the block height.
+        /// </summary>
+        /// <param name="height">The new key to move the shares.</param>
+        void MoveCurrentShares(int height);
+
+        /// <summary>
+        /// Move shares of an orphaned block to current key.
+        /// </summary>
+        /// <param name="block"></param>
+        void MoveOrphanedShares(IPersistedBlock block);
+
+        /// <summary>
+        /// Remove shares associated with a round.
+        /// </summary>
+        /// <param name="round"></param>
         void RemoveShares(IPaymentRound round);
 
-        void MoveShares(IShare share);
-
-        void MoveSharesToCurrentRound(IPaymentRound round);
-
+        /// <summary>
+        /// Return shares within current key.
+        /// </summary>
+        /// <returns></returns>
         Dictionary<string, double> GetCurrentShares();
 
-        Dictionary<UInt32, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds);
-
-        void DeleteExpiredHashrateData(int until);
-
-        IDictionary<string, double> GetHashrateData(int since);
+        /// <summary>
+        /// Get shares for a given block.
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
+        Dictionary<string, double> GetShares(IPersistedBlock block);
 
         #endregion
 
         #region block storage
 
+        /// <summary>
+        /// Adds a new block contained within the given share.
+        /// </summary>
+        /// <param name="share"></param>
         void AddBlock(IShare share);
 
-        void UpdateBlock(IPaymentRound round);
+        /// <summary>
+        /// Updated a given block.
+        /// </summary>
+        /// <param name="block"></param>
+        void UpdateBlock(IPersistedBlock block);
 
+        /// <summary>
+        /// Returns total blocks.
+        /// </summary>
+        /// <returns></returns>
         IDictionary<string, int> GetTotalBlocks();
 
-        IEnumerable<IPersistedBlock> GetBlocks();
-        IEnumerable<IPersistedBlock> GetBlocks(BlockStatus status);
+        /// <summary>
+        /// Returns all unpaid blocks.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IPersistedBlock> GetUnpaidBlocks();
 
-        #endregion
+        /// <summary>
+        /// Returns all pending blocks.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IPersistedBlock> GetPendingBlocks(); 
 
-        #region user storage
-
-        bool Authenticate(IMiner miner);
-
-        void UpdateDifficulty(IStratumMiner miner);
+        /// <summary>
+        /// Returns last n blocks.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20);
 
         #endregion
 
         #region payments storage
 
-        Dictionary<string, double> GetPreviousBalances();
+        /// <summary>
+        /// Adds a new payment.
+        /// </summary>
+        /// <param name="payment"></param>
+        void AddPayment(IPayment payment);
 
-        void SetBalances(IList<IWorkerBalance> workerBalances);
+        /// <summary>
+        /// Updates a payment.
+        /// </summary>
+        /// <param name="payment"></param>
+        void UpdatePayment(IPayment payment);
+
+        /// <summary>
+        /// Gets pending payments.
+        /// </summary>
+        /// <returns></returns>
+        IList<IPayment> GetPendingPayments();
+
+        /// <summary>
+        /// Adds a transaction.
+        /// </summary>
+        /// <param name="transaction"></param>
+        void AddTransaction(ITransaction transaction);
+
+        #endregion
+
+        #region account storage
+
+        /// <summary>
+        /// Adds a new account.
+        /// </summary>
+        /// <param name="user"></param>
+        void AddAccount(IAccount user);
+
+        /// <summary>
+        /// Returns the account with given username.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        IAccount GetAccount(string username);
+
+        /// <summary>
+        /// Returns the account with given Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        IAccount GetAccountById(int id);
+
+        #endregion
+
+        #region worker storage
+
+        /// <summary>
+        /// Authenticates a miner.
+        /// </summary>
+        /// <param name="miner"></param>
+        /// <returns></returns>
+        bool Authenticate(IMiner miner);
+
+        /// <summary>
+        /// Updated difficulty for a stratum miner.
+        /// </summary>
+        /// <param name="miner"></param>
+        void UpdateDifficulty(IStratumMiner miner);
+
+        #endregion
+
+        #region statistics storage
+
+        IDictionary<string, double> GetHashrateData(int since);
+
+        void DeleteExpiredHashrateData(int until);
 
         #endregion
     }

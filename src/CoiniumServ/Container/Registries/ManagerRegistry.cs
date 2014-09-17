@@ -23,10 +23,13 @@
 using CoiniumServ.Banning;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
+using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Logging;
+using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
+using CoiniumServ.Payments;
 using CoiniumServ.Pools;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
@@ -51,6 +54,8 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IStatisticsManager, StatisticsManager>().AsSingleton();
             _applicationContext.Container.Register<ILogManager, LogManager>().AsSingleton();
             _applicationContext.Container.Register<IMetricsManager, MetricsManager>().AsSingleton();
+            _applicationContext.Container.Register<IDaemonManager, DaemonManager>().AsSingleton();
+            _applicationContext.Container.Register<IMarketManager, MarketManager>().AsSingleton();
 
             // per-pool managers
             _applicationContext.Container.Register<IShareManager, ShareManager>().AsMultiInstance();
@@ -58,7 +63,8 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IJobManager, JobManager>().AsMultiInstance();
             _applicationContext.Container.Register<IMinerManager, MinerManager>().AsMultiInstance();
             _applicationContext.Container.Register<IVardiffManager, VardiffManager>().AsMultiInstance();
-            _applicationContext.Container.Register<IBanManager, BanManager>().AsMultiInstance();                                   
+            _applicationContext.Container.Register<IBanManager, BanManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentManager, PaymentManager>().AsMultiInstance();
         }
     }
 }
