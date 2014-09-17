@@ -187,6 +187,8 @@
     <Compile Include="Miners\IMinerConfig.cs" />
     <Compile Include="Miners\MetaConfig.cs" />
     <Compile Include="Miners\MinerSoftware.cs" />
+    <Compile Include="Miners\Software\IMinerSoftware.cs" />
+    <Compile Include="Miners\Software\MinerSoftware.cs" />
     <Compile Include="Daemon\IDaemonManager.cs" />
     <Compile Include="Daemon\DaemonManager.cs" />
     <Compile Include="Daemon\IStandaloneDaemonConfig.cs" />
