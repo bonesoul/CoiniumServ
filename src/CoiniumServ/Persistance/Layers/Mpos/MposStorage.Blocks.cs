@@ -105,7 +105,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20)
+        public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 10)
         {
             var blocks = new List<IPersistedBlock>();
 

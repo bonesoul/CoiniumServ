@@ -116,7 +116,7 @@ namespace CoiniumServ.Persistance.Layers
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20);
+        IEnumerable<IPersistedBlock> GetLastBlocks(int count = 10);
 
         #endregion
 
