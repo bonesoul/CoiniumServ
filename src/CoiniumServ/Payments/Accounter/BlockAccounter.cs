@@ -29,7 +29,7 @@ using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
 
-namespace CoiniumServ.Payments.New
+namespace CoiniumServ.Payments.Accounter
 {
     public class BlockAccounter : IBlockAccounter
     {
@@ -66,13 +66,14 @@ namespace CoiniumServ.Payments.New
             // find that blocks that were confirmed but still unpaid.
             var unpaidBlocks = _storageLayer.GetAllUnpaidBlocks(); 
 
-            // create the awaiting payment objects.
+            // create the payouts.
             var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer)).ToList();
 
             // loop through rounds
             foreach (var round in rounds)
             {
                 _storageLayer.CommitPayoutsForRound(round); // commit awaiting payments for the round.
+                _storageLayer.RemoveShares(round); // remove the shares for the round.
                 _storageLayer.UpdateBlock(round.Block); // set the block for the round as accounted.
             }
 

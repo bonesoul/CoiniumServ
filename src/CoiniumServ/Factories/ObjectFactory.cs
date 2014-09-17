@@ -35,7 +35,9 @@ using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Payments.New;
+using CoiniumServ.Payments.Accounter;
+using CoiniumServ.Payments.Processor;
+using CoiniumServ.Payments.Round;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
@@ -178,19 +180,6 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IShareManager>(@params);
         }
 
-        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer, IBlockProcessor blockProcessor)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"poolConfig", poolConfig},
-                {"daemonClient", daemonClient},
-                {"storageLayer", storageLayer},
-                {"blockProcessor", blockProcessor},
-            };
-
-            return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
-        }
-
         public IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
@@ -288,7 +277,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IBlockAccounter>(@params);
         }
 
-        public INewPaymentProcessor GetNewPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient)
+        public INewPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient)
         {
             var @params = new NamedParameterOverloads
             {

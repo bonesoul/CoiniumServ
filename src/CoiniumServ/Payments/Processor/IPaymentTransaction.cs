@@ -21,14 +21,24 @@
 // 
 #endregion
 
-namespace CoiniumServ.Payments.New
+using System;
+using CoiniumServ.Accounts;
+using CoiniumServ.Payments.Round;
+
+namespace CoiniumServ.Payments.Processor
 {
-    public interface IUser
+    public interface IPaymentTransaction
     {
         int Id { get; }
 
-        string Username { get; }
+        IUser User { get; }
 
-        string Address { get; }
+        IPayout  Payment { get; }
+
+        string Currency { get; }
+
+        string TxId { get; set; }
+
+        DateTime CreatedAt { get; }
     }
 }

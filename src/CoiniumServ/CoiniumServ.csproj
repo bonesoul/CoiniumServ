@@ -273,14 +273,8 @@
     <Compile Include="Server\Web\RootPathProvider.cs" />
     <Compile Include="Server\Mining\Stratum\Sockets\ISocketServer.cs" />
     <Compile Include="Server\Mining\Stratum\Sockets\BannedConnectionEventArgs.cs" />
-    <Compile Include="Payments\IPaymentRound.cs" />
     <Compile Include="Payments\IPaymentConfig.cs" />
-    <Compile Include="Payments\IPaymentProcessor.cs" />
-    <Compile Include="Payments\IWorkerBalance.cs" />
-    <Compile Include="Payments\PaymentRound.cs" />
     <Compile Include="Payments\PaymentConfig.cs" />
-    <Compile Include="Payments\PaymentProcessor.cs" />
-    <Compile Include="Payments\WorkerBalance.cs" />
     <Compile Include="Persistance\Blocks\BlockStatus.cs" />
     <Compile Include="Persistance\Blocks\IPersistedBlock.cs" />
     <Compile Include="Container\Registries\AlgorithmRegistry.cs" />

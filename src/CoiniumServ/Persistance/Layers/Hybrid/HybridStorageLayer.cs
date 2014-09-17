@@ -24,11 +24,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using CoiniumServ.Accounts;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Payments.New;
+using CoiniumServ.Payments.Processor;
+using CoiniumServ.Payments.Round;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
@@ -116,7 +118,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public void RemoveShares(IPaymentRound round)
+        public void RemoveShares(INewPaymentRound round)
         {
             try
             {
@@ -154,28 +156,28 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public void MoveSharesToCurrentRound(IPaymentRound round)
+        public void MoveSharesToCurrentRound(IPersistedBlock block)
         {
             try
             {
                 if (!IsEnabled || !_redisProvider.IsConnected)
                     return;
 
-                if (round.Block.Status == BlockStatus.Confirmed || round.Block.Status == BlockStatus.Pending)
+                if (block.Status == BlockStatus.Confirmed || block.Status == BlockStatus.Pending)
                     return;
 
-                var currentRound = string.Format("{0}:shares:round:current", _coin); // current round key.
-                var roundShares = string.Format("{0}:shares:round:{1}", _coin, round.Block.Height); // rounds shares key.
+                var round = string.Format("{0}:shares:round:{1}", _coin, block.Height); // rounds shares key.
+                var current = string.Format("{0}:shares:round:current", _coin); // current round key.
 
                 //_client.StartPipeTransaction(); // batch the commands as atomic.
 
                 // add shares to current round again.
-                foreach (var pair in round.Shares)
+                foreach (var entry in _redisProvider.Client.HGetAll(round))
                 {
-                    _redisProvider.Client.HIncrByFloat(currentRound, pair.Key, pair.Value);
+                    _redisProvider.Client.HIncrByFloat(current, entry.Key, double.Parse(entry.Value, CultureInfo.InvariantCulture));
                 }
 
-                _redisProvider.Client.Del(roundShares); // delete the associated shares.
+                _redisProvider.Client.Del(round); // delete the round shares.
 
                 //_client.EndPipe(); // execute the batch commands.
             }
@@ -233,32 +235,6 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
 
             return shares;
-        }
-
-        public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
-        {
-            var sharesForRounds = new Dictionary<UInt32, Dictionary<string, double>>(); // dictionary of block-height <-> shares.
-
-            try
-            {
-                if (!IsEnabled || !_redisProvider.IsConnected)
-                    return sharesForRounds;
-
-                foreach (var round in rounds)
-                {
-                    var roundKey = string.Format("{0}:shares:round:{1}", _coin, round.Block.Height);
-                    var hashes = _redisProvider.Client.HGetAll(roundKey);
-
-                    var shares = hashes.ToDictionary(x => x.Key, x => double.Parse(x.Value, CultureInfo.InvariantCulture));
-                    sharesForRounds.Add(round.Block.Height, shares);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error("An exception occured while getting shares for round: {0:l}", e.Message);
-            }
-
-            return sharesForRounds;
         }
 
         public void DeleteExpiredHashrateData(int until)
@@ -335,32 +311,6 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             {
                 _logger.Error("An exception occured while adding block; {0:l}", e.Message);
             }            
-        }
-
-        public void UpdateBlock(IPaymentRound round)
-        {
-            try
-            {
-                if (!IsEnabled)
-                    return;
-
-                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
-                {
-                    connection.Execute(
-                        @"UPDATE Block SET Orphaned = @orphaned, Confirmed = @confirmed, Accounted = @accounted WHERE Height = @height",
-                        new
-                        {
-                            orphaned = round.Block.Status == BlockStatus.Orphaned,
-                            confirmed = round.Block.Status == BlockStatus.Confirmed,
-                            accounted = round.Block.Accounted,
-                            height = round.Block.Height
-                        });
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error("An exception occured while updating block; {0:l}", e.Message);
-            }
         }
 
         public void UpdateBlock(IPersistedBlock block)
@@ -632,33 +582,6 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
 
             return previousBalances;
-        }
-
-        public void SetBalances(IList<IWorkerBalance> workerBalances)
-        {
-            try
-            {
-                if (!IsEnabled || !_redisProvider.IsConnected)
-                    return;
-
-                var balancesKey = string.Format("{0}:balances", _coin);
-
-                foreach (var workerBalance in workerBalances)
-                {
-                    //_client.StartPipeTransaction(); // batch the commands as atomic.
-
-                    _redisProvider.Client.HDel(balancesKey, workerBalance.Worker); // first delete the existing key.
-
-                    if (!workerBalance.Paid) // if outstanding balance exists, commit it.
-                        _redisProvider.Client.HIncrByFloat(balancesKey, workerBalance.Worker, (double)workerBalance.Balance); // increment the value.
-
-                    //_client.EndPipe(); // execute the batch commands.
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error("An exception occured while setting remaining balance: {0:l}", e.Message);
-            }
         }
 
         public void CommitPayoutsForRound(INewPaymentRound round)

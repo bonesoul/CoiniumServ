@@ -34,7 +34,9 @@ using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Payments.New;
+using CoiniumServ.Payments.Accounter;
+using CoiniumServ.Payments.Processor;
+using CoiniumServ.Payments.Round;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
@@ -85,8 +87,6 @@ namespace CoiniumServ.Factories
 
         IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
 
-        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
-
         IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer);
 
         IBanManager GetBanManager(IPoolConfig poolConfig, IShareManager shareManager);
@@ -109,7 +109,7 @@ namespace CoiniumServ.Factories
 
         IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
-        INewPaymentProcessor GetNewPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient);
+        INewPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient);
 
         #endregion
 

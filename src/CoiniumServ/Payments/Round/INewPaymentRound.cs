@@ -21,9 +21,15 @@
 // 
 #endregion
 
-namespace CoiniumServ.Payments.New
+using System.Collections.Generic;
+using CoiniumServ.Persistance.Blocks;
+
+namespace CoiniumServ.Payments.Round
 {
-    public interface INewPaymentProcessor
+    public interface INewPaymentRound
     {
+        IPersistedBlock Block { get; }
+
+        IList<IPayout> Payouts { get; }                
     }
 }

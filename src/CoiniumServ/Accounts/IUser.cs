@@ -20,10 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Payments
+
+namespace CoiniumServ.Accounts
 {
-    public interface IPaymentProcessor
+    public interface IUser
     {
-        void Initialize();
+        int Id { get; }
+
+        string Username { get; }
+
+        string Address { get; }
     }
 }

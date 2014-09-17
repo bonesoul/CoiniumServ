@@ -20,19 +20,26 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using CoiniumServ.Persistance.Blocks;
 
-namespace CoiniumServ.Payments
+using CoiniumServ.Miners;
+
+namespace CoiniumServ.Accounts
 {
-    public interface IPaymentRound
+    public class User:IUser
     {
-        IPersistedBlock Block { get; }
+        public int Id { get; private set; }
+        public string Username { get; private set; }
+        public string Address { get; private set; }
 
-        Dictionary<string, double> Shares { get; }
+        public User(int id, string username)
+        {
+            Id = id;
+            Username = username;
+            Address = username;
+        }
 
-        Dictionary<string, decimal> Payouts { get; }
-
-        void AddShares(IDictionary<string, double> shares);
+        public User(IMiner miner)
+            :this(-1, miner.Username)
+        { }
     }
 }

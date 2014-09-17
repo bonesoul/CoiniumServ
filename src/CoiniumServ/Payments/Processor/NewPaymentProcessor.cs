@@ -31,7 +31,7 @@ using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
 
-namespace CoiniumServ.Payments.New
+namespace CoiniumServ.Payments.Processor
 {
     public class NewPaymentProcessor:INewPaymentProcessor
     {

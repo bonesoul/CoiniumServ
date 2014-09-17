@@ -26,7 +26,7 @@ using System.Linq;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 
-namespace CoiniumServ.Payments.New
+namespace CoiniumServ.Payments.Round
 {
     public class NewPaymentRound : INewPaymentRound
     {

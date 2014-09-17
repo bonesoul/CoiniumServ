@@ -21,7 +21,7 @@
 // 
 #endregion
 using System;
-using CoiniumServ.Payments.New;
+using CoiniumServ.Accounts;
 using CoiniumServ.Pools;
 using Newtonsoft.Json;
 

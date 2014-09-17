@@ -23,9 +23,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Accounts;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Payments.New;
+using CoiniumServ.Payments.Processor;
+using CoiniumServ.Payments.Round;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
@@ -101,7 +103,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             }
         }
 
-        public void RemoveShares(IPaymentRound round)
+        public void RemoveShares(INewPaymentRound round)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException(); 
@@ -112,7 +114,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             // The function is not supported as MPOS mode doesn't require the functionality.
         }
 
-        public void MoveSharesToCurrentRound(IPaymentRound round)
+        public void MoveSharesToCurrentRound(IPersistedBlock block)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
@@ -147,12 +149,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         }
 
         public Dictionary<string, double> GetShares(IPersistedBlock block)
-        {
-            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
-            throw new NotImplementedException();
-        }
-
-        public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();
@@ -193,12 +189,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         public void AddBlock(IShare share)
         {
             // Blocks are handled by MPOS by itself, we don't need to persist found block data.
-        }
-
-        public void UpdateBlock(IPaymentRound round)
-        {
-            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
-            throw new NotImplementedException();
         }
 
         public void UpdateBlock(IPersistedBlock block)
@@ -356,12 +346,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         }
 
         public Dictionary<string, double> GetPreviousBalances()
-        {
-            // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
-            throw new NotImplementedException();
-        }
-
-        public void SetBalances(IList<IWorkerBalance> workerBalances)
         {
             // The function is not supported as it's only required by payments processor. In MPOS mode payments processor should be disabled.
             throw new NotImplementedException();

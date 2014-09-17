@@ -21,18 +21,27 @@
 // 
 #endregion
 
-namespace CoiniumServ.Payments.New
+using System;
+using CoiniumServ.Accounts;
+using CoiniumServ.Payments.Round;
+
+namespace CoiniumServ.Payments.Processor
 {
-    public interface IPayout
+    public class PaymentTransaction:IPaymentTransaction
     {
-        int Id { get; }
+        public int Id { get; private set; }
+        public IUser User { get; private set; }
+        public IPayout Payment { get; private set; }
+        public string Currency { get; private set; }
+        public string TxId { get; set; }
+        public DateTime CreatedAt { get; private set; }
 
-        int BlockId { get; }
-
-        int UserId { get; }
-
-        decimal Amount { get; }
-
-        bool Completed { get; set; }
+        public PaymentTransaction(IUser user, IPayout payout, string currency)
+        {
+            User = user;
+            Payment = payout;
+            Currency = currency;
+            CreatedAt = DateTime.Now;
+        }
     }
 }

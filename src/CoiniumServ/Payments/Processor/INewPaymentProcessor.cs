@@ -21,34 +21,9 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Persistance.Blocks;
-
-namespace CoiniumServ.Payments.New
+namespace CoiniumServ.Payments.Processor
 {
-    public class Payout : IPayout
+    public interface INewPaymentProcessor
     {
-        public int Id { get; private set; }
-        public int BlockId { get; private set; }
-        public int UserId { get; private set; }
-        public decimal Amount { get; private set; }
-        public bool Completed { get; set; }
-
-        public Payout(IPersistedBlock block, int userId, decimal amount)
-        {
-            BlockId = (int)block.Height;
-            UserId = userId;
-            Amount = amount;
-            Completed = false;
-        }
-
-        public Payout(Int32 id, Int32 block, Int32 user, Decimal amount, bool completed)
-        {
-            Id = id;
-            BlockId = block;
-            UserId = user;
-            Amount = amount;
-            Completed = completed;
-        }
     }
 }

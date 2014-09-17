@@ -21,9 +21,11 @@
 // 
 #endregion
 using System.Collections.Generic;
+using CoiniumServ.Accounts;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
-using CoiniumServ.Payments.New;
+using CoiniumServ.Payments.Processor;
+using CoiniumServ.Payments.Round;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
@@ -39,7 +41,7 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return; // just skip.
         }
 
-        public void RemoveShares(IPaymentRound round)
+        public void RemoveShares(INewPaymentRound round)
         {
             return; // just skip.
         }
@@ -49,7 +51,7 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return; // just skip.
         }
 
-        public void MoveSharesToCurrentRound(IPaymentRound round)
+        public void MoveSharesToCurrentRound(IPersistedBlock block)
         {
             return; // just skip.
         }
@@ -64,11 +66,6 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return new Dictionary<string, double>(); // return an empty dictionary.
         }
 
-        public Dictionary<uint, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds)
-        {
-            return new Dictionary<uint, Dictionary<string, double>>(); // return an empty dictionary.
-        }
-
         public void DeleteExpiredHashrateData(int until)
         {
             return; // just skip.
@@ -80,11 +77,6 @@ namespace CoiniumServ.Persistance.Layers.Empty
         }
 
         public void AddBlock(IShare share)
-        {
-            return; // just skip.
-        }
-
-        public void UpdateBlock(IPaymentRound round)
         {
             return; // just skip.
         }
@@ -137,11 +129,6 @@ namespace CoiniumServ.Persistance.Layers.Empty
         public Dictionary<string, double> GetPreviousBalances()
         {
             return new Dictionary<string, double>(); // return an empty dictionary.
-        }
-
-        public void SetBalances(IList<IWorkerBalance> workerBalances)
-        {
-            return;
         }
 
         public void CommitPayoutsForRound(INewPaymentRound round)

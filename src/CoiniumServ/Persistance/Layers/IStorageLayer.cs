@@ -22,9 +22,10 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Accounts;
 using CoiniumServ.Miners;
-using CoiniumServ.Payments;
-using CoiniumServ.Payments.New;
+using CoiniumServ.Payments.Processor;
+using CoiniumServ.Payments.Round;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
@@ -40,17 +41,15 @@ namespace CoiniumServ.Persistance.Layers
 
         void AddShare(IShare share);
 
-        void RemoveShares(IPaymentRound round);
+        void RemoveShares(INewPaymentRound round);
 
         void MoveShares(IShare share);
 
-        void MoveSharesToCurrentRound(IPaymentRound round);
+        void MoveSharesToCurrentRound(IPersistedBlock block);
 
         Dictionary<string, double> GetCurrentShares();
 
         Dictionary<string, double> GetShares(IPersistedBlock block);
-
-        Dictionary<UInt32, Dictionary<string, double>> GetShares(IList<IPaymentRound> rounds);
 
         void DeleteExpiredHashrateData(int until);
 
@@ -61,8 +60,6 @@ namespace CoiniumServ.Persistance.Layers
         #region block storage
 
         void AddBlock(IShare share);
-
-        void UpdateBlock(IPaymentRound round);
 
         void UpdateBlock(IPersistedBlock block);
 
@@ -93,8 +90,6 @@ namespace CoiniumServ.Persistance.Layers
         #region payments storage
 
         Dictionary<string, double> GetPreviousBalances();
-
-        void SetBalances(IList<IWorkerBalance> workerBalances);
 
         void CommitPayoutsForRound(INewPaymentRound round);
 

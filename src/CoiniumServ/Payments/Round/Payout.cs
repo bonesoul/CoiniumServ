@@ -21,25 +21,34 @@
 // 
 #endregion
 
-using CoiniumServ.Miners;
+using System;
+using CoiniumServ.Persistance.Blocks;
 
-namespace CoiniumServ.Payments.New
+namespace CoiniumServ.Payments.Round
 {
-    public class User:IUser
+    public class Payout : IPayout
     {
         public int Id { get; private set; }
-        public string Username { get; private set; }
-        public string Address { get; private set; }
+        public int BlockId { get; private set; }
+        public int UserId { get; private set; }
+        public decimal Amount { get; private set; }
+        public bool Completed { get; set; }
 
-        public User(int id, string username)
+        public Payout(IPersistedBlock block, int userId, decimal amount)
         {
-            Id = id;
-            Username = username;
-            Address = username;
+            BlockId = (int)block.Height;
+            UserId = userId;
+            Amount = amount;
+            Completed = false;
         }
 
-        public User(IMiner miner)
-            :this(-1, miner.Username)
-        { }
+        public Payout(Int32 id, Int32 block, Int32 user, Decimal amount, bool completed)
+        {
+            Id = id;
+            BlockId = block;
+            UserId = user;
+            Amount = amount;
+            Completed = completed;
+        }
     }
 }

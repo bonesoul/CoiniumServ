@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -78,13 +79,21 @@ namespace CoiniumServ.Blocks
 
                 QueryBlock(block); // query the block status
 
-                if (block.Status != BlockStatus.Pending) // if the block is no more pending.
-                    _storageLayer.UpdateBlock(block); // update it in our persistance layer.
 
-                if (block.Status == BlockStatus.Confirmed)
-                    confirmedCount++;
-                else if(block.Status == BlockStatus.Orphaned)
-                    orphanedCount++;                
+                switch (block.Status)
+                {
+                    case BlockStatus.Pending:
+                        break;
+                    case BlockStatus.Orphaned:
+                        _storageLayer.MoveSharesToCurrentRound(block); // move existing shares for contributed miners to current round.
+                        _storageLayer.UpdateBlock(block); // update block in our persistance layer.
+                        orphanedCount++;             
+                        break;
+                    case BlockStatus.Confirmed:
+                        _storageLayer.UpdateBlock(block); // update block in our persistance layer.
+                        confirmedCount++;
+                        break;
+                }              
             }
 
             _logger.Information("Queried {0} pending blocks; {1} got confirmed, {2} got orphaned; took {3:0.000} seconds", pendingCount, confirmedCount, orphanedCount, (float)_stopWatch.ElapsedMilliseconds / 1000);
