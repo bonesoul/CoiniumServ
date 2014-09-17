@@ -26,7 +26,7 @@ namespace CoiniumServ.Blocks
 {
     public interface IBlockProcessor
     {
-        Block GetBlock(string blockHash);
+        Block GetBlockInfo(string blockHash);
 
         Transaction GetGenerationTransaction(Block block);
 

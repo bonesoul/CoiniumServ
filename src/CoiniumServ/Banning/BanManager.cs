@@ -27,8 +27,8 @@ using System.Net;
 using System.Threading;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
-using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Helpers.Time;
 using Serilog;
@@ -92,7 +92,7 @@ namespace CoiniumServ.Banning
         private void Ban(IMiner miner)
         {
             // TODO: add vanilla miners to banlist too.
-            if (miner is IVanillaMiner) // as vanilla miners doesn't use persistent connections, we don't need to disconect him
+            if (miner is IGetworkMiner) // as vanilla miners doesn't use persistent connections, we don't need to disconect him
                 return; // but just blacklist his ip.
 
             var client = (IClient) miner;

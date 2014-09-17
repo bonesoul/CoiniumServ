@@ -4,16 +4,16 @@
 @{ Layout = "layout.cshtml"; }
 
 
-<div class="row">
+<div class="row">   
     <div class="col-lg-3 col-md-6">
-        <div class="panel panel-success">
+        <div class="panel bg-aqua">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
                         <i class="fa fa-tasks fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">@Model.Statistics.Hashrate.GetReadableHashrate()</div>
+                        <h3>@Model.Statistics.Hashrate.GetReadableHashrate()</h3>
                         <div>Hashrate</div>
                     </div>
                 </div>
@@ -26,16 +26,16 @@
                 </div>
             </a>
         </div>
-    </div>
+    </div>    
     <div class="col-lg-3 col-md-6">
-        <div class="panel panel-info">
+        <div class="panel bg-green">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
                         <i class="fa fa-users fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">@Model.Statistics.MinerCount</div>
+                        <h3>@Model.Statistics.MinerCount</h3>
                         <div>Miners</div>
                     </div>
                 </div>
@@ -50,14 +50,14 @@
         </div>
     </div>
     <div class="col-lg-3 col-md-6">
-        <div class="panel panel-warning">
+        <div class="panel bg-yellow">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
                         <i class="fa fa-flask fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">@Model.Statistics.Pools.Count</div>
+                        <h3>@Model.Statistics.Pools.Count</h3>
                         <div>Pools</div>
                     </div>
                 </div>
@@ -72,14 +72,14 @@
         </div>
     </div>
     <div class="col-lg-3 col-md-6">
-        <div class="panel panel-primary">
+        <div class="panel bg-red">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
                         <i class="fa fa-gears fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">@Model.Statistics.Algorithms.Count</div>
+                        <h3>@Model.Statistics.Algorithms.Count</h3>
                         <div>Algorithms</div>
                     </div>
                 </div>

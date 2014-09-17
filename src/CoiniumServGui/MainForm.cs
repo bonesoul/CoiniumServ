@@ -41,8 +41,8 @@ namespace CoiniumServGui
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Text = string.Format("CoiniumServ \"{0}\" - v{1}", CoiniumServ.Utils.Versions.VersionInfo.CodeName,
-                Assembly.GetAssembly(typeof(CoiniumServ.Utils.Versions.VersionInfo)).GetName().Version);
+            Text = string.Format("CoiniumServ \"{0}\" - v{1}", libCoiniumServ.Versions.VersionInfo.CodeName,
+                Assembly.GetAssembly(typeof(libCoiniumServ.Versions.VersionInfo)).GetName().Version);
 
             consoleControl1.StartProcess("CoiniumServ.exe","");
         }

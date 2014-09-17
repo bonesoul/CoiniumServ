@@ -29,7 +29,7 @@ using CoiniumServ.Factories;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
 using CoiniumServ.Utils.Platform;
-using CoiniumServ.Utils.Versions;
+using libCoiniumServ.Versions;
 using Nancy.TinyIoc;
 using Serilog;
 
@@ -94,8 +94,14 @@ namespace CoiniumServ
             // run algorithm manager.
             objectFactory.GetAlgorithmManager();
 
+            // run payment manager
+            objectFactory.GetPaymentDaemonManager();
+
             // run statistics manager.
             objectFactory.GetStatisticsManager();
+
+            // run market manager.
+            objectFactory.GetMarketManager();
 
             // start web server.
             objectFactory.GetWebServer();

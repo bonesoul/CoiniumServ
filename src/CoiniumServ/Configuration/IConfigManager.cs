@@ -21,6 +21,8 @@
 // 
 #endregion
 using System.Collections.Generic;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon;
 using CoiniumServ.Logging;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
@@ -39,6 +41,10 @@ namespace CoiniumServ.Configuration
         ILogConfig LogConfig { get; }
 
         List<IPoolConfig> PoolConfigs { get; }
+
+        IDaemonManagerConfig DaemonManagerConfig { get; }
+
+        ICoinConfig GetCoinConfig(string name);
 
         void Initialize();
     }

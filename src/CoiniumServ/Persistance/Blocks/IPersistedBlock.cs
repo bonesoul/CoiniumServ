@@ -31,21 +31,27 @@ namespace CoiniumServ.Persistance.Blocks
     {
         [JsonProperty("height")]
         UInt32 Height { get; }
+
         [JsonProperty("status")]
         [JsonConverter(typeof(StringEnumConverter))]
         BlockStatus Status { get; set; }
+
+        bool Accounted { get; set; }
+
         [JsonProperty("blockHash")]
         string BlockHash { get; }
+
         [JsonProperty("txHash")]
         string TransactionHash { get; }
+
         [JsonProperty("amount")]
         decimal Amount { get; }
-        decimal Reward { get; }
+
+        decimal Reward { get; set; }
+
         [JsonProperty("time")]
-        DateTime Time { get; }
+        DateTime CreatedAt { get; }
 
         bool IsPending { get; }
-
-        void SetReward(decimal reward);
     }
 }

@@ -42,7 +42,6 @@ namespace CoiniumServ.Pools
         public PoolManager(IObjectFactory objectFactory , IConfigManager configManager)
         {
             _logger = Log.ForContext<PoolManager>();
-
             _storage = new List<IPool>(); // initialize the pool storage.
 
             // loop through all enabled pool configurations.
@@ -55,6 +54,15 @@ namespace CoiniumServ.Pools
             }
 
             Run(); // run the initialized pools.
+        }
+
+        private void Run()
+        {
+            // run the initialized pools
+            foreach (var pool in _storage)
+            {
+                pool.Start();
+            }
         }
 
         public IQueryable<IPool> SearchFor(Expression<Func<IPool, bool>> predicate)
@@ -103,14 +111,6 @@ namespace CoiniumServ.Pools
         public IPool Get(string symbol)
         {
             return _storage.FirstOrDefault(p => p.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private void Run()
-        {
-            foreach (var pool in _storage)
-            {
-                pool.Start();
-            }
         }
 
         public IEnumerator<IPool> GetEnumerator()

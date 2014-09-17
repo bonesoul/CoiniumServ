@@ -25,5 +25,6 @@ namespace CoiniumServ.Miners.Software
 {
     public class MinerSoftware : IMinerSoftware
     {
+        public string Name { get; private set; }
     }
 }

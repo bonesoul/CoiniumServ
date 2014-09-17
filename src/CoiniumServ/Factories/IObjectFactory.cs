@@ -23,14 +23,18 @@
 using System.Collections.Generic;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
+using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Providers;
@@ -58,6 +62,8 @@ namespace CoiniumServ.Factories
 
         ILogManager GetLogManager();
 
+        IDaemonManager GetPaymentDaemonManager();
+
         #endregion
 
         #region pool objects
@@ -68,7 +74,7 @@ namespace CoiniumServ.Factories
         /// Returns a new instance of daemon client.
         /// </summary>
         /// <returns></returns>
-        IDaemonClient GetDaemonClient(IPoolConfig poolConfig);
+        IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
 
         IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer);
 
@@ -78,9 +84,7 @@ namespace CoiniumServ.Factories
 
         IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
 
-        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
-
-        IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient);
+        IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer);
 
         IBanManager GetBanManager(IPoolConfig poolConfig, IShareManager shareManager);
 
@@ -95,6 +99,18 @@ namespace CoiniumServ.Factories
         IRpcService GetMiningService(string type, IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient);
 
         #endregion        
+
+        #region payment objects 
+
+        IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor);
+
+        IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer);
+
+        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient);
+
+        IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer);
+
+        #endregion
 
         #region hash algorithms
 
@@ -126,6 +142,12 @@ namespace CoiniumServ.Factories
         INancyBootstrapper GetWebBootstrapper();
 
         IMetricsManager GetMetricsManager();
+
+        #endregion
+
+        #region market objects
+
+        IMarketManager GetMarketManager();
 
         #endregion
     }

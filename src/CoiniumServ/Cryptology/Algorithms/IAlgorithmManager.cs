@@ -22,7 +22,6 @@
 #endregion
 using CoiniumServ.Server.Web.Service;
 using CoiniumServ.Utils.Repository;
-using HashLib;
 
 namespace CoiniumServ.Cryptology.Algorithms
 {

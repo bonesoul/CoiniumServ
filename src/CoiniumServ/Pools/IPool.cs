@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Daemon;
 using CoiniumServ.Miners;
 using CoiniumServ.Server.Web.Service;
 using Newtonsoft.Json;
@@ -53,6 +54,11 @@ namespace CoiniumServ.Pools
 
         [JsonProperty("blocks")]
         IBlocksCache BlocksCache { get; }
+
+        /// <summary>
+        /// Coin daemon assigned to pool.
+        /// </summary>
+        IDaemonClient Daemon { get; }
 
         void Start();
 
