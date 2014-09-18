@@ -28,6 +28,7 @@ using Metrics;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.CustomErrors;
+using Nancy.Diagnostics;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Server.Web
@@ -79,6 +80,13 @@ namespace CoiniumServ.Server.Web
         {
             return _applicationContext.Container;
         }
+
+        #if DEBUG // on debug mode, enable http://website/_Nancy/
+        protected override DiagnosticsConfiguration DiagnosticsConfiguration
+        {
+            get { return new DiagnosticsConfiguration { Password = @"debug" }; }
+        }
+        #endif
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
         {

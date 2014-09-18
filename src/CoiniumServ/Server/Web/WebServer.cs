@@ -80,8 +80,12 @@ namespace CoiniumServ.Server.Web
 
             try
             {
-                StaticConfiguration.Caching.EnableRuntimeViewDiscovery = true;
-                StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
+                #if DEBUG // on debug mode enable 
+                    StaticConfiguration.Caching.EnableRuntimeViewDiscovery = true;
+                    StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
+                    StaticConfiguration.EnableRequestTracing = true;
+                #endif
+
                 var host = new NancyHost(_webBootstrapper, hostConfiguration, uri); // create nancy host.
                 host.Start();
                 IsListening = true;
