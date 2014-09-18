@@ -31,7 +31,7 @@ namespace libCoiniumServ.Versions
         /// <summary>
         /// Codename.
         /// </summary>
-        public const string CodeName = "Piri Reis";
+        public const string CodeName = "Aurora";
 
         /// <summary>
         /// Main assembly versions info.
@@ -41,7 +41,7 @@ namespace libCoiniumServ.Versions
             /// <summary>
             /// Main assemby version.
             /// </summary>
-            public const string Version = "0.1.5.*";
+            public const string Version = "0.2.0.*";
         }
     }
 }
