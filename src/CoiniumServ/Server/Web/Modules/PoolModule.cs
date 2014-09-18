@@ -36,18 +36,15 @@ namespace CoiniumServ.Server.Web.Modules
             {
                 var pool = poolManager.Get(_.slug); // find the requested pool. TODO: use IStatistics instead
 
-                if (pool == null) // make sure queried pool exists.
+                if (pool == null)
                 {
-                    ViewBag.Title = "Error";
-                    ViewBag.Heading = "An error occured!";
-
                     return View["error", new ErrorViewModel
                     {
                         Summary = "Pool not found",
                         Details = string.Format("The requested pool does not exist: {0}", _.slug)
                     }];
                 }
-             
+
                 ViewBag.Title = string.Format("{0} Pool", pool.Config.Coin.Name);
                 ViewBag.Heading = string.Format("{0} Pool", pool.Config.Coin.Name);
 

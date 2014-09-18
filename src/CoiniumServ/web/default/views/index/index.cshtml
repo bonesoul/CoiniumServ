@@ -164,7 +164,7 @@
                                     <td>@pool.MinerManager.Count</td>
                                     <td>@pool.Config.Coin.Algorithm</td>
                                     <td>@pool.NetworkInfo.Round</td>
-                                    <td><span class="badge @(pool.NetworkInfo.Healthy? "btn-success" : "btn-danger")">@(pool.NetworkInfo.Healthy ? "healthy" : "warnings!")</span></td>
+                                    <td><span class="badge @(pool.NetworkInfo.Healthy? "bg-green" : "bg-red")">@(pool.NetworkInfo.Healthy ? "healthy" : "warnings!")</span></td>
                                 </tr>
                             }</tbody>
                     </table>

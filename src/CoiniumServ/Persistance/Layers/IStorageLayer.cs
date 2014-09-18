@@ -112,11 +112,18 @@ namespace CoiniumServ.Persistance.Layers
         IEnumerable<IPersistedBlock> GetPendingBlocks(); 
 
         /// <summary>
-        /// Returns last n blocks.
+        /// Returns latest n blocks.
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        IEnumerable<IPersistedBlock> GetLastBlocks(int count = 10);
+        IEnumerable<IPersistedBlock> GetLastestBlocks(int count = 5);
+
+        /// <summary>
+        /// Returns latest n paid blocks.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5); 
 
         #endregion
 

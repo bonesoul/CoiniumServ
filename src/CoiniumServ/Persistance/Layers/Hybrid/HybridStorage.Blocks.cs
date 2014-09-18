@@ -171,7 +171,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 10)
+        public IEnumerable<IPersistedBlock> GetLastestBlocks(int count = 5)
         {
             var blocks = new List<IPersistedBlock>();
 
@@ -185,6 +185,32 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     var results = connection.Query<PersistedBlock>(
                         string.Format(@"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt 
                                 FROM Block ORDER BY Height DESC LIMIT {0}", count));
+
+                    blocks.AddRange(results);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting last blocks: {0:l}", e.Message);
+            }
+
+            return blocks;
+        }
+
+        public IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5)
+        {
+            var blocks = new List<IPersistedBlock>();
+
+            try
+            {
+                if (!IsEnabled)
+                    return blocks;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<PersistedBlock>(
+                        string.Format(@"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt 
+                                FROM Block WHERE Accounted = true ORDER BY Height DESC LIMIT {0}", count));
 
                     blocks.AddRange(results);
                 }

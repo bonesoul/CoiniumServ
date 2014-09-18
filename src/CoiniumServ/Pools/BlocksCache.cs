@@ -39,64 +39,39 @@ namespace CoiniumServ.Pools
         public int Orphaned { get; private set; }
         public int Total { get; private set; }
 
-        public Dictionary<uint, IPersistedBlock> Latest { 
-            get { return _storage.ToDictionary(b => b.Height); }
-        } 
+        public IList<IPersistedBlock> Latest
+        {
+            get { return _latestBlocks.AsReadOnly(); }
+        }
 
-        private readonly IList<IPersistedBlock> _storage;
+        public IList<IPersistedBlock> LatestPaid
+        {
+            get { return _lastPaid.AsReadOnly(); }
+        }
+
+        private readonly List<IPersistedBlock> _latestBlocks;
+
+        private readonly List<IPersistedBlock> _lastPaid;
 
         private readonly IStorageLayer _storageLayer;
 
         public BlocksCache(IStorageLayer storageLayer)
         {
             _storageLayer = storageLayer;
-            _storage = new List<IPersistedBlock>();
+            _latestBlocks = new List<IPersistedBlock>();
+            _lastPaid = new List<IPersistedBlock>();
         }
 
-        public IEnumerator<IPersistedBlock> GetEnumerator()
-        {
-            return _storage.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public IQueryable<IPersistedBlock> SearchFor(Expression<Func<IPersistedBlock, bool>> predicate)
-        {
-            return _storage.AsQueryable().Where(predicate);
-        }
-
-        public IEnumerable<IPersistedBlock> GetAll()
-        {
-            return _storage;
-        }
-
-        public IQueryable<IPersistedBlock> GetAllAsQueryable()
-        {
-            return _storage.AsQueryable();
-        }
-
-        public IReadOnlyCollection<IPersistedBlock> GetAllAsReadOnly()
-        {
-            return new ReadOnlyCollection<IPersistedBlock>(_storage);
-        }
-
-        public int Count { get { return _storage.Count; } }
 
         public string ServiceResponse { get; private set; }
 
         public void Recache()
         {
-            _storage.Clear();
-            
-            // recache blocks.
-            var blocks = _storageLayer.GetLastBlocks();
-            foreach (var block in blocks)
-            {
-                _storage.Add(block);
-            }
+            _latestBlocks.Clear();
+            _lastPaid.Clear();
+
+            _latestBlocks.AddRange(_storageLayer.GetLastestBlocks()); // recache latest blocks.
+            _lastPaid.AddRange(_storageLayer.GetLatestPaidBlocks()); // recache last paid blocks.
 
             // recache block counts.
             var blockCounts = _storageLayer.GetTotalBlocks();

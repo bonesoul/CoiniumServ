@@ -105,7 +105,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 10)
+        public IEnumerable<IPersistedBlock> GetLastestBlocks(int count = 5)
         {
             var blocks = new List<IPersistedBlock>();
 
@@ -129,6 +129,12 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             }
 
             return blocks;
+        }
+
+        public IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5)
+        {
+            //todo: implement me!
+            throw new NotImplementedException();
         }
     }
 }

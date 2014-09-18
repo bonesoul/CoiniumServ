@@ -90,9 +90,14 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return new List<IPersistedBlock>();
         }
 
-        public IEnumerable<IPersistedBlock> GetLastBlocks(int count = 20)
+        public IEnumerable<IPersistedBlock> GetLastestBlocks(int count = 5)
         {
             return new List<IPersistedBlock>();
+        }
+
+        public IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void AddPayment(IPayment payment)

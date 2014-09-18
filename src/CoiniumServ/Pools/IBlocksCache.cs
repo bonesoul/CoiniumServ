@@ -23,13 +23,12 @@
 using System.Collections.Generic;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Utils.Repository;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Pools
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public interface IBlocksCache : IRepository<IPersistedBlock>, IJsonService
+    public interface IBlocksCache : IJsonService
     {
         [JsonProperty("pending")]
         int Pending { get; }
@@ -44,6 +43,9 @@ namespace CoiniumServ.Pools
         int Total { get; }
 
         [JsonProperty("latest")]
-        Dictionary<uint, IPersistedBlock> Latest { get; } 
+        IList<IPersistedBlock> Latest { get; }
+
+        [JsonProperty("latestPaid")]
+        IList<IPersistedBlock> LatestPaid { get; }
     }
 }
