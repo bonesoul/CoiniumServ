@@ -259,10 +259,11 @@
     <Compile Include="Server\Web\IBackendConfig.cs" />
     <Compile Include="Server\Web\Models\RoundModel.cs" />
     <Compile Include="Server\Web\Models\WorkersModel.cs" />
-    <Compile Include="Server\Web\Modules\BackendConfig.cs" />
-    <Compile Include="Server\Web\Modules\Donate.cs" />
+    <Compile Include="Server\Web\BackendConfig.cs" />
+    <Compile Include="Server\Web\Modules\DonateModule.cs" />
     <Compile Include="Server\Web\Models\IndexModel.cs" />
     <Compile Include="Server\Web\Models\PoolModel.cs" />
+    <Compile Include="Server\Web\Modules\TosModule.cs" />
     <Compile Include="Statistics\IStatisticsManager.cs" />
     <Compile Include="Statistics\StatisticsManager.cs" />
     <Compile Include="Utils\Repository\IRepository.cs" />
@@ -296,9 +297,9 @@
     <Compile Include="Server\Web\IWebServer.cs" />
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
     <Compile Include="Server\Web\IWebServerConfig.cs" />
-    <Compile Include="Server\Web\Modules\Api.cs" />
+    <Compile Include="Server\Web\Modules\ApiModule.cs" />
     <Compile Include="Server\Web\Models\JsonError.cs" />
-    <Compile Include="Server\Web\Modules\Pool.cs" />
+    <Compile Include="Server\Web\Modules\PoolModule.cs" />
     <Compile Include="Server\Web\WebServer.cs" />
     <Compile Include="Server\Web\WebServerConfig.cs" />
     <Compile Include="Configuration\ConfigManager.cs" />
@@ -450,7 +451,7 @@
     <Compile Include="Daemon\DaemonResponse.cs" />
     <Compile Include="Server\Mining\Stratum\Responses\SubscribeResponse.cs" />
     <Compile Include="Server\Mining\Stratum\Sockets\SocketServer.cs" />
-    <Compile Include="Server\Web\Modules\Index.cs" />
+    <Compile Include="Server\Web\Modules\IndexModule.cs" />
     <Compile Include="Server\Web\HttpServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1055,6 +1056,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\views\pool\workers.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\tos\tos.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

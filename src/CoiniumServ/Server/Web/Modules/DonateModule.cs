@@ -20,30 +20,28 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Serilog;
+using CoiniumServ.Pools;
+using CoiniumServ.Statistics;
+using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules
 {
-    public class BackendConfig: IBackendConfig
+    public class DonateModule : NancyModule
     {
-        public bool Valid { get; private set; }
-        public bool MetricsEnabled { get; private set; }
-
-        public BackendConfig(dynamic config)
+        public DonateModule(IStatisticsManager statisticsManager, IPoolManager poolManager)
+            :base("/donate")
         {
-            try
+            Get["/"] = _ =>
             {
-                // load the config data.
-                MetricsEnabled = config.metrics.enabled;
+                // include common data required by layout.
+                ViewBag.Title = "Donation";
+                ViewBag.Heading = "Donation";
+                ViewBag.Pools = poolManager;
+                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 
-                Valid = true;
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<BackendConfig>().Error(e, "Error loading backend configuration");
-            }
+                // return our view
+                return View["donate"];
+            };
         }
     }
 }

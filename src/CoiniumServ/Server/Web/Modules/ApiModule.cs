@@ -21,7 +21,6 @@
 // 
 #endregion
 using System.Linq;
-using CoiniumServ.Coin.Config;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
@@ -36,7 +35,6 @@ namespace CoiniumServ.Server.Web.Modules
         private static readonly Response PoolNotFound = JsonConvert.SerializeObject(new JsonError("Pool not found!"));
         private static readonly Response AlgorithmNotFound = JsonConvert.SerializeObject(new JsonError("Algorithm not found!"));
 
-        // TODO: use base("/api");
         public ApiModule(IStatisticsManager statisticsManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
             :base("/api")
         {
