@@ -20,23 +20,20 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using CoiniumServ.Configuration;
 
-using Nancy;
-
-namespace CoiniumServ.Server.Web.Modules
+namespace CoiniumServ.Server.Web
 {
-    public class TosModule:NancyModule
+    public interface ISocialConfig : IConfig
     {
-        public TosModule()
-            :base("/tos")
-        {
-            Get["/"] = _ =>
-            {
-                ViewBag.Heading = "Terms of Service";
-                ViewBag.Title = "Terms of Service";
+        string Rss { get; }
 
-                return View["tos"];
-            };
-        }
+        string Twitter { get; }
+
+        string Facebook { get; }
+
+        string GooglePlus { get; }
+
+        string Youtube { get; }
     }
 }

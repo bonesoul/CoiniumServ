@@ -43,8 +43,6 @@ namespace CoiniumServ.Server.Web.Modules
                 // include common data required by layout.
                 ViewBag.Title = "API";
                 ViewBag.Heading = "Public API";
-                ViewBag.Pools = poolManager;
-                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
 
                 // return our view
                 return View["api", new ApiModel

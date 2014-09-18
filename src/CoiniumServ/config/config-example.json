@@ -29,6 +29,14 @@
     # bind: interface to bind webserver, leave empty to listen on all available interfaces.
     # port: port to listen for http connections.
     # folder: name of the template folder that exists in web/.
+    
+    # social: 
+    # rss: Feed url
+    # twitter: Twitter page url
+    # facebook: Facebook page url
+    # googleplus: Google Plus page url
+    # youtube: Youtube page url
+    
     # backend: 
     # enabled: set this true to enable admin backend.
     # password: password for enabling administrator 
@@ -38,7 +46,14 @@
 		"bind": "",
         "port": 80,
         "template": "default",
-        "backend" : {
+        "social": {
+            "rss": "http://bit.ly/1qheogE",
+            "twitter": "https://twitter.com/coinium",
+            "facebook": "https://www.facebook.com/pages/Coiniumorg/639179226128343",
+            "googleplus": "https://plus.google.com/+CoiniumOrgNetwork/about",
+            "youtube": "http://www.youtube.com/user/CoiniumNetwork/"
+        },
+        "backend": {
             "metrics": {
                 "enabled": false
             }

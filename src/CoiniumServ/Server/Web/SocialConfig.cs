@@ -20,44 +20,36 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using CoiniumServ.Server.Web.Modules;
 using Serilog;
 
 namespace CoiniumServ.Server.Web
 {
-    public class WebServerConfig : IWebServerConfig
+    public class SocialConfig:ISocialConfig
     {
-        public bool Enabled { get; private set; }
-
-        public string BindInterface { get; private set; }
-
-        public int Port { get; private set; }
-
-        public string Template { get; private set; }
-        public ISocialConfig Social { get; private set; }
-
-        public IBackendConfig Backend { get; private set; }
-
         public bool Valid { get; private set; }
+        public string Rss { get; private set; }
+        public string Twitter { get; private set; }
+        public string Facebook { get; private set; }
+        public string GooglePlus { get; private set; }
+        public string Youtube { get; private set; }
 
-        public WebServerConfig(dynamic config)
+        public SocialConfig(dynamic config)
         {
             try
             {
-                // load the config data.
-                Enabled = config.enabled;
-                BindInterface = string.IsNullOrEmpty(config.bind) ? "localhost" : config.bind;
-                Port = config.port == 0 ? 80 : config.port;
-                Template = string.IsNullOrEmpty(config.template) ? "default" : config.template;
-                Social = new SocialConfig(config.social);
-                Backend = new BackendConfig(config.backend);
+                Rss = string.IsNullOrEmpty(config.rss)? string.Empty: config.rss;
+                Twitter = string.IsNullOrEmpty(config.twitter) ? string.Empty : config.twitter;
+                Facebook = string.IsNullOrEmpty(config.facebook) ? string.Empty : config.facebook;
+                GooglePlus = string.IsNullOrEmpty(config.googleplus) ? string.Empty : config.googleplus;
+                Youtube = string.IsNullOrEmpty(config.youtube) ? string.Empty : config.youtube;
                 Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<WebServerConfig>().Error(e, "Error loading web-server configuration");
+                Log.Logger.ForContext<WebServerConfig>().Error(e, "Error loading social configuration");
             }
         }
     }

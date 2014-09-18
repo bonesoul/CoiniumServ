@@ -22,7 +22,6 @@
 #endregion
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
-using CoiniumServ.Statistics;
 using Nancy;
 using Nancy.CustomErrors;
 
@@ -30,14 +29,11 @@ namespace CoiniumServ.Server.Web.Modules
 {
     public class PoolModule : NancyModule
     {
-        public PoolModule(IStatisticsManager statisticsManager, IPoolManager poolManager)
+        public PoolModule(IPoolManager poolManager)
             :base("/pool")
         {
             Get["/{slug}"] = _ =>
             {
-                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
-                ViewBag.Pools = poolManager;
-
                 var pool = poolManager.Get(_.slug); // find the requested pool. TODO: use IStatistics instead
 
                 if (pool == null) // make sure queried pool exists.
@@ -64,9 +60,6 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/{slug}/workers"] = _ =>
             {
-                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
-                ViewBag.Pools = poolManager;
-
                 var pool = poolManager.Get(_.slug); // find the requested pool.                
 
                 if (pool == null) // make sure queried pool exists.
@@ -93,9 +86,6 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/{slug}/round"] = _ =>
             {
-                ViewBag.LastUpdate = statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
-                ViewBag.Pools = poolManager;
-
                 var pool = poolManager.Get(_.slug); // find the requested pool.                
 
                 if (pool == null) // make sure queried pool exists.

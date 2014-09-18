@@ -22,6 +22,8 @@
 #endregion
 using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
+using CoiniumServ.Pools;
+using CoiniumServ.Statistics;
 using Metrics;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -34,19 +36,36 @@ namespace CoiniumServ.Server.Web
     {
         private readonly IApplicationContext _applicationContext;
 
+        private readonly IStatisticsManager _statisticsManager;
+        private readonly IPoolManager _poolManager;
         private readonly IConfigManager _configManager;
 
-        public NancyBootstrapper(IApplicationContext applicationContext, IConfigManager configManager)
+        public NancyBootstrapper(IApplicationContext applicationContext, IStatisticsManager statisticsManager, IPoolManager poolManager, IConfigManager configManager)
         {
             _applicationContext = applicationContext;
+            _statisticsManager = statisticsManager;
+            _poolManager = poolManager;
             _configManager = configManager;
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
-            // todo: enable authentication support
+            // intercept the request and fill common ViewBag data.
+            pipelines.AfterRequest += (ctx) =>
+            {
+                ctx.ViewBag.StackName = _configManager.StackConfig.Name;
+                ctx.ViewBag.Title = string.Format("{0} - {1}", _configManager.StackConfig.Name, ctx.ViewBag.Heading);
+                ctx.ViewBag.Pools = _poolManager;
+                ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
+                ctx.ViewBag.Rss = _configManager.WebServerConfig.Social.Rss;
+                ctx.ViewBag.Twitter = _configManager.WebServerConfig.Social.Twitter;
+                ctx.ViewBag.Facebook = _configManager.WebServerConfig.Social.Facebook;
+                ctx.ViewBag.GooglePlus = _configManager.WebServerConfig.Social.GooglePlus;
+                ctx.ViewBag.Youtube = _configManager.WebServerConfig.Social.Youtube;                
+            };
+
             if (_configManager.WebServerConfig.Backend.MetricsEnabled)
-                Metric.Config.WithNancy(config => config.WithMetricsModule("/admin/metrics"));
+                Metric.Config.WithNancy(config => config.WithMetricsModule("/admin/metrics")); // todo: enable authentication support
 
             CustomErrors.Enable(pipelines, new ErrorConfiguration());
         }

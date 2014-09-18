@@ -27,6 +27,8 @@ namespace CoiniumServ.Server.Web
     {
         string Template { get; }
 
+        ISocialConfig Social { get; }
+
         IBackendConfig Backend { get; }
     }
 }
