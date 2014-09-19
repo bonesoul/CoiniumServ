@@ -30,6 +30,7 @@ namespace CoiniumServ.Server.Web.Models.Pool
         public int PaymentId { get; set; }
         public int TransactionId { get; set; }
         public int AccountId { get; set; }
+        public string Address { get; set; }
         public int Block { get; set; }
         public decimal Amount { get; set; }
         public decimal SentAmount { get; set; }

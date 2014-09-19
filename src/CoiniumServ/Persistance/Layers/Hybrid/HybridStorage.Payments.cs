@@ -119,9 +119,11 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<DetailedPayment>(
-                        @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, p.Block, p.Amount as Amount, 
+                        @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, a.Address, p.Block, p.Amount as Amount, 
                             t.Amount as SentAmount, t.Currency, t.TxId as TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
-                            FROM Payment p LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId Where Block = @height",
+                            FROM Payment p 
+                                INNER JOIN Account as a ON p.AccountId = a.Id
+                                LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId Where Block = @height",
                         new {height});
 
                     payouts.AddRange(results);

@@ -33,6 +33,8 @@ namespace CoiniumServ.Server.Web.Models.Pool
 
         int AccountId { get; set; }
 
+        string Address { get; set; }
+
         int Block { get; set; }
 
         decimal Amount { get; set; }

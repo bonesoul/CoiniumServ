@@ -69,34 +69,41 @@
                         <tbody>
                             <tr>
                                 <th title="Id of the payment">Payment Id</th>
-                                <th title="Id of the transaction if any">Tx Id</th>
-                                <th title="Is the payment executed?">Fullfilled</th>
+                                <th title="Payment address of the user">Address</th>
                                 <th title="Amount of the payment">Amount</th>
-                                <th title="Amount of sent @Model.Coin.Symbol's">Sent</th>
-                                <th title="Hash of the transaction">TxId</th>
-                                <th title="Time when payment was created">Payment Date</th>
-                                <th title="Time transaction was executed if any">Tx Date</th>
+                                <th title="Is the payment executed?">Fullfilled</th>                                                                                            
+                                <th title="Hash of the transaction">Tx Hash</th>
+                                <th title="Date of the payment">Date</th>
                             </tr>
                             @foreach (var paymentDetails in @Model.Payments)
                             {
                                 <tr>
                                     <td>@paymentDetails.PaymentId</td>
-                                    <td>@(paymentDetails.Completed ? paymentDetails.TransactionId.ToString(CultureInfo.InvariantCulture) : "-")</td>
-                                    <td><div class="label @(paymentDetails.Completed ?"bg-green":"bg-red")">@paymentDetails.Completed</div></td>
-                                    <td>@paymentDetails.Amount @Model.Coin.Symbol</td>
-                                    <td>@(paymentDetails.Completed ? string.Format("{0} {1}", paymentDetails.Amount, paymentDetails.Currency) : "-")</td>
+                                    <td><a href="/account/address/@paymentDetails.Address">@paymentDetails.Address</a></td>
                                     <td>
                                         @if (paymentDetails.Completed)
                                         {
-                                            <a href="@Model.Coin.BlockExplorer/tx/@paymentDetails.TxHash" target="_blank">@paymentDetails.TxHash.Substring(0, 10)</a>
+                                            @: @paymentDetails.Amount @paymentDetails.Currency
+                                        }
+                                        else
+                                        {
+                                            @: @paymentDetails.Amount @Model.Coin.Symbol
+                                        }
+                                    </td>
+                                    <td><div class="label @(paymentDetails.Completed ?"bg-green":"bg-red")">@paymentDetails.Completed</div></td>
+                                    <td>
+                                        @if (paymentDetails.Completed)
+                                        {
+                                            <a href="/pool/@Model.Coin.Symbol/tx/@paymentDetails.TransactionId">@paymentDetails.TxHash.Substring(0, 10)</a>
                                         }
                                         else
                                         {
                                             @:-
                                         }
-                                    </td>
-                                    <td>@paymentDetails.PaymentDate</td>
-                                    <td>@(paymentDetails.Completed ? paymentDetails.TransactionDate.ToString(CultureInfo.InvariantCulture) : "-")</td>
+                                    </td>                 
+                                    <td>
+                                        @(paymentDetails.Completed ? paymentDetails.TransactionDate : paymentDetails.PaymentDate)
+                                    </td>                                                            
                                 </tr>
                             }
                         </tbody>
