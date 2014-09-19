@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Shares;
 using Dapper;
@@ -41,6 +42,11 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         public void UpdateBlock(IPersistedBlock block)
         {
             // this function is not supported as this functionality is handled by mpos itself.
+        }
+
+        public IPersistedBlock GetBlock(uint height)
+        {
+            throw new NotImplementedException();
         }
 
         public IDictionary<string, int> GetTotalBlocks()

@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using Nancy;
@@ -61,9 +62,6 @@ namespace CoiniumServ.Server.Web.Modules
 
                 if (pool == null) // make sure queried pool exists.
                 {
-                    ViewBag.Title = "Error";
-                    ViewBag.Heading = "An error occured!";
-
                     return View["error", new ErrorViewModel
                     {
                         Summary = "Pool not found",
@@ -83,13 +81,10 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/{slug}/round"] = _ =>
             {
-                var pool = poolManager.Get(_.slug); // find the requested pool.                
+                var pool = poolManager.Get(_.slug); // find the requested pool.
 
                 if (pool == null) // make sure queried pool exists.
                 {
-                    ViewBag.Title = "Error";
-                    ViewBag.Heading = "An error occured!";
-
                     return View["error", new ErrorViewModel
                     {
                         Summary = "Pool not found",
@@ -106,6 +101,48 @@ namespace CoiniumServ.Server.Web.Modules
                     Round = pool.NetworkInfo.Round,
                     Shares = pool.RoundShares
                 }];
+            };
+
+            Get["/{slug}/blocks"] = _ =>
+            {
+                return "test";
+            };
+
+            Get["/{slug}/block/{height:int}"] = _ =>
+            {
+                var pool = (IPool)poolManager.Get(_.slug); // find the requested pool.
+
+                if (pool == null) // make sure queried pool exists.
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Summary = "Pool not found",
+                        Details = string.Format("The requested pool does not exist: {0}", _.slug)
+                    }];
+                }
+
+                var block = pool.BlocksCache.Get((uint)_.height);
+
+                if (block == null)
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Summary = "Block not found",
+                        Details = string.Format("The requested block does not exist: {0}", _.height)
+                    }];
+                }
+                
+                var blockModel = new BlockDetailsModel
+                {
+                    Block = block,
+                    Coin = pool.Config.Coin,
+                    Payments = pool.PaymentsCache.GetPaymentsForBlock((uint)_.height)
+                };
+
+                ViewBag.Title = string.Format("{0} - Block {1}", pool.Config.Coin.Name, block.Height);
+                ViewBag.Heading = string.Format("Block: {0}", block.Height);
+                ViewBag.SubHeader = "Details for the block";
+                return View["block", blockModel];
             };
         }
     }

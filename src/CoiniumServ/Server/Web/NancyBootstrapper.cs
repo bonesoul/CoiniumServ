@@ -55,7 +55,17 @@ namespace CoiniumServ.Server.Web
             pipelines.AfterRequest += (ctx) =>
             {
                 ctx.ViewBag.StackName = _configManager.StackConfig.Name;
-                ctx.ViewBag.Title = string.Format("{0} - {1}", _configManager.StackConfig.Name, ctx.ViewBag.Heading);
+
+                ctx.ViewBag.Title = string.IsNullOrEmpty(ctx.ViewBag.Title)
+                    ? _configManager.StackConfig.Name
+                    : string.Format("{0} - {1}", _configManager.StackConfig.Name, ctx.ViewBag.Heading);
+
+                if (string.IsNullOrEmpty(ctx.ViewBag.Heading)) 
+                    ctx.ViewBag.Heading = "";
+
+                if(string.IsNullOrEmpty(ctx.ViewBag.SubHeading))
+                    ctx.ViewBag.SubHeading = "";
+
                 ctx.ViewBag.Pools = _poolManager;
                 ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
                 ctx.ViewBag.Rss = _configManager.WebServerConfig.Social.Rss;

@@ -27,6 +27,7 @@ using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Server.Mining.Stratum;
+using CoiniumServ.Server.Web.Models.Pool;
 using CoiniumServ.Shares;
 
 namespace CoiniumServ.Persistance.Layers.Empty
@@ -75,6 +76,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
             return;
         }
 
+        public IPersistedBlock GetBlock(uint height)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public IDictionary<string, int> GetTotalBlocks()
         {
             return new Dictionary<string, int>();
@@ -113,6 +119,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
         public IList<IPayment> GetPendingPayments()
         {
             return new List<IPayment>();
+        }
+
+        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void AddTransaction(ITransaction transaction)

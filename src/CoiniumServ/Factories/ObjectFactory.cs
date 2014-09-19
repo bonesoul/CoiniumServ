@@ -309,6 +309,16 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IPaymentRound>(@params);
         }
 
+        public IPaymentsCache GetPaymentsCache(IStorageLayer storageLayer)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"storageLayer", storageLayer}
+            };
+
+            return _applicationContext.Container.Resolve<IPaymentsCache>(@params);
+        }
+
         #endregion
 
         #region hash algorithms

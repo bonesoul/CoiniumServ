@@ -20,34 +20,23 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Server.Web.Service;
-using Newtonsoft.Json;
 
-namespace CoiniumServ.Pools
+using System;
+
+namespace CoiniumServ.Server.Web.Models.Pool
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IBlocksCache : IJsonService
+    public class DetailedPayment:IDetailedPayment
     {
-        [JsonProperty("pending")]
-        int Pending { get; }
-        
-        [JsonProperty("confirmed")]
-        int Confirmed { get; }
-        
-        [JsonProperty("orphaned")]
-        int Orphaned { get; }
-        
-        [JsonProperty("total")]
-        int Total { get; }
-
-        [JsonProperty("latest")]
-        IList<IPersistedBlock> Latest { get; }
-
-        [JsonProperty("latestPaid")]
-        IList<IPersistedBlock> LatestPaid { get; }
-
-        IPersistedBlock Get(uint height);
+        public int PaymentId { get; set; }
+        public int TransactionId { get; set; }
+        public int AccountId { get; set; }
+        public int Block { get; set; }
+        public decimal Amount { get; set; }
+        public decimal SentAmount { get; set; }
+        public string Currency { get; set; }
+        public string TxHash { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public bool Completed { get; set; }
     }
 }

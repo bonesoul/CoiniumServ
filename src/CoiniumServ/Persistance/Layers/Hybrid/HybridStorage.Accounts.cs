@@ -22,10 +22,8 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Accounts;
-using CoiniumServ.Persistance.Blocks;
 using Dapper;
 using MySql.Data.MySqlClient;
 

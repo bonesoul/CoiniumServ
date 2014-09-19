@@ -1,0 +1,108 @@
+﻿@using System.Globalization
+@using CoiniumServ.Persistance.Blocks
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.BlockDetailsModel>
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Block Details</h3>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th style="width: 10px" title="Height of the block">Height</th>
+                            <th title="Status of the block">Status</th>
+                            <th title="Hash of the block">Block Hash</th>
+                            <th title="Hash of the generation transaction">Tx Hash</th>
+                            <th title="Amount of coins generated">Amount</th>
+                            <th title="Did miners got paid for their contributions?">Paid</th>
+                            <th title="Time block was found">Date</th>
+                        </tr>
+                        <tr>
+                            <td>@Model.Block.Height</td>
+                            <td>
+                                @switch (@Model.Block.Status)
+                                {
+                                    case BlockStatus.Pending:
+                                        <div class="label label-warning">@Model.Block.Status</div>
+                                        break;
+                                    case BlockStatus.Orphaned:
+                                    <div class="label label-danger">@Model.Block.Status</div>
+                                        break;
+                                    case BlockStatus.Confirmed:
+                                    <div class="label label-info">@Model.Block.Status</div>
+                                        break;
+                                }
+                            </td>
+                            <td><a href="@Model.Coin.BlockExplorer/block/@Model.Block.BlockHash" target="_blank">@Model.Block.BlockHash.Substring(0, 10)..</a></td>
+                            <td><a href="@Model.Coin.BlockExplorer/tx/@Model.Block.TransactionHash" target="_blank">@Model.Block.TransactionHash.Substring(0, 10)..</a></td>
+                            <td>@Model.Block.Amount</td>
+                            <td>@Model.Block.Accounted</td>
+                            <td>@Model.Block.CreatedAt</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title">Payment Details</h3>
+            </div>
+            <div class="box-body no-padding">
+                @if (Model.Payments.Count == 0)
+                {
+                    <div class="box-footer">
+                        Waiting block to get confirmed..
+                    </div>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th title="Id of the payment">Payment Id</th>
+                                <th title="Id of the transaction if any">Tx Id</th>
+                                <th title="Is the payment executed?">Fullfilled</th>
+                                <th title="Amount of the payment">Amount</th>
+                                <th title="Amount of sent @Model.Coin.Symbol's">Sent</th>
+                                <th title="Hash of the transaction">TxId</th>
+                                <th title="Time when payment was created">Payment Date</th>
+                                <th title="Time transaction was executed if any">Tx Date</th>
+                            </tr>
+                            @foreach (var paymentDetails in @Model.Payments)
+                            {
+                                <tr>
+                                    <td>@paymentDetails.PaymentId</td>
+                                    <td>@(paymentDetails.Completed ? paymentDetails.TransactionId.ToString(CultureInfo.InvariantCulture) : "-")</td>
+                                    <td><div class="label @(paymentDetails.Completed ?"bg-green":"bg-red")">@paymentDetails.Completed</div></td>
+                                    <td>@paymentDetails.Amount @Model.Coin.Symbol</td>
+                                    <td>@(paymentDetails.Completed ? string.Format("{0} {1}", paymentDetails.Amount, paymentDetails.Currency) : "-")</td>
+                                    <td>
+                                        @if (paymentDetails.Completed)
+                                        {
+                                            <a href="@Model.Coin.BlockExplorer/tx/@paymentDetails.TxHash" target="_blank">@paymentDetails.TxHash.Substring(0, 10)</a>
+                                        }
+                                        else
+                                        {
+                                            @:-
+                                        }
+                                    </td>
+                                    <td>@paymentDetails.PaymentDate</td>
+                                    <td>@(paymentDetails.Completed ? paymentDetails.TransactionDate.ToString(CultureInfo.InvariantCulture) : "-")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>

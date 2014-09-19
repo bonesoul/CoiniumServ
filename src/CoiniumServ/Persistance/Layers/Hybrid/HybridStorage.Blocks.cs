@@ -89,6 +89,31 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
+        public IPersistedBlock GetBlock(uint height)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return null;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    return connection.Query<PersistedBlock>(
+                        @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt From Block WHERE Height = @height",
+                        new {height}).Single();
+                }
+            }
+            catch (InvalidOperationException) // fires when no result is found.
+            {
+                return null;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting block; {0:l}", e.Message);
+                return null;
+            }
+        }
+
         public IDictionary<string, int> GetTotalBlocks()
         {
             var blocks = new Dictionary<string, int> { { "total", 0 }, { "pending", 0 }, { "orphaned", 0 }, { "confirmed", 0 } };

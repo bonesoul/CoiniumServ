@@ -49,8 +49,6 @@ namespace CoiniumServ.Persistance.Blocks
 
         public PersistedBlock(Int32 height, Boolean orphaned, Boolean confirmed, Boolean accounted, String blockHash, String txHash, Decimal amount, Decimal reward, DateTime createdAt)
         {
-            // used by hybrid storage layer.
-
             // determine the block status
             if(orphaned)
                 Status = BlockStatus.Orphaned;
@@ -70,8 +68,6 @@ namespace CoiniumServ.Persistance.Blocks
 
         public PersistedBlock(UInt32 height, String blockhash, Double amount, Int32 confirmations, Int32 time)
         {
-            // used by mpos storage layer.
-
             // determine the block status
             if (confirmations == -1)
                 Status = BlockStatus.Orphaned;

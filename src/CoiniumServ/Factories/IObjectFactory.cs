@@ -110,6 +110,8 @@ namespace CoiniumServ.Factories
 
         IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer);
 
+        IPaymentsCache GetPaymentsCache(IStorageLayer storageLayer);
+
         #endregion
 
         #region hash algorithms

@@ -195,6 +195,8 @@
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
+    <Compile Include="Server\Web\Models\Pool\DetailedPayment.cs" />
+    <Compile Include="Server\Web\Models\Pool\IDetailedPayment.cs" />
     <Compile Include="Payments\IPaymentLabor.cs" />
     <Compile Include="Payments\IPaymentManager.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />
@@ -250,6 +252,8 @@
     <Compile Include="Persistance\StorageConfig.cs" />
     <Compile Include="Pools\BlocksCache.cs" />
     <Compile Include="Pools\IBlocksCache.cs" />
+    <Compile Include="Pools\IPaymentsCache.cs" />
+    <Compile Include="Pools\PaymentsCache.cs" />
     <Compile Include="Server\Web\ISocialConfig.cs" />
     <Compile Include="Server\Web\Models\ApiModel.cs" />
     <Compile Include="Pools\INetworkInfo.cs" />
@@ -257,6 +261,7 @@
     <Compile Include="Pools\NetworkInfo.cs" />
     <Compile Include="Container\Registries\StorageRegistry.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
+    <Compile Include="Server\Web\Models\BlockDetailsModel.cs" />
     <Compile Include="Server\Web\Models\RoundModel.cs" />
     <Compile Include="Server\Web\Models\WorkersModel.cs" />
     <Compile Include="Server\Web\BackendConfig.cs" />
@@ -1051,6 +1056,7 @@
     </None>
     <None Include="web\default\views\partial\blocks\latestBlocks.cshtml" />
     <None Include="web\default\views\partial\blocks\latestPaid.cshtml" />
+    <None Include="web\default\views\pool\block.cshtml" />
     <None Include="web\default\views\pool\pool.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

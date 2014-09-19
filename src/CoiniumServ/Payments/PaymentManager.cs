@@ -65,7 +65,7 @@ namespace CoiniumServ.Payments
                 if (!labor.Active) // make sure labor is active
                     continue;
 
-                labor.Run(); // run the labor.
+                //labor.Run(); // run the labor.
             }
 
             _timer.Change(_poolConfig.Payments.Interval * 1000, Timeout.Infinite); // reset the timer.

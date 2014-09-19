@@ -20,12 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections;
+
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Linq.Expressions;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using Newtonsoft.Json;
@@ -49,11 +45,18 @@ namespace CoiniumServ.Pools
             get { return _lastPaid.AsReadOnly(); }
         }
 
+        public IPersistedBlock Get(uint height)
+        {
+            return _storageLayer.GetBlock(height);
+        }
+
         private readonly List<IPersistedBlock> _latestBlocks;
 
         private readonly List<IPersistedBlock> _lastPaid;
 
         private readonly IStorageLayer _storageLayer;
+
+        public string ServiceResponse { get; private set; }
 
         public BlocksCache(IStorageLayer storageLayer)
         {
@@ -61,9 +64,6 @@ namespace CoiniumServ.Pools
             _latestBlocks = new List<IPersistedBlock>();
             _lastPaid = new List<IPersistedBlock>();
         }
-
-
-        public string ServiceResponse { get; private set; }
 
         public void Recache()
         {

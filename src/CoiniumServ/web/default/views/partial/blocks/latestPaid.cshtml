@@ -1,7 +1,7 @@
 ﻿@using CoiniumServ.Persistance.Blocks
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.PoolModel>
 <div class="col-md-6">
-    <div class="box">
+    <div class="box box-solid box-danger">
         <div class="box-header">
             <h3 class="box-title"><i class="fa fa-dollar"></i> Latest Paid Blocks</h3>
         </div>
@@ -17,7 +17,7 @@
                     @foreach (var block in Model.Pool.BlocksCache.LatestPaid)
                     {
                         <tr>
-                            <td><a href="/pool/@Model.Pool.Config.Coin.Symbol/block/@block.Height" target="_blank">@block.Height</a></td>
+                            <td><a href="/pool/@Model.Pool.Config.Coin.Symbol/block/@block.Height">@block.Height</a></td>
                             <td>
                                 @switch (block.Status)
                                 {

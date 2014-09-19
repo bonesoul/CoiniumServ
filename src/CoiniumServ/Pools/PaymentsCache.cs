@@ -21,42 +21,25 @@
 // 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Server.Web.Models.Pool;
 
-namespace CoiniumServ.Persistance.Layers.Mpos
+namespace CoiniumServ.Pools
 {
-    public partial class MposStorage
+    public class PaymentsCache:IPaymentsCache
     {
-        public void AddPayment(IPayment payment)
-        {
-            // this function is not supported as this functionality is only required by payment processors which mpos itself is already one so and handles itself.
-            throw new NotSupportedException();
-        }
+        private readonly IStorageLayer _storageLayer;
 
-        public void UpdatePayment(IPayment payment)
+        public PaymentsCache(IStorageLayer storageLayer)
         {
-            // this function is not supported as this functionality is only required by payment processors which mpos itself is already one so and handles itself.
-            throw new NotSupportedException();
-        }
-
-        public IList<IPayment> GetPendingPayments()
-        {
-            // TODO: implement me!
-            throw new NotImplementedException();
+            _storageLayer = storageLayer;
         }
 
         public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
         {
-            throw new NotImplementedException();
-        }
-
-        public void AddTransaction(ITransaction transaction)
-        {
-            // this function is not supported as this functionality is only required by payment processors which mpos itself is already one so and handles itself.
-            throw new NotSupportedException();
+            return _storageLayer.GetPaymentsForBlock(height);
         }
     }
 }

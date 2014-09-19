@@ -67,7 +67,9 @@ namespace CoiniumServ.Pools
         public INetworkInfo NetworkInfo { get; private set; }
 
         public IBlocksCache BlocksCache { get; private set; }
-        
+
+        public IPaymentsCache PaymentsCache { get; private set; }
+
         public IDaemonClient Daemon { get; private set; }
 
         // object factory.
@@ -175,6 +177,7 @@ namespace CoiniumServ.Pools
             try
             {
                 BlocksCache = _objectFactory.GetBlocksCache(_storageLayer);
+                PaymentsCache = _objectFactory.GetPaymentsCache(_storageLayer);
                 MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
                 var jobTracker = _objectFactory.GetJobTracker(Config);

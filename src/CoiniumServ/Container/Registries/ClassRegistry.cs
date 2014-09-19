@@ -52,6 +52,7 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<INetworkInfo, NetworkInfo>().AsMultiInstance();
             _applicationContext.Container.Register<IBlocksCache, BlocksCache>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentsCache, PaymentsCache>().AsMultiInstance();
 
             // payment objects
             _applicationContext.Container.Register<IBlockAccounter, BlockAccounter>().AsMultiInstance();

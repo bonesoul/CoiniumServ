@@ -55,6 +55,8 @@ namespace CoiniumServ.Pools
         [JsonProperty("blocks")]
         IBlocksCache BlocksCache { get; }
 
+        IPaymentsCache PaymentsCache { get; }
+
         /// <summary>
         /// Coin daemon assigned to pool.
         /// </summary>

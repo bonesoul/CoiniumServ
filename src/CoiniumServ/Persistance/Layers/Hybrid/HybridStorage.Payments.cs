@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using CoiniumServ.Payments;
+using CoiniumServ.Server.Web.Models.Pool;
 using Dapper;
 using MySql.Data.MySqlClient;
 
@@ -101,6 +102,34 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             catch (Exception e)
             {
                 _logger.Error("An exception occured while getting pending payments: {0:l}", e.Message);
+            }
+
+            return payouts;
+        }
+
+        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
+        {
+            var payouts = new List<IDetailedPayment>();
+
+            try
+            {
+                if (!IsEnabled)
+                    return payouts;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<DetailedPayment>(
+                        @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, p.Block, p.Amount as Amount, 
+                            t.Amount as SentAmount, t.Currency, t.TxId as TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
+                            FROM Payment p LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId Where Block = @height",
+                        new {height});
+
+                    payouts.AddRange(results);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting payments: {0:l}", e.Message);
             }
 
             return payouts;
