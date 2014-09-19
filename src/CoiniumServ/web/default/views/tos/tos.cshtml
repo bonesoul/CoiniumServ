@@ -1,11 +1,12 @@
 ﻿@{ Layout = "layout/main.cshtml"; }
 
-<h2 class="page-header">Terms of Service</h2>
-
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-solid">
-            <div class="box-body">                
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-paperclip"></i> Terms of Service</h3>
+            </div>            
+            <div class="box-body">
                 <div class="callout callout-warning">
                     <h4>This Agreement governs your use of <strong>@ViewBag.StackName</strong> pools & website.</h4>
                     <p>
@@ -13,7 +14,7 @@
                         and conditions in this <strong>Agreement</strong>, you may not use the pools & service.
                     </p>
                 </div>
-                            
+
                 <div class="callout callout-info">
                     <h4>Modifications</h4>
                     <p>
@@ -21,7 +22,7 @@
                         Your continued use of the pools and websites following any modification to this <strong>Agreement</strong> shall be deemed an acceptance of all modifications.
                     </p>
                 </div>
-                   
+
                 <p class="lead">Payments & Mining</p>
                 <ul>
                     <li>@ViewBag.StackName pools charges miners with a fee for the service. This fee and reward system may change any time but prior notice will be given before doing so. Any changes on fee will be communicated through the pools news page and/or @ViewBag.StackName.</li>
@@ -31,7 +32,7 @@
                     <li>Shares rejected by the Coinium.org and and/or it’s pools as stale or invalid will not be paid for.</li>
                     <li>Oprhaned blocks will not be paid by @ViewBag.StackName pools as they are basically in-correct blocks.</li>
                 </ul>
-                
+
                 <p class="lead">Maintenance & Downtimes</p>
 
                 <ul>
