@@ -934,6 +934,7 @@
     <None Include="web\default\Content\fonts\ionicons.woff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="web\default\views\layout\header.cshtml" />
     <None Include="web\default\views\layout\footer.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1048,7 +1049,7 @@
     <None Include="web\default\Content\less\vars.less">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\layout\header.cshtml">
+    <None Include="web\default\views\layout\navbar.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\views\layout\sidebar.cshtml">

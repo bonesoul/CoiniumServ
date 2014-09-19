@@ -22,7 +22,7 @@
 
     <body class="skin-blue">        
            
-        @Html.Partial("layout/header")        
+        @Html.Partial("layout/navbar")        
 
         <div class="wrapper row-offcanvas row-offcanvas-left">
                   
@@ -32,24 +32,15 @@
 
             <aside class="right-side">
                 
-                <!-- Content Header (Page header) -->
                 <section class="content-header">                    
-                    <h1>
-                        @ViewBag.Heading
-                        <small>@ViewBag.SubHeader</small>
-                    </h1>
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li class="active">Blank page</li>
-                    </ol>
+                    @Html.Partial("layout/header")
                 </section>
 
                 <!-- Main content -->
                 <section class="content">
                     @RenderBody()
+                    @Html.Partial("layout/footer")
                 </section><!-- /.content -->
-
-                @Html.Partial("layout/footer")
 
             </aside><!-- /.right-side -->
 
