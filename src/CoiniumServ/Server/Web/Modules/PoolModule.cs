@@ -141,7 +141,7 @@ namespace CoiniumServ.Server.Web.Modules
 
                 ViewBag.Title = string.Format("{0} - Block {1}", pool.Config.Coin.Name, block.Height);
                 ViewBag.Heading = string.Format("Block: {0}", block.Height);
-                ViewBag.SubHeader = "Details for the block";
+                ViewBag.SubHeader = string.Format("Details for the {0} block", pool.Config.Coin.Name);
                 return View["block", blockModel];
             };
         }

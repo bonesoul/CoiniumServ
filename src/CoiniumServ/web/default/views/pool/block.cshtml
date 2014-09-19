@@ -37,8 +37,8 @@
                                         break;
                                 }
                             </td>
-                            <td><a href="@Model.Coin.BlockExplorer/block/@Model.Block.BlockHash" target="_blank">@Model.Block.BlockHash.Substring(0, 10)..</a></td>
-                            <td><a href="@Model.Coin.BlockExplorer/tx/@Model.Block.TransactionHash" target="_blank">@Model.Block.TransactionHash.Substring(0, 10)..</a></td>
+                            <td><a href="@Model.Coin.BlockExplorer/block/@Model.Block.BlockHash" target="_blank">@Model.Block.BlockHash.Substring(0, 10)</a></td>
+                            <td><a href="@Model.Coin.BlockExplorer/tx/@Model.Block.TransactionHash" target="_blank">@Model.Block.TransactionHash.Substring(0, 10)</a></td>
                             <td>@Model.Block.Amount</td>
                             <td>@Model.Block.Accounted</td>
                             <td>@Model.Block.CreatedAt</td>
@@ -111,5 +111,12 @@
                 }
             </div>
         </div>
+    </div>       
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <a href="/pool/@Model.Coin.Symbol/block/@(Model.Block.Height - 1)"><button type="button" class="btn btn-default btn-sm"><i class="fa fa-angle-double-left"></i> Prev</button></a>
+        <a href="/pool/@Model.Coin.Symbol/block/@(Model.Block.Height + 1)"><button type="button" class="btn btn-default btn-sm pull-right"><i class="fa fa-angle-double-right"></i> Next</button></a>
     </div>
 </div>
