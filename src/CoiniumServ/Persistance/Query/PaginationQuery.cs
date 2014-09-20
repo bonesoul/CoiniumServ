@@ -21,20 +21,22 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Payments;
-using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Server.Web.Models.Pool;
-
-namespace CoiniumServ.Server.Web.Models
+namespace CoiniumServ.Persistance.Query
 {
-    public class BlockDetailsModel
+    public class PaginationQuery:IPaginationQuery
     {
-        public IPersistedBlock Block { get; set; }
+        public int Page { get; private set; }
+        public int Count { get; private set; }
+        public int Offset { get; private set; }
 
-        public ICoinConfig Coin { get; set; }
+        public PaginationQuery(int page = 1, int count = 15)
+        {
+            Page = page;
+            if (page <= 0)
+                page = 1;
 
-        public IList<IDetailedPayment> Payments { get; set; } 
+            Count = count;
+            Offset = (page - 1)*count;
+        }
     }
 }

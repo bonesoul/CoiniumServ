@@ -21,10 +21,17 @@
 // 
 #endregion
 
+using System;
+using System.Linq;
+using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Persistance.Query;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
+using CoiniumServ.Server.Web.Models.Pool;
 using Nancy;
 using Nancy.CustomErrors;
+using Nancy.Responses.Negotiation;
+using Nancy.Routing;
 
 namespace CoiniumServ.Server.Web.Modules
 {
@@ -41,7 +48,6 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     return View["error", new ErrorViewModel
                     {
-                        Summary = "Pool not found",
                         Details = string.Format("The requested pool does not exist: {0}", _.slug)
                     }];
                 }
@@ -64,7 +70,6 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     return View["error", new ErrorViewModel
                     {
-                        Summary = "Pool not found",
                         Details = string.Format("The requested pool does not exist: {0}", _.slug)
                     }];
                 }
@@ -87,7 +92,6 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     return View["error", new ErrorViewModel
                     {
-                        Summary = "Pool not found",
                         Details = string.Format("The requested pool does not exist: {0}", _.slug)
                     }];
                 }
@@ -103,9 +107,42 @@ namespace CoiniumServ.Server.Web.Modules
                 }];
             };
 
-            Get["/{slug}/blocks"] = _ =>
+            Get["/{slug}/blocks/{page?1}"] = _ =>
             {
-                return "test";
+                var pool = (IPool)poolManager.Get(_.slug); // find the requested pool.
+
+                if (pool == null) // make sure queried pool exists.
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = string.Format("The requested pool does not exist: {0}", _.slug)
+                    }];
+                }
+
+                int page;
+                if (!Int32.TryParse(_.page, out page))
+                    page = 1;
+
+                var paginationQuery = new PaginationQuery(page);
+
+                var blocks = pool.BlocksCache.GetBlocks(paginationQuery);
+
+                if (blocks.Count == 0)
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = "No more blocks exist"
+                    }];
+                }
+
+                var model = new BlocksModel
+                {
+                    Blocks = blocks,
+                    Coin = pool.Config.Coin,
+                    PaginationQuery = paginationQuery
+                };
+
+                return View["blocks", model];
             };
 
             Get["/{slug}/block/{height:int}"] = _ =>
@@ -116,7 +153,6 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     return View["error", new ErrorViewModel
                     {
-                        Summary = "Pool not found",
                         Details = string.Format("The requested pool does not exist: {0}", _.slug)
                     }];
                 }
@@ -127,12 +163,11 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     return View["error", new ErrorViewModel
                     {
-                        Summary = "Block not found",
                         Details = string.Format("The requested block does not exist: {0}", _.height)
                     }];
                 }
                 
-                var blockModel = new BlockDetailsModel
+                var model = new BlockModel
                 {
                     Block = block,
                     Coin = pool.Config.Coin,
@@ -142,7 +177,7 @@ namespace CoiniumServ.Server.Web.Modules
                 ViewBag.Title = string.Format("{0} - Block {1}", pool.Config.Coin.Name, block.Height);
                 ViewBag.Heading = string.Format("Block {0}", block.Height);
                 ViewBag.SubHeader = string.Format("{0} block", pool.Config.Coin.Name);
-                return View["block", blockModel];
+                return View["block", model];
             };
         }
     }

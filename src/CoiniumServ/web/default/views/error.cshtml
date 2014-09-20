@@ -1,5 +1,4 @@
-﻿@using Nancy.CustomErrors
-@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Nancy.CustomErrors.ErrorViewModel>
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Nancy.CustomErrors.ErrorViewModel>
 
 @{ ViewBag.Title = "Error"; }
 @{ ViewBag.Heading = "Error"; }
@@ -9,7 +8,7 @@
 <div class="error-page">
     <h2 class="headline text-info"> ERR</h2>
     <div class="error-content">
-        <h3><i class="fa fa-warning text-yellow"></i> @Model.Summary</h3>
+        <h3><i class="fa fa-warning text-yellow"></i> Oups!</h3>
         <p>
             @Model.Summary
         </p>

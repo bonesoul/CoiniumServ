@@ -26,11 +26,12 @@ using CoiniumServ.Accounts;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Persistance.Query;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Web.Models.Pool;
 using CoiniumServ.Shares;
 
-namespace CoiniumServ.Persistance.Layers.Empty
+namespace CoiniumServ.Persistance.Layers.Null
 {
     public class NullStorage : IStorageLayer
     {
@@ -77,6 +78,11 @@ namespace CoiniumServ.Persistance.Layers.Empty
         }
 
         public IPersistedBlock GetBlock(uint height)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IList<IPersistedBlock> GetBlocks(IPaginationQuery paginationQuery)
         {
             throw new System.NotImplementedException();
         }

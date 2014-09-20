@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Persistance.Query;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Time;
@@ -112,6 +113,38 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 _logger.Error("An exception occured while getting block; {0:l}", e.Message);
                 return null;
             }
+        }
+
+        public IList<IPersistedBlock> GetBlocks(IPaginationQuery paginationQuery)
+        {
+            // todo: remove GetPendingBlocks() instances.
+
+            var blocks = new List<IPersistedBlock>();
+
+            try
+            {
+                if (!IsEnabled)
+                    return null;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<PersistedBlock>(string.Format(
+                        @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt From Block 
+                            ORDER BY Height DESC LIMIT {0},{1}", paginationQuery.Offset, paginationQuery.Count));
+
+                    blocks.AddRange(results);
+                }
+            }
+            catch (InvalidOperationException) // fires when no result is found.
+            {
+                return null;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting block; {0:l}", e.Message);
+            }
+
+            return blocks;
         }
 
         public IDictionary<string, int> GetTotalBlocks()

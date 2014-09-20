@@ -25,17 +25,17 @@ using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules
 {
-    public class TosModule:NancyModule
+    public class HelpModule:NancyModule
     {
-        public TosModule()
-            :base("/tos")
+        public HelpModule()
+            :base("/help")
         {
-            Get["/"] = _ =>
+            Get["/termsofservice"] = _ =>
             {
                 ViewBag.Heading = "Terms of Service";
                 ViewBag.Title = "Terms of Service";
 
-                return View["tos"];
+                return View["termsofservice"];
             };
         }
     }

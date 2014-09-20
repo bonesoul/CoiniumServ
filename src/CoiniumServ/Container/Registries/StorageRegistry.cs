@@ -22,9 +22,9 @@
 #endregion
 using CoiniumServ.Container.Context;
 using CoiniumServ.Persistance.Layers;
-using CoiniumServ.Persistance.Layers.Empty;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Layers.Mpos;
+using CoiniumServ.Persistance.Layers.Null;
 using CoiniumServ.Persistance.Providers;
 using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Persistance.Providers.Redis;

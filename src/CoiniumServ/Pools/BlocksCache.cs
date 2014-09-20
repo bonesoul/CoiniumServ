@@ -24,6 +24,7 @@
 using System.Collections.Generic;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Query;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Pools
@@ -48,6 +49,11 @@ namespace CoiniumServ.Pools
         public IPersistedBlock Get(uint height)
         {
             return _storageLayer.GetBlock(height);
+        }
+
+        public IList<IPersistedBlock> GetBlocks(IPaginationQuery paginationQuery)
+        {
+            return _storageLayer.GetBlocks(paginationQuery);
         }
 
         private readonly List<IPersistedBlock> _latestBlocks;

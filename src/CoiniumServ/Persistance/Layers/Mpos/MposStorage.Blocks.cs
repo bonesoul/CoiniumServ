@@ -24,8 +24,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
+using CoiniumServ.Persistance.Query;
 using CoiniumServ.Shares;
 using Dapper;
 using MySql.Data.MySqlClient;
@@ -45,6 +45,11 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         }
 
         public IPersistedBlock GetBlock(uint height)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<IPersistedBlock> GetBlocks(IPaginationQuery paginationQuery)
         {
             throw new NotImplementedException();
         }

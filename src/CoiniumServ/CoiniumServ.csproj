@@ -195,6 +195,8 @@
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
+    <Compile Include="Persistance\Query\PaginationQuery.cs" />
+    <Compile Include="Server\Web\Models\Pool\BlocksModel.cs" />
     <Compile Include="Server\Web\Models\Pool\DetailedPayment.cs" />
     <Compile Include="Server\Web\Models\Pool\IDetailedPayment.cs" />
     <Compile Include="Payments\IPaymentLabor.cs" />
@@ -214,8 +216,8 @@
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Persistance\Blocks\PersistedBlock.cs" />
     <Compile Include="Persistance\IStorageConfig.cs" />
-    <Compile Include="Persistance\Layers\Empty\NullStorage.cs" />
-    <Compile Include="Persistance\Layers\Empty\NullStorageConfig.cs" />
+    <Compile Include="Persistance\Layers\Null\NullStorage.cs" />
+    <Compile Include="Persistance\Layers\Null\NullStorageConfig.cs" />
     <Compile Include="Persistance\Layers\Hybrid\HybridStorageConfig.cs" />
     <Compile Include="Payments\Config\IWalletConfig.cs" />
     <Compile Include="Payments\Config\RewardsConfig.cs" />
@@ -261,14 +263,15 @@
     <Compile Include="Pools\NetworkInfo.cs" />
     <Compile Include="Container\Registries\StorageRegistry.cs" />
     <Compile Include="Server\Web\IBackendConfig.cs" />
-    <Compile Include="Server\Web\Models\BlockDetailsModel.cs" />
+    <Compile Include="Server\Web\Models\Pool\BlockModel.cs" />
+    <Compile Include="Persistance\Query\IPaginationQuery.cs" />
     <Compile Include="Server\Web\Models\RoundModel.cs" />
     <Compile Include="Server\Web\Models\WorkersModel.cs" />
     <Compile Include="Server\Web\BackendConfig.cs" />
     <Compile Include="Server\Web\Modules\DonateModule.cs" />
     <Compile Include="Server\Web\Models\IndexModel.cs" />
-    <Compile Include="Server\Web\Models\PoolModel.cs" />
-    <Compile Include="Server\Web\Modules\TosModule.cs" />
+    <Compile Include="Server\Web\Models\Pool\PoolModel.cs" />
+    <Compile Include="Server\Web\Modules\HelpModule.cs" />
     <Compile Include="Server\Web\SocialConfig.cs" />
     <Compile Include="Statistics\IStatisticsManager.cs" />
     <Compile Include="Statistics\StatisticsManager.cs" />
@@ -1058,6 +1061,7 @@
     <None Include="web\default\views\partial\blocks\latestBlocks.cshtml" />
     <None Include="web\default\views\partial\blocks\latestPaid.cshtml" />
     <None Include="web\default\views\pool\block.cshtml" />
+    <None Include="web\default\views\pool\blocks.cshtml" />
     <None Include="web\default\views\pool\pool.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1067,7 +1071,7 @@
     <None Include="web\default\views\pool\workers.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\tos\tos.cshtml">
+    <None Include="web\default\views\help\termsofservice.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -1086,6 +1090,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Coinium.ico" />
+    <None Include="web\default\Content\img\CoiniumServ.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\Content\img\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

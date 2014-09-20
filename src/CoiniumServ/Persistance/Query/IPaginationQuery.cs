@@ -20,37 +20,15 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using CoiniumServ.Persistance.Blocks;
-using CoiniumServ.Persistance.Query;
-using CoiniumServ.Server.Web.Service;
-using Newtonsoft.Json;
 
-namespace CoiniumServ.Pools
+namespace CoiniumServ.Persistance.Query
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IBlocksCache : IJsonService
+    public interface IPaginationQuery
     {
-        [JsonProperty("pending")]
-        int Pending { get; }
-        
-        [JsonProperty("confirmed")]
-        int Confirmed { get; }
-        
-        [JsonProperty("orphaned")]
-        int Orphaned { get; }
-        
-        [JsonProperty("total")]
-        int Total { get; }
+        int Page { get; }
 
-        [JsonProperty("latest")]
-        IList<IPersistedBlock> Latest { get; }
+        int Count { get; }
 
-        [JsonProperty("latestPaid")]
-        IList<IPersistedBlock> LatestPaid { get; }
-
-        IPersistedBlock Get(uint height);
-
-        IList<IPersistedBlock> GetBlocks(IPaginationQuery paginationQuery);
+        int Offset { get; }
     }
 }
