@@ -52,5 +52,7 @@ namespace CoiniumServ.Pools
         IPersistedBlock Get(uint height);
 
         IList<IPersistedBlock> GetBlocks(IPaginationQuery paginationQuery);
+
+        IList<IPersistedBlock> GetPaidBlocks(IPaginationQuery paginationQuery);
     }
 }

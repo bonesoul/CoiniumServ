@@ -105,11 +105,17 @@ namespace CoiniumServ.Persistance.Layers
         /// <summary>
         /// Returns blocks.
         /// </summary>
-        /// <param name="count"></param>
-        /// <param name="page"></param>
+        /// <param name="paginationQuery"></param>
         /// <returns></returns>
         IList<IPersistedBlock> GetBlocks(IPaginationQuery paginationQuery);
-            
+
+        /// <summary>
+        /// Returns blocks.
+        /// </summary>
+        /// <param name="paginationQuery"></param>
+        /// <returns></returns>
+        IList<IPersistedBlock> GetPaidBlocks(IPaginationQuery paginationQuery);
+
         /// <summary>
         /// Returns total blocks.
         /// </summary>

@@ -33,7 +33,9 @@
                         <a href="#" class="list-group-item" title="Is the pool's network connection healthy?">
                             <div class="row">
                                 <div class="col-xs-6"><i class="fa fa-check"></i> Healthy</div>
-                                <div class="col-xs-6 text-right"><div><span class="badge @(Model.Pool.NetworkInfo.Healthy? "bg-green" : "bg-red")">@Model.Pool.NetworkInfo.Healthy</span></div></div>
+                                <div class="col-xs-6 text-right">
+                                    <div class="label @(Model.Pool.NetworkInfo.Healthy? "label-info" : "label-danger")">@(Model.Pool.NetworkInfo.Healthy ? "Yes" : "No")</div>
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -120,8 +122,8 @@
 
         <div class="row">
 
-            @Html.Partial("partial/blocks/latestBlocks", Model)
-            @Html.Partial("partial/blocks/latestPaid", Model)
+            @Html.Partial("pool/partial/blocks/latest", Model)
+            @Html.Partial("pool/partial/blocks/latestPaid", Model)
 
         </div>
 

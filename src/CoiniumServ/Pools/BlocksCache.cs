@@ -56,6 +56,11 @@ namespace CoiniumServ.Pools
             return _storageLayer.GetBlocks(paginationQuery);
         }
 
+        public IList<IPersistedBlock> GetPaidBlocks(IPaginationQuery paginationQuery)
+        {
+            return _storageLayer.GetPaidBlocks(paginationQuery);
+        }
+
         private readonly List<IPersistedBlock> _latestBlocks;
 
         private readonly List<IPersistedBlock> _lastPaid;

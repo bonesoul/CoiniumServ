@@ -87,6 +87,11 @@ namespace CoiniumServ.Persistance.Layers.Null
             throw new System.NotImplementedException();
         }
 
+        public IList<IPersistedBlock> GetPaidBlocks(IPaginationQuery paginationQuery)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public IDictionary<string, int> GetTotalBlocks()
         {
             return new Dictionary<string, int>();

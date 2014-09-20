@@ -1058,8 +1058,8 @@
     <None Include="web\default\views\layout\sidebar.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\partial\blocks\latestBlocks.cshtml" />
-    <None Include="web\default\views\partial\blocks\latestPaid.cshtml" />
+    <None Include="web\default\views\pool\partial\blocks\latest.cshtml" />
+    <None Include="web\default\views\pool\partial\blocks\latestPaid.cshtml" />
     <None Include="web\default\views\pool\block.cshtml" />
     <None Include="web\default\views\pool\blocks.cshtml" />
     <None Include="web\default\views\pool\pool.cshtml">

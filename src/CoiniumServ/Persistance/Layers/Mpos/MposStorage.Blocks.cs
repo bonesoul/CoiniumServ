@@ -54,6 +54,11 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
+        public IList<IPersistedBlock> GetPaidBlocks(IPaginationQuery paginationQuery)
+        {
+            throw new NotImplementedException();
+        }
+
         public IDictionary<string, int> GetTotalBlocks()
         {
             var blocks = new Dictionary<string, int> { { "total", 0 }, { "pending", 0 }, { "orphaned", 0 }, { "confirmed", 0 } };

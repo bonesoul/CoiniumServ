@@ -39,7 +39,7 @@
                             <td><a href="@Model.Coin.BlockExplorer/block/@Model.Block.BlockHash" target="_blank">@Model.Block.BlockHash.Substring(0, 10)</a></td>
                             <td><a href="@Model.Coin.BlockExplorer/tx/@Model.Block.TransactionHash" target="_blank">@Model.Block.TransactionHash.Substring(0, 10)</a></td>
                             <td>@Model.Block.Amount</td>
-                            <td><div class="label @(Model.Block.Accounted ?"bg-green":"bg-red")">@Model.Block.Accounted</div></td>
+                            <td><div class="label @(Model.Block.Accounted ?"bg-green":"bg-red")">@(Model.Block.Accounted ? "Yes" : "No")</div></td>
                             <td>@Model.Block.CreatedAt</td>
                         </tr>
                     </tbody>
@@ -89,7 +89,7 @@
                                             @: @paymentDetails.Amount @Model.Coin.Symbol
                                         }
                                     </td>
-                                    <td><div class="label @(paymentDetails.Completed ?"bg-green":"bg-red")">@paymentDetails.Completed</div></td>
+                                    <td><div class="label @(paymentDetails.Completed ?"bg-green":"bg-red")">@(paymentDetails.Completed ? "Yes" : "No")</div></td>
                                     <td>
                                         @if (paymentDetails.Completed)
                                         {
