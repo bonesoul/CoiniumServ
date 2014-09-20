@@ -56,7 +56,7 @@ namespace CoiniumServ.Daemon
             _storage = new Dictionary<string, IDaemonClient>(); // initialize the daemon storage.
 
             ReadPoolDaemons(); // read pool daemons.
-            LoadPaymentDaemons(); // load payment daemons.
+            // LoadPaymentDaemons(); // load payment daemons. - disabled until we need it.
         }
 
         private void ReadPoolDaemons()
