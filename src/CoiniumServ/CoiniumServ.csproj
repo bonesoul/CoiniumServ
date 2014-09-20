@@ -252,10 +252,10 @@
     <Compile Include="Persistance\Providers\Redis\RedisProviderConfig.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisProvider.cs" />
     <Compile Include="Persistance\StorageConfig.cs" />
-    <Compile Include="Pools\BlocksCache.cs" />
-    <Compile Include="Pools\IBlocksCache.cs" />
-    <Compile Include="Pools\IPaymentsCache.cs" />
-    <Compile Include="Pools\PaymentsCache.cs" />
+    <Compile Include="Pools\BlocksRepository.cs" />
+    <Compile Include="Pools\IBlockRepository.cs" />
+    <Compile Include="Pools\IPaymentRepository.cs" />
+    <Compile Include="Pools\PaymentRepository.cs" />
     <Compile Include="Server\Web\ISocialConfig.cs" />
     <Compile Include="Server\Web\Models\ApiModel.cs" />
     <Compile Include="Pools\INetworkInfo.cs" />
@@ -1058,8 +1058,6 @@
     <None Include="web\default\views\layout\sidebar.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\pool\partial\blocks\latest.cshtml" />
-    <None Include="web\default\views\pool\partial\blocks\latestPaid.cshtml" />
     <None Include="web\default\views\pool\block.cshtml" />
     <None Include="web\default\views\pool\blocks.cshtml" />
     <None Include="web\default\views\pool\pool.cshtml">
@@ -1090,6 +1088,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Coinium.ico" />
+    <None Include="web\default\Content\css\extra.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coin\icon\EAC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\Content\img\CoiniumServ.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

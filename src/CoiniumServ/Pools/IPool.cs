@@ -53,9 +53,9 @@ namespace CoiniumServ.Pools
         INetworkInfo NetworkInfo { get; }
 
         [JsonProperty("blocks")]
-        IBlocksCache BlocksCache { get; }
+        IBlockRepository BlockRepository { get; }
 
-        IPaymentsCache PaymentsCache { get; }
+        IPaymentRepository PaymentRepository { get; }
 
         /// <summary>
         /// Coin daemon assigned to pool.

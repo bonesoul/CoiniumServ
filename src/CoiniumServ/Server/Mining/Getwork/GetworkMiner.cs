@@ -56,13 +56,13 @@ namespace CoiniumServ.Server.Mining.Getwork
         /// </summary>
         public bool Authenticated { get; set; }
 
-        public int ValidShares { get; set; }
-        public int InvalidShares { get; set; }
+        public int ValidShareCount { get; set; }
+        public int InvalidShareCount { get; set; }
 
         public IPool Pool { get; private set; }
 
         public MinerSoftware Software { get; private set; }
-        public Version Version { get; private set; }
+        public Version SoftwareVersion { get; private set; }
 
         private readonly IMinerManager _minerManager;
 
@@ -87,7 +87,7 @@ namespace CoiniumServ.Server.Mining.Getwork
             Authenticated = false; // miner has to authenticate.
 
             Software = MinerSoftware.Unknown;
-            Version = new Version();
+            SoftwareVersion = new Version();
 
             _logger = Log.ForContext<GetworkMiner>().ForContext("Component", pool.Config.Coin.Name);
             _packetLogger = LogManager.PacketLogger.ForContext<GetworkMiner>().ForContext("Component", pool.Config.Coin.Name);

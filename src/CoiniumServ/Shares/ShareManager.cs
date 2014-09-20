@@ -110,7 +110,7 @@ namespace CoiniumServ.Shares
         private void HandleValidShare(IShare share)
         {
             var miner = (IStratumMiner) share.Miner;
-            miner.ValidShares++;
+            miner.ValidShareCount++;
 
             _storageLayer.AddShare(share); // commit the share.
             _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);
@@ -134,7 +134,7 @@ namespace CoiniumServ.Shares
         private void HandleInvalidShare(IShare share)
         {
             var miner = (IStratumMiner)share.Miner;
-            miner.InvalidShares++;
+            miner.InvalidShareCount++;
 
             JsonRpcException exception = null; // the exception determined by the stratum error code.
             switch (share.Error)

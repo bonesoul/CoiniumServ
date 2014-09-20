@@ -66,9 +66,9 @@ namespace CoiniumServ.Pools
 
         public INetworkInfo NetworkInfo { get; private set; }
 
-        public IBlocksCache BlocksCache { get; private set; }
+        public IBlockRepository BlockRepository { get; private set; }
 
-        public IPaymentsCache PaymentsCache { get; private set; }
+        public IPaymentRepository PaymentRepository { get; private set; }
 
         public IDaemonClient Daemon { get; private set; }
 
@@ -176,8 +176,8 @@ namespace CoiniumServ.Pools
         {
             try
             {
-                BlocksCache = _objectFactory.GetBlocksCache(_storageLayer);
-                PaymentsCache = _objectFactory.GetPaymentsCache(_storageLayer);
+                BlockRepository = _objectFactory.GetBlockRepository(_storageLayer);
+                PaymentRepository = _objectFactory.GetPaymentRepository(_storageLayer);
                 MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
                 var jobTracker = _objectFactory.GetJobTracker(Config);
@@ -265,7 +265,7 @@ namespace CoiniumServ.Pools
 
         public void Recache()
         {
-            BlocksCache.Recache(); // recache the blocks.
+            BlockRepository.Recache(); // recache the blocks.
             NetworkInfo.Recache(); // let network statistics recache.
             CalculateHashrate(); // calculate the pool hashrate.
 

@@ -29,7 +29,7 @@ using Newtonsoft.Json;
 
 namespace CoiniumServ.Pools
 {
-    public class BlocksCache : IBlocksCache
+    public class BlocksRepository : IBlockRepository
     {
         public int Pending { get; private set; }
         public int Confirmed { get; private set; }
@@ -69,7 +69,7 @@ namespace CoiniumServ.Pools
 
         public string ServiceResponse { get; private set; }
 
-        public BlocksCache(IStorageLayer storageLayer)
+        public BlocksRepository(IStorageLayer storageLayer)
         {
             _storageLayer = storageLayer;
             _latestBlocks = new List<IPersistedBlock>();

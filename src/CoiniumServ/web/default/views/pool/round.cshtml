@@ -2,32 +2,31 @@
 
 @{ Layout = "layout/main.cshtml"; }
 
+
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-warning">
-            <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money"></i> Shares for current round: @Model.Round</h3>
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-circle-o"></i> Shares for current round: @Model.Round</h3>
             </div>
-            <div class="panel-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-striped tablesorter">
-                        <thead>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Worker</th>
+                            <th>Shares</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var worker in Model.Shares)
+                        {
                             <tr>
-                                <th>Username <i class="fa fa-sort"></i></th>
-                                <th>Shares <i class="fa fa-sort"></i></th>
+                                <td>@worker.Key</td>
+                                <td>@worker.Value</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var worker in Model.Shares)
-                            {
-                                <tr>
-                                    <td>@worker.Key</td>
-                                    <td>@worker.Value</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

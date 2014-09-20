@@ -22,13 +22,23 @@
 #endregion
 
 using System.Collections.Generic;
-using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Server.Web.Models.Pool;
 
 namespace CoiniumServ.Pools
 {
-    public interface IPaymentsCache
+    public class PaymentRepository:IPaymentRepository
     {
-        IList<IDetailedPayment> GetPaymentsForBlock(uint height);
+        private readonly IStorageLayer _storageLayer;
+
+        public PaymentRepository(IStorageLayer storageLayer)
+        {
+            _storageLayer = storageLayer;
+        }
+
+        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
+        {
+            return _storageLayer.GetPaymentsForBlock(height);
+        }
     }
 }

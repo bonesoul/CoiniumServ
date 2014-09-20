@@ -69,18 +69,18 @@ namespace CoiniumServ.Banning
             if (miner == null)
                 return;
 
-            var totalShares = miner.ValidShares + miner.InvalidShares;
+            var totalShares = miner.ValidShareCount + miner.InvalidShareCount;
 
             if (totalShares < Config.CheckThreshold) // check if we exceeded the threshold for checks.
                 return;
 
-            var invalidPercentage = miner.InvalidShares/totalShares*100;
+            var invalidPercentage = miner.InvalidShareCount/totalShares*100;
 
             if (invalidPercentage < Config.InvalidPercent)
                 // if the miner didn't reach the invalid share percentage, reset his stats.
             {
-                miner.ValidShares = 0;
-                miner.InvalidShares = 0;
+                miner.ValidShareCount = 0;
+                miner.InvalidShareCount = 0;
             }
             else // he needs a ban
             {

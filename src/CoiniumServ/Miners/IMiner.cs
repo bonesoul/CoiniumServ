@@ -61,13 +61,13 @@ namespace CoiniumServ.Miners
         [JsonProperty("authenticated")]
         bool Authenticated { get; set; }
 
-        int ValidShares { get; set; }
+        int ValidShareCount { get; set; }
 
-        int InvalidShares { get; set; }
+        int InvalidShareCount { get; set; }
 
         MinerSoftware Software { get; }
 
-        Version Version { get; }
+        Version SoftwareVersion { get; }
 
         /// <summary>
         /// Authenticates the miner.

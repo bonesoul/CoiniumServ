@@ -125,7 +125,7 @@ namespace CoiniumServ.Server.Web.Modules
 
                 var paginationQuery = new PaginationQuery(page);
 
-                var blocks = pool.BlocksCache.GetPaidBlocks(paginationQuery);
+                var blocks = pool.BlockRepository.GetPaidBlocks(paginationQuery);
 
                 if (blocks.Count == 0)
                 {
@@ -163,7 +163,7 @@ namespace CoiniumServ.Server.Web.Modules
 
                 var paginationQuery = new PaginationQuery(page);
 
-                var blocks = pool.BlocksCache.GetBlocks(paginationQuery);
+                var blocks = pool.BlockRepository.GetBlocks(paginationQuery);
 
                 if (blocks.Count == 0)
                 {
@@ -195,7 +195,7 @@ namespace CoiniumServ.Server.Web.Modules
                     }];
                 }
 
-                var block = pool.BlocksCache.Get((uint)_.height);
+                var block = pool.BlockRepository.Get((uint)_.height);
 
                 if (block == null)
                 {
@@ -209,7 +209,7 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     Block = block,
                     Coin = pool.Config.Coin,
-                    Payments = pool.PaymentsCache.GetPaymentsForBlock((uint)_.height)
+                    Payments = pool.PaymentRepository.GetPaymentsForBlock((uint)_.height)
                 };
 
                 ViewBag.Title = string.Format("{0} - Block {1}", pool.Config.Coin.Name, block.Height);

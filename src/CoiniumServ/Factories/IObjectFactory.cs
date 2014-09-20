@@ -92,7 +92,7 @@ namespace CoiniumServ.Factories
 
         INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig);
 
-        IBlocksCache GetBlocksCache(IStorageLayer storageLayer);
+        IBlockRepository GetBlockRepository(IStorageLayer storageLayer);
 
         IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,IBanManager banManager);
 
@@ -110,7 +110,7 @@ namespace CoiniumServ.Factories
 
         IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer);
 
-        IPaymentsCache GetPaymentsCache(IStorageLayer storageLayer);
+        IPaymentRepository GetPaymentRepository(IStorageLayer storageLayer);
 
         #endregion
 

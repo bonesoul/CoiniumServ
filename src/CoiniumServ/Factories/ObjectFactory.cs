@@ -223,14 +223,14 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<INetworkInfo>(@params);
         }
 
-        public IBlocksCache GetBlocksCache(IStorageLayer storageLayer)
+        public IBlockRepository GetBlockRepository(IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
                 {"storageLayer", storageLayer},
             };
 
-            return _applicationContext.Container.Resolve<IBlocksCache>(@params);
+            return _applicationContext.Container.Resolve<IBlockRepository>(@params);
         }
 
         public IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager)
@@ -309,14 +309,14 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IPaymentRound>(@params);
         }
 
-        public IPaymentsCache GetPaymentsCache(IStorageLayer storageLayer)
+        public IPaymentRepository GetPaymentRepository(IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
                 {"storageLayer", storageLayer}
             };
 
-            return _applicationContext.Container.Resolve<IPaymentsCache>(@params);
+            return _applicationContext.Container.Resolve<IPaymentRepository>(@params);
         }
 
         #endregion
