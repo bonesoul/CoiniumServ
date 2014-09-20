@@ -20,320 +20,150 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Persistance;
-using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
 
 namespace CoiniumServ.Payments
 {
-    // TODO: needs a cleanup.
-
-    public class PaymentProcessor : IPaymentProcessor
+    public class PaymentProcessor:IPaymentProcessor
     {
-        private readonly IPoolConfig _poolConfig;
+        public bool Active { get; private set; }
 
-        private readonly IDaemonClient _daemonClient;
+        private readonly Stopwatch _stopWatch = new Stopwatch();
+
+        private readonly IPoolConfig _poolConfig;
 
         private readonly IStorageLayer _storageLayer;
 
-        private readonly IBlockProcessor _blockProcessor;
-
-        private Timer _timer;
-
-        private Int32 _precision; // coin's precision.
-        private UInt32 _magnitude; // coin's magnitude
-        private decimal _paymentThresholdInSatoshis; // minimum amount of satoshis to issue a payment.
-
-        private readonly object _paymentsLock = new object();
-        private readonly Stopwatch _stopWatch = new Stopwatch();
+        private readonly IDaemonClient _daemonClient;
 
         private string _poolAccount = string.Empty;
 
         private readonly ILogger _logger;
 
-        public PaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient, IBlockProcessor blockProcessor)
+        public PaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient)
         {
             _poolConfig = poolConfig;
-            _daemonClient = daemonClient;
             _storageLayer = storageLayer;
-            _blockProcessor = blockProcessor;
-
+            _daemonClient = daemonClient;
             _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", poolConfig.Coin.Name);
+
+            if (!_poolConfig.Payments.Enabled) // make sure payments are enabled.
+                return;
+
+            if (!ValidatePoolAddress()) // try to validate the pool wallet.
+                return; // if we can't, stop the payment processor.
+
+            if (!GetPoolAccount()) // get the pool's account name if any.
+                return; // if we can't, stop the payment processor.
+
+            Active = true;
         }
 
-        public void Initialize()
+        public void Run()
         {
-            if (!_poolConfig.Payments.Enabled) 
-                return;
+            _stopWatch.Start();
 
-            // validate the pool wallet.
-            if (!ValidatePoolAddress())
-                return;
+            var candidates = GetTransactionCandidates(); // get the pending payments available for execution.            
+            var executedPayments = ExecutePayments(candidates); // try to execute the payments.
+            CommitTransactions(executedPayments); // commit them to storage layer.
 
-            // get the pool's account name if any.
-            GetPoolAccount();
+            if (executedPayments.Count > 0)
+                _logger.Information("Executed {0} payments, took {1:0.000} seconds", executedPayments.Count, (float)_stopWatch.ElapsedMilliseconds / 1000);
+            else
+                _logger.Information("No pending payments found");
 
-            // determine the satoshis in the coin.
-            if (!DeterminePrecision())
-                return;
-
-            // calculate the minimum amount of payments in satoshis.
-            _paymentThresholdInSatoshis = (decimal) (_magnitude*_poolConfig.Payments.Minimum);
-
-            // if we reached here, then we can just setup the timer to run payments.  
-            _timer = new Timer(RunPayments, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
+            _stopWatch.Reset();
         }
 
-        private void RunPayments(object state)
+        private IEnumerable<KeyValuePair<string, List<ITransaction>>> GetTransactionCandidates()
         {
-            if (!_poolConfig.Payments.Enabled)
-                return;
-
-            lock (_paymentsLock)
+            var pendingPayments = _storageLayer.GetPendingPayments(); // get all pending payments.
+            var perUserTransactions = new Dictionary<string, List<ITransaction>>();  // list of payments to be executed.
+             
+            foreach (var payment in pendingPayments)
             {
-                _stopWatch.Start();
+                // query the user for the payment.
+                var user = _storageLayer.GetAccountById(payment.AccountId);
 
-                var pendingBlocks = _storageLayer.GetBlocks(BlockStatus.Pending); // get all the pending blocks.
-                var nonPendingBlocks = GetNonPendingBlocks(pendingBlocks); // get the confirmed blocks that are either orphan or mature.
-                var rounds = GetPaymentRounds(nonPendingBlocks); // get the list of rounds that should be paid.
-                AssignSharesToRounds(rounds); // process the rounds, calculate shares and payouts per rounds.
-                var previousBalances = GetPreviousBalances(); // get previous balances of workers.
-                var workerBalances = CalculateRewards(rounds, previousBalances); // calculate the payments.               
-                ExecutePayments(workerBalances); // execute the payments.
-                ProcessRemainingBalances(workerBalances); // process the remaining balances.
-                ProcessRounds(rounds); // process the rounds.
-
-                _logger.Information("Payments processed - took {0:0.000} seconds", (float)_stopWatch.ElapsedMilliseconds / 1000);
-                
-                _stopWatch.Reset();
-
-                _timer.Change(_poolConfig.Payments.Interval*1000, Timeout.Infinite); // reset the payments timer.
-            }
-        }
-
-        private Dictionary<string, double> GetPreviousBalances()
-        {
-            var previousBalances = _storageLayer.GetPreviousBalances();
-            return previousBalances;
-        }
-
-        private IList<IWorkerBalance> CalculateRewards(IEnumerable<IPaymentRound> rounds, IDictionary<string, double> previousBalances)
-        {
-            var workerBalances = new Dictionary<string, IWorkerBalance>();
-
-            // set previous balances
-            foreach(var pair in previousBalances)
-            {
-                if (pair.Value == 0) // skip zero balances
+                if (user == null)
                     continue;
 
-                if (!workerBalances.ContainsKey(pair.Key))
-                    workerBalances.Add(pair.Key, new WorkerBalance(pair.Key, _magnitude));
-
-                workerBalances[pair.Key].SetPreviousBalance(pair.Value);
-            }
-
-            // add rewards by rounds
-            foreach (var round in rounds) 
-            {
-                if (round.Block.Status != BlockStatus.Confirmed) // only pay to confirmed rounds.
-                    continue;
-
-                foreach (var pair in round.Payouts) // loop through all payouts for the rounds
+                if (!perUserTransactions.ContainsKey(user.Username)) // check if our list of transactions to be executed already contains an entry for the user.
                 {
-                    if (!workerBalances.ContainsKey(pair.Key)) // make sure a payout for worker already exists
-                        workerBalances.Add(pair.Key, new WorkerBalance(pair.Key, _magnitude));
+                    // if not, create an entry that contains the list of transactions for the user.
 
-                    workerBalances[pair.Key].AddReward(pair.Value);
+                    // see if user payout address is directly payable from the pool's main daemon connection
+                    // which happens when a user connects an XYZ pool and want his payments in XYZ coin.
+
+                    var result = _daemonClient.ValidateAddress(user.Address); // does the user have a directly payable address set?
+
+                    if (!result.IsValid) // if not skip the payment and let it handled by auto-exchange module.
+                        continue;
+
+                    perUserTransactions.Add(user.Username, new List<ITransaction>());
                 }
+
+                perUserTransactions[user.Username].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
             }
 
-            return workerBalances.Values.ToList();
+            return perUserTransactions;
         }
 
-        private void ExecutePayments(IList<IWorkerBalance> workerBalances)
+        private IList<ITransaction> ExecutePayments(IEnumerable<KeyValuePair<string, List<ITransaction>>> paymentsToExecute)
         {
-            var payments = new Dictionary<string, decimal>();
+            var executed = new List<ITransaction>();
 
             try
             {
-                decimal totalAmountToPay = 0;
+                // filter out users whom total amount doesn't exceed the configured minimum payment amount.
+                var filtered = paymentsToExecute.Where(
+                        x => x.Value.Sum(y => y.Payment.Amount) >= (decimal)_poolConfig.Payments.Minimum)
+                        .ToDictionary(x => x.Key, x => x.Value);
 
-                foreach (var balance in workerBalances)
+                if (filtered.Count <= 0)  // make sure we have payments to execute even after our filter.
+                    return executed;
+
+                // coin daemon expects us to handle outputs in <wallet_address,amount> format, create the data structure so.
+                var outputs = filtered.ToDictionary(x => x.Key, x => x.Value.Sum(y => y.Payment.Amount));
+                var txId = _daemonClient.SendMany(_poolAccount, outputs);
+
+                // loop through all executed payments
+                filtered.ToList().ForEach(x => x.Value.ForEach(y =>
                 {
-                    if (balance.BalanceInSatoshis >= _paymentThresholdInSatoshis) // if worker's balance exceed's threshold, add him to payment list.
-                    {
-                        totalAmountToPay += balance.Balance;
-                        payments.Add(balance.Worker, balance.Balance);
-                    }
-                }
+                    y.TxId = txId; // set transaction id.
+                    y.Payment.Completed = true; // set as completed.
+                }));
 
-                if (totalAmountToPay <= 0)
-                {
-                    _logger.Information("No pending payments found.");
-                    return;
-                }
+                executed = filtered.SelectMany(x => x.Value).ToList();
 
-                var result = _daemonClient.SendMany(_poolAccount, payments); // send the payments
-
-                // mark the paid ones.
-                foreach (var balance in workerBalances.Where(balance => balance.BalanceInSatoshis >= _paymentThresholdInSatoshis))
-                {
-                    balance.Paid = true;
-                }
-
-                _logger.Information("Paid a total of {0} coins to {1} workers.", totalAmountToPay, workerBalances.Count);
+                return executed;
             }
             catch (RpcException e)
             {
-                _logger.Error("Payment failed: {0} [{1}] - payouts: {2}.", e.Message, e.Code, payments);
+                _logger.Error("An error occured while trying to execute payment; {0}", e.Message);
+                return executed;
             }
         }
 
-        private void ProcessRemainingBalances(IList<IWorkerBalance> workerBalances)
+        private void CommitTransactions(IList<ITransaction> executedPayments)
         {
-            _storageLayer.SetBalances(workerBalances); // commit remaining balances to storage.
-        }
-
-        private void ProcessRounds(IEnumerable<IPaymentRound> rounds)
-        {
-            foreach (var round in rounds)
-            {
-                if (round.Block.Status == BlockStatus.Pending) // if the block is still pending,
-                    continue; // just skip it.
-
-                switch (round.Block.Status)
-                {
-                    case BlockStatus.Confirmed:
-                        _storageLayer.RemoveShares(round); // delete the associated shares.
-                        _storageLayer.UpdateBlock(round); // update block status.
-                        break;
-                    case BlockStatus.Orphaned:
-                        _storageLayer.MoveSharesToCurrentRound(round); // move shares to current round so the work of miners aren't gone to void.
-                        _storageLayer.UpdateBlock(round); // update block status.                    
-                        break;
-                }
-            }
-        }   
-
-        private void AssignSharesToRounds(IList<IPaymentRound> rounds)
-        {
-            // get shares for the rounds.
-            var shares = _storageLayer.GetShares(rounds);
-
-            // assign shares to the rounds.
-            foreach (var round in rounds)
-            {
-                if (!shares.ContainsKey(round.Block.Height)) 
-                    continue;
-
-                round.AddShares(shares[round.Block.Height]);
-            }
-        }
-
-        private IEnumerable<IPersistedBlock> GetNonPendingBlocks(IEnumerable<IPersistedBlock> blocks)
-        {
-            var nonPendingBlocks = new List<IPersistedBlock>();
-
-            foreach (var item in blocks)
-            {
-                var block = item; // get a local copy of the block
-                QueryBlock(ref block); // check the block.
-
-                if (!block.IsPending) // only add non-pending blocks to list.
-                    nonPendingBlocks.Add(block);
-            }
-
-            return nonPendingBlocks;
-        }
-
-        private void QueryBlock(ref IPersistedBlock block)
-        {
-            var blockInfo = _blockProcessor.GetBlock(block.BlockHash); // query the block.
-
-            if (blockInfo == null || blockInfo.Confirmations == -1) // make sure the block exists and is accepted.
-            {
-                block.Status = BlockStatus.Orphaned;
+            if (executedPayments.Count == 0) // make sure we have payments to execute.
                 return;
-            }
 
-            // calculate our expected generation transactions's hash
-            var expectedTxHash = block.TransactionHash; // expected transaction hash
-            var genTxHash = blockInfo.Tx.First(); // read the hash of very first (generation transaction) of the block
-
-            // make sure our calculated and reported generation tx hashes match.
-            if (expectedTxHash != genTxHash)
+            // commit transactions & update payments.
+            foreach (var transaction in executedPayments)
             {
-                block.Status = BlockStatus.Orphaned;
-                return;
-            }
-
-            var genTx = _blockProcessor.GetGenerationTransaction(blockInfo); // get the generation transaction.
-
-            // get the output transaction that targets pools central wallet.
-            var poolOutput = _blockProcessor.GetPoolOutput(genTx);
-
-            // make sure we have a valid reference to poolOutput
-            if (poolOutput == null)
-            {
-                block.Status = BlockStatus.Orphaned;
-                return;
-            }
-
-            block.SetReward((decimal)poolOutput.Amount); // set the reward of the block to miners.
-
-            switch (poolOutput.Category)
-            {
-                case "immature":
-                    block.Status = BlockStatus.Pending;
-                    break;
-                case "orphan":
-                    block.Status = BlockStatus.Orphaned;
-                    break;
-                case "generate":
-                    block.Status = BlockStatus.Confirmed;
-                    break;
-            }
-
-
-            // TODO: add back these.
-            // total amount of coins contained in the block.
-            // candidate.Amount = transaction.Details.Sum(output => (decimal)output.Amount);
-            // candidate.Reward = (decimal) poolOutput.Amount;               
-        }
-
-        private IList<IPaymentRound> GetPaymentRounds(IEnumerable<IPersistedBlock> blocks)
-        {
-            var rounds = new List<IPaymentRound>();
-
-            foreach (var block in blocks)
-            {
-                var round = new PaymentRound(block);
-                rounds.Add(round);
-            }
-
-            return rounds;            
-        }
-
-        private void GetPoolAccount()
-        {
-            try
-            {
-                _poolAccount = _daemonClient.GetAccount(_poolConfig.Wallet.Adress);
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Cannot determine pool's central wallet account: {0:l}", e.Message);
+                _storageLayer.AddTransaction(transaction);
+                _storageLayer.UpdatePayment(transaction.Payment);
             }
         }
 
@@ -347,7 +177,7 @@ namespace CoiniumServ.Payments
                 if (result.IsValid && result.IsMine)
                     return true;
 
-                _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.",_poolConfig.Wallet.Adress);
+                _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
                 return false;
             }
             catch (RpcException e)
@@ -357,35 +187,16 @@ namespace CoiniumServ.Payments
             }
         }
 
-        private bool DeterminePrecision()
+        private bool GetPoolAccount()
         {
-            var json = string.Empty;
-
             try
             {
-                json = _daemonClient.MakeRawRequest("getbalance", DaemonClient.EmptyString);
-
-                // we want a raw request
-                var satoshis = json.Split(new[] { "result\":" }, StringSplitOptions.None)[1].Split(',')[0].Split('.')[1];
-
-                _precision = satoshis.Length;
-                _magnitude = 1;
-
-                for (int i = 1; i <= _precision; i++)
-                {
-                    _magnitude *= 10;
-                }
-
+                _poolAccount = _daemonClient.GetAccount(_poolConfig.Wallet.Adress);
                 return true;
             }
             catch (RpcException e)
             {
-                _logger.Error("Halted as getbalance call failed: {0}.", e.Message);
-                return false;
-            }
-            catch (Exception)
-            {
-                _logger.Error("Halted as we can not determine satoshis in a coin - failed parsing: {0}", json);
+                _logger.Error("Cannot determine pool's central wallet account: {0:l}", e.Message);
                 return false;
             }
         }

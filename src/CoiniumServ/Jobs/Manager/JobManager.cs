@@ -28,8 +28,8 @@ using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Miners;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Shares;
 using CoiniumServ.Transactions;
 using Serilog;
@@ -200,7 +200,7 @@ namespace CoiniumServ.Jobs.Manager
 
         private bool SendJobToMiner(IMiner miner, IJob job)
         {
-            if (miner is IVanillaMiner) // only stratum miners needs to be submitted new jobs.
+            if (miner is IGetworkMiner) // only stratum miners needs to be submitted new jobs.
                 return false;
 
             var stratumMiner = (IStratumMiner) miner;

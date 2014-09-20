@@ -30,9 +30,9 @@ using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Errors;
-using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Utils.Extensions;
 using Serilog;
 
@@ -102,7 +102,7 @@ namespace CoiniumServ.Shares
             return share;
         }
 
-        public IShare ProcessShare(IVanillaMiner miner, string data)
+        public IShare ProcessShare(IGetworkMiner miner, string data)
         {
             throw new NotImplementedException();
         }
@@ -110,7 +110,7 @@ namespace CoiniumServ.Shares
         private void HandleValidShare(IShare share)
         {
             var miner = (IStratumMiner) share.Miner;
-            miner.ValidShares++;
+            miner.ValidShareCount++;
 
             _storageLayer.AddShare(share); // commit the share.
             _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);
@@ -128,13 +128,13 @@ namespace CoiniumServ.Shares
             OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
 
             _storageLayer.AddBlock(share); // commit the block details to storage.
-            _storageLayer.MoveShares(share); // move associated shares.
+            _storageLayer.MoveCurrentShares(share.Height); // move associated shares to new key.
         }
 
         private void HandleInvalidShare(IShare share)
         {
             var miner = (IStratumMiner)share.Miner;
-            miner.InvalidShares++;
+            miner.InvalidShareCount++;
 
             JsonRpcException exception = null; // the exception determined by the stratum error code.
             switch (share.Error)
@@ -175,7 +175,7 @@ namespace CoiniumServ.Shares
             {
                 _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
 
-                var block = _blockProcessor.GetBlock(share.BlockHash.ToHexString()); // query the block.
+                var block = _blockProcessor.GetBlockInfo(share.BlockHash.ToHexString()); // query the block.
 
                 if (block == null) // make sure the block exists
                     return false;

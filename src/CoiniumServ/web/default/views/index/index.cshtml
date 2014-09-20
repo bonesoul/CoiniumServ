@@ -1,0 +1,181 @@
+﻿@using CoiniumServ.Coin.Helpers
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.IndexModel>
+
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel bg-aqua">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-tasks fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <h3>@Model.Statistics.Hashrate.GetReadableHashrate()</h3>
+                        <div>Hashrate</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel bg-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-users fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <h3>@Model.Statistics.MinerCount</h3>
+                        <div>Miners</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel bg-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-flask fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <h3>@Model.Statistics.Pools.Count</h3>
+                        <div>Pools</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel bg-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-gears fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <h3>@Model.Statistics.Algorithms.Count</h3>
+                        <div>Algorithms</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- algorithms -->
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-cog"></i> Per Algorithm Statistics</h3>
+                <div class="box-tools pull-right">
+                    <a href="/algorithms/" type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i></a>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Hashrate</th>
+                            <th>Workers</th>
+                            <th>Pools</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var algorithm in Model.Statistics.Algorithms)
+                        {
+                            <tr>
+                                <td><a href="/algorithm/@algorithm.Name">@algorithm.Name</a></td>
+                                <td>@algorithm.Hashrate.GetReadableHashrate()</td>
+                                <td>@algorithm.MinerCount</td>                               
+                                <td>@algorithm.Count</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- pools -->
+    <div class="col-md-12">
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-flask"></i> Per Pool Statistics</h3>
+                <div class="box-tools pull-right">
+                    <a href="/pools/" type="button" class="btn btn-danger"><i class="fa fa-angle-double-right"></i></a>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"></th>
+                            <th>Pool</th>
+                            <th>Hashrate</th>
+                            <th>Network</th>
+                            <th>Difficulty</th>
+                            <th>Workers</th>
+                            <th>Algorithm</th>
+                            <th>Current Block</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pool in Model.Pools)
+                        {
+                            <tr>
+                                <td><img src="/Content/img/coin/icon/@(pool.Config.Coin.Symbol).png" class="coin-icon"/></td>
+                                <td><a href="/pool/@pool.Config.Coin.Symbol/">@pool.Config.Coin.Name</a></td>
+                                <td>@pool.Hashrate.GetReadableHashrate()</td>
+                                <td>@pool.NetworkInfo.Hashrate.GetReadableHashrate()</td>
+                                <td>@pool.NetworkInfo.Difficulty</td>
+                                <td>@pool.MinerManager.Count</td>
+                                <td><a href="@pool.Config.Coin.Algorithm">@pool.Config.Coin.Algorithm</a></td>
+                                <td>@pool.NetworkInfo.Round</td>
+                                <td>
+                                    <div class="label @(pool.NetworkInfo.Healthy? "label-info" : "label-danger")">@(pool.NetworkInfo.Healthy ? "Healthy" : "Warnings!")</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

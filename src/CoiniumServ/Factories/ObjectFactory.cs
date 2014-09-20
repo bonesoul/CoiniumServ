@@ -23,15 +23,19 @@
 using System.Collections.Generic;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
+using CoiniumServ.Markets;
 using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Providers;
@@ -88,6 +92,11 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<ILogManager>();
         }
 
+        public IDaemonManager GetPaymentDaemonManager()
+        {
+            return _applicationContext.Container.Resolve<IDaemonManager>();
+        }
+
         #endregion
 
         #region pool objects
@@ -106,11 +115,12 @@ namespace CoiniumServ.Factories
         /// Returns a new instance of daemon client.
         /// </summary>
         /// <returns></returns>
-        public IDaemonClient GetDaemonClient(IPoolConfig poolConfig)
+        public IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig)
         {
             var @params = new NamedParameterOverloads
             {
-                {"poolConfig", poolConfig}              
+                {"daemonConfig", daemonConfig},
+                {"coinConfig", coinConfig}
             };
 
             return _applicationContext.Container.Resolve<IDaemonClient>(@params);
@@ -167,25 +177,13 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IShareManager>(@params);
         }
 
-        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer, IBlockProcessor blockProcessor)
+        public IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
                 {"storageLayer", storageLayer},
-                {"blockProcessor", blockProcessor},
-            };
-
-            return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
-        }
-
-        public IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"poolConfig", poolConfig},
-                {"daemonClient", daemonClient},           
             };
 
             return _applicationContext.Container.Resolve<IBlockProcessor>(@params);
@@ -225,14 +223,14 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<INetworkInfo>(@params);
         }
 
-        public IBlocksCache GetBlocksCache(IStorageLayer storageLayer)
+        public IBlockRepository GetBlockRepository(IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
                 {"storageLayer", storageLayer},
             };
 
-            return _applicationContext.Container.Resolve<IBlocksCache>(@params);
+            return _applicationContext.Container.Resolve<IBlockRepository>(@params);
         }
 
         public IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager, IBanManager banManager)
@@ -259,6 +257,66 @@ namespace CoiniumServ.Factories
             };
 
             return _applicationContext.Container.Resolve<IRpcService>(type, @params);
+        }
+
+        #endregion
+
+        #region payment objects
+
+        public IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+                {"blockAccounter", blockAccounter},
+                {"paymentProcessor", paymentProcessor}
+            };
+
+            return _applicationContext.Container.Resolve<IPaymentManager>(@params);
+        }
+
+        public IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+                {"storageLayer", storageLayer}
+            };
+
+            return _applicationContext.Container.Resolve<IBlockAccounter>(@params);
+        }
+
+        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig},
+                {"storageLayer", storageLayer},
+                {"daemonClient", daemonClient},
+            };
+
+            return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
+        }
+
+        public IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"block", block},
+                {"storageLayer", storageLayer}
+            };
+
+            return _applicationContext.Container.Resolve<IPaymentRound>(@params);
+        }
+
+        public IPaymentRepository GetPaymentRepository(IStorageLayer storageLayer)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"storageLayer", storageLayer}
+            };
+
+            return _applicationContext.Container.Resolve<IPaymentRepository>(@params);
         }
 
         #endregion
@@ -337,6 +395,11 @@ namespace CoiniumServ.Factories
         public IMetricsManager GetMetricsManager()
         {
             return _applicationContext.Container.Resolve<IMetricsManager>();
+        }
+
+        public IMarketManager GetMarketManager()
+        {
+            return _applicationContext.Container.Resolve<IMarketManager>();
         }
 
         #endregion

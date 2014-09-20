@@ -21,6 +21,7 @@
 // 
 #endregion
 using System;
+using CoiniumServ.Accounts;
 using CoiniumServ.Pools;
 using Newtonsoft.Json;
 
@@ -39,6 +40,11 @@ namespace CoiniumServ.Miners
         int Id { get; }
 
         /// <summary>
+        /// Account for the miner.
+        /// </summary>
+        IAccount Account { get; set; }
+
+        /// <summary>
         /// Username of the miner.
         /// </summary>
         [JsonProperty("username")]
@@ -55,13 +61,13 @@ namespace CoiniumServ.Miners
         [JsonProperty("authenticated")]
         bool Authenticated { get; set; }
 
-        int ValidShares { get; set; }
+        int ValidShareCount { get; set; }
 
-        int InvalidShares { get; set; }
+        int InvalidShareCount { get; set; }
 
         MinerSoftware Software { get; }
 
-        Version Version { get; }
+        Version SoftwareVersion { get; }
 
         /// <summary>
         /// Authenticates the miner.

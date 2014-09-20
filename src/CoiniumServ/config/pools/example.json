@@ -114,7 +114,7 @@
     # enabled: Set this true to enable getwork server.
     # port: port to listen for getwork connections.
 
-	"vanilla": {
+	"getwork": {
 		"enabled": false,
 		"port": 2223			
 	}	

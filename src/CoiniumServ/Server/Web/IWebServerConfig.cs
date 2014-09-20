@@ -25,6 +25,10 @@ namespace CoiniumServ.Server.Web
 {
     public interface IWebServerConfig : IServerConfig
     {
+        string Template { get; }
+
+        ISocialConfig Social { get; }
+
         IBackendConfig Backend { get; }
     }
 }

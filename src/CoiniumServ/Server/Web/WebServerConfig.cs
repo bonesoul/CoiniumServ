@@ -22,7 +22,6 @@
 #endregion
 using System;
 using CoiniumServ.Server.Web.Modules;
-using CoiniumServ.Statistics;
 using Serilog;
 
 namespace CoiniumServ.Server.Web
@@ -34,6 +33,9 @@ namespace CoiniumServ.Server.Web
         public string BindInterface { get; private set; }
 
         public int Port { get; private set; }
+
+        public string Template { get; private set; }
+        public ISocialConfig Social { get; private set; }
 
         public IBackendConfig Backend { get; private set; }
 
@@ -47,6 +49,8 @@ namespace CoiniumServ.Server.Web
                 Enabled = config.enabled;
                 BindInterface = string.IsNullOrEmpty(config.bind) ? "localhost" : config.bind;
                 Port = config.port == 0 ? 80 : config.port;
+                Template = string.IsNullOrEmpty(config.template) ? "default" : config.template;
+                Social = new SocialConfig(config.social);
                 Backend = new BackendConfig(config.backend);
                 Valid = true;
             }

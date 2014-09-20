@@ -66,13 +66,16 @@ namespace CoiniumServ.Pools
 
         public INetworkInfo NetworkInfo { get; private set; }
 
-        public IBlocksCache BlocksCache { get; private set; }
+        public IBlockRepository BlockRepository { get; private set; }
+
+        public IPaymentRepository PaymentRepository { get; private set; }
+
+        public IDaemonClient Daemon { get; private set; }
 
         // object factory.
         private readonly IObjectFactory _objectFactory;
 
         // dependent objects.
-        private IDaemonClient _daemonClient;       
         
         private IJobManager _jobManager;
         
@@ -139,9 +142,9 @@ namespace CoiniumServ.Pools
                 return;
             }
 
-            _daemonClient = _objectFactory.GetDaemonClient(Config);
+            Daemon = _objectFactory.GetDaemonClient(Config.Daemon, Config.Coin);
             HashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
-            NetworkInfo = _objectFactory.GetNetworkInfo(_daemonClient, HashAlgorithm, Config);
+            NetworkInfo = _objectFactory.GetNetworkInfo(Daemon, HashAlgorithm, Config);
             
             _shareMultiplier = Math.Pow(2, 32) / HashAlgorithm.Multiplier; // will be used in hashrate calculation.
         }
@@ -157,35 +160,37 @@ namespace CoiniumServ.Pools
                             Config, providerConfig)).ToList();
 
             // start the migration manager if needed
-            if (Config.Storage.Layer is HybridStorageLayerConfig)
+            if (Config.Storage.Layer is HybridStorageConfig)
                 _objectFactory.GetMigrationManager((IMySqlProvider)providers.First(p => p is MySqlProvider), Config); // run migration manager.
 
             // load the storage layer.
-            if (Config.Storage.Layer is HybridStorageLayerConfig)
-                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, _daemonClient, Config);
-            else if (Config.Storage.Layer is MposStorageLayerConfig)
-                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, _daemonClient, Config);
-            else if (Config.Storage.Layer is EmptyStorageLayerConfig)
-                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, _daemonClient, Config);
+            if (Config.Storage.Layer is HybridStorageConfig)
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, Daemon, Config);
+            else if (Config.Storage.Layer is MposStorageConfig)
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Daemon, Config);
+            else if (Config.Storage.Layer is NullStorageConfig)
+                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, Daemon, Config);
         }
 
         private void InitManagers()
         {
             try
             {
-                BlocksCache = _objectFactory.GetBlocksCache(_storageLayer);
+                BlockRepository = _objectFactory.GetBlockRepository(_storageLayer);
+                PaymentRepository = _objectFactory.GetPaymentRepository(_storageLayer);
                 MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
 
                 var jobTracker = _objectFactory.GetJobTracker(Config);
-                var blockProcessor = _objectFactory.GetBlockProcessor(Config, _daemonClient);
-                _shareManager = _objectFactory.GetShareManager(Config, _daemonClient, jobTracker, _storageLayer, blockProcessor);
+                var blockProcessor = _objectFactory.GetBlockProcessor(Config, Daemon, _storageLayer);
+                _shareManager = _objectFactory.GetShareManager(Config, Daemon, jobTracker, _storageLayer, blockProcessor);
                 _objectFactory.GetVardiffManager(Config, _shareManager);
                 _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
-                _jobManager = _objectFactory.GetJobManager(Config, _daemonClient, jobTracker, _shareManager, MinerManager, HashAlgorithm);
+                _jobManager = _objectFactory.GetJobManager(Config, Daemon, jobTracker, _shareManager, MinerManager, HashAlgorithm);
                 _jobManager.Initialize(InstanceId);
 
-                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _daemonClient, _storageLayer, blockProcessor);
-                paymentProcessor.Initialize();
+                var blockAccounter =_objectFactory.GetBlockAccounter(Config, _storageLayer);
+                var paymentProcessor =_objectFactory.GetPaymentProcessor(Config, _storageLayer, Daemon);
+                _objectFactory.GetPaymentManager(Config, blockAccounter, paymentProcessor);
             }
             catch (Exception e)
             {
@@ -202,20 +207,20 @@ namespace CoiniumServ.Pools
             if (Config.Stratum != null && Config.Stratum.Enabled)
             {
                 var stratumServer = _objectFactory.GetMiningServer("Stratum", Config, this, MinerManager, _jobManager, _banningManager);
-                var stratumService = _objectFactory.GetMiningService("Stratum", Config, _shareManager, _daemonClient);
+                var stratumService = _objectFactory.GetMiningService("Stratum", Config, _shareManager, Daemon);
                 stratumServer.Initialize(Config.Stratum);
 
                 _servers.Add(stratumServer, stratumService);
             }
 
-            if (Config.Vanilla != null && Config.Vanilla.Enabled)
+            if (Config.Getwork != null && Config.Getwork.Enabled)
             {
-                var vanillaServer = _objectFactory.GetMiningServer("Vanilla", Config, this, MinerManager, _jobManager, _banningManager);
-                var vanillaService = _objectFactory.GetMiningService("Vanilla", Config, _shareManager, _daemonClient);
+                var getworkServer = _objectFactory.GetMiningServer("Getwork", Config, this, MinerManager, _jobManager, _banningManager);
+                var getworkService = _objectFactory.GetMiningService("Getwork", Config, _shareManager, Daemon);
 
-                vanillaServer.Initialize(Config.Vanilla);
+                getworkServer.Initialize(Config.Getwork);
 
-                _servers.Add(vanillaServer, vanillaService);
+                _servers.Add(getworkServer, getworkService);
             }
         }
 
@@ -260,7 +265,7 @@ namespace CoiniumServ.Pools
 
         public void Recache()
         {
-            BlocksCache.Recache(); // recache the blocks.
+            BlockRepository.Recache(); // recache the blocks.
             NetworkInfo.Recache(); // let network statistics recache.
             CalculateHashrate(); // calculate the pool hashrate.
 

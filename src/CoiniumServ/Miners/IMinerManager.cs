@@ -23,9 +23,9 @@
 using System;
 using System.Collections.Generic;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
-using CoiniumServ.Server.Mining.Vanilla;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Miners
@@ -45,7 +45,7 @@ namespace CoiniumServ.Miners
 
         IMiner GetByConnection(IConnection connection);
 
-        T Create<T>(IPool pool) where T : IVanillaMiner;
+        T Create<T>(IPool pool) where T : IGetworkMiner;
 
         T Create<T>(UInt32 extraNonce, IConnection connection, IPool pool) where T : IStratumMiner;
 
