@@ -25,7 +25,7 @@ using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Payments;
 using CoiniumServ.Payments.Config;
 using CoiniumServ.Persistance;

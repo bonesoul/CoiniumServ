@@ -21,7 +21,7 @@
 // 
 #endregion
 
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 
 namespace CoiniumServ.Server.Mining.Getwork
 {

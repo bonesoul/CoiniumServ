@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Logging;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Statistics;
@@ -43,6 +44,8 @@ namespace CoiniumServ.Configuration
         List<IPoolConfig> PoolConfigs { get; }
 
         IDaemonManagerConfig DaemonManagerConfig { get; }
+
+        ISoftwareRepositoryConfig SoftwareRepositoryConfig { get; }
 
         ICoinConfig GetCoinConfig(string name);
 

@@ -23,7 +23,7 @@
 
 using System.Collections.Generic;
 using CoiniumServ.Accounts;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Query;

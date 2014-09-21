@@ -86,9 +86,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\JsonFx.2.0.1209.2802\lib\net40\JsonFx.dll</HintPath>
     </Reference>
-    <Reference Include="Metrics, Version=0.1.11.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Metrics, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Metrics.NET.0.1.11\lib\net45\Metrics.dll</HintPath>
+      <HintPath>..\..\build\packages\Metrics.NET.0.2.0\lib\net45\Metrics.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -106,9 +106,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Nancy.Hosting.Self.0.23.2\lib\net40\Nancy.Hosting.Self.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Metrics, Version=0.1.11.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nancy.Metrics, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\NancyFx.Metrics.0.1.11\lib\net45\Nancy.Metrics.dll</HintPath>
+      <HintPath>..\..\build\packages\NancyFx.Metrics.0.2.0\lib\net45\Nancy.Metrics.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.ViewEngines.Razor, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -180,22 +180,28 @@
     <Compile Include="Jobs\Manager\IJobConfig.cs" />
     <Compile Include="Markets\IMarketManager.cs" />
     <Compile Include="Markets\MarketManager.cs" />
+    <Compile Include="Mining\Software\IMiningSoftwareConfig.cs" />
+    <Compile Include="Mining\Software\ISoftwareRepository.cs" />
+    <Compile Include="Mining\Software\ISoftwareRepositoryConfig.cs" />
+    <Compile Include="Mining\Software\MiningSoftware.cs" />
+    <Compile Include="Mining\Software\MiningSoftwareConfig.cs" />
+    <Compile Include="Mining\Software\SoftwareRepository.cs" />
+    <Compile Include="Mining\Software\SoftwareRepositoryConfig.cs" />
     <Compile Include="Server\Web\Models\Algorithm\AlgorithmModel.cs" />
     <Compile Include="Server\Web\Modules\AlgorithmModule.cs" />
     <Compile Include="Utils\Metrics\IMetricsManager.cs" />
     <Compile Include="Utils\Metrics\MetricsManager.cs" />
-    <Compile Include="Miners\IMetaConfig.cs" />
-    <Compile Include="Miners\IMinerConfig.cs" />
-    <Compile Include="Miners\MetaConfig.cs" />
-    <Compile Include="Miners\MinerSoftware.cs" />
-    <Compile Include="Miners\Software\IMinerSoftware.cs" />
-    <Compile Include="Miners\Software\MinerSoftware.cs" />
+    <Compile Include="Mining\IMetaConfig.cs" />
+    <Compile Include="Mining\IMinerConfig.cs" />
+    <Compile Include="Mining\MetaConfig.cs" />
+    <Compile Include="Mining\MinerSoftware.cs" />
+    <Compile Include="Mining\Software\IMiningSoftware.cs" />
     <Compile Include="Daemon\IDaemonManager.cs" />
     <Compile Include="Daemon\DaemonManager.cs" />
     <Compile Include="Daemon\IStandaloneDaemonConfig.cs" />
     <Compile Include="Payments\Config\IRewardsConfig.cs" />
     <Compile Include="Jobs\Manager\JobConfig.cs" />
-    <Compile Include="Miners\MinerConfig.cs" />
+    <Compile Include="Mining\MinerConfig.cs" />
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
     <Compile Include="Persistance\Query\PaginationQuery.cs" />
     <Compile Include="Server\Web\Models\Algorithm\AlgorithmsModel.cs" />
@@ -289,7 +295,7 @@
     <Compile Include="Daemon\Responses\IBlockTemplate.cs" />
     <Compile Include="Jobs\Tracker\IJobTracker.cs" />
     <Compile Include="Jobs\Tracker\JobTracker.cs" />
-    <Compile Include="Miners\MinerEventArgs.cs" />
+    <Compile Include="Mining\MinerEventArgs.cs" />
     <Compile Include="Server\Web\Service\IJsonService.cs" />
     <Compile Include="Shares\ShareEventArgs.cs" />
     <Compile Include="Statistics\StatisticsConfig.cs" />
@@ -392,12 +398,12 @@
     <Compile Include="Jobs\ExtraNonce.cs" />
     <Compile Include="Jobs\IExtraNonce.cs" />
     <Compile Include="Jobs\JobCounter.cs" />
-    <Compile Include="Miners\IMinerManager.cs" />
+    <Compile Include="Mining\IMinerManager.cs" />
     <Compile Include="Cryptology\Merkle\MerkleTree.cs" />
     <Compile Include="Daemon\Responses\BlockTemplateTransaction.cs" />
     <Compile Include="Jobs\Manager\IJobManager.cs" />
     <Compile Include="Jobs\Manager\JobManager.cs" />
-    <Compile Include="Miners\MinerManager.cs" />
+    <Compile Include="Mining\MinerManager.cs" />
     <Compile Include="Pools\IPool.cs" />
     <Compile Include="Pools\IPoolManager.cs" />
     <Compile Include="Pools\Pool.cs" />
@@ -415,7 +421,7 @@
     <Compile Include="Server\Mining\Getwork\GetworkServer.cs" />
     <Compile Include="Server\Mining\Getwork\GetworkServerConfig.cs" />
     <Compile Include="Server\Mining\Getwork\Service\GetworkService.cs" />
-    <Compile Include="Miners\IMiner.cs" />
+    <Compile Include="Mining\IMiner.cs" />
     <Compile Include="Server\Mining\Stratum\Service\SocketServiceContext.cs" />
     <Compile Include="Server\Commands\Server.cs" />
     <Compile Include="Server\Commands\Stats.cs" />
@@ -473,6 +479,9 @@
     <Compile Include="Transactions\Utils\TransactionUtils.cs" />
     <Compile Include="Utils\Numerics\BigInteger.cs" />
     <Compile Include="Utils\Numerics\BigRational.cs" />
+    <None Include="config\software-example.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\algorithm\algorithm.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -945,6 +954,8 @@
     <None Include="web\default\Content\fonts\ionicons.woff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="web\default\views\help\gettingstarted\index.cshtml" />
+    <None Include="web\default\views\help\miningsoftware\index.cshtml" />
     <None Include="web\default\views\layout\header.cshtml" />
     <None Include="web\default\views\layout\footer.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -20,41 +20,36 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using System.Collections.Generic;
-using CoiniumServ.Factories;
-using JsonConfig;
 using Serilog;
 
-namespace CoiniumServ.Daemon
+namespace CoiniumServ.Mining
 {
-    public class DaemonManagerConfig : IDaemonManagerConfig
+    public class MetaConfig :IMetaConfig
     {
-        public IList<IStandaloneDaemonConfig> Configs { get { return _configs; }}
-
-        private readonly List<IStandaloneDaemonConfig> _configs;
-
         public bool Valid { get; private set; }
+        public string MOTD { get; private set; }
+        public string TxMessage { get; private set; }
 
-        public DaemonManagerConfig(IConfigFactory configFactory, dynamic config)
+        public MetaConfig(dynamic config)
         {
             try
             {
-                _configs = new List<IStandaloneDaemonConfig>();
+                // load the config data.
+                MOTD = string.IsNullOrEmpty(config.motd)
+                    ? "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com"
+                    : config.motd;
 
-                if (config.daemons is NullExceptionPreventer)
-                    return;
+                TxMessage = string.IsNullOrEmpty(config.txMessage) ? "http://www.coiniumserv.com/" : config.txMessage;
 
-                foreach (var entry in config.daemons)
-                {
-                    _configs.Add(configFactory.GetStandaloneDaemonConfig(entry));
-                }
+                Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<DaemonManagerConfig>().Error(e, "Error loading daemon manager configuration");
-            }            
+                Log.Logger.ForContext<MetaConfig>().Error(e, "Error loading meta configuration");
+            }
         }
     }
 }

@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using Serilog;
 
-namespace CoiniumServ.Miners
+namespace CoiniumServ.Mining
 {
     public class MinerManager : IMinerManager
     {        

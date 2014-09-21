@@ -23,7 +23,7 @@
 
 using System;
 using System.Linq;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Server.Mining.Stratum;
 using Dapper;
 using MySql.Data.MySqlClient;

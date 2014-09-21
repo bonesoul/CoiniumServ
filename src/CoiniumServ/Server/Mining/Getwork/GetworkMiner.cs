@@ -28,7 +28,7 @@ using System.Text;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Accounts;
 using CoiniumServ.Logging;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Getwork.Service;
 using CoiniumServ.Utils.Extensions;

@@ -75,8 +75,11 @@ namespace CoiniumServ.Server.Web
                 ctx.ViewBag.Youtube = _configManager.WebServerConfig.Social.Youtube;                
             };
 
+            #if DEBUG
+            // only enable metrics support in debug mode.
             if (_configManager.WebServerConfig.Backend.MetricsEnabled)
-                Metric.Config.WithNancy(config => config.WithMetricsModule("/admin/metrics")); // todo: enable authentication support
+                Metric.Config.WithNancy(pipelines);
+            #endif
 
             CustomErrors.Enable(pipelines, new ErrorConfiguration());
         }

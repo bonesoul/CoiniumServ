@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Daemon;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Server.Web.Service;
 using Newtonsoft.Json;
 

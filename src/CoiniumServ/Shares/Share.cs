@@ -26,7 +26,7 @@ using CoiniumServ.Coin.Coinbase;
 using CoiniumServ.Cryptology;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Time;

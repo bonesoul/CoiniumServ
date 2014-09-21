@@ -21,7 +21,7 @@
 // 
 #endregion
 using System.Collections.Generic;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 
 namespace CoiniumServ.Server.Web.Models
 {

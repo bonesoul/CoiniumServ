@@ -37,9 +37,8 @@
     # googleplus: Google Plus page url
     # youtube: Youtube page url
     
-    # backend: 
-    # enabled: set this true to enable admin backend.
-    # password: password for enabling administrator 
+    # backend:
+	# metrics: used for performance analysis purposes in debug mode.
 
 	"website": {
 		"enabled": true,

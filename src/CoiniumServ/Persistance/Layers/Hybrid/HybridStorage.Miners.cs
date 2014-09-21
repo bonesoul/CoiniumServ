@@ -22,7 +22,7 @@
 #endregion
 
 using CoiniumServ.Daemon.Exceptions;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Server.Mining.Stratum;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid

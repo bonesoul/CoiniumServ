@@ -20,11 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-namespace CoiniumServ.Miners.Software
+namespace CoiniumServ.Mining
 {
-    public class MinerSoftware : IMinerSoftware
+    public enum MinerSoftware
     {
-        public string Name { get; private set; }
+        Unknown,
+        BfgMiner,
+        CCMiner,
+        CGMiner,
+        CudaMiner
     }
 }

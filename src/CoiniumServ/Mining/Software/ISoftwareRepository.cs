@@ -20,17 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
 
-namespace CoiniumServ.Miners
+using CoiniumServ.Utils.Repository;
+
+namespace CoiniumServ.Mining.Software
 {
-    public class MinerEventArgs:EventArgs
+    public interface ISoftwareRepository : IRepository<IMiningSoftware>
     {
-        public IMiner Miner { get; private set; }
-
-        public MinerEventArgs(IMiner miner)
-        {
-            Miner = miner;
-        }
     }
 }

@@ -29,7 +29,7 @@ using AustinHarris.JsonRpc;
 using CoiniumServ.Accounts;
 using CoiniumServ.Jobs;
 using CoiniumServ.Logging;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Errors;

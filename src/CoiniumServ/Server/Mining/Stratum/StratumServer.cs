@@ -25,7 +25,7 @@ using System.Net;
 using System.Net.Sockets;
 using CoiniumServ.Banning;
 using CoiniumServ.Jobs.Manager;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using Serilog;

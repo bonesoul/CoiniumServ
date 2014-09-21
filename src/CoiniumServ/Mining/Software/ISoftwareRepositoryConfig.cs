@@ -20,21 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System.Collections.Generic;
 using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Miners
+namespace CoiniumServ.Mining.Software
 {
-    public interface IMinerConfig : IConfig 
+    public interface ISoftwareRepositoryConfig : IEnumerable<IMiningSoftwareConfig>, IConfig
     {
-        /// <summary>
-        /// Should worker usernames validated against coin daemon as an address?
-        /// </summary>
-        bool ValidateUsername { get; }
-
-        // todo: need to utilize this!
-        /// <summary>
-        /// timeout in seconds to disconnect miners that did not submit any shares for the period.
-        /// </summary>
-        int Timeout { get; }
     }
 }

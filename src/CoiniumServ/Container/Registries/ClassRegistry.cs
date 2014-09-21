@@ -26,7 +26,7 @@ using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Tracker;
-using CoiniumServ.Markets;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
@@ -60,14 +60,18 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
 
             // config
+            _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
             _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IDaemonManagerConfig, DaemonManagerConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<IDaemonManagerConfig, DaemonManagerConfig>().AsMultiInstance(); // todo: this should be singleton!
             _applicationContext.Container.Register<IStandaloneDaemonConfig, StandaloneDaemonConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
+            _applicationContext.Container.Register<IMiningSoftwareConfig, MiningSoftwareConfig>().AsMultiInstance();
 
             // web
             _applicationContext.Container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();
+
+            // software
+            _applicationContext.Container.Register<IMiningSoftware, MiningSoftware>().AsMultiInstance();
         }
     }
 }

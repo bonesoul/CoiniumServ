@@ -27,7 +27,8 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Logging;
 using CoiniumServ.Markets;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
 using CoiniumServ.Shares;
@@ -56,6 +57,7 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IMetricsManager, MetricsManager>().AsSingleton();
             _applicationContext.Container.Register<IDaemonManager, DaemonManager>().AsSingleton();
             _applicationContext.Container.Register<IMarketManager, MarketManager>().AsSingleton();
+            _applicationContext.Container.Register<ISoftwareRepository, SoftwareRepository>().AsSingleton();
 
             // per-pool managers
             _applicationContext.Container.Register<IShareManager, ShareManager>().AsMultiInstance();

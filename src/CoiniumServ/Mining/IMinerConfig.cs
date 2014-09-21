@@ -20,37 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Mining.Getwork;
-using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Mining.Stratum.Sockets;
-using Newtonsoft.Json;
 
-namespace CoiniumServ.Miners
+using CoiniumServ.Configuration;
+
+namespace CoiniumServ.Mining
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IMinerManager
+    public interface IMinerConfig : IConfig 
     {
-        event EventHandler MinerAuthenticated;
+        /// <summary>
+        /// Should worker usernames validated against coin daemon as an address?
+        /// </summary>
+        bool ValidateUsername { get; }
 
-        [JsonProperty("count")]
-        int Count { get; }
-
-        [JsonProperty("list")]
-        IList<IMiner> Miners { get; }
-
-        IMiner GetMiner(Int32 id);
-
-        IMiner GetByConnection(IConnection connection);
-
-        T Create<T>(IPool pool) where T : IGetworkMiner;
-
-        T Create<T>(UInt32 extraNonce, IConnection connection, IPool pool) where T : IStratumMiner;
-
-        void Remove(IConnection connection);
-
-        void Authenticate(IMiner miner);
+        // todo: need to utilize this!
+        /// <summary>
+        /// timeout in seconds to disconnect miners that did not submit any shares for the period.
+        /// </summary>
+        int Timeout { get; }
     }
 }

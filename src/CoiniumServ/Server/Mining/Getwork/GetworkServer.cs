@@ -24,7 +24,7 @@
 // classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 using System.Net;
 using CoiniumServ.Jobs.Manager;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Pools;
 using Serilog;
 

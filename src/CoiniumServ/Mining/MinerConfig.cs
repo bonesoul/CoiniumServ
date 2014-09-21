@@ -21,10 +21,32 @@
 // 
 #endregion
 
-namespace CoiniumServ.Miners.Software
+using System;
+using Serilog;
+
+namespace CoiniumServ.Mining
 {
-    public interface IMinerSoftware
+    public class MinerConfig:IMinerConfig
     {
-        string Name { get; }
+        public bool Valid { get; private set; }
+        public bool ValidateUsername { get; private set; }
+        public int Timeout { get; private set; }
+
+        public MinerConfig(dynamic config)
+        {
+            try
+            {
+                // load the config data.
+                ValidateUsername = config.validateUsername;
+                Timeout = config.timeout == 0 ? 300 : config.timeout;
+
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<MinerConfig>().Error(e, "Error loading miner configuration");
+            }
+        }
     }
 }
