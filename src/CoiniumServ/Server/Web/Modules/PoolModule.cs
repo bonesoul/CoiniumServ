@@ -38,7 +38,7 @@ namespace CoiniumServ.Server.Web.Modules
         {
             Get["/{slug}"] = _ =>
             {
-                var pool = poolManager.Get(_.slug); // find the requested pool. TODO: use IStatistics instead
+                var pool = poolManager.Get(_.slug); // find the requested pool.
 
                 if (pool == null)
                 {

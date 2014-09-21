@@ -180,6 +180,8 @@
     <Compile Include="Jobs\Manager\IJobConfig.cs" />
     <Compile Include="Markets\IMarketManager.cs" />
     <Compile Include="Markets\MarketManager.cs" />
+    <Compile Include="Server\Web\Models\Algorithm\AlgorithmModel.cs" />
+    <Compile Include="Server\Web\Modules\AlgorithmModule.cs" />
     <Compile Include="Utils\Metrics\IMetricsManager.cs" />
     <Compile Include="Utils\Metrics\MetricsManager.cs" />
     <Compile Include="Miners\IMetaConfig.cs" />
@@ -196,7 +198,7 @@
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
     <Compile Include="Persistance\Query\PaginationQuery.cs" />
-    <Compile Include="Server\Web\Models\AlgorithmsModel.cs" />
+    <Compile Include="Server\Web\Models\Algorithm\AlgorithmsModel.cs" />
     <Compile Include="Server\Web\Models\PoolsModel.cs" />
     <Compile Include="Server\Web\Models\Pool\BlocksModel.cs" />
     <Compile Include="Server\Web\Models\Pool\DetailedPayment.cs" />
@@ -471,6 +473,7 @@
     <Compile Include="Transactions\Utils\TransactionUtils.cs" />
     <Compile Include="Utils\Numerics\BigInteger.cs" />
     <Compile Include="Utils\Numerics\BigRational.cs" />
+    <None Include="web\default\views\algorithm\algorithm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
