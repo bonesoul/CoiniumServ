@@ -21,10 +21,21 @@
 // 
 #endregion
 
+using System;
+using System.Collections.Generic;
+using CoiniumServ.Algorithms;
+
 namespace CoiniumServ.Miners.Software
 {
-    public class MinerSoftware : IMinerSoftware
+    public class MinerSoftware :IMiningSoftware
     {
         public string Name { get; private set; }
+        public Version Version { get; private set; }
+        public IList<IHashAlgorithm> SupportedAlgorithms { get; private set; }
+        public Platforms SupportedPlatforms { get; private set; }
+        public string Site { get; private set; }
+        public string WindowsDownloadLink { get; private set; }
+        public string LinuxDownloadLink { get; private set; }
+        public string MacOSDownloadLink { get; private set; }
     }
 }

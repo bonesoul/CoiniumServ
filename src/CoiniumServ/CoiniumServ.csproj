@@ -180,6 +180,7 @@
     <Compile Include="Jobs\Manager\IJobConfig.cs" />
     <Compile Include="Markets\IMarketManager.cs" />
     <Compile Include="Markets\MarketManager.cs" />
+    <Compile Include="Miners\Software\MinerSoftware.cs" />
     <Compile Include="Server\Web\Models\Algorithm\AlgorithmModel.cs" />
     <Compile Include="Server\Web\Modules\AlgorithmModule.cs" />
     <Compile Include="Utils\Metrics\IMetricsManager.cs" />
@@ -188,8 +189,7 @@
     <Compile Include="Miners\IMinerConfig.cs" />
     <Compile Include="Miners\MetaConfig.cs" />
     <Compile Include="Miners\MinerSoftware.cs" />
-    <Compile Include="Miners\Software\IMinerSoftware.cs" />
-    <Compile Include="Miners\Software\MinerSoftware.cs" />
+    <Compile Include="Miners\Software\IMiningSoftware.cs" />
     <Compile Include="Daemon\IDaemonManager.cs" />
     <Compile Include="Daemon\DaemonManager.cs" />
     <Compile Include="Daemon\IStandaloneDaemonConfig.cs" />
@@ -473,6 +473,9 @@
     <Compile Include="Transactions\Utils\TransactionUtils.cs" />
     <Compile Include="Utils\Numerics\BigInteger.cs" />
     <Compile Include="Utils\Numerics\BigRational.cs" />
+    <None Include="config\software\cgminer.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\algorithm\algorithm.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -945,6 +948,8 @@
     <None Include="web\default\Content\fonts\ionicons.woff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="web\default\views\help\gettingstarted\index.cshtml" />
+    <None Include="web\default\views\help\miningsoftware\index.cshtml" />
     <None Include="web\default\views\layout\header.cshtml" />
     <None Include="web\default\views\layout\footer.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

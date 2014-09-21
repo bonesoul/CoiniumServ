@@ -37,6 +37,16 @@ namespace CoiniumServ.Server.Web.Modules
 
                 return View["termsofservice"];
             };
+
+            Get["/gettingstarted/"] = _ =>
+            {
+                return View["gettingstarted/index"];
+            };
+
+            Get["/miningsoftware/"] = _ =>
+            {
+                return View["miningsoftware/index"];
+            };
         }
     }
 }

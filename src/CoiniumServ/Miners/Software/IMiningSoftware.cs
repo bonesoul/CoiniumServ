@@ -21,10 +21,37 @@
 // 
 #endregion
 
+using System;
+using System.Collections.Generic;
+using CoiniumServ.Algorithms;
+
 namespace CoiniumServ.Miners.Software
 {
-    public interface IMinerSoftware
+    public interface IMiningSoftware
     {
         string Name { get; }
+
+        Version Version { get; }
+
+        IList<IHashAlgorithm> SupportedAlgorithms { get; }
+
+        Platforms SupportedPlatforms { get; }
+
+        string Site { get; }
+
+        string WindowsDownloadLink { get; }
+
+        string LinuxDownloadLink { get; }
+
+        string MacOSDownloadLink { get; }
+    }
+
+    [Flags] 
+    public enum Platforms
+    {
+        Cpu,
+        Ati,
+        Nvidia,
+        Asic
     }
 }
