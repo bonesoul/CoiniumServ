@@ -20,8 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Algorithms;
 using CoiniumServ.Container.Context;
-using CoiniumServ.Cryptology.Algorithms;
 
 namespace CoiniumServ.Container.Registries
 {

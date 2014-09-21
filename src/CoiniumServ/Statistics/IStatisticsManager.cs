@@ -21,7 +21,7 @@
 // 
 #endregion
 using System;
-using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Service;
 using Newtonsoft.Json;

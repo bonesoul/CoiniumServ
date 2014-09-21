@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using CoiniumServ.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
@@ -30,7 +31,7 @@ namespace CoiniumServ.Server.Web.Modules
 {
     public class IndexModule : NancyModule
     {
-        public IndexModule(IStatisticsManager statisticsManager, IPoolManager poolManager)
+        public IndexModule(IStatisticsManager statisticsManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
         {
             Get["/"] = _ =>
             {
@@ -42,6 +43,7 @@ namespace CoiniumServ.Server.Web.Modules
                 return View["index", new IndexModel
                 {
                     Pools = poolManager.GetAllAsReadOnly(),
+                    Algorithms = algorithmManager.GetAllAsReadOnly(),
                     Statistics = statisticsManager
                 }];
             };

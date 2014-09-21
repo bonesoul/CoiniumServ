@@ -21,9 +21,9 @@
 // 
 #endregion
 using System;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Coinbase;
 using CoiniumServ.Cryptology;
-using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Miners;

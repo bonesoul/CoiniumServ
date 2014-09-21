@@ -22,7 +22,7 @@
 #endregion
 using System;
 using System.Threading;
-using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;

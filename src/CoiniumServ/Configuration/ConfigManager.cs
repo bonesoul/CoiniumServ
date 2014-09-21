@@ -91,7 +91,7 @@ namespace CoiniumServ.Configuration
         {
             // these config files below need to access log-manager, that's why we wait it's configuration initialized with in ctor().
 
-            LoadDaemonManagerConfig(); // load the global daemon manager config.
+            // LoadDaemonManagerConfig(); // load the global daemon manager config. - disabled until we need it.
             LoadPoolConfigs(); // load the per-pool config files.
         }
 

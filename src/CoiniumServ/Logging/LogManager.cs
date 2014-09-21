@@ -43,6 +43,8 @@ namespace CoiniumServ.Logging
 
         private readonly ILogConfig _config;
 
+        // todo: create console log by default without the need for configuration.
+
         public LogManager(IConfigManager configManager)
         {
             _config = configManager.LogConfig;

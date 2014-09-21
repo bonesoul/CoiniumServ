@@ -21,18 +21,17 @@
 // 
 #endregion
 using System.Collections.Generic;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Container.Context;
-using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
 using CoiniumServ.Markets;
-using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
@@ -46,6 +45,7 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
+using CoiniumServ.Utils.Metrics;
 using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;

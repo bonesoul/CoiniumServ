@@ -148,25 +148,25 @@
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Configuration\IStackConfig.cs" />
     <Compile Include="Configuration\StackConfig.cs" />
-    <Compile Include="Cryptology\Algorithms\Blake.cs" />
-    <Compile Include="Cryptology\Algorithms\Fresh.cs" />
-    <Compile Include="Cryptology\Algorithms\Fugue.cs" />
-    <Compile Include="Cryptology\Algorithms\Groestl.cs" />
-    <Compile Include="Cryptology\Algorithms\HashAlgorithmBase.cs" />
-    <Compile Include="Cryptology\Algorithms\IAlgorithmManager.cs" />
-    <Compile Include="Cryptology\Algorithms\Keccak.cs" />
-    <Compile Include="Cryptology\Algorithms\Nist5.cs" />
-    <Compile Include="Cryptology\Algorithms\Qubit.cs" />
-    <Compile Include="Cryptology\Algorithms\ScryptOg.cs" />
-    <Compile Include="Cryptology\Algorithms\Sha1.cs" />
-    <Compile Include="Cryptology\Algorithms\Sha256.cs" />
-    <Compile Include="Cryptology\Algorithms\Shavite3.cs" />
-    <Compile Include="Cryptology\Algorithms\Skein.cs" />
-    <Compile Include="Cryptology\Algorithms\X11.cs" />
-    <Compile Include="Cryptology\Algorithms\X13.cs" />
-    <Compile Include="Cryptology\Algorithms\X14.cs" />
-    <Compile Include="Cryptology\Algorithms\X15.cs" />
-    <Compile Include="Cryptology\Algorithms\X17.cs" />
+    <Compile Include="Algorithms\Blake.cs" />
+    <Compile Include="Algorithms\Fresh.cs" />
+    <Compile Include="Algorithms\Fugue.cs" />
+    <Compile Include="Algorithms\Groestl.cs" />
+    <Compile Include="Algorithms\HashAlgorithmBase.cs" />
+    <Compile Include="Algorithms\IAlgorithmManager.cs" />
+    <Compile Include="Algorithms\Keccak.cs" />
+    <Compile Include="Algorithms\Nist5.cs" />
+    <Compile Include="Algorithms\Qubit.cs" />
+    <Compile Include="Algorithms\ScryptOg.cs" />
+    <Compile Include="Algorithms\Sha1.cs" />
+    <Compile Include="Algorithms\Sha256.cs" />
+    <Compile Include="Algorithms\Shavite3.cs" />
+    <Compile Include="Algorithms\Skein.cs" />
+    <Compile Include="Algorithms\X11.cs" />
+    <Compile Include="Algorithms\X13.cs" />
+    <Compile Include="Algorithms\X14.cs" />
+    <Compile Include="Algorithms\X15.cs" />
+    <Compile Include="Algorithms\X17.cs" />
     <Compile Include="Daemon\DaemonManagerConfig.cs" />
     <Compile Include="Daemon\IDaemonManagerConfig.cs" />
     <Compile Include="Factories\ConfigFactory.cs" />
@@ -180,8 +180,10 @@
     <Compile Include="Jobs\Manager\IJobConfig.cs" />
     <Compile Include="Markets\IMarketManager.cs" />
     <Compile Include="Markets\MarketManager.cs" />
-    <Compile Include="Metrics\IMetricsManager.cs" />
-    <Compile Include="Metrics\MetricsManager.cs" />
+    <Compile Include="Server\Web\Models\Algorithm\AlgorithmModel.cs" />
+    <Compile Include="Server\Web\Modules\AlgorithmModule.cs" />
+    <Compile Include="Utils\Metrics\IMetricsManager.cs" />
+    <Compile Include="Utils\Metrics\MetricsManager.cs" />
     <Compile Include="Miners\IMetaConfig.cs" />
     <Compile Include="Miners\IMinerConfig.cs" />
     <Compile Include="Miners\MetaConfig.cs" />
@@ -196,6 +198,8 @@
     <Compile Include="Miners\MinerConfig.cs" />
     <Compile Include="Daemon\StandaloneDaemonConfig.cs" />
     <Compile Include="Persistance\Query\PaginationQuery.cs" />
+    <Compile Include="Server\Web\Models\Algorithm\AlgorithmsModel.cs" />
+    <Compile Include="Server\Web\Models\PoolsModel.cs" />
     <Compile Include="Server\Web\Models\Pool\BlocksModel.cs" />
     <Compile Include="Server\Web\Models\Pool\DetailedPayment.cs" />
     <Compile Include="Server\Web\Models\Pool\IDetailedPayment.cs" />
@@ -268,10 +272,12 @@
     <Compile Include="Server\Web\Models\RoundModel.cs" />
     <Compile Include="Server\Web\Models\WorkersModel.cs" />
     <Compile Include="Server\Web\BackendConfig.cs" />
+    <Compile Include="Server\Web\Modules\AlgorithmsModule.cs" />
     <Compile Include="Server\Web\Modules\DonateModule.cs" />
     <Compile Include="Server\Web\Models\IndexModel.cs" />
     <Compile Include="Server\Web\Models\Pool\PoolModel.cs" />
     <Compile Include="Server\Web\Modules\HelpModule.cs" />
+    <Compile Include="Server\Web\Modules\PoolsModule.cs" />
     <Compile Include="Server\Web\SocialConfig.cs" />
     <Compile Include="Statistics\IStatisticsManager.cs" />
     <Compile Include="Statistics\StatisticsManager.cs" />
@@ -355,9 +361,9 @@
     <Compile Include="Utils\Platform\Frameworks.cs" />
     <Compile Include="Utils\Platform\PlatformManager.cs" />
     <Compile Include="Utils\Buffers\RingBuffer.cs" />
-    <Compile Include="Cryptology\Algorithms\AlgorithmManager.cs" />
-    <Compile Include="Cryptology\Algorithms\IHashAlgorithm.cs" />
-    <Compile Include="Cryptology\Algorithms\Scrypt.cs" />
+    <Compile Include="Algorithms\AlgorithmManager.cs" />
+    <Compile Include="Algorithms\IHashAlgorithm.cs" />
+    <Compile Include="Algorithms\Scrypt.cs" />
     <Compile Include="Coin\Address\Base58.cs" />
     <Compile Include="Coin\Config\CoinConfig.cs" />
     <Compile Include="Coin\Config\ICoinConfig.cs" />
@@ -467,6 +473,7 @@
     <Compile Include="Transactions\Utils\TransactionUtils.cs" />
     <Compile Include="Utils\Numerics\BigInteger.cs" />
     <Compile Include="Utils\Numerics\BigRational.cs" />
+    <None Include="web\default\views\algorithm\algorithm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -898,6 +905,7 @@
     <Compile Include="Persistance\Layers\Mpos\MposStorage.Miners.cs" />
     <Compile Include="Persistance\Layers\Mpos\MposStorage.Statistics.cs" />
     <None Include="web.config" />
+    <None Include="web\default\views\algorithms\algorithms.cshtml" />
     <None Include="web\default\views\api\api.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1058,6 +1066,9 @@
     <None Include="web\default\views\layout\sidebar.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="web\default\views\partial\algorithms.cshtml" />
+    <None Include="web\default\views\partial\pools.cshtml" />
+    <None Include="web\default\views\pools\pools.cshtml" />
     <None Include="web\default\views\pool\block.cshtml" />
     <None Include="web\default\views\pool\blocks.cshtml" />
     <None Include="web\default\views\pool\pool.cshtml">
