@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using CoiniumServ.Accounts;
 using CoiniumServ.Pools;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Miners
+namespace CoiniumServ.Mining
 {
     /// <summary>
     /// Miner interface that any implementations should extend.

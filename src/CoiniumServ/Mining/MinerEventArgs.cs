@@ -20,41 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using System.Collections.Generic;
-using CoiniumServ.Factories;
-using JsonConfig;
-using Serilog;
 
-namespace CoiniumServ.Daemon
+namespace CoiniumServ.Mining
 {
-    public class DaemonManagerConfig : IDaemonManagerConfig
+    public class MinerEventArgs:EventArgs
     {
-        public IList<IStandaloneDaemonConfig> Configs { get { return _configs; }}
+        public IMiner Miner { get; private set; }
 
-        private readonly List<IStandaloneDaemonConfig> _configs;
-
-        public bool Valid { get; private set; }
-
-        public DaemonManagerConfig(IConfigFactory configFactory, dynamic config)
+        public MinerEventArgs(IMiner miner)
         {
-            try
-            {
-                _configs = new List<IStandaloneDaemonConfig>();
-
-                if (config.daemons is NullExceptionPreventer)
-                    return;
-
-                foreach (var entry in config.daemons)
-                {
-                    _configs.Add(configFactory.GetStandaloneDaemonConfig(entry));
-                }
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<DaemonManagerConfig>().Error(e, "Error loading daemon manager configuration");
-            }            
+            Miner = miner;
         }
     }
 }

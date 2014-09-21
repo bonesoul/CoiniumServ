@@ -1,5 +1,5 @@
 ﻿{
-    "miners": [
+    "miner": [
         {
             "name": "CGMiner",
             "version": "3.7.2",

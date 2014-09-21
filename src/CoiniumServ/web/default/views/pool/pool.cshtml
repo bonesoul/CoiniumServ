@@ -12,32 +12,32 @@
             </div>
             <div class="box-body no-padding">
                 <div class="list-group">
-                    <a href="#" class="list-group-item" title="The symbol of the coin">
+                    <div class="list-group-item" title="The symbol of the coin">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-dollar"></i> Symbol</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.Config.Coin.Symbol</div></div>
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item" title="The hash algorithm that coin uses">
+                    </div>
+                    <div class="list-group-item" title="The hash algorithm that coin uses">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-cog"></i> Algorithm</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.Config.Coin.Algorithm</div></div>
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item" title="Version of the coin">
+                    </div>
+                    <div class="list-group-item" title="Version of the coin">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-code-fork"></i> Version</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.NetworkInfo.CoinVersion</div></div>
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item" title="Is the pool's network connection healthy?">
+                    </div>
+                    <div class="list-group-item" title="Is the pool's network connection healthy?">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-check"></i> Healthy</div>
                             <div class="col-xs-6 text-right">
                                 <div class="label @(Model.Pool.NetworkInfo.Healthy? "label-info" : "label-danger")">@(Model.Pool.NetworkInfo.Healthy ? "Yes" : "No")</div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,24 +50,24 @@
             </div>
             <div class="box-body no-padding">
                 <div class="list-group">
-                    <a href="#" class="list-group-item" title="Overall hashrate of miners connect to pool">
+                    <div class="list-group-item" title="Overall hashrate of miners connect to pool">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-flask"></i> Pool</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.Hashrate.GetReadableHashrate()</div></div>
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item" title="Overall hashrate of network">
+                    </div>
+                    <div class="list-group-item" title="Overall hashrate of network">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-flash"></i> Network</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.NetworkInfo.Hashrate.GetReadableHashrate()</div></div>
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item" title="Network difficulty">
+                    </div>
+                    <div class="list-group-item" title="Network difficulty">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-random"></i> Difficulty</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.NetworkInfo.Difficulty</div></div>
                         </div>
-                    </a>
+                    </div>
                     <a href="/pool/@Model.Pool.Config.Coin.Symbol/workers" class="list-group-item" title="Total of number of workers connected to pool">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-users"></i> Workers</div>
@@ -92,30 +92,30 @@
             </div>
             <div class="box-body no-padding">
                 <div class="list-group">
-                    <a href="#" class="list-group-item" title="Total number of blocks found by the pool">
+                    <div class="list-group-item" title="Total number of blocks found by the pool">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-hdd-o"></i> Total</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.BlockRepository.Total</div></div>
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item" title="Pending blocks found by the pool waiting to get confirmed">
+                    </div>
+                    <div class="list-group-item" title="Pending blocks found by the pool waiting to get confirmed">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-adjust"></i> Pending</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.BlockRepository.Pending</div></div>
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item" title="Confirmed blocks found by the pool">
+                    </div>
+                    <div class="list-group-item" title="Confirmed blocks found by the pool">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-check"></i> Confirmed</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.BlockRepository.Confirmed</div></div>
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item" title="Orphaned blocks found by the pool">
+                    </div>
+                    <div class="list-group-item" title="Orphaned blocks found by the pool">
                         <div class="row">
                             <div class="col-xs-6"><i class="fa fa-times"></i> Orphaned</div>
                             <div class="col-xs-6 text-right"><div>@Model.Pool.BlockRepository.Orphaned</div></div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>

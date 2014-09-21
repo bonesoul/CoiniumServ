@@ -103,11 +103,16 @@ namespace CoiniumServ
             // run market manager.
             objectFactory.GetMarketManager();
 
+            // run software repository.
+            objectFactory.GetSoftwareRepository();
+
             // start web server.
             objectFactory.GetWebServer();
 
-            // initialize metrics support    
-            objectFactory.GetMetricsManager();
+            #if DEBUG            
+            // only initialize metrics support in debug mode
+            objectFactory.GetMetricsManager();            
+            #endif
         }
 
         #region unhandled exception emitter

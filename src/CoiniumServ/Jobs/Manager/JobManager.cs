@@ -26,7 +26,7 @@ using CoiniumServ.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;

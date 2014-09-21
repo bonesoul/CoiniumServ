@@ -21,21 +21,14 @@
 // 
 #endregion
 
-using System.Net;
-using CoiniumServ.Mining;
+using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Server.Mining.Getwork.Service
+namespace CoiniumServ.Mining
 {
-    public class HttpServiceContext
+    public interface IMetaConfig:IConfig
     {
-        public IMiner Miner { get; private set; }
+        string MOTD { get; }
 
-        public HttpListenerResponse Response { get; private set; }
-
-        public HttpServiceContext(IMiner miner, HttpListenerContext context)
-        {
-            Miner = miner;
-            Response = context.Response;
-        }
+        string TxMessage { get; }
     }
 }

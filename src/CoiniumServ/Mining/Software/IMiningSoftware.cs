@@ -20,14 +20,34 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Miners
+
+using System;
+using System.Collections.Generic;
+using CoiniumServ.Algorithms;
+
+namespace CoiniumServ.Mining.Software
 {
-    public enum MinerSoftware
+    public interface IMiningSoftware
     {
-        Unknown,
-        BfgMiner,
-        CCMiner,
-        CGMiner,
-        CudaMiner
+        string Name { get; }
+
+        Version Version { get; }
+
+        IList<IHashAlgorithm> Algorithms { get; }
+
+        Platforms Platforms { get; }
+
+        string Site { get; }
+
+        IDictionary<string, string> Downloads { get; }
+    }
+
+    [Flags]
+    public enum Platforms
+    {
+        Cpu = 1,
+        Ati = 2,
+        Nvidia = 4,
+        Asic = 8
     }
 }

@@ -20,31 +20,46 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
+using System.Collections.Generic;
 using Serilog;
 
-namespace CoiniumServ.Miners
+namespace CoiniumServ.Mining.Software
 {
-    public class MinerConfig:IMinerConfig
+    public class MiningSoftwareConfig:IMiningSoftwareConfig
     {
-        public bool Valid { get; private set; }
-        public bool ValidateUsername { get; private set; }
-        public int Timeout { get; private set; }
+        public string Name { get; private set; }
+        public string Version { get; private set; }
+        public IList<string> Platforms { get; private set; }
+        public IList<string> Algorithms { get; private set; }
+        public string Site { get; private set; }
+        public IDictionary<string, string> Downloads { get; private set; }
 
-        public MinerConfig(dynamic config)
+        public bool Valid { get; private set; }
+
+        public MiningSoftwareConfig(dynamic config)
         {
             try
             {
-                // load the config data.
-                ValidateUsername = config.validateUsername;
-                Timeout = config.timeout == 0 ? 300 : config.timeout;
+                Name = config.name;
+                Version = config.version;
+                Platforms = config.platforms;
+                Algorithms = config.algorithms;
+                Site = config.site;
+                Downloads = new Dictionary<string, string>
+                {
+                    {"windows", config.download.windows},
+                    {"linux", config.download.linux},
+                    {"macos", config.download.macos},
+                };
 
                 Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<MinerConfig>().Error(e, "Error loading miner configuration");
+                Log.Logger.ForContext<MiningSoftwareConfig>().Error(e, "Error loading software configuration");
             }
         }
     }

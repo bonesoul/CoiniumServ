@@ -31,7 +31,8 @@ using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
 using CoiniumServ.Markets;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
@@ -150,6 +151,14 @@ namespace CoiniumServ.Factories
         #region market objects
 
         IMarketManager GetMarketManager();
+
+        #endregion
+
+        #region mining software
+
+        ISoftwareRepository GetSoftwareRepository();
+
+        IMiningSoftware GetMiningSoftware(IMiningSoftwareConfig config);
 
         #endregion
     }

@@ -22,7 +22,7 @@
 #endregion
 using System;
 using CoiniumServ.Jobs;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Vardiff;
 using Newtonsoft.Json;
 

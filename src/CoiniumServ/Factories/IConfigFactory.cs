@@ -23,6 +23,7 @@
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
 using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
 
 namespace CoiniumServ.Factories
@@ -43,5 +44,7 @@ namespace CoiniumServ.Factories
         IDaemonManagerConfig GetDaemonManagerConfig(dynamic config);
 
         IStandaloneDaemonConfig GetStandaloneDaemonConfig(dynamic config);
+
+        IMiningSoftwareConfig GetMiningSoftwareConfig(dynamic config);
     }
 }

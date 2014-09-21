@@ -20,35 +20,51 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using CoiniumServ.Factories;
+using JsonConfig;
 using Serilog;
 
-namespace CoiniumServ.Miners
+namespace CoiniumServ.Mining.Software
 {
-    public class MetaConfig :IMetaConfig
+    public class SoftwareRepositoryConfig:ISoftwareRepositoryConfig
     {
-        public bool Valid { get; private set; }
-        public string MOTD { get; private set; }
-        public string TxMessage { get; private set; }
+        private readonly List<IMiningSoftwareConfig> _configs;
 
-        public MetaConfig(dynamic config)
+        public bool Valid { get; private set; }
+
+        public SoftwareRepositoryConfig(IConfigFactory configFactory, dynamic config)
         {
             try
             {
-                // load the config data.
-                MOTD = string.IsNullOrEmpty(config.motd)
-                    ? "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com"
-                    : config.motd;
+                _configs = new List<IMiningSoftwareConfig>();
 
-                TxMessage = string.IsNullOrEmpty(config.txMessage) ? "http://www.coiniumserv.com/" : config.txMessage;
+                if (config.miner is NullExceptionPreventer)
+                    return;
 
-                Valid = true;
+                foreach (var entry in config.miner)
+                {
+                    _configs.Add(configFactory.GetMiningSoftwareConfig(entry));
+                }
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<MetaConfig>().Error(e, "Error loading meta configuration");
+                Log.Logger.ForContext<SoftwareRepositoryConfig>().Error(e, "Error loading software manager configuration");
             }
+        }
+
+        public IEnumerator<IMiningSoftwareConfig> GetEnumerator()
+        {
+            return _configs.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

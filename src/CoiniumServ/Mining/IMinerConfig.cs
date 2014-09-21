@@ -21,37 +21,21 @@
 // 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using CoiniumServ.Algorithms;
+using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Miners.Software
+namespace CoiniumServ.Mining
 {
-    public interface IMiningSoftware
+    public interface IMinerConfig : IConfig 
     {
-        string Name { get; }
+        /// <summary>
+        /// Should worker usernames validated against coin daemon as an address?
+        /// </summary>
+        bool ValidateUsername { get; }
 
-        Version Version { get; }
-
-        IList<IHashAlgorithm> SupportedAlgorithms { get; }
-
-        Platforms SupportedPlatforms { get; }
-
-        string Site { get; }
-
-        string WindowsDownloadLink { get; }
-
-        string LinuxDownloadLink { get; }
-
-        string MacOSDownloadLink { get; }
-    }
-
-    [Flags] 
-    public enum Platforms
-    {
-        Cpu,
-        Ati,
-        Nvidia,
-        Asic
+        // todo: need to utilize this!
+        /// <summary>
+        /// timeout in seconds to disconnect miners that did not submit any shares for the period.
+        /// </summary>
+        int Timeout { get; }
     }
 }

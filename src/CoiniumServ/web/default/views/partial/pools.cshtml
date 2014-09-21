@@ -2,7 +2,6 @@
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IEnumerable<CoiniumServ.Pools.IPool>>
 
 <div class="row">
-        <!-- pools -->
         <div class="col-md-12">
             <div class="box box-solid box-danger">
                 <div class="box-header">
@@ -20,10 +19,10 @@
                                 <th>Hashrate</th>
                                 <th>Network</th>
                                 <th>Difficulty</th>
-                                <th>Workers</th>
-                                <th>Algorithm</th>
-                                <th>Current Block</th>
-                                <th>Status</th>
+                                <th class="hidden-xs">Workers</th>
+                                <th class="hidden-xs">Algorithm</th>
+                                <th class="hidden-xs">Current Block</th>
+                                <th class="hidden-xs">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,10 +34,10 @@
                                     <td>@pool.Hashrate.GetReadableHashrate()</td>
                                     <td>@pool.NetworkInfo.Hashrate.GetReadableHashrate()</td>
                                     <td>@pool.NetworkInfo.Difficulty</td>
-                                    <td>@pool.MinerManager.Count</td>
-                                    <td><a href="@pool.Config.Coin.Algorithm">@pool.Config.Coin.Algorithm</a></td>
-                                    <td>@pool.NetworkInfo.Round</td>
-                                    <td>
+                                    <td class="hidden-xs">@pool.MinerManager.Count</td>
+                                    <td class="hidden-xs"><a href="@pool.Config.Coin.Algorithm">@pool.Config.Coin.Algorithm</a></td>
+                                    <td class="hidden-xs">@pool.NetworkInfo.Round</td>
+                                    <td class="hidden-xs">
                                         <div class="label @(pool.NetworkInfo.Healthy? "label-info" : "label-danger")">@(pool.NetworkInfo.Healthy ? "Healthy" : "Warnings!")</div>
                                     </td>
                                 </tr>

@@ -21,13 +21,14 @@
 // 
 #endregion
 
+using CoiniumServ.Mining.Software;
 using Nancy;
 
 namespace CoiniumServ.Server.Web.Modules
 {
     public class HelpModule:NancyModule
     {
-        public HelpModule()
+        public HelpModule(ISoftwareRepository softwareRepository)
             :base("/help")
         {
             Get["/termsofservice"] = _ =>
@@ -45,7 +46,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/miningsoftware/"] = _ =>
             {
-                return View["miningsoftware/index"];
+                return View["miningsoftware/index", softwareRepository];
             };
         }
     }

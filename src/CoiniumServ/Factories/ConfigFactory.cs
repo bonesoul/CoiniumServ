@@ -24,6 +24,7 @@ using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Daemon;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
 using Nancy.TinyIoc;
 
@@ -93,6 +94,16 @@ namespace CoiniumServ.Factories
             };
 
             return _applicationContext.Container.Resolve<IStandaloneDaemonConfig>(@params);
+        }
+
+        public IMiningSoftwareConfig GetMiningSoftwareConfig(dynamic config)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"config", config},
+            };
+
+            return _applicationContext.Container.Resolve<IMiningSoftwareConfig>(@params);
         }
     }
 }
