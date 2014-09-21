@@ -20,26 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using HashLib;
 
-namespace CoiniumServ.Cryptology.Algorithms
+using System.Collections.Generic;
+using CoiniumServ.Pools;
+
+namespace CoiniumServ.Server.Web.Models
 {
-    public sealed class Shavite3 : HashAlgorithmBase
+    public class PoolsModel
     {
-        public override uint Multiplier { get; protected set; }
-
-        private readonly IHash _hasher;
-
-        public Shavite3()
-        {
-            _hasher = HashFactory.Crypto.SHA3.CreateSHAvite3_512();
-
-            Multiplier = 1;
-        }
-
-        public override byte[] Hash(byte[] input, dynamic config)
-        {
-            return _hasher.ComputeBytes(input).GetBytes();
-        }
+        public IReadOnlyCollection<IPool> Pools { get; set; }
     }
 }

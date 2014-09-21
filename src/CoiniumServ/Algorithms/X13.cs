@@ -20,18 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using HashLib;
 
-namespace CoiniumServ.Cryptology.Algorithms
+namespace CoiniumServ.Algorithms
 {
-    public sealed class X17 : HashAlgorithmBase
+    public sealed class X13 : HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
         private readonly List<IHash> _hashers;
 
-        public X17()
+        public X13()
         {
             _hashers = new List<IHash>
             {
@@ -48,10 +49,6 @@ namespace CoiniumServ.Cryptology.Algorithms
                 HashFactory.Crypto.SHA3.CreateEcho512(),
                 HashFactory.Crypto.SHA3.CreateHamsi512(),
                 HashFactory.Crypto.SHA3.CreateFugue512(),
-                HashFactory.Crypto.SHA3.CreateShabal512(),
-                HashFactory.Crypto.CreateWhirlpool(),
-                HashFactory.Crypto.CreateSHA512(),
-                HashFactory.Crypto.CreateHaval_5_256(),
             };
 
             Multiplier = 1;

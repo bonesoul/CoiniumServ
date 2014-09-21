@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ using System.Linq.Expressions;
 using CoiniumServ.Pools;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Cryptology.Algorithms
+namespace CoiniumServ.Algorithms
 {
     public class HashAlgorithmBase : IHashAlgorithm
     {

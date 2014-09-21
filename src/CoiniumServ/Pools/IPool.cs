@@ -22,7 +22,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Miners;
 using CoiniumServ.Server.Web.Service;

@@ -20,41 +20,26 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using HashLib;
 
-namespace CoiniumServ.Cryptology.Algorithms
+using CoiniumServ.Algorithms;
+using CoiniumServ.Server.Web.Models;
+using Nancy;
+
+namespace CoiniumServ.Server.Web.Modules
 {
-    public sealed class Qubit : HashAlgorithmBase
+    public class AlgorithmsModule : NancyModule
     {
-        public override uint Multiplier { get; protected set; }
-
-        private readonly List<IHash> _hashers;
-
-        public Qubit()
+        public AlgorithmsModule(IAlgorithmManager algorithmManager)
+            : base("/algorithms")
         {
-            _hashers = new List<IHash>
+            Get["/"] = _ =>
             {
-                HashFactory.Crypto.SHA3.CreateLuffa512(),
-                HashFactory.Crypto.SHA3.CreateCubeHash512(),
-                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
-                HashFactory.Crypto.SHA3.CreateSIMD512(),
-                HashFactory.Crypto.SHA3.CreateEcho512()
+                // return our view
+                return View["algorithms", new AlgorithmsModel
+                {
+                    Algorithms = algorithmManager.GetAllAsReadOnly()
+                }];
             };
-
-            Multiplier = 1;
-        }
-
-        public override byte[] Hash(byte[] input, dynamic config)
-        {
-            var buffer = input;
-
-            foreach (var hasher in _hashers)
-            {
-                buffer = hasher.ComputeBytes(buffer).GetBytes();
-            }
-
-            return buffer;
         }
     }
 }

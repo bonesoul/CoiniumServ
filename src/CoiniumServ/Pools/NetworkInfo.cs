@@ -20,8 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Helpers;
-using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using Serilog;

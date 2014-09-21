@@ -20,19 +20,28 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using CoiniumServ.Algorithms;
-using CoiniumServ.Pools;
-using CoiniumServ.Statistics;
 
-namespace CoiniumServ.Server.Web.Models
+using System;
+using HashLib;
+
+namespace CoiniumServ.Algorithms
 {
-    public class IndexModel
+    public sealed class Groestl : HashAlgorithmBase
     {
-        public IReadOnlyCollection<IPool> Pools { get; set; }
+        public override uint Multiplier { get; protected set; }
 
-        public IReadOnlyCollection<IHashAlgorithm> Algorithms { get; set; }
+        private readonly IHash _hasher;
 
-        public IStatisticsManager Statistics { get; set; }
+        public Groestl()
+        {
+            _hasher = HashFactory.Crypto.SHA3.CreateGroestl512();
+
+            Multiplier = (UInt32)Math.Pow(2, 8);
+        }
+
+        public override byte[] Hash(byte[] input, dynamic config)
+        {
+            return _hasher.ComputeBytes(input).GetBytes();
+        }
     }
 }

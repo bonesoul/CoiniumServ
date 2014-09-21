@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Utils.Repository;
 
-namespace CoiniumServ.Cryptology.Algorithms
+using System.Collections.Generic;
+using CoiniumServ.Algorithms;
+
+namespace CoiniumServ.Server.Web.Models
 {
-    public interface IAlgorithmManager : IRepository<IHashAlgorithm>, IJsonService
+    public class AlgorithmsModel
     {
-        IHashAlgorithm Get(string name);
+        public IReadOnlyCollection<IHashAlgorithm> Algorithms { get; set; }
     }
 }

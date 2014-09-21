@@ -20,10 +20,26 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Metrics
-{
-    public interface IMetricsManager
-    {
 
+using CoiniumServ.Pools;
+using CoiniumServ.Server.Web.Models;
+using Nancy;
+
+namespace CoiniumServ.Server.Web.Modules
+{
+    public class PoolsModule : NancyModule        
+    {
+        public PoolsModule(IPoolManager poolManager)
+            : base("/pools")
+        {
+            Get["/"] = _ =>
+            {
+                // return our view
+                return View["pools", new PoolsModel
+                {
+                    Pools = poolManager.GetAllAsReadOnly()
+                }];
+            };
+        }
     }
 }

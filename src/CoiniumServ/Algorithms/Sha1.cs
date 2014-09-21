@@ -20,19 +20,20 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using HashLib;
 
-namespace CoiniumServ.Cryptology.Algorithms
+namespace CoiniumServ.Algorithms
 {
-    public sealed class Skein : HashAlgorithmBase
+    public sealed class Sha1 : HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
         private readonly IHash _hasher;
 
-        public Skein()
+        public Sha1()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateSkein512();
+            _hasher = HashFactory.Crypto.CreateSHA512();
 
             Multiplier = 1;
         }

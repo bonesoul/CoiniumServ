@@ -23,8 +23,8 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Configuration;
-using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Pools;
 using Newtonsoft.Json;
 using Serilog;

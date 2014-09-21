@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using HashLib;
 
-namespace CoiniumServ.Cryptology.Algorithms
+namespace CoiniumServ.Algorithms
 {
     public sealed class Keccak : HashAlgorithmBase
     {

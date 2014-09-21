@@ -22,7 +22,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Cryptology.Merkle;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Shares;

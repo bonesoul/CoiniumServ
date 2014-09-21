@@ -27,12 +27,12 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Logging;
 using CoiniumServ.Markets;
-using CoiniumServ.Metrics;
 using CoiniumServ.Miners;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
+using CoiniumServ.Utils.Metrics;
 using CoiniumServ.Vardiff;
 
 namespace CoiniumServ.Container.Registries

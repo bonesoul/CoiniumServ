@@ -24,9 +24,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Persistance.Layers;
-using CoiniumServ.Persistance.Layers.Empty;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Layers.Mpos;
+using CoiniumServ.Persistance.Layers.Null;
 using Serilog;
 
 namespace CoiniumServ.Persistance

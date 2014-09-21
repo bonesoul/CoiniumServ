@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -20,28 +20,50 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using CoiniumServ.Algorithms;
+using System.Collections.Generic;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Service;
+using CoiniumServ.Utils.Repository;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Statistics
+namespace CoiniumServ.Algorithms
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public interface IStatisticsManager:IJsonService
+    public interface IHashAlgorithm: IRepository<IPool>, IJsonService
     {
-        [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
+        /// <summary>
+        /// Algorithm name.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        /// Gets the multiplier.
+        /// </summary>
+        /// <value>
+        /// The multiplier.
+        /// </value>
+        UInt32 Multiplier { get; }
 
         [JsonProperty("miners")]
         Int32 MinerCount { get; }
 
-        [JsonProperty("lastUpdate")]
-        DateTime LastUpdate { get; }
+        [JsonProperty("hashrate")]
+        UInt64 Hashrate { get; }
 
-        IAlgorithmManager Algorithms { get; }
+        /// <summary>
+        /// Hashes the input data.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        byte[] Hash(byte[] input, dynamic config);
 
-        IPoolManager Pools { get; }
+        /// <summary>
+        /// Assigns pools that runs on the algorithm.
+        /// </summary>
+        /// <param name="pools"></param>
+        void AssignPools(IEnumerable<IPool> pools);
     }
 }

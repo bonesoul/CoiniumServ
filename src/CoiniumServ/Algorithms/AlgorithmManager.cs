@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ using CoiniumServ.Pools;
 using CoiniumServ.Utils.Numerics;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Cryptology.Algorithms
+namespace CoiniumServ.Algorithms
 {
     public class AlgorithmManager:IAlgorithmManager
     {

@@ -20,49 +20,27 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
+
 using HashLib;
 
-namespace CoiniumServ.Cryptology.Algorithms
+namespace CoiniumServ.Algorithms
 {
-    public sealed class X13 : HashAlgorithmBase
+    public sealed class Shavite3 : HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
-        private readonly List<IHash> _hashers;
+        private readonly IHash _hasher;
 
-        public X13()
+        public Shavite3()
         {
-            _hashers = new List<IHash>
-            {
-                HashFactory.Crypto.SHA3.CreateBlake512(),
-                HashFactory.Crypto.SHA3.CreateBlueMidnightWish512(),
-                HashFactory.Crypto.SHA3.CreateGroestl512(),
-                HashFactory.Crypto.SHA3.CreateSkein512(),
-                HashFactory.Crypto.SHA3.CreateJH512(),
-                HashFactory.Crypto.SHA3.CreateKeccak512(),
-                HashFactory.Crypto.SHA3.CreateLuffa512(),
-                HashFactory.Crypto.SHA3.CreateCubeHash512(),
-                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
-                HashFactory.Crypto.SHA3.CreateSIMD512(),
-                HashFactory.Crypto.SHA3.CreateEcho512(),
-                HashFactory.Crypto.SHA3.CreateHamsi512(),
-                HashFactory.Crypto.SHA3.CreateFugue512(),
-            };
+            _hasher = HashFactory.Crypto.SHA3.CreateSHAvite3_512();
 
             Multiplier = 1;
         }
 
         public override byte[] Hash(byte[] input, dynamic config)
         {
-            var buffer = input;
-
-            foreach (var hasher in _hashers)
-            {
-                buffer = hasher.ComputeBytes(buffer).GetBytes();
-            }
-
-            return buffer;
+            return _hasher.ComputeBytes(input).GetBytes();
         }
     }
 }

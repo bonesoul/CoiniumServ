@@ -22,16 +22,12 @@
 #endregion
 
 using System;
-using System.Linq;
-using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Query;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Server.Web.Models.Pool;
 using Nancy;
 using Nancy.CustomErrors;
-using Nancy.Responses.Negotiation;
-using Nancy.Routing;
 
 namespace CoiniumServ.Server.Web.Modules
 {

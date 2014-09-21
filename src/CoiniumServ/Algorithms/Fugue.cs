@@ -20,22 +20,23 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using HashLib;
 
-namespace CoiniumServ.Cryptology.Algorithms
+namespace CoiniumServ.Algorithms
 {
-    public sealed class Blake : HashAlgorithmBase
+    public sealed class Fugue : HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
         private readonly IHash _hasher;
 
-        public Blake()
+        public Fugue()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateBlake256();
+            _hasher = HashFactory.Crypto.SHA3.CreateFugue256();
 
-            Multiplier = (UInt32) Math.Pow(2, 8);
+            Multiplier = (UInt32)Math.Pow(2, 8);
         }
 
         public override byte[] Hash(byte[] input, dynamic config)
