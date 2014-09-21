@@ -78,7 +78,7 @@ namespace CoiniumServ.Server.Web
             #if DEBUG
             // only enable metrics support in debug mode.
             if (_configManager.WebServerConfig.Backend.MetricsEnabled)
-                Metric.Config.WithNancy(config => config.WithMetricsModule("/admin/metrics"));
+                Metric.Config.WithNancy(pipelines);
             #endif
 
             CustomErrors.Enable(pipelines, new ErrorConfiguration());
