@@ -135,7 +135,7 @@ namespace CoiniumServ.Blocks
                 return; // in case we have a null, status will be already decided by GetGenerationTx() function.
 
             // get the output transaction that targets pools central wallet.
-            var poolOutput = GetPoolOutput(genTx);
+            var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount);
 
             // make sure we have a valid reference to poolOutput
             if (poolOutput == null)
@@ -254,23 +254,6 @@ namespace CoiniumServ.Blocks
             {
                 _logger.Error("Error getting account for pool central wallet address: {0:l} - {1:l}", _poolConfig.Wallet.Adress, e.Message);
             }
-        }
-
-        public Transaction GetGenerationTransaction(Block block)
-        {
-            try
-            {
-                return _daemonClient.GetTransaction(block.Tx.First()); // query the transaction
-            }
-            catch (RpcException)
-            {
-                return null;
-            }
-        }
-
-        public TransactionDetail GetPoolOutput(Transaction transaction)
-        {
-            return transaction == null ? null : transaction.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount);
         }
     }
 }
