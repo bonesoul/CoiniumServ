@@ -44,7 +44,7 @@ namespace CoiniumServ.Daemon.Responses
         /// difference in value between transaction inputs and outputs (in Satoshis); for coinbase transactions, this is a negative Number of the 
         /// total collected block fees (ie, not including the block subsidy); if key is not present, fee is unknown and clients MUST NOT assume there isn't one
         /// </summary>
-        public int Fee { get; set; }
+        public uint Fee { get; set; }
 
         /// <summary>
         /// hash/id encoded in little-endian hexadecimal
