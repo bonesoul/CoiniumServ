@@ -138,8 +138,7 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IMinerManager>(@params);
         }
 
-        public IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
-            IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
+        public IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             var @params = new NamedParameterOverloads
             {
@@ -164,15 +163,14 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IJobTracker>(@params);
         }
 
-        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor)
+        public IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
                 {"jobTracker", jobTracker},
-                {"storageLayer", storageLayer},
-                {"blockProcessor", blockProcessor}
+                {"storageLayer", storageLayer}
             };
 
             return _applicationContext.Container.Resolve<IShareManager>(@params);
