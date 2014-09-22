@@ -192,64 +192,6 @@ namespace CoiniumServ.Tests.Blocks
         }
 
         [Fact]
-        private void QueryBlockTest_WithPoolOutputAddress_ShouldEqual()
-        {
-            // test case: find pool output by address
-            _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
-
-            var expectedOutput = new TransactionDetail
-            {
-                Address = "POOL_ADDRESS",
-                Account = string.Empty,
-                Amount = 999,
-                Category = "immature",
-                Fee = 1
-            };
-
-            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
-            {
-                Details = new List<TransactionDetail> {expectedOutput}
-            });
-
-            // query the pool output.
-            var blockProcessor = new BlockProcessor(_poolConfig, _daemonClient, _storageLayer);
-            var transaction = _daemonClient.GetTransaction("TX_HASH");
-            var output = blockProcessor.GetPoolOutput(transaction);
-
-            // output should equal our expected value.
-            output.Should().Equal(expectedOutput);
-        }
-
-        [Fact]
-        private void QueryBlockTest_WithPoolOutputAccount_ShouldEqual()
-        {
-            // test case: find pool output by address
-            var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
-            exposed._poolAccount = "POOL_ACCOUNT";
-
-            var expectedOutput = new TransactionDetail
-            {
-                Address = string.Empty,
-                Account = "POOL_ACCOUNT",
-                Amount = 999,
-                Category = "immature",
-                Fee = 1
-            };
-
-            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
-            {
-                Details = new List<TransactionDetail> { expectedOutput }
-            });
-
-            // query the pool output.
-            var transaction = _daemonClient.GetTransaction("TX_HASH");
-            var output = exposed.GetPoolOutput(transaction);
-
-            // output should equal our expected value.
-            ((object) output).Should().Equal(expectedOutput);
-        }
-
-        [Fact]
         private void QueryBlockTest_ShouldSetReward()
         {
             // test case: set block reward based on pool output value.
