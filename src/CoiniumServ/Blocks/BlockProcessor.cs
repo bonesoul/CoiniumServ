@@ -105,7 +105,19 @@ namespace CoiniumServ.Blocks
 
         private void QueryBlock(IPersistedBlock block)
         {
-            var blockInfo = GetBlockInfo(block.BlockHash); // query the block.
+
+            Block blockInfo;
+
+            try
+            {
+                blockInfo = _daemonClient.GetBlock(block.BlockHash); // query the block.
+            }
+            catch (RpcException e)
+            {
+                // if we got a rpc-exception like timeout, just skip the rest of the query.
+                block.Status = BlockStatus.Pending; // and let block stay in pending status so we can query it again later.
+                return;
+            }
 
             if (blockInfo == null || blockInfo.Confirmations == -1) // make sure the block exists and is accepted.
             {
