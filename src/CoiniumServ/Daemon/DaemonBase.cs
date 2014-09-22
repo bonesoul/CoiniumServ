@@ -27,6 +27,7 @@ using System.Text;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Errors;
+using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Factories;
 using CoiniumServ.Logging;
 using CoiniumServ.Utils.Extensions;
@@ -166,7 +167,10 @@ namespace CoiniumServ.Daemon
 
             try
             {
-                return JsonConvert.DeserializeObject<DaemonResponse<T>>(json);
+                //if(typeof(T) == typeof(MiningInfo))
+                //    return JsonConvert.DeserializeObject<DaemonResponse<T>>(json, new MiningInfoConverter());
+                //else
+                    return JsonConvert.DeserializeObject<DaemonResponse<T>>(json);
             }
             catch (JsonException jsonEx)
             {

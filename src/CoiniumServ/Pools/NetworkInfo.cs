@@ -59,9 +59,9 @@ namespace CoiniumServ.Pools
             _poolConfig = poolConfig;
             _logger = Log.ForContext<NetworkInfo>().ForContext("Component", poolConfig.Coin.Name);
 
+            DetectProofOfStakeCoin(); // detect if we are running on a proof-of-stake coin.
             Recache(); // recache the data initially.
             PrintNetworkInfo();
-            DetectProofOfStakeCoin(); // detect if we are running on a proof-of-stake coin.
         }
 
         public void Recache()
