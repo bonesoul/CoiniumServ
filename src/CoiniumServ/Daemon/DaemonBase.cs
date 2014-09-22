@@ -167,10 +167,7 @@ namespace CoiniumServ.Daemon
 
             try
             {
-                //if(typeof(T) == typeof(MiningInfo))
-                //    return JsonConvert.DeserializeObject<DaemonResponse<T>>(json, new MiningInfoConverter());
-                //else
-                    return JsonConvert.DeserializeObject<DaemonResponse<T>>(json);
+                return JsonConvert.DeserializeObject<DaemonResponse<T>>(json);
             }
             catch (JsonException jsonEx)
             {

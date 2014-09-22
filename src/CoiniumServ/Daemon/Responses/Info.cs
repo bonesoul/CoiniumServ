@@ -20,6 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Daemon.Converters;
+using Newtonsoft.Json;
+
 namespace CoiniumServ.Daemon.Responses
 {
     public class Info
@@ -40,7 +44,8 @@ namespace CoiniumServ.Daemon.Responses
 
         public string Proxy { get; set; }
 
-        //public decimal Difficulty { get; set; }
+        [JsonConverter(typeof(DifficultyConverter))]
+        public double Difficulty { get; set; }
 
         public bool Testnet { get; set; }
 

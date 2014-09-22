@@ -61,7 +61,7 @@ namespace CoiniumServ.Pools
 
             DetectProofOfStakeCoin(); // detect if we are running on a proof-of-stake coin.
             Recache(); // recache the data initially.
-            PrintNetworkInfo();
+            PrintNetworkInfo(); // print the collected network info.
         }
 
         public void Recache()

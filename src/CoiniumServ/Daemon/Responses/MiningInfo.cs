@@ -21,7 +21,8 @@
 // 
 #endregion
 using System;
-using Newtonsoft.Json.Converters;
+using CoiniumServ.Daemon.Converters;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Daemon.Responses
 {
@@ -33,6 +34,7 @@ namespace CoiniumServ.Daemon.Responses
 
         public int CurrentBlockTx { get; set; }
 
+        [JsonConverter(typeof(DifficultyConverter))]
         public double Difficulty { get; set; }
 
         public string Errors { get; set; }
@@ -48,19 +50,5 @@ namespace CoiniumServ.Daemon.Responses
         public int PooledTx { get; set; }
 
         public bool Testnet { get; set; }
-    }
-
-    public class MiningInfoConverter : CustomCreationConverter<MiningInfo>
-    {
-        public override MiningInfo Create(Type objectType)
-        {
-            throw new NotImplementedException();
-        }
-
-        // http://pastebin.com/9aPbcsv4
-        // http://stackoverflow.com/questions/7816780/json-net-conditional-type-deserialization
-        // http://james.newtonking.com/json/help/index.html
-        // http://stackoverflow.com/questions/23566980/deserialize-json-based-on-fields-in-net-c
-        // http://stackoverflow.com/questions/8030538/how-to-implement-custom-jsonconverter-in-json-net-to-deserialize-a-list-of-base
     }
 }

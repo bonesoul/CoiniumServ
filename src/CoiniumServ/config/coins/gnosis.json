@@ -1,0 +1,7 @@
+﻿{
+    "name": "Gnosis",
+    "symbol": "GNS",
+    "algorithm": "scrypt",
+    "txMessages": true,
+    "reward": "pos"
+}
