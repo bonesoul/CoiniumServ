@@ -26,6 +26,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Logging;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Stack;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Statistics;
 

@@ -26,6 +26,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CoiniumServ.Factories;
 using JsonConfig;
+using Microsoft.CSharp.RuntimeBinder;
 using Serilog;
 
 namespace CoiniumServ.Mining.Software
@@ -42,13 +43,18 @@ namespace CoiniumServ.Mining.Software
             {
                 _configs = new List<IMiningSoftwareConfig>();
 
-                if (config.miner is NullExceptionPreventer)
+                if (config == null)
+                {
+                    Valid = false;
                     return;
+                }
 
                 foreach (var entry in config.miner)
                 {
                     _configs.Add(configFactory.GetMiningSoftwareConfig(entry));
                 }
+
+                Valid = true;
             }
             catch (Exception e)
             {

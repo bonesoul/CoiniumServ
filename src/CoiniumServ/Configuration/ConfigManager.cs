@@ -31,6 +31,7 @@ using CoiniumServ.Factories;
 using CoiniumServ.Logging;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Stack;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers.IO;
@@ -118,9 +119,6 @@ namespace CoiniumServ.Configuration
         private void LoadSoftwareManagerConfig()
         {
             var data = _jsonConfigReader.Read(SoftwareManagerConfigFilename); // read the global config data.
-
-            if (data == null) // if we can't read daemon manager config file.
-                data = new ExpandoObject(); // create a fake object.                
 
             SoftwareRepositoryConfig = new SoftwareRepositoryConfig(_configFactory, data);
         }

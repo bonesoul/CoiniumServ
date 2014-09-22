@@ -23,11 +23,14 @@
 
 using System.Collections.Generic;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Stack;
 
-namespace CoiniumServ.Server.Web.Models
+namespace CoiniumServ.Server.Web.Models.GettingStarted
 {
-    public class PoolsModel
+    public class GettingStartedModel
     {
+        public IStackConfig Stack { get; set; }
+
         public IReadOnlyCollection<IPool> Pools { get; set; }
     }
 }

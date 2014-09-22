@@ -7,7 +7,7 @@
             "algorithms": [ "sha256", "scrypt" ],
             "site": "https://bitcointalk.org/index.php?topic=28402.0",
             "download": {
-                "windows": "https://mega.co.nz/#!iQhlGIxa!mzKOfLY6TpOfvPvWE6JFlWdRgHEoshzm99f1hd3ZdRw",
+                "windows": "http://ck.kolivas.org/apps/cgminer/",
                 "linux": "http://ck.kolivas.org/apps/cgminer/"
             }
         },
@@ -28,7 +28,7 @@
             "algorithms": [ "scrypt" ],
             "site": "https://github.com/sgminer-dev/sgminer",
             "download": {
-                "windows": "https://github.com/sgminer-dev/sgminer",
+                "windows": "http://sgminer.builders/",
                 "linux": "https://github.com/sgminer-dev/sgminer"
             }
         },

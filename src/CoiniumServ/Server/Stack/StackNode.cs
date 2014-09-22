@@ -20,10 +20,33 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Configuration
+
+using System;
+using Serilog;
+
+namespace CoiniumServ.Server.Stack
 {
-    public interface IStackConfig : IConfig
-    {
-        string Name { get; }
+    public class StackNode:IStackNode
+    {        
+        public string Location { get; private set; }
+        public string Address { get; private set; }
+        public bool Default { get; private set; }
+
+        public bool Valid { get; private set; }
+        public StackNode(dynamic config)
+        {
+            try
+            {
+                Location = config.location;
+                Address = config.address;
+                Default=config.@default;
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<StackNode>().Error(e, "Error loading stack node configuration");
+            }
+        }
     }
 }

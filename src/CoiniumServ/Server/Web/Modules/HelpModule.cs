@@ -21,14 +21,19 @@
 // 
 #endregion
 
+using CoiniumServ.Configuration;
 using CoiniumServ.Mining.Software;
+using CoiniumServ.Pools;
+using CoiniumServ.Server.Web.Models;
+using CoiniumServ.Server.Web.Models.GettingStarted;
 using Nancy;
+using Nancy.CustomErrors;
 
 namespace CoiniumServ.Server.Web.Modules
 {
     public class HelpModule:NancyModule
     {
-        public HelpModule(ISoftwareRepository softwareRepository)
+        public HelpModule(IPoolManager poolManager, IConfigManager configManager, ISoftwareRepository softwareRepository)
             :base("/help")
         {
             Get["/termsofservice"] = _ =>
@@ -41,7 +46,34 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/gettingstarted/"] = _ =>
             {
-                return View["gettingstarted/index"];
+                var model = new GettingStartedModel
+                {
+                    Stack = configManager.StackConfig,
+                    Pools = poolManager.GetAllAsReadOnly()
+                };
+
+                return View["gettingstarted/index", model];
+            };
+
+            Get["/gettingstarted/pool/{slug}"] = _ =>
+            {
+                var pool = poolManager.Get(_.slug); // find the requested pool.
+
+                if (pool == null)
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = string.Format("The requested pool does not exist: {0}", _.slug)
+                    }];
+                }
+
+                var model = new GettingStartedPoolModel
+                {
+                    Stack = configManager.StackConfig,
+                    Pool = pool
+                };
+
+                return View["gettingstarted/pool", model];
             };
 
             Get["/miningsoftware/"] = _ =>

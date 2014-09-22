@@ -29,7 +29,7 @@
                             @foreach (var pool in Model)
                             {
                                 <tr>
-                                    <td><img src="/Content/img/coin/icon/@(pool.Config.Coin.Symbol).png" /></td>
+                                    <td><img src="/Content/img/coins/icon/@(pool.Config.Coin.Symbol).png" /></td>
                                     <td><a href="/pool/@pool.Config.Coin.Symbol/">@pool.Config.Coin.Name</a></td>
                                     <td>@pool.Hashrate.GetReadableHashrate()</td>
                                     <td>@pool.NetworkInfo.Hashrate.GetReadableHashrate()</td>

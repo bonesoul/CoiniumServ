@@ -24,7 +24,7 @@
 using System.Collections.Generic;
 using CoiniumServ.Algorithms;
 
-namespace CoiniumServ.Server.Web.Models
+namespace CoiniumServ.Server.Web.Models.Algorithm
 {
     public class AlgorithmsModel
     {
