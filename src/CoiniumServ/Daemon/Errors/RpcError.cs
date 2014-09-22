@@ -20,33 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using Newtonsoft.Json;
 
-namespace CoiniumServ.Daemon
+namespace CoiniumServ.Daemon.Errors
 {
-    public class DaemonErrorResponse
-    {
-        /// <summary>
-        /// The result object.
-        /// </summary>
-        [JsonProperty(PropertyName = "result", Order = 0)]
-        public object Result { get; set; }
-
-        /// <summary>
-        /// The error returned by the wallet, if any.
-        /// </summary>
-        [JsonProperty(PropertyName = "error", Order = 1)]
-        public DaemonError Error { get; set; }
-
-        /// <summary>
-        /// The id of the corresponding request.
-        /// </summary>
-        [JsonProperty(PropertyName = "id", Order = 2)]
-        public int Id { get; set; }
-    }
-
-    public class DaemonError
+    public class RpcError
     {
         [JsonProperty(PropertyName = "code", Order = 1)]
         public Int32 Code { get; set; }

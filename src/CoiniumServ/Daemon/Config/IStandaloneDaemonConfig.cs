@@ -20,25 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Container.Context;
-using CoiniumServ.Factories;
 
-namespace CoiniumServ.Container.Registries
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Configuration;
+
+namespace CoiniumServ.Daemon.Config
 {
-    public class FactoryRegistry : IRegistry
+    public interface IStandaloneDaemonConfig :IConfig
     {
-        private readonly IApplicationContext _applicationContext;
+        bool Enabled { get; }
 
-        public FactoryRegistry(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
+        ICoinConfig Coin { get; }
 
-        public void RegisterInstances()
-        {
-            _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
-            _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IRpcExceptionFactory, RpcExceptionFactory>().AsSingleton();
-        }
+        IDaemonConfig Daemon { get; }
     }
 }

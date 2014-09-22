@@ -27,6 +27,7 @@ using System.IO;
 using System.Linq;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Factories;
 using CoiniumServ.Logging;
 using CoiniumServ.Mining.Software;

@@ -20,14 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
-using CoiniumServ.Daemon.Config;
 using Serilog;
 
-namespace CoiniumServ.Daemon
+namespace CoiniumServ.Daemon.Config
 {
     public class StandaloneDaemonConfig:IStandaloneDaemonConfig
     {

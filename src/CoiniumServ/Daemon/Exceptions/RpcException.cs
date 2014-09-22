@@ -26,18 +26,12 @@ namespace CoiniumServ.Daemon.Exceptions
 {
     public class RpcException : Exception
     {
-        public Int32 Code { get; private set; }
-
-        public RpcException(string message, Exception innerException) :
+        protected RpcException(string message, Exception innerException) :
             base(message, innerException)
-        {
-            Code = 0;
-        }
+        { }
 
-        public RpcException(DaemonErrorResponse response) :
-            base(response.Error.Message)
-        {
-            Code = response.Error.Code;
-        }
+        protected RpcException(string message) :
+            base(message)
+        { }
     }
 }

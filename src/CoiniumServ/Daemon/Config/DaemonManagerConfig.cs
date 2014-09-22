@@ -20,25 +20,42 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Container.Context;
+
+using System;
+using System.Collections.Generic;
 using CoiniumServ.Factories;
+using JsonConfig;
+using Serilog;
 
-namespace CoiniumServ.Container.Registries
+namespace CoiniumServ.Daemon.Config
 {
-    public class FactoryRegistry : IRegistry
+    public class DaemonManagerConfig : IDaemonManagerConfig
     {
-        private readonly IApplicationContext _applicationContext;
+        public IList<IStandaloneDaemonConfig> Configs { get { return _configs; }}
 
-        public FactoryRegistry(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
+        private readonly List<IStandaloneDaemonConfig> _configs;
 
-        public void RegisterInstances()
+        public bool Valid { get; private set; }
+
+        public DaemonManagerConfig(IConfigFactory configFactory, dynamic config)
         {
-            _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
-            _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IRpcExceptionFactory, RpcExceptionFactory>().AsSingleton();
+            try
+            {
+                _configs = new List<IStandaloneDaemonConfig>();
+
+                if (config.daemons is NullExceptionPreventer)
+                    return;
+
+                foreach (var entry in config.daemons)
+                {
+                    _configs.Add(configFactory.GetStandaloneDaemonConfig(entry));
+                }
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<DaemonManagerConfig>().Error(e, "Error loading daemon manager configuration");
+            }            
         }
     }
 }
