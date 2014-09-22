@@ -23,6 +23,7 @@
 using System.Collections.Generic;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Logging;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;

@@ -26,6 +26,7 @@ using System.Linq;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
@@ -50,9 +51,9 @@ namespace CoiniumServ.Shares
 
         private readonly IStorageLayer _storageLayer;
 
-        private readonly IBlockProcessor _blockProcessor;
-
         private readonly IPoolConfig _poolConfig;
+
+        private string _poolAccount;
 
         private readonly ILogger _logger;
 
@@ -63,15 +64,15 @@ namespace CoiniumServ.Shares
         /// <param name="daemonClient"></param>
         /// <param name="jobTracker"></param>
         /// <param name="storageLayer"></param>
-        /// <param name="blockProcessor"></param>
-        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor)
+        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer)
         {
             _poolConfig = poolConfig;
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _storageLayer = storageLayer;
-            _blockProcessor = blockProcessor;
             _logger = Log.ForContext<ShareManager>().ForContext("Component", poolConfig.Coin.Name);
+
+            FindPoolAccount();
         }
 
         /// <summary>
@@ -173,9 +174,9 @@ namespace CoiniumServ.Shares
 
             try
             {
-                _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
+                _daemonClient.SubmitBlock(share.BlockHex.ToHexString()); // submit the block.
 
-                var block = _blockProcessor.GetBlockInfo(share.BlockHash.ToHexString()); // query the block.
+                var block = _daemonClient.GetBlock(share.BlockHash.ToHexString()); // query the block.
 
                 if (block == null) // make sure the block exists
                     return false;
@@ -195,7 +196,7 @@ namespace CoiniumServ.Shares
                     return false;
                 }
 
-                var genTx = _blockProcessor.GetGenerationTransaction(block); // get the generation transaction.
+                var genTx = _daemonClient.GetTransaction(block.Tx.First()); // get the generation transaction.
 
                 // make sure we were able to read the generation transaction
                 if (genTx == null)
@@ -204,7 +205,7 @@ namespace CoiniumServ.Shares
                     return false;
                 }
 
-                var poolOutput = _blockProcessor.GetPoolOutput(genTx); // get the output that targets pool's central address.
+                var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount); // get the output that targets pool's central address.
 
                 // make sure the blocks generation transaction contains our central pool wallet address
                 if (poolOutput == null)
@@ -220,8 +221,11 @@ namespace CoiniumServ.Shares
 
                 return true;
             }
-            catch (Exception e)
+            catch (RpcException e)
             {
+                // unlike BlockProcessor's detailed exception handling and decision making based on the error,
+                // here in share-manager we only one-shot submissions. If we get an error, basically we just don't care about the rest
+                // and flag the submission as failed.
                 _logger.Error("Submit block [{0}] failed with hash [{1:l}] - reason; {2:l}", share.Height, share.BlockHash.ToHexString(), e.Message);
                 return false;
             }
@@ -241,6 +245,18 @@ namespace CoiniumServ.Shares
 
             if (handler != null)
                 handler(this, e);
+        }
+
+        private void FindPoolAccount()
+        {
+            try
+            {
+                _poolAccount = _daemonClient.GetAccount(_poolConfig.Wallet.Adress);
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Error getting account for pool central wallet address: {0:l} - {1:l}", _poolConfig.Wallet.Adress, e.Message);
+            }
         }
     }
 }

@@ -20,25 +20,29 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Container.Context;
-using CoiniumServ.Factories;
 
-namespace CoiniumServ.Container.Registries
+using Newtonsoft.Json;
+
+namespace CoiniumServ.Daemon.Errors
 {
-    public class FactoryRegistry : IRegistry
+    public class RpcErrorResponse
     {
-        private readonly IApplicationContext _applicationContext;
+        /// <summary>
+        /// The result object.
+        /// </summary>
+        [JsonProperty(PropertyName = "result", Order = 0)]
+        public object Result { get; set; }
 
-        public FactoryRegistry(IApplicationContext applicationContext)
-        {
-            _applicationContext = applicationContext;
-        }
+        /// <summary>
+        /// The error returned by the wallet, if any.
+        /// </summary>
+        [JsonProperty(PropertyName = "error", Order = 1)]
+        public RpcError Error { get; set; }
 
-        public void RegisterInstances()
-        {
-            _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
-            _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IRpcExceptionFactory, RpcExceptionFactory>().AsSingleton();
-        }
+        /// <summary>
+        /// The id of the corresponding request.
+        /// </summary>
+        [JsonProperty(PropertyName = "id", Order = 2)]
+        public int Id { get; set; }
     }
 }

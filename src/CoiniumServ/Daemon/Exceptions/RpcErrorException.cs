@@ -20,25 +20,23 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Container.Context;
-using CoiniumServ.Factories;
 
-namespace CoiniumServ.Container.Registries
+using System;
+using CoiniumServ.Daemon.Errors;
+
+namespace CoiniumServ.Daemon.Exceptions
 {
-    public class FactoryRegistry : IRegistry
+    public class RpcErrorException:RpcException
     {
-        private readonly IApplicationContext _applicationContext;
+        /// <summary>
+        /// Error code if supplied by the daemon error response.
+        /// </summary>
+        public Int32 Code { get; private set; }
 
-        public FactoryRegistry(IApplicationContext applicationContext)
+        public RpcErrorException(RpcErrorResponse response)
+            :base(response.Error.Message)
         {
-            _applicationContext = applicationContext;
-        }
-
-        public void RegisterInstances()
-        {
-            _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
-            _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
-            _applicationContext.Container.Register<IRpcExceptionFactory, RpcExceptionFactory>().AsSingleton();
+            Code = response.Error.Code;
         }
     }
 }

@@ -20,13 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Daemon
+using System;
+using CoiniumServ.Daemon.Errors;
+using CoiniumServ.Daemon.Exceptions;
+
+namespace CoiniumServ.Factories
 {
-    public interface IDaemonManagerConfig : IConfig
+    public interface IRpcExceptionFactory
     {
-        IList<IStandaloneDaemonConfig> Configs { get; }
+        RpcException GetRpcException(Exception inner);
+
+        RpcException GetRpcException(string message, Exception inner);
+
+        RpcException GetRpcErrorException(RpcErrorResponse response);
     }
 }

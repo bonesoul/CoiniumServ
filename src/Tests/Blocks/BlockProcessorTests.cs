@@ -25,6 +25,8 @@ using System;
 using System.Collections.Generic;
 using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Errors;
+using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
@@ -56,8 +58,17 @@ namespace CoiniumServ.Tests.Blocks
         {
             // test case: coin daemon reports block hash as invalid.
             var block = new PersistedBlock(1, false, false, false, "INVALID_HASH", "TX_HASH", 0, 0, DateTime.Now);
-            _daemonClient.GetBlock("INVALID_HASH").Returns(info => null);            
-            
+            _daemonClient.GetBlock("INVALID_HASH").Returns(x =>
+            {
+                throw new RpcErrorException(new RpcErrorResponse
+                {
+                    Error = new RpcError
+                    {
+                        Code = -5 // 'block not found'.
+                    }
+                });
+            });
+
             // query the block.
             var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
             exposed.QueryBlock(block);
@@ -102,7 +113,17 @@ namespace CoiniumServ.Tests.Blocks
             // test case: coin reports generation transaction hash as invalid.
             var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _daemonClient.GetBlock("BLOCK_HASH").Returns(info => new Block { Tx = new List<string> { "TX_HASH" } });
-            _daemonClient.GetTransaction("TX_HASH").Returns(info => null);            
+
+            _daemonClient.GetTransaction("TX_HASH").Returns(x =>
+            {
+                throw new RpcErrorException(new RpcErrorResponse
+                {
+                    Error = new RpcError
+                    {
+                        Code = -5 // 'Invalid or non-wallet transaction id'
+                    }
+                });
+            });          
 
             // query the block.
             var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
@@ -168,64 +189,6 @@ namespace CoiniumServ.Tests.Blocks
 
             // block should be marked as orphaned.
             block.Status.Should().Equal(BlockStatus.Orphaned);
-        }
-
-        [Fact]
-        private void QueryBlockTest_WithPoolOutputAddress_ShouldEqual()
-        {
-            // test case: find pool output by address
-            _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");
-
-            var expectedOutput = new TransactionDetail
-            {
-                Address = "POOL_ADDRESS",
-                Account = string.Empty,
-                Amount = 999,
-                Category = "immature",
-                Fee = 1
-            };
-
-            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
-            {
-                Details = new List<TransactionDetail> {expectedOutput}
-            });
-
-            // query the pool output.
-            var blockProcessor = new BlockProcessor(_poolConfig, _daemonClient, _storageLayer);
-            var transaction = _daemonClient.GetTransaction("TX_HASH");
-            var output = blockProcessor.GetPoolOutput(transaction);
-
-            // output should equal our expected value.
-            output.Should().Equal(expectedOutput);
-        }
-
-        [Fact]
-        private void QueryBlockTest_WithPoolOutputAccount_ShouldEqual()
-        {
-            // test case: find pool output by address
-            var exposed = Exposed.From(new BlockProcessor(_poolConfig, _daemonClient, _storageLayer));
-            exposed._poolAccount = "POOL_ACCOUNT";
-
-            var expectedOutput = new TransactionDetail
-            {
-                Address = string.Empty,
-                Account = "POOL_ACCOUNT",
-                Amount = 999,
-                Category = "immature",
-                Fee = 1
-            };
-
-            _daemonClient.GetTransaction("TX_HASH").Returns(info => new Transaction
-            {
-                Details = new List<TransactionDetail> { expectedOutput }
-            });
-
-            // query the pool output.
-            var transaction = _daemonClient.GetTransaction("TX_HASH");
-            var output = exposed.GetPoolOutput(transaction);
-
-            // output should equal our expected value.
-            ((object) output).Should().Equal(expectedOutput);
         }
 
         [Fact]

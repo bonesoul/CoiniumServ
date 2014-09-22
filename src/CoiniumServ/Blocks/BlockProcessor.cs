@@ -24,6 +24,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Errors;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Persistance.Blocks;
@@ -105,9 +106,12 @@ namespace CoiniumServ.Blocks
 
         private void QueryBlock(IPersistedBlock block)
         {
-            var blockInfo = GetBlockInfo(block.BlockHash); // query the block.
+            var blockInfo = GetBlockInfo(block); // query the block.
 
-            if (blockInfo == null || blockInfo.Confirmations == -1) // make sure the block exists and is accepted.
+            if (blockInfo == null) // make sure we got a valid blockInfo response before continuing on 
+                return; // in case we have a null, status will be already decided by GetBlockInfo() function.
+
+            if (blockInfo.Confirmations == -1) // check if block is orphaned already.
             {
                 block.Status = BlockStatus.Orphaned;
                 return;
@@ -125,17 +129,13 @@ namespace CoiniumServ.Blocks
             }
 
             // get the generation transaction.
-            var genTx = GetGenerationTransaction(blockInfo);
+            var genTx = GetGenerationTx(block);
 
-            // make sure we were able to read the generation transaction
-            if (genTx == null)
-            {
-                block.Status = BlockStatus.Orphaned;
-                return;
-            }
+            if (genTx == null) // make sure we were able to read the generation transaction
+                return; // in case we have a null, status will be already decided by GetGenerationTx() function.
 
             // get the output transaction that targets pools central wallet.
-            var poolOutput = GetPoolOutput(genTx);
+            var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount);
 
             // make sure we have a valid reference to poolOutput
             if (poolOutput == null)
@@ -162,6 +162,88 @@ namespace CoiniumServ.Blocks
             }
         }
 
+        private Block GetBlockInfo(IPersistedBlock block)
+        {
+            try
+            {
+                return _daemonClient.GetBlock(block.BlockHash); // query the block.
+            }
+            catch (RpcTimeoutException)
+            {
+                // on rpc-timeout exception, let block stay in pending status so we can query it again later.
+                block.Status = BlockStatus.Pending;
+                return null;
+            }
+            catch (RpcConnectionException)
+            {
+                // on rpc-connection exception, let block stay in pending status so we can query it again later.
+                block.Status = BlockStatus.Pending;
+                return null;
+            }
+            catch (RpcErrorException e)
+            {
+                // block not found
+                if (e.Code == (int)RpcErrorCode.RPC_INVALID_ADDRESS_OR_KEY)
+                    block.Status = BlockStatus.Orphaned; // orphan the block if block does not exist.
+
+                // if we got an error that we do not handle
+                else
+                {
+                    block.Status = BlockStatus.Pending; // let the block in pending status so we can query it again later.
+                    _logger.Error("Unhandled rpc-error: {0:l}", e.Message);
+                }
+
+                return null;
+            }
+            catch (GenericRpcException e)
+            {
+                block.Status = BlockStatus.Pending; // and let block stay in pending status so we can query it again later.
+                _logger.Error("Unhandled rpc-exception: {0:l}", e);
+                return null;
+            }
+        }
+
+        private Transaction GetGenerationTx(IPersistedBlock block)
+        {
+            try
+            {
+                return _daemonClient.GetTransaction(block.TransactionHash); // query the transaction
+            }
+            catch (RpcTimeoutException)
+            {
+                // on rpc-timeout exception, let block stay in pending status so we can query it again later.
+                block.Status = BlockStatus.Pending;
+                return null;
+            }
+            catch (RpcConnectionException)
+            {
+                // on rpc-connection exception, let block stay in pending status so we can query it again later.
+                block.Status = BlockStatus.Pending;
+                return null;
+            }
+            catch (RpcErrorException e)
+            {
+                // Invalid or non-wallet transaction id
+                if (e.Code == (int) RpcErrorCode.RPC_INVALID_ADDRESS_OR_KEY)
+                    block.Status = BlockStatus.Orphaned; // orphan the block if block does not exist.
+
+                // if we got an error that we do not handle
+                else
+                {                    
+                    block.Status = BlockStatus.Pending; // let the block in pending status so we can query it again later.
+                    _logger.Error("Unhandled rpc-error: {0:l}", e.Message);
+                }
+
+                return null;
+            }
+            catch (GenericRpcException e)
+            {
+                block.Status = BlockStatus.Pending; // and let block stay in pending status so we can query it again later.
+                _logger.Error("Unhandled rpc-exception: {0:l}", e);
+                return null;
+            }
+        }
+
         private void FindPoolAccount()
         {
             try
@@ -172,38 +254,6 @@ namespace CoiniumServ.Blocks
             {
                 _logger.Error("Error getting account for pool central wallet address: {0:l} - {1:l}", _poolConfig.Wallet.Adress, e.Message);
             }
-        }
-
-        public Block GetBlockInfo(string blockHash)
-        {
-            try
-            {
-                var block = _daemonClient.GetBlock(blockHash);
-                return block;
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Queried block does not exist {0:l} - {1:l}", blockHash, e.Message);
-                return null;
-            }
-        }
-
-        public Transaction GetGenerationTransaction(Block block)
-        {
-            try
-            {
-                return _daemonClient.GetTransaction(block.Tx.First()); // query the transaction
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Queried transaction does not exist {0:l} - {1:l}", block.Tx.First(), e.Message);
-                return null;
-            }
-        }
-
-        public TransactionDetail GetPoolOutput(Transaction transaction)
-        {
-            return transaction == null ? null : transaction.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount);
         }
     }
 }

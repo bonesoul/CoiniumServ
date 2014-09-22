@@ -20,18 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Configuration;
-using CoiniumServ.Daemon.Config;
 
-namespace CoiniumServ.Daemon
+using System;
+
+namespace CoiniumServ.Daemon.Exceptions
 {
-    public interface IStandaloneDaemonConfig :IConfig
+    public class GenericRpcException : RpcException
     {
-        bool Enabled { get; }
+        public GenericRpcException(Exception inner)
+            : base(inner.Message, inner)
+        { }
 
-        ICoinConfig Coin { get; }
-
-        IDaemonConfig Daemon { get; }
+        public GenericRpcException(string message, Exception inner)
+            :base(message, inner)
+        { }
     }
 }
