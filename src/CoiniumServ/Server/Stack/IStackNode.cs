@@ -20,10 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Configuration
+using CoiniumServ.Configuration;
+
+namespace CoiniumServ.Server.Stack
 {
-    public interface IStackConfig : IConfig
+    public interface IStackNode:IConfig
     {
-        string Name { get; }
+        string Location { get; }
+
+        string Address { get; }
+
+        bool Default { get; }
     }
 }

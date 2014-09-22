@@ -20,30 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Serilog;
+using System.Collections.Generic;
+using CoiniumServ.Pools;
 
-namespace CoiniumServ.Configuration
+namespace CoiniumServ.Server.Web.Models.Pool
 {
-    public class StackConfig : IStackConfig
+    public class PoolsModel
     {
-        public bool Valid { get; private set; }
-        public string Name { get; private set; }
-
-        public StackConfig(dynamic config)
-        {
-            try
-            {
-                // load the config data.
-                Name = string.IsNullOrEmpty(config.name) ? "CoiniumServ.com" : config.name;
-
-                Valid = true;
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<StackConfig>().Error(e, "Error loading stack configuration");
-            }
-        }
+        public IReadOnlyCollection<IPool> Pools { get; set; }
     }
 }

@@ -4,9 +4,19 @@
     # -------------------------------
 
     # name:  name of the pool stack.
+    # nodes: list of the installations of CoiniumServ on different geographic locations.
+    # location:  geographic location of the server.
+    # address: domain or ip address of the server.
 
     "stack": {
-        "name": "CoiniumServ.com"
+        "name": "CoiniumServ.com",
+        "nodes": [
+            {
+                "location": "eu",
+                "address": "127.0.0.1",
+                "default": true
+            }
+        ]
     },
 
     # -------------------------------
