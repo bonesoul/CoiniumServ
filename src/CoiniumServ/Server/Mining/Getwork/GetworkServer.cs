@@ -20,13 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
-// classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 using System.Net;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;
 using CoiniumServ.Pools;
 using Serilog;
+
+// classic server uses json-rpc 1.0 (over http) & json-rpc.net (http://jsonrpc2.codeplex.com/)
 
 namespace CoiniumServ.Server.Mining.Getwork
 {
