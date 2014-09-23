@@ -22,7 +22,7 @@ Sample file;
         "magic": "fbc0b6db",
         "testnetMagic": "fcc1b7dc"
     },
-	"extra": {
+	"algorithm": {
 	}
 }
 ```
@@ -51,6 +51,6 @@ Not in use yet, will be used once embedded daemon-node is developed which will b
 - __magic__: Coin's magic string.
 - __testnetMagic__: Magic string for Testnet.
 
-__extra__ options
+__algorithm__ options
 
 Any extra options that will be handled to algorithm itself.
