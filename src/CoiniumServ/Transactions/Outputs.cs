@@ -58,7 +58,7 @@ namespace CoiniumServ.Transactions
             Add(address, amount, false);
         }
 
-        private void Add(string walletAddress, double amount, bool toFront)
+        private void Add(string walletAddress, double amount, bool poolCentralAddress)
         {
             // check if the supplied wallet address is correct.
             var result = _daemonClient.ValidateAddress(walletAddress);
@@ -66,28 +66,29 @@ namespace CoiniumServ.Transactions
             if (!result.IsValid)
                 throw new InvalidWalletAddressException(walletAddress);
 
-            // we may only need this for pool-wallet address.
-            /* POS coins use PubKey in coinbase transaction and pubkey is only given if the address is owned by the wallet */
-            if (_coinConfig.IsPOS)
+            // POS coin's require the PubKey to be used in coinbase for pool's central wallet address and
+            // and we can only get PubKey of an address when the wallet owns it.
+            // so check if we own the address when we are on a POS coin and adding the output for pool central address.
+            if (_coinConfig.IsPOS && poolCentralAddress) 
             {
                 if(!result.IsMine || string.IsNullOrEmpty(result.PubKey)) // given address should be ours and PubKey should not be empty.
                     throw new AddressNotOwnedException(walletAddress);
             }
 
             // generate the script to claim the output for recipient.
-            var recipientScript = _coinConfig.IsPOS
-                ? Coin.Coinbase.Utils.PubKeyToScript(result.PubKey) // pos coins use pubkey within script.
-                : Coin.Coinbase.Utils.CoinAddressToScript(walletAddress); // pow coins use wallet address instead.
+            var recipientScript = _coinConfig.IsPOS && poolCentralAddress
+                ? Coin.Coinbase.Utils.PubKeyToScript(result.PubKey) // pos coins use pubkey within script for pool central address.
+                : Coin.Coinbase.Utils.CoinAddressToScript(walletAddress); // for others (pow coins, reward recipients in pos coins) use wallet address instead.
 
             var txOut = new TxOut
             {
                 Value = ((UInt64)amount).LittleEndian(),
                 PublicKeyScriptLenght = Serializers.VarInt((UInt32)recipientScript.Length),
                 PublicKeyScript = recipientScript
-            };   
+            };
 
-            if(toFront)
-                List.Insert(0,txOut);
+            if (poolCentralAddress) // if we are adding output for the pool's central wallet address.
+                List.Insert(0, txOut); // add it to the front of the queue.
             else
                 List.Add(txOut);
         }
