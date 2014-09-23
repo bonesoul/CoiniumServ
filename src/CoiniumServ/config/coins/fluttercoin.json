@@ -1,0 +1,8 @@
+﻿{
+    "name": "Fluttercoin",
+    "symbol": "FLT",
+    "algorithm": "scrypt",
+    "txMessages": false,
+    "reward": "pos",
+    "blockExplorer": "http://blockexperts.com/flt"
+}

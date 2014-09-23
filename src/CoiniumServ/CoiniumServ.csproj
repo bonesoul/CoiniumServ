@@ -144,8 +144,10 @@
   <ItemGroup>
     <Compile Include="Blocks\BlockProcessor.cs" />
     <Compile Include="Blocks\IBlockProcessor.cs" />
+    <Compile Include="Coin\Address\Exceptions\AddressNotOwnedException.cs" />
     <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
+    <Compile Include="Daemon\Converters\DifficultyConverter.cs" />
     <Compile Include="Daemon\Errors\RpcError.cs" />
     <Compile Include="Daemon\Errors\RpcErrorCode.cs" />
     <Compile Include="Daemon\Exceptions\GenericRpcException.cs" />
@@ -491,6 +493,15 @@
     <Compile Include="Transactions\Utils\TransactionUtils.cs" />
     <Compile Include="Utils\Numerics\BigInteger.cs" />
     <Compile Include="Utils\Numerics\BigRational.cs" />
+    <None Include="config\coins\bitcoindark.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="config\coins\fluttercoin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="config\coins\infinitecoin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="config\software-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

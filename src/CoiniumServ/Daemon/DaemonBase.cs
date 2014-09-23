@@ -27,6 +27,7 @@ using System.Text;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Errors;
+using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Factories;
 using CoiniumServ.Logging;
 using CoiniumServ.Utils.Extensions;

@@ -20,41 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+using System;
 
-using CoiniumServ.Daemon.Converters;
-using Newtonsoft.Json;
-
-namespace CoiniumServ.Daemon.Responses
+namespace CoiniumServ.Coin.Address.Exceptions
 {
-    public class Info
+    public class AddressNotOwnedException : Exception
     {
-        public string Version { get; set; }
-
-        public int ProtocolVersion { get; set; }
-
-        public int WalletVersion { get; set; }
-
-        public decimal Balance { get; set; }
-
-        public long Blocks { get; set; }
-
-        public long TimeOffset { get; set; }
-
-        public long Connections { get; set; }
-
-        public string Proxy { get; set; }
-
-        [JsonConverter(typeof(DifficultyConverter))]
-        public double Difficulty { get; set; }
-
-        public bool Testnet { get; set; }
-
-        public long KeyPoolEldest { get; set; }
-
-        public long KeyPoolSize { get; set; }
-
-        public decimal PayTxFee { get; set; }
-
-        public string Errors { get; set; }
+        public AddressNotOwnedException(string address)
+            : base(string.Format("Address provided {0:l} is not owned by wallet itself, which is a requirement for POS coins.", address))
+        { }
     }
 }

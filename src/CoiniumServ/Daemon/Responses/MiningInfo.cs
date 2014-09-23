@@ -21,21 +21,68 @@
 // 
 #endregion
 using System;
+using System.Runtime.Serialization;
+using CoiniumServ.Daemon.Converters;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Daemon.Responses
 {
     public class MiningInfo
     {
         public int Blocks { get; set; }
+
         public int CurrentBockSize { get; set; }
+
         public int CurrentBlockTx { get; set; }
+
+        [JsonConverter(typeof(DifficultyConverter))]
         public double Difficulty { get; set; }
+
         public string Errors { get; set; }
+
         public bool Generate { get; set; }
+
         public int GenProcLimit { get; set; }
+
         public int HashesPerSec { get; set; }
-        public UInt64 NetworkHashps { get; set; }
+
         public int PooledTx { get; set; }
+
         public bool Testnet { get; set; }
+
+        // coins may report network hash in different fields; networkhashps, networkmhps, netmhashps
+        // we have a member for each of them and then set the actual NetworkHashPerSec in OnDeserializedMethod;
+        // we set NetMHashps, NetworkGhps, NetworkMhps and NetworkHashps as private because we won't to expose them
+        // to outer world but only NetworkHashPerSec.
+
+        [JsonProperty]
+        private double NetMHashps { get; set; }
+
+        [JsonProperty]
+        private double NetworkGhps { get; set; }
+
+        [JsonProperty]
+        private double NetworkMhps { get; set; }
+
+        [JsonProperty]
+        private UInt64 NetworkHashps { get; set; }
+
+        [JsonIgnore]
+        public UInt64 NetworkHashPerSec { get; set; }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            NetworkHashPerSec = 0;
+
+            if (NetMHashps > 0)
+                NetworkHashPerSec = (UInt64)(NetMHashps*1000*1000);
+            else if (NetworkGhps > 0)
+                NetworkHashPerSec = (UInt64)(NetworkGhps * 1000 * 1000 * 1000);
+            else if (NetworkMhps > 0)
+                NetworkHashPerSec = (UInt64)(NetworkMhps * 1000 * 1000);
+            else if (NetworkHashps > 0)
+                NetworkHashPerSec = NetworkHashps;
+        }
     }
 }

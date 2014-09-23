@@ -27,7 +27,7 @@ namespace CoiniumServ.Coin.Address.Exceptions
     public class InvalidWalletAddressException : Exception
     {
         public InvalidWalletAddressException(string address)
-            : base(string.Format("Invalid wallet address: {0}", address))
+            : base(string.Format("Invalid wallet address: {0:l}", address))
         {
 
         }

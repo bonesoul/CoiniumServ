@@ -59,9 +59,9 @@ namespace CoiniumServ.Pools
             _poolConfig = poolConfig;
             _logger = Log.ForContext<NetworkInfo>().ForContext("Component", poolConfig.Coin.Name);
 
-            Recache(); // recache the data initially.
-            PrintNetworkInfo();
             DetectProofOfStakeCoin(); // detect if we are running on a proof-of-stake coin.
+            Recache(); // recache the data initially.
+            PrintNetworkInfo(); // print the collected network info.
         }
 
         public void Recache()
@@ -92,7 +92,7 @@ namespace CoiniumServ.Pools
                 var miningInfo = _daemonClient.GetMiningInfo();
 
                 // read data.
-                Hashrate = miningInfo.NetworkHashps;
+                Hashrate = miningInfo.NetworkHashPerSec;
                 Difficulty = miningInfo.Difficulty;
                 Round = miningInfo.Blocks + 1;
             }

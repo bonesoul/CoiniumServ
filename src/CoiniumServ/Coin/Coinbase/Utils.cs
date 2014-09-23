@@ -24,6 +24,7 @@ using System;
 using System.IO;
 using System.Linq;
 using CoiniumServ.Coin.Address;
+using CoiniumServ.Coin.Address.Exceptions;
 using CoiniumServ.Cryptology;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Numerics;
@@ -43,16 +44,28 @@ namespace CoiniumServ.Coin.Coinbase
         /// <param name="address"></param>
         /// <example>
         /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/dfad9e58c661174894d4ab625455bb5b7428881c/lib/util.js#L264
+        /// nodejs: https://codio.com/raistlinthewiz/bitcoin-coinbase-serializer-wallet-address-to-script
         /// </example>
         /// <returns></returns>
         public static byte[] CoinAddressToScript(string address)
         {
-            // TODO: implement a test for it!
+            byte[] decoded;
 
-            var decoded = Base58.Decode(address);
+            try
+            {
+                decoded = Base58.Decode(address);
+            }
+            catch (AddressFormatException)
+            {
+                Log.Error("Base58 decode failed for address {0:l}", address);
+                return null;
+            }
 
             if (decoded.Length != 25)
-                Log.Error("invalid address length for: " + address);
+            {
+                Log.Error("invalid address length for {0:l}", address);
+                return null;
+            }
 
             var pubkey = decoded.Slice(1, -4);
 
@@ -67,6 +80,38 @@ namespace CoiniumServ.Coin.Coinbase
                 stream.WriteValueU8(0x88);
                 stream.WriteValueU8(0xac);
 
+                result = stream.ToArray();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// For POS coins - used to format wallet address pubkey to use in generation transaction's output.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <example>
+        /// nodejs: https://github.com/zone117x/node-stratum-pool/blob/3586ec0d7374b2acc5a72d5ef597da26f0e39d54/lib/util.js#L243
+        /// nodejs: http://runnable.com/me/VCFHE0RrZnwbsQ6y
+        /// </example>
+        /// <returns></returns>
+        public static byte[] PubKeyToScript(string key)
+        {
+            var pubKey = key.HexToByteArray();
+
+            if (pubKey.Length != 33)
+            {
+                Log.Error("invalid pubkey length for {0:l}", key);
+                return null;
+            }
+
+            byte[] result;
+
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteValueU8(0x21);
+                stream.WriteBytes(pubKey);
+                stream.WriteValueU8(0xac);
                 result = stream.ToArray();
             }
 
