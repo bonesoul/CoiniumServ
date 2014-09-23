@@ -2,6 +2,7 @@
     "name": "Bottlecaps",
     "symbol": "CAP",
     "algorithm": "scrypt",
+    "site": "https://github.com/bottlecaps-foundation/bottlecaps",
     "reward": "pos",
     "node": {
         "magic": "e4e8e9e5",

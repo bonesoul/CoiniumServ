@@ -1,6 +1,7 @@
 {
     "name": "Internetcoin",
     "symbol": "ITC",
+	"site": "http://frankos.org/",
     "algorithm": "scrypt-jane",
     "chainStartTime": 1388385602
 }

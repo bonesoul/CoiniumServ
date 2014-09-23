@@ -1,5 +1,6 @@
 {
     "name": "Guarantcoin",
     "symbol": "GTC",
-    "algorithm": "scrypt-n"
+    "algorithm": "scrypt-n",
+	"site": "http://frankos.org/"
 }

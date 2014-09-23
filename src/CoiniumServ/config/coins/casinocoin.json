@@ -2,6 +2,7 @@
     "name": "Casinocoin",
     "symbol": "CSC",
     "algorithm": "scrypt",
+    "site": "http://casinocoin.org/",
     "blockExplorer": {
         "block": "http://csc.blockexp.info/block/",
         "tx": "http://csc.blockexp.info/tx/",

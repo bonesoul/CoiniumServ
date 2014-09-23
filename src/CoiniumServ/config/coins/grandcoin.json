@@ -2,6 +2,13 @@
     "name": "Grandcoin",
     "symbol": "GDC",
     "algorithm": "scrypt",
-    "peerMagic": "fdc1a5db",
-    "txMessages": true
+	"site": "http://grandcoin.org/",
+    "txMessages": true,
+    "blockExplorer": {
+        "block": "http://grandcoin.org/blocks/index.php?block_hash=",
+        "tx": "http://grandcoin.org/blocks/index.php?transaction="
+    },
+    "node": {
+        "magic": "fdc1a5db"
+    }    
 }

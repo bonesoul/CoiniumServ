@@ -1,5 +1,6 @@
 {
     "name": "Ixcoin",
     "symbol": "IXC",
+	"site": "http://frankos.org/",
     "algorithm": "sha256"
 }

@@ -2,6 +2,7 @@
     "name": "CryptogenicBullion",
     "symbol": "CGB", 
     "algorithm": "scrypt",
+    "site": "http://cgb.holdings/",
     "blockExplorer": {
         "block": "http://blocks.gotcrypto.net/block/",
         "tx": "http://blocks.gotcrypto.net/tx/",

@@ -2,6 +2,9 @@
     "name": "GlobalDenomination",
     "symbol": "GDN",
     "algorithm": "x11",
-    "peerMagic": "fec3b9de",
-    "peerMagicTestnet": "fec4bade"
+    "site": "http://www.globaldenomination.org/",
+    "node": {
+        "magic": "fec3b9de",
+        "testnetMagic": "fec4bade"
+    }
 }

@@ -2,5 +2,14 @@
     "name": "Fastcoin",
     "symbol": "FST",
     "algorithm": "scrypt",
-    "peerMagic": "fbc0b6db"
+    "site": "http://www.fastcoin.ca/",
+    "blockExplorer": {
+        "block": "http://fst.webboise.com/block/",
+        "tx": "http://fst.webboise.com/tx/",
+        "address": "http://fst.webboise.com/address/"
+    },
+    "node": {
+        "magic": "fbc0b6db",
+        "testnetMagic": "fcc1b7dc"
+    }
 }

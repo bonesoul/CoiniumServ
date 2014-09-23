@@ -2,5 +2,6 @@
     "name": "BitcoinDark",
     "symbol": "BTCD",
     "algorithm": "sha256",
+    "site": "http://bitcoindark.pw/",
     "reward": "pos"
 }

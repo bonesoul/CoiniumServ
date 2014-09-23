@@ -1,5 +1,6 @@
 {
     "name": "Hobonickels",
     "symbol": "HBN",
-    "algorithm": "scrypt"
+    "algorithm": "scrypt",
+	"site": "http://frankos.org/"
 }

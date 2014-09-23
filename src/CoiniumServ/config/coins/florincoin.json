@@ -2,5 +2,11 @@
     "name": "Florincoin",
     "symbol": "FLO",
     "algorithm": "scrypt",
-    "txMessages": true
+    "txMessages": true,
+    "site": "http://florincoin.org/",
+    "blockExplorer": {
+        "block": "http://florincoin.info/explorer/block/?hash=",
+        "tx": "http://florincoin.info/explorer/tx/?txid=",
+        "address": "http://florincoin.info/explorer/address/?address="
+    }
 }

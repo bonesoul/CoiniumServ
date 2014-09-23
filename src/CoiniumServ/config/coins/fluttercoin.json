@@ -2,7 +2,12 @@
     "name": "Fluttercoin",
     "symbol": "FLT",
     "algorithm": "scrypt",
-    "txMessages": false,
+	"site": "http://fluttercoin.us/",
     "reward": "pos",
-    "blockExplorer": "http://blockexperts.com/flt"
+    "txMessages": false,
+    "blockExplorer": {
+        "block": "http://blockexperts.com/flt/hash/",
+        "tx": "http://blockexperts.com/flt/tx/",
+        "address": "http://blockexperts.com/flt/address/"
+    }
 }

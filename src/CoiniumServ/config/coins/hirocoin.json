@@ -2,5 +2,6 @@
     "name": "Hirocoin",
     "symbol": "HIRO",
     "algorithm": "x11",
-    "mposDiffMultiplier": 256
+    "mposDiffMultiplier": 256,
+	"site": "http://frankos.org/"            
 }

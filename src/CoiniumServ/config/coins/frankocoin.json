@@ -1,5 +1,11 @@
 {
     "name": "Frankocoin",
     "symbol": "FRK",
-    "algorithm": "scrypt"
+    "algorithm": "scrypt",
+	"site": "http://frankos.org/",
+    "blockExplorer": {
+        "block": "http://block-explorer.com/block/",
+        "tx": "https://coinplorer.com/FRK/Transactions/",
+        "address": "https://coinplorer.com/FRK/Addresses/"
+    },
 }
