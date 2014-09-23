@@ -84,7 +84,7 @@ namespace CoiniumServ.Server.Web
                     StaticConfiguration.Caching.EnableRuntimeViewDiscovery = true;
                     StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
                     StaticConfiguration.EnableRequestTracing = true;
-                #elif
+                #else
                     StaticConfiguration.Caching.EnableRuntimeViewDiscovery = false;
                     StaticConfiguration.Caching.EnableRuntimeViewUpdates = false;
                     StaticConfiguration.EnableRequestTracing = false;
