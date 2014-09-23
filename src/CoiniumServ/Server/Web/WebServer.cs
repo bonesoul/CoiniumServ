@@ -139,11 +139,7 @@ namespace CoiniumServ.Server.Web
         /// <param name="e"></param>
         private void UnhandledExceptionHandler(Exception e)
         {
-            #if DEBUG
-                _logger.Error("Unhandled web-server exception: {0:l}", e);
-            #else
-                _logger.Error("Unhandled web-server exception: {0:l}", e.Message);
-            #endif
+            _logger.Error("Unhandled web-server exception: {0:l}", e);
         }
 
         public void Dispose()
