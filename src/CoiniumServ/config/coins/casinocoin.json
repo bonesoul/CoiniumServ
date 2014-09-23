@@ -2,6 +2,13 @@
     "name": "Casinocoin",
     "symbol": "CSC",
     "algorithm": "scrypt",
-    "peerMagic": "fac3b6da",
-    "peerMagicTestnet": "fcc1b7dc"
+    "blockExplorer": {
+        "block": "http://csc.blockexp.info/block/",
+        "tx": "http://csc.blockexp.info/tx/",
+        "address": "http://csc.blockexp.info/address/"
+    },
+    "node": {
+        "magic": "fac3b6da",
+        "testnetMagic": "fcc1b7dc"
+    }
 }

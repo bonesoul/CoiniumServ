@@ -2,6 +2,9 @@
     "name": "Darkcoin",
     "symbol": "DRK",
     "algorithm": "x11",
-    "blockExplorer": "http://explorer.darkcoin.io",
-    "mposDiffMultiplier": 256
+    "blockExplorer": {
+        "block": "http://explorer.darkcoin.io/block/",
+        "tx": "http://explorer.darkcoin.io/tx/",
+        "address": "http://explorer.darkcoin.io/address/"
+    }
 }

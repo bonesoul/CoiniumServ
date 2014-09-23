@@ -2,6 +2,9 @@
     "name": "Bottlecaps",
     "symbol": "CAP",
     "algorithm": "scrypt",
-    "peerMagic": "e4e8e9e5",
-    "peerMagicTestnet": "cdf2c0ef"
+    "reward": "pos",
+    "node": {
+        "magic": "e4e8e9e5",
+        "testnetMagic": "cdf2c0ef"
+    }
 }

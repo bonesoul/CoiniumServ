@@ -2,6 +2,5 @@
     "name": "BitcoinDark",
     "symbol": "BTCD",
     "algorithm": "sha256",
-    "txMessages": false,
     "reward": "pos"
 }

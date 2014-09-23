@@ -2,6 +2,13 @@
     "name": "CryptogenicBullion",
     "symbol": "CGB", 
     "algorithm": "scrypt",
-    "peerMagic": "e4e8e9e5",
-    "peerMagicTestnet": "cdf2c0ef"
+    "blockExplorer": {
+        "block": "http://blocks.gotcrypto.net/block/",
+        "tx": "http://blocks.gotcrypto.net/tx/",
+        "address": "http://blocks.gotcrypto.net/address/"
+    },
+    "node": {
+        "magic": "e4e8e9e5",
+        "testnetMagic": "cdf2c0ef"
+    }
 }

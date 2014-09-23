@@ -2,6 +2,13 @@
     "name": "Copperlark",
     "symbol": "CLR",
     "algorithm": "keccak",
-    "normalHashing": true,
-    "diffShift": 32
+    "blockExplorer": {
+        "block": "http://blockchain.copperlark.com/block/",
+        "tx": "http://blockchain.copperlark.com/tx/",
+        "address": "http://blockchain.copperlark.com/address/"
+    },
+	"extra": {
+        "normalHashing": true,
+        "diffShift": 32
+	}
 }
