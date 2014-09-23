@@ -70,6 +70,7 @@ namespace CoiniumServ.Daemon.Responses
             // case 1) some of bitcoin variants can include the "address" in the transaction detail and we can basically find the output comparing against it.
             // case 2) some other bitcoin variants can include "address account" name in transaction detail and we again find the output comparing against it.
             // case 3) peercoin variants is where things get complicated, even if you set an account name to an address, they peercoin variants will refuse use the name in details.
+            // TODO: case 3 should be only allowed by configuration
 
             if (Details.Any(x => x.Address == poolAddress))  // check for case 1.
                 return Details.First(x => x.Address == poolAddress); // return the output that matches pool address.
