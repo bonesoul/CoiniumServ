@@ -15,7 +15,7 @@ Sample file;
         "address": "http://block-explorer.com/address/"
     },
     "getBlockTemplate": {
-        "modeRequired": true
+        "modeRequired": false
     }
     "node": {
         "magic": "fbc0b6db",
