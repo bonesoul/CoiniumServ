@@ -109,7 +109,7 @@ namespace CoiniumServ.Jobs.Manager
 
             try
             {
-                var blockTemplate = _daemonClient.GetBlockTemplate();
+                var blockTemplate = _daemonClient.GetBlockTemplate(false);
 
                 if (blockTemplate.Height == _jobTracker.Current.Height) // if network reports the same block-height with our current job.
                     return; // just return.
@@ -146,7 +146,7 @@ namespace CoiniumServ.Jobs.Manager
         {
             try
             {
-                var blockTemplate = _daemonClient.GetBlockTemplate();
+                var blockTemplate = _daemonClient.GetBlockTemplate(false);
 
                 // TODO: convert generation transaction to ioc & DI based.
                 var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate, _poolConfig);

@@ -98,7 +98,7 @@ namespace CoiniumServ.Jobs
             PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();
-            CreationTime = TimeHelpers.NowInUnixTime();
+            CreationTime = TimeHelpers.NowInUnixTimestamp();
 
             _shares = new List<UInt64>();
 

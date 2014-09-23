@@ -278,7 +278,7 @@ namespace CoiniumServ.Pools
         private void CalculateHashrate()
         {
             // read hashrate stats.
-            var windowTime = TimeHelpers.NowInUnixTime() - _configManager.StatisticsConfig.HashrateWindow;
+            var windowTime = TimeHelpers.NowInUnixTimestamp() - _configManager.StatisticsConfig.HashrateWindow;
             _storageLayer.DeleteExpiredHashrateData(windowTime);
             var hashrates = _storageLayer.GetHashrateData(windowTime);
 

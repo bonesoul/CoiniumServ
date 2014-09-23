@@ -52,7 +52,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                             blockHash = share.BlockHash.ToHexString(),
                             txHash = share.Block.Tx.First(),
                             amount = (decimal)share.GenerationTransaction.TotalAmount,
-                            createdAt = share.Block.Time.UnixTimeToDateTime()
+                            createdAt = share.Block.Time.UnixTimestampToDateTime()
                         });
                 }
             }

@@ -22,15 +22,21 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Daemon.Converters;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Daemon.Responses
 {
     public class Block
     {
         public string Hash { get; set; }
+
         public Int32 Confirmations { get; set; }
+
         public Int32 Size { get; set; }
+
         public Int32 Height { get; set; }
+
         public Int32 Version { get; set; }
 
         /// <summary>
@@ -39,10 +45,16 @@ namespace CoiniumServ.Daemon.Responses
         public string MerkleRoot { get; set; }
 
         public List<string> Tx { get; set; }
+
+        [JsonConverter(typeof(TimeConverter))]
         public Int32 Time { get; set; }
+
         public UInt32 Nonce { get; set; }
+
         public string Bits { get; set; }
+
         public double Difficulty { get; set; }
+
         public string NextBlockHash { get; set; }
     }
 }

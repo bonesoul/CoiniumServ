@@ -69,7 +69,7 @@ namespace CoiniumServ.Shares
             Job = job;
             Error = ShareError.None;
 
-            var submitTime = TimeHelpers.NowInUnixTime(); // time we recieved the share from miner.
+            var submitTime = TimeHelpers.NowInUnixTimestamp(); // time we recieved the share from miner.
 
             if (Job == null)
             {

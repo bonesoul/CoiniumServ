@@ -148,6 +148,7 @@
     <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />
+    <Compile Include="Daemon\Converters\TimeConverter.cs" />
     <Compile Include="Daemon\Errors\RpcError.cs" />
     <Compile Include="Daemon\Errors\RpcErrorCode.cs" />
     <Compile Include="Daemon\Exceptions\GenericRpcException.cs" />

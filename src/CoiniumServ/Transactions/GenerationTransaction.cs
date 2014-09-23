@@ -149,7 +149,7 @@ namespace CoiniumServ.Transactions
                         new SignatureScript(
                             blockTemplate.Height,
                             blockTemplate.CoinBaseAux.Flags,
-                            TimeHelpers.NowInUnixTime(),
+                            TimeHelpers.NowInUnixTimestamp(),
                             (byte) extraNonce.ExtraNoncePlaceholder.Length,
                             "/CoiniumServ/")
                 }

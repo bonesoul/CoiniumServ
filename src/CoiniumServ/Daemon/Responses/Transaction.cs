@@ -65,10 +65,18 @@ namespace CoiniumServ.Daemon.Responses
             if (Details == null) // make sure we have valid outputs.
                 return null;
 
-            // check if coin includes output address data in transaction details.
-            return Details.Any(x => x.Address == null)
-                ? Details.FirstOrDefault(x => x.Account == poolAccount) // some coins doesn't include address field in outputs, so try to determine using the associated account name.
-                : Details.FirstOrDefault(x => x.Address == poolAddress); // if coin includes address field in outputs, just use it.
+            // kinda weird stuff goin here;
+            // bitcoin variants;
+            // case 1) some of bitcoin variants can include the "address" in the transaction detail and we can basically find the output comparing against it.
+            // case 2) some other bitcoin variants can include "address account" name in transaction detail and we again find the output comparing against it.
+            // case 3) peercoin variants is where things get complicated, even if you set an account name to an address, they peercoin variants will refuse use the name in details.
+
+            if (Details.Any(x => x.Address == poolAddress))  // check for case 1.
+                return Details.First(x => x.Address == poolAddress); // return the output that matches pool address.
+            else if (Details.Any(x => x.Account == poolAccount)) // check for case 2.
+                return Details.First(x => x.Account == poolAccount);
+            else // case 3 - if we can't match pool address or pool account, just return the very first output.
+                return Details.FirstOrDefault();
         }
 
         // not sure if fields below even exists / used

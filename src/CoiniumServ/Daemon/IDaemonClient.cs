@@ -27,7 +27,7 @@ namespace CoiniumServ.Daemon
 {
     public interface IDaemonClient
     {
-        BlockTemplate GetBlockTemplate();
+        BlockTemplate GetBlockTemplate(bool capabilitiesSupported = true);
 
         BlockTemplate GetBlockTemplate(string blockHex);
 
