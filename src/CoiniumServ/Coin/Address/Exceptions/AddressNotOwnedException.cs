@@ -20,28 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
+using System;
 
-namespace CoiniumServ.Daemon.Responses
+namespace CoiniumServ.Coin.Address.Exceptions
 {
-    public class ValidateAddress
+    public class AddressNotOwnedException : Exception
     {
-        public bool IsValid { get; set; }
-
-        public string Address { get; set; }
-
-        public bool IsMine { get; set; }
-
-        public bool IsScript { get; set; }
-
-        public string Script { get; set; }
-
-        public string PubKey { get; set; }
-
-        public List<string> Addresses { get; set; }
-
-        public int SigsRequired { get; set; }
-
-        public string Account { get; set; }
+        public AddressNotOwnedException(string address)
+            : base(string.Format("Address provided {0:l} is not owned by wallet itself, which is a requirement for POS coins.", address))
+        { }
     }
 }

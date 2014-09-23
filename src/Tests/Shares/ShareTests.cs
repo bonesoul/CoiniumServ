@@ -119,10 +119,6 @@ namespace CoiniumServ.Tests.Shares
                 (byte)_extraNonce.ExtraNoncePlaceholder.Length,
                 "/nodeStratum/");
 
-            // outputs
-            _outputs = Substitute.For<Outputs>(_daemonClient);
-            double blockReward = 5000000000; // the amount rewarded by the block.
-
             // pool config
             var poolConfig = Substitute.For<IPoolConfig>();
 
@@ -131,6 +127,10 @@ namespace CoiniumServ.Tests.Shares
             coinConfig.SupportsTxMessages.Returns(false);
             coinConfig.IsPOS.Returns(false);
             poolConfig.Coin.Returns(coinConfig);
+
+            // outputs
+            _outputs = Substitute.For<Outputs>(_daemonClient, coinConfig);
+            double blockReward = 5000000000; // the amount rewarded by the block.
 
             // create rewards config.
             var rewardsConfig = Substitute.For<IRewardsConfig>();

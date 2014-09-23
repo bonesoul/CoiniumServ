@@ -156,7 +156,7 @@ namespace CoiniumServ.Transactions
             }; 
 
             // transaction outputs
-            Outputs = new Outputs(daemonClient);
+            Outputs = new Outputs(daemonClient, poolConfig.Coin);
 
             double blockReward = BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
 

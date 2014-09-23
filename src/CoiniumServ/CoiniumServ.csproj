@@ -144,6 +144,7 @@
   <ItemGroup>
     <Compile Include="Blocks\BlockProcessor.cs" />
     <Compile Include="Blocks\IBlockProcessor.cs" />
+    <Compile Include="Coin\Address\Exceptions\AddressNotOwnedException.cs" />
     <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />

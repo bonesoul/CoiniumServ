@@ -26,6 +26,7 @@ using System.IO;
 using System.Linq;
 using CoiniumServ.Coin.Address.Exceptions;
 using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using Gibbed.IO;
 
@@ -35,12 +36,15 @@ namespace CoiniumServ.Transactions
     {
         public List<TxOut> List { get; private set; }
 
-        public IDaemonClient DaemonClient { get; private set; }
+        private readonly IDaemonClient _daemonClient;
 
+        private readonly ICoinConfig _coinConfig;
 
-        public Outputs(IDaemonClient daemonClient)
+        public Outputs(IDaemonClient daemonClient, ICoinConfig coinConfig)
         {
-            DaemonClient = daemonClient;
+            _daemonClient = daemonClient;
+            _coinConfig = coinConfig;
+
             List = new List<TxOut>();
         }
 
@@ -57,11 +61,23 @@ namespace CoiniumServ.Transactions
         private void Add(string walletAddress, double amount, bool toFront)
         {
             // check if the supplied wallet address is correct.
+            var result = _daemonClient.ValidateAddress(walletAddress);
 
-            if (!DaemonClient.ValidateAddress(walletAddress).IsValid)
+            if (!result.IsValid)
                 throw new InvalidWalletAddressException(walletAddress);
 
-            var recipientScript = Coin.Coinbase.Utils.CoinAddressToScript(walletAddress); // generate the script to claim the output for recipient.
+            // we may only need this for pool-wallet address.
+            /* POS coins use PubKey in coinbase transaction and pubkey is only given if the address is owned by the wallet */
+            if (_coinConfig.IsPOS)
+            {
+                if(!result.IsMine || string.IsNullOrEmpty(result.PubKey)) // given address should be ours and PubKey should not be empty.
+                    throw new AddressNotOwnedException(walletAddress);
+            }
+
+            // generate the script to claim the output for recipient.
+            var recipientScript = _coinConfig.IsPOS
+                ? Coin.Coinbase.Utils.PubKeyToScript(result.PubKey) // pos coins use pubkey within script.
+                : Coin.Coinbase.Utils.CoinAddressToScript(walletAddress); // pow coins use wallet address instead.
 
             var txOut = new TxOut
             {

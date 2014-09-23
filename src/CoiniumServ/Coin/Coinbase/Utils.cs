@@ -73,6 +73,18 @@ namespace CoiniumServ.Coin.Coinbase
             return result;
         }
 
+        public static byte[] PubKeyToScript(string pubKey)
+        {
+            // TODO: implement a test for it!
+
+            if (pubKey.Length != 66)
+                Log.Error("invalid pubkey length for: " + pubKey);
+
+            var result = new byte[35];
+            result[0] = 0x21;
+            result[34] = 0xac;
+        }
+
         /// <summary>
         /// Hashes the coinbase.
         /// </summary>
