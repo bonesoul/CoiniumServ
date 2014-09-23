@@ -495,7 +495,10 @@
     <None Include="config\coins\bitcoindark.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\coins\gnosis.json">
+    <None Include="config\coins\fluttercoin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="config\coins\infinitecoin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\software-example.json">
