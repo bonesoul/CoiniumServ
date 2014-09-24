@@ -80,13 +80,18 @@ namespace CoiniumServ.Server.Web
 
             try
             {
-                #if DEBUG // on debug mode enable 
+                #if DEBUG // on debug mode enable runtime view discovery & request tracing
                     StaticConfiguration.Caching.EnableRuntimeViewDiscovery = true;
                     StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
                     StaticConfiguration.EnableRequestTracing = true;
+                #else
+                    StaticConfiguration.Caching.EnableRuntimeViewDiscovery = false;
+                    StaticConfiguration.Caching.EnableRuntimeViewUpdates = false;
+                    StaticConfiguration.EnableRequestTracing = false;
                 #endif
 
                 var host = new NancyHost(_webBootstrapper, hostConfiguration, uri); // create nancy host.
+
                 host.Start();
                 IsListening = true;
             }
@@ -139,11 +144,7 @@ namespace CoiniumServ.Server.Web
         /// <param name="e"></param>
         private void UnhandledExceptionHandler(Exception e)
         {
-            #if DEBUG
-                _logger.Error("Unhandled web-server exception: {0:l}", e);
-            #else
-                _logger.Error("Unhandled web-server exception: {0:l}", e.Message);
-            #endif
+            _logger.Error("Unhandled web-server exception: {0:l}", e);
         }
 
         public void Dispose()

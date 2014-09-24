@@ -77,7 +77,7 @@ namespace CoiniumServ.Persistance.Blocks
             Height = height;
             BlockHash = blockhash;
             Amount = (decimal)amount;
-            CreatedAt = time.UnixTimeToDateTime();
+            CreatedAt = time.UnixTimestampToDateTime();
         }
     }
 }

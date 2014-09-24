@@ -2,5 +2,10 @@
     "name": "Digibyte",
     "symbol": "DGB",
     "algorithm": "scrypt",
-    "blockExplorer": "https://altexplorer.net"
+    "site": "http://www.digibyte.co/",
+    "blockExplorer": {
+        "block": "http://insight.dgb.cryptopoolmining.com/block/",
+        "tx": "http://insight.dgb.cryptopoolmining.com/tx/",
+        "address": "http://insight.dgb.cryptopoolmining.com/address/"
+    }
 }

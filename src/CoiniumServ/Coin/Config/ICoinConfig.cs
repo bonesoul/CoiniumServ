@@ -46,26 +46,10 @@ namespace CoiniumServ.Coin.Config
         [JsonProperty("algorithm")]
         string Algorithm { get; }
 
-        /// <summary>
-        /// Does the coin uses TxMessages.
-        /// </summary>
-        bool SupportsTxMessages { get; }
+        ICoinOptions Options { get; }
 
-        /// <summary>
-        /// Is the coin a proof-of-stake coin?
-        /// </summary>
-        [JsonProperty("pos")]
-        bool IsPOS { get; set; }
+        IBlockExplorerOptions BlockExplorer { get; }
 
-        /// <summary>
-        /// Block explorer for the coin.
-        /// </summary>
-        
-        string BlockExplorer { get; }
-
-        /// <summary>
-        /// Extra options provided that will be passed to coin algorithm.
-        /// </summary>
-        dynamic Options { get; }
+        dynamic Extra { get; }
     }
 }

@@ -2,6 +2,13 @@
     "name": "BitcoinDark",
     "symbol": "BTCD",
     "algorithm": "sha256",
-    "txMessages": false,
-    "reward": "pos"
+    "site": "http://bitcoindark.pw/",
+    "blockExplorer": {
+        "block": "http://cryptobe.com/block/",
+        "tx": "http://cryptobe.com/tx/",
+        "address": "http://cryptobe.com/address/"
+    },
+    "options": {
+		"isProofOfStakeHybrid": true
+    }
 }

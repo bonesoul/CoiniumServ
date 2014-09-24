@@ -69,14 +69,14 @@ namespace CoiniumServ.Transactions
             // POS coin's require the PubKey to be used in coinbase for pool's central wallet address and
             // and we can only get PubKey of an address when the wallet owns it.
             // so check if we own the address when we are on a POS coin and adding the output for pool central address.
-            if (_coinConfig.IsPOS && poolCentralAddress) 
+            if (_coinConfig.Options.IsProofOfStakeHybrid && poolCentralAddress) 
             {
                 if(!result.IsMine || string.IsNullOrEmpty(result.PubKey)) // given address should be ours and PubKey should not be empty.
                     throw new AddressNotOwnedException(walletAddress);
             }
 
             // generate the script to claim the output for recipient.
-            var recipientScript = _coinConfig.IsPOS && poolCentralAddress
+            var recipientScript = _coinConfig.Options.IsProofOfStakeHybrid && poolCentralAddress
                 ? Coin.Coinbase.Utils.PubKeyToScript(result.PubKey) // pos coins use pubkey within script for pool central address.
                 : Coin.Coinbase.Utils.CoinAddressToScript(walletAddress); // for others (pow coins, reward recipients in pos coins) use wallet address instead.
 

@@ -58,7 +58,7 @@ namespace CoiniumServ.Tests.Transactions
             _daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress { IsValid = true });
 
             _coinConfig = Substitute.For<ICoinConfig>();
-            _coinConfig.IsPOS.Returns(false);
+            _coinConfig.Options.IsProofOfStakeHybrid.Returns(false);
         }
 
         [Fact]

@@ -2,5 +2,10 @@
     "name": "Bitcoin",
     "symbol": "BTC",
     "algorithm": "sha256",
-    "blockExplorer": "https://blockchain.info"
+    "site": "https://bitcoin.org/",
+    "blockExplorer": {
+        "block": "https://blockchain.info/block-index/",
+        "tx": "https://blockchain.info/tx/",
+        "address": "https://blockchain.info/address/"
+    }
 }

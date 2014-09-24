@@ -2,6 +2,14 @@
     "name": "Vertcoin",
     "symbol": "VTC",
     "algorithm": "scrypt-n",
-    "peerMagic": "fabfb5da",
-    "peerMagicTestnet": "76657274"
+	"site": "https://vertcoin.org/",
+    "blockExplorer": {
+        "block": "https://explorer.vertcoin.org/block/",
+        "tx": "https://explorer.vertcoin.org/tx/",
+        "address": "https://explorer.vertcoin.org/address/"
+    },
+    "node": {
+        "magic": "fabfb5da",
+        "testnetMagic": "76657274"
+    }
 }

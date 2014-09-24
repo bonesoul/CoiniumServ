@@ -63,7 +63,7 @@ namespace CoiniumServ.Vardiff
             if (miner == null)
                 return;
 
-            var now = TimeHelpers.NowInUnixTime();
+            var now = TimeHelpers.NowInUnixTimestamp();
 
             if (miner.VardiffBuffer == null)
             {

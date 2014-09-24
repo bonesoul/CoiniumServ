@@ -23,7 +23,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Persistance.Layers;
@@ -133,6 +132,8 @@ namespace CoiniumServ.Payments
 
                 // coin daemon expects us to handle outputs in <wallet_address,amount> format, create the data structure so.
                 var outputs = filtered.ToDictionary(x => x.Key, x => x.Value.Sum(y => y.Payment.Amount));
+
+                // send the payments all-together.
                 var txId = _daemonClient.SendMany(_poolAccount, outputs);
 
                 // loop through all executed payments
@@ -190,7 +191,9 @@ namespace CoiniumServ.Payments
         {
             try
             {
-                _poolAccount = _daemonClient.GetAccount(_poolConfig.Wallet.Adress);
+                _poolAccount = !_poolConfig.Coin.Options.UseDefaultAccount // if UseDefaultAccount is not set
+                    ? _daemonClient.GetAccount(_poolConfig.Wallet.Adress) // find the account of the our pool address.
+                    : ""; // use the default account.
                 return true;
             }
             catch (RpcException e)

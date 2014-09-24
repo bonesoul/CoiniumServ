@@ -1,7 +1,0 @@
-{
-    "name": "ZZcoin",
-    "symbol": "ZZC",
-    "algorithm": "scrypt-jane",
-    "chainStartTime": 1375817223,
-    "nMin": 12
-}

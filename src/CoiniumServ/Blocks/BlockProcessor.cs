@@ -248,7 +248,9 @@ namespace CoiniumServ.Blocks
         {
             try
             {
-                _poolAccount = _daemonClient.GetAccount(_poolConfig.Wallet.Adress);
+                _poolAccount = !_poolConfig.Coin.Options.UseDefaultAccount // if UseDefaultAccount is not set
+                    ? _daemonClient.GetAccount(_poolConfig.Wallet.Adress) // find the account of the our pool address.
+                    : ""; // use the default account.
             }
             catch (RpcException e)
             {

@@ -112,8 +112,8 @@ namespace CoiniumServ.Tests.Transactions
 
             // create coin config.
             var coinConfig = Substitute.For<ICoinConfig>();
-            coinConfig.SupportsTxMessages.Returns(false);
-            coinConfig.IsPOS.Returns(false);
+            coinConfig.Options.TxMessageSupported.Returns(false);
+            coinConfig.Options.IsProofOfStakeHybrid.Returns(false);
             _poolConfig.Coin.Returns(coinConfig);
 
             // use the same output data within our sample data.

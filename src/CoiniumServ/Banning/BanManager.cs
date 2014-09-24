@@ -99,7 +99,7 @@ namespace CoiniumServ.Banning
             var ip = client.Connection.RemoteEndPoint.Address;
 
             if(!_bannedIps.ContainsKey(ip))
-                _bannedIps.Add(ip, TimeHelpers.NowInUnixTime());
+                _bannedIps.Add(ip, TimeHelpers.NowInUnixTimestamp());
 
             client.Connection.Disconnect();
         }
@@ -148,7 +148,7 @@ namespace CoiniumServ.Banning
         {
             var banTime = _bannedIps[ip];
 
-            var elapsedTime = TimeHelpers.NowInUnixTime() - banTime; // elapsed time since his ban.
+            var elapsedTime = TimeHelpers.NowInUnixTimestamp() - banTime; // elapsed time since his ban.
             var timeLeft = Config.Duration - elapsedTime; // time left for his ban
 
             if (timeLeft > 0) // if he has still remaining time

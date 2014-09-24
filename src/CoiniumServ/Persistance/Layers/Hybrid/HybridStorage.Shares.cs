@@ -54,7 +54,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     var hashrateKey = string.Format("{0}:hashrate", _coin);
                     var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
-                    _redisProvider.Client.ZAdd(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTime(), entry));
+                    _redisProvider.Client.ZAdd(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTimestamp(), entry));
                 }
 
                 //_client.EndPipe(); // execute the batch commands.
