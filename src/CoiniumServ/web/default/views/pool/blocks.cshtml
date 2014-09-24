@@ -38,8 +38,8 @@
                                             break;
                                     }
                                 </td>
-                                <td><a href="@Model.Coin.BlockExplorer/block/@block.BlockHash" target="_blank">@block.BlockHash.Substring(0, 10)</a></td>
-                                <td><a href="@Model.Coin.BlockExplorer/tx/@block.TransactionHash" target="_blank">@block.TransactionHash.Substring(0, 10)</a></td>
+                                <td><a href="@Model.Coin.BlockExplorer.Block@block.BlockHash" target="_blank">@block.BlockHash.Substring(0, 10)</a></td>
+                                <td><a href="@Model.Coin.BlockExplorer.Tx@block.TransactionHash" target="_blank">@block.TransactionHash.Substring(0, 10)</a></td>
                                 <td>@block.Amount</td>
                                 <td><div class="label @(block.Accounted ?"bg-green":"bg-red")">@(block.Accounted ? "Yes" : "No")</div></td>
                                 <td>@block.CreatedAt</td>

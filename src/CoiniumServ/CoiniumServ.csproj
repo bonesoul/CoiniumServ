@@ -939,6 +939,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Coinium.ico" />
+    <None Include="web\default\Content\img\coins\icon\PPC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\Content\img\coins\icon\CAT.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

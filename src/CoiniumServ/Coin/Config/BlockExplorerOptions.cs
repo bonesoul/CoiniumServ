@@ -30,7 +30,7 @@ namespace CoiniumServ.Coin.Config
     {
         public string Block { get; private set; }
 
-        public string Transaction { get; private set; }
+        public string Tx { get; private set; }
 
         public string Address { get; private set; }
 
@@ -41,7 +41,7 @@ namespace CoiniumServ.Coin.Config
             try
             {
                 Block = string.IsNullOrEmpty(config.block) ? "https://altexplorer.net/block/" : config.block;
-                Transaction = string.IsNullOrEmpty(config.tx) ? "https://altexplorer.net/tx/" : config.tx;
+                Tx = string.IsNullOrEmpty(config.tx) ? "https://altexplorer.net/tx/" : config.tx;
                 Address = string.IsNullOrEmpty(config.address) ? "https://altexplorer.net/address/" : config.address;                
                 Valid = true;
             }

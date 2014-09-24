@@ -29,7 +29,7 @@ namespace CoiniumServ.Coin.Config
     {
         string Block { get; }
 
-        string Transaction { get; }
+        string Tx { get; }
 
         string Address { get; }
     }
