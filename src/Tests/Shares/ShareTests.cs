@@ -124,7 +124,7 @@ namespace CoiniumServ.Tests.Shares
 
             // create coin config.
             var coinConfig = Substitute.For<ICoinConfig>();
-            coinConfig.Options.GenTx.TxMessageSupported.Returns(false);
+            coinConfig.Options.TxMessageSupported.Returns(false);
             coinConfig.Options.IsProofOfStakeHybrid.Returns(false);
             poolConfig.Coin.Returns(coinConfig);
 

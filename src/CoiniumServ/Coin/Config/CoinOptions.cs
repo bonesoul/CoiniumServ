@@ -31,20 +31,22 @@ namespace CoiniumServ.Coin.Config
     {
         public bool IsProofOfStakeHybrid { get; set; }
         
-        public IBlockTemplateOptions BlockTemplate { get; private set; }
+        public bool BlockTemplateModeRequired { get; private set; }
         
-        public IGenTxOptions GenTx { get; private set; }
-        
+        public bool UseDefaultAccount { get; private set; }
+
+        public bool TxMessageSupported { get; private set; }
+
         public bool Valid { get; private set; }
 
         public CoinOptions(dynamic config)
         {
             try
             {
-                // if no value is set, use the default value as false.
                 IsProofOfStakeHybrid = config.isProofOfStakeHybrid is NullExceptionPreventer ? false : config.isProofOfStakeHybrid;
-                BlockTemplate = new BlockTemplateOptions(config.blockTemplate);
-                GenTx = new GenTxOptions(config.genTx);
+                BlockTemplateModeRequired = config.blockTemplateModeRequired is NullExceptionPreventer ? false : config.blockTemplateModeRequired;
+                UseDefaultAccount = config.useDefaultAccount is NullExceptionPreventer ? false : config.useDefaultAccount;
+                TxMessageSupported = config.txMessageSupported is NullExceptionPreventer ? false : config.txMessageSupported;
                 Valid = true;
             }
             catch (Exception e)

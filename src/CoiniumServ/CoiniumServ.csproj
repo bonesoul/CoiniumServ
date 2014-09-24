@@ -146,13 +146,9 @@
     <Compile Include="Blocks\IBlockProcessor.cs" />
     <Compile Include="Coin\Address\Exceptions\AddressNotOwnedException.cs" />
     <Compile Include="Coin\Config\BlockExplorerOptions.cs" />
-    <Compile Include="Coin\Config\BlockTemplateOptions.cs" />
     <Compile Include="Coin\Config\CoinOptions.cs" />
-    <Compile Include="Coin\Config\GenTxOptions.cs" />
     <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
-    <Compile Include="Coin\Config\IBlockTemplateOptions.cs" />
     <Compile Include="Coin\Config\ICoinOptions.cs" />
-    <Compile Include="Coin\Config\IGenTxOptions.cs" />
     <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />
@@ -939,6 +935,57 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Coinium.ico" />
+    <None Include="web\default\Content\img\coins\icon\21.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\365.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\ANC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\BTC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\BTCD.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\CAP.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\CLR.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\CSC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\CTM.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\DVC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\EMC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\EXE.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\FLO.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\FRC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\FRK.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\FST.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\Content\img\coins\icon\TiPS.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\Content\img\coins\icon\PPC.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -135,7 +135,7 @@ namespace CoiniumServ.Blocks
                 return; // in case we have a null, status will be already decided by GetGenerationTx() function.
 
             // get the output transaction that targets pools central wallet.
-            var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount, _poolConfig.Coin.Options.GenTx.AcceptFirstOutput);
+            var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount);
 
             // make sure we have a valid reference to poolOutput
             if (poolOutput == null)
@@ -248,7 +248,9 @@ namespace CoiniumServ.Blocks
         {
             try
             {
-                _poolAccount = _daemonClient.GetAccount(_poolConfig.Wallet.Adress);
+                _poolAccount = !_poolConfig.Coin.Options.UseDefaultAccount // if UseDefaultAccount is not set
+                    ? _daemonClient.GetAccount(_poolConfig.Wallet.Adress) // find the account of the our pool address.
+                    : ""; // use the default account.
             }
             catch (RpcException e)
             {

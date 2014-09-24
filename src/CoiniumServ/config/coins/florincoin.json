@@ -9,8 +9,6 @@
         "address": "http://florincoin.info/explorer/address/?address="
     },
     "options": {
-		"genTx": {
-			"txMessageSupported": true
-		}  
+		"txMessageSupported": true	 
     }
 }

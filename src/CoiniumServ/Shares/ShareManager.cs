@@ -205,7 +205,7 @@ namespace CoiniumServ.Shares
                     return false;
                 }
 
-                var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount, _poolConfig.Coin.Options.GenTx.AcceptFirstOutput); // get the output that targets pool's central address.
+                var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount); // get the output that targets pool's central address.
 
                 // make sure the blocks generation transaction contains our central pool wallet address
                 if (poolOutput == null)
@@ -251,7 +251,9 @@ namespace CoiniumServ.Shares
         {
             try
             {
-                _poolAccount = _daemonClient.GetAccount(_poolConfig.Wallet.Adress);
+                _poolAccount = !_poolConfig.Coin.Options.UseDefaultAccount // if UseDefaultAccount is not set
+                    ? _daemonClient.GetAccount(_poolConfig.Wallet.Adress) // find the account of the our pool address.
+                    : ""; // use the default account.
             }
             catch (RpcException e)
             {

@@ -9,8 +9,6 @@
         "address": "http://explorer.netcoinfoundation.org/address/"
     },
     "options": {
-		"genTx": {
-			"txMessageSupported": true
-		}  
+        "txMessageSupported": true 
     }
 }

@@ -130,7 +130,7 @@ namespace CoiniumServ.Transactions
             ExtraNonce = extraNonce;
             PoolConfig = poolConfig;
 
-            Version = (UInt32)(poolConfig.Coin.Options.GenTx.TxMessageSupported ? 2 : 1);
+            Version = (UInt32)(poolConfig.Coin.Options.TxMessageSupported ? 2 : 1);
             TxMessage = Serializers.SerializeString(poolConfig.Meta.TxMessage);
             LockTime = 0;
 
@@ -216,7 +216,7 @@ namespace CoiniumServ.Transactions
 
                 stream.WriteValueU32(LockTime.LittleEndian());
 
-                if (PoolConfig.Coin.Options.GenTx.TxMessageSupported)
+                if (PoolConfig.Coin.Options.TxMessageSupported)
                     stream.WriteBytes(TxMessage);
 
                 Final = stream.ToArray();

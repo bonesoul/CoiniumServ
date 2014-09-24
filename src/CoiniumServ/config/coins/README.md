@@ -16,13 +16,9 @@ Sample file;
     },
     "options": {
 		"isProofOfStakeHybrid": false,
-		"blockTemplate": {
-			"modeRequired": false
-		},
-		"genTx": {
-			"txMessageSupported": false,
-			"acceptFirstOutput": false
-		}  
+		"blockTemplateModeRequired": false,
+		"useDefaultAccount": false,
+		"txMessageSupported": false			
     },
     "node": {
         "magic": "fbc0b6db",
@@ -46,16 +42,12 @@ __blockExplorer__
  
 __options__
 
-__isProofOfStakeHybrid__: Is the coin pow+pos hybrid? Default: false.
+Settings that manipulate the internal working of server based on coin requirements.
 
-__blockTemplate__
-Block template related settings;
-- "modeRequired": Peercoin variants need a "mode" parameter to be set in in getblocktemplate, so we need to set this true for them. Default: false.
-
-__genTx__
-Generation transaction related settings;
-- __txMessageSupported__: does the coin use transaction messages? False by default.
-- __acceptFirstOutput__: Peercoin variants may not use the correct pool wallet address or account in generation tx outputs. Enabling this will accept the first output in. Default: false.
+- __isProofOfStakeHybrid__: Is the coin pow+pos hybrid? Default: false.
+- __blockTemplateModeRequired__: Peercoin variants need a "mode" parameter to be set in in getblocktemplate, so we need to set this true for them. Default: false.
+- __useDefaultAccount__: Needed to set true for Peercoin variants as they always send the coins for new blocks to default account. Default: false.
+- __txMessageSupported__: Does the coin use transaction messages? False by default.
 
 __node__ options
 

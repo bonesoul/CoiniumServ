@@ -33,13 +33,20 @@ namespace CoiniumServ.Coin.Config
         bool IsProofOfStakeHybrid { get; set; }
 
         /// <summary>
-        /// Block template options
+        /// Is setting a mode required in getblocktemplate function?
+        /// <remarks>Required by peercoin variants</remarks>
         /// </summary>
-        IBlockTemplateOptions BlockTemplate { get; }
+        bool BlockTemplateModeRequired { get; }
 
         /// <summary>
-        /// Generation transaction options
+        /// Use the default account for coinbase transactions?
+        /// <remarks>Required by peercoin variants</remarks>
         /// </summary>
-        IGenTxOptions GenTx { get; }       
+        bool UseDefaultAccount { get; }
+
+        /// <summary>
+        /// Does the coin uses TxMessages.
+        /// </summary>
+        bool TxMessageSupported { get; }
     }
 }

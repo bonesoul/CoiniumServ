@@ -8,9 +8,7 @@
         "tx": "http://grandcoin.org/blocks/index.php?transaction="
     },
     "options": {
-		"genTx": {
-			"txMessageSupported": true
-		}  
+        "txMessageSupported": true
     },
     "node": {
         "magic": "fdc1a5db"

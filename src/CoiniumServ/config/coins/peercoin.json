@@ -9,12 +9,8 @@
         "address": "http://ppc.blockr.io/address/info/"
     },
     "options": {
-        "isProofOfStakeHybrid": true,
-        "blockTemplate": {
-            "modeRequired": true
-        },
-        "genTx": {
-            "acceptFirstOutput": true
-        }
+		"isProofOfStakeHybrid": true,
+		"blockTemplateModeRequired": true,
+		"useDefaultAccount": true
     }
 }

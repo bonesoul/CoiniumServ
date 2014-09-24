@@ -10,8 +10,6 @@
     },
     "options": {
         "isProofOfStakeHybrid": true,
-        "genTx": {
-            "txMessageSupported": true
-        }
+        "txMessageSupported": true	
     }
 }
