@@ -173,8 +173,6 @@ namespace CoiniumServ.Tests.Blocks
         [Fact]
         private void QueryBlockTest_WithIncorrectPoolOutputAccount_ShouldBeOrphaned()
         {
-            // todo: latest change in Transaction.cs:GetPoolOutput() makes this test fail, case 3 should be only allowed by configuration
-
             // test case: generation transaction output doesn't match pool output account.
             var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
 
@@ -196,8 +194,6 @@ namespace CoiniumServ.Tests.Blocks
         [Fact]
         private void QueryBlockTest_ShouldSetReward()
         {
-            // todo: latest change in Transaction.cs:GetPoolOutput() makes this test fail, case 3 should be only a configuration option.
-
             // test case: set block reward based on pool output value.
             var block = new PersistedBlock(1, false, false, false, "BLOCK_HASH", "TX_HASH", 0, 0, DateTime.Now);
             _poolConfig.Wallet.Adress.Returns("POOL_ADDRESS");

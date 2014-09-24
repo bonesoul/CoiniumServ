@@ -135,7 +135,7 @@ namespace CoiniumServ.Blocks
                 return; // in case we have a null, status will be already decided by GetGenerationTx() function.
 
             // get the output transaction that targets pools central wallet.
-            var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount);
+            var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount, _poolConfig.Coin.Options.GenTx.AcceptFirstOutput);
 
             // make sure we have a valid reference to poolOutput
             if (poolOutput == null)

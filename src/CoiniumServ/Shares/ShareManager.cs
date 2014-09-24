@@ -205,7 +205,7 @@ namespace CoiniumServ.Shares
                     return false;
                 }
 
-                var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount); // get the output that targets pool's central address.
+                var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount, _poolConfig.Coin.Options.GenTx.AcceptFirstOutput); // get the output that targets pool's central address.
 
                 // make sure the blocks generation transaction contains our central pool wallet address
                 if (poolOutput == null)
