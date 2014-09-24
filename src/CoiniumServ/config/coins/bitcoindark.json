@@ -2,6 +2,11 @@
     "name": "BitcoinDark",
     "symbol": "BTCD",
     "algorithm": "sha256",
+    "reward": "pos",
     "site": "http://bitcoindark.pw/",
-    "reward": "pos"
+    "blockExplorer": {
+        "block": "http://cryptobe.com/block/",
+        "tx": "http://cryptobe.com/tx/",
+        "address": "http://cryptobe.com/address/"
+    }
 }

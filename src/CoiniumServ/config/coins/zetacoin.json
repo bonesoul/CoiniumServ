@@ -1,5 +1,11 @@
 {
     "name": "Zetacoin",
     "symbol": "ZTC",
-    "algorithm": "sha256"
+    "algorithm": "sha256",
+	"site": "http://zetacoin.cc/",
+    "blockExplorer": {
+        "block": "https://coinplorer.com/ZET/Blocks/",
+        "tx": "https://coinplorer.com/ZET/Transactions/",
+        "address": "https://coinplorer.com/ZET/Addresses/"
+    }
 }

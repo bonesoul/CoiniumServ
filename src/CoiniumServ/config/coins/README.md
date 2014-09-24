@@ -8,16 +8,21 @@ Sample file;
     "name": "Litecoin",
     "symbol": "LTC",
     "algorithm": "scrypt",
-	"site": "https://litecoin.org/",
     "reward": "pow",
-	"txMessages": false,
+	"site": "https://litecoin.org/",
     "blockExplorer": {
         "block": "http://block-explorer.com/block/",
         "tx": "http://block-explorer.com/tx/",
         "address": "http://block-explorer.com/address/"
     },
-    "getBlockTemplate": {
-        "modeRequired": false
+    "options": {
+		"blockTemplate": {
+			"modeRequired": false
+		},
+		"genTx": {
+			"txMessageSupported": false,
+			"acceptFirstOutput": false
+		}  
     },
     "node": {
         "magic": "fbc0b6db",
@@ -36,15 +41,22 @@ Fields;
 - reward: reward system of the coin - possible values; 
   - pow (proof-of-work) [default]
   - pos (proof-of-work + proof-of-stake hybrid)
-- __txMessages__: does the coin use transaction messages? False by default.
 
-__blockExplorer__ options
+__blockExplorer__
 - block: URL that block hash will be appended.
 - tx: URL that x will be appended.
 - address: URL that address will be appended.
  
-__getBlockTemplate__ options
+__options__
+
+__blockTemplate__
+Block template related settings;
 - "modeRequired": Peercoin variants need a "mode" parameter to be set in in getblocktemplate, so we need to set this true for them. Default: false.
+
+__genTx__
+Generation transaction related settings;
+- __txMessageSupported__: does the coin use transaction messages? False by default.
+- __acceptFirstOutput__: Peercoin variants may not use the correct pool wallet address or account in generation tx outputs. Enabling this will accept the first output in. Default: false.
 
 __node__ options
 
@@ -53,6 +65,6 @@ Not in use yet, will be used once embedded daemon-node is developed which will b
 - __magic__: Coin's magic string.
 - __testnetMagic__: Magic string for Testnet.
 
-__extra__ options
+__extra__
 
 Any extra options that will be handled to algorithm itself.

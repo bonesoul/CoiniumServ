@@ -2,5 +2,19 @@
     "name": "Peercoin",
     "symbol": "PPC",
     "algorithm": "sha256",
-    "reward": "pos"
+    "reward": "pos",
+	"site": "http://peercoin.net/",
+    "blockExplorer": {
+        "block": "http://ppc.blockr.io/block/info/",
+        "tx": "http://ppc.blockr.io/tx/info/",
+        "address": "http://ppc.blockr.io/address/info/"
+    },
+    "options": {
+		"blockTemplate": {
+			"modeRequired": true
+		},
+		"genTx": {
+			"acceptFirstOutput": true
+		}  
+    }
 }

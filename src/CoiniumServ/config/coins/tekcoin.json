@@ -2,6 +2,11 @@
     "name": "Tekcoin",
     "symbol": "TEK",
     "algorithm": "sha256",
-    "txMessages": true,
-    "reward": "pos"
+    "reward": "pos",
+    "site": "http://tekcoin.org/",
+    "options": {
+		"genTx": {
+			"txMessageSupported": true
+		}  
+    }
 }
