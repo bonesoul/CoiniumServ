@@ -3,10 +3,14 @@
     "symbol": "GDC",
     "algorithm": "scrypt",
 	"site": "http://grandcoin.org/",
-    "txMessages": true,
     "blockExplorer": {
         "block": "http://grandcoin.org/blocks/index.php?block_hash=",
         "tx": "http://grandcoin.org/blocks/index.php?transaction="
+    },
+    "options": {
+		"genTx": {
+			"txMessageSupported": true
+		}  
     },
     "node": {
         "magic": "fdc1a5db"

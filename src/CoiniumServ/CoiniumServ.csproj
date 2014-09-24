@@ -588,7 +588,7 @@
     <None Include="config\coins\florincoin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\coins\frankocoin.json">
+    <None Include="config\coins\franko.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\coins\freicoin.json">

@@ -9,7 +9,7 @@
     },
     "options": {
 		"genTx": {
-			"txMessages": true
+			"txMessageSupported": true
 		}  
     },
     "node": {
