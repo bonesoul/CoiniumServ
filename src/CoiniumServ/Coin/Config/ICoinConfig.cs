@@ -46,6 +46,12 @@ namespace CoiniumServ.Coin.Config
         [JsonProperty("algorithm")]
         string Algorithm { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("site")]
+        string Site { get; }
+
         ICoinOptions Options { get; }
 
         IBlockExplorerOptions BlockExplorer { get; }

@@ -102,7 +102,7 @@ namespace CoiniumServ.Server.Web.Modules
                 }];
             };
 
-            Get["/{slug}/blocks/paid{page?1}"] = _ =>
+            Get["/{slug}/blocks/paid/{page?1}"] = _ =>
             {
                 var pool = (IPool)poolManager.Get(_.slug); // find the requested pool.
 
@@ -134,13 +134,14 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     Blocks = blocks,
                     Coin = pool.Config.Coin,
+                    Filter = BlockFilter.PaidOnly,
                     PaginationQuery = paginationQuery
                 };
 
                 return View["blocks", model];
             };
 
-            Get["/{slug}/blocks/latest/{page?1}"] = _ =>
+            Get["/{slug}/blocks/{page?1}"] = _ =>
             {
                 var pool = (IPool)poolManager.Get(_.slug); // find the requested pool.
 
@@ -172,6 +173,7 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     Blocks = blocks,
                     Coin = pool.Config.Coin,
+                    Filter = BlockFilter.All,
                     PaginationQuery = paginationQuery
                 };
 

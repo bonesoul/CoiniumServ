@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-4">
         <div class="box box-solid box-warning">
             <div class="box-header">
@@ -122,9 +122,35 @@
     </div>
 </div>
 
-<div class="callout callout-info">
-    <h4><i class="ion ion-arrow-right-b"></i> Get Started</h4>
-    <p>Follow our <a href="/help/gettingstarted/pool/@Model.Pool.Config.Coin.Symbol">getting started guide</a> to start mining @Model.Pool.Config.Coin.Name's now!</p>
+<div class="row">
+    <div class="col-md-6">
+        <div class="small-box bg-blue-gradient">
+            <div class="inner">
+                <h3><img src="/Content/img/coins/icon/@(Model.Pool.Config.Coin.Symbol).png" /> @Model.Pool.Config.Coin.Symbol (@Model.Pool.Config.Coin.Algorithm)</h3>
+                <p>Check the official site for more information about @Model.Pool.Config.Coin.Name</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-information-circled"></i>
+            </div>
+            <a href="@Model.Pool.Config.Coin.Site" target="_blank" class="small-box-footer"> 
+                @Model.Pool.Config.Coin.Site <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>    
+    <div class="col-md-6">
+        <div class="small-box bg-purple-gradient">
+            <div class="inner">
+                <h3>Get Started</h3>
+                <p>Follow our getting started guide to start mining now!</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-flash"></i>
+            </div>
+            <a href="/help/gettingstarted/pool/@Model.Pool.Config.Coin.Symbol" class="small-box-footer"> 
+                Getting Started <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -133,7 +159,7 @@
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-hdd-o"></i> Latest Blocks</h3>
                 <div class="box-tools pull-right">
-                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/blocks/latest/" type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i></a>
+                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/blocks/" type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i></a>
                 </div>
             </div>
             <div class="box-body no-padding">
@@ -156,10 +182,10 @@
                                             <span class="label label-warning">@block.Status</span>
                                             break;
                                         case BlockStatus.Orphaned:
-                                        <span class="label label-danger">@block.Status</span>
+                                            <span class="label label-danger">@block.Status</span>
                                             break;
                                         case BlockStatus.Confirmed:
-                                        <span class="label label-info">@block.Status</span>
+                                            <span class="label label-info">@block.Status</span>
                                             break;
                                     }
                                 </td>
@@ -169,6 +195,14 @@
                         }
                     </tbody>
                 </table>
+            </div>
+            <div class="box-footer">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> Lookup</button>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Enter block height..">
+                </div>
             </div>
         </div>
     </div>
@@ -201,10 +235,10 @@
                                             <span class="label label-warning">@block.Status</span>
                                             break;
                                         case BlockStatus.Orphaned:
-                                        <span class="label label-danger">@block.Status</span>
+                                            <span class="label label-danger">@block.Status</span>
                                             break;
                                         case BlockStatus.Confirmed:
-                                        <span class="label label-info">@block.Status</span>
+                                            <span class="label label-info">@block.Status</span>
                                             break;
                                     }
                                 </td>
@@ -215,8 +249,15 @@
                     </tbody>
                 </table>
             </div>
+            <div class="box-footer">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-danger"><i class="fa fa-search"></i> Lookup</button>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Enter your wallet address..">
+                </div>
+            </div>
         </div>
     </div>
-
 </div>
 
