@@ -12,34 +12,44 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </a>
-        <div class="navbar-right">
+        <div class="navbar-left">
             <ul class="nav navbar-nav">
-                <li class="hidden-xs">
+                <li><a href="/help/gettingstarted/"><i class="ion ion-flash"></i> Getting Started</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right hidden-xs">
+            <ul class="nav navbar-nav">
+                <li>
                     <iframe style="width: 85px; height: 50px; margin-top: 15px;" src="http://ghbtns.com/github-btn.html?user=CoiniumServ&amp;repo=CoiniumServ&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="no"></iframe>
                 </li>
-                <li class="hidden-xs">
+                <li>
                     <iframe style="width: 85px; height: 20px; margin-top: 15px;" src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpages%2FCoiniumorg%2F639179226128343&amp;width&amp;layout=button_count&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=21" scrolling="no" frameborder="0" allowtransparency="true"></iframe>
-                </li>  
+                </li>
                 @if (!string.IsNullOrEmpty(ViewBag.Rss))
                 {
-                    @:<li><a href="@ViewBag.Rss" target="_blank"><i class="fa fa-rss"></i></a></li>
+                    @:
+                    <li><a href="@ViewBag.Rss" target="_blank"><i class="fa fa-rss"></i></a></li>
                 }
                 @if (!string.IsNullOrEmpty(ViewBag.Twitter))
                 {
-                    @:<li><a href="@ViewBag.Twitter" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                    @:
+                    <li><a href="@ViewBag.Twitter" target="_blank"><i class="fa fa-twitter"></i></a></li>
                 }
                 @if (!string.IsNullOrEmpty(ViewBag.Facebook))
                 {
-                    @:<li><a href="@ViewBag.Facebook" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                    @:
+                    <li><a href="@ViewBag.Facebook" target="_blank"><i class="fa fa-facebook"></i></a></li>
                 }
                 @if (!string.IsNullOrEmpty(ViewBag.GooglePlus))
                 {
-                    @:<li><a href="@ViewBag.GooglePlus" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                    @:
+                    <li><a href="@ViewBag.GooglePlus" target="_blank"><i class="fa fa-google-plus"></i></a></li>
                 }
                 @if (!string.IsNullOrEmpty(ViewBag.Youtube))
                 {
-                    @:<li><a href="@ViewBag.Youtube" target="_blank"><i class="fa fa-youtube"></i></a></li>
-                }                              
+                    @:
+                    <li><a href="@ViewBag.Youtube" target="_blank"><i class="fa fa-youtube"></i></a></li>
+                }
             </ul>
         </div>
     </nav>
