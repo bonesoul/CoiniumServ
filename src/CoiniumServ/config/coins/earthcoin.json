@@ -7,5 +7,8 @@
         "block": "http://earthchain.info/block/",
         "tx": "http://earthchain.info/tx/",
         "address": "http://earthchain.info/address/"
+    },
+    "options": {
+		"txMessageSupported": true			
     }
 }
