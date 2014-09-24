@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ../../..
+cd ../..
 git submodule init
 git submodule update
 mozroots --import --ask-remove
