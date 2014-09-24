@@ -9,7 +9,7 @@ env:
   - MONO_VER="3.8.0"  
 before_install:
 - wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg"
-- ./build/extra/travis/install-mono.sh
+- sudo installer -pkg "MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg" -target /
 script:
 - xbuild build/CoiniumServ.sln
 - ./build/extra/travis/run-tests.sh
