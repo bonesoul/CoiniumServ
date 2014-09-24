@@ -158,8 +158,11 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     var results = connection.Query<PersistedBlock>(string.Format(
-                        @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt From Block 
-                            WHERE Accounted = true ORDER BY Height DESC LIMIT {0},{1}", paginationQuery.Offset, paginationQuery.Count));
+                        @"SELECT b.Height, b.Orphaned, b.Confirmed, b.Accounted, b.BlockHash, b.TxHash, b.Amount, b.Reward, b.CreatedAt 
+                            From Block b
+	                            INNER JOIN Payment as p ON p.Block = b.Height
+	                            WHERE b.Accounted = true and p.Completed = true
+	                            ORDER BY Height DESC LIMIT {0},{1}", paginationQuery.Offset, paginationQuery.Count));
 
                     blocks.AddRange(results);
                 }

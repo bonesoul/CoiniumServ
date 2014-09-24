@@ -35,6 +35,8 @@ namespace CoiniumServ.Coin.Config
 
         public string Algorithm { get; private set; }
 
+        public string Site { get; private set; }
+
         public ICoinOptions Options { get; private set; }
 
         public IBlockExplorerOptions BlockExplorer { get; private set; }
@@ -49,6 +51,7 @@ namespace CoiniumServ.Coin.Config
                 Name = config.name;
                 Symbol = config.symbol;
                 Algorithm = config.algorithm;
+                Site = string.IsNullOrEmpty(config.site) ? string.Empty : config.site;
                 Options = new CoinOptions(config.options);
                 BlockExplorer = new BlockExplorerOptions(config.blockExplorer);
                 Extra = config.extra;

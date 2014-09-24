@@ -33,6 +33,14 @@ namespace CoiniumServ.Server.Web.Models.Pool
 
         public ICoinConfig Coin { get; set; }
 
+        public BlockFilter Filter { get; set; }
+
         public IPaginationQuery PaginationQuery { get; set; }
+    }
+
+    public enum BlockFilter
+    {
+        All,
+        PaidOnly
     }
 }
