@@ -3,10 +3,12 @@ env:
   global:
   - EnableNuGetPackageRestore=true
   matrix:
-  - MONO_VER="3.2.7" Package="pkg"
-  - MONO_VER="3.4.0" Package="pkg"
+  - MONO_VER="3.2.7"
+  - MONO_VER="3.4.0"
+  - MONO_VER="3.6.0"
+  - MONO_VER="3.8.0"  
 before_install:
-- wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.${Package}"
+- wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg"
 - ./build/extra/travis/install-mono.sh
 script:
 - xbuild build/CoiniumServ.sln
