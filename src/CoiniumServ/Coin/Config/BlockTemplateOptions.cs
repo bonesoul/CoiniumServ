@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using JsonConfig;
 using Serilog;
 
 namespace CoiniumServ.Coin.Config
@@ -37,7 +38,7 @@ namespace CoiniumServ.Coin.Config
             try
             {
                 // if no value is set, use the default value as false.
-                ModeRequired = string.IsNullOrEmpty(config.modeRequired) ? false : config.modeRequired;
+                ModeRequired = config.modeRequired is NullExceptionPreventer ? false : config.modeRequired;
 
                 Valid = true;
             }

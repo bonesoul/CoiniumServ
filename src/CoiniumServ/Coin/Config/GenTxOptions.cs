@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using JsonConfig;
 using Serilog;
 
 namespace CoiniumServ.Coin.Config
@@ -39,8 +40,8 @@ namespace CoiniumServ.Coin.Config
             try
             {
                 // if no value is set, use the default value as false.
-                TxMessageSupported = string.IsNullOrEmpty(config.txMessageSupported) ? false : config.txMessageSupported;
-                AcceptFirstOutput = string.IsNullOrEmpty(config.acceptFirstOutput) ? false : config.acceptFirstOutput;
+                TxMessageSupported = config.txMessageSupported is NullExceptionPreventer ? false : config.txMessageSupported;
+                AcceptFirstOutput = config.acceptFirstOutput is NullExceptionPreventer ? false : config.acceptFirstOutput;
 
                 Valid = true;
             }

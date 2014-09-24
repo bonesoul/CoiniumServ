@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using JsonConfig;
 using Serilog;
 
 namespace CoiniumServ.Coin.Config
@@ -41,7 +42,7 @@ namespace CoiniumServ.Coin.Config
             try
             {
                 // if no value is set, use the default value as false.
-                IsProofOfStakeHybrid = string.IsNullOrEmpty(config.isProofOfStakeHybrid) ? false : config.isProofOfStakeHybrid;
+                IsProofOfStakeHybrid = config.isProofOfStakeHybrid is NullExceptionPreventer ? false : config.isProofOfStakeHybrid;
                 BlockTemplate = new BlockTemplateOptions(config.blockTemplate);
                 GenTx = new GenTxOptions(config.genTx);
                 Valid = true;
