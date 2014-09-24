@@ -145,6 +145,14 @@
     <Compile Include="Blocks\BlockProcessor.cs" />
     <Compile Include="Blocks\IBlockProcessor.cs" />
     <Compile Include="Coin\Address\Exceptions\AddressNotOwnedException.cs" />
+    <Compile Include="Coin\Config\BlockExplorerOptions.cs" />
+    <Compile Include="Coin\Config\BlockTemplateOptions.cs" />
+    <Compile Include="Coin\Config\CoinOptions.cs" />
+    <Compile Include="Coin\Config\GenTxOptions.cs" />
+    <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
+    <Compile Include="Coin\Config\IBlockTemplateOptions.cs" />
+    <Compile Include="Coin\Config\ICoinOptions.cs" />
+    <Compile Include="Coin\Config\IGenTxOptions.cs" />
     <Compile Include="Coin\Helpers\Hashrate.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />

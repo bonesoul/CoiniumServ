@@ -2,16 +2,16 @@
     "name": "Fluttercoin",
     "symbol": "FLT",
     "algorithm": "scrypt",
-    "reward": "pos",
-	"site": "http://fluttercoin.us/",
+    "site": "http://fluttercoin.us/",
     "blockExplorer": {
         "block": "http://blockexperts.com/flt/hash/",
         "tx": "http://blockexperts.com/flt/tx/",
         "address": "http://blockexperts.com/flt/address/"
     },
     "options": {
-		"genTx": {
-			"txMessageSupported": true
-		}  
+        "isProofOfStakeHybrid": true,
+        "genTx": {
+            "txMessageSupported": true
+        }
     }
 }

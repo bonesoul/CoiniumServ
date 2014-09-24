@@ -20,36 +20,26 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Configuration;
-using Newtonsoft.Json;
 
 namespace CoiniumServ.Coin.Config
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface ICoinConfig:IConfig
+    public interface ICoinOptions:IConfig
     {
         /// <summary>
-        /// name of the coin
+        /// Is the coin a proof-of-stake hybrid coin?
         /// </summary>
-        [JsonProperty("name")]
-        string Name { get; }
+        bool IsProofOfStakeHybrid { get; set; }
 
         /// <summary>
-        /// 3 or 4 letter symbol for the coin
+        /// Block template options
         /// </summary>
-        [JsonProperty("symbol")]
-        string Symbol { get; }
+        IBlockTemplateOptions BlockTemplate { get; }
 
         /// <summary>
-        /// The algorithm used by the coin.
+        /// Generation transaction options
         /// </summary>
-        [JsonProperty("algorithm")]
-        string Algorithm { get; }
-
-        ICoinOptions Options { get; }
-
-        IBlockExplorerOptions BlockExplorer { get; }
-
-        dynamic Extra { get; }
+        IGenTxOptions GenTx { get; }       
     }
 }

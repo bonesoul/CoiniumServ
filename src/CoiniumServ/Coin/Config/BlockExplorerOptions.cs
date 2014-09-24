@@ -20,36 +20,36 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Configuration;
-using Newtonsoft.Json;
+
+using System;
+using Serilog;
 
 namespace CoiniumServ.Coin.Config
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface ICoinConfig:IConfig
+    public class BlockExplorerOptions:IBlockExplorerOptions
     {
-        /// <summary>
-        /// name of the coin
-        /// </summary>
-        [JsonProperty("name")]
-        string Name { get; }
+        public string Block { get; private set; }
 
-        /// <summary>
-        /// 3 or 4 letter symbol for the coin
-        /// </summary>
-        [JsonProperty("symbol")]
-        string Symbol { get; }
+        public string Transaction { get; private set; }
 
-        /// <summary>
-        /// The algorithm used by the coin.
-        /// </summary>
-        [JsonProperty("algorithm")]
-        string Algorithm { get; }
+        public string Address { get; private set; }
 
-        ICoinOptions Options { get; }
+        public bool Valid { get; private set; }
 
-        IBlockExplorerOptions BlockExplorer { get; }
-
-        dynamic Extra { get; }
+        public BlockExplorerOptions(dynamic config)
+        {
+            try
+            {
+                Block = string.IsNullOrEmpty(config.block) ? "https://altexplorer.net/block/" : config.block;
+                Transaction = string.IsNullOrEmpty(config.tx) ? "https://altexplorer.net/tx/" : config.tx;
+                Address = string.IsNullOrEmpty(config.address) ? "https://altexplorer.net/address/" : config.address;                
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<CoinOptions>().Error("Error loading block explorer options: {0:l}", e.Message);
+            }
+        }
     }
 }

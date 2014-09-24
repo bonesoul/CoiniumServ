@@ -140,7 +140,7 @@ namespace CoiniumServ.Pools
 
                 var response = _daemonClient.MakeRawRequest("getdifficulty");
                 if (response.Contains("proof-of-stake")) // if response contains proof-of-stake field
-                    _poolConfig.Coin.IsPOS = true; // then automatically set coin-config.IsPOS to true.
+                    _poolConfig.Coin.Options.IsProofOfStakeHybrid = true; // then automatically set coin-config.IsPOS to true.
             }
             catch (RpcException e)
             {

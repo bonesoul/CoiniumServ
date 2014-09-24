@@ -2,9 +2,9 @@
     "name": "Tekcoin",
     "symbol": "TEK",
     "algorithm": "sha256",
-    "reward": "pos",
     "site": "http://tekcoin.org/",
     "options": {
+        "isProofOfStakeHybrid": true,
 		"genTx": {
 			"txMessageSupported": true
 		}  

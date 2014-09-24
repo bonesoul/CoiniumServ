@@ -8,7 +8,6 @@ Sample file;
     "name": "Litecoin",
     "symbol": "LTC",
     "algorithm": "scrypt",
-    "reward": "pow",
 	"site": "https://litecoin.org/",
     "blockExplorer": {
         "block": "http://block-explorer.com/block/",
@@ -16,6 +15,7 @@ Sample file;
         "address": "http://block-explorer.com/address/"
     },
     "options": {
+		"isProofOfStakeHybrid": false,
 		"blockTemplate": {
 			"modeRequired": false
 		},
@@ -38,9 +38,6 @@ Fields;
 - __symbol__: symbol of the coin
 - __algorithm__: algorithm used by the coin
 - __site__: coins official site
-- reward: reward system of the coin - possible values; 
-  - pow (proof-of-work) [default]
-  - pos (proof-of-work + proof-of-stake hybrid)
 
 __blockExplorer__
 - block: URL that block hash will be appended.
@@ -48,6 +45,8 @@ __blockExplorer__
 - address: URL that address will be appended.
  
 __options__
+
+__isProofOfStakeHybrid__: Is the coin pow+pos hybrid? Default: false.
 
 __blockTemplate__
 Block template related settings;

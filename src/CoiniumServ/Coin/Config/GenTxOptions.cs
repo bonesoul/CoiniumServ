@@ -20,36 +20,35 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Configuration;
-using Newtonsoft.Json;
+
+using System;
+using Serilog;
 
 namespace CoiniumServ.Coin.Config
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface ICoinConfig:IConfig
-    {
-        /// <summary>
-        /// name of the coin
-        /// </summary>
-        [JsonProperty("name")]
-        string Name { get; }
+    public class GenTxOptions:IGenTxOptions
+    {        
+        public bool TxMessageSupported { get; private set; }
+        
+        public bool AcceptFirstOutput { get; private set; }
 
-        /// <summary>
-        /// 3 or 4 letter symbol for the coin
-        /// </summary>
-        [JsonProperty("symbol")]
-        string Symbol { get; }
+        public bool Valid { get; private set; }
 
-        /// <summary>
-        /// The algorithm used by the coin.
-        /// </summary>
-        [JsonProperty("algorithm")]
-        string Algorithm { get; }
+        public GenTxOptions(dynamic config)
+        {
+            try
+            {
+                // if no value is set, use the default value as false.
+                TxMessageSupported = string.IsNullOrEmpty(config.txMessageSupported) ? false : config.txMessageSupported;
+                AcceptFirstOutput = string.IsNullOrEmpty(config.acceptFirstOutput) ? false : config.acceptFirstOutput;
 
-        ICoinOptions Options { get; }
-
-        IBlockExplorerOptions BlockExplorer { get; }
-
-        dynamic Extra { get; }
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<CoinOptions>().Error("Error loading generation transaction options: {0:l}", e.Message);
+            }
+        }
     }
 }

@@ -20,36 +20,37 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Configuration;
-using Newtonsoft.Json;
+
+using System;
+using Serilog;
 
 namespace CoiniumServ.Coin.Config
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface ICoinConfig:IConfig
+    public class CoinOptions:ICoinOptions
     {
-        /// <summary>
-        /// name of the coin
-        /// </summary>
-        [JsonProperty("name")]
-        string Name { get; }
+        public bool IsProofOfStakeHybrid { get; set; }
+        
+        public IBlockTemplateOptions BlockTemplate { get; private set; }
+        
+        public IGenTxOptions GenTx { get; private set; }
+        
+        public bool Valid { get; private set; }
 
-        /// <summary>
-        /// 3 or 4 letter symbol for the coin
-        /// </summary>
-        [JsonProperty("symbol")]
-        string Symbol { get; }
-
-        /// <summary>
-        /// The algorithm used by the coin.
-        /// </summary>
-        [JsonProperty("algorithm")]
-        string Algorithm { get; }
-
-        ICoinOptions Options { get; }
-
-        IBlockExplorerOptions BlockExplorer { get; }
-
-        dynamic Extra { get; }
+        public CoinOptions(dynamic config)
+        {
+            try
+            {
+                // if no value is set, use the default value as false.
+                IsProofOfStakeHybrid = string.IsNullOrEmpty(config.isProofOfStakeHybrid) ? false : config.isProofOfStakeHybrid;
+                BlockTemplate = new BlockTemplateOptions(config.blockTemplate);
+                GenTx = new GenTxOptions(config.genTx);
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<CoinOptions>().Error("Error loading coin options: {0:l}", e.Message);
+            }
+        }
     }
 }

@@ -130,7 +130,7 @@ namespace CoiniumServ.Transactions
             ExtraNonce = extraNonce;
             PoolConfig = poolConfig;
 
-            Version = (UInt32)(poolConfig.Coin.SupportsTxMessages ? 2 : 1);
+            Version = (UInt32)(poolConfig.Coin.Options.GenTx.TxMessageSupported ? 2 : 1);
             TxMessage = Serializers.SerializeString(poolConfig.Meta.TxMessage);
             LockTime = 0;
 
@@ -180,7 +180,7 @@ namespace CoiniumServ.Transactions
             {
                 stream.WriteValueU32(Version.LittleEndian()); // write version
 
-                if(PoolConfig.Coin.IsPOS) // if coin is a proof-of-stake coin
+                if(PoolConfig.Coin.Options.IsProofOfStakeHybrid) // if coin is a proof-of-stake coin
                     stream.WriteValueU32(BlockTemplate.CurTime); // include time-stamp in the transaction.
 
                 // write transaction input.
@@ -216,7 +216,7 @@ namespace CoiniumServ.Transactions
 
                 stream.WriteValueU32(LockTime.LittleEndian());
 
-                if (PoolConfig.Coin.SupportsTxMessages)
+                if (PoolConfig.Coin.Options.GenTx.TxMessageSupported)
                     stream.WriteBytes(TxMessage);
 
                 Final = stream.ToArray();

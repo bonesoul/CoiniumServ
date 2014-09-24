@@ -20,36 +20,32 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Configuration;
-using Newtonsoft.Json;
+
+using System;
+using Serilog;
 
 namespace CoiniumServ.Coin.Config
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface ICoinConfig:IConfig
+    public class BlockTemplateOptions:IBlockTemplateOptions
     {
-        /// <summary>
-        /// name of the coin
-        /// </summary>
-        [JsonProperty("name")]
-        string Name { get; }
+        public bool ModeRequired { get; private set; }
 
-        /// <summary>
-        /// 3 or 4 letter symbol for the coin
-        /// </summary>
-        [JsonProperty("symbol")]
-        string Symbol { get; }
+        public bool Valid { get; private set; }
 
-        /// <summary>
-        /// The algorithm used by the coin.
-        /// </summary>
-        [JsonProperty("algorithm")]
-        string Algorithm { get; }
+        public BlockTemplateOptions(dynamic config)
+        {
+            try
+            {
+                // if no value is set, use the default value as false.
+                ModeRequired = string.IsNullOrEmpty(config.modeRequired) ? false : config.modeRequired;
 
-        ICoinOptions Options { get; }
-
-        IBlockExplorerOptions BlockExplorer { get; }
-
-        dynamic Extra { get; }
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<CoinOptions>().Error("Error loading block template options: {0:l}", e.Message);
+            }
+        }
     }
 }
