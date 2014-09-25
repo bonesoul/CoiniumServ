@@ -43,15 +43,14 @@ namespace CoiniumServ.Logging
 
                 switch ((string) config.type)
                 {
-                    case "console":
-                        Type = LogTargetType.Console;
-                        break;
                     case "file":
                         Type = LogTargetType.File;
                         break;
                     case "packet":
                         Type = LogTargetType.Packet;
                         break;
+                    default:
+                        return;
                 }
 
                 switch ((string) config.level)

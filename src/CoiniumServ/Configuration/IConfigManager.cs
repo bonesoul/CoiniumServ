@@ -22,7 +22,6 @@
 #endregion
 using System.Collections.Generic;
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Logging;
 using CoiniumServ.Mining.Software;
@@ -50,7 +49,5 @@ namespace CoiniumServ.Configuration
         ISoftwareRepositoryConfig SoftwareRepositoryConfig { get; }
 
         ICoinConfig GetCoinConfig(string name);
-
-        void Initialize();
     }
 }

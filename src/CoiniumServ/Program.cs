@@ -62,19 +62,14 @@ namespace CoiniumServ
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
-            // load the config-manager.
-            var configManager = configFactory.GetConfigManager();
-
-            // initialize log-manager as we'll need it below for the loading rest of the configuration files.
+            // initialize the log-manager.
             objectFactory.GetLogManager();
 
-            // print a version banner.
-            _logger = Log.ForContext<Program>();
-            _logger.Information("CoiniumServ {0:l} {1:l} warming-up..", VersionInfo.CodeName, Assembly.GetAssembly(typeof(Program)).GetName().Version);
-            PlatformManager.PrintPlatformBanner();
+            // load the config-manager.
+            configFactory.GetConfigManager();
 
-            // rest of configurations need access to log-manager being already initialized.
-            configManager.Initialize();
+            // create logger to be used later.
+            _logger = Log.ForContext<Program>();
 
             // run global managers
             RunGlobalManagers(objectFactory);
