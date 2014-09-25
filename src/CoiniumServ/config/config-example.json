@@ -107,7 +107,7 @@
 				"level": "verbose"
 			},
 			{
-				"enabled": true,
+				"enabled": false,
 				"type": "packet",
 				"filename": "packet.log",
 				"rolling": false,

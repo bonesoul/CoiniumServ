@@ -74,6 +74,9 @@ namespace CoiniumServ.Logging
 
             foreach (var target in _config.Targets)
             {
+                if (!target.Enabled)
+                    continue;
+
                 switch (target.Type)
                 {
                     case LogTargetType.Console:
