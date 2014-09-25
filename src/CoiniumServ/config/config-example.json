@@ -1,13 +1,4 @@
 {
-    # -------------------------------
-    # Stack Configuration
-    # -------------------------------
-
-    # name:  name of the pool stack.
-    # nodes: list of the installations of CoiniumServ on different geographic locations.
-    # location:  geographic location of the server.
-    # address: domain or ip address of the server.
-
     "stack": {
         "name": "CoiniumServ.com",
         "nodes": [
@@ -18,41 +9,13 @@
             }
         ]
     },
-
-    # -------------------------------
-    # Statistics Configuration
-    # -------------------------------
-    
-    # updateInterval: interval for recaching statistics.
-    # hashrateWindow: how many seconds worth of shares should be gathered to generate hashrate.
-
     "statistics": {
         "updateInterval": 60,
         "hashrateWindow": 300
     },
-
-    # -------------------------------
-    # Website Configuration
-    # -------------------------------
-
-    # enabled: set this true to enable frontend.
-    # bind: interface to bind webserver, leave empty to listen on all available interfaces.
-    # port: port to listen for http connections.
-    # folder: name of the template folder that exists in web/.
-    
-    # social: 
-    # rss: Feed url
-    # twitter: Twitter page url
-    # facebook: Facebook page url
-    # googleplus: Google Plus page url
-    # youtube: Youtube page url
-    
-    # backend:
-	# metrics: used for performance analysis purposes in debug mode.
-
-	"website": {
-		"enabled": true,
-		"bind": "",
+    "website": {
+        "enabled": true,
+        "bind": "",
         "port": 80,
         "template": "default",
         "social": {
@@ -67,47 +30,31 @@
                 "enabled": false
             }
         }
-	},
-
-    # -------------------------------
-    # Logging Configuration
-    # -------------------------------
-
-    # root: relative path of logs.
-    # targets: log targets.
-    
-    # target: 
-    # enabled: is the log target enabled?
-    # type: console, file or packet.
-    # filename: filename of the log file.
-    # rolling: set this true to get a seperate log file for every day.
-    # level: minimum log level.
-
-    # logging configuration
-	"logging": {
-		"root": "logs",
-		"targets": [
-			{
-				"enabled": true,
-				"type": "file",
-				"filename": "server.log",
-				"rolling": false,
-				"level": "information"
-			},
-			{
-				"enabled": true,
-				"type": "file",
-				"filename": "debug.log",
-				"rolling": false,
-				"level": "verbose"
-			},
-			{
-				"enabled": false,
-				"type": "packet",
-				"filename": "packet.log",
-				"rolling": false,
-				"level": "verbose"
-			}			
-        ]	
-	}
+    },
+    "logging": {
+        "root": "logs",
+        "targets": [
+            {
+                "enabled": true,
+                "type": "file",
+                "filename": "server.log",
+                "rolling": false,
+                "level": "information"
+            },
+            {
+                "enabled": true,
+                "type": "file",
+                "filename": "debug.log",
+                "rolling": false,
+                "level": "verbose"
+            },
+            {
+                "enabled": false,
+                "type": "packet",
+                "filename": "packet.log",
+                "rolling": false,
+                "level": "verbose"
+            }
+        ]
+    }
 }
