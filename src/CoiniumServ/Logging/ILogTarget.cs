@@ -53,10 +53,6 @@ namespace CoiniumServ.Logging
     public enum LogTargetType
     {
         /// <summary>
-        /// Logs to console.
-        /// </summary>
-        Console,
-        /// <summary>
         /// Logs to a file.
         /// </summary>
         File,

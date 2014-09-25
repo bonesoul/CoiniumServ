@@ -23,5 +23,7 @@
 namespace CoiniumServ.Logging
 {
     public interface ILogManager
-    { }
+    {
+        void EmitConfiguration(ILogConfig config);
+    }
 }

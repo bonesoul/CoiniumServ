@@ -89,11 +89,6 @@
 		"targets": [
 			{
 				"enabled": true,
-				"type": "console",
-				"level": "debug"
-			},
-			{
-				"enabled": true,
 				"type": "file",
 				"filename": "server.log",
 				"rolling": false,
@@ -107,7 +102,7 @@
 				"level": "verbose"
 			},
 			{
-				"enabled": true,
+				"enabled": false,
 				"type": "packet",
 				"filename": "packet.log",
 				"rolling": false,

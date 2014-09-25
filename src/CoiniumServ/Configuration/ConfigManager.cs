@@ -25,8 +25,8 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Factories;
 using CoiniumServ.Logging;
@@ -36,6 +36,8 @@ using CoiniumServ.Server.Stack;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers.IO;
+using CoiniumServ.Utils.Platform;
+using libCoiniumServ.Versions;
 using Serilog;
 
 namespace CoiniumServ.Configuration
@@ -66,55 +68,47 @@ namespace CoiniumServ.Configuration
 
         private readonly IConfigFactory _configFactory;
         private readonly IJsonConfigReader _jsonConfigReader;
+        private readonly ILogManager _logManager;
 
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
-        public ConfigManager(IConfigFactory configFactory, IJsonConfigReader jsonConfigReader)
+        public ConfigManager(IConfigFactory configFactory, IJsonConfigReader jsonConfigReader, ILogManager logManager)
         {
             _configFactory = configFactory;
             _jsonConfigReader = jsonConfigReader;
-
-            PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
+            _logManager = logManager;
+            _logger = Log.ForContext<ConfigManager>();
 
             LoadGlobalConfig(); // read the global config.
+            // LoadDaemonManagerConfig(); // load the global daemon manager config. - disabled until we need it.
+            LoadSoftwareManagerConfig(); // load software manager config file.
+            LoadPoolConfigs(); // load the per-pool config files.
         }
 
         private void LoadGlobalConfig()
         {
             var data = _jsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
 
-            if (data == null) // make sure it exists, else gracefully exists
+            // make sure we were able to load global config.
+            if (data == null)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Couldn't read config/config.json! Make sure you rename config/config-example.json as config/config.json.");
-                Console.ResetColor();
-
+                // gracefully exit
+                _logger.Error("Couldn't read config/config.json! Make sure you rename config/config-example.json as config/config.json.");
                 Environment.Exit(-1);
             }
 
+            // load log config.
+            LogConfig = new LogConfig(data.logging); // read the log config first, so rest of the config loaders can use log subsystem.
+            _logManager.EmitConfiguration(LogConfig); // assign the log configuration to log manager.
+
+            // print a version banner.
+            _logger.Information("CoiniumServ {0:l} {1:l} warming-up..", VersionInfo.CodeName, Assembly.GetAssembly(typeof(Program)).GetName().Version);
+            PlatformManager.PrintPlatformBanner();
+
+            // load rest of the configs.
             StackConfig = new StackConfig(data.stack);
             StatisticsConfig = new StatisticsConfig(data.statistics);
             WebServerConfig = new WebServerConfig(data.website);
-            LogConfig = new LogConfig(data.logging);
-        }
-
-        public void Initialize()
-        {
-            // these config files below need to access log-manager, that's why we wait it's configuration initialized with in ctor().
-
-            // LoadDaemonManagerConfig(); // load the global daemon manager config. - disabled until we need it.
-            LoadSoftwareManagerConfig(); // load software maanger config file.
-            LoadPoolConfigs(); // load the per-pool config files.
-        }
-
-        private void LoadDaemonManagerConfig()
-        {
-            var data = _jsonConfigReader.Read(DaemonManagerConfigFilename); // read the global config data.
-
-            if (data == null) // if we can't read daemon manager config file.
-                data = new ExpandoObject(); // create a fake object.                
-
-            DaemonManagerConfig = _configFactory.GetDaemonManagerConfig(data);
         }
 
         private void LoadSoftwareManagerConfig()
@@ -126,9 +120,7 @@ namespace CoiniumServ.Configuration
 
         private void LoadPoolConfigs()
         {
-            _logger = Log.ForContext<ConfigManager>();
-            _logger.Debug("Discovering enabled pool configs..");
-
+            PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
             var files = FileHelpers.GetFilesByExtension(PoolConfigRoot, ".json");
 
             foreach (var file in files)
@@ -172,6 +164,16 @@ namespace CoiniumServ.Configuration
 
             _logger.Information("Discovered a total of {0} enabled pool configurations: {1:l}", PoolConfigs.Count,
                 PoolConfigs.Select(config => config.Coin.Name).ToList());
+        }
+
+        private void LoadDaemonManagerConfig()
+        {
+            var data = _jsonConfigReader.Read(DaemonManagerConfigFilename); // read the global config data.
+
+            if (data == null) // if we can't read daemon manager config file.
+                data = new ExpandoObject(); // create a fake object.                
+
+            DaemonManagerConfig = _configFactory.GetDaemonManagerConfig(data);
         }
 
         public ICoinConfig GetCoinConfig(string name)
