@@ -22,11 +22,7 @@ Our binary distributions can work on any platform including Windows, Linux and M
 
 .. image:: http://i.imgur.com/MDYxtOO.png
 
-Once you download the package, extract the contents to a suitable folder;
-
-.. image:: http://i.imgur.com/gnspINk.png
-
-Then you can simply run the **CoiniumServ.exe**
+Once you download the package, extract the contents to a suitable folder. Then you can simply run the **CoiniumServ.exe**
 
 .. image:: http://i.imgur.com/MhJkZxT.png
 
