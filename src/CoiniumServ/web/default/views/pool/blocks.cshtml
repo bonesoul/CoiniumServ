@@ -26,7 +26,7 @@
                         @foreach (var block in Model.Blocks)
                         {
                             <tr>
-                            <td><a href="/pool/@Model.Coin.Symbol/block/@block.Height">@block.Height</a></td>
+                                <td><a href="/pool/@Model.Coin.Symbol/block/@block.Height">@block.Height</a></td>
                                 <td>
                                     @switch (@block.Status)
                                     {
@@ -34,10 +34,10 @@
                                             <div class="label label-warning">@block.Status</div>
                                             break;
                                         case BlockStatus.Orphaned:
-                                            <div class="label label-danger">@block.Status</div>
+                                        <div class="label label-danger">@block.Status</div>
                                             break;
                                         case BlockStatus.Confirmed:
-                                            <div class="label label-info">@block.Status</div>
+                                        <div class="label label-info">@block.Status</div>
                                             break;
                                     }
                                 </td>

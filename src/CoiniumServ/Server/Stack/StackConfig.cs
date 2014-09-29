@@ -22,6 +22,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using JsonConfig;
 using Serilog;
 
 namespace CoiniumServ.Server.Stack
@@ -39,7 +40,14 @@ namespace CoiniumServ.Server.Stack
                 // load the config data.
                 Name = string.IsNullOrEmpty(config.name) ? "CoiniumServ.com" : config.name;
 
-                Nodes=new List<IStackNode>();
+                Nodes = new List<IStackNode>();
+
+                if (config.nodes is NullExceptionPreventer)
+                {
+                    Valid = true;
+                    return;
+                }
+
                 foreach (var entry in config.nodes)
                 {
                     Nodes.Add(new StackNode(entry));

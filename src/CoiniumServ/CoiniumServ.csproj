@@ -510,7 +510,9 @@
     <None Include="config\software-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\algorithm\algorithm.cshtml" />
+    <None Include="web\default\views\algorithm\algorithm.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -738,7 +740,9 @@
     <Compile Include="Persistance\Layers\Mpos\MposStorage.Miners.cs" />
     <Compile Include="Persistance\Layers\Mpos\MposStorage.Statistics.cs" />
     <None Include="web.config" />
-    <None Include="web\default\views\algorithms\algorithms.cshtml" />
+    <None Include="web\default\views\algorithms\algorithms.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\api\api.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -778,10 +782,18 @@
     <None Include="web\default\Content\fonts\ionicons.woff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\help\gettingstarted\index.cshtml" />
-    <None Include="web\default\views\help\gettingstarted\pool.cshtml" />
-    <None Include="web\default\views\help\miningsoftware\index.cshtml" />
-    <None Include="web\default\views\layout\header.cshtml" />
+    <None Include="web\default\views\help\gettingstarted\index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\help\gettingstarted\pool.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\help\miningsoftware\index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\layout\header.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\layout\footer.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -896,17 +908,30 @@
     <None Include="web\default\Content\less\vars.less">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="web\default\views\layout\main.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\layout\navbar.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\views\layout\sidebar.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\partial\algorithms.cshtml" />
-    <None Include="web\default\views\partial\pools.cshtml" />
-    <None Include="web\default\views\pools\pools.cshtml" />
-    <None Include="web\default\views\pool\block.cshtml" />
-    <None Include="web\default\views\pool\blocks.cshtml" />
+    <None Include="web\default\views\partial\algorithms.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\partial\pools.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\pools\pools.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\pool\block.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\pool\blocks.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\pool\pool.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -3410,9 +3435,6 @@
     <None Include="web\default\Content\js\plugins\timepicker\bootstrap-timepicker.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\layout\main.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="web\default\Content\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -3420,27 +3442,10 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <CustomCommands>
-      <!-- Custom commands for mono -->
-      <CustomCommands>
-        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/BuildProviders/Nancy.ViewEngines.Razor.BuildProviders.dll&quot; &quot;$(ProjectDir)/../../bin/Debug&quot;" />
-        <Command type="AfterBuild" command="cp -f &quot;$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/lib/net40/Nancy.ViewEngines.Razor.dll&quot; &quot;$(ProjectDir)/../../bin/Debug&quot;" />
-      </CustomCommands>
-    </CustomCommands>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
-    <PostBuildEvent>
-if $(ConfigurationName) == Debug (
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.2\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.2\lib\net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
-)</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
+    <Copy SourceFiles="$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/BuildProviders/Nancy.ViewEngines.Razor.BuildProviders.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/lib/net40/Nancy.ViewEngines.Razor.dll" DestinationFolder="$(OutDir)" />
   </Target>
-  -->
 </Project>
