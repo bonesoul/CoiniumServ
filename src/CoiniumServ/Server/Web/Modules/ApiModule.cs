@@ -26,6 +26,7 @@ using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Statistics;
 using Nancy;
+using Nancy.Helpers;
 using Newtonsoft.Json;
 
 namespace CoiniumServ.Server.Web.Modules
@@ -41,8 +42,7 @@ namespace CoiniumServ.Server.Web.Modules
             Get["/"] = _ =>
             {
                 // include common data required by layout.
-                ViewBag.Title = "API";
-                ViewBag.Heading = "Public API";
+                ViewBag.Header = "Public API";
 
                 // return our view
                 return View["api", new ApiModel
@@ -62,7 +62,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/pool/{slug}"] = _ =>
             {
-                var pool = poolManager.Get(_.slug); // query the requested pool.
+                var pool = poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // query the requested pool.
 
                 var response = pool != null ? (Response)pool.ServiceResponse : PoolNotFound;
                 response.ContentType = "application/json";
@@ -78,7 +78,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/algorithm/{slug}"] = _ =>
             {
-                var algorithm = algorithmManager.Get(_.slug); // query the requested pool.
+                var algorithm = algorithmManager.Get(HttpUtility.HtmlEncode(_.slug)); // query the requested pool.
 
                 var response = algorithm != null ? (Response)algorithm.ServiceResponse : AlgorithmNotFound;
                 response.ContentType = "application/json";

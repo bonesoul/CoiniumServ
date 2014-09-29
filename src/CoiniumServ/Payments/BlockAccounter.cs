@@ -23,6 +23,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using CoiniumServ.Accounts;
 using CoiniumServ.Factories;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
@@ -36,22 +37,22 @@ namespace CoiniumServ.Payments
 
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
-        private readonly IPoolConfig _poolConfig;
-
         private readonly IObjectFactory _objectFactory;
 
         private readonly IStorageLayer _storageLayer;
 
+        private readonly IAccountManager _accountManager;
+
         private readonly ILogger _logger;
 
-        public BlockAccounter(IPoolConfig poolConfig, IObjectFactory objectFactory, IStorageLayer storageLayer)
+        public BlockAccounter(IPoolConfig poolConfig, IObjectFactory objectFactory, IStorageLayer storageLayer, IAccountManager accountManager)
         {
-            _poolConfig = poolConfig;
             _objectFactory = objectFactory;
             _storageLayer = storageLayer;
+            _accountManager = accountManager;
             _logger = Log.ForContext<BlockAccounter>().ForContext("Component", poolConfig.Coin.Name);
 
-            if (!_poolConfig.Payments.Enabled) // make sure payments are enabled.
+            if (!poolConfig.Payments.Enabled) // make sure payments are enabled.
                 return;
 
             Active = true;
@@ -65,7 +66,7 @@ namespace CoiniumServ.Payments
             var unpaidBlocks = _storageLayer.GetUnpaidBlocks();
 
             // create the payouts.
-            var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer)).ToList();
+            var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer, _accountManager)).ToList();
 
             // loop through rounds
             foreach (var round in rounds)

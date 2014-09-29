@@ -127,9 +127,14 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<PersistedBlock>(string.Format(
+                    var results = connection.Query<PersistedBlock>(
                         @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt From Block 
-                            ORDER BY Height DESC LIMIT {0},{1}", paginationQuery.Offset, paginationQuery.Count));
+                            ORDER BY Height DESC LIMIT @offset, @count",
+                        new
+                        {
+                            offset = paginationQuery.Offset,
+                            count = paginationQuery.Count
+                        });
 
                     blocks.AddRange(results);
                 }
@@ -157,12 +162,17 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<PersistedBlock>(string.Format(
+                    var results = connection.Query<PersistedBlock>(
                         @"SELECT b.Height, b.Orphaned, b.Confirmed, b.Accounted, b.BlockHash, b.TxHash, b.Amount, b.Reward, b.CreatedAt 
                             From Block b
 	                            INNER JOIN Payment as p ON p.Block = b.Height
 	                            WHERE b.Accounted = true and p.Completed = true
-	                            ORDER BY Height DESC LIMIT {0},{1}", paginationQuery.Offset, paginationQuery.Count));
+	                            ORDER BY Height DESC LIMIT @offset, @count",
+                        new
+                        {
+                            offset = paginationQuery.Offset,
+                            count = paginationQuery.Count
+                        });
 
                     blocks.AddRange(results);
                 }

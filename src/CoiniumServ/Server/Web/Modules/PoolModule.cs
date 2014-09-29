@@ -21,23 +21,25 @@
 // 
 #endregion
 using System;
+using CoiniumServ.Accounts;
 using CoiniumServ.Persistance.Query;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Server.Web.Models.Pool;
 using Nancy;
 using Nancy.CustomErrors;
+using Nancy.Helpers;
 
 namespace CoiniumServ.Server.Web.Modules
 {
     public class PoolModule : NancyModule
     {
         public PoolModule(IPoolManager poolManager)
-            :base("/pool")
+            : base("/pool")
         {
             Get["/{slug}"] = _ =>
             {
-                var pool = poolManager.Get(_.slug); // find the requested pool.
+                var pool = poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
 
                 if (pool == null)
                 {
@@ -59,7 +61,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/{slug}/workers"] = _ =>
             {
-                var pool = poolManager.Get(_.slug); // find the requested pool.                
+                var pool = poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.                
 
                 if (pool == null) // make sure queried pool exists.
                 {
@@ -69,8 +71,7 @@ namespace CoiniumServ.Server.Web.Modules
                     }];
                 }
 
-                ViewBag.Title = string.Format("{0} Workers", pool.Config.Coin.Name);
-                ViewBag.Heading = string.Format("{0} Workers", pool.Config.Coin.Name);
+                ViewBag.Header = string.Format("{0} Workers", pool.Config.Coin.Name);
 
                 // return our view
                 return View["workers", new WorkersModel
@@ -81,7 +82,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/{slug}/round"] = _ =>
             {
-                var pool = poolManager.Get(_.slug); // find the requested pool.
+                var pool = poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
 
                 if (pool == null) // make sure queried pool exists.
                 {
@@ -91,8 +92,7 @@ namespace CoiniumServ.Server.Web.Modules
                     }];
                 }
 
-                ViewBag.Title = string.Format("{0} Current Round", pool.Config.Coin.Name);
-                ViewBag.Heading = string.Format("{0} Current Round", pool.Config.Coin.Name);
+                ViewBag.Header = string.Format("{0} Current Round", pool.Config.Coin.Name);
 
                 // return our view
                 return View["round", new RoundModel
@@ -104,7 +104,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/{slug}/blocks/paid/{page?1}"] = _ =>
             {
-                var pool = (IPool)poolManager.Get(_.slug); // find the requested pool.
+                var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
 
                 if (pool == null) // make sure queried pool exists.
                 {
@@ -143,7 +143,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/{slug}/blocks/{page?1}"] = _ =>
             {
-                var pool = (IPool)poolManager.Get(_.slug); // find the requested pool.
+                var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
 
                 if (pool == null) // make sure queried pool exists.
                 {
@@ -182,7 +182,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/{slug}/block/{height:int}"] = _ =>
             {
-                var pool = (IPool)poolManager.Get(_.slug); // find the requested pool.
+                var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
 
                 if (pool == null) // make sure queried pool exists.
                 {
@@ -201,7 +201,7 @@ namespace CoiniumServ.Server.Web.Modules
                         Details = string.Format("The requested block does not exist: {0}", _.height)
                     }];
                 }
-                
+
                 var model = new BlockModel
                 {
                     Block = block,
@@ -209,10 +209,54 @@ namespace CoiniumServ.Server.Web.Modules
                     Payments = pool.PaymentRepository.GetPaymentsForBlock((uint)_.height)
                 };
 
-                ViewBag.Title = string.Format("{0} - Block {1}", pool.Config.Coin.Name, block.Height);
-                ViewBag.Heading = string.Format("Block {0}", block.Height);
+                ViewBag.Header = string.Format("Block {0}", block.Height);
                 ViewBag.SubHeader = string.Format("{0} block", pool.Config.Coin.Name);
+
                 return View["block", model];
+            };
+
+            Get["/{slug}/account/address/{address:length(26,34)}/{page?1}"] = _ =>
+            {
+                var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
+
+                if (pool == null)
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = string.Format("The requested pool does not exist: {0}", HttpUtility.HtmlEncode(_.slug))
+                    }];
+                }
+
+                var account = (IAccount)pool.AccountManager.GetAccountByAddress(_.address);
+
+                if (account == null)
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = string.Format("The requested account does not exist: {0}", _.address)
+                    }];
+                }
+
+                int page;
+                if (!Int32.TryParse(_.page, out page))
+                    page = 1;
+
+                var paginationQuery = new PaginationQuery(page);
+
+                // get the payments for the account.
+                var payments = pool.AccountManager.GetPaymentsForAccount(account.Id, paginationQuery);
+
+                ViewBag.Header = string.Format("Account Details");
+                ViewBag.SubHeader = account.Username;
+
+                // return our view
+                return View["account", new AccountModel
+                {
+                    Account = account,
+                    Coin = pool.Config.Coin,
+                    Payments = payments,
+                    PaginationQuery = paginationQuery
+                }];
             };
         }
     }

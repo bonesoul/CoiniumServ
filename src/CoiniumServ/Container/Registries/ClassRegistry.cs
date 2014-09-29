@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Accounts;
 using CoiniumServ.Blocks;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
@@ -54,6 +56,7 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<INetworkInfo, NetworkInfo>().AsMultiInstance();
             _applicationContext.Container.Register<IBlockRepository, BlocksRepository>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentRepository, PaymentRepository>().AsMultiInstance();
+            _applicationContext.Container.Register<IAccountManager, AccountManager>().AsMultiInstance();
 
             // payment objects
             _applicationContext.Container.Register<IBlockAccounter, BlockAccounter>().AsMultiInstance();

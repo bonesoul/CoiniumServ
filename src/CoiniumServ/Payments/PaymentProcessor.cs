@@ -23,6 +23,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using CoiniumServ.Accounts;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Persistance.Layers;
@@ -43,15 +44,18 @@ namespace CoiniumServ.Payments
 
         private readonly IDaemonClient _daemonClient;
 
+        private readonly IAccountManager _accountManager;
+
         private string _poolAccount = string.Empty;
 
         private readonly ILogger _logger;
 
-        public PaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient)
+        public PaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient, IAccountManager accountManager)
         {
             _poolConfig = poolConfig;
             _storageLayer = storageLayer;
             _daemonClient = daemonClient;
+            _accountManager = accountManager;
             _logger = Log.ForContext<PaymentProcessor>().ForContext("Component", poolConfig.Coin.Name);
 
             if (!_poolConfig.Payments.Enabled) // make sure payments are enabled.
@@ -90,7 +94,7 @@ namespace CoiniumServ.Payments
             foreach (var payment in pendingPayments)
             {
                 // query the user for the payment.
-                var user = _storageLayer.GetAccountById(payment.AccountId);
+                var user = _accountManager.GetAccountById(payment.AccountId);
 
                 if (user == null)
                     continue;

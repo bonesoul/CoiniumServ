@@ -78,7 +78,7 @@
                             {
                                 <tr>
                                     <td class="hidden-xs">@paymentDetails.PaymentId</td>
-                                    <td><a href="/account/address/@paymentDetails.Address">@paymentDetails.Address</a></td>
+                                    <td><a href="/pool/@Model.Coin.Symbol/account/address/@paymentDetails.Address">@paymentDetails.Address</a></td>
                                     <td>
                                         @if (paymentDetails.Completed)
                                         {

@@ -22,6 +22,7 @@
 #endregion
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Accounts;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 
@@ -36,10 +37,13 @@ namespace CoiniumServ.Payments
 
         private readonly IStorageLayer _storageLayer;
 
-        public PaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
+        private readonly IAccountManager _accountManager;
+
+        public PaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager)
         {
             Block = block;
             _storageLayer = storageLayer;
+            _accountManager = accountManager;
 
             Payments = new List<IPayment>();
             _shares = _storageLayer.GetShares(Block); // load the shares for the round.
@@ -58,7 +62,7 @@ namespace CoiniumServ.Payments
                 var amount = (decimal)percent * Block.Reward;
 
                 // get the user id for the payment.
-                var user = _storageLayer.GetAccount(pair.Key);
+                var user = _accountManager.GetAccountByUsername(pair.Key);
 
                 // if we can't find a user for the given username, just skip.
                 if (user == null)

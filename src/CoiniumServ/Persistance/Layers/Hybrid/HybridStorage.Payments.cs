@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Query;
 using CoiniumServ.Server.Web.Models.Pool;
 using Dapper;
 using MySql.Data.MySqlClient;
@@ -123,7 +124,43 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                             FROM Payment p 
                                 INNER JOIN Account as a ON p.AccountId = a.Id
                                 LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId Where Block = @height",
-                        new {height});
+                        new { height });
+
+                    payouts.AddRange(results);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting payments: {0:l}", e.Message);
+            }
+
+            return payouts;
+        }
+
+        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        {
+            var payouts = new List<IDetailedPayment>();
+
+            try
+            {
+                if (!IsEnabled)
+                    return payouts;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    var results = connection.Query<DetailedPayment>(
+                        @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, a.Address, p.Block, p.Amount as Amount, 
+                            t.Amount as SentAmount, t.Currency, t.TxId as TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
+                            FROM Payment p 
+                                INNER JOIN Account as a ON p.AccountId = a.Id
+                                LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId Where a.Id = @id
+                            ORDER BY p.Id DESC LIMIT @offset, @count",
+                        new
+                        {
+                            id,
+                            offset = paginationQuery.Offset,
+                            count = paginationQuery.Count
+                        });
 
                     payouts.AddRange(results);
                 }

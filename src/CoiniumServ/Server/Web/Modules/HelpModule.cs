@@ -27,6 +27,7 @@ using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Server.Web.Models.GettingStarted;
 using Nancy;
 using Nancy.CustomErrors;
+using Nancy.Helpers;
 
 namespace CoiniumServ.Server.Web.Modules
 {
@@ -37,8 +38,7 @@ namespace CoiniumServ.Server.Web.Modules
         {
             Get["/termsofservice"] = _ =>
             {
-                ViewBag.Heading = "Terms of Service";
-                ViewBag.Title = "Terms of Service";
+                ViewBag.Header = "Terms of Service";
 
                 return View["termsofservice"];
             };
@@ -56,7 +56,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/gettingstarted/pool/{slug}"] = _ =>
             {
-                var pool = poolManager.Get(_.slug); // find the requested pool.
+                var pool = poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
 
                 if (pool == null)
                 {

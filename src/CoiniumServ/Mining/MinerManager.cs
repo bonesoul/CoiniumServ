@@ -48,12 +48,15 @@ namespace CoiniumServ.Mining
 
         private readonly IStorageLayer _storageLayer;
 
+        private readonly IAccountManager _accountManager;
+
         private readonly ILogger _logger;        
 
-        public MinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer)
+        public MinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager)
         {
             _poolConfig = poolConfig;
             _storageLayer = storageLayer;
+            _accountManager = accountManager;
 
             _miners = new Dictionary<int, IMiner>();
             _logger = Log.ForContext<MinerManager>().ForContext("Component", poolConfig.Coin.Name);
@@ -137,11 +140,11 @@ namespace CoiniumServ.Mining
                 stratumMiner.SendMessage(_poolConfig.Meta.MOTD); // send the motd.
             }
 
-            miner.Account = _storageLayer.GetAccount(miner.Username); // query the user.
+            miner.Account = _accountManager.GetAccountByUsername(miner.Username); // query the user.
             if (miner.Account == null) // if the user doesn't exists.
             {
-                _storageLayer.AddAccount(new Account(miner)); // create a new one.
-                miner.Account =_storageLayer.GetAccount(miner.Username); // re-query the newly created record.
+                _accountManager.AddAccount(new Account(miner)); // create a new one.
+                miner.Account = _accountManager.GetAccountByUsername(miner.Username); // re-query the newly created record.
             }
 
             OnMinerAuthenticated(new MinerEventArgs(miner)); // notify listeners about the new authenticated miner.            

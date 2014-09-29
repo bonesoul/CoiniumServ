@@ -131,7 +131,7 @@ namespace CoiniumServ.Persistance.Layers
         /// Returns all pending blocks.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IPersistedBlock> GetPendingBlocks(); 
+        IEnumerable<IPersistedBlock> GetPendingBlocks();
 
         /// <summary>
         /// Returns latest n blocks.
@@ -145,7 +145,7 @@ namespace CoiniumServ.Persistance.Layers
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5); 
+        IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5);
 
         #endregion
 
@@ -174,7 +174,15 @@ namespace CoiniumServ.Persistance.Layers
         /// </summary>
         /// <param name="height"></param>
         /// <returns></returns>
-        IList<IDetailedPayment> GetPaymentsForBlock(uint height); 
+        IList<IDetailedPayment> GetPaymentsForBlock(uint height);
+
+        /// <summary>
+        /// Returns payments for a specific account.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="paginationQuery"></param>
+        /// <returns></returns>
+        IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery);
 
         /// <summary>
         /// Adds a transaction.
@@ -189,15 +197,22 @@ namespace CoiniumServ.Persistance.Layers
         /// <summary>
         /// Adds a new account.
         /// </summary>
-        /// <param name="user"></param>
-        void AddAccount(IAccount user);
+        /// <param name="account"></param>
+        void AddAccount(IAccount account);
 
         /// <summary>
         /// Returns the account with given username.
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        IAccount GetAccount(string username);
+        IAccount GetAccountByUsername(string username);
+
+        /// <summary>
+        /// Returns the account with given address.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        IAccount GetAccountByAddress(string address);
 
         /// <summary>
         /// Returns the account with given Id.

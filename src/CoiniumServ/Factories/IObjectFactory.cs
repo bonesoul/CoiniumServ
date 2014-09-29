@@ -21,6 +21,7 @@
 // 
 #endregion
 using System.Collections.Generic;
+using CoiniumServ.Accounts;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
@@ -77,7 +78,7 @@ namespace CoiniumServ.Factories
         /// <returns></returns>
         IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
 
-        IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer);
+        IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager);
 
         IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
 
@@ -99,17 +100,19 @@ namespace CoiniumServ.Factories
 
         IRpcService GetMiningService(string type, IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient);
 
+        IAccountManager GetAccountManager(IStorageLayer storageLayer, IPoolConfig poolConfig);
+
         #endregion        
 
         #region payment objects 
 
         IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor);
 
-        IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer);
+        IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager);
 
-        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient);
+        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient, IAccountManager accountManager);
 
-        IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer);
+        IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager);
 
         IPaymentRepository GetPaymentRepository(IStorageLayer storageLayer);
 

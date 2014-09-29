@@ -136,19 +136,29 @@ namespace CoiniumServ.Persistance.Layers.Null
             throw new System.NotImplementedException();
         }
 
+        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void AddTransaction(ITransaction transaction)
         {
             return;
         }
 
-        public void AddAccount(IAccount user)
+        public void AddAccount(IAccount account)
         {
             return;
         }
 
-        public IAccount GetAccount(string username)
+        public IAccount GetAccountByUsername(string username)
         {
             return null;
+        }
+
+        public IAccount GetAccountByAddress(string address)
+        {
+            throw new System.NotImplementedException();
         }
 
         public IAccount GetAccountById(int id)

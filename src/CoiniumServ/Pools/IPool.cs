@@ -22,6 +22,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Accounts;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining;
@@ -31,7 +32,7 @@ using Newtonsoft.Json;
 namespace CoiniumServ.Pools
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public interface IPool: IJsonService
+    public interface IPool : IJsonService
     {
         bool Enabled { get; }
 
@@ -61,6 +62,8 @@ namespace CoiniumServ.Pools
         /// Coin daemon assigned to pool.
         /// </summary>
         IDaemonClient Daemon { get; }
+
+        IAccountManager AccountManager { get; }
 
         void Start();
 
