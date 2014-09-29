@@ -165,7 +165,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                             From Block b
 	                            INNER JOIN Payment as p ON p.Block = b.Height
 	                            WHERE b.Accounted = true and p.Completed = true
-	                            ORDER BY Height DESC LIMIT @offset, @count",
+                                GROUP BY b.Height
+	                            ORDER BY b.Height DESC LIMIT @offset, @count",
                         new
                         {
                             offset = paginationQuery.Offset,
