@@ -42,12 +42,15 @@ namespace CoiniumServ.Server.Stack
 
                 Nodes = new List<IStackNode>();
 
-                if (!config.nodes is NullExceptionPreventer)
+                if (config.nodes is NullExceptionPreventer)
                 {
-                    foreach (var entry in config.nodes)
-                    {
-                        Nodes.Add(new StackNode(entry));
-                    }
+                    Valid = true;
+                    return;
+                }
+
+                foreach (var entry in config.nodes)
+                {
+                    Nodes.Add(new StackNode(entry));
                 }
 
                 Valid = true;
