@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Coinbase;
@@ -31,7 +32,6 @@ using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Time;
 using CoiniumServ.Utils.Numerics;
-using Serilog;
 
 namespace CoiniumServ.Shares
 {

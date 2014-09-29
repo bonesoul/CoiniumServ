@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.IO;
 using CoiniumServ.Utils.Helpers.IO;
 using Nancy;

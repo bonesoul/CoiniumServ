@@ -20,10 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Query;
-using CoiniumServ.Server.Web.Models.Pool;
 
 namespace CoiniumServ.Accounts
 {

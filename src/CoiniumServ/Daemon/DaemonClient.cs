@@ -20,13 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon.Config;
-using CoiniumServ.Daemon.Requests;
-using CoiniumServ.Daemon.Responses;
+
 /* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
 /* Possible alternative implementations:
@@ -38,6 +32,13 @@ using CoiniumServ.Daemon.Responses;
 
 // Original bitcoin api call list: https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_Calls_list
 // Rpc error codes: https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Requests;
+using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Factories;
 
 namespace CoiniumServ.Daemon

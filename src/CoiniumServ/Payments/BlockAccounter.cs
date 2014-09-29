@@ -20,9 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using CoiniumServ.Accounts;
 using CoiniumServ.Factories;
 using CoiniumServ.Persistance.Layers;

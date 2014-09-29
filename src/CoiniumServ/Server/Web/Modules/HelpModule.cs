@@ -20,10 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Configuration;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Server.Web.Models.GettingStarted;
 using Nancy;
 using Nancy.CustomErrors;

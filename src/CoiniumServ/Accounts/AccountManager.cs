@@ -20,13 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Query;
 using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Models.Pool;
 using Serilog;
 
 namespace CoiniumServ.Accounts
