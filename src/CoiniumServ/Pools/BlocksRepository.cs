@@ -35,6 +35,8 @@ namespace CoiniumServ.Pools
         public int Orphaned { get; private set; }
         public int Total { get; private set; }
 
+        private readonly IPaginationQuery _query = new PaginationQuery(1, 5);
+
         public IList<IPersistedBlock> Latest
         {
             get { return _latestBlocks.AsReadOnly(); }
@@ -80,8 +82,8 @@ namespace CoiniumServ.Pools
             _latestBlocks.Clear();
             _lastPaid.Clear();
 
-            _latestBlocks.AddRange(_storageLayer.GetLastestBlocks()); // recache latest blocks.
-            _lastPaid.AddRange(_storageLayer.GetLatestPaidBlocks()); // recache last paid blocks.
+            _latestBlocks.AddRange(_storageLayer.GetBlocks(_query)); // recache latest blocks.
+            _lastPaid.AddRange(_storageLayer.GetPaidBlocks(_query)); // recache last paid blocks.
 
             // recache block counts.
             var blockCounts = _storageLayer.GetTotalBlocks();

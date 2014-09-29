@@ -58,37 +58,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public IDictionary<string, int> GetTotalBlocks()
-        {
-            var blocks = new Dictionary<string, int> { { "total", 0 }, { "pending", 0 }, { "orphaned", 0 }, { "confirmed", 0 } };
-
-            try
-            {
-                if (!IsEnabled)
-                    return blocks;
-
-                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
-                {
-                    var result = connection.Query(@"SELECT COUNT(*),
-                        (SELECT COUNT(*) FROM blocks WHERE confirmations >= 0 AND confirmations < 120) AS pending,
-                        (SELECT COUNT(*) FROM blocks WHERE confirmations < 0) AS orphaned,
-                        (SELECT COUNT(*) FROM blocks WHERE confirmations >= 120) AS confirmed
-                        from blocks");
-
-                    var data = result.First();
-                    blocks["pending"] = (int)data.pending;
-                    blocks["orphaned"] = (int)data.orphaned;
-                    blocks["confirmed"] = (int)data.confirmed;
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error("An exception occured while getting block totals: {0:l}", e.Message);
-            }
-
-            return blocks;
-        }
-
         public IEnumerable<IPersistedBlock> GetUnpaidBlocks()
         {
             // this function is not supported as this functionality is only required by payment processors which mpos itself is already one so and handles itself.
@@ -120,9 +89,9 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetLastestBlocks(int count = 5)
+        public IDictionary<string, int> GetTotalBlocks()
         {
-            var blocks = new List<IPersistedBlock>();
+            var blocks = new Dictionary<string, int> { { "total", 0 }, { "pending", 0 }, { "orphaned", 0 }, { "confirmed", 0 } };
 
             try
             {
@@ -131,25 +100,24 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<PersistedBlock>(
-                        string.Format(@"SELECT height, blockhash, amount, confirmations, time 
-                            FROM blocks ORDER BY height DESC LIMIT {0}", count));
+                    var result = connection.Query(@"SELECT COUNT(*),
+                        (SELECT COUNT(*) FROM blocks WHERE confirmations >= 0 AND confirmations < 120) AS pending,
+                        (SELECT COUNT(*) FROM blocks WHERE confirmations < 0) AS orphaned,
+                        (SELECT COUNT(*) FROM blocks WHERE confirmations >= 120) AS confirmed
+                        from blocks");
 
-                    blocks.AddRange(results);
+                    var data = result.First();
+                    blocks["pending"] = (int)data.pending;
+                    blocks["orphaned"] = (int)data.orphaned;
+                    blocks["confirmed"] = (int)data.confirmed;
                 }
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting last blocks: {0:l}", e.Message);
+                _logger.Error("An exception occured while getting block totals: {0:l}", e.Message);
             }
 
             return blocks;
-        }
-
-        public IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5)
-        {
-            //todo: implement me!
-            throw new NotImplementedException();
         }
     }
 }

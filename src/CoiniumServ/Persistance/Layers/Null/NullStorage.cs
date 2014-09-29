@@ -91,11 +91,6 @@ namespace CoiniumServ.Persistance.Layers.Null
             throw new System.NotImplementedException();
         }
 
-        public IDictionary<string, int> GetTotalBlocks()
-        {
-            return new Dictionary<string, int>();
-        }
-
         public IEnumerable<IPersistedBlock> GetUnpaidBlocks()
         {
             return new List<IPersistedBlock>();
@@ -106,14 +101,9 @@ namespace CoiniumServ.Persistance.Layers.Null
             return new List<IPersistedBlock>();
         }
 
-        public IEnumerable<IPersistedBlock> GetLastestBlocks(int count = 5)
+        public IDictionary<string, int> GetTotalBlocks()
         {
-            return new List<IPersistedBlock>();
-        }
-
-        public IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5)
-        {
-            throw new System.NotImplementedException();
+            return new Dictionary<string, int>();
         }
 
         public void AddPayment(IPayment payment)

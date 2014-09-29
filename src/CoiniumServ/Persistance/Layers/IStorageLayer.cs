@@ -116,12 +116,6 @@ namespace CoiniumServ.Persistance.Layers
         IList<IPersistedBlock> GetPaidBlocks(IPaginationQuery paginationQuery);
 
         /// <summary>
-        /// Returns total blocks.
-        /// </summary>
-        /// <returns></returns>
-        IDictionary<string, int> GetTotalBlocks();
-
-        /// <summary>
         /// Returns all unpaid blocks.
         /// </summary>
         /// <returns></returns>
@@ -134,18 +128,10 @@ namespace CoiniumServ.Persistance.Layers
         IEnumerable<IPersistedBlock> GetPendingBlocks();
 
         /// <summary>
-        /// Returns latest n blocks.
+        /// Returns total blocks.
         /// </summary>
-        /// <param name="count"></param>
         /// <returns></returns>
-        IEnumerable<IPersistedBlock> GetLastestBlocks(int count = 5);
-
-        /// <summary>
-        /// Returns latest n paid blocks.
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5);
+        IDictionary<string, int> GetTotalBlocks();
 
         #endregion
 
