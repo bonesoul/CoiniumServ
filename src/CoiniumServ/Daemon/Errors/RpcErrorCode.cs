@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 namespace CoiniumServ.Daemon.Errors
 {
     // defined in https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
