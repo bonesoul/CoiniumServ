@@ -39,5 +39,10 @@ namespace CoiniumServ.Payments
         {
             return _storageLayer.GetPaymentsForBlock(height);
         }
+
+        public IPaymentDetails GetTransactionById(uint id)
+        {
+            return _storageLayer.GetTransactionById(id);
+        }
     }
 }

@@ -131,6 +131,11 @@ namespace CoiniumServ.Persistance.Layers.Null
             throw new System.NotImplementedException();
         }
 
+        public IPaymentDetails GetTransactionById(uint id)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void AddTransaction(ITransaction transaction)
         {
             return;

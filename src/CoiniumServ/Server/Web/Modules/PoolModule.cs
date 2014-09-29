@@ -103,45 +103,6 @@ namespace CoiniumServ.Server.Web.Modules
                 }];
             };
 
-            Get["/{slug}/blocks/paid/{page?1}"] = _ =>
-            {
-                var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
-
-                if (pool == null) // make sure queried pool exists.
-                {
-                    return View["error", new ErrorViewModel
-                    {
-                        Details = string.Format("The requested pool does not exist: {0}", _.slug)
-                    }];
-                }
-
-                int page;
-                if (!Int32.TryParse(_.page, out page))
-                    page = 1;
-
-                var paginationQuery = new PaginationQuery(page);
-
-                var blocks = pool.BlockRepository.GetPaidBlocks(paginationQuery);
-
-                if (blocks.Count == 0)
-                {
-                    return View["error", new ErrorViewModel
-                    {
-                        Details = "No more blocks exist"
-                    }];
-                }
-
-                var model = new BlocksModel
-                {
-                    Blocks = blocks,
-                    Coin = pool.Config.Coin,
-                    Filter = BlockFilter.PaidOnly,
-                    PaginationQuery = paginationQuery
-                };
-
-                return View["blocks", model];
-            };
-
             Get["/{slug}/blocks/{page?1}"] = _ =>
             {
                 var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
@@ -181,6 +142,45 @@ namespace CoiniumServ.Server.Web.Modules
                 return View["blocks", model];
             };
 
+            Get["/{slug}/blocks/paid/{page?1}"] = _ =>
+            {
+                var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
+
+                if (pool == null) // make sure queried pool exists.
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = string.Format("The requested pool does not exist: {0}", _.slug)
+                    }];
+                }
+
+                int page;
+                if (!Int32.TryParse(_.page, out page))
+                    page = 1;
+
+                var paginationQuery = new PaginationQuery(page);
+
+                var blocks = pool.BlockRepository.GetPaidBlocks(paginationQuery);
+
+                if (blocks.Count == 0)
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = "No more blocks exist"
+                    }];
+                }
+
+                var model = new BlocksModel
+                {
+                    Blocks = blocks,
+                    Coin = pool.Config.Coin,
+                    Filter = BlockFilter.PaidOnly,
+                    PaginationQuery = paginationQuery
+                };
+
+                return View["blocks", model];
+            };
+
             Get["/{slug}/block/{height:int}"] = _ =>
             {
                 var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
@@ -214,6 +214,34 @@ namespace CoiniumServ.Server.Web.Modules
                 ViewBag.SubHeader = string.Format("{0} block", pool.Config.Coin.Name);
 
                 return View["block", model];
+            };
+
+            Get["/{slug}/tx/{id:int}"] = _ =>
+            {
+                var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
+
+                if (pool == null) // make sure queried pool exists.
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = string.Format("The requested pool does not exist: {0}", _.slug)
+                    }];
+                }
+
+                var transaction = pool.PaymentRepository.GetTransactionById((uint)_.id);
+
+                if (transaction == null)
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = string.Format("The requested transaction does not exist.")
+                    }];
+                }
+
+                ViewBag.Header = string.Format("Transaction Details");
+                ViewBag.SubHeader = string.Format("{0}", transaction.TransactionId);
+
+                return View["transaction", transaction];
             };
 
             Get["/{slug}/account/address/{address:length(26,34)}/{page?1}"] = _ =>

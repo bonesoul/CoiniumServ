@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Query;
 using Dapper;
@@ -171,6 +172,35 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
 
             return payouts;
+        }
+
+        public IPaymentDetails GetTransactionById(uint id)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return null;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    return connection.Query<PaymentDetails>(
+                        @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, a.Address, p.Block, p.Amount as Amount, 
+                            t.Amount as SentAmount, t.Currency, t.TxId as TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
+                            FROM Payment p 
+                                INNER JOIN Account as a ON p.AccountId = a.Id
+                                LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId Where t.Id = @id",
+                        new {id}).Single();
+                }
+            }
+            catch (InvalidOperationException) // fires when no result is found.
+            {
+                return null;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while gettin transaction: {0:l}", e.Message);
+                return null;
+            }
         }
 
         public void AddTransaction(ITransaction transaction)
