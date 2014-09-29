@@ -32,8 +32,7 @@ namespace CoiniumServ.Server.Web.Modules
             Get["/"] = _ =>
             {
                 // include common data required by layout.
-                ViewBag.Title = "Donation";
-                ViewBag.Heading = "Donation";
+                ViewBag.Header = "Donation";
 
                 // return our view
                 return View["donate"];

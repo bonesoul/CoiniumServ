@@ -182,10 +182,10 @@
                                             <span class="label label-warning">@block.Status</span>
                                             break;
                                         case BlockStatus.Orphaned:
-                                            <span class="label label-danger">@block.Status</span>
+                                        <span class="label label-danger">@block.Status</span>
                                             break;
                                         case BlockStatus.Confirmed:
-                                            <span class="label label-info">@block.Status</span>
+                                        <span class="label label-info">@block.Status</span>
                                             break;
                                     }
                                 </td>
@@ -197,12 +197,14 @@
                 </table>
             </div>
             <div class="box-footer">
-                <div class="input-group">
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> Lookup</button>
+                <form action="#" method="get" id="block-search">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> Lookup</button>
+                        </div>
+                        <input type="text" class="form-control" id="block-height" placeholder="Enter block height..">
                     </div>
-                    <input type="text" class="form-control" placeholder="Enter block height..">
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -235,10 +237,10 @@
                                             <span class="label label-warning">@block.Status</span>
                                             break;
                                         case BlockStatus.Orphaned:
-                                            <span class="label label-danger">@block.Status</span>
+                                        <span class="label label-danger">@block.Status</span>
                                             break;
                                         case BlockStatus.Confirmed:
-                                            <span class="label label-info">@block.Status</span>
+                                        <span class="label label-info">@block.Status</span>
                                             break;
                                     }
                                 </td>
@@ -250,12 +252,14 @@
                 </table>
             </div>
             <div class="box-footer">
-                <div class="input-group">
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-danger"><i class="fa fa-search"></i> Lookup</button>
+                <form action="#" method="get" id="address-search">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-danger"><i class="fa fa-search"></i> Lookup</button>
+                        </div>
+                        <input type="text" class="form-control" id="address" placeholder="Enter your wallet address..">
                     </div>
-                    <input type="text" class="form-control" placeholder="Enter your wallet address..">
-                </div>
+                </form>
             </div>
         </div>
     </div>

@@ -35,8 +35,7 @@ namespace CoiniumServ.Server.Web.Modules
             Get["/"] = _ =>
             {
                 // include common data required by layout.                
-                ViewBag.Title = "Welcome!";
-                ViewBag.Heading = "Welcome";
+                ViewBag.Header = "Welcome";
 
                 // return our view
                 return View["index", new IndexModel

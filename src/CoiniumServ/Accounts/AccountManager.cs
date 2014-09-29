@@ -20,34 +20,52 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using CoiniumServ.Accounts;
 
-namespace CoiniumServ.Persistance.Layers.Mpos
+using System.Collections.Generic;
+using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Persistance.Layers.Hybrid;
+using CoiniumServ.Persistance.Query;
+using CoiniumServ.Pools;
+using CoiniumServ.Server.Web.Models.Pool;
+using Serilog;
+
+namespace CoiniumServ.Accounts
 {
-    public partial class MposStorage
+    public class AccountManager:IAccountManager
     {
+        private readonly IStorageLayer _storageLayer;
+
+        private readonly ILogger _logger;
+
+        public AccountManager(IStorageLayer storageLayer, IPoolConfig poolConfig)
+        {
+            _storageLayer = storageLayer;
+            _logger = Log.ForContext<HybridStorage>().ForContext("Component", poolConfig.Coin.Name);
+        }
+
         public void AddAccount(IAccount account)
         {
-            // this function is not supported as this functionality is handled by mpos itself.
-			throw new NotSupportedException();
-        }
-
-        public IAccount GetAccountByUsername(string username)
-        {
-            // TODO: implement me!
-            throw new NotImplementedException();
-        }
-
-        public IAccount GetAccountByAddress(string address)
-        {
-            throw new NotImplementedException();
+            _storageLayer.AddAccount(account);
         }
 
         public IAccount GetAccountById(int id)
         {
-            // TODO: implement me!
-            throw new NotImplementedException();
+            return _storageLayer.GetAccountById(id);
+        }
+
+        public IAccount GetAccountByUsername(string username)
+        {
+            return _storageLayer.GetAccountByUsername(username);
+        }
+
+        public IAccount GetAccountByAddress(string address)
+        {
+            return _storageLayer.GetAccountByAddress(address);
+        }
+
+        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        {
+            return _storageLayer.GetPaymentsForAccount(id, paginationQuery);
         }
     }
 }

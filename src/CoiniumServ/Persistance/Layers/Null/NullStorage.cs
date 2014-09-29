@@ -91,11 +91,6 @@ namespace CoiniumServ.Persistance.Layers.Null
             throw new System.NotImplementedException();
         }
 
-        public IDictionary<string, int> GetTotalBlocks()
-        {
-            return new Dictionary<string, int>();
-        }
-
         public IEnumerable<IPersistedBlock> GetUnpaidBlocks()
         {
             return new List<IPersistedBlock>();
@@ -106,14 +101,9 @@ namespace CoiniumServ.Persistance.Layers.Null
             return new List<IPersistedBlock>();
         }
 
-        public IEnumerable<IPersistedBlock> GetLastestBlocks(int count = 5)
+        public IDictionary<string, int> GetTotalBlocks()
         {
-            return new List<IPersistedBlock>();
-        }
-
-        public IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5)
-        {
-            throw new System.NotImplementedException();
+            return new Dictionary<string, int>();
         }
 
         public void AddPayment(IPayment payment)
@@ -136,19 +126,29 @@ namespace CoiniumServ.Persistance.Layers.Null
             throw new System.NotImplementedException();
         }
 
+        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void AddTransaction(ITransaction transaction)
         {
             return;
         }
 
-        public void AddAccount(IAccount user)
+        public void AddAccount(IAccount account)
         {
             return;
         }
 
-        public IAccount GetAccount(string username)
+        public IAccount GetAccountByUsername(string username)
         {
             return null;
+        }
+
+        public IAccount GetAccountByAddress(string address)
+        {
+            throw new System.NotImplementedException();
         }
 
         public IAccount GetAccountById(int id)

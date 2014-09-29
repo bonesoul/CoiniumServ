@@ -142,6 +142,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accounts\AccountManager.cs" />
+    <Compile Include="Accounts\IAccountManager.cs" />
     <Compile Include="Blocks\BlockProcessor.cs" />
     <Compile Include="Blocks\IBlockProcessor.cs" />
     <Compile Include="Coin\Address\Exceptions\AddressNotOwnedException.cs" />
@@ -207,6 +209,7 @@
     <Compile Include="Server\Web\Models\Algorithm\AlgorithmModel.cs" />
     <Compile Include="Server\Web\Models\GettingStarted\GettingStartedModel.cs" />
     <Compile Include="Server\Web\Models\GettingStarted\GettingStartedPoolModel.cs" />
+    <Compile Include="Server\Web\Models\Pool\AccountModel.cs" />
     <Compile Include="Server\Web\Modules\AlgorithmModule.cs" />
     <Compile Include="Utils\Metrics\IMetricsManager.cs" />
     <Compile Include="Utils\Metrics\MetricsManager.cs" />
@@ -926,6 +929,9 @@
     <None Include="web\default\views\pools\pools.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="web\default\views\pool\account.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\pool\block.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -960,6 +966,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Coinium.ico" />
+    <None Include="web\default\Content\js\interface.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\Content\img\coins\icon\21.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

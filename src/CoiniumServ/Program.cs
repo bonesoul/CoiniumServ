@@ -22,14 +22,11 @@
 #endregion
 using System;
 using System.Globalization;
-using System.Reflection;
 using System.Threading;
 using CoiniumServ.Container;
 using CoiniumServ.Factories;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
-using CoiniumServ.Utils.Platform;
-using libCoiniumServ.Versions;
 using Nancy.TinyIoc;
 using Serilog;
 
@@ -104,10 +101,10 @@ namespace CoiniumServ
             // start web server.
             objectFactory.GetWebServer();
 
-            #if DEBUG            
+#if DEBUG
             // only initialize metrics support in debug mode
-            objectFactory.GetMetricsManager();            
-            #endif
+            objectFactory.GetMetricsManager();
+#endif
         }
 
         #region unhandled exception emitter
@@ -127,9 +124,10 @@ namespace CoiniumServ
             if (e.IsTerminating)
             {
                 _logger.Fatal(exception, "Terminating because of unhandled exception!");
-                #if !DEBUG // prevent console window from being closed when we are in development mode.
-                    Environment.Exit(-1);
-                #endif
+#if !DEBUG 
+                // prevent console window from being closed when we are in development mode.
+                Environment.Exit(-1);
+#endif
             }
             else
                 _logger.Error(exception, "Caught unhandled exception");

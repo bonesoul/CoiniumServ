@@ -59,7 +59,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             catch (Exception e)
             {
                 _logger.Error("An exception occured while adding block; {0:l}", e.Message);
-            } 
+            }
         }
 
         public void UpdateBlock(IPersistedBlock block)
@@ -100,7 +100,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     return connection.Query<PersistedBlock>(
                         @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt From Block WHERE Height = @height",
-                        new {height}).Single();
+                        new { height }).Single();
                 }
             }
             catch (InvalidOperationException) // fires when no result is found.
@@ -116,8 +116,6 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
         public IList<IPersistedBlock> GetBlocks(IPaginationQuery paginationQuery)
         {
-            // todo: remove GetPendingBlocks() instances.
-
             var blocks = new List<IPersistedBlock>();
 
             try
@@ -127,9 +125,14 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<PersistedBlock>(string.Format(
+                    var results = connection.Query<PersistedBlock>(
                         @"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt From Block 
-                            ORDER BY Height DESC LIMIT {0},{1}", paginationQuery.Offset, paginationQuery.Count));
+                            ORDER BY Height DESC LIMIT @offset, @count",
+                        new
+                        {
+                            offset = paginationQuery.Offset,
+                            count = paginationQuery.Count
+                        });
 
                     blocks.AddRange(results);
                 }
@@ -157,12 +160,17 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<PersistedBlock>(string.Format(
+                    var results = connection.Query<PersistedBlock>(
                         @"SELECT b.Height, b.Orphaned, b.Confirmed, b.Accounted, b.BlockHash, b.TxHash, b.Amount, b.Reward, b.CreatedAt 
                             From Block b
 	                            INNER JOIN Payment as p ON p.Block = b.Height
 	                            WHERE b.Accounted = true and p.Completed = true
-	                            ORDER BY Height DESC LIMIT {0},{1}", paginationQuery.Offset, paginationQuery.Count));
+	                            ORDER BY Height DESC LIMIT @offset, @count",
+                        new
+                        {
+                            offset = paginationQuery.Offset,
+                            count = paginationQuery.Count
+                        });
 
                     blocks.AddRange(results);
                 }
@@ -174,37 +182,6 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             catch (Exception e)
             {
                 _logger.Error("An exception occured while getting block; {0:l}", e.Message);
-            }
-
-            return blocks;
-        }
-
-        public IDictionary<string, int> GetTotalBlocks()
-        {
-            var blocks = new Dictionary<string, int> { { "total", 0 }, { "pending", 0 }, { "orphaned", 0 }, { "confirmed", 0 } };
-
-            try
-            {
-                if (!IsEnabled)
-                    return blocks;
-
-                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
-                {
-                    var result = connection.Query(@"SELECT COUNT(*),
-                        (SELECT COUNT(*) FROM Block WHERE Orphaned = false AND Confirmed = false) AS pending,
-                        (SELECT COUNT(*) FROM Block WHERE Orphaned = true) AS orphaned,
-                        (SELECT COUNT(*) FROM Block WHERE Confirmed = true) AS confirmed
-                        from Block");
-
-                    var data = result.First();
-                    blocks["pending"] = (int) data.pending;
-                    blocks["orphaned"] = (int) data.orphaned;
-                    blocks["confirmed"] = (int) data.confirmed;
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error("An exception occured while getting block totals: {0:l}", e.Message);
             }
 
             return blocks;
@@ -261,9 +238,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return blocks;
         }
 
-        public IEnumerable<IPersistedBlock> GetLastestBlocks(int count = 5)
+        public IDictionary<string, int> GetTotalBlocks()
         {
-            var blocks = new List<IPersistedBlock>();
+            var blocks = new Dictionary<string, int> { { "total", 0 }, { "pending", 0 }, { "orphaned", 0 }, { "confirmed", 0 } };
 
             try
             {
@@ -272,42 +249,21 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<PersistedBlock>(
-                        string.Format(@"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt 
-                                FROM Block ORDER BY Height DESC LIMIT {0}", count));
+                    var result = connection.Query(@"SELECT COUNT(*),
+                        (SELECT COUNT(*) FROM Block WHERE Orphaned = false AND Confirmed = false) AS pending,
+                        (SELECT COUNT(*) FROM Block WHERE Orphaned = true) AS orphaned,
+                        (SELECT COUNT(*) FROM Block WHERE Confirmed = true) AS confirmed
+                        from Block");
 
-                    blocks.AddRange(results);
+                    var data = result.First();
+                    blocks["pending"] = (int)data.pending;
+                    blocks["orphaned"] = (int)data.orphaned;
+                    blocks["confirmed"] = (int)data.confirmed;
                 }
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting last blocks: {0:l}", e.Message);
-            }
-
-            return blocks;
-        }
-
-        public IEnumerable<IPersistedBlock> GetLatestPaidBlocks(int count = 5)
-        {
-            var blocks = new List<IPersistedBlock>();
-
-            try
-            {
-                if (!IsEnabled)
-                    return blocks;
-
-                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
-                {
-                    var results = connection.Query<PersistedBlock>(
-                        string.Format(@"SELECT Height, Orphaned, Confirmed, Accounted, BlockHash, TxHash, Amount, Reward, CreatedAt 
-                                FROM Block WHERE Accounted = true ORDER BY Height DESC LIMIT {0}", count));
-
-                    blocks.AddRange(results);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error("An exception occured while getting last blocks: {0:l}", e.Message);
+                _logger.Error("An exception occured while getting block totals: {0:l}", e.Message);
             }
 
             return blocks;

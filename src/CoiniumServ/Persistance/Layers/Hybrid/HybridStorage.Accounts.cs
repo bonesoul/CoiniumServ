@@ -30,7 +30,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 {
     public partial class HybridStorage
     {
-        public void AddAccount(IAccount user)
+        public void AddAccount(IAccount account)
         {
             try
             {
@@ -43,8 +43,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         @"INSERT INTO Account(Username, Address, CreatedAt) VALUES (@username, @address, @createdAt)",
                         new
                         {
-                            username = user.Username,
-                            address = user.Address,
+                            username = account.Username,
+                            address = account.Address,
                             createdAt = DateTime.Now
                         });
                 }
@@ -55,7 +55,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
         }
 
-        public IAccount GetAccount(string username)
+        public IAccount GetAccountByUsername(string username)
         {
             try
             {
@@ -64,8 +64,32 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<Account>("SELECT Id, Username FROM Account WHERE Username = @username",
+                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Username = @username",
                         new { username }).Single();
+                }
+            }
+            catch (InvalidOperationException) // fires when no result is found.
+            {
+                return null;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting account; {0:l}", e.Message);
+                return null;
+            }
+        }
+
+        public IAccount GetAccountByAddress(string address)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return null;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Address = @address",
+                        new { address }).Single();
                 }
             }
             catch (InvalidOperationException) // fires when no result is found.
@@ -88,7 +112,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<Account>("SELECT Id, Username FROM Account WHERE Id = @id",
+                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Id = @id",
                         new { id }).Single();
                 }
             }

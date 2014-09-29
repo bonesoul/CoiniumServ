@@ -21,6 +21,7 @@
 // 
 #endregion
 using System.Collections.Generic;
+using CoiniumServ.Accounts;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
@@ -56,7 +57,7 @@ namespace CoiniumServ.Factories
     /// <summary>
     /// Object factory that creates instances of objects
     /// </summary>
-    public class ObjectFactory:IObjectFactory
+    public class ObjectFactory : IObjectFactory
     {
         #region context
 
@@ -127,12 +128,13 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IDaemonClient>(@params);
         }
 
-        public IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer)
+        public IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
                 {"storageLayer", storageLayer},
+                {"accountManager", accountManager},
             };
 
             return _applicationContext.Container.Resolve<IMinerManager>(@params);
@@ -258,6 +260,17 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IRpcService>(type, @params);
         }
 
+        public IAccountManager GetAccountManager(IStorageLayer storageLayer, IPoolConfig poolConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"storageLayer", storageLayer},
+                {"poolConfig", poolConfig},
+            };
+
+            return _applicationContext.Container.Resolve<IAccountManager>(@params);
+        }
+
         #endregion
 
         #region payment objects
@@ -274,35 +287,39 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IPaymentManager>(@params);
         }
 
-        public IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer)
+        public IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
-                {"storageLayer", storageLayer}
+                {"storageLayer", storageLayer},
+                {"accountManager", accountManager}
             };
 
             return _applicationContext.Container.Resolve<IBlockAccounter>(@params);
         }
 
-        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient)
+        public IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient,
+            IAccountManager accountManager)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
                 {"storageLayer", storageLayer},
                 {"daemonClient", daemonClient},
+                {"accountManager", accountManager},
             };
 
             return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
         }
 
-        public IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer)
+        public IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager)
         {
             var @params = new NamedParameterOverloads
             {
                 {"block", block},
-                {"storageLayer", storageLayer}
+                {"storageLayer", storageLayer},
+                {"accountManager", accountManager}
             };
 
             return _applicationContext.Container.Resolve<IPaymentRound>(@params);

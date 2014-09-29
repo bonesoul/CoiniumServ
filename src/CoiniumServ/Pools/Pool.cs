@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using CoiniumServ.Accounts;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Banning;
 using CoiniumServ.Configuration;
@@ -72,18 +73,20 @@ namespace CoiniumServ.Pools
 
         public IDaemonClient Daemon { get; private set; }
 
+        public IAccountManager AccountManager { get; private set; }
+
         // object factory.
         private readonly IObjectFactory _objectFactory;
 
         // dependent objects.
-        
+
         private IJobManager _jobManager;
-        
-        private IShareManager _shareManager;       
-        
+
+        private IShareManager _shareManager;
+
         private IBanManager _banningManager;
-        
-        private IStorageLayer _storageLayer;
+
+        private IStorageLayer _storage;
 
         private readonly IConfigManager _configManager;
 
@@ -115,7 +118,7 @@ namespace CoiniumServ.Pools
             _configManager = configManager;
             _objectFactory = objectFactory;
             Config = poolConfig;
-            _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);                                   
+            _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);
 
             GenerateInstanceId(); // generate unique instance id for the pool.
 
@@ -145,7 +148,7 @@ namespace CoiniumServ.Pools
             Daemon = _objectFactory.GetDaemonClient(Config.Daemon, Config.Coin);
             HashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
             NetworkInfo = _objectFactory.GetNetworkInfo(Daemon, HashAlgorithm, Config);
-            
+
             _shareMultiplier = Math.Pow(2, 32) / HashAlgorithm.Multiplier; // will be used in hashrate calculation.
         }
 
@@ -165,31 +168,32 @@ namespace CoiniumServ.Pools
 
             // load the storage layer.
             if (Config.Storage.Layer is HybridStorageConfig)
-                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, Daemon, Config);
+                _storage = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, Daemon, Config);
             else if (Config.Storage.Layer is MposStorageConfig)
-                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Daemon, Config);
+                _storage = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Daemon, Config);
             else if (Config.Storage.Layer is NullStorageConfig)
-                _storageLayer = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, Daemon, Config);
+                _storage = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, Daemon, Config);
         }
 
         private void InitManagers()
         {
             try
             {
-                BlockRepository = _objectFactory.GetBlockRepository(_storageLayer);
-                PaymentRepository = _objectFactory.GetPaymentRepository(_storageLayer);
-                MinerManager = _objectFactory.GetMinerManager(Config, _storageLayer);
+                AccountManager = _objectFactory.GetAccountManager(_storage, Config);
+                BlockRepository = _objectFactory.GetBlockRepository(_storage);
+                PaymentRepository = _objectFactory.GetPaymentRepository(_storage);
+                MinerManager = _objectFactory.GetMinerManager(Config, _storage, AccountManager);
 
                 var jobTracker = _objectFactory.GetJobTracker(Config);
-                _objectFactory.GetBlockProcessor(Config, Daemon, _storageLayer);
-                _shareManager = _objectFactory.GetShareManager(Config, Daemon, jobTracker, _storageLayer);
+                _objectFactory.GetBlockProcessor(Config, Daemon, _storage);
+                _shareManager = _objectFactory.GetShareManager(Config, Daemon, jobTracker, _storage);
                 _objectFactory.GetVardiffManager(Config, _shareManager);
                 _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
                 _jobManager = _objectFactory.GetJobManager(Config, Daemon, jobTracker, _shareManager, MinerManager, HashAlgorithm);
                 _jobManager.Initialize(InstanceId);
 
-                var blockAccounter =_objectFactory.GetBlockAccounter(Config, _storageLayer);
-                var paymentProcessor =_objectFactory.GetPaymentProcessor(Config, _storageLayer, Daemon);
+                var blockAccounter = _objectFactory.GetBlockAccounter(Config, _storage, AccountManager);
+                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _storage, Daemon, AccountManager);
                 _objectFactory.GetPaymentManager(Config, blockAccounter, paymentProcessor);
             }
             catch (Exception e)
@@ -269,7 +273,7 @@ namespace CoiniumServ.Pools
             NetworkInfo.Recache(); // let network statistics recache.
             CalculateHashrate(); // calculate the pool hashrate.
 
-            RoundShares = _storageLayer.GetCurrentShares(); // recache current round.
+            RoundShares = _storage.GetCurrentShares(); // recache current round.
 
             // cache the json-service response
             ServiceResponse = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
@@ -279,8 +283,8 @@ namespace CoiniumServ.Pools
         {
             // read hashrate stats.
             var windowTime = TimeHelpers.NowInUnixTimestamp() - _configManager.StatisticsConfig.HashrateWindow;
-            _storageLayer.DeleteExpiredHashrateData(windowTime);
-            var hashrates = _storageLayer.GetHashrateData(windowTime);
+            _storage.DeleteExpiredHashrateData(windowTime);
+            var hashrates = _storage.GetHashrateData(windowTime);
 
             double total = hashrates.Sum(pair => pair.Value);
             Hashrate = Convert.ToUInt64(_shareMultiplier * total / _configManager.StatisticsConfig.HashrateWindow);

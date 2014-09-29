@@ -56,12 +56,12 @@ namespace CoiniumServ.Server.Web
             {
                 ctx.ViewBag.StackName = _configManager.StackConfig.Name;
 
-                ctx.ViewBag.Title = string.IsNullOrEmpty(ctx.ViewBag.Title)
-                    ? _configManager.StackConfig.Name
-                    : string.Format("{0} - {1}", _configManager.StackConfig.Name, ctx.ViewBag.Heading);
+                if (string.IsNullOrEmpty(ctx.ViewBag.Header))
+                    ctx.ViewBag.Header = "";
 
-                if (string.IsNullOrEmpty(ctx.ViewBag.Heading)) 
-                    ctx.ViewBag.Heading = "";
+                ctx.ViewBag.Title = string.IsNullOrEmpty(ctx.ViewBag.Header)
+                    ? _configManager.StackConfig.Name
+                    : string.Format("{0} - {1}", _configManager.StackConfig.Name, ctx.ViewBag.Header);
 
                 if(string.IsNullOrEmpty(ctx.ViewBag.SubHeading))
                     ctx.ViewBag.SubHeading = "";

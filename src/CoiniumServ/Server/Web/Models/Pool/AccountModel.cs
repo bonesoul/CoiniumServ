@@ -20,38 +20,22 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Algorithms;
-using CoiniumServ.Server.Web.Models.Algorithm;
-using Nancy;
-using Nancy.CustomErrors;
-using Nancy.Helpers;
 
-namespace CoiniumServ.Server.Web.Modules
+using System.Collections.Generic;
+using CoiniumServ.Accounts;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Persistance.Query;
+
+namespace CoiniumServ.Server.Web.Models.Pool
 {
-    public class AlgorithmModule:NancyModule
+    public class AccountModel
     {
-        public AlgorithmModule(IAlgorithmManager algorithmManager)
-            :base("/algorithm")
-        {
-            Get["/{slug}"] = _ =>
-            {
-                var algorithm = algorithmManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested algorithm.
+        public IAccount Account { get; set; }
 
-                if (algorithm == null)
-                {
-                    return View["error", new ErrorViewModel
-                    {
-                        Details = string.Format("The requested algorithm does not exist: {0}", _.slug)
-                    }];                    
-                }
+        public ICoinConfig Coin { get; set; }
 
-                ViewBag.Header = algorithm.Name;
+        public IList<IDetailedPayment> Payments { get; set; } 
 
-                return View["algorithm", new AlgorithmModel
-                {
-                    Algorithm = algorithm
-                }];
-            };
-        }
+        public IPaginationQuery PaginationQuery { get; set; }
     }
 }

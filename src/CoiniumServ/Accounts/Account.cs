@@ -32,15 +32,15 @@ namespace CoiniumServ.Accounts
 
         public string Address { get; private set; }
 
-        public Account(int id, string username)
+        public Account(int id, string username, string address)
         {
             Id = id;
             Username = username;
-            Address = username;
+            Address = address;
         }
 
         public Account(IMiner miner)
-            :this(-1, miner.Username)
+            :this(-1, miner.Username, miner.Username)
         { }
     }
 }
