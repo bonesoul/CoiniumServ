@@ -510,7 +510,9 @@
     <None Include="config\software-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\algorithm\algorithm.cshtml" />
+    <None Include="web\default\views\algorithm\algorithm.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -738,7 +740,9 @@
     <Compile Include="Persistance\Layers\Mpos\MposStorage.Miners.cs" />
     <Compile Include="Persistance\Layers\Mpos\MposStorage.Statistics.cs" />
     <None Include="web.config" />
-    <None Include="web\default\views\algorithms\algorithms.cshtml" />
+    <None Include="web\default\views\algorithms\algorithms.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\api\api.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -778,10 +782,18 @@
     <None Include="web\default\Content\fonts\ionicons.woff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\help\gettingstarted\index.cshtml" />
-    <None Include="web\default\views\help\gettingstarted\pool.cshtml" />
-    <None Include="web\default\views\help\miningsoftware\index.cshtml" />
-    <None Include="web\default\views\layout\header.cshtml" />
+    <None Include="web\default\views\help\gettingstarted\index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\help\gettingstarted\pool.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\help\miningsoftware\index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\layout\header.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\layout\footer.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -896,17 +908,30 @@
     <None Include="web\default\Content\less\vars.less">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="web\default\views\layout\main.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\layout\navbar.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\views\layout\sidebar.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\partial\algorithms.cshtml" />
-    <None Include="web\default\views\partial\pools.cshtml" />
-    <None Include="web\default\views\pools\pools.cshtml" />
-    <None Include="web\default\views\pool\block.cshtml" />
-    <None Include="web\default\views\pool\blocks.cshtml" />
+    <None Include="web\default\views\partial\algorithms.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\partial\pools.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\pools\pools.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\pool\block.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\pool\blocks.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="web\default\views\pool\pool.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -3408,9 +3433,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\Content\js\plugins\timepicker\bootstrap-timepicker.min.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="web\default\views\layout\main.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\Content\favicon.ico">
