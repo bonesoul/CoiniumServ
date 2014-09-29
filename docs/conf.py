@@ -45,7 +45,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'CoiniumServ'
-copyright = '2014, Hüseyin Uslu'
+copyright = '2014, Huseyin Uslu'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
