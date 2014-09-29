@@ -32,6 +32,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Layers.Mpos;

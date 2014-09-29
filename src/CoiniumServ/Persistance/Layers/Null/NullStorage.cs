@@ -121,12 +121,12 @@ namespace CoiniumServ.Persistance.Layers.Null
             return new List<IPayment>();
         }
 
-        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
+        public IList<IPaymentDetails> GetPaymentsForBlock(uint height)
         {
             throw new System.NotImplementedException();
         }
 
-        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        public IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
         {
             throw new System.NotImplementedException();
         }

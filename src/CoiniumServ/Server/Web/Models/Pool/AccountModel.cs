@@ -24,6 +24,7 @@
 using System.Collections.Generic;
 using CoiniumServ.Accounts;
 using CoiniumServ.Coin.Config;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Query;
 
 namespace CoiniumServ.Server.Web.Models.Pool
@@ -34,7 +35,7 @@ namespace CoiniumServ.Server.Web.Models.Pool
 
         public ICoinConfig Coin { get; set; }
 
-        public IList<IDetailedPayment> Payments { get; set; } 
+        public IList<IPaymentDetails> Payments { get; set; } 
 
         public IPaginationQuery PaginationQuery { get; set; }
     }

@@ -229,8 +229,8 @@
     <Compile Include="Server\Web\Models\Algorithm\AlgorithmsModel.cs" />
     <Compile Include="Server\Web\Models\Pool\PoolsModel.cs" />
     <Compile Include="Server\Web\Models\Pool\BlocksModel.cs" />
-    <Compile Include="Server\Web\Models\Pool\DetailedPayment.cs" />
-    <Compile Include="Server\Web\Models\Pool\IDetailedPayment.cs" />
+    <Compile Include="Payments\PaymentDetails.cs" />
+    <Compile Include="Payments\IPaymentDetails.cs" />
     <Compile Include="Payments\IPaymentLabor.cs" />
     <Compile Include="Payments\IPaymentManager.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />
@@ -286,8 +286,8 @@
     <Compile Include="Persistance\StorageConfig.cs" />
     <Compile Include="Pools\BlocksRepository.cs" />
     <Compile Include="Pools\IBlockRepository.cs" />
-    <Compile Include="Pools\IPaymentRepository.cs" />
-    <Compile Include="Pools\PaymentRepository.cs" />
+    <Compile Include="Payments\IPaymentRepository.cs" />
+    <Compile Include="Payments\PaymentRepository.cs" />
     <Compile Include="Server\Web\ISocialConfig.cs" />
     <Compile Include="Server\Web\Models\ApiModel.cs" />
     <Compile Include="Pools\INetworkInfo.cs" />

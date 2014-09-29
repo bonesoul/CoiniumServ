@@ -107,9 +107,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return payouts;
         }
 
-        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
+        public IList<IPaymentDetails> GetPaymentsForBlock(uint height)
         {
-            var payouts = new List<IDetailedPayment>();
+            var payouts = new List<IPaymentDetails>();
 
             try
             {
@@ -118,7 +118,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<DetailedPayment>(
+                    var results = connection.Query<PaymentDetails>(
                         @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, a.Address, p.Block, p.Amount as Amount, 
                             t.Amount as SentAmount, t.Currency, t.TxId as TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
                             FROM Payment p 
@@ -137,9 +137,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return payouts;
         }
 
-        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        public IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
         {
-            var payouts = new List<IDetailedPayment>();
+            var payouts = new List<IPaymentDetails>();
 
             try
             {
@@ -148,7 +148,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    var results = connection.Query<DetailedPayment>(
+                    var results = connection.Query<PaymentDetails>(
                         @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, a.Address, p.Block, p.Amount as Amount, 
                             t.Amount as SentAmount, t.Currency, t.TxId as TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
                             FROM Payment p 

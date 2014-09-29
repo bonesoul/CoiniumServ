@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace CoiniumServ.Server.Web.Models.Pool
+namespace CoiniumServ.Payments
 {
-    public interface IDetailedPayment
+    public interface IPaymentDetails
     {
         int PaymentId { get; set; }
 

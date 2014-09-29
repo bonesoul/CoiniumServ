@@ -160,7 +160,7 @@ namespace CoiniumServ.Persistance.Layers
         /// </summary>
         /// <param name="height"></param>
         /// <returns></returns>
-        IList<IDetailedPayment> GetPaymentsForBlock(uint height);
+        IList<IPaymentDetails> GetPaymentsForBlock(uint height);
 
         /// <summary>
         /// Returns payments for a specific account.
@@ -168,7 +168,7 @@ namespace CoiniumServ.Persistance.Layers
         /// <param name="id"></param>
         /// <param name="paginationQuery"></param>
         /// <returns></returns>
-        IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery);
+        IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery);
 
         /// <summary>
         /// Adds a transaction.

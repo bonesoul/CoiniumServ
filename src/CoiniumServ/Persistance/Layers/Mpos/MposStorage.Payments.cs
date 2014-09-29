@@ -48,12 +48,12 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
+        public IList<IPaymentDetails> GetPaymentsForBlock(uint height)
         {
             throw new NotImplementedException();
         }
 
-        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        public IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
         {
             throw new NotImplementedException();
         }

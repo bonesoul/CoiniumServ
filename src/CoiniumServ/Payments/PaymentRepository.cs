@@ -20,11 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using CoiniumServ.Persistance.Layers;
-using CoiniumServ.Server.Web.Models.Pool;
 
-namespace CoiniumServ.Pools
+namespace CoiniumServ.Payments
 {
     public class PaymentRepository:IPaymentRepository
     {
@@ -35,7 +35,7 @@ namespace CoiniumServ.Pools
             _storageLayer = storageLayer;
         }
 
-        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
+        public IList<IPaymentDetails> GetPaymentsForBlock(uint height)
         {
             return _storageLayer.GetPaymentsForBlock(height);
         }

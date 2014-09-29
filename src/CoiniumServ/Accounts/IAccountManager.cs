@@ -22,6 +22,7 @@
 #endregion
 
 using System.Collections.Generic;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Query;
 using CoiniumServ.Server.Web.Models.Pool;
 
@@ -37,6 +38,6 @@ namespace CoiniumServ.Accounts
 
         IAccount GetAccountByAddress(string address);
 
-        IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery);
+        IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery);
     }
 }

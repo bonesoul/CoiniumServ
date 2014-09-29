@@ -26,6 +26,7 @@ using CoiniumServ.Accounts;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Mining;
+using CoiniumServ.Payments;
 using CoiniumServ.Server.Web.Service;
 using Newtonsoft.Json;
 

@@ -22,6 +22,7 @@
 #endregion
 
 using System.Collections.Generic;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Query;
@@ -63,7 +64,7 @@ namespace CoiniumServ.Accounts
             return _storageLayer.GetAccountByAddress(address);
         }
 
-        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        public IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
         {
             return _storageLayer.GetPaymentsForAccount(id, paginationQuery);
         }
