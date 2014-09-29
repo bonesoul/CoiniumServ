@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using CoiniumServ.Accounts;
 using CoiniumServ.Mining;
@@ -27,7 +28,6 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Query;
 using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Web.Models.Pool;
 using CoiniumServ.Shares;
 
 namespace CoiniumServ.Persistance.Layers
@@ -160,7 +160,7 @@ namespace CoiniumServ.Persistance.Layers
         /// </summary>
         /// <param name="height"></param>
         /// <returns></returns>
-        IList<IDetailedPayment> GetPaymentsForBlock(uint height);
+        IList<IPaymentDetails> GetPaymentsForBlock(uint height);
 
         /// <summary>
         /// Returns payments for a specific account.
@@ -168,7 +168,9 @@ namespace CoiniumServ.Persistance.Layers
         /// <param name="id"></param>
         /// <param name="paginationQuery"></param>
         /// <returns></returns>
-        IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery);
+        IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery);
+
+        IPaymentDetails GetTransactionById(uint id);
 
         /// <summary>
         /// Adds a transaction.

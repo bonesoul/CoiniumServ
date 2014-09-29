@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -45,9 +46,13 @@ namespace CoiniumServ.Logging
                     AddDefaults(); // if we don't have any targets defined, setup a few default ones.
                 else
                 {
-                    foreach (var target in config.targets)
+                    foreach (var data in config.targets)
                     {
-                        Targets.Add(new LogTarget(target));
+                        var target = new LogTarget(data);
+                        if (!target.Valid)
+                            continue;
+
+                        Targets.Add(target);
                     }
                 }
 

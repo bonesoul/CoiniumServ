@@ -20,8 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using CoiniumServ.Coin.Config;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 
 namespace CoiniumServ.Server.Web.Models.Pool
@@ -32,6 +34,6 @@ namespace CoiniumServ.Server.Web.Models.Pool
 
         public ICoinConfig Coin { get; set; }
 
-        public IList<IDetailedPayment> Payments { get; set; } 
+        public IList<IPaymentDetails> Payments { get; set; } 
     }
 }

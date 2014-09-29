@@ -20,30 +20,29 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using Serilog;
 
-namespace CoiniumServ.Server.Web
+using System.Collections.Generic;
+using CoiniumServ.Persistance.Layers;
+
+namespace CoiniumServ.Payments
 {
-    public class BackendConfig: IBackendConfig
+    public class PaymentRepository:IPaymentRepository
     {
-        public bool Valid { get; private set; }
-        public bool MetricsEnabled { get; private set; }
+        private readonly IStorageLayer _storageLayer;
 
-        public BackendConfig(dynamic config)
+        public PaymentRepository(IStorageLayer storageLayer)
         {
-            try
-            {
-                // load the config data.
-                MetricsEnabled = config.metrics.enabled;
+            _storageLayer = storageLayer;
+        }
 
-                Valid = true;
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<BackendConfig>().Error(e, "Error loading backend configuration");
-            }
+        public IList<IPaymentDetails> GetPaymentsForBlock(uint height)
+        {
+            return _storageLayer.GetPaymentsForBlock(height);
+        }
+
+        public IPaymentDetails GetTransactionById(uint id)
+        {
+            return _storageLayer.GetTransactionById(id);
         }
     }
 }

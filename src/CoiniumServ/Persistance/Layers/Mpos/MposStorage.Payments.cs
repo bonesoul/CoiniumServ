@@ -20,11 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Query;
-using CoiniumServ.Server.Web.Models.Pool;
 
 namespace CoiniumServ.Persistance.Layers.Mpos
 {
@@ -48,12 +48,17 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
+        public IList<IPaymentDetails> GetPaymentsForBlock(uint height)
         {
             throw new NotImplementedException();
         }
 
-        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        public IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPaymentDetails GetTransactionById(uint id)
         {
             throw new NotImplementedException();
         }

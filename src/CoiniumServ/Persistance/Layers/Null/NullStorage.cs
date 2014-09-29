@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using CoiniumServ.Accounts;
 using CoiniumServ.Mining;
@@ -27,7 +28,6 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Query;
 using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Web.Models.Pool;
 using CoiniumServ.Shares;
 
 namespace CoiniumServ.Persistance.Layers.Null
@@ -121,12 +121,17 @@ namespace CoiniumServ.Persistance.Layers.Null
             return new List<IPayment>();
         }
 
-        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
+        public IList<IPaymentDetails> GetPaymentsForBlock(uint height)
         {
             throw new System.NotImplementedException();
         }
 
-        public IList<IDetailedPayment> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        public IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IPaymentDetails GetTransactionById(uint id)
         {
             throw new System.NotImplementedException();
         }

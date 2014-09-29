@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -165,7 +166,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                             From Block b
 	                            INNER JOIN Payment as p ON p.Block = b.Height
 	                            WHERE b.Accounted = true and p.Completed = true
-	                            ORDER BY Height DESC LIMIT @offset, @count",
+                                GROUP BY b.Height
+	                            ORDER BY b.Height DESC LIMIT @offset, @count",
                         new
                         {
                             offset = paginationQuery.Offset,

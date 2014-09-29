@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using FluentMigrator;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations

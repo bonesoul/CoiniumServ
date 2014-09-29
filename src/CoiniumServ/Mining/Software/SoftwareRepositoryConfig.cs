@@ -20,12 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using CoiniumServ.Factories;
-using JsonConfig;
-using Microsoft.CSharp.RuntimeBinder;
 using Serilog;
 
 namespace CoiniumServ.Mining.Software

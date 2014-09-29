@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using MySql.Data.MySqlClient;
 
 namespace CoiniumServ.Persistance.Providers.MySql
 {

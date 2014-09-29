@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web.Models.Pool;
 using Nancy;
@@ -31,14 +32,10 @@ namespace CoiniumServ.Server.Web.Modules
         public PoolsModule(IPoolManager poolManager)
             : base("/pools")
         {
-            Get["/"] = _ =>
+            Get["/"] = _ => View["pools", new PoolsModel
             {
-                // return our view
-                return View["pools", new PoolsModel
-                {
-                    Pools = poolManager.GetAllAsReadOnly()
-                }];
-            };
+                Pools = poolManager.GetAllAsReadOnly()
+            }];
         }
     }
 }

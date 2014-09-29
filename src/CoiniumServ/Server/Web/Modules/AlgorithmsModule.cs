@@ -20,8 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Algorithms;
-using CoiniumServ.Server.Web.Models;
 using CoiniumServ.Server.Web.Models.Algorithm;
 using Nancy;
 

@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CSRedis;
 
 namespace CoiniumServ.Persistance.Providers.Redis

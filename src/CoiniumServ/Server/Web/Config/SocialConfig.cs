@@ -20,10 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using Serilog;
 
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Server.Web.Config
 {
     public class SocialConfig:ISocialConfig
     {

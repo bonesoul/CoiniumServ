@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;
+using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Layers.Mpos;

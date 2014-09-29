@@ -20,34 +20,24 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
-namespace CoiniumServ.Server.Web.Models.Pool
+namespace CoiniumServ.Payments
 {
-    public interface IDetailedPayment
+    public class PaymentDetails:IPaymentDetails
     {
-        int PaymentId { get; set; }
-
-        int TransactionId { get; set; }
-
-        int AccountId { get; set; }
-
-        string Address { get; set; }
-
-        int Block { get; set; }
-
-        decimal Amount { get; set; }
-
-        decimal SentAmount { get; set; }
-
-        string Currency { get; set; }
-
-        string TxHash { get; set; }
-
-        DateTime PaymentDate { get; set; }
-
-        DateTime TransactionDate { get; set; }
-
-        bool Completed { get; set; }
+        public int PaymentId { get; set; }
+        public int TransactionId { get; set; }
+        public int AccountId { get; set; }
+        public string Address { get; set; }
+        public int Block { get; set; }
+        public decimal Amount { get; set; }
+        public decimal SentAmount { get; set; }
+        public string Currency { get; set; }
+        public string TxHash { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public bool Completed { get; set; }
     }
 }

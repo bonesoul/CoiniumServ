@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Net;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;

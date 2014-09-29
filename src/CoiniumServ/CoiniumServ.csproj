@@ -229,8 +229,8 @@
     <Compile Include="Server\Web\Models\Algorithm\AlgorithmsModel.cs" />
     <Compile Include="Server\Web\Models\Pool\PoolsModel.cs" />
     <Compile Include="Server\Web\Models\Pool\BlocksModel.cs" />
-    <Compile Include="Server\Web\Models\Pool\DetailedPayment.cs" />
-    <Compile Include="Server\Web\Models\Pool\IDetailedPayment.cs" />
+    <Compile Include="Payments\PaymentDetails.cs" />
+    <Compile Include="Payments\IPaymentDetails.cs" />
     <Compile Include="Payments\IPaymentLabor.cs" />
     <Compile Include="Payments\IPaymentManager.cs" />
     <Compile Include="Payments\IPaymentProcessor.cs" />
@@ -286,27 +286,27 @@
     <Compile Include="Persistance\StorageConfig.cs" />
     <Compile Include="Pools\BlocksRepository.cs" />
     <Compile Include="Pools\IBlockRepository.cs" />
-    <Compile Include="Pools\IPaymentRepository.cs" />
-    <Compile Include="Pools\PaymentRepository.cs" />
-    <Compile Include="Server\Web\ISocialConfig.cs" />
+    <Compile Include="Payments\IPaymentRepository.cs" />
+    <Compile Include="Payments\PaymentRepository.cs" />
+    <Compile Include="Server\Web\Config\ISocialConfig.cs" />
     <Compile Include="Server\Web\Models\ApiModel.cs" />
     <Compile Include="Pools\INetworkInfo.cs" />
     <Compile Include="Pools\IPoolConfig.cs" />
     <Compile Include="Pools\NetworkInfo.cs" />
     <Compile Include="Container\Registries\StorageRegistry.cs" />
-    <Compile Include="Server\Web\IBackendConfig.cs" />
+    <Compile Include="Server\Web\Config\IBackendConfig.cs" />
     <Compile Include="Server\Web\Models\Pool\BlockModel.cs" />
     <Compile Include="Persistance\Query\IPaginationQuery.cs" />
     <Compile Include="Server\Web\Models\RoundModel.cs" />
     <Compile Include="Server\Web\Models\WorkersModel.cs" />
-    <Compile Include="Server\Web\BackendConfig.cs" />
+    <Compile Include="Server\Web\Config\BackendConfig.cs" />
     <Compile Include="Server\Web\Modules\AlgorithmsModule.cs" />
     <Compile Include="Server\Web\Modules\DonateModule.cs" />
     <Compile Include="Server\Web\Models\IndexModel.cs" />
     <Compile Include="Server\Web\Models\Pool\PoolModel.cs" />
     <Compile Include="Server\Web\Modules\HelpModule.cs" />
     <Compile Include="Server\Web\Modules\PoolsModule.cs" />
-    <Compile Include="Server\Web\SocialConfig.cs" />
+    <Compile Include="Server\Web\Config\SocialConfig.cs" />
     <Compile Include="Statistics\IStatisticsManager.cs" />
     <Compile Include="Statistics\StatisticsManager.cs" />
     <Compile Include="Utils\Repository\IRepository.cs" />
@@ -339,11 +339,11 @@
     <Compile Include="Server\Mining\Getwork\IGetworkMiner.cs" />
     <Compile Include="Server\Web\IWebServer.cs" />
     <Compile Include="Server\Mining\Stratum\IStratumMiner.cs" />
-    <Compile Include="Server\Web\IWebServerConfig.cs" />
+    <Compile Include="Server\Web\Config\IWebServerConfig.cs" />
     <Compile Include="Server\Web\Modules\ApiModule.cs" />
     <Compile Include="Server\Web\Models\JsonError.cs" />
     <Compile Include="Server\Web\Modules\PoolModule.cs" />
-    <Compile Include="Server\Web\WebServerConfig.cs" />
+    <Compile Include="Server\Web\Config\WebServerConfig.cs" />
     <Compile Include="Configuration\ConfigManager.cs" />
     <Compile Include="Configuration\IConfigManager.cs" />
     <Compile Include="Utils\Extensions\StringExtensions.cs" />
@@ -942,6 +942,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\views\pool\round.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\pool\transaction.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\views\pool\workers.cshtml">

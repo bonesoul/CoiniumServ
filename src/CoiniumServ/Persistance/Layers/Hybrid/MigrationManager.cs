@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Reflection;
 using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Pools;

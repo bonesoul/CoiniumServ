@@ -20,20 +20,31 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Server.Web
+using System;
+using Serilog;
+
+namespace CoiniumServ.Server.Web.Config
 {
-    public interface ISocialConfig : IConfig
+    public class BackendConfig: IBackendConfig
     {
-        string Rss { get; }
+        public bool Valid { get; private set; }
+        public bool MetricsEnabled { get; private set; }
 
-        string Twitter { get; }
+        public BackendConfig(dynamic config)
+        {
+            try
+            {
+                // load the config data.
+                MetricsEnabled = config.metrics.enabled;
 
-        string Facebook { get; }
-
-        string GooglePlus { get; }
-
-        string Youtube { get; }
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<BackendConfig>().Error(e, "Error loading backend configuration");
+            }
+        }
     }
 }

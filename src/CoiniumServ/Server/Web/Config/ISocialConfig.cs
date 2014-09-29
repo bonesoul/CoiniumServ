@@ -20,24 +20,21 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Collections.Generic;
-using CoiniumServ.Persistance.Layers;
-using CoiniumServ.Server.Web.Models.Pool;
 
-namespace CoiniumServ.Pools
+using CoiniumServ.Configuration;
+
+namespace CoiniumServ.Server.Web.Config
 {
-    public class PaymentRepository:IPaymentRepository
+    public interface ISocialConfig : IConfig
     {
-        private readonly IStorageLayer _storageLayer;
+        string Rss { get; }
 
-        public PaymentRepository(IStorageLayer storageLayer)
-        {
-            _storageLayer = storageLayer;
-        }
+        string Twitter { get; }
 
-        public IList<IDetailedPayment> GetPaymentsForBlock(uint height)
-        {
-            return _storageLayer.GetPaymentsForBlock(height);
-        }
+        string Facebook { get; }
+
+        string GooglePlus { get; }
+
+        string Youtube { get; }
     }
 }

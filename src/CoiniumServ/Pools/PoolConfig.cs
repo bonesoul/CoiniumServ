@@ -20,19 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
-using System.Diagnostics;
 using CoiniumServ.Banning;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;
-using CoiniumServ.Payments;
 using CoiniumServ.Payments.Config;
 using CoiniumServ.Persistance;
-using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Mpos;
-using CoiniumServ.Persistance.Providers.Redis;
 using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using Serilog;
