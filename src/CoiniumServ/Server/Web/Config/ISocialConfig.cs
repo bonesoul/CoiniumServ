@@ -20,14 +20,21 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Server.Web
+
+using CoiniumServ.Configuration;
+
+namespace CoiniumServ.Server.Web.Config
 {
-    public interface IWebServerConfig : IServerConfig
+    public interface ISocialConfig : IConfig
     {
-        string Template { get; }
+        string Rss { get; }
 
-        ISocialConfig Social { get; }
+        string Twitter { get; }
 
-        IBackendConfig Backend { get; }
+        string Facebook { get; }
+
+        string GooglePlus { get; }
+
+        string Youtube { get; }
     }
 }

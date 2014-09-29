@@ -24,32 +24,26 @@
 using System;
 using Serilog;
 
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Server.Web.Config
 {
-    public class SocialConfig:ISocialConfig
+    public class BackendConfig: IBackendConfig
     {
         public bool Valid { get; private set; }
-        public string Rss { get; private set; }
-        public string Twitter { get; private set; }
-        public string Facebook { get; private set; }
-        public string GooglePlus { get; private set; }
-        public string Youtube { get; private set; }
+        public bool MetricsEnabled { get; private set; }
 
-        public SocialConfig(dynamic config)
+        public BackendConfig(dynamic config)
         {
             try
             {
-                Rss = string.IsNullOrEmpty(config.rss)? string.Empty: config.rss;
-                Twitter = string.IsNullOrEmpty(config.twitter) ? string.Empty : config.twitter;
-                Facebook = string.IsNullOrEmpty(config.facebook) ? string.Empty : config.facebook;
-                GooglePlus = string.IsNullOrEmpty(config.googleplus) ? string.Empty : config.googleplus;
-                Youtube = string.IsNullOrEmpty(config.youtube) ? string.Empty : config.youtube;
+                // load the config data.
+                MetricsEnabled = config.metrics.enabled;
+
                 Valid = true;
             }
             catch (Exception e)
             {
                 Valid = false;
-                Log.Logger.ForContext<WebServerConfig>().Error(e, "Error loading social configuration");
+                Log.Logger.ForContext<BackendConfig>().Error(e, "Error loading backend configuration");
             }
         }
     }

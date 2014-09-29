@@ -23,18 +23,10 @@
 
 using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Server.Web
+namespace CoiniumServ.Server.Web.Config
 {
-    public interface ISocialConfig : IConfig
+    public interface IBackendConfig : IConfig
     {
-        string Rss { get; }
-
-        string Twitter { get; }
-
-        string Facebook { get; }
-
-        string GooglePlus { get; }
-
-        string Youtube { get; }
+        bool MetricsEnabled { get; }
     }
 }
