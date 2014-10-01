@@ -210,6 +210,7 @@
     <Compile Include="Server\Web\Models\GettingStarted\GettingStartedModel.cs" />
     <Compile Include="Server\Web\Models\GettingStarted\GettingStartedPoolModel.cs" />
     <Compile Include="Server\Web\Models\Pool\AccountModel.cs" />
+    <Compile Include="Server\Web\Models\Pool\PaymentDetailsModel.cs" />
     <Compile Include="Server\Web\Modules\AlgorithmModule.cs" />
     <Compile Include="Utils\Metrics\IMetricsManager.cs" />
     <Compile Include="Utils\Metrics\MetricsManager.cs" />
@@ -944,7 +945,7 @@
     <None Include="web\default\views\pool\round.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\pool\transaction.cshtml">
+    <None Include="web\default\views\pool\paymentdetails.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\views\pool\workers.cshtml">

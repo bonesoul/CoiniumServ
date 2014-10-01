@@ -58,7 +58,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
-        public IPaymentDetails GetTransactionById(uint id)
+        public IPaymentDetails GetPaymentDetailsByTransactionId(uint id)
         {
             throw new NotImplementedException();
         }

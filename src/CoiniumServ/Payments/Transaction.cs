@@ -32,7 +32,7 @@ namespace CoiniumServ.Payments
         public IAccount Account { get; private set; }
         public IPayment Payment { get; private set; }
         public string Currency { get; private set; }
-        public string TxId { get; set; }
+        public string TxHash { get; set; }
         public DateTime CreatedAt { get; private set; }
 
         public Transaction(IAccount account, IPayment payout, string currency)

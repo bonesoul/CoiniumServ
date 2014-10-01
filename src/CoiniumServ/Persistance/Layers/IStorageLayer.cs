@@ -170,7 +170,7 @@ namespace CoiniumServ.Persistance.Layers
         /// <returns></returns>
         IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery);
 
-        IPaymentDetails GetTransactionById(uint id);
+        IPaymentDetails GetPaymentDetailsByTransactionId(uint id);
 
         /// <summary>
         /// Adds a transaction.

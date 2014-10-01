@@ -21,14 +21,21 @@
 // 
 #endregion
 
-using System.Collections.Generic;
+using CoiniumServ.Accounts;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
 
-namespace CoiniumServ.Payments
+namespace CoiniumServ.Server.Web.Models.Pool
 {
-    public interface IPaymentRepository
+    public class PaymentDetailsModel
     {
-        IList<IPaymentDetails> GetPaymentDetailsForBlock(uint height);
+        public IPaymentDetails Details { get; set; }
 
-        IPaymentDetails GetPaymentDetailsByTransactionId(uint id);
+        public IAccount Account { get; set; }
+
+        public IPersistedBlock Block { get; set; }
+
+        public ICoinConfig Coin { get; set; }
     }
 }

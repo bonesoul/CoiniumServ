@@ -207,7 +207,7 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     Block = block,
                     Coin = pool.Config.Coin,
-                    Payments = pool.PaymentRepository.GetPaymentsForBlock((uint)_.height)
+                    Payments = pool.PaymentRepository.GetPaymentDetailsForBlock((uint)_.height)
                 };
 
                 ViewBag.Header = string.Format("Block {0}", block.Height);
@@ -228,9 +228,9 @@ namespace CoiniumServ.Server.Web.Modules
                     }];
                 }
 
-                var transaction = pool.PaymentRepository.GetTransactionById((uint)_.id);
+                var details = pool.PaymentRepository.GetPaymentDetailsByTransactionId((uint)_.id);
 
-                if (transaction == null)
+                if (details == null)
                 {
                     return View["error", new ErrorViewModel
                     {
@@ -238,10 +238,21 @@ namespace CoiniumServ.Server.Web.Modules
                     }];
                 }
 
-                ViewBag.Header = string.Format("Transaction Details");
-                ViewBag.SubHeader = string.Format("{0}", transaction.TransactionId);
+                var account = pool.AccountManager.GetAccountById(details.AccountId);
+                var block = pool.BlockRepository.Get((uint) details.Block);
 
-                return View["transaction", transaction];
+                ViewBag.Header = string.Format("Transaction Details");
+                ViewBag.SubHeader = string.Format("{0}", details.TransactionId);
+
+                var model = new PaymentDetailsModel
+                {
+                    Details = details,
+                    Account = account,
+                    Block = block,
+                    Coin = pool.Config.Coin
+                };
+
+                return View["paymentdetails", model];
             };
 
             Get["/{slug}/account/address/{address:length(26,34)}/{page?1}"] = _ =>

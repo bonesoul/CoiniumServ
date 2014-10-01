@@ -35,14 +35,14 @@ namespace CoiniumServ.Payments
             _storageLayer = storageLayer;
         }
 
-        public IList<IPaymentDetails> GetPaymentsForBlock(uint height)
+        public IList<IPaymentDetails> GetPaymentDetailsForBlock(uint height)
         {
             return _storageLayer.GetPaymentsForBlock(height);
         }
 
-        public IPaymentDetails GetTransactionById(uint id)
+        public IPaymentDetails GetPaymentDetailsByTransactionId(uint id)
         {
-            return _storageLayer.GetTransactionById(id);
+            return _storageLayer.GetPaymentDetailsByTransactionId(id);
         }
     }
 }
