@@ -43,7 +43,7 @@ Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#user-sup
 
 ##### Binary distributions
 
-You can also purchase [binary distribution](http://www.coiniumserv.com/shop/releases/coiniumserv/) for easier setup and meanwhile help the development of the project.
+You can purchase [binary distribution](http://www.coiniumserv.com/shop/releases/coiniumserv/) for easier setup and meanwhile support the development of the project.
 
 ### Support the project
 
