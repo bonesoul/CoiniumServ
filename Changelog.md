@@ -1,8 +1,64 @@
 ##### [v0.2.0 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.0-beta) - 02.10.2014
 
+v0.2.0 is the last major release before our auto-exchange & multipool feature with many fixes and improvements. Check-out the details below;
+
 #### What's new?
 
+* Improved support for POW + POS hybrids and peercoin variants.
+* Improved & re-developed payment manager.
+* New web frontend theme.
+* Improved web frontend's functionality.
+
 #### Changelog
+
+**Algorithms**
+* Added scrypt-og, sha1, qubit, nist5 and fresh support.
+
+**Coin**
+* Improved support for POW + POS hybrid coins.
+* Added support for peercoin and variants.
+* Improved coin configuration [file format](https://github.com/CoiniumServ/CoiniumServ/blob/master/src/CoiniumServ/config/coins/README.md).
+* Added working block explorer's for most coins.
+
+**Payments**
+* Re-developed payments manager from stratch with base-work for upcoming auto-exchange feature.
+* Multiple payments can now be sent using sendmany() together in once.
+
+**Database**
+* Hybrid-storage can now track users, payouts and transactions.
+
+**Stratum**
+
+**Web**
+* Fixed misc. bugs in embedded web-server, it can now correctly function both in debug and release mode.
+* The front-end now uses a brand new bootstrap based theme which is also mobile-friendly.
+* Implemented "Getting Started pages for miners.
+* Implemented "Mining Software" pages for miners.
+* Implemented "Terms of Service" page.
+* Front-end can now render algorithms, blocks, payments and transactions in details.
+* Added a template option to config.json - website section so additional themes can be used.
+* Added partial views to front-end allowing easier edits.
+* Added support for social icons to be rendered in frontend.
+* Live template edits are now possible in debug mode.
+* Embedded web-server can now listen on all available network interfaces.
+
+**Blocks**
+* Improved handling of newly found blocks. 
+* Fixed an integer overflow bug within in block pooler.
+
+**RPC**
+* Improved handling of coin daemon rpc errors.
+
+**Configuration**
+* Removed comment lines from json configuration files so they can be validated (using jsonlint.com or so).
+* Added timeout option for daemon rpc connections (by default 5 seconds).
+* Added node configuration support to config.json stack section.
+* Added more error checks for json config file loaders.
+
+**Logging**
+* Removed console.log configuration as it'll be always on by default.
+* Packet.log configuration is now correctly honored.
+
 
 ##### [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha) - 05.09.2014
 
