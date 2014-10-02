@@ -276,11 +276,12 @@ namespace CoiniumServ.Factories
 
         #region payment objects
 
-        public IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor)
+        public IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockProcessor blockProcessor, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
+                {"blockProcessor", blockProcessor},
                 {"blockAccounter", blockAccounter},
                 {"paymentProcessor", paymentProcessor}
             };

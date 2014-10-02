@@ -107,7 +107,7 @@ namespace CoiniumServ.Factories
 
         #region payment objects 
 
-        IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor);
+        IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockProcessor blockProcessor, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor);
 
         IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager);
 

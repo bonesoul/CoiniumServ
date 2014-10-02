@@ -20,8 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Payments;
+
 namespace CoiniumServ.Blocks
 {
-    public interface IBlockProcessor
+    public interface IBlockProcessor: IPaymentLabor
     { }
 }

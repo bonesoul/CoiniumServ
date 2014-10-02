@@ -22,7 +22,10 @@
 #endregion
 
 using System;
+using System.Linq;
 using CoiniumServ.Accounts;
+using Dapper;
+using MySql.Data.MySqlClient;
 
 namespace CoiniumServ.Persistance.Layers.Mpos
 {
@@ -36,8 +39,29 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
         public IAccount GetAccountByUsername(string username)
         {
-            // TODO: implement me!
-            throw new NotImplementedException();
+            try
+            {
+                if (!IsEnabled)
+                    return null;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    return connection.Query<Account>(
+                        @"SELECT a.id, w.username, a.coin_address as address FROM pool_worker as w
+                            INNER JOIN accounts as a ON a.id=w.account_id
+                            WHERE w.username = @username",
+                        new {username}).Single();
+                }
+            }
+            catch (InvalidOperationException) // fires when no result is found.
+            {
+                return null;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting account; {0:l}", e.Message);
+                return null;
+            }
         }
 
         public IAccount GetAccountByAddress(string address)
