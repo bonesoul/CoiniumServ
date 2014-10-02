@@ -11,7 +11,7 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 ### Status
 
-Latest release: [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha)
+Latest release: [v0.2.0 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.0-beta)
 
 ### Getting Started
 
@@ -24,7 +24,7 @@ Start by checking our [Getting Started](https://github.com/CoiniumServ/CoiniumSe
 
 ### User Support
 
-Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our user-support channel [#coiniumserv@freenode](http://webchat.freenode.net/?channels=%23coiniumserv&prompt=1&uio=OT10cnVlde). You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
+Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/CoiniumServ/CoiniumServ/wiki/). If you need further help, join us over our IRC channel. You can also use our [issues](https://github.com/CoiniumServ/CoiniumServ/issues) page to report bugs.
 
 ##### Where to get support?
 
@@ -41,16 +41,15 @@ Start by reading our [FAQ](https://github.com/CoiniumServ/CoiniumServ/wiki/FAQ) 
 
 Additional to free [support](https://github.com/CoiniumServ/CoiniumServ#user-support) methods, we offer [paid support](http://www.coiniumserv.com/services/paid-support/) & [consulting](http://www.coiniumserv.com/services/consulting/) services for whom would like to get professional help. 
 
+##### Binary distributions
+
+You can also purchase [binary distribution](http://www.coiniumserv.com/shop/releases/coiniumserv/) for easier setup and meanwhile help the development of the project.
 
 ### Support the project
 
 You can support the development of the project with different methods;
 
 [![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1) [![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)  [![Gratipay](http://img.shields.io/badge/gratipay-donate-brightgreen.svg)](https://gratipay.com/on/github/CoiniumServ)
-
-##### Binary distributions
-
-If you like you can also help the project buy purchasing a [binary distribution](http://www.coiniumserv.com/shop/releases/coiniumserv/).
 
 ##### Donations
 
@@ -131,8 +130,7 @@ Start reading by these;
 
 ### License
 
-Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org - 
-http://www.coiniumserv.com
+Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coiniumserv.com
 
 This software is dual-licensed: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
