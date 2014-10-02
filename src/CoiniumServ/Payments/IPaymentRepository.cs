@@ -30,5 +30,7 @@ namespace CoiniumServ.Payments
         IList<IPaymentDetails> GetPaymentDetailsForBlock(uint height);
 
         IPaymentDetails GetPaymentDetailsByTransactionId(uint id);
+
+        IPaymentDetails GeyPaymentDetailsByPaymentId(uint id);
     }
 }

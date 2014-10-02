@@ -63,6 +63,11 @@ namespace CoiniumServ.Persistance.Layers.Mpos
             throw new NotImplementedException();
         }
 
+        public IPaymentDetails GetPaymentDetailsByPaymentId(uint id)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddTransaction(ITransaction transaction)
         {
             // this function is not supported as this functionality is only required by payment processors which mpos itself is already one so and handles itself.

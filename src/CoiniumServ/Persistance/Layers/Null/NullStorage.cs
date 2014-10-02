@@ -123,17 +123,22 @@ namespace CoiniumServ.Persistance.Layers.Null
 
         public IList<IPaymentDetails> GetPaymentsForBlock(uint height)
         {
-            throw new System.NotImplementedException();
+            return new List<IPaymentDetails>();
         }
 
         public IList<IPaymentDetails> GetPaymentsForAccount(int id, IPaginationQuery paginationQuery)
         {
-            throw new System.NotImplementedException();
+            return new List<IPaymentDetails>();
         }
 
         public IPaymentDetails GetPaymentDetailsByTransactionId(uint id)
         {
-            throw new System.NotImplementedException();
+            return null;
+        }
+
+        public IPaymentDetails GetPaymentDetailsByPaymentId(uint id)
+        {
+            return null;
         }
 
         public void AddTransaction(ITransaction transaction)

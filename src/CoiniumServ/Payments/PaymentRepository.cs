@@ -44,5 +44,10 @@ namespace CoiniumServ.Payments
         {
             return _storageLayer.GetPaymentDetailsByTransactionId(id);
         }
+
+        public IPaymentDetails GeyPaymentDetailsByPaymentId(uint id)
+        {
+            return _storageLayer.GetPaymentDetailsByPaymentId(id);
+        }
     }
 }

@@ -255,6 +255,45 @@ namespace CoiniumServ.Server.Web.Modules
                 return View["paymentdetails", model];
             };
 
+            Get["/{slug}/payment/{id:int}"] = _ =>
+            {
+                var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
+
+                if (pool == null) // make sure queried pool exists.
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = string.Format("The requested pool does not exist: {0}", _.slug)
+                    }];
+                }
+
+                var details = pool.PaymentRepository.GeyPaymentDetailsByPaymentId((uint)_.id);
+
+                if (details == null)
+                {
+                    return View["error", new ErrorViewModel
+                    {
+                        Details = string.Format("The requested payment does not exist.")
+                    }];
+                }
+
+                var account = pool.AccountManager.GetAccountById(details.AccountId);
+                var block = pool.BlockRepository.Get((uint)details.Block);
+
+                ViewBag.Header = string.Format("Payment Details");
+                ViewBag.SubHeader = string.Format("{0}", details.PaymentId);
+
+                var model = new PaymentDetailsModel
+                {
+                    Details = details,
+                    Account = account,
+                    Block = block,
+                    Coin = pool.Config.Coin
+                };
+
+                return View["paymentdetails", model];
+            };
+
             Get["/{slug}/account/address/{address:length(26,34)}/{page?1}"] = _ =>
             {
                 var pool = (IPool)poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.

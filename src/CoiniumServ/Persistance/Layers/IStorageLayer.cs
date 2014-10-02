@@ -172,6 +172,8 @@ namespace CoiniumServ.Persistance.Layers
 
         IPaymentDetails GetPaymentDetailsByTransactionId(uint id);
 
+        IPaymentDetails GetPaymentDetailsByPaymentId(uint id);
+
         /// <summary>
         /// Adds a transaction.
         /// </summary>
