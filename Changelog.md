@@ -1,3 +1,9 @@
+##### [v0.2.0 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.0-beta) - 02.10.2014
+
+#### What's new?
+
+#### Changelog
+
 ##### [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha) - 05.09.2014
 
 **Payments**
