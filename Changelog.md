@@ -27,8 +27,6 @@ v0.2.0 is the last major release before our auto-exchange & multi-pool feature w
 **Database**
 * Hybrid-storage can now track users, payouts and transactions.
 
-**Stratum**
-
 **Web**
 * Fixed misc. bugs in embedded web-server, it can now correctly function both in debug and release mode.
 * The front-end now uses a brand new bootstrap based theme which is also mobile-friendly.
