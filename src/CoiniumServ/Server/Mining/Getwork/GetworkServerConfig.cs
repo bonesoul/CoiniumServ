@@ -40,12 +40,16 @@ namespace CoiniumServ.Server.Mining.Getwork
         {
             try
             {
-               // load the config data.
-                Enabled = config.enabled;
-                BindInterface = string.IsNullOrEmpty(config.bind) ? "0.0.0.0" : config.bind;
-                Port = config.port;
-
+                // disable getwork server until it's implementation is done.
+                Enabled = false;
                 Valid = true;
+
+                // load the config data.
+                //Enabled = config.enabled;
+                //BindInterface = string.IsNullOrEmpty(config.bind) ? "0.0.0.0" : config.bind;
+                //Port = config.port;
+
+                //Valid = true;
             }
 
             catch (Exception e)

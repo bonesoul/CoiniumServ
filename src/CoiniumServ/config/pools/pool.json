@@ -1,0 +1,44 @@
+{
+    "enabled": false,
+    "coin": "litecoin.json",
+    "daemon": {
+        "port": 9333,
+        "username": "user",
+        "password": "password"
+    },
+    "wallet": {
+        "address": "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"
+    },
+    "rewards": [
+        {
+            "myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1
+        }
+    ],
+    "payments": {
+        "enabled": true
+    },
+    "stratum": {
+        "enabled": true,
+        "port": 3333,
+        "vardiff": {
+            "enabled": true
+        }
+    },
+    "banning": {
+        "enabled": true
+    },
+    "storage": {
+        "hybrid": {
+            "enabled": false,
+            "mysql": {
+                "database": "db-name"
+            }
+        },
+        "mpos": {
+            "enabled": false,
+            "mysql": {
+                "database": "db-name"
+            }
+        }
+    }
+}

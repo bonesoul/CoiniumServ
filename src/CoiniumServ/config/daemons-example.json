@@ -1,22 +1,8 @@
-﻿{
-    # payment daemons configuration
-    # here you can add extra payment daemons so that auto-exchange module can pay in a specific coin even if you don't run a pool for it.
-
-    # -------------------------------
-    # Payment Daemon RPC Connection
-    # -------------------------------
-
-    # enabled: Is the connection enabled?
-    # coin: name of the coin configuration file that should exist in config/coins/.
-	# host: ip/hostname of coin-daemon.
-    # port: the port coin daemon is listening on.
-    # username: username for rpc connection.
-    # password: password for rpc connection.
-
+{
     "daemons": [
         {
-            "enabled": false,	
-            "coin": "litecoin.json", 
+            "enabled": false,
+            "coin": "litecoin.json",
             "daemon": {
                 "host": "127.0.0.1",
                 "port": 9333,
@@ -26,4 +12,4 @@
             }
         }
     ]
-}
+} 
