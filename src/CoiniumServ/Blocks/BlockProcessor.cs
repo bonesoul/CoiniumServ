@@ -59,6 +59,8 @@ namespace CoiniumServ.Blocks
             _logger = Log.ForContext<BlockProcessor>().ForContext("Component", poolConfig.Coin.Name);
 
             FindPoolAccount();
+
+            Active = true;
         }
 
         public void Run()
