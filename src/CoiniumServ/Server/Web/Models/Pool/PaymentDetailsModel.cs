@@ -21,33 +21,21 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Persistance.Layers;
+using CoiniumServ.Accounts;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
 
-namespace CoiniumServ.Payments
+namespace CoiniumServ.Server.Web.Models.Pool
 {
-    public class PaymentRepository:IPaymentRepository
+    public class PaymentDetailsModel
     {
-        private readonly IStorageLayer _storageLayer;
+        public IPaymentDetails Details { get; set; }
 
-        public PaymentRepository(IStorageLayer storageLayer)
-        {
-            _storageLayer = storageLayer;
-        }
+        public IAccount Account { get; set; }
 
-        public IList<IPaymentDetails> GetPaymentDetailsForBlock(uint height)
-        {
-            return _storageLayer.GetPaymentsForBlock(height);
-        }
+        public IPersistedBlock Block { get; set; }
 
-        public IPaymentDetails GetPaymentDetailsByTransactionId(uint id)
-        {
-            return _storageLayer.GetPaymentDetailsByTransactionId(id);
-        }
-
-        public IPaymentDetails GeyPaymentDetailsByPaymentId(uint id)
-        {
-            return _storageLayer.GetPaymentDetailsByPaymentId(id);
-        }
+        public ICoinConfig Coin { get; set; }
     }
 }

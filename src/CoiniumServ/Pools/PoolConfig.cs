@@ -94,7 +94,7 @@ namespace CoiniumServ.Pools
                     if (Payments.Enabled)
                     {
                         Payments.Disable();
-                        _logger.Information("Disabled payments processor as it can not be enabled when MPOS mode is on");
+                        _logger.Information("Disabled payment processor as it can not be enabled when MPOS mode is on");
                     }
                 }
 

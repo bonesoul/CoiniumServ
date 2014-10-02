@@ -79,7 +79,6 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         public void MoveCurrentShares(int height)
         {
             // this function is not supported as this functionality is handled by mpos itself.
-            throw new NotSupportedException();
         }
 
         public void MoveOrphanedShares(IPersistedBlock block)

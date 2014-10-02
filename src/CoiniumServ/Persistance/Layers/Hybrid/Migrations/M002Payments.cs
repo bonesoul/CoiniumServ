@@ -77,7 +77,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
                 .WithColumn("PaymentId").AsInt32().ForeignKey("Payment", "Id")
                 .WithColumn("Amount").AsDecimal().NotNullable()
                 .WithColumn("Currency").AsString(4).NotNullable()
-                .WithColumn("TxId").AsString(64).NotNullable()
+                .WithColumn("TxHash").AsString(64).NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
         }
 

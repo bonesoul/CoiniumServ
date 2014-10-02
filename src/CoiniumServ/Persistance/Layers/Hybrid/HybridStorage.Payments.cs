@@ -121,7 +121,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     var results = connection.Query<PaymentDetails>(
                         @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, a.Address, p.Block, p.Amount as Amount, 
-                            t.Amount as SentAmount, t.Currency, t.TxId as TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
+                            t.Amount as SentAmount, t.Currency, t.TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
                             FROM Payment p 
                                 INNER JOIN Account as a ON p.AccountId = a.Id
                                 LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId Where Block = @height",
@@ -151,7 +151,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     var results = connection.Query<PaymentDetails>(
                         @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, a.Address, p.Block, p.Amount as Amount, 
-                            t.Amount as SentAmount, t.Currency, t.TxId as TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
+                            t.Amount as SentAmount, t.Currency, t.TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
                             FROM Payment p 
                                 INNER JOIN Account as a ON p.AccountId = a.Id
                                 LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId Where a.Id = @id
@@ -174,7 +174,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             return payouts;
         }
 
-        public IPaymentDetails GetTransactionById(uint id)
+        public IPaymentDetails GetPaymentDetailsByTransactionId(uint id)
         {
             try
             {
@@ -185,11 +185,42 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     return connection.Query<PaymentDetails>(
                         @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, a.Address, p.Block, p.Amount as Amount, 
-                            t.Amount as SentAmount, t.Currency, t.TxId as TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
+                            t.Amount as SentAmount, t.Currency, t.TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
                             FROM Payment p 
                                 INNER JOIN Account as a ON p.AccountId = a.Id
-                                LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId Where t.Id = @id",
+                                LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId 
+                                Where t.Id = @id",
                         new {id}).Single();
+                }
+            }
+            catch (InvalidOperationException) // fires when no result is found.
+            {
+                return null;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while gettin transaction: {0:l}", e.Message);
+                return null;
+            }
+        }
+
+        public IPaymentDetails GetPaymentDetailsByPaymentId(uint id)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return null;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    return connection.Query<PaymentDetails>(
+                        @"SELECT p.Id as PaymentId, t.Id as TransactionId, p.AccountId, a.Address, p.Block, p.Amount as Amount, 
+                            t.Amount as SentAmount, t.Currency, t.TxHash, p.CreatedAt as PaymentDate, t.CreatedAt as TransactionDate, p.Completed 
+                            FROM Payment p 
+                                INNER JOIN Account as a ON p.AccountId = a.Id
+                                LEFT OUTER JOIN Transaction t On p.Id = t.PaymentId 
+                                Where p.Id = @id",
+                        new { id }).Single();
                 }
             }
             catch (InvalidOperationException) // fires when no result is found.
@@ -213,15 +244,15 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        @"INSERT INTO Transaction(AccountId, PaymentId, Amount, Currency, TxId, CreatedAt) 
-                            VALUES(@accountId, @paymentId, @amount, @currency, @txId, @createdAt)",
+                        @"INSERT INTO Transaction(AccountId, PaymentId, Amount, Currency, TxHash, CreatedAt) 
+                            VALUES(@accountId, @paymentId, @amount, @currency, @txHash, @createdAt)",
                         new
                         {
                             accountId = transaction.Account.Id,
                             paymentId = transaction.Payment.Id,
                             amount = transaction.Payment.Amount,
                             currency = transaction.Currency,
-                            txId = transaction.TxId,
+                            txHash = transaction.TxHash,
                             createdAt = transaction.CreatedAt
                         });
                 }

@@ -23,6 +23,7 @@
 
 using System.Collections.Generic;
 using System.Threading;
+using CoiniumServ.Blocks;
 using CoiniumServ.Pools;
 using Serilog;
 
@@ -30,7 +31,7 @@ namespace CoiniumServ.Payments
 {
     public class PaymentManager:IPaymentManager
     {
-        private Timer _timer;
+        private readonly Timer _timer;
 
         private readonly IPoolConfig _poolConfig;
 
@@ -38,11 +39,12 @@ namespace CoiniumServ.Payments
 
         private readonly ILogger _logger;
 
-        public PaymentManager(IPoolConfig poolConfig, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor)
+        public PaymentManager(IPoolConfig poolConfig,  IBlockProcessor blockProcessor, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor)
         {
             _poolConfig = poolConfig;
             _labors = new List<IPaymentLabor>
             {
+                blockProcessor,
                 blockAccounter, 
                 paymentProcessor
             };

@@ -77,7 +77,7 @@
                             @foreach (var paymentDetails in @Model.Payments)
                             {
                                 <tr>
-                                    <td class="hidden-xs">@paymentDetails.PaymentId</td>
+                                <td class="hidden-xs"><a href="/pool/@Model.Coin.Symbol/payment/@paymentDetails.PaymentId">@paymentDetails.PaymentId</a></td>
                                     <td><a href="/pool/@Model.Coin.Symbol/account/address/@paymentDetails.Address">@paymentDetails.Address</a></td>
                                     <td>
                                         @if (paymentDetails.Completed)

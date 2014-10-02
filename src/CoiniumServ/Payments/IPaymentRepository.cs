@@ -27,8 +27,10 @@ namespace CoiniumServ.Payments
 {
     public interface IPaymentRepository
     {
-        IList<IPaymentDetails> GetPaymentsForBlock(uint height);
+        IList<IPaymentDetails> GetPaymentDetailsForBlock(uint height);
 
-        IPaymentDetails GetTransactionById(uint id);
+        IPaymentDetails GetPaymentDetailsByTransactionId(uint id);
+
+        IPaymentDetails GeyPaymentDetailsByPaymentId(uint id);
     }
 }

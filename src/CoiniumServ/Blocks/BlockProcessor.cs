@@ -37,13 +37,13 @@ namespace CoiniumServ.Blocks
 {
     public class BlockProcessor:IBlockProcessor
     {
+        public bool Active { get; private set; }
+
         private readonly IPoolConfig _poolConfig;
 
         private readonly IDaemonClient _daemonClient;
 
         private readonly IStorageLayer _storageLayer;
-
-        private readonly Timer _timer;
 
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
@@ -59,12 +59,9 @@ namespace CoiniumServ.Blocks
             _logger = Log.ForContext<BlockProcessor>().ForContext("Component", poolConfig.Coin.Name);
 
             FindPoolAccount();
-
-            // setup the timer to run calculations.  
-            _timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);            
         }
 
-        private void Run(object state)
+        public void Run()
         {
             _stopWatch.Start();
 
@@ -86,23 +83,21 @@ namespace CoiniumServ.Blocks
                     case BlockStatus.Orphaned:
                         _storageLayer.MoveOrphanedShares(block); // move existing shares for contributed miners to current round.
                         _storageLayer.UpdateBlock(block); // update block in our persistance layer.
-                        orphanedCount++;             
+                        orphanedCount++;
                         break;
                     case BlockStatus.Confirmed:
                         _storageLayer.UpdateBlock(block); // update block in our persistance layer.
                         confirmedCount++;
                         break;
-                }              
+                }
             }
 
-            if(pendingCount > 0)
+            if (pendingCount > 0)
                 _logger.Information("Queried {0} pending blocks; {1} got confirmed, {2} got orphaned; took {3:0.000} seconds", pendingCount, confirmedCount, orphanedCount, (float)_stopWatch.ElapsedMilliseconds / 1000);
             else
                 _logger.Information("No pending blocks found");
 
             _stopWatch.Reset();
-
-            _timer.Change(_poolConfig.Payments.Interval * 1000, Timeout.Infinite); // reset the timer.
         }
 
         private void QueryBlock(IPersistedBlock block)

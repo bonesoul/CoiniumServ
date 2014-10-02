@@ -187,16 +187,16 @@ namespace CoiniumServ.Pools
                 MinerManager = _objectFactory.GetMinerManager(Config, _storage, AccountManager);
 
                 var jobTracker = _objectFactory.GetJobTracker(Config);
-                _objectFactory.GetBlockProcessor(Config, Daemon, _storage);
                 _shareManager = _objectFactory.GetShareManager(Config, Daemon, jobTracker, _storage);
                 _objectFactory.GetVardiffManager(Config, _shareManager);
                 _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
                 _jobManager = _objectFactory.GetJobManager(Config, Daemon, jobTracker, _shareManager, MinerManager, HashAlgorithm);
                 _jobManager.Initialize(InstanceId);
 
+                var blockProcessor =_objectFactory.GetBlockProcessor(Config, Daemon, _storage);
                 var blockAccounter = _objectFactory.GetBlockAccounter(Config, _storage, AccountManager);
                 var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _storage, Daemon, AccountManager);
-                _objectFactory.GetPaymentManager(Config, blockAccounter, paymentProcessor);
+                _objectFactory.GetPaymentManager(Config, blockProcessor, blockAccounter, paymentProcessor);
             }
             catch (Exception e)
             {

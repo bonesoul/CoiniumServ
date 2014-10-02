@@ -36,7 +36,7 @@ namespace CoiniumServ.Payments
 
         string Currency { get; }
 
-        string TxId { get; set; }
+        string TxHash { get; set; }
 
         DateTime CreatedAt { get; }
     }

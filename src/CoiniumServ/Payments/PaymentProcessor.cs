@@ -139,12 +139,12 @@ namespace CoiniumServ.Payments
                 var outputs = filtered.ToDictionary(x => x.Key, x => x.Value.Sum(y => y.Payment.Amount));
 
                 // send the payments all-together.
-                var txId = _daemonClient.SendMany(_poolAccount, outputs);
+                var txHash = _daemonClient.SendMany(_poolAccount, outputs);
 
                 // loop through all executed payments
                 filtered.ToList().ForEach(x => x.Value.ForEach(y =>
                 {
-                    y.TxId = txId; // set transaction id.
+                    y.TxHash = txHash; // set transaction id.
                     y.Payment.Completed = true; // set as completed.
                 }));
 
