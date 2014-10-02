@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using Serilog;
 
@@ -37,6 +38,8 @@ namespace CoiniumServ.Daemon.Config
 
         public string Password { get; private set; }
 
+        public int Timeout { get; private set; }
+
         public DaemonConfig(dynamic config)
         {
             try
@@ -46,6 +49,7 @@ namespace CoiniumServ.Daemon.Config
                 Port = config.port;
                 Username = config.username;
                 Password = config.password;
+                Timeout = config.timeout == 0 ? 5 : config.timeout;
 
                 Valid = true;
             }

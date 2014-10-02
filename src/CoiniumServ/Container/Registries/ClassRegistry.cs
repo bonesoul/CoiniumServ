@@ -20,16 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Accounts;
 using CoiniumServ.Blocks;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Tracker;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Web;
-using CoiniumServ.Statistics;
 using Nancy.Bootstrapper;
 
 namespace CoiniumServ.Container.Registries
@@ -49,18 +52,30 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
-            _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<INetworkInfo, NetworkInfo>().AsMultiInstance();
-            _applicationContext.Container.Register<IBlocksCache, BlocksCache>().AsMultiInstance();
+            _applicationContext.Container.Register<IBlockRepository, BlocksRepository>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentRepository, PaymentRepository>().AsMultiInstance();
+            _applicationContext.Container.Register<IAccountManager, AccountManager>().AsMultiInstance();
+
+            // payment objects
+            _applicationContext.Container.Register<IBlockAccounter, BlockAccounter>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentRound, PaymentRound>().AsMultiInstance();
+            _applicationContext.Container.Register<IPaymentProcessor, PaymentProcessor>().AsMultiInstance();
 
             // config
+            _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
             _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
+            _applicationContext.Container.Register<IDaemonManagerConfig, DaemonManagerConfig>().AsMultiInstance(); // todo: this should be singleton!
+            _applicationContext.Container.Register<IStandaloneDaemonConfig, StandaloneDaemonConfig>().AsMultiInstance();
+            _applicationContext.Container.Register<IMiningSoftwareConfig, MiningSoftwareConfig>().AsMultiInstance();
 
             // web
-            _applicationContext.Container.Register<INancyBootstrapper, WebBootstrapper>().AsSingleton();
+            _applicationContext.Container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();
+
+            // software
+            _applicationContext.Container.Register<IMiningSoftware, MiningSoftware>().AsMultiInstance();
         }
     }
 }

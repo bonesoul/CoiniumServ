@@ -21,8 +21,8 @@
 // 
 #endregion
 
+using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Helpers;
-using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using Serilog;
@@ -60,9 +60,9 @@ namespace CoiniumServ.Pools
             _poolConfig = poolConfig;
             _logger = Log.ForContext<NetworkInfo>().ForContext("Component", poolConfig.Coin.Name);
 
-            Recache(); // recache the data initially.
-            PrintNetworkInfo();
             DetectProofOfStakeCoin(); // detect if we are running on a proof-of-stake coin.
+            Recache(); // recache the data initially.
+            PrintNetworkInfo(); // print the collected network info.
         }
 
         public void Recache()
@@ -93,7 +93,7 @@ namespace CoiniumServ.Pools
                 var miningInfo = _daemonClient.GetMiningInfo();
 
                 // read data.
-                Hashrate = miningInfo.NetworkHashps;
+                Hashrate = miningInfo.NetworkHashPerSec;
                 Difficulty = miningInfo.Difficulty;
                 Round = miningInfo.Blocks + 1;
             }
@@ -141,7 +141,7 @@ namespace CoiniumServ.Pools
 
                 var response = _daemonClient.MakeRawRequest("getdifficulty");
                 if (response.Contains("proof-of-stake")) // if response contains proof-of-stake field
-                    _poolConfig.Coin.IsPOS = true; // then automatically set coin-config.IsPOS to true.
+                    _poolConfig.Coin.Options.IsProofOfStakeHybrid = true; // then automatically set coin-config.IsPOS to true.
             }
             catch (RpcException e)
             {

@@ -2,7 +2,14 @@
     "name": "Litecoin",
     "symbol": "LTC",
     "algorithm": "scrypt",
-    "blockExplorer": "http://block-explorer.com",
-    "peerMagic": "fbc0b6db",
-    "peerMagicTestnet": "fcc1b7dc"
+    "site": "https://litecoin.org/",
+    "blockExplorer": {
+        "block": "http://block-explorer.com/block/",
+        "tx": "http://block-explorer.com/tx/",
+        "address": "http://block-explorer.com/address/"
+    },
+    "node": {
+        "magic": "fbc0b6db",
+        "testnetMagic": "fcc1b7dc"
+    }
 }

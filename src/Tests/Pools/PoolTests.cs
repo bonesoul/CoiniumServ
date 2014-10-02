@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using CoiniumServ.Configuration;
 using CoiniumServ.Daemon;
@@ -57,7 +56,7 @@ namespace CoiniumServ.Tests.Pools
             _config.Daemon.Valid.Returns(true);
 
             // daemon client mockup.
-            _daemonClient = _objectFactory.GetDaemonClient(_config);
+            _daemonClient = _objectFactory.GetDaemonClient(_config.Daemon, _config.Coin);
             _daemonClient.GetInfo().Returns(new Info());
             _daemonClient.GetMiningInfo().Returns(new MiningInfo());
         }

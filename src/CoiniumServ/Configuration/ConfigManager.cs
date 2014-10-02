@@ -20,17 +20,26 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Factories;
 using CoiniumServ.Logging;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Stack;
 using CoiniumServ.Server.Web;
+using CoiniumServ.Server.Web.Config;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers.IO;
+using CoiniumServ.Utils.Platform;
+using libCoiniumServ.Versions;
 using Serilog;
 
 namespace CoiniumServ.Configuration
@@ -38,12 +47,22 @@ namespace CoiniumServ.Configuration
     public class ConfigManager:IConfigManager
     {
         public IStackConfig StackConfig { get; private set; }
+        
         public IStatisticsConfig StatisticsConfig { get; private set; }
+        
         public IWebServerConfig WebServerConfig { get; private set; }
+        
         public ILogConfig LogConfig { get; private set; }
+        
         public List<IPoolConfig> PoolConfigs { get; private set; }
+        
+        public IDaemonManagerConfig DaemonManagerConfig { get; private set; }
+
+        public ISoftwareRepositoryConfig SoftwareRepositoryConfig { get; private set; }
 
         private const string GlobalConfigFilename = "config/config.json"; // global config filename.
+        private const string DaemonManagerConfigFilename = "config/daemons.json"; // daemon manager config filename.
+        private const string SoftwareManagerConfigFilename = "config/software.json"; // software manager config filename.
         private const string PoolConfigRoot = "config/pools"; // root of pool configs.
         private const string CoinConfigRoot = "config/coins"; // root of pool configs.
 
@@ -51,48 +70,59 @@ namespace CoiniumServ.Configuration
 
         private readonly IConfigFactory _configFactory;
         private readonly IJsonConfigReader _jsonConfigReader;
+        private readonly ILogManager _logManager;
 
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
-        public ConfigManager(IConfigFactory configFactory, IJsonConfigReader jsonConfigReader)
+        public ConfigManager(IConfigFactory configFactory, IJsonConfigReader jsonConfigReader, ILogManager logManager)
         {
             _configFactory = configFactory;
             _jsonConfigReader = jsonConfigReader;
+            _logManager = logManager;
+            _logger = Log.ForContext<ConfigManager>();
 
-            PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
-
-            ReadGlobalConfig(); // read the global config.
+            LoadGlobalConfig(); // read the global config.
+            // LoadDaemonManagerConfig(); // load the global daemon manager config. - disabled until we need it.
+            LoadSoftwareManagerConfig(); // load software manager config file.
+            LoadPoolConfigs(); // load the per-pool config files.
         }
 
-        private void ReadGlobalConfig()
+        private void LoadGlobalConfig()
         {
             var data = _jsonConfigReader.Read(GlobalConfigFilename); // read the global config data.
 
-            if (data == null) // make sure it exists, else gracefully exists
-            {                
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Couldn't read config/config.json! Make sure you rename config/config-example.json as config/config.json.");
-                Console.ResetColor();
-
+            // make sure we were able to load global config.
+            if (data == null)
+            {
+                // gracefully exit
+                _logger.Error("Couldn't read config/config.json! Make sure you rename config/config-example.json as config/config.json.");
                 Environment.Exit(-1);
             }
 
+            // load log config.
+            LogConfig = new LogConfig(data.logging); // read the log config first, so rest of the config loaders can use log subsystem.
+            _logManager.EmitConfiguration(LogConfig); // assign the log configuration to log manager.
+
+            // print a version banner.
+            _logger.Information("CoiniumServ {0:l} {1:l} warming-up..", VersionInfo.CodeName, Assembly.GetAssembly(typeof(Program)).GetName().Version);
+            PlatformManager.PrintPlatformBanner();
+
+            // load rest of the configs.
             StackConfig = new StackConfig(data.stack);
             StatisticsConfig = new StatisticsConfig(data.statistics);
             WebServerConfig = new WebServerConfig(data.website);
-            LogConfig = new LogConfig(data.logging);
         }
 
-        public void Initialize()
+        private void LoadSoftwareManagerConfig()
         {
-            LoadPoolConfigs();
+            var data = _jsonConfigReader.Read(SoftwareManagerConfigFilename); // read the global config data.
+
+            SoftwareRepositoryConfig = new SoftwareRepositoryConfig(_configFactory, data);
         }
 
         private void LoadPoolConfigs()
         {
-            _logger = Log.ForContext<ConfigManager>();
-            _logger.Debug("Discovering enabled pool configs..");
-
+            PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
             var files = FileHelpers.GetFilesByExtension(PoolConfigRoot, ".json");
 
             foreach (var file in files)
@@ -138,7 +168,17 @@ namespace CoiniumServ.Configuration
                 PoolConfigs.Select(config => config.Coin.Name).ToList());
         }
 
-        private ICoinConfig GetCoinConfig(string name)
+        private void LoadDaemonManagerConfig()
+        {
+            var data = _jsonConfigReader.Read(DaemonManagerConfigFilename); // read the global config data.
+
+            if (data == null) // if we can't read daemon manager config file.
+                data = new ExpandoObject(); // create a fake object.                
+
+            DaemonManagerConfig = _configFactory.GetDaemonManagerConfig(data);
+        }
+
+        public ICoinConfig GetCoinConfig(string name)
         {
             var fileName = string.Format("{0}/{1}.json", CoinConfigRoot, name);
             var data = _jsonConfigReader.Read(fileName);

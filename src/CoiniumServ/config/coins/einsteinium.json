@@ -2,5 +2,10 @@
     "name": "Einsteinium",
     "symbol": "EMC2",
     "algorithm": "scrypt",
-    "blockExplorer": "https://altexplorer.net"
+    "site": "http://einsteinium.org/",
+    "blockExplorer": {
+        "block": "http://chain.einsteinium.org/block/",
+        "tx": "http://chain.einsteinium.org/tx/",
+        "address": "http://chain.einsteinium.org/address/"
+    }
 }

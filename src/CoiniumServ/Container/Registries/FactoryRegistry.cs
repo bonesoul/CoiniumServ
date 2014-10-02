@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Container.Context;
 using CoiniumServ.Factories;
 
@@ -38,6 +39,7 @@ namespace CoiniumServ.Container.Registries
         {
             _applicationContext.Container.Register<IObjectFactory, ObjectFactory>().AsSingleton();
             _applicationContext.Container.Register<IConfigFactory, ConfigFactory>().AsSingleton();
+            _applicationContext.Container.Register<IRpcExceptionFactory, RpcExceptionFactory>().AsSingleton();
         }
     }
 }

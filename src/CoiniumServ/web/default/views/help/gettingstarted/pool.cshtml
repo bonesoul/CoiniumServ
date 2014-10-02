@@ -1,0 +1,87 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.GettingStarted.GettingStartedPoolModel>
+
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid box-info">
+            <div class="box-header">
+                <h3 class="box-title">Get Hardware</h3>
+            </div>
+            <div class="box-body">
+                <div class="text-center"><i class="fa fa-cogs fa-5x"></i></div>
+                In order to get started mining, you need mining hardware. You can mine coins with your CPU, GPU or specialized
+                <a href="https://www.google.com/?q=mining+asic" target="_blank">asic chips</a>.
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="box box-solid box-success">
+            <div class="box-header">
+                <h3 class="box-title">Get Wallet Software</h3>
+            </div>
+            <div class="box-body">
+                <div class="text-center"><i class="fa fa-desktop fa-5x"></i></div>
+                In order to mine on our <a href="/pool/@Model.Pool.Config.Coin.Symbol">@Model.Pool.Config.Coin.Name</a> pool, you have first download a wallet software.
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title">Create Payment Address</h3>
+            </div>
+            <div class="box-body">
+                <div class="text-center"><i class="fa fa-bitcoin fa-5x"></i></div>
+                You have to create a payment address on your wallet software in order to get your payments.
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="box box-solid box-warning">
+            <div class="box-header">
+                <h3 class="box-title">Get Mining Software</h3>
+            </div>
+            <div class="box-body">
+                <div class="text-center"><i class="fa fa-cloud-download fa-5x"></i></div>
+                Next, you need a <a href="/help/miningsoftware/">mining software</a> that can connect our pools. Check our <a href="/help/miningsoftware/">list</a> to find a suitable one for you.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Configure Your Miner</h3>
+            </div>
+            <div class="box-body">
+                Finally, you have to configure your miner's to work against our stratum servers.<br /><br />
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th style="width: 10px">Location</th>
+                            <th>Stratum Address</th>
+                            <th>Port</th>
+                            <th class="hidden-xs">Username</th>
+                            <th class="hidden-xs">Password</th>
+                        </tr>
+                        @foreach (var node in Model.Stack.Nodes)
+                        {
+                            <tr>
+                                <td><img src="/Content/img/flags/@(node.Location).png" alt="@node.Location" /></td>
+                                <td>stratum+tcp://@node.Address</td>
+                                <td>@Model.Pool.Config.Stratum.Port</td>
+                                <td class="hidden-xs">Your wallet address</td>
+                                <td class="hidden-xs">Anything</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

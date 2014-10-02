@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using CoiniumServ.Configuration;
 
@@ -46,5 +47,10 @@ namespace CoiniumServ.Daemon.Config
         /// password for rpc connection.
         /// </summary>
         string Password { get; }
+
+        /// <summary>
+        /// Timeout for daemon rpc connections in seconds.
+        /// </summary>
+        int Timeout { get; }
     }
 }

@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Net;
 using System.Net.Sockets;
 using CoiniumServ.Banning;
 using CoiniumServ.Jobs.Manager;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using Serilog;
@@ -74,7 +75,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         public void Initialize(IServerConfig config)
         {
             Config = config;
-            BindIP = config.BindInterface;
+            BindInterface = config.BindInterface;
             Port = config.Port;
 
             ClientConnected += OnClientConnection;
@@ -89,8 +90,8 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <returns></returns>
         public override bool Start()
         {
-            var success = Listen(BindIP, Port);
-            _logger.Information("Stratum server listening on {0:l}:{1}", BindIP, Port);
+            var success = Listen(BindInterface, Port);
+            _logger.Information("Stratum server listening on {0:l}:{1}", BindInterface, Port);
             return success;
         }
 

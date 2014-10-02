@@ -20,8 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Algorithms;
 using CoiniumServ.Container.Context;
-using CoiniumServ.Cryptology.Algorithms;
 
 namespace CoiniumServ.Container.Registries
 {
@@ -36,13 +37,22 @@ namespace CoiniumServ.Container.Registries
 
         public void RegisterInstances()
         {
-            // hash algorithms
+            // available cryptographic hash functions: http://en.wikipedia.org/wiki/List_of_hash_functions#Cryptographic_hash_functions
+
+            // algorithm manager
             _applicationContext.Container.Register<IAlgorithmManager, AlgorithmManager>().AsSingleton();
+
+            // hash algorithms           
             _applicationContext.Container.Register<IHashAlgorithm, Blake>(AlgorithmManager.Blake).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Fresh>(AlgorithmManager.Fresh).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Fugue>(AlgorithmManager.Fugue).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Groestl>(AlgorithmManager.Groestl).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Keccak>(AlgorithmManager.Keccak).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Nist5>(AlgorithmManager.Nist5).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Qubit>(AlgorithmManager.Qubit).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(AlgorithmManager.Scrypt).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, ScryptOg>(AlgorithmManager.ScryptOg).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Sha1>(AlgorithmManager.Sha1).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Sha256>(AlgorithmManager.Sha256).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Shavite3>(AlgorithmManager.Shavite3).AsSingleton();
             _applicationContext.Container.Register<IHashAlgorithm, Skein>(AlgorithmManager.Skein).AsSingleton();

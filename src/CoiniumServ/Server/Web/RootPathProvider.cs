@@ -20,6 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System.IO;
 using CoiniumServ.Utils.Helpers.IO;
 using Nancy;
 
@@ -29,11 +31,23 @@ namespace CoiniumServ.Server.Web
     {
         private string _rootPath; // root path of the web files.
 
+        private readonly string _template; // the template name.
+        
+        public RootPathProvider(string template)
+        {
+            _template = template;
+
+            // determine the root path
+            #if DEBUG // on debug mode use static files form source directory, so live edits can be possible
+                // note: we need to convert relative path to absolute path as nancy can only server static files with absolute path.
+                _rootPath = Path.GetFullPath(FileHelpers.GetAbsolutePath(string.Format("../../src/CoiniumServ/web/{0}", _template))); // if not yet do so.
+            #else // on release mode use static files from bin/Release.
+                _rootPath = FileHelpers.GetAbsolutePath(string.Format("web/{0}", _template));
+            #endif
+        }
+
         public string GetRootPath()
         {
-            if (string.IsNullOrEmpty(_rootPath)) // make sure we already determined the absolute root path
-                _rootPath = FileHelpers.GetAbsolutePath("web/default"); // if not yet do so.
-
             return _rootPath;
         }
     }

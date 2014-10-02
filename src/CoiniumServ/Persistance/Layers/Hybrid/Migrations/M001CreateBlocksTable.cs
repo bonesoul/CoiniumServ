@@ -30,6 +30,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
     {
         public override void Up()
         {
+            // create the blocks table.
             Create.Table("blocks")
                 .WithColumn("id").AsInt32().NotNullable().PrimaryKey().Identity()
                 .WithColumn("height").AsInt32().NotNullable()

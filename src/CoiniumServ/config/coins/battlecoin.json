@@ -1,7 +1,0 @@
-{
-    "name": "Battlecoin",
-    "symbol": "BCX",
-    "algorithm": "sha256",
-    "peerMagic": "03e803e4",
-    "peerMagicTestnet": "cdf2c0ef"
-}

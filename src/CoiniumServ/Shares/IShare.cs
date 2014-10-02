@@ -20,11 +20,12 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using CoiniumServ.Cryptology;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Utils.Numerics;
 
 namespace CoiniumServ.Shares

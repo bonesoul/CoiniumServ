@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         /// <summary>
         /// The IP address of the interface the server binded.
         /// </summary>
-        public string BindIP { get; protected set; }
+        public string BindInterface { get; protected set; }
 
         /// <summary>
         /// The listening port for the server.

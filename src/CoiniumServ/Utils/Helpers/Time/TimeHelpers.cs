@@ -20,22 +20,34 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 
 namespace CoiniumServ.Utils.Helpers.Time
 {
     public static class TimeHelpers
     {
-        public static Int32 NowInUnixTime()
+        public static Int32 NowInUnixTimestamp()
         {
             return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
 
-        public static DateTime UnixTimeToDateTime(this int unixTimeStamp)
+        public static int ToUnixTimestamp(this DateTime value)
+        {
+            return (int)Math.Truncate((value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
+        }
+
+
+        public static int UnixTimestamp(this DateTime value)
+        {
+            return (int)Math.Truncate((value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
+        }
+
+        public static DateTime UnixTimestampToDateTime(this int unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
             var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToUniversalTime();
             return dtDateTime;
         }
     }

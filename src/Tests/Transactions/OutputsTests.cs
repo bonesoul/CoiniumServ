@@ -20,9 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Linq;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Transactions;
@@ -50,17 +50,21 @@ namespace CoiniumServ.Tests.Transactions
     {
         // object mocks.
         private readonly IDaemonClient _daemonClient;
+        private readonly ICoinConfig _coinConfig;
 
         public OutputsTests()
         {
             _daemonClient = Substitute.For<IDaemonClient>();
             _daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress { IsValid = true });
+
+            _coinConfig = Substitute.For<ICoinConfig>();
+            _coinConfig.Options.IsProofOfStakeHybrid.Returns(false);
         }
 
         [Fact]
         public void TestOutputs()
         {
-            var outputs = new Outputs(_daemonClient);
+            var outputs = new Outputs(_daemonClient, _coinConfig);
 
             // setup the outputs based on the sample.
             double blockReward = 5000000000; // the amount rewarded by the block.

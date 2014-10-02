@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using CoiniumServ.Daemon.Responses;
 
@@ -27,7 +28,7 @@ namespace CoiniumServ.Daemon
 {
     public interface IDaemonClient
     {
-        BlockTemplate GetBlockTemplate();
+        BlockTemplate GetBlockTemplate(bool modeRequired = false);
 
         BlockTemplate GetBlockTemplate(string blockHex);
 

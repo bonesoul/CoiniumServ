@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Container.Context;
 using CoiniumServ.Server.Mining;
+using CoiniumServ.Server.Mining.Getwork;
+using CoiniumServ.Server.Mining.Getwork.Service;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Service;
-using CoiniumServ.Server.Mining.Vanilla;
-using CoiniumServ.Server.Mining.Vanilla.Service;
 using CoiniumServ.Server.Web;
 
 namespace CoiniumServ.Container.Registries
@@ -43,12 +44,12 @@ namespace CoiniumServ.Container.Registries
         public void RegisterInstances()
         {
             // servers.
-            _applicationContext.Container.Register<IMiningServer, VanillaServer>(Services.Vanilla).AsMultiInstance();
+            _applicationContext.Container.Register<IMiningServer, GetworkServer>(Services.Getwork).AsMultiInstance();
             _applicationContext.Container.Register<IMiningServer, StratumServer>(Services.Stratum).AsMultiInstance();
             _applicationContext.Container.Register<IWebServer, WebServer>().AsSingleton();
 
             // services.
-            _applicationContext.Container.Register<IRpcService, VanillaService>(Services.Vanilla).AsMultiInstance();
+            _applicationContext.Container.Register<IRpcService, GetworkService>(Services.Getwork).AsMultiInstance();
             _applicationContext.Container.Register<IRpcService, StratumService>(Services.Stratum).AsMultiInstance();
         }
     }

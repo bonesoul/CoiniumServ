@@ -20,11 +20,10 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using CoiniumServ.Configuration;
 using CoiniumServ.Utils.Helpers.IO;
 using Serilog;
 using Serilog.Core;
@@ -41,62 +40,71 @@ namespace CoiniumServ.Logging
 
         private string _rootFolder;
 
-        private readonly ILogConfig _config;
+        private LoggerConfiguration _mainConfig; // used by console and file logs.
+        private LoggerConfiguration _packetLoggerConfig; // used by the packet log.
 
-        public LogManager(IConfigManager configManager)
+        public LogManager()
         {
-            _config = configManager.LogConfig;
-
             Initialize();
         }
 
         private void Initialize()
         {
+            _mainConfig = new LoggerConfiguration(); // set the main config for console and file logs.
+            SetupConfiguration(_mainConfig); // setup the configuration with enrichers and so.
+
+            // create the default console.
+#if DEBUG
+            _mainConfig.WriteTo.ColoredConsole(LogEventLevel.Debug, ConsoleLogFormat); // use debug level for debug mode.
+#else
+            _mainConfig.WriteTo.ColoredConsole(LogEventLevel.Information, ConsoleLogFormat); // use information level for release mode.
+#endif
+            // bind the config to global log.
+            Log.Logger = _mainConfig.CreateLogger();
+
+            // set the packet log configuration.
+            _packetLoggerConfig = new LoggerConfiguration(); // will be used for packet logger.
+            SetupConfiguration(_packetLoggerConfig); // setup the configuration with enrichers and so.
+        }
+
+        private void SetupConfiguration(LoggerConfiguration configuration)
+        {
+            configuration.Enrich.With(new SourceEnricher()); // used for enriching logs with class names.
+            configuration.Enrich.With(new ComponentEnricher()); // used for enriching logs with pool names.
+            configuration.MinimumLevel.Verbose(); // lower the default minimum level to verbose as sinks can only rise them but not lower.
+        }
+
+        public void EmitConfiguration(ILogConfig config)
+        {
             // read the root folder for logs.
-            _rootFolder = string.IsNullOrEmpty(_config.Root) ? "logs" : _config.Root;
+            _rootFolder = string.IsNullOrEmpty(config.Root) ? "logs" : config.Root;
             var rootPath = FileHelpers.GetAbsolutePath(_rootFolder);
 
-            if (!Directory.Exists(rootPath)) // make sure log root exists.
-                Directory.CreateDirectory(rootPath);            
-
-            // create the global logger.
-            var globalConfig = new LoggerConfiguration();
-            var packetLoggerConfig = new LoggerConfiguration();
-
-            // add enrichers
-            globalConfig.Enrich.With(new SourceEnricher());
-            globalConfig.Enrich.With(new ComponentEnricher());
-
-            packetLoggerConfig.Enrich.With(new SourceEnricher());
-            packetLoggerConfig.Enrich.With(new ComponentEnricher());
-
-            foreach (var target in _config.Targets)
+            // make sure log root exists.
+            if (!Directory.Exists(rootPath))
+                Directory.CreateDirectory(rootPath);  
+    
+            // loop through file log targets from the config
+            foreach (var target in config.Targets)
             {
+                if (!target.Enabled)
+                    continue;
+
                 switch (target.Type)
                 {
-                    case LogTargetType.Console:
-                        CreateConsoleLog(globalConfig, target);
-                        break;
                     case LogTargetType.File:
-                        CreateFileLog(globalConfig, target);
+                        CreateFileLog(_mainConfig, target);
                         break;
                     case LogTargetType.Packet:
-                        CreatePacketLog(packetLoggerConfig, target);
+                        CreatePacketLog(_packetLoggerConfig, target);
                         break;
                 }
             }
 
-            // lower the default minimum level to verbose as sinks can only rise them but not lower.
-            globalConfig.MinimumLevel.Verbose();
-            packetLoggerConfig.MinimumLevel.Verbose();
+            if (config.Targets.Count(x => x.Type == LogTargetType.File) > 0) // if we have added new file loggers.
+                Log.Logger = _mainConfig.CreateLogger(); // recreate the global logger.
 
-            Log.Logger = globalConfig.CreateLogger(); // bind the config to global log.
-            PacketLogger = packetLoggerConfig.CreateLogger();
-        }
-
-        private void CreateConsoleLog(LoggerConfiguration config, ILogTarget target)
-        {
-            config.WriteTo.ColoredConsole(target.Level, ConsoleLogFormat);
+            PacketLogger = _packetLoggerConfig.CreateLogger(); // create the packet logger too even if doesn't really contain any outputs.
         }
 
         private void CreateFileLog(LoggerConfiguration config, ILogTarget target)
@@ -112,7 +120,6 @@ namespace CoiniumServ.Logging
             }
             catch (UnauthorizedAccessException e)
             {
-                // we can at least log the error to console.
                 Log.ForContext<LogManager>().Error("Error creating file log {0:l} - {1:l}", target.Filename, e.Message);
             }
         }
@@ -130,7 +137,6 @@ namespace CoiniumServ.Logging
             }
             catch (UnauthorizedAccessException e)
             {
-                // we can at least log the error to console.
                 Log.ForContext<LogManager>().Error("Error creating file log {0:l} - {1:l}", target.Filename, e.Message);
             }
         }

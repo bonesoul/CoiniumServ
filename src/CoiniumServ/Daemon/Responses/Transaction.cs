@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -62,10 +63,23 @@ namespace CoiniumServ.Daemon.Responses
         /// <returns></returns>
         public TransactionDetail GetPoolOutput(string poolAddress, string poolAccount)
         {
-            // check if coin includes output address data in transaction details.
-            return Details.Any(x => x.Address == null)
-                ? Details.FirstOrDefault(x => x.Account == poolAccount) // some coins doesn't include address field in outputs, so try to determine using the associated account name.
-                : Details.FirstOrDefault(x => x.Address == poolAddress); // if coin includes address field in outputs, just use it.
+            if (Details == null) // make sure we have valid outputs.
+                return null;
+
+            // kinda weird stuff goin here;
+            // bitcoin variants;
+            // case 1) some of bitcoin variants can include the "address" in the transaction detail and we can basically find the output comparing against it.
+            // case 2) some other bitcoin variants can include "address account" name in transaction detail and we again find the output comparing against it.
+
+            // check for case 1.
+            if (Details.Any(x => x.Address == poolAddress))
+                return Details.First(x => x.Address == poolAddress); // return the output that matches pool address.
+
+            // check for case 2.
+            if (Details.Any(x => x.Account == poolAccount))
+                return Details.First(x => x.Account == poolAccount); // return the output that matches pool account.
+            
+            return null;
         }
 
         // not sure if fields below even exists / used

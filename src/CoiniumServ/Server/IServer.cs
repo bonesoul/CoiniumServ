@@ -30,7 +30,7 @@ namespace CoiniumServ.Server
         /// <summary>
         /// The IP address of the interface the server binded.
         /// </summary>
-        string BindIP { get; }
+        string BindInterface { get; }
 
         /// <summary>
         /// The listening port for the server.

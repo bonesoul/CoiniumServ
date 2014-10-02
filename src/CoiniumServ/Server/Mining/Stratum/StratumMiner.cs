@@ -20,15 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using AustinHarris.JsonRpc;
+using CoiniumServ.Accounts;
 using CoiniumServ.Jobs;
 using CoiniumServ.Logging;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Errors;
@@ -56,6 +58,8 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         public int Id { get; private set; }
 
+        public IAccount Account { get; set; }
+
         /// <summary>
         /// Username of the miner.
         /// </summary>
@@ -71,9 +75,9 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         public bool Authenticated { get; set; }
 
-        public int ValidShares { get; set; }
+        public int ValidShareCount { get; set; }
 
-        public int InvalidShares { get; set; }
+        public int InvalidShareCount { get; set; }
 
         public IPool Pool { get; private set; }
         
@@ -92,6 +96,12 @@ namespace CoiniumServ.Server.Mining.Stratum
 
         public IRingBuffer VardiffBuffer { get; set; }
 
+        public MinerSoftware Software { get; private set; }
+
+        public Version SoftwareVersion { get; private set; }
+
+        private readonly AsyncCallback _rpcResultHandler;
+
         private readonly IMinerManager _minerManager;
 
         private readonly IStorageLayer _storageLayer;
@@ -99,12 +109,6 @@ namespace CoiniumServ.Server.Mining.Stratum
         private readonly ILogger _logger;
 
         private readonly ILogger _packetLogger;
-
-        public MinerSoftware Software { get; private set; }
-
-        public Version Version { get; private set; }
-
-        private readonly AsyncCallback _rpcResultHandler;
 
         /// <summary>
         /// Creates a new miner instance.
@@ -192,12 +196,12 @@ namespace CoiniumServ.Server.Mining.Stratum
                         break;
                 }
 
-                Version = new Version(version);
+                SoftwareVersion = new Version(version);
             }
             catch (Exception) // on unknown signature
             {
                 Software = MinerSoftware.Unknown;
-                Version = new Version();
+                SoftwareVersion = new Version();
             }
         }
 

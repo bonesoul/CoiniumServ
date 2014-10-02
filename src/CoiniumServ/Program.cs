@@ -20,16 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Globalization;
-using System.Reflection;
 using System.Threading;
 using CoiniumServ.Container;
 using CoiniumServ.Factories;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
-using CoiniumServ.Utils.Platform;
-using CoiniumServ.Utils.Versions;
 using Nancy.TinyIoc;
 using Serilog;
 
@@ -62,41 +60,52 @@ namespace CoiniumServ
             ConsoleWindow.PrintBanner();
             ConsoleWindow.PrintLicense();
 
-            // load the config-manager.
-            var configManager = configFactory.GetConfigManager();
-
-            // initialize log-manager as we'll need it below.
+            // initialize the log-manager.
             objectFactory.GetLogManager();
 
-            // print a version banner.
+            // load the config-manager.
+            configFactory.GetConfigManager();
+
+            // create logger to be used later.
             _logger = Log.ForContext<Program>();
-            _logger.Information("CoiniumServ {0:l} {1:l} warming-up..", VersionInfo.CodeName, Assembly.GetAssembly(typeof(Program)).GetName().Version);
-            PlatformManager.PrintPlatformBanner();
 
-            // initialize config manager.
-            configManager.Initialize();
-
-            // start pool manager.
-            var poolManager = objectFactory.GetPoolManager();
-            poolManager.Run();
-
-            // run algorithm manager.
-            objectFactory.GetAlgorithmManager(poolManager);
-
-            // run statistics manager.
-            objectFactory.GetStatisticsManager();
-
-            // initialize metrics support    
-            objectFactory.GetMetricsManager();
-
-            // start web server.
-            objectFactory.GetWebServer();
+            // run global managers
+            RunGlobalManagers(objectFactory);
 
             while (true) // idle loop & command parser
             {
                 var line = Console.ReadLine();
                 CommandManager.Parse(line);
             }
+        }
+
+        private static void RunGlobalManagers(IObjectFactory objectFactory)
+        {
+            // start pool manager.
+            objectFactory.GetPoolManager();
+
+            // run algorithm manager.
+            objectFactory.GetAlgorithmManager();
+
+            // run payment manager
+            objectFactory.GetPaymentDaemonManager();
+
+            // run statistics manager.
+            objectFactory.GetStatisticsManager();
+
+            // run market manager.
+            objectFactory.GetMarketManager();
+
+            // run software repository.
+            objectFactory.GetSoftwareRepository();
+
+            // start web server.
+            objectFactory.GetWebServer();
+
+#if DEBUG
+            // only initialize metrics support in debug mode
+            objectFactory.GetMetricsManager();
+#endif
         }
 
         #region unhandled exception emitter
@@ -116,9 +125,10 @@ namespace CoiniumServ
             if (e.IsTerminating)
             {
                 _logger.Fatal(exception, "Terminating because of unhandled exception!");
-                #if !DEBUG // prevent console window from being closed when we are in development mode.
-                    Environment.Exit(-1);
-                #endif
+#if !DEBUG 
+                // prevent console window from being closed when we are in development mode.
+                Environment.Exit(-1);
+#endif
             }
             else
                 _logger.Error(exception, "Caught unhandled exception");

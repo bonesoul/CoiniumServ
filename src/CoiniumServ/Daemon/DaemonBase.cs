@@ -20,13 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Errors;
+using CoiniumServ.Factories;
 using CoiniumServ.Logging;
-using CoiniumServ.Pools;
 using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
@@ -40,15 +43,24 @@ namespace CoiniumServ.Daemon
         public string RpcPassword { get; private set; }
         public Int32 RequestCounter { get; private set; }
 
+        private readonly Int32 _timeout;
+
+        private readonly IRpcExceptionFactory _rpcExceptionFactory;
+
         private readonly ILogger _logger;
 
-        public DaemonBase(IPoolConfig poolConfig)
+        public DaemonBase(IDaemonConfig daemonConfig, ICoinConfig coinConfig, IRpcExceptionFactory rpcExceptionFactory)
         {
-            RpcUrl = string.Format("http://{0}:{1}", poolConfig.Daemon.Host, poolConfig.Daemon.Port);
-            RpcUser = poolConfig.Daemon.Username;
-            RpcPassword = poolConfig.Daemon.Password;
+            _rpcExceptionFactory = rpcExceptionFactory;
+            _logger = LogManager.PacketLogger.ForContext<DaemonClient>().ForContext("Component", coinConfig.Name);
+
+            _timeout = daemonConfig.Timeout * 1000; // set the daemon timeout.
+        	
+            RpcUrl = string.Format("http://{0}:{1}", daemonConfig.Host, daemonConfig.Port);
+            RpcUser = daemonConfig.Username;
+            RpcPassword = daemonConfig.Password;
+            
             RequestCounter = 0;
-            _logger = LogManager.PacketLogger.ForContext<DaemonClient>().ForContext("Component", poolConfig.Coin.Name);
         }
 
         /// <summary>
@@ -118,7 +130,7 @@ namespace CoiniumServ.Daemon
             // Important, otherwise the service can't deserialse your request properly
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
-            webRequest.Timeout = 1000;
+            webRequest.Timeout = _timeout;
 
             _logger.Verbose("tx: {0}", Encoding.UTF8.GetString(walletRequest.GetBytes()).PrettifyJson());
 
@@ -135,7 +147,7 @@ namespace CoiniumServ.Daemon
             }
             catch (WebException exception)
             {
-                throw new RpcException(string.Format("json-rpc exception: {0}", exception.Message), exception);
+                throw _rpcExceptionFactory.GetRpcException(exception);
             }
 
             return webRequest;
@@ -186,14 +198,14 @@ namespace CoiniumServ.Daemon
             }
             catch (ProtocolViolationException protocolException)
             {
-                throw new RpcException("Unable to connect to the daemon.", protocolException);
+                throw _rpcExceptionFactory.GetRpcException(protocolException);
             }
             catch (WebException webException)
             {
                 var response = webException.Response as HttpWebResponse;
 
-                if(response == null)
-                    throw new RpcException(string.Format("Error while reading the json response: {0}.", webException.Message), webException);
+                if (response == null)
+                    throw _rpcExceptionFactory.GetRpcException("Error while reading json response", webException);
 
                 using (var stream = response.GetResponseStream())
                 {
@@ -204,19 +216,19 @@ namespace CoiniumServ.Daemon
                         // we actually expect a json error response here, but it seems some coins may return non-json responses.
                         try
                         {
-                            var errorResponse = JsonConvert.DeserializeObject<DaemonErrorResponse>(error); // so let's try parsing the error response as json.
-                            throw new RpcException(errorResponse); // if we can use the error json
+                            var errorResponse = JsonConvert.DeserializeObject<RpcErrorResponse>(error); // so let's try parsing the error response as json.
+                            throw _rpcExceptionFactory.GetRpcErrorException(errorResponse); // if we can use the error json
                         }
                         catch (JsonException e) // if we can't parse the error response as json
                         {
-                            throw new RpcException(error, e); // then just use the error text.
-                        }                        
+                            throw _rpcExceptionFactory.GetRpcException(error, e); // then just use the error text.
+                        }
                     }
                 }
             }
             catch (Exception exception)
             {
-                throw new RpcException("An unknown exception occured while trying to read the JSON response.", exception);
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while trying to read the JSON response.", exception);
             }
         }
     }

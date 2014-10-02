@@ -20,18 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Coinbase;
 using CoiniumServ.Cryptology;
-using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers.Time;
 using CoiniumServ.Utils.Numerics;
-using Serilog;
 
 namespace CoiniumServ.Shares
 {
@@ -69,7 +69,7 @@ namespace CoiniumServ.Shares
             Job = job;
             Error = ShareError.None;
 
-            var submitTime = TimeHelpers.NowInUnixTime(); // time we recieved the share from miner.
+            var submitTime = TimeHelpers.NowInUnixTimestamp(); // time we recieved the share from miner.
 
             if (Job == null)
             {
@@ -128,7 +128,7 @@ namespace CoiniumServ.Shares
 
             // create the block headers
             HeaderBuffer = Serializers.SerializeHeader(Job, MerkleRoot, NTime, Nonce);
-            HeaderHash = Job.HashAlgorithm.Hash(HeaderBuffer, miner.Pool.Config.Coin.Options);
+            HeaderHash = Job.HashAlgorithm.Hash(HeaderBuffer, miner.Pool.Config.Coin.Extra);
             HeaderValue = new BigInteger(HeaderHash);
 
             // calculate the share difficulty
@@ -141,7 +141,7 @@ namespace CoiniumServ.Shares
             if (Job.Target >= HeaderValue)
             {
                 IsBlockCandidate = true;
-                BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer, miner.Pool.Config.Coin.IsPOS);
+                BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer, miner.Pool.Config.Coin.Options.IsProofOfStakeHybrid);
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
             }
             else

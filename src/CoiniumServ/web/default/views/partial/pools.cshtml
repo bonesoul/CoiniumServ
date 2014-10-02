@@ -1,0 +1,50 @@
+﻿@using CoiniumServ.Coin.Helpers
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IEnumerable<CoiniumServ.Pools.IPool>>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-flask"></i> Pools</h3>
+                <div class="box-tools pull-right">
+                    <a href="/pools/" type="button" class="btn btn-danger"><i class="fa fa-angle-double-right"></i></a>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"></th>
+                            <th>Pool</th>
+                            <th>Hashrate</th>
+                            <th>Network</th>
+                            <th>Difficulty</th>
+                            <th class="hidden-xs">Workers</th>
+                            <th class="hidden-xs">Algorithm</th>
+                            <th class="hidden-xs">Current Block</th>
+                            <th class="hidden-xs">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pool in Model)
+                        {
+                            <tr>
+                                <td><img src="/Content/img/coins/icon/@(pool.Config.Coin.Symbol).png" /></td>
+                                <td><a href="/pool/@pool.Config.Coin.Symbol/">@pool.Config.Coin.Name</a></td>
+                                <td>@pool.Hashrate.GetReadableHashrate()</td>
+                                <td>@pool.NetworkInfo.Hashrate.GetReadableHashrate()</td>
+                                <td>@pool.NetworkInfo.Difficulty</td>
+                                <td class="hidden-xs">@pool.MinerManager.Count</td>
+                                <td class="hidden-xs"><a href="@pool.Config.Coin.Algorithm">@pool.Config.Coin.Algorithm</a></td>
+                                <td class="hidden-xs">@pool.NetworkInfo.Round</td>
+                                <td class="hidden-xs">
+                                    <div class="label @(pool.NetworkInfo.Healthy? "label-info" : "label-danger")">@(pool.NetworkInfo.Healthy ? "Healthy" : "Warnings!")</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

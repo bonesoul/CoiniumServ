@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using CoiniumServ.Pools;
 using CoiniumServ.Shares;
@@ -63,7 +64,7 @@ namespace CoiniumServ.Vardiff
             if (miner == null)
                 return;
 
-            var now = TimeHelpers.NowInUnixTime();
+            var now = TimeHelpers.NowInUnixTimestamp();
 
             if (miner.VardiffBuffer == null)
             {

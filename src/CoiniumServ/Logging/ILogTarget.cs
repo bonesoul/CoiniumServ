@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Configuration;
 using Serilog.Events;
 
@@ -52,10 +53,6 @@ namespace CoiniumServ.Logging
 
     public enum LogTargetType
     {
-        /// <summary>
-        /// Logs to console.
-        /// </summary>
-        Console,
         /// <summary>
         /// Logs to a file.
         /// </summary>

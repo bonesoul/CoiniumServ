@@ -20,8 +20,11 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
 
 namespace CoiniumServ.Factories
@@ -35,12 +38,14 @@ namespace CoiniumServ.Factories
 
         IJsonConfigReader GetJsonConfigReader();
 
-        #region per-pool configs
-
         IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
 
         ICoinConfig GetCoinConfig(dynamic config);
 
-        #endregion
+        IDaemonManagerConfig GetDaemonManagerConfig(dynamic config);
+
+        IStandaloneDaemonConfig GetStandaloneDaemonConfig(dynamic config);
+
+        IMiningSoftwareConfig GetMiningSoftwareConfig(dynamic config);
     }
 }

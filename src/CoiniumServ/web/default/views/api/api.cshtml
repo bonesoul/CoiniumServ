@@ -1,0 +1,74 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.ApiModel>
+
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-cogs"></i> API</h3>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Arguments</th>
+                            <th>Description</th>
+                            <th style="width: 100px;">Demo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>global</td>
+                            <td>none</td>
+                            <td><strong>Global Information</strong><br><small>Returns general statistics & information about the pool network.</small></td>
+                            <td>
+                                <a href="/api/global/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>pools</td>
+                            <td>none</td>
+                            <td><strong>Pools List & Statistics</strong><br><small>Returns list of pools and detailed statistics for them.</small></td>
+                            <td>
+                                <a href="/api/pools/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>pool</td>
+                            <td><code>coin symbol</code></td>
+                            <td><strong>Pool Statistics</strong><br><small>Returns detailed statistics for a given pool.</small></td>
+                            <td>
+                                @if (@Model.Coin != null)
+                                {
+                                    <a href="/api/pool/@Model.Coin.Symbol/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>algorithms</td>
+                            <td>none</td>
+                            <td><strong>Algorithms List & Statistics</strong><br><small>Returns list of algorithms and detailed statistics for them.</small></td>
+                            <td>
+                                <a href="/api/algorithms/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>algorithm</td>
+                            <td><code>algorithm name</code></td>
+                            <td><strong>Algorithm Statistics</strong><br><small>Returns detailed statistics for a given algorithm.</small></td>
+                            <td>
+                                @if (@Model.Coin != null)
+                                {
+                                    <a href="/api/algorithm/@Model.Coin.Algorithm/" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

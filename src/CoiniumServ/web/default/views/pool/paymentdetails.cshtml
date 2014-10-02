@@ -1,0 +1,114 @@
+﻿@using CoiniumServ.Persistance.Blocks
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.Pool.PaymentDetailsModel>
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid box-warning">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-cube"></i> Block Details</h3>
+            </div>
+            <div class="box-body no-padding">
+                <div class="list-group">
+                    <div class="list-group-item" title="Height of the block">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-arrow-up"></i> Height</div>
+                            <div class="col-xs-6 text-right"><a href="/pool/@Model.Coin.Symbol/block/@Model.Block.Height">@Model.Block.Height</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="box box-solid box-success">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-user"></i> Account Details</h3>
+            </div>
+            <div class="box-body no-padding">
+                <div class="list-group">
+                    <div class="list-group-item" title="Payment address for the account">
+                        <div class="row">
+                            <div class="col-xs-3"><i class="fa fa-inbox"></i> Address</div>
+                            <div class="col-xs-9 text-right"><a href="/pool/@Model.Coin.Symbol/account/address/@Model.Account.Address">@Model.Account.Address</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-credit-card"></i> Payment Details</h3>
+            </div>
+            <div class="box-body no-padding">
+                <div class="list-group">
+                    <div class="list-group-item" title="The id of the payment">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-caret-right"></i> Id</div>
+                            <div class="col-xs-6 text-right"><a href="/pool/@Model.Coin.Symbol/payment/@Model.Details.PaymentId">@Model.Details.PaymentId</a></div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="The amount of the payment">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-dollar"></i> Amount</div>
+                            <div class="col-xs-6 text-right">@Model.Details.Amount @Model.Coin.Symbol</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Is the payment fullfilled?">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-check-circle-o"></i> Fullfilled</div>
+                            <div class="col-xs-6 text-right"><div class="label @(Model.Details.Completed ?"bg-green":"bg-red")">@(Model.Details.Completed ? "Yes" : "No")</div></div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Date of the payment">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-calendar"></i> Date</div>
+                            <div class="col-xs-6 text-right">@Model.Details.PaymentDate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-random"></i> Transaction Details</h3>
+            </div>
+            <div class="box-body no-padding">
+                <div class="list-group">
+                    <div class="list-group-item" title="The id of the payment">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-caret-right"></i> Id</div>
+                            <div class="col-xs-6 text-right"><a href="/pool/@Model.Coin.Symbol/tx/@Model.Details.TransactionId">@Model.Details.TransactionId</a></div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="The amount of the sent coins">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-dollar"></i> Amount</div>
+                            <div class="col-xs-6 text-right">@Model.Details.SentAmount @Model.Details.Currency</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="The hash of the transaction">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-bolt"></i> Hash</div>
+                            <div class="col-xs-6 text-right"><a href="@Model.Coin.BlockExplorer.Tx@Model.Details.TxHash" target="_blank">@Model.Details.TxHash.Substring(0, 10)</a></div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Date of the transaction">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-calendar"></i> Date</div>
+                            <div class="col-xs-6 text-right">@Model.Details.TransactionDate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

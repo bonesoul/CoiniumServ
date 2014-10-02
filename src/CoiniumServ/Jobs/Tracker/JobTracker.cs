@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,7 +70,7 @@ namespace CoiniumServ.Jobs.Tracker
             var startingCount = _jobs.Count;
 
             // calculate the cleanup delta time - jobs created before this will be cleaned up.
-            var delta = TimeHelpers.NowInUnixTime() - _cleanupFrequency;
+            var delta = TimeHelpers.NowInUnixTimestamp() - _cleanupFrequency;
 
             // find expired jobs that were created before our calcualted delta time.
             _jobs = _jobs.Where(j => j.Value.CreationTime >= delta || j.Value == Current)

@@ -22,8 +22,7 @@
 #endregion
 namespace CoiniumServ.Payments
 {
-    public interface IPaymentProcessor
+    public interface IPaymentProcessor:IPaymentLabor
     {
-        void Initialize();
     }
 }

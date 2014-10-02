@@ -20,19 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Diagnostics;
 using System.Linq;
 using AustinHarris.JsonRpc;
-using CoiniumServ.Blocks;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
-using CoiniumServ.Persistance;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Errors;
-using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Utils.Extensions;
 using Serilog;
 
@@ -50,9 +50,9 @@ namespace CoiniumServ.Shares
 
         private readonly IStorageLayer _storageLayer;
 
-        private readonly IBlockProcessor _blockProcessor;
-
         private readonly IPoolConfig _poolConfig;
+
+        private string _poolAccount;
 
         private readonly ILogger _logger;
 
@@ -63,15 +63,15 @@ namespace CoiniumServ.Shares
         /// <param name="daemonClient"></param>
         /// <param name="jobTracker"></param>
         /// <param name="storageLayer"></param>
-        /// <param name="blockProcessor"></param>
-        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor)
+        public ShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer)
         {
             _poolConfig = poolConfig;
             _daemonClient = daemonClient;
             _jobTracker = jobTracker;
             _storageLayer = storageLayer;
-            _blockProcessor = blockProcessor;
             _logger = Log.ForContext<ShareManager>().ForContext("Component", poolConfig.Coin.Name);
+
+            FindPoolAccount();
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace CoiniumServ.Shares
             return share;
         }
 
-        public IShare ProcessShare(IVanillaMiner miner, string data)
+        public IShare ProcessShare(IGetworkMiner miner, string data)
         {
             throw new NotImplementedException();
         }
@@ -110,7 +110,7 @@ namespace CoiniumServ.Shares
         private void HandleValidShare(IShare share)
         {
             var miner = (IStratumMiner) share.Miner;
-            miner.ValidShares++;
+            miner.ValidShareCount++;
 
             _storageLayer.AddShare(share); // commit the share.
             _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);
@@ -122,26 +122,19 @@ namespace CoiniumServ.Shares
             // submit block candidate to daemon.
             var accepted = SubmitBlock(share);
 
-            // log about the acceptance status of the block.
-            _logger.Information(
-                accepted
-                    ? "Found block [{0}] with hash: {1:l}"
-                    : "Submit block [{0}] failed with hash: {1:l}",
-                share.Height, share.BlockHash.ToHexString());
-
             if (!accepted) // if block wasn't accepted
                 return; // just return as we don't need to notify about it and store it.
 
             OnBlockFound(EventArgs.Empty); // notify the listeners about the new block.
 
             _storageLayer.AddBlock(share); // commit the block details to storage.
-            _storageLayer.MoveShares(share); // move associated shares.
+            _storageLayer.MoveCurrentShares(share.Height); // move associated shares to new key.
         }
 
         private void HandleInvalidShare(IShare share)
         {
             var miner = (IStratumMiner)share.Miner;
-            miner.InvalidShares++;
+            miner.InvalidShareCount++;
 
             JsonRpcException exception = null; // the exception determined by the stratum error code.
             switch (share.Error)
@@ -180,16 +173,16 @@ namespace CoiniumServ.Shares
 
             try
             {
-                _daemonClient.SubmitBlock(share.BlockHex.ToHexString());
+                _daemonClient.SubmitBlock(share.BlockHex.ToHexString()); // submit the block.
 
-                var block = _blockProcessor.GetBlock(share.BlockHash.ToHexString()); // query the block.
+                var block = _daemonClient.GetBlock(share.BlockHash.ToHexString()); // query the block.
 
                 if (block == null) // make sure the block exists
                     return false;
 
                 if (block.Confirmations == -1) // make sure the block is accepted.
                 {
-                    _logger.Debug("Submitted block {0:l} is orphaned", block.Hash);
+                    _logger.Debug("Submitted block [{0}] is orphaned; [{1:l}]", block.Height, block.Hash);
                     return false;
                 }
 
@@ -198,29 +191,41 @@ namespace CoiniumServ.Shares
 
                 if (expectedTxHash != genTxHash) // make sure our calculated generated transaction and one reported by coin daemon matches.
                 {
-                    _logger.Debug("Submitted block {0:l} doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Hash, genTxHash, expectedTxHash);
+                    _logger.Debug("Submitted block [{0}] doesn't seem to belong us as reported generation transaction hash [{1:l}] doesn't match our expected one [{2:l}]", block.Height, genTxHash, expectedTxHash);
                     return false;
                 }
 
-                var genTx = _blockProcessor.GetGenerationTransaction(block); // get the generation transaction.
+                var genTx = _daemonClient.GetTransaction(block.Tx.First()); // get the generation transaction.
 
-                var poolOutput = _blockProcessor.GetPoolOutput(genTx); // get the output that targets pool's central address.
+                // make sure we were able to read the generation transaction
+                if (genTx == null)
+                {
+                    _logger.Debug("Submitted block [{0}] doesn't seem to belong us as we can't read the generation transaction on our records [{1:l}]", block.Height, block.Tx.First());
+                    return false;
+                }
+
+                var poolOutput = genTx.GetPoolOutput(_poolConfig.Wallet.Adress, _poolAccount); // get the output that targets pool's central address.
 
                 // make sure the blocks generation transaction contains our central pool wallet address
                 if (poolOutput == null)
                 {
-                    _logger.Debug("Submitted block doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", _poolConfig.Wallet.Adress);
+                    _logger.Debug("Submitted block [{0}] doesn't seem to belong us as generation transaction doesn't contain an output for pool's central wallet address: {0:}", block.Height, _poolConfig.Wallet.Adress);
                     return false;
                 }
 
                 // if the code flows here, then it means the block was succesfully submitted and belongs to us.
                 share.SetFoundBlock(block, genTx); // assign the block to share.
 
+                _logger.Information("Found block [{0}] with hash [{1:l}]", share.Height, share.BlockHash.ToHexString());
+
                 return true;
             }
-            catch (Exception e)
+            catch (RpcException e)
             {
-                _logger.Error("Submit block failed - height: {0}, hash: {1:l} - {2:l}", share.Height, share.BlockHash.ToHexString(), e.Message);
+                // unlike BlockProcessor's detailed exception handling and decision making based on the error,
+                // here in share-manager we only one-shot submissions. If we get an error, basically we just don't care about the rest
+                // and flag the submission as failed.
+                _logger.Error("Submit block [{0}] failed with hash [{1:l}] - reason; {2:l}", share.Height, share.BlockHash.ToHexString(), e.Message);
                 return false;
             }
         }
@@ -239,6 +244,20 @@ namespace CoiniumServ.Shares
 
             if (handler != null)
                 handler(this, e);
+        }
+
+        private void FindPoolAccount()
+        {
+            try
+            {
+                _poolAccount = !_poolConfig.Coin.Options.UseDefaultAccount // if UseDefaultAccount is not set
+                    ? _daemonClient.GetAccount(_poolConfig.Wallet.Adress) // find the account of the our pool address.
+                    : ""; // use the default account.
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Error getting account for pool central wallet address: {0:l} - {1:l}", _poolConfig.Wallet.Adress, e.Message);
+            }
         }
     }
 }

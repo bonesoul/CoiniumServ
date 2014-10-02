@@ -20,13 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System.Reflection;
-using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-using CoiniumServ.Utils.Versions;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using libCoiniumServ.Versions;
 
 [assembly: AssemblyTitle("CoiniumServ")]
 [assembly: AssemblyDescription("Next-gen crypto currency mining pool software")]

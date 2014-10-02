@@ -20,13 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Persistance.Layers;
-using CoiniumServ.Persistance.Layers.Empty;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Layers.Mpos;
+using CoiniumServ.Persistance.Layers.Null;
 using Serilog;
 
 namespace CoiniumServ.Persistance
@@ -49,8 +50,8 @@ namespace CoiniumServ.Persistance
 
                 var layers = new List<IStorageLayerConfig>
                 {
-                    new HybridStorageLayerConfig(config.hybrid),
-                    new MposStorageLayerConfig(config.mpos)
+                    new HybridStorageConfig(config.hybrid),
+                    new MposStorageConfig(config.mpos)
                 };
 
                 var enabledLayers = layers.Count(layer => layer.Enabled && layer.Valid); // find the count of enabled storage layers.
@@ -58,13 +59,13 @@ namespace CoiniumServ.Persistance
                 if (enabledLayers == 0) // make sure we have at least a single enabled layer.
                 {
                     _logger.Error("Storage will be not working as no valid storage configuration was found!");
-                    Layer = EmptyStorageLayerConfig.Empty;
+                    Layer = NullStorageConfig.Null;
                     Valid = false;
                 }
                 else if (enabledLayers > 1) // we can have either hybrid or mpos layer enabled only at a time.
                 {
                     _logger.Error("Storage will be not working as only a single storage configuration can be enabled!");
-                    Layer = EmptyStorageLayerConfig.Empty;
+                    Layer = NullStorageConfig.Null;
                     Valid = false;
                 }
                 else // the configuration meets our expectations

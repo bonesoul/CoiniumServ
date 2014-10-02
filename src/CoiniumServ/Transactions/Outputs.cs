@@ -20,12 +20,14 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CoiniumServ.Coin.Address.Exceptions;
 using CoiniumServ.Coin.Coinbase;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using Gibbed.IO;
 
@@ -35,12 +37,15 @@ namespace CoiniumServ.Transactions
     {
         public List<TxOut> List { get; private set; }
 
-        public IDaemonClient DaemonClient { get; private set; }
+        private readonly IDaemonClient _daemonClient;
 
+        private readonly ICoinConfig _coinConfig;
 
-        public Outputs(IDaemonClient daemonClient)
+        public Outputs(IDaemonClient daemonClient, ICoinConfig coinConfig)
         {
-            DaemonClient = daemonClient;
+            _daemonClient = daemonClient;
+            _coinConfig = coinConfig;
+
             List = new List<TxOut>();
         }
 
@@ -54,24 +59,37 @@ namespace CoiniumServ.Transactions
             Add(address, amount, false);
         }
 
-        private void Add(string walletAddress, double amount, bool toFront)
+        private void Add(string walletAddress, double amount, bool poolCentralAddress)
         {
             // check if the supplied wallet address is correct.
+            var result = _daemonClient.ValidateAddress(walletAddress);
 
-            if (!DaemonClient.ValidateAddress(walletAddress).IsValid)
+            if (!result.IsValid)
                 throw new InvalidWalletAddressException(walletAddress);
 
-            var recipientScript = Coin.Coinbase.Utils.CoinAddressToScript(walletAddress); // generate the script to claim the output for recipient.
+            // POS coin's require the PubKey to be used in coinbase for pool's central wallet address and
+            // and we can only get PubKey of an address when the wallet owns it.
+            // so check if we own the address when we are on a POS coin and adding the output for pool central address.
+            if (_coinConfig.Options.IsProofOfStakeHybrid && poolCentralAddress) 
+            {
+                if(!result.IsMine || string.IsNullOrEmpty(result.PubKey)) // given address should be ours and PubKey should not be empty.
+                    throw new AddressNotOwnedException(walletAddress);
+            }
+
+            // generate the script to claim the output for recipient.
+            var recipientScript = _coinConfig.Options.IsProofOfStakeHybrid && poolCentralAddress
+                ? Coin.Coinbase.Utils.PubKeyToScript(result.PubKey) // pos coins use pubkey within script for pool central address.
+                : Coin.Coinbase.Utils.CoinAddressToScript(walletAddress); // for others (pow coins, reward recipients in pos coins) use wallet address instead.
 
             var txOut = new TxOut
             {
                 Value = ((UInt64)amount).LittleEndian(),
                 PublicKeyScriptLenght = Serializers.VarInt((UInt32)recipientScript.Length),
                 PublicKeyScript = recipientScript
-            };   
+            };
 
-            if(toFront)
-                List.Insert(0,txOut);
+            if (poolCentralAddress) // if we are adding output for the pool's central wallet address.
+                List.Insert(0, txOut); // add it to the front of the queue.
             else
                 List.Add(txOut);
         }

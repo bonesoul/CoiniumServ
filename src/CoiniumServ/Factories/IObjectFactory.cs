@@ -20,17 +20,23 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
+using CoiniumServ.Accounts;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Banning;
 using CoiniumServ.Blocks;
-using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
-using CoiniumServ.Metrics;
-using CoiniumServ.Miners;
+using CoiniumServ.Markets;
+using CoiniumServ.Mining;
+using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
+using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Persistance.Layers.Hybrid;
 using CoiniumServ.Persistance.Providers;
@@ -41,6 +47,7 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
+using CoiniumServ.Utils.Metrics;
 using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 
@@ -58,6 +65,8 @@ namespace CoiniumServ.Factories
 
         ILogManager GetLogManager();
 
+        IDaemonManager GetPaymentDaemonManager();
+
         #endregion
 
         #region pool objects
@@ -68,19 +77,17 @@ namespace CoiniumServ.Factories
         /// Returns a new instance of daemon client.
         /// </summary>
         /// <returns></returns>
-        IDaemonClient GetDaemonClient(IPoolConfig poolConfig);
+        IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
 
-        IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer);
+        IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager);
 
         IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
 
         IJobTracker GetJobTracker(IPoolConfig poolConfig);
 
-        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
+        IShareManager GetShareManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IStorageLayer storageLayer);
 
-        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer, IBlockProcessor blockProcessor);
-
-        IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient);
+        IBlockProcessor GetBlockProcessor(IPoolConfig poolConfig, IDaemonClient daemonClient, IStorageLayer storageLayer);
 
         IBanManager GetBanManager(IPoolConfig poolConfig, IShareManager shareManager);
 
@@ -88,13 +95,29 @@ namespace CoiniumServ.Factories
 
         INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig);
 
-        IBlocksCache GetBlocksCache(IStorageLayer storageLayer);
+        IBlockRepository GetBlockRepository(IStorageLayer storageLayer);
 
         IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,IBanManager banManager);
 
         IRpcService GetMiningService(string type, IPoolConfig poolConfig, IShareManager shareManager, IDaemonClient daemonClient);
 
+        IAccountManager GetAccountManager(IStorageLayer storageLayer, IPoolConfig poolConfig);
+
         #endregion        
+
+        #region payment objects 
+
+        IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockProcessor blockProcessor, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor);
+
+        IBlockAccounter GetBlockAccounter(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager);
+
+        IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient, IAccountManager accountManager);
+
+        IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager);
+
+        IPaymentRepository GetPaymentRepository(IStorageLayer storageLayer);
+
+        #endregion
 
         #region hash algorithms
 
@@ -105,7 +128,7 @@ namespace CoiniumServ.Factories
         /// <returns></returns>
         IHashAlgorithm GetHashAlgorithm(string algorithm);
 
-        IAlgorithmManager GetAlgorithmManager(IPoolManager poolManager);
+        IAlgorithmManager GetAlgorithmManager();
 
         #endregion
 
@@ -126,6 +149,20 @@ namespace CoiniumServ.Factories
         INancyBootstrapper GetWebBootstrapper();
 
         IMetricsManager GetMetricsManager();
+
+        #endregion
+
+        #region market objects
+
+        IMarketManager GetMarketManager();
+
+        #endregion
+
+        #region mining software
+
+        ISoftwareRepository GetSoftwareRepository();
+
+        IMiningSoftware GetMiningSoftware(IMiningSoftwareConfig config);
 
         #endregion
     }

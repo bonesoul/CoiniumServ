@@ -20,7 +20,8 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using CoiniumServ.Miners;
+
+using CoiniumServ.Mining;
 
 namespace CoiniumServ.Server.Mining.Stratum.Service
 {

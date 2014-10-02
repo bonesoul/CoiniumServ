@@ -20,16 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Payments;
+using CoiniumServ.Payments.Config;
 using CoiniumServ.Pools;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Script;
@@ -121,18 +121,18 @@ namespace CoiniumServ.Tests.Jobs
                 (byte) _extraNonce.ExtraNoncePlaceholder.Length,
                 "/nodeStratum/");
 
-            // outputs
-            _outputs = Substitute.For<Outputs>(_daemonClient);
-            double blockReward = 5000000000; // the amount rewarded by the block.
-
             // pool config
             _poolConfig = Substitute.For<IPoolConfig>();
 
             // create coin config.
             var coinConfig = Substitute.For<ICoinConfig>();
-            coinConfig.SupportsTxMessages.Returns(false);
-            coinConfig.IsPOS.Returns(false);
+            coinConfig.Options.TxMessageSupported.Returns(false);
+            coinConfig.Options.IsProofOfStakeHybrid.Returns(false);
             _poolConfig.Coin.Returns(coinConfig);
+
+            // outputs
+            _outputs = Substitute.For<Outputs>(_daemonClient, coinConfig);
+            double blockReward = 5000000000; // the amount rewarded by the block.
 
             // create rewards config.
             var rewardsConfig = Substitute.For<IRewardsConfig>();

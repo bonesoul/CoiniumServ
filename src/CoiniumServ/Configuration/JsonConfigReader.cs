@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -39,8 +40,12 @@ namespace CoiniumServ.Configuration
         {
             try
             {
-                var path = FileHelpers.GetAbsolutePath(fileName);
+                var path = FileHelpers.GetAbsolutePath(fileName); // get the absolute path for the config file.
                 var json = ReadJsonFromFile(path); // read the json.
+
+                if (json == null) // make sure we were able to load the json file.
+                    return null;
+
                 json = CleanComments(json); // strip out comment lines that starts with # as they'll be preventing validation.
                 var valid = ValidateJson(json, fileName); // check if it's valid.
 
@@ -75,9 +80,9 @@ namespace CoiniumServ.Configuration
                 var json = File.ReadAllText(fileName);
                 return json;
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
-                Log.Error("Can not read json file {0:l} - {1:l}", fileName, e.Message);
+                Log.Error("Can not read json file {0:l}", fileName);
                 return null;
             }
         }

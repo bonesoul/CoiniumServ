@@ -20,7 +20,6 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-
 using CoiniumServ.Coin.Helpers;
 using Should.Fluent;
 using Xunit;

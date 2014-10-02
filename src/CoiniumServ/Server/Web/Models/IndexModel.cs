@@ -20,7 +20,9 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Collections.Generic;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Statistics;
 
@@ -29,6 +31,8 @@ namespace CoiniumServ.Server.Web.Models
     public class IndexModel
     {
         public IReadOnlyCollection<IPool> Pools { get; set; }
+
+        public IReadOnlyCollection<IHashAlgorithm> Algorithms { get; set; }
 
         public IStatisticsManager Statistics { get; set; }
     }

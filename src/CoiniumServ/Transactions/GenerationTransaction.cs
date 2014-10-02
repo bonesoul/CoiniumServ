@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -130,7 +131,7 @@ namespace CoiniumServ.Transactions
             ExtraNonce = extraNonce;
             PoolConfig = poolConfig;
 
-            Version = (UInt32)(poolConfig.Coin.SupportsTxMessages ? 2 : 1);
+            Version = (UInt32)(poolConfig.Coin.Options.TxMessageSupported ? 2 : 1);
             TxMessage = Serializers.SerializeString(poolConfig.Meta.TxMessage);
             LockTime = 0;
 
@@ -149,14 +150,14 @@ namespace CoiniumServ.Transactions
                         new SignatureScript(
                             blockTemplate.Height,
                             blockTemplate.CoinBaseAux.Flags,
-                            TimeHelpers.NowInUnixTime(),
+                            TimeHelpers.NowInUnixTimestamp(),
                             (byte) extraNonce.ExtraNoncePlaceholder.Length,
                             "/CoiniumServ/")
                 }
             }; 
 
             // transaction outputs
-            Outputs = new Outputs(daemonClient);
+            Outputs = new Outputs(daemonClient, poolConfig.Coin);
 
             double blockReward = BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
 
@@ -180,7 +181,7 @@ namespace CoiniumServ.Transactions
             {
                 stream.WriteValueU32(Version.LittleEndian()); // write version
 
-                if(PoolConfig.Coin.IsPOS) // if coin is a proof-of-stake coin
+                if(PoolConfig.Coin.Options.IsProofOfStakeHybrid) // if coin is a proof-of-stake coin
                     stream.WriteValueU32(BlockTemplate.CurTime); // include time-stamp in the transaction.
 
                 // write transaction input.
@@ -216,7 +217,7 @@ namespace CoiniumServ.Transactions
 
                 stream.WriteValueU32(LockTime.LittleEndian());
 
-                if (PoolConfig.Coin.SupportsTxMessages)
+                if (PoolConfig.Coin.Options.TxMessageSupported)
                     stream.WriteBytes(TxMessage);
 
                 Final = stream.ToArray();

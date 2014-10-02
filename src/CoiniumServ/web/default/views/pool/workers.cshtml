@@ -1,0 +1,50 @@
+﻿@using CoiniumServ.Server.Mining.Stratum
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.WorkersModel>
+
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-users"></i> Connected workers</h3>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Username</th>
+                            <th>Difficulty</th>
+                            <th>Valid Shares</th>
+                            <th>Invalid Shares</th>
+                            <th>Software</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var worker in Model.Workers)
+                        {
+                            <tr>
+                                <td>@worker.Id</td>
+                                <td>@worker.Username</td>
+                                <td>
+                                    @if (worker is IStratumMiner)
+                                    {
+                                        @((worker as IStratumMiner).Difficulty)
+                                    }
+                                    else
+                                    {
+                                        @:
+                                    }
+                                </td>
+                                <td>@worker.ValidShareCount</td>
+                                <td>@worker.InvalidShareCount</td>
+                                <td>@worker.Software @worker.SoftwareVersion</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -20,12 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using CoiniumServ.Daemon.Config;
-using CoiniumServ.Daemon.Requests;
-using CoiniumServ.Daemon.Responses;
+
 /* This file is based on https://github.com/BitKoot/BitcoinRpcSharp */
 
 /* Possible alternative implementations:
@@ -37,7 +32,14 @@ using CoiniumServ.Daemon.Responses;
 
 // Original bitcoin api call list: https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_Calls_list
 // Rpc error codes: https://github.com/bitcoin/bitcoin/blob/master/src/rpcprotocol.h#L34
-using CoiniumServ.Pools;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Requests;
+using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Factories;
 
 namespace CoiniumServ.Daemon
 {
@@ -48,8 +50,8 @@ namespace CoiniumServ.Daemon
     {
         public static readonly object[] EmptyString = {}; // used as empty parameter.
 
-        public DaemonClient(IPoolConfig poolConfig)
-            : base(poolConfig)
+        public DaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig, IRpcExceptionFactory rpcExceptionFactory)
+            : base(daemonConfig, coinConfig, rpcExceptionFactory)
         { }
 
         /// <summary>
@@ -244,14 +246,22 @@ namespace CoiniumServ.Daemon
         /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
         /// https://en.bitcoin.it/wiki/Getblocktemplate
         /// </summary>
-        public BlockTemplate GetBlockTemplate()
+        public BlockTemplate GetBlockTemplate(bool modeRequired = false)
         {
-            var capabilities = new Dictionary<string, object>
-            {
-                {"capabilities", new List<string> {"coinbasetxn", "workid", "coinbase/append"}}
-            };
+            var data = new Dictionary<string, object>();
 
-            return MakeRequest<BlockTemplate>("getblocktemplate", capabilities);
+            if (!modeRequired)
+            {
+                // bitcoin variants can accept capabilities: https://github.com/bitcoin/bitcoin/blob/7388b74cd2c5e3b71e991d26953c89c059ba6f2f/src/rpcmining.cpp#L298            
+                data.Add("capabilities", new List<string> {"coinbasetxn", "workid", "coinbase/append"});
+            }
+            else
+            {
+                // peercoin variants instead require mode: https://github.com/Peerunity/Peerunity/blob/master/src/bitcoinrpc.cpp#L2206
+                data.Add("mode", "template");
+            }
+
+            return MakeRequest<BlockTemplate>("getblocktemplate", data);
         }
 
         /// <summary>

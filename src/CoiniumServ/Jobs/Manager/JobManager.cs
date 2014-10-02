@@ -20,16 +20,17 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Threading;
-using CoiniumServ.Cryptology.Algorithms;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Shares;
 using CoiniumServ.Transactions;
 using Serilog;
@@ -109,7 +110,7 @@ namespace CoiniumServ.Jobs.Manager
 
             try
             {
-                var blockTemplate = _daemonClient.GetBlockTemplate();
+                var blockTemplate = _daemonClient.GetBlockTemplate(_poolConfig.Coin.Options.BlockTemplateModeRequired);
 
                 if (blockTemplate.Height == _jobTracker.Current.Height) // if network reports the same block-height with our current job.
                     return; // just return.
@@ -135,7 +136,7 @@ namespace CoiniumServ.Jobs.Manager
                 if (initiatedByTimer)
                     _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds", job.Id, count, _poolConfig.Job.RebroadcastTimeout);
                 else
-                    _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as network found a new block {2}", job.Id, count, job.Height);
+                    _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as network found a new block", job.Id, count);
             }
 
             // no matter we created a job successfully or not, reset the rebroadcast timer, so we can keep trying. 
@@ -146,7 +147,7 @@ namespace CoiniumServ.Jobs.Manager
         {
             try
             {
-                var blockTemplate = _daemonClient.GetBlockTemplate();
+                var blockTemplate = _daemonClient.GetBlockTemplate(_poolConfig.Coin.Options.BlockTemplateModeRequired);
 
                 // TODO: convert generation transaction to ioc & DI based.
                 var generationTransaction = new GenerationTransaction(ExtraNonce, _daemonClient, blockTemplate, _poolConfig);
@@ -200,7 +201,7 @@ namespace CoiniumServ.Jobs.Manager
 
         private bool SendJobToMiner(IMiner miner, IJob job)
         {
-            if (miner is IVanillaMiner) // only stratum miners needs to be submitted new jobs.
+            if (miner is IGetworkMiner) // only stratum miners needs to be submitted new jobs.
                 return false;
 
             var stratumMiner = (IStratumMiner) miner;

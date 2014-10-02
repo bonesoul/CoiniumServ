@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,13 +43,26 @@ namespace CoiniumServ.Pools
         public PoolManager(IObjectFactory objectFactory , IConfigManager configManager)
         {
             _logger = Log.ForContext<PoolManager>();
-
             _storage = new List<IPool>(); // initialize the pool storage.
 
-            foreach (var config in configManager.PoolConfigs) // loop through all enabled pool configurations.
+            // loop through all enabled pool configurations.
+            foreach (var config in configManager.PoolConfigs)
             {
                 var pool = objectFactory.GetPool(config); // create pool for the given configuration.
-                _storage.Add(pool); // add it to storage.
+                
+                if(pool.Enabled) // make sure pool was succesfully initialized.
+                    _storage.Add(pool); // add it to storage.
+            }
+
+            Run(); // run the initialized pools.
+        }
+
+        private void Run()
+        {
+            // run the initialized pools
+            foreach (var pool in _storage)
+            {
+                pool.Start();
             }
         }
 
@@ -98,14 +112,6 @@ namespace CoiniumServ.Pools
         public IPool Get(string symbol)
         {
             return _storage.FirstOrDefault(p => p.Config.Coin.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public void Run()
-        {
-            foreach (var pool in _storage)
-            {
-                pool.Start();
-            }
         }
 
         public IEnumerator<IPool> GetEnumerator()

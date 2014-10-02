@@ -20,15 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
-using CoiniumServ.Miners;
+using CoiniumServ.Mining;
 using CoiniumServ.Pools;
+using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
-using CoiniumServ.Server.Mining.Vanilla;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Helpers.Time;
 using Serilog;
@@ -69,18 +70,18 @@ namespace CoiniumServ.Banning
             if (miner == null)
                 return;
 
-            var totalShares = miner.ValidShares + miner.InvalidShares;
+            var totalShares = miner.ValidShareCount + miner.InvalidShareCount;
 
             if (totalShares < Config.CheckThreshold) // check if we exceeded the threshold for checks.
                 return;
 
-            var invalidPercentage = miner.InvalidShares/totalShares*100;
+            var invalidPercentage = miner.InvalidShareCount/totalShares*100;
 
             if (invalidPercentage < Config.InvalidPercent)
                 // if the miner didn't reach the invalid share percentage, reset his stats.
             {
-                miner.ValidShares = 0;
-                miner.InvalidShares = 0;
+                miner.ValidShareCount = 0;
+                miner.InvalidShareCount = 0;
             }
             else // he needs a ban
             {
@@ -92,14 +93,14 @@ namespace CoiniumServ.Banning
         private void Ban(IMiner miner)
         {
             // TODO: add vanilla miners to banlist too.
-            if (miner is IVanillaMiner) // as vanilla miners doesn't use persistent connections, we don't need to disconect him
+            if (miner is IGetworkMiner) // as vanilla miners doesn't use persistent connections, we don't need to disconect him
                 return; // but just blacklist his ip.
 
             var client = (IClient) miner;
             var ip = client.Connection.RemoteEndPoint.Address;
 
             if(!_bannedIps.ContainsKey(ip))
-                _bannedIps.Add(ip, TimeHelpers.NowInUnixTime());
+                _bannedIps.Add(ip, TimeHelpers.NowInUnixTimestamp());
 
             client.Connection.Disconnect();
         }
@@ -148,7 +149,7 @@ namespace CoiniumServ.Banning
         {
             var banTime = _bannedIps[ip];
 
-            var elapsedTime = TimeHelpers.NowInUnixTime() - banTime; // elapsed time since his ban.
+            var elapsedTime = TimeHelpers.NowInUnixTimestamp() - banTime; // elapsed time since his ban.
             var timeLeft = Config.Duration - elapsedTime; // time left for his ban
 
             if (timeLeft > 0) // if he has still remaining time

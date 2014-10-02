@@ -1,5 +1,6 @@
 {
     "name": "Freicoin",
     "symbol": "FRC",
-    "algorithm": "sha256"
+    "algorithm": "sha256",
+	"site": "http://freico.in/"
 }

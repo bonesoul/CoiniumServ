@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using Serilog;
 
@@ -28,13 +29,20 @@ namespace CoiniumServ.Coin.Config
     public class CoinConfig : ICoinConfig
     {
         public bool Valid { get; private set; }
+
         public string Name { get; private set; }
+
         public string Symbol { get; private set; }
+
         public string Algorithm { get; private set; }
-        public bool SupportsTxMessages { get; private set; }
-        public bool IsPOS { get; set; }
-        public string BlockExplorer { get; private set; }
-        public dynamic Options { get; private set; }
+
+        public string Site { get; private set; }
+
+        public ICoinOptions Options { get; private set; }
+
+        public IBlockExplorerOptions BlockExplorer { get; private set; }
+
+        public dynamic Extra { get; private set; }
 
         public CoinConfig(dynamic config)
         {
@@ -44,16 +52,10 @@ namespace CoiniumServ.Coin.Config
                 Name = config.name;
                 Symbol = config.symbol;
                 Algorithm = config.algorithm;
-                SupportsTxMessages = config.txMessages;
-
-                // check the coin type.
-                if (string.IsNullOrEmpty(config.reward)) // if no value is set, behave it as a proof-of-work coin by default.
-                    IsPOS = false;
-                else // if we have a reward value set.
-                    IsPOS = config.reward.ToString().ToLower() == "pos"; // see if it's a proof-of-stake coin or proof-of-work coin.
-
-                BlockExplorer = string.IsNullOrEmpty(config.blockExplorer) ? "https://altexplorer.net" : config.blockExplorer;
-                Options = config;
+                Site = string.IsNullOrEmpty(config.site) ? string.Empty : config.site;
+                Options = new CoinOptions(config.options);
+                BlockExplorer = new BlockExplorerOptions(config.blockExplorer);
+                Extra = config.extra;
 
                 if (Name == null || Symbol == null || Algorithm == null) // make sure we have valid name, symbol and algorithm data.
                     Valid = false;

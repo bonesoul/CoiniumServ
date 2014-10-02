@@ -20,6 +20,7 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using CoiniumServ.Configuration;
 using Newtonsoft.Json;
 
@@ -47,25 +48,15 @@ namespace CoiniumServ.Coin.Config
         string Algorithm { get; }
 
         /// <summary>
-        /// Does the coin uses TxMessages.
+        /// 
         /// </summary>
-        bool SupportsTxMessages { get; }
+        [JsonProperty("site")]
+        string Site { get; }
 
-        /// <summary>
-        /// Is the coin a proof-of-stake coin?
-        /// </summary>
-        [JsonProperty("pos")]
-        bool IsPOS { get; set; }
+        ICoinOptions Options { get; }
 
-        /// <summary>
-        /// Block explorer for the coin.
-        /// </summary>
-        
-        string BlockExplorer { get; }
+        IBlockExplorerOptions BlockExplorer { get; }
 
-        /// <summary>
-        /// Extra options provided that will be passed to coin algorithm.
-        /// </summary>
-        dynamic Options { get; }
+        dynamic Extra { get; }
     }
 }

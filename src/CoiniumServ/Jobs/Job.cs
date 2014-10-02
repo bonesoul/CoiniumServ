@@ -20,12 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Coinbase;
-using CoiniumServ.Cryptology.Algorithms;
 using CoiniumServ.Cryptology.Merkle;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Shares;
@@ -98,7 +99,7 @@ namespace CoiniumServ.Jobs
             PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();
-            CreationTime = TimeHelpers.NowInUnixTime();
+            CreationTime = TimeHelpers.NowInUnixTimestamp();
 
             _shares = new List<UInt64>();
 
