@@ -11,4 +11,4 @@ CoiniumServ can run on dotnet framework 4.0+.
 
 ## Mono
 
-CoiniumServ can run on mono 3.2.x series.
+CoiniumServ can run on mono 3.2.x+ series.
