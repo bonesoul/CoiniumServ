@@ -1,6 +1,6 @@
 ##### [v0.2.0 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.0-beta) - 02.10.2014
 
-v0.2.0 is the last major release before our auto-exchange & multipool feature with many fixes and improvements. Check-out the details below;
+v0.2.0 is the last major release before our auto-exchange & multi-pool feature with many fixes and improvements. You can find out the details below;
 
 #### What's new?
 
@@ -58,7 +58,6 @@ v0.2.0 is the last major release before our auto-exchange & multipool feature wi
 **Logging**
 * Removed console.log configuration as it'll be always on by default.
 * Packet.log configuration is now correctly honored.
-
 
 ##### [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha) - 05.09.2014
 
