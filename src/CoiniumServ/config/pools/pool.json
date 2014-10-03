@@ -14,28 +14,11 @@
             "myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1
         }
     ],
-    "payments": {
-        "enabled": true
-    },
     "stratum": {
-        "enabled": true,
-        "port": 3333,
-        "vardiff": {
-            "enabled": true
-        }
-    },
-    "banning": {
-        "enabled": true
+        "port": 3333
     },
     "storage": {
         "hybrid": {
-            "enabled": false,
-            "mysql": {
-                "database": "db-name"
-            }
-        },
-        "mpos": {
-            "enabled": false,
             "mysql": {
                 "database": "db-name"
             }

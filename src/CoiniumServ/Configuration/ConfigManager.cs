@@ -84,6 +84,7 @@ namespace CoiniumServ.Configuration
             LoadGlobalConfig(); // read the global config.
             // LoadDaemonManagerConfig(); // load the global daemon manager config. - disabled until we need it.
             LoadSoftwareManagerConfig(); // load software manager config file.
+            LoadDefaultPoolConfig(); // load default pool config if exists.
             LoadPoolConfigs(); // load the per-pool config files.
         }
 
@@ -120,6 +121,12 @@ namespace CoiniumServ.Configuration
             SoftwareRepositoryConfig = new SoftwareRepositoryConfig(_configFactory, data);
         }
 
+        private void LoadDefaultPoolConfig()
+        {
+            var data = _jsonConfigReader.Read(string.Format("{0}/default.json", PoolConfigRoot));
+            _defaultPoolConfig = data ?? null; // set the default config data.
+        }
+
         private void LoadPoolConfigs()
         {
             PoolConfigs = new List<IPoolConfig>(); // list of pool configurations.
@@ -127,18 +134,14 @@ namespace CoiniumServ.Configuration
 
             foreach (var file in files)
             {
+                var filename = Path.GetFileNameWithoutExtension(file); // read the filename.
+                if (!string.IsNullOrEmpty(filename) && filename.Equals("default", StringComparison.OrdinalIgnoreCase)) // if it's the default.json,
+                    continue; // just skip it.
+
                 var data = _jsonConfigReader.Read(file); // read the pool config json.
 
                 if (data == null) // make sure we have loaded json data.
                     continue;
-
-                // check if we have a default.json pool config.
-                var filename = Path.GetFileNameWithoutExtension(file);
-                if (!string.IsNullOrEmpty(filename) && filename.Equals("default", StringComparison.OrdinalIgnoreCase)) 
-                {
-                    _defaultPoolConfig = data;
-                    continue; // don't add the default.json to list of pools and yet again do not load the coinconfig data for it.
-                }
 
                 if (!data.enabled) // skip pools that are not enabled.
                     continue;
