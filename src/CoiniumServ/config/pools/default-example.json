@@ -8,6 +8,7 @@
         "txMessage": "http://www.coiniumserv.com/"
     },
     "payments": {
+        "enabled": true,
         "interval": 60,
         "minimum": 0.01
     },
@@ -20,9 +21,11 @@
         "rebroadcastTimeout": 55
     },
     "stratum": {
+        "enabled": true,
         "bind": "0.0.0.0",
         "diff": 16,
         "vardiff": {
+            "enabled": true,
             "minDiff": 8,
             "maxDiff": 512,
             "targetTime": 15,
@@ -31,6 +34,7 @@
         }
     },
     "banning": {
+        "enabled": true,
         "duration": 600,
         "invalidPercent": 50,
         "checkThreshold": 100,
@@ -38,6 +42,7 @@
     },
     "storage": {
         "hybrid": {
+            "enabled": true,
             "redis": {
                 "host": "127.0.0.1",
                 "port": 6379,
@@ -52,6 +57,7 @@
             }
         },
         "mpos": {
+            "enabled": false,
             "mysql": {
                 "host": "127.0.0.1",
                 "port": 3306,
