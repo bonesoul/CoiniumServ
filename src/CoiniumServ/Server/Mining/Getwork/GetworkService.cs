@@ -28,7 +28,7 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using Serilog;
 
-namespace CoiniumServ.Server.Mining.Getwork.Service
+namespace CoiniumServ.Server.Mining.Getwork
 {
     /// <summary>
     /// Getwork protocol implementation.
@@ -56,7 +56,7 @@ namespace CoiniumServ.Server.Mining.Getwork.Service
         [JsonRpcMethod("getwork")]
         public Daemon.Responses.Getwork Getwork(string data = null)
         {
-            var context = (HttpServiceContext) JsonRpcContext.Current().Value;
+            var context = (GetworkContext) JsonRpcContext.Current().Value;
             var miner = (IGetworkMiner) (context.Miner);
 
             // TODO: fixme! instead use jobmanager and sharemanager.
