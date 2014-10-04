@@ -1,3 +1,6 @@
 [submodule "deps/csredis"]
 	path = deps/csredis
 	url = https://github.com/CoiniumServ/csredis.git
+[submodule "deps/json-rpc"]
+	path = deps/json-rpc
+	url = https://github.com/CoiniumServ/JSON-RPC.NET.git

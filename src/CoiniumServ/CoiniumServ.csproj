@@ -46,10 +46,6 @@
     <ApplicationIcon>Coinium.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AustinHarris.JsonRpc, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\AustinHarris.JsonRpc.1.0.4.18\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
-    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
@@ -956,6 +952,10 @@
     <ProjectReference Include="..\..\deps\csredis\CSRedis\CSRedis.csproj">
       <Project>{d35e185e-a7e1-41e1-846c-21944f56074f}</Project>
       <Name>CSRedis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\deps\json-rpc\Json-Rpc\AustinHarris.JsonRpc.csproj">
+      <Project>{24fc1a2a-0bc3-43a7-9bfe-b628c2c4a307}</Project>
+      <Name>AustinHarris.JsonRpc</Name>
     </ProjectReference>
     <ProjectReference Include="..\libCoiniumServ\libCoiniumServ.csproj">
       <Project>{f908636c-bc75-4b93-a774-e4878f3d39af}</Project>

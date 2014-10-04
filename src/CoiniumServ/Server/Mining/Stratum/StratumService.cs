@@ -49,7 +49,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="signature">software signature</param>
         /// <param name="sessionId">optional parameter supplied by miners whom wants to reconnect and continue their old session</param>
         [JsonRpcMethod("mining.subscribe")]
-        public SubscribeResponse SubscribeMiner(string signature, string sessionId = null)
+        public SubscribeResponse SubscribeMiner(string signature = null, string sessionId = null)
         {
             var context = (StratumContext) JsonRpcContext.Current().Value;         
 
