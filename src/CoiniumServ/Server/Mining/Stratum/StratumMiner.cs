@@ -34,7 +34,6 @@ using CoiniumServ.Mining;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum.Errors;
-using CoiniumServ.Server.Mining.Stratum.Service;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Utils.Buffers;
 using CoiniumServ.Utils.Extensions;
@@ -227,7 +226,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         {
             try
             {
-                var rpcContext = new SocketServiceContext(this); // set the context.
+                var rpcContext = new StratumContext(this); // set the context.
 
                 _packetLogger.Verbose("rx: {0}", line.PrettifyJson());
 

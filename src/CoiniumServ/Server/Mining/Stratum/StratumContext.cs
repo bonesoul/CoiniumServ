@@ -21,21 +21,15 @@
 // 
 #endregion
 
-using System.Net;
-using CoiniumServ.Mining;
-
-namespace CoiniumServ.Server.Mining.Getwork.Service
+namespace CoiniumServ.Server.Mining.Stratum
 {
-    public class HttpServiceContext
+    public class StratumContext
     {
-        public IMiner Miner { get; private set; }
+        public IStratumMiner Miner { get; private set; }
 
-        public HttpListenerResponse Response { get; private set; }
-
-        public HttpServiceContext(IMiner miner, HttpListenerContext context)
+        public StratumContext(IStratumMiner miner)
         {
             Miner = miner;
-            Response = context.Response;
         }
     }
 }

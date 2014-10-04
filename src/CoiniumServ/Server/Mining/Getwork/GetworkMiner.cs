@@ -30,7 +30,6 @@ using CoiniumServ.Accounts;
 using CoiniumServ.Logging;
 using CoiniumServ.Mining;
 using CoiniumServ.Pools;
-using CoiniumServ.Server.Mining.Getwork.Service;
 using CoiniumServ.Utils.Extensions;
 using Newtonsoft.Json;
 using Serilog;
@@ -97,7 +96,7 @@ namespace CoiniumServ.Server.Mining.Getwork
                 var asyncData = ((JsonRpcStateAsync) callback);
                 var result = asyncData.Result;
                 var response = Encoding.UTF8.GetBytes(result);
-                var context = (HttpServiceContext) asyncData.AsyncState;
+                var context = (GetworkContext) asyncData.AsyncState;
 
                 context.Response.ContentType = "application/json";
                 context.Response.ContentEncoding = Encoding.UTF8;
@@ -125,7 +124,7 @@ namespace CoiniumServ.Server.Mining.Getwork
                 using (var reader = new StreamReader(httpRequest.InputStream, Encoding.UTF8))
                 {
                     var line = reader.ReadToEnd();
-                    var rpcContext = new HttpServiceContext(this, httpContext);
+                    var rpcContext = new GetworkContext(this, httpContext);
 
                     _packetLogger.Verbose("rx: {0}", line.PrettifyJson());
 

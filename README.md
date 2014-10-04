@@ -7,7 +7,15 @@ Even better multi-pool & auto-exchange module is being developed which once comp
 
 CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) mining pool network at first hand. You can check [some of pools](https://github.com/CoiniumServ/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
+### Screenshots
+
+##### Console
+
 ![CoiniumServ running over mono & ubuntu](http://i.imgur.com/HvaPVrZ.png)
+
+##### Embedded web frontend
+
+![Embedded web frontend](http://i.imgur.com/oOF8lQ0.png)
 
 ### Status
 

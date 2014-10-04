@@ -24,10 +24,8 @@
 using CoiniumServ.Container.Context;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Getwork;
-using CoiniumServ.Server.Mining.Getwork.Service;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Mining.Stratum;
-using CoiniumServ.Server.Mining.Stratum.Service;
 using CoiniumServ.Server.Web;
 
 namespace CoiniumServ.Container.Registries
