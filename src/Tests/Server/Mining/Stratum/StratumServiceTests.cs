@@ -47,12 +47,12 @@ namespace CoiniumServ.Tests.Server.Mining.Stratum
         }
 
         [Fact]
-        public void MiningSubscribe_WithZeroParameters_ShouldSuccess()
+        public void MiningSubscribe_WithOutParameters_ShouldEqual()
         {
             _poolConfig.Coin.Name.Returns("zero-params");
             var service = new StratumService(_poolConfig, _shareManager);
 
-            const string request = @"{ 'id' : 1, 'method' : 'mining.subscribe', 'params' : [  ] }";
+            const string request = @"{ 'id' : 1, 'method' : 'mining.subscribe', 'params' : [] }";
             const string expectedResult = "{\"jsonrpc\":\"2.0\",\"result\":[[\"mining.set_difficulty\",\"0\",\"mining.notify\",\"0\"],\"00000000\",4],\"id\":1}";
 
             var task = JsonRpcProcessor.Process(_poolConfig.Coin.Name, request,_stratumContext);
@@ -62,7 +62,7 @@ namespace CoiniumServ.Tests.Server.Mining.Stratum
         }
 
         [Fact]
-        public void MiningSubscribe_WithSignature_ShouldSuccess()
+        public void MiningSubscribe_WithSignature_ShouldEqual()
         {
             _poolConfig.Coin.Name.Returns("signature");
             var service = new StratumService(_poolConfig, _shareManager);
@@ -77,12 +77,12 @@ namespace CoiniumServ.Tests.Server.Mining.Stratum
         }
 
         [Fact]
-        public void MiningSubscribe_WithNonce_ShouldSuccess()
+        public void MiningSubscribe_WithSessionId_ShouldEqual()
         {
-            _poolConfig.Coin.Name.Returns("nonce");
+            _poolConfig.Coin.Name.Returns("session");
             var service = new StratumService(_poolConfig, _shareManager);
 
-            const string request = @"{ 'id' : 1, 'method' : 'mining.subscribe', 'params' : [ 'cgminer/3.7.2', 'aa' ] }";
+            const string request = @"{ 'id' : 1, 'method' : 'mining.subscribe', 'params' : [ 'cgminer/3.7.2', '02000000b507a8fd1ea2b7d9cdec867086f6935228aba1540154f83930377ea5a2e37108' ] }";
             const string expectedResult = "{\"jsonrpc\":\"2.0\",\"result\":[[\"mining.set_difficulty\",\"0\",\"mining.notify\",\"0\"],\"00000000\",4],\"id\":1}";
 
             var task = JsonRpcProcessor.Process(_poolConfig.Coin.Name, request, _stratumContext);
