@@ -32,15 +32,14 @@ namespace CoiniumServ.Tests.Banning
 {
     public class BanConfigTests
     {
-        private readonly IConfigFactory _configFactory;
         private readonly IJsonConfigReader _jsonConfigReader;
 
         public BanConfigTests()
         {
             var kernel = TinyIoCContainer.Current;
             new Bootstrapper(kernel);
-            _configFactory = kernel.Resolve<IConfigFactory>();
-            _jsonConfigReader = _configFactory.GetJsonConfigReader();
+            var configFactory = kernel.Resolve<IConfigFactory>();
+            _jsonConfigReader = configFactory.GetJsonConfigReader();
         }
 
         /// <summary>
