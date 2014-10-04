@@ -56,9 +56,6 @@ namespace CoiniumServ.Server.Mining.Getwork
         [JsonRpcMethod("getwork")]
         public Daemon.Responses.Getwork Getwork(string data = null)
         {
-            var context = (GetworkContext) JsonRpcContext.Current().Value;
-            var miner = (IGetworkMiner) (context.Miner);
-
             // TODO: fixme! instead use jobmanager and sharemanager.
 
             if (data == null) // if miner supplied no data
