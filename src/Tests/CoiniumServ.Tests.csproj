@@ -35,6 +35,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AustinHarris.JsonRpc, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\packages\AustinHarris.JsonRpc.1.0.4.22\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
+    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
@@ -102,10 +106,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\deps\json-rpc\Json-Rpc\AustinHarris.JsonRpc.csproj">
-      <Project>{24fc1a2a-0bc3-43a7-9bfe-b628c2c4a307}</Project>
-      <Name>AustinHarris.JsonRpc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CoiniumServ\CoiniumServ.csproj">
       <Project>{5fca1e48-0751-4625-9532-cb804df55db5}</Project>
       <Name>CoiniumServ</Name>
