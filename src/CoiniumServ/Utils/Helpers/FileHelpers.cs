@@ -28,7 +28,7 @@ using System.Linq;
 using CoiniumServ.Utils.Platform;
 using Serilog;
 
-namespace CoiniumServ.Utils.Helpers.IO
+namespace CoiniumServ.Utils.Helpers
 {
     public static class FileHelpers
     {

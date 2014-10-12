@@ -21,34 +21,56 @@
 // 
 #endregion
 
-using System;
+using System.Collections;
+using System.Collections.Generic;
 
-namespace CoiniumServ.Utils.Helpers.Time
+namespace CoiniumServ.Utils.Helpers
 {
-    public static class TimeHelpers
+    /// <summary>
+    /// Port of python's range from
+    /// </summary>
+    /// <remarks>
+    /// Ported from: http://stackoverflow.com/a/8273091
+    /// </remarks>
+    public class Range : IEnumerable<int>
     {
-        public static Int32 NowInUnixTimestamp()
+        private readonly int _start;
+        private int _stop;
+        private int _step = 1;
+
+        public Range(int start)
         {
-            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            _start = _stop = start;
         }
 
-        public static int ToUnixTimestamp(this DateTime value)
+        public static Range From(int startRange)
         {
-            return (int)Math.Truncate((value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
+            return new Range(startRange);
         }
 
-
-        public static int UnixTimestamp(this DateTime value)
+        public Range To(int endRange)
         {
-            return (int)Math.Truncate((value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
+            _stop = endRange;
+            return this;
         }
 
-        public static DateTime UnixTimestampToDateTime(this int unixTimeStamp)
+        public Range WithStepSize(int step)
         {
-            // Unix timestamp is seconds past epoch
-            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToUniversalTime();
-            return dtDateTime;
+            _step = step;
+            return this;
+        }
+
+        public IEnumerator<int> GetEnumerator()
+        {
+            for (var i = _start; _step > 0 ? i < _stop : i > _stop; i += _step)
+            {
+                yield return i;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

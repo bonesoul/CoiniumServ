@@ -25,6 +25,7 @@ using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Helpers;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Utils.Helpers;
 using Serilog;
 
 namespace CoiniumServ.Pools

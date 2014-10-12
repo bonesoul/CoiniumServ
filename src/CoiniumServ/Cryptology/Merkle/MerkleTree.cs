@@ -24,7 +24,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Utils.Extensions;
-using CoiniumServ.Utils.Helpers.Misc;
+using CoiniumServ.Utils.Helpers;
 
 namespace CoiniumServ.Cryptology.Merkle
 {

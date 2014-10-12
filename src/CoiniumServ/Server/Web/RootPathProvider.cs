@@ -22,7 +22,7 @@
 #endregion
 
 using System.IO;
-using CoiniumServ.Utils.Helpers.IO;
+using CoiniumServ.Utils.Helpers;
 using Nancy;
 
 namespace CoiniumServ.Server.Web

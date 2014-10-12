@@ -28,7 +28,7 @@ using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Query;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Extensions;
-using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Helpers;
 using Dapper;
 using MySql.Data.MySqlClient;
 

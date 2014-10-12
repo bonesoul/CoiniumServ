@@ -23,7 +23,7 @@
 
 using System;
 using System.Diagnostics;
-using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Helpers;
 
 namespace CoiniumServ.Persistance.Blocks
 {

@@ -151,7 +151,7 @@
     <Compile Include="Coin\Config\CoinOptions.cs" />
     <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
     <Compile Include="Coin\Config\ICoinOptions.cs" />
-    <Compile Include="Coin\Helpers\Hashrate.cs" />
+    <Compile Include="Utils\Helpers\Humanize.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />
     <Compile Include="Daemon\Converters\TimeConverter.cs" />
@@ -372,14 +372,14 @@
     <Compile Include="Transactions\TxOut.cs" />
     <Compile Include="Container\Context\ApplicationContext.cs" />
     <Compile Include="Configuration\JsonConfigReader.cs" />
-    <Compile Include="Utils\Helpers\Validation\Enforce.cs" />
+    <Compile Include="Utils\Helpers\Enforce.cs" />
     <Compile Include="Server\Mining\Service\Services.cs" />
     <Compile Include="Utils\Extensions\ArrayExtensions.cs" />
     <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Utils\Helpers\Arrays\ArrayHelpers.cs" />
-    <Compile Include="Utils\Helpers\IO\FileHelpers.cs" />
-    <Compile Include="Utils\Helpers\Misc\Range.cs" />
-    <Compile Include="Utils\Helpers\Time\TimeHelpers.cs" />
+    <Compile Include="Utils\Helpers\ArrayHelpers.cs" />
+    <Compile Include="Utils\Helpers\FileHelpers.cs" />
+    <Compile Include="Utils\Helpers\Range.cs" />
+    <Compile Include="Utils\Helpers\TimeHelpers.cs" />
     <Compile Include="Utils\Buffers\IRingBuffer.cs" />
     <Compile Include="Logging\ILogConfig.cs" />
     <Compile Include="Logging\ILogTarget.cs" />
@@ -404,7 +404,7 @@
     <Compile Include="Coin\Address\Exceptions\AddressFormatException.cs" />
     <Compile Include="Coin\Address\Exceptions\InvalidWalletAddressException.cs" />
     <Compile Include="Transactions\GenerationTransaction.cs" />
-    <Compile Include="Coin\Helpers\Amount.cs" />
+    <Compile Include="Utils\Helpers\Amount.cs" />
     <Compile Include="Container\Bootstrapper.cs" />
     <Compile Include="Configuration\IConfig.cs" />
     <Compile Include="Container\Registries\ClassRegistry.cs" />

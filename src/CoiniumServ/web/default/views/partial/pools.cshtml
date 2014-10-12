@@ -1,4 +1,4 @@
-﻿@using CoiniumServ.Coin.Helpers
+﻿@using CoiniumServ.Utils.Helpers
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IEnumerable<CoiniumServ.Pools.IPool>>
 
 <div class="row">
@@ -33,7 +33,7 @@
                                 <td><a href="/pool/@pool.Config.Coin.Symbol/">@pool.Config.Coin.Name</a></td>
                                 <td>@pool.Hashrate.GetReadableHashrate()</td>
                                 <td>@pool.NetworkInfo.Hashrate.GetReadableHashrate()</td>
-                                <td>@pool.NetworkInfo.Difficulty</td>
+                                <td title="@string.Format("{0:n8}",pool.NetworkInfo.Difficulty)">@pool.NetworkInfo.Difficulty.GetReadableDifficulty()</td>
                                 <td class="hidden-xs">@pool.MinerManager.Count</td>
                                 <td class="hidden-xs"><a href="@pool.Config.Coin.Algorithm">@pool.Config.Coin.Algorithm</a></td>
                                 <td class="hidden-xs">@pool.NetworkInfo.Round</td>

@@ -25,7 +25,7 @@ using System;
 using CoiniumServ.Pools;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Buffers;
-using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Helpers;
 using Serilog;
 
 namespace CoiniumServ.Vardiff
