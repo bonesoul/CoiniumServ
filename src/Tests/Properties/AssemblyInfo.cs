@@ -20,17 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
 using System.Reflection;
 using System.Runtime.InteropServices;
+using libCoiniumServ.Versions;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CoiniumServ.Tests")]
 [assembly: AssemblyDescription("Tests for CoiniumServ")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Coinium.org")]
-[assembly: AssemblyProduct("CoiniumServ.Tests")]
+[assembly: AssemblyProduct("CoiniumServ.Tests - " + VersionInfo.CodeName)]
 [assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, CoiniumServ project, http://www.coinium.org -  http://www.coiniumserv.com")]
 [assembly: AssemblyTrademark("CoiniumServ")]
 [assembly: AssemblyCulture("")]
@@ -43,15 +44,5 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("c2c43b17-b445-48d2-871a-8b244e6d5062")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+// Set the assembly version from VersionInfo.cs file.
+[assembly: AssemblyVersion(VersionInfo.Assembly.Version)]
