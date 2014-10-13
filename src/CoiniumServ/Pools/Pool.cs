@@ -43,8 +43,7 @@ using CoiniumServ.Persistance.Providers.MySql;
 using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
-using CoiniumServ.Utils.Helpers.Time;
-using CoiniumServ.Utils.Helpers.Validation;
+using CoiniumServ.Utils.Helpers;
 using Newtonsoft.Json;
 using Serilog;
 

@@ -21,56 +21,34 @@
 // 
 #endregion
 
-using System.Collections;
-using System.Collections.Generic;
+using System;
 
-namespace CoiniumServ.Utils.Helpers.Misc
+namespace CoiniumServ.Utils.Helpers
 {
-    /// <summary>
-    /// Port of python's range from
-    /// </summary>
-    /// <remarks>
-    /// Ported from: http://stackoverflow.com/a/8273091
-    /// </remarks>
-    public class Range : IEnumerable<int>
+    public static class TimeHelpers
     {
-        private readonly int _start;
-        private int _stop;
-        private int _step = 1;
-
-        public Range(int start)
+        public static Int32 NowInUnixTimestamp()
         {
-            _start = _stop = start;
+            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
 
-        public static Range From(int startRange)
+        public static int ToUnixTimestamp(this DateTime value)
         {
-            return new Range(startRange);
+            return (int)Math.Truncate((value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
         }
 
-        public Range To(int endRange)
+
+        public static int UnixTimestamp(this DateTime value)
         {
-            _stop = endRange;
-            return this;
+            return (int)Math.Truncate((value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
         }
 
-        public Range WithStepSize(int step)
+        public static DateTime UnixTimestampToDateTime(this int unixTimeStamp)
         {
-            _step = step;
-            return this;
-        }
-
-        public IEnumerator<int> GetEnumerator()
-        {
-            for (var i = _start; _step > 0 ? i < _stop : i > _stop; i += _step)
-            {
-                yield return i;
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            // Unix timestamp is seconds past epoch
+            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToUniversalTime();
+            return dtDateTime;
         }
     }
 }

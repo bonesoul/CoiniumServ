@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using CoiniumServ.Pools;
-using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Helpers;
 using Serilog;
 
 namespace CoiniumServ.Jobs.Tracker

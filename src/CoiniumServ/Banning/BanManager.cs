@@ -31,7 +31,7 @@ using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Shares;
-using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Helpers;
 using Serilog;
 
 namespace CoiniumServ.Banning

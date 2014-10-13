@@ -271,13 +271,13 @@ namespace CoiniumServ.Daemon
         /// <returns></returns>
         public BlockTemplate GetBlockTemplate(string blockHex)
         {
-            var submission = new Dictionary<string, object>
+            var data = new Dictionary<string, object>
             {
                 {"mode", "submit"},
                 {"data", blockHex}
             };
 
-            return MakeRequest<BlockTemplate>("getblocktemplate", submission);
+            return MakeRequest<BlockTemplate>("getblocktemplate", data);
         }
 
         /// <summary>

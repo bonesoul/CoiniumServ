@@ -37,6 +37,7 @@ namespace CoiniumServ.Mining
     public class MinerManager : IMinerManager
     {        
         public int Count { get { return _miners.Count(kvp => kvp.Value.Authenticated); } }
+
         public IList<IMiner> Miners { get { return _miners.Values.ToList(); } }
 
         public event EventHandler MinerAuthenticated;
@@ -51,7 +52,12 @@ namespace CoiniumServ.Mining
 
         private readonly IAccountManager _accountManager;
 
-        private readonly ILogger _logger;        
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// Used for locking miners list.
+        /// </summary>
+        private readonly object _minersLock = new object();
 
         public MinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager)
         {
@@ -87,7 +93,9 @@ namespace CoiniumServ.Mining
 
             var instance = Activator.CreateInstance(typeof(T), @params); // create an instance of the miner.
             var miner = (IGetworkMiner)instance;
-            _miners.Add(miner.Id, miner); // add it to our collection.
+
+            lock(_minersLock) // lock the list before we modify the collection.
+                _miners.Add(miner.Id, miner); // add it to our collection.
 
             return (T)miner;
         }
@@ -106,20 +114,26 @@ namespace CoiniumServ.Mining
 
             var instance = Activator.CreateInstance(typeof(T), @params);  // create an instance of the miner.
             var miner = (IStratumMiner)instance;
-            _miners.Add(miner.Id, miner); // add it to our collection.           
+            
+            lock (_minersLock) // lock the list before we modify the collection.
+                _miners.Add(miner.Id, miner); // add it to our collection.           
 
             return (T)miner;
         }
 
         public void Remove(IConnection connection)
         {
-            var miner = (from pair in _miners // find the miner associated with the connection.
-                let client = (IClient)pair.Value 
-                where client.Connection == connection 
+            // find the miner associated with the connection.
+            var miner = (from pair in _miners
+                let client = (IClient) pair.Value
+                where client.Connection == connection
                 select pair.Value).FirstOrDefault();
 
-            if (miner != null)
-                _miners.Remove(miner.Id);
+            if (miner == null) // make sure the miner exists
+                return;
+
+            lock (_minersLock) // lock the list before we modify the collection.
+                _miners.Remove(miner.Id); // remove the miner.
         }
 
         public void Authenticate(IMiner miner)

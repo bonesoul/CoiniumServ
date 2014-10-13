@@ -24,7 +24,9 @@
 using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Helpers;
 using CoiniumServ.Daemon;
+using CoiniumServ.Daemon.Errors;
 using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Utils.Helpers;
 using Serilog;
 
 namespace CoiniumServ.Pools
@@ -61,6 +63,7 @@ namespace CoiniumServ.Pools
             _logger = Log.ForContext<NetworkInfo>().ForContext("Component", poolConfig.Coin.Name);
 
             DetectProofOfStakeCoin(); // detect if we are running on a proof-of-stake coin.
+            DetectSubmitBlockSupport(); // detect if the coin daemon supports submitblock call.
             Recache(); // recache the data initially.
             PrintNetworkInfo(); // print the collected network info.
         }
@@ -125,6 +128,28 @@ namespace CoiniumServ.Pools
                 Connections,
                 Round - 1,
                 string.IsNullOrEmpty(Errors) ? "none" : Errors);
+        }
+
+
+        private void DetectSubmitBlockSupport()
+        {
+            // issue a submitblock() call too see if it's supported.
+            // If the coin supports the submitblock() call it's should return a RPC_DESERIALIZATION_ERROR (-22) - 'Block decode failed' as we just supplied an empty string as block hash.
+            // otherwise if it doesn't support the call, it should return a RPC_METHOD_NOT_FOUND (-32601) - 'Method not found' error.
+
+            try
+            {
+                var response = _daemonClient.SubmitBlock(string.Empty);
+            }
+            catch (RpcErrorException e)
+            {
+                if (e.Code == (int)RpcErrorCode.RPC_METHOD_NOT_FOUND) // 'Method not found' error.
+                    _poolConfig.Coin.Options.SubmitBlockSupported = false; // the coin doesn't support submitblock().
+                else if (e.Code == (int)RpcErrorCode.RPC_DESERIALIZATION_ERROR) // 'Block decode failed' error.
+                    _poolConfig.Coin.Options.SubmitBlockSupported = true; // the coin supports submitblock().
+                else // we shouldn't be really recieving any other errors.
+                    _logger.Error("Recieved an unexpected response for DetectSubmitBlockSupport() - {0}, {1:l}", e.Code, e.Message);
+            }
         }
 
         private void DetectProofOfStakeCoin()

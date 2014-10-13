@@ -27,7 +27,7 @@ using System.Globalization;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Shares;
-using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Helpers;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
 {

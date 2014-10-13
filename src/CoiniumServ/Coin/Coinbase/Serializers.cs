@@ -26,7 +26,7 @@ using System.IO;
 using System.Text;
 using CoiniumServ.Jobs;
 using CoiniumServ.Utils.Extensions;
-using CoiniumServ.Utils.Helpers.Arrays;
+using CoiniumServ.Utils.Helpers;
 using Gibbed.IO;
 
 namespace CoiniumServ.Coin.Coinbase

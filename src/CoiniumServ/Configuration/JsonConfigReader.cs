@@ -24,7 +24,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using CoiniumServ.Utils.Helpers.IO;
+using CoiniumServ.Utils.Helpers;
 using JsonConfig;
 using Newtonsoft.Json;
 using Serilog;

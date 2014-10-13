@@ -22,17 +22,48 @@
 #endregion
 
 using System;
+using System.Globalization;
 
-namespace CoiniumServ.Coin.Helpers
+namespace CoiniumServ.Utils.Helpers
 {
-    public static class Hashrate
+    public static class Humanize
     {
+
+        /// <summary>
+        /// Returns given hashrate value as human readable string.
+        /// </summary>
+        /// <param name="hashrate"></param>
+        /// <returns></returns>
         public static string GetReadableHashrate(this UInt64 hashrate)
         {
             var index = -1;
             double rate = hashrate;
 
-            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s" };
+            var units = new[] {"KH/s", "MH/s", "GH/s", "TH/s", "PH/s", "EH/s", "ZH/s", "YH/s"};
+
+            do
+            {
+                rate = rate/1000;
+                index++;
+            } while (rate > 1000);
+
+            return string.Format("{0:0.00} {1}", rate, units[index]);
+        }
+
+        /// <summary>
+        /// Returns given difficulty value as human readable string.
+        /// </summary>
+        /// <param name="difficulty"></param>
+        /// <returns></returns>
+        public static string GetReadableDifficulty(this double difficulty)
+        {
+            var index = -1;
+            var rate = difficulty;
+
+            var units = new[] {"K", "M", "B", "T", "Q"};
+
+            if (difficulty < 1000)
+                return difficulty.ToString(CultureInfo.InvariantCulture);
 
             do
             {

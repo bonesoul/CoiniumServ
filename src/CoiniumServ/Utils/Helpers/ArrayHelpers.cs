@@ -23,7 +23,7 @@
 
 using System;
 
-namespace CoiniumServ.Utils.Helpers.Arrays
+namespace CoiniumServ.Utils.Helpers
 {
     public static class ArrayHelpers
     {

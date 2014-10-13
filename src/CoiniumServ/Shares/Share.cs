@@ -30,7 +30,7 @@ using CoiniumServ.Jobs;
 using CoiniumServ.Mining;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Utils.Extensions;
-using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Helpers;
 using CoiniumServ.Utils.Numerics;
 
 namespace CoiniumServ.Shares
