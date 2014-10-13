@@ -23,7 +23,6 @@
 
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Errors;
 using CoiniumServ.Daemon.Exceptions;

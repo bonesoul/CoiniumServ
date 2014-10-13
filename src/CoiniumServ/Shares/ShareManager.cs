@@ -173,7 +173,10 @@ namespace CoiniumServ.Shares
 
             try
             {
-                _daemonClient.SubmitBlock(share.BlockHex.ToHexString()); // submit the block.
+                if (_poolConfig.Coin.Options.SubmitBlockSupported) // see if submitblock() is available.
+                    _daemonClient.SubmitBlock(share.BlockHex.ToHexString()); // submit the block.
+                else
+                    _daemonClient.GetBlockTemplate(share.BlockHex.ToHexString()); // use getblocktemplate() if submitblock() is not supported.
 
                 var block = _daemonClient.GetBlock(share.BlockHash.ToHexString()); // query the block.
 
@@ -225,7 +228,7 @@ namespace CoiniumServ.Shares
                 // unlike BlockProcessor's detailed exception handling and decision making based on the error,
                 // here in share-manager we only one-shot submissions. If we get an error, basically we just don't care about the rest
                 // and flag the submission as failed.
-                _logger.Error("Submit block [{0}] failed with hash [{1:l}] - reason; {2:l}", share.Height, share.BlockHash.ToHexString(), e.Message);
+                _logger.Error("We thought a block was found but it was rejected by the coin daemon; [{0:l}] - reason; {1:l}", share.BlockHash.ToHexString(), e.Message);
                 return false;
             }
         }

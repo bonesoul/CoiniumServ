@@ -48,5 +48,10 @@ namespace CoiniumServ.Coin.Config
         /// Does the coin uses TxMessages.
         /// </summary>
         bool TxMessageSupported { get; }
+
+        /// <summary>
+        /// Does the coin daemon support submitblock call?
+        /// </summary>
+        bool SubmitBlockSupported { get; set; }
     }
 }

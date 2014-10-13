@@ -23,7 +23,7 @@
 
 using System;
 using System.Globalization;
-using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

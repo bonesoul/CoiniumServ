@@ -32,7 +32,7 @@ using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Pools;
 using CoiniumServ.Transactions.Script;
-using CoiniumServ.Utils.Helpers.Time;
+using CoiniumServ.Utils.Helpers;
 using Gibbed.IO;
 
 namespace CoiniumServ.Transactions

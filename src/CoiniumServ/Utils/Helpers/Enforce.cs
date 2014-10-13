@@ -25,7 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace CoiniumServ.Utils.Helpers.Validation
+namespace CoiniumServ.Utils.Helpers
 {
     /// <summary>
     /// The enforce.

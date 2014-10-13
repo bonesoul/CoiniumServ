@@ -24,7 +24,7 @@
 using System;
 using System.IO;
 using System.Linq;
-using CoiniumServ.Utils.Helpers.IO;
+using CoiniumServ.Utils.Helpers;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
