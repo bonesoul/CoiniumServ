@@ -1,3 +1,10 @@
+##### [v0.2.1 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.1-beta) - 04.10.2014
+
+#### Bug Fixes
+* Fixed a bug in stratum service where some miners were unable to connect back after they got disconnected.
+
+---
+
 ##### [v0.2.0 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.0-beta) - 02.10.2014
 
 v0.2.0 is the last major release before our auto-exchange & multi-pool feature with many fixes and improvements. You can find out the details below;
@@ -56,6 +63,8 @@ v0.2.0 is the last major release before our auto-exchange & multi-pool feature w
 **Logging**
 * Removed console.log configuration as it'll be always on by default.
 * Packet.log configuration is now correctly honored.
+ 
+---
 
 ##### [v0.1.5 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.5-alpha) - 05.09.2014
 
@@ -82,10 +91,14 @@ v0.2.0 is the last major release before our auto-exchange & multi-pool feature w
 **Configuration**
 * Moved config.json "website:stats" section to upper level and renamed as "statistics". You have to apply the change to your existing config.json file!
 
+---
+
 ##### [v0.1.4 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.4-alpha) - 03.09.2014
 
 **Storage**
 * Downgraded csredis package at it was causing problems with mono.
+
+---
 
 ##### [v0.1.3 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.3-alpha) - 03.09.2014
 
@@ -112,11 +125,15 @@ v0.2.0 is the last major release before our auto-exchange & multi-pool feature w
 * File path handling improvements.
 * Fixed app.config.
 
+---
+
 ##### [v0.1.2 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.2-alpha) - 14.08.2014
 
 **Payments**
 * Fixed a major bug in payment processor which was preventing payments to miners.
 * Fixed a bug in statistics manager.
+
+---
 
 ##### [v0.1.1 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.1-alpha) - 10.08.2014
 **Mining**
@@ -141,6 +158,7 @@ v0.2.0 is the last major release before our auto-exchange & multi-pool feature w
 * ShareManager and PaymenProcessor will now also honor orphan blocks with -1 confirmations.
 * Double.parse() and float.parse() calls will now correctly use CultureInfo.InvariantCulture - basically fixing potential problems with non en-US systems.
 
+---
 
 ##### [v0.1.0 alpha](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.1.0-alpha) - 08.08.2014
 
