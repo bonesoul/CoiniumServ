@@ -1,6 +1,15 @@
+##### [v0.2.2 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.2-beta) - 04.10.2014
+
+**Bug Fixes**
+* Fixed compilation problems caused by json-rpc package.
+* Difficulty in web front-end is now shortened & humanized.
+* Added submitblock() detection support - so that coins like USD-e without submitblock() methods are also supported.
+
+---
+
 ##### [v0.2.1 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.1-beta) - 04.10.2014
 
-#### Bug Fixes
+**Bug Fixes**
 * Fixed a bug in stratum service where some miners were unable to connect back after they got disconnected.
 
 ---
