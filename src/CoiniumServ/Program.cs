@@ -99,13 +99,13 @@ namespace CoiniumServ
             // run software repository.
             objectFactory.GetSoftwareRepository();
 
-            // start web server.
-            objectFactory.GetWebServer();
-
 #if DEBUG
             // only initialize metrics support in debug mode
             objectFactory.GetMetricsManager();
 #endif
+
+            // start web server.
+            objectFactory.GetWebServer();
         }
 
         #region unhandled exception emitter
