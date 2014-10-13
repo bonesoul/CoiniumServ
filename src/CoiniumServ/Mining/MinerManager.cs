@@ -123,8 +123,6 @@ namespace CoiniumServ.Mining
 
         public void Remove(IConnection connection)
         {
-            // todo: we need a lock on _miners in order to fix - https://github.com/CoiniumServ/CoiniumServ/issues/550#issuecomment-58748173
-
             // find the miner associated with the connection.
             var miner = (from pair in _miners
                 let client = (IClient) pair.Value
