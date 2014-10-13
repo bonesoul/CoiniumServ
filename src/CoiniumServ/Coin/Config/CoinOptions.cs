@@ -37,6 +37,8 @@ namespace CoiniumServ.Coin.Config
 
         public bool TxMessageSupported { get; private set; }
 
+        public bool SubmitBlockSupported { get; set; }
+
         public bool Valid { get; private set; }
 
         public CoinOptions(dynamic config)
@@ -47,6 +49,7 @@ namespace CoiniumServ.Coin.Config
                 BlockTemplateModeRequired = config.blockTemplateModeRequired is NullExceptionPreventer ? false : config.blockTemplateModeRequired;
                 UseDefaultAccount = config.useDefaultAccount is NullExceptionPreventer ? false : config.useDefaultAccount;
                 TxMessageSupported = config.txMessageSupported is NullExceptionPreventer ? false : config.txMessageSupported;
+                SubmitBlockSupported = true; // setting true by default, but will be actually checked in NetworkInfo.cs to see if the coin supports it.
                 Valid = true;
             }
             catch (Exception e)

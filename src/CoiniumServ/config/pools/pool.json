@@ -20,7 +20,7 @@
     "storage": {
         "hybrid": {
             "mysql": {
-                "database": "db-name"
+                "database": "dbname"
             }
         }
     }

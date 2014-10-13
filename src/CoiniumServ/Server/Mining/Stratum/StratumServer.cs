@@ -155,8 +155,14 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="e"></param>
         private void OnDataReceived(object sender, ConnectionDataEventArgs e)
         {
-            var connection = (Connection)e.Connection;
-            ((StratumMiner)connection.Client).Parse(e);
+            if (e.Connection == null)
+                return;
+
+            var connection = (Connection) e.Connection;
+            if (connection.Client == null)
+                return;
+
+            ((StratumMiner) connection.Client).Parse(e);
         }
     }
 }
