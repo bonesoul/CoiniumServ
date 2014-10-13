@@ -19,7 +19,7 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 ### Status
 
-Latest release: [v0.2.1 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.1-beta)
+Latest release: [v0.2.2 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.2-beta)
 
 ### Getting Started
 
