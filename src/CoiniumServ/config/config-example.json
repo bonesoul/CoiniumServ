@@ -18,13 +18,6 @@
         "bind": "",
         "port": 80,
         "template": "default",
-        "social": {
-            "rss": "http://bit.ly/1qheogE",
-            "twitter": "https://twitter.com/coinium",
-            "facebook": "https://www.facebook.com/pages/Coiniumorg/639179226128343",
-            "googleplus": "https://plus.google.com/+CoiniumOrgNetwork/about",
-            "youtube": "http://www.youtube.com/user/CoiniumNetwork/"
-        },
         "backend": {
             "metrics": {
                 "enabled": false

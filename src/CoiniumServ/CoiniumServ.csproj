@@ -289,7 +289,6 @@
     <Compile Include="Pools\IBlockRepository.cs" />
     <Compile Include="Payments\IPaymentRepository.cs" />
     <Compile Include="Payments\PaymentRepository.cs" />
-    <Compile Include="Server\Web\Config\ISocialConfig.cs" />
     <Compile Include="Server\Web\Models\ApiModel.cs" />
     <Compile Include="Pools\INetworkInfo.cs" />
     <Compile Include="Pools\IPoolConfig.cs" />
@@ -307,7 +306,6 @@
     <Compile Include="Server\Web\Models\Pool\PoolModel.cs" />
     <Compile Include="Server\Web\Modules\HelpModule.cs" />
     <Compile Include="Server\Web\Modules\PoolsModule.cs" />
-    <Compile Include="Server\Web\Config\SocialConfig.cs" />
     <Compile Include="Statistics\IStatisticsManager.cs" />
     <Compile Include="Statistics\StatisticsManager.cs" />
     <Compile Include="Utils\Repository\IRepository.cs" />
