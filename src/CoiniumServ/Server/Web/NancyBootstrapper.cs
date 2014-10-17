@@ -68,12 +68,8 @@ namespace CoiniumServ.Server.Web
                     ctx.ViewBag.SubHeading = "";
 
                 ctx.ViewBag.Pools = _poolManager;
+                ctx.ViewBag.Feed = _configManager.WebServerConfig.Feed;
                 ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
-                ctx.ViewBag.Rss = _configManager.WebServerConfig.Social.Rss;
-                ctx.ViewBag.Twitter = _configManager.WebServerConfig.Social.Twitter;
-                ctx.ViewBag.Facebook = _configManager.WebServerConfig.Social.Facebook;
-                ctx.ViewBag.GooglePlus = _configManager.WebServerConfig.Social.GooglePlus;
-                ctx.ViewBag.Youtube = _configManager.WebServerConfig.Social.Youtube;                
             };
 
             #if DEBUG
