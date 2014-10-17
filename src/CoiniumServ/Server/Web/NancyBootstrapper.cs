@@ -68,6 +68,7 @@ namespace CoiniumServ.Server.Web
                     ctx.ViewBag.SubHeading = "";
 
                 ctx.ViewBag.Pools = _poolManager;
+                ctx.ViewBag.Feed = _configManager.WebServerConfig.Feed;
                 ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
             };
 

@@ -20,14 +20,24 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace CoiniumServ.Server.Web.Config
+
+using Nancy;
+
+namespace CoiniumServ.Server.Web.Modules
 {
-    public interface IWebServerConfig : IServerConfig
+    public class TosModule : NancyModule
     {
-        string Template { get; }
+        public TosModule()
+            : base("/tos")
+        {
+            Get["/"] = _ =>
+            {
+                // include common data required by layout.
+                ViewBag.Header = "Terms of Service";
 
-        string Feed { get; }
-
-        IBackendConfig Backend { get; }
+                // return our view
+                return View["tos"];
+            };
+        }
     }
 }

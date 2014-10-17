@@ -18,6 +18,7 @@
         "bind": "",
         "port": 80,
         "template": "default",
+        "feed": "",
         "backend": {
             "metrics": {
                 "enabled": false

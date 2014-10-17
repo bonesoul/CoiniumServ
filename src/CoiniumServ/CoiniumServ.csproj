@@ -151,6 +151,7 @@
     <Compile Include="Coin\Config\CoinOptions.cs" />
     <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
     <Compile Include="Coin\Config\ICoinOptions.cs" />
+    <Compile Include="Server\Web\Modules\TosModule.cs" />
     <Compile Include="Utils\Helpers\Humanize.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />
@@ -527,6 +528,8 @@
     <None Include="web\default\views\algorithm\algorithm.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="web\default\views\help\faq.cshtml" />
+    <None Include="web\default\views\tos\tos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -799,7 +802,10 @@
     <None Include="web\default\views\help\gettingstarted\pool.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\help\miningsoftware\index.cshtml">
+    <None Include="web\default\views\help\miningsoftware.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\layout\news.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\views\layout\header.cshtml">
@@ -958,9 +964,6 @@
     <None Include="web\default\views\pool\workers.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\help\termsofservice.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\deps\csredis\CSRedis\CSRedis.csproj">
@@ -977,7 +980,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Coinium.ico" />
-    <None Include="web\default\Content\js\interface.js">
+    <Content Include="web\default\Content\js\jquery.timeago.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="web\default\Content\js\frontend.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="web\default\Content\img\coins\icon\21.png">

@@ -40,7 +40,7 @@
                             <td class="hidden-xs"><a href="@Model.Coin.BlockExplorer.Tx@Model.Block.TransactionHash" target="_blank">@Model.Block.TransactionHash.Substring(0, 10)</a></td>
                             <td>@Model.Block.Amount</td>
                             <td><div class="label @(Model.Block.Accounted ?"bg-green":"bg-red")">@(Model.Block.Accounted ? "Yes" : "No")</div></td>
-                            <td>@Model.Block.CreatedAt</td>
+                            <td><time class="timeago" datetime="@Model.Block.CreatedAt.ToString("o")">@Model.Block.CreatedAt.ToString("o")</time></td>
                         </tr>
                     </tbody>
                 </table>
@@ -77,7 +77,7 @@
                             @foreach (var paymentDetails in @Model.Payments)
                             {
                                 <tr>
-                                <td class="hidden-xs"><a href="/pool/@Model.Coin.Symbol/payment/@paymentDetails.PaymentId">@paymentDetails.PaymentId</a></td>
+                                    <td class="hidden-xs"><a href="/pool/@Model.Coin.Symbol/payment/@paymentDetails.PaymentId">@paymentDetails.PaymentId</a></td>
                                     <td><a href="/pool/@Model.Coin.Symbol/account/address/@paymentDetails.Address">@paymentDetails.Address</a></td>
                                     <td>
                                         @if (paymentDetails.Completed)
@@ -101,7 +101,7 @@
                                         }
                                     </td>
                                     <td class="hidden-xs">
-                                        @(paymentDetails.Completed ? paymentDetails.TransactionDate : paymentDetails.PaymentDate)
+                                        <time class="timeago" datetime="@(paymentDetails.Completed ? paymentDetails.TransactionDate.ToString("yyyy-MM-ddTHH:mm:ssZ") : paymentDetails.PaymentDate.ToString("yyyy-MM-ddTHH:mm:ssZ"))">@(paymentDetails.Completed ? paymentDetails.TransactionDate.ToString("yyyy-MM-ddTHH:mm:ssZ") : paymentDetails.PaymentDate.ToString("yyyy-MM-ddTHH:mm:ssZ"))</time>
                                     </td>
                                 </tr>
                             }
