@@ -43,7 +43,7 @@
                                 <td><a href="@Model.Coin.BlockExplorer.Tx@block.TransactionHash" target="_blank">@block.TransactionHash.Substring(0, 10)</a></td>
                                 <td>@block.Amount</td>
                                 <td><div class="label @(block.Accounted ?"bg-green":"bg-red")">@(block.Accounted ? "Yes" : "No")</div></td>
-                                <td>@block.CreatedAt</td>
+                                <td><time class="timeago" datetime="@block.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")">@block.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")</time></td>
                             </tr>
                         }
                     </tbody>

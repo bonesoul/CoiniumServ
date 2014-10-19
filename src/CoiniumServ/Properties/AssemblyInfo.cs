@@ -21,13 +21,13 @@
 // 
 #endregion
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
 using System.Reflection;
 using System.Runtime.InteropServices;
 using libCoiniumServ.Versions;
 
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
 [assembly: AssemblyTitle("CoiniumServ")]
 [assembly: AssemblyDescription("Next-gen crypto currency mining pool software")]
 [assembly: AssemblyCompany("Coinium.org")]

@@ -102,7 +102,7 @@ namespace CoiniumServ.Pools
             }
             catch (RpcException e)
             {
-                _logger.Error("Can not read mininginfo() - the coin may not support the request: {0:l}", e.Message);
+                _logger.Error("Can not read mininginfo(): {0:l}", e.Message);
                 Hashrate = 0;
                 Difficulty = 0;
                 Round = -1;
@@ -141,14 +141,26 @@ namespace CoiniumServ.Pools
             {
                 var response = _daemonClient.SubmitBlock(string.Empty);
             }
-            catch (RpcErrorException e)
+            catch(RpcException e)
             {
-                if (e.Code == (int)RpcErrorCode.RPC_METHOD_NOT_FOUND) // 'Method not found' error.
-                    _poolConfig.Coin.Options.SubmitBlockSupported = false; // the coin doesn't support submitblock().
-                else if (e.Code == (int)RpcErrorCode.RPC_DESERIALIZATION_ERROR) // 'Block decode failed' error.
-                    _poolConfig.Coin.Options.SubmitBlockSupported = true; // the coin supports submitblock().
-                else // we shouldn't be really recieving any other errors.
-                    _logger.Error("Recieved an unexpected response for DetectSubmitBlockSupport() - {0}, {1:l}", e.Code, e.Message);
+                if (e is RpcErrorException)
+                {
+                    var error = e as RpcErrorException;
+                    switch (error.Code)
+                    {
+                        case (int)RpcErrorCode.RPC_METHOD_NOT_FOUND:
+                            _poolConfig.Coin.Options.SubmitBlockSupported = false; // the coin doesn't support submitblock().
+                            break;
+                        case (int)RpcErrorCode.RPC_DESERIALIZATION_ERROR:
+                            _poolConfig.Coin.Options.SubmitBlockSupported = true; // the coin supports submitblock().
+                            break;
+                        default:
+                            _logger.Error("Recieved an unexpected response for DetectSubmitBlockSupport() - {0}, {1:l}", error.Code, e.Message);
+                            break;
+                    }
+                }
+                else
+                    _logger.Error("Can not probe submitblock() support: {0:l}", e.Message);
             }
         }
 
