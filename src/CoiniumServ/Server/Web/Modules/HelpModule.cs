@@ -36,11 +36,11 @@ namespace CoiniumServ.Server.Web.Modules
         public HelpModule(IPoolManager poolManager, IConfigManager configManager, ISoftwareRepository softwareRepository)
             :base("/help")
         {
-            Get["/termsofservice"] = _ =>
+            Get["/faq"] = _ =>
             {
-                ViewBag.Header = "Terms of Service";
+                ViewBag.Header = "Frequently Asked Questions";
 
-                return View["termsofservice"];
+                return View["faq"];
             };
 
             Get["/gettingstarted/"] = _ =>
@@ -77,7 +77,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/miningsoftware/"] = _ =>
             {
-                return View["miningsoftware/index", softwareRepository];
+                return View["miningsoftware", softwareRepository];
             };
         }
     }

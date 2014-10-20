@@ -21,20 +21,23 @@
 // 
 #endregion
 
-using CoiniumServ.Configuration;
+using Nancy;
 
-namespace CoiniumServ.Server.Web.Config
+namespace CoiniumServ.Server.Web.Modules
 {
-    public interface ISocialConfig : IConfig
+    public class TosModule : NancyModule
     {
-        string Rss { get; }
+        public TosModule()
+            : base("/tos")
+        {
+            Get["/"] = _ =>
+            {
+                // include common data required by layout.
+                ViewBag.Header = "Terms of Service";
 
-        string Twitter { get; }
-
-        string Facebook { get; }
-
-        string GooglePlus { get; }
-
-        string Youtube { get; }
+                // return our view
+                return View["tos"];
+            };
+        }
     }
 }
