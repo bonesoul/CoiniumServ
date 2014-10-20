@@ -1,3 +1,13 @@
+### [v0.2.3 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.3-beta)
+
+**Web**
+* Implemented FAQ page.
+* Pool page now renders an notice when pool's daemon connection is un-healthy.
+* Pools list & per-pool pages do now show the last found block for the pool.
+* /help/termsofservice has been moved to /tos.
+* Time zones in embedded front-end are localized & rendered as relative.
+* Removed social icons configuration - social icons can be now enabled by editing navbar.cshtml.
+
 ### [v0.2.2 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.2-beta)
 
 **Bug Fixes**
