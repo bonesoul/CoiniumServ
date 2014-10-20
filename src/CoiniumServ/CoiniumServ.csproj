@@ -528,8 +528,12 @@
     <None Include="web\default\views\algorithm\algorithm.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="web\default\views\help\faq.cshtml" />
-    <None Include="web\default\views\tos\tos.cshtml" />
+    <None Include="web\default\views\help\faq.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="web\default\views\tos\tos.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
