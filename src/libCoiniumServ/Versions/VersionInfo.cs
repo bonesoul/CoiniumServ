@@ -41,7 +41,7 @@ namespace libCoiniumServ.Versions
             /// <summary>
             /// Main assemby version.
             /// </summary>
-            public const string Version = "0.2.2.*";
+            public const string Version = "0.2.3.*";
         }
     }
 }
