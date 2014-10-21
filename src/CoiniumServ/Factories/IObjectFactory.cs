@@ -156,6 +156,8 @@ namespace CoiniumServ.Factories
 
         IMarketManager GetMarketManager();
 
+        ICryptsyClient GetCryptsyClient();
+
         #endregion
 
         #region mining software

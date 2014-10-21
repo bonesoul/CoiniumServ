@@ -420,6 +420,11 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IMarketManager>();
         }
 
+        public ICryptsyClient GetCryptsyClient()
+        {
+            return _applicationContext.Container.Resolve<ICryptsyClient>();
+        }
+
         public ISoftwareRepository GetSoftwareRepository()
         {
             return _applicationContext.Container.Resolve<ISoftwareRepository>();

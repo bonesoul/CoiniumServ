@@ -29,6 +29,7 @@ using CoiniumServ.Container.Context;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Tracker;
+using CoiniumServ.Markets;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
@@ -67,9 +68,12 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
             _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IDaemonManagerConfig, DaemonManagerConfig>().AsMultiInstance(); // todo: this should be singleton!
+            _applicationContext.Container.Register<IDaemonManagerConfig, DaemonManagerConfig>().AsMultiInstance();
             _applicationContext.Container.Register<IStandaloneDaemonConfig, StandaloneDaemonConfig>().AsMultiInstance();
             _applicationContext.Container.Register<IMiningSoftwareConfig, MiningSoftwareConfig>().AsMultiInstance();
+
+            // markets
+            _applicationContext.Container.Register<ICryptsyClient, CryptsyClient>().AsSingleton();
 
             // web
             _applicationContext.Container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();

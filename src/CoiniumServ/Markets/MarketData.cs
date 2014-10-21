@@ -21,18 +21,11 @@
 // 
 #endregion
 
-using CoiniumServ.Pools;
-using Serilog;
-
 namespace CoiniumServ.Markets
 {
-    public class MarketManager : IMarketManager
+    public class MarketData:IMarketData
     {
-        private readonly ILogger _logger;
-
-        public MarketManager(IPoolManager poolManager, ICryptsyClient cryptsyClient)
-        {
-            _logger = Log.ForContext<MarketManager>();
-        }
+        public string Coin { get; set; }
+        public string Fiat { get; set; }
     }
 }
