@@ -1,0 +1,11 @@
+{
+    "name": "CannabisCoin",
+    "symbol": "CANN",
+    "algorithm": "x11",
+    "site": "http://cannabiscoin.net",
+    "blockExplorer": {
+        "block": "https://chainz.cryptoid.info/cann/block/",
+        "tx": "https://chainz.cryptoid.info/cann/tx/",
+        "address": "https://chainz.cryptoid.info/cann/address/"
+    }
+}
