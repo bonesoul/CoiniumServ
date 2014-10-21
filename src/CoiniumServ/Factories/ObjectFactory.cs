@@ -420,9 +420,9 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<IMarketManager>();
         }
 
-        public ICryptsyClient GetCryptsyClient()
+        public IBittrexClient GetBittrexClient()
         {
-            return _applicationContext.Container.Resolve<ICryptsyClient>();
+            return _applicationContext.Container.Resolve<IBittrexClient>();
         }
 
         public ISoftwareRepository GetSoftwareRepository()

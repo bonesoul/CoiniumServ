@@ -154,8 +154,10 @@
     <Compile Include="Coin\Config\CoinOptions.cs" />
     <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
     <Compile Include="Coin\Config\ICoinOptions.cs" />
+    <Compile Include="Markets\BittrexClient.cs" />
     <Compile Include="Markets\CryptsyClient.cs" />
-    <Compile Include="Markets\Exchanges.cs" />
+    <Compile Include="Markets\Exchange.cs" />
+    <Compile Include="Markets\IBittrexClient.cs" />
     <Compile Include="Markets\ICryptsyClient.cs" />
     <Compile Include="Markets\IExchangeClient.cs" />
     <Compile Include="Markets\IMarketData.cs" />

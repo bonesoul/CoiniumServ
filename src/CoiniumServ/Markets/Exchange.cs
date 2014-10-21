@@ -21,13 +21,12 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace CoiniumServ.Markets
 {
-    public interface IExchangeClient
+    public enum Exchange
     {
-        Task<IList<IMarketData>> GetMarkets();
+        Unknown,
+        Cryptsy,
+        Bittrex
     }
 }

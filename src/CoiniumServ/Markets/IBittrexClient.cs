@@ -23,8 +23,7 @@
 
 namespace CoiniumServ.Markets
 {
-    public enum Exchanges
+    public interface IBittrexClient:IExchangeClient
     {
-        Cryptsy
     }
 }

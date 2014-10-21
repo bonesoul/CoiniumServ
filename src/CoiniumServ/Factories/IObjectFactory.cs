@@ -156,7 +156,7 @@ namespace CoiniumServ.Factories
 
         IMarketManager GetMarketManager();
 
-        ICryptsyClient GetCryptsyClient();
+        IBittrexClient GetBittrexClient();
 
         #endregion
 

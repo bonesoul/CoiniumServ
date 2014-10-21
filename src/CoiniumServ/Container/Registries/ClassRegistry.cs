@@ -73,7 +73,7 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IMiningSoftwareConfig, MiningSoftwareConfig>().AsMultiInstance();
 
             // markets
-            _applicationContext.Container.Register<ICryptsyClient, CryptsyClient>().AsSingleton();
+            _applicationContext.Container.Register<IBittrexClient, BittrexClient>().AsSingleton();
 
             // web
             _applicationContext.Container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();

@@ -40,24 +40,27 @@ namespace CoiniumServ.Markets
 
         public CryptsyClient()
         {
-            GetMarkets();
         }
 
-        public async void GetMarkets()
+        //public async void GetMarkets()
+        //{
+        //    var @params = new Dictionary<string, string>
+        //    {
+        //        {"method", "marketdatav2"}
+        //    };
+
+        //    var result = await Request(@params);
+
+        //    foreach (var pair in result.@return.markets)
+        //    {
+        //        var market = pair.Value;                
+        //    }
+        //}
+
+        public Task<IList<IMarketData>> GetMarkets()
         {
-            var @params = new Dictionary<string, string>
-            {
-                {"method", "marketdatav2"}
-            };
-
-            var result = await Request(@params);
-
-            foreach (var pair in result.@return.markets)
-            {
-                var market = pair.Value;                
-            }
+            throw new System.NotImplementedException();
         }
-
 
         private async Task<dynamic> Request(IEnumerable<KeyValuePair<string, string>> @params = null, bool userless = true, Method httpMethod = Method.GET)
         {

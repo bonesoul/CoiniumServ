@@ -21,6 +21,7 @@
 // 
 #endregion
 
+using System.Collections.Generic;
 using CoiniumServ.Pools;
 using Serilog;
 
@@ -30,9 +31,31 @@ namespace CoiniumServ.Markets
     {
         private readonly ILogger _logger;
 
-        public MarketManager(IPoolManager poolManager, ICryptsyClient cryptsyClient)
+        private IDictionary<string, IDictionary<Exchange, IMarketData>> _markets =
+            new Dictionary<string, IDictionary<Exchange, IMarketData>>();
+
+        public MarketManager(IPoolManager poolManager, IBittrexClient bittrexClient)
         {
             _logger = Log.ForContext<MarketManager>();
+
+            var bittrexTask = bittrexClient.GetMarkets();
+
+            foreach (var entry in bittrexTask.Result)
+            {
+                if (entry.BaseCurrency != "BTC") // ignore non-BTC based markets.
+                    continue;
+
+                var name = string.Format("{0}/{1}", entry.BaseCurrency, entry.MarketCurrency);
+                
+                if (!_markets.ContainsKey(name))
+                {
+                    var storage = new Dictionary<Exchange, IMarketData>();
+                    _markets.Add(name, storage);
+                }
+
+                var market = _markets[name];
+
+            }
         }
     }
 }

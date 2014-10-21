@@ -25,8 +25,18 @@ namespace CoiniumServ.Markets
 {
     public interface IMarketData
     {
-        string Coin { get; set; }
+        Exchange Exchange { get; set; }
 
-        string Fiat { get; set; }
+        string MarketCurrency { get; set; }        
+
+        string BaseCurrency { get; set; }
+
+        double VolumeInBaseCurrency { get; set; }
+
+        double VolumeInMarketCurrency { get; set; }
+
+        double Bid { get; set; }
+
+        double Ask { get; set; }
     }
 }
