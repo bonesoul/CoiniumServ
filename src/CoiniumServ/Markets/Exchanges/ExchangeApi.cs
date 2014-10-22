@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -32,59 +31,24 @@ using Newtonsoft.Json.Converters;
 using RestSharp;
 using Serilog;
 
-namespace CoiniumServ.Markets
+namespace CoiniumServ.Markets.Exchanges
 {
-    public class BittrexClient:IBittrexClient
+    public class ExchangeApi
     {
-        private const string ApiBase = "https://bittrex.com/api/v1.1/";
-
         private readonly ExpandoObjectConverter _converter = new ExpandoObjectConverter();
+
         private readonly ILogger _logger;
 
-        public BittrexClient()
+        public ExchangeApi()
         {
-            _logger = Log.ForContext<BittrexClient>();
+            _logger = Log.ForContext<ExchangeApi>();
         }
 
-        public async Task<IList<IMarketData>> GetMarkets()
-        {
-            var list = new List<IMarketData>();
-            var data = await Request("public/getmarketsummaries");
-
-            try
-            {
-                foreach (var market in data.@result)
-                {
-                    string name = market.MarketName;
-                    var temp = name.Split('-');
-
-                    var entry = new MarketData
-                    {
-                        Exchange = Exchange.Bittrex,
-                        BaseCurrency = temp.First(),
-                        MarketCurrency = temp.Last(),
-                        VolumeInMarketCurrency = market.Volume,
-                        VolumeInBaseCurrency = market.BaseVolume,
-                        Bid = market.Bid,
-                        Ask = market.Ask
-                    };
-
-                    list.Add(entry);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e.Message);
-            }
-
-            return list;
-        }
-
-        private async Task<dynamic> Request(string endpoint, IEnumerable<KeyValuePair<string, string>> @params = null, bool userless = true, Method httpMethod = Method.GET)
+        protected async Task<dynamic> Request(string @base, string endpoint, IEnumerable<KeyValuePair<string, string>> @params = null, bool userless = true, Method httpMethod = Method.GET)
         {
             try
             {
-                var client = new RestClient(ApiBase);
+                var client = new RestClient(@base);
                 var request = new RestRequest(endpoint, httpMethod);
                 var cancellationTokenSource = new CancellationTokenSource();
 

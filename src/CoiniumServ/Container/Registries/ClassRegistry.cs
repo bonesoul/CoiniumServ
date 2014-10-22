@@ -29,7 +29,7 @@ using CoiniumServ.Container.Context;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Tracker;
-using CoiniumServ.Markets;
+using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
@@ -74,6 +74,8 @@ namespace CoiniumServ.Container.Registries
 
             // markets
             _applicationContext.Container.Register<IBittrexClient, BittrexClient>().AsSingleton();
+            _applicationContext.Container.Register<ICryptsyClient, CryptsyClient>().AsSingleton();
+            _applicationContext.Container.Register<IPoloniexClient, PoloniexClient>().AsSingleton();
 
             // web
             _applicationContext.Container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();

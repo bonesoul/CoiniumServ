@@ -21,13 +21,9 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace CoiniumServ.Markets
+namespace CoiniumServ.Markets.Exchanges
 {
-    public interface IExchangeClient
+    public interface ICryptsyClient:IExchangeClient
     {
-        Task<IList<IMarketData>> GetMarkets();
     }
 }

@@ -34,6 +34,7 @@ using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
 using CoiniumServ.Markets;
+using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Mining;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
@@ -423,6 +424,16 @@ namespace CoiniumServ.Factories
         public IBittrexClient GetBittrexClient()
         {
             return _applicationContext.Container.Resolve<IBittrexClient>();
+        }
+
+        public ICryptsyClient GetCryptsyClient()
+        {
+            return _applicationContext.Container.Resolve<ICryptsyClient>();
+        }
+
+        public IPoloniexClient GetPoloniexClient()
+        {
+            return _applicationContext.Container.Resolve<IPoloniexClient>();
         }
 
         public ISoftwareRepository GetSoftwareRepository()

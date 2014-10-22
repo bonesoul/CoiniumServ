@@ -21,8 +21,11 @@
 // 
 #endregion
 
+using System.Diagnostics;
+
 namespace CoiniumServ.Markets
 {
+    [DebuggerDisplay("{MarketCurrency}/{BaseCurrency}, Exchange: {Exchange}, Bid: {Bid}, Ask: {Ask}")]
     public class MarketData:IMarketData
     {
         public Exchange Exchange { get; set; }

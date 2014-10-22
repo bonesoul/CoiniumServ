@@ -33,6 +33,7 @@ using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
 using CoiniumServ.Markets;
+using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Mining;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
@@ -157,6 +158,10 @@ namespace CoiniumServ.Factories
         IMarketManager GetMarketManager();
 
         IBittrexClient GetBittrexClient();
+
+        ICryptsyClient GetCryptsyClient();
+
+        IPoloniexClient GetPoloniexClient();
 
         #endregion
 

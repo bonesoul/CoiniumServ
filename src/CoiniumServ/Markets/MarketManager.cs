@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
-using System.Threading.Tasks;
+using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Utils.Extensions;
 using Serilog;
 
@@ -41,21 +41,26 @@ namespace CoiniumServ.Markets
 
         private readonly IList<IExchangeClient> _exchanges;
 
-        private readonly HashSet<IMarketData> _storage; 
+        private HashSet<IMarketData> _storage; 
 
-        public MarketManager(IBittrexClient bittrexClient)
+        public MarketManager(IBittrexClient bittrexClient, IPoloniexClient poloniexClient, ICryptsyClient cryptsyClient)
         {
             _logger = Log.ForContext<MarketManager>();
             _storage = new HashSet<IMarketData>();
-
+           
             // init the exchanges.
             _exchanges = new List<IExchangeClient>
             {
-                bittrexClient
+                bittrexClient,
+                cryptsyClient,
+                poloniexClient
             };
 
             // update the data initially
+            _timer = new Timer(Run, null, Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
             Run(null);
+
+            var ltc = GetMarketsFor("LTC", "BTC");
         }
 
         private void Run(object state)
@@ -66,7 +71,7 @@ namespace CoiniumServ.Markets
 
         private void UpdateMarkets()
         {
-            _storage.Clear();
+            var results = new HashSet<IMarketData>();
 
             var tasks = _exchanges.Select(exchange => exchange.GetMarkets()).ToList(); // tasks to update.
 
@@ -74,9 +79,11 @@ namespace CoiniumServ.Markets
             {
                 foreach (var entry in task.Result)
                 {
-                    _storage.Add(entry);
+                    results.Add(entry);
                 }
-            }      
+            }
+
+            _storage = results;
         }
 
         public IEnumerable<IMarketData> GetMarketsFor(string marketCurrency, string baseCurrency)

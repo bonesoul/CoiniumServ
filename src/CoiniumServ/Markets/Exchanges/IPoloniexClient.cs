@@ -21,9 +21,10 @@
 // 
 #endregion
 
-namespace CoiniumServ.Markets
+
+namespace CoiniumServ.Markets.Exchanges
 {
-    public interface IBittrexClient:IExchangeClient
+    public interface IPoloniexClient : IExchangeClient
     {
     }
 }
