@@ -26,6 +26,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 using CoiniumServ.Utils.Extensions;
 using Serilog;
 
@@ -33,7 +35,11 @@ namespace CoiniumServ.Markets
 {
     public class MarketManager : IMarketManager
     {
+        private readonly Timer _timer;
+
         private readonly ILogger _logger;
+
+        private readonly IList<IExchangeClient> _exchanges;
 
         private readonly HashSet<IMarketData> _storage; 
 
@@ -42,12 +48,35 @@ namespace CoiniumServ.Markets
             _logger = Log.ForContext<MarketManager>();
             _storage = new HashSet<IMarketData>();
 
-            var bittrexTask = bittrexClient.GetMarkets();
-            
-            foreach (var entry in bittrexTask.Result)
+            // init the exchanges.
+            _exchanges = new List<IExchangeClient>
             {
-                _storage.Add(entry);
-            }
+                bittrexClient
+            };
+
+            // update the data initially
+            Run(null);
+        }
+
+        private void Run(object state)
+        {
+            UpdateMarkets();    
+            _timer.Change(5 * 1000, Timeout.Infinite); // reset the timer.
+        }
+
+        private void UpdateMarkets()
+        {
+            _storage.Clear();
+
+            var tasks = _exchanges.Select(exchange => exchange.GetMarkets()).ToList(); // tasks to update.
+
+            foreach (var task in tasks)
+            {
+                foreach (var entry in task.Result)
+                {
+                    _storage.Add(entry);
+                }
+            }      
         }
 
         public IEnumerable<IMarketData> GetMarketsFor(string marketCurrency, string baseCurrency)
