@@ -63,7 +63,7 @@ namespace CoiniumServ.Markets
                     _storage.Where(x => x.MarketCurrency == marketCurrency && x.BaseCurrency == baseCurrency)
                         .MaxBy(x => x.Bid);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
