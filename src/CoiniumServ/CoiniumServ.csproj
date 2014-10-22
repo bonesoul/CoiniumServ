@@ -163,6 +163,7 @@
     <Compile Include="Markets\IMarketData.cs" />
     <Compile Include="Markets\MarketData.cs" />
     <Compile Include="Server\Web\Modules\TosModule.cs" />
+    <Compile Include="Utils\Extensions\Linq.cs" />
     <Compile Include="Utils\Helpers\Humanize.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />

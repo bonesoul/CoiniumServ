@@ -20,9 +20,13 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using CoiniumServ.Pools;
+using CoiniumServ.Utils.Repository;
+
 namespace CoiniumServ.Markets
 {
-    public interface IMarketManager
+    public interface IMarketManager : IRepository<IMarketData>
     {
     }
 }

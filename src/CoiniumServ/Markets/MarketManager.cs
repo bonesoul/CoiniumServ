@@ -21,8 +21,12 @@
 // 
 #endregion
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using CoiniumServ.Pools;
+using System.Linq;
+using System.Linq.Expressions;
+using CoiniumServ.Utils.Extensions;
 using Serilog;
 
 namespace CoiniumServ.Markets
@@ -31,31 +35,70 @@ namespace CoiniumServ.Markets
     {
         private readonly ILogger _logger;
 
-        private IDictionary<string, IDictionary<Exchange, IMarketData>> _markets =
-            new Dictionary<string, IDictionary<Exchange, IMarketData>>();
+        private readonly HashSet<IMarketData> _storage; 
 
-        public MarketManager(IPoolManager poolManager, IBittrexClient bittrexClient)
+        public MarketManager(IBittrexClient bittrexClient)
         {
             _logger = Log.ForContext<MarketManager>();
+            _storage = new HashSet<IMarketData>();
 
             var bittrexTask = bittrexClient.GetMarkets();
-
+            
             foreach (var entry in bittrexTask.Result)
             {
-                if (entry.BaseCurrency != "BTC") // ignore non-BTC based markets.
-                    continue;
-
-                var name = string.Format("{0}/{1}", entry.BaseCurrency, entry.MarketCurrency);
-                
-                if (!_markets.ContainsKey(name))
-                {
-                    var storage = new Dictionary<Exchange, IMarketData>();
-                    _markets.Add(name, storage);
-                }
-
-                var market = _markets[name];
-
+                _storage.Add(entry);
             }
         }
+
+        public IEnumerable<IMarketData> GetMarketsFor(string marketCurrency, string baseCurrency)
+        {
+            return _storage.Where(x => x.MarketCurrency == marketCurrency && x.BaseCurrency == baseCurrency);
+        }
+
+        public IMarketData GetBestMarketFor(string marketCurrency, string baseCurrency)
+        {
+            try
+            {
+                return
+                    _storage.Where(x => x.MarketCurrency == marketCurrency && x.BaseCurrency == baseCurrency)
+                        .MaxBy(x => x.Bid);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public IQueryable<IMarketData> SearchFor(Expression<Func<IMarketData, bool>> predicate)
+        {
+            return _storage.AsQueryable().Where(predicate);
+        }
+
+        public IEnumerable<IMarketData> GetAll()
+        {
+            return _storage;
+        }
+
+        public IQueryable<IMarketData> GetAllAsQueryable()
+        {
+            return _storage.AsQueryable();
+        }
+
+        public IReadOnlyCollection<IMarketData> GetAllAsReadOnly()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<IMarketData> GetEnumerator()
+        {
+            return _storage.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public int Count { get { return _storage.Count; } }
     }
 }
