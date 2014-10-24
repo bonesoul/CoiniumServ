@@ -151,6 +151,7 @@
     <Compile Include="Coin\Config\CoinOptions.cs" />
     <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
     <Compile Include="Coin\Config\ICoinOptions.cs" />
+    <Compile Include="Persistance\Layers\Hybrid\Migrations\M003FixDefaults.cs" />
     <Compile Include="Server\Web\Modules\TosModule.cs" />
     <Compile Include="Utils\Helpers\Humanize.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
