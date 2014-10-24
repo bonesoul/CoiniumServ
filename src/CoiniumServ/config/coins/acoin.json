@@ -1,0 +1,11 @@
+{
+    "name": "Acoin",
+    "symbol": "ACOIN",
+    "algorithm": "sha256",
+    "site": "http://Acoinproject.org",
+    "blockExplorer": {
+        "block": "http://www.blockexperts.com/acoin/block-index/",
+        "tx": "http://www.blockexperts.com/acoin/tx/",
+        "address": "http://www.blockexperts.com/acoin/address/"
+    }
+}
