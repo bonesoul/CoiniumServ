@@ -77,6 +77,9 @@ namespace CoiniumServ.Markets
 
             foreach (var task in tasks)
             {
+                if (task.Result == null)
+                    continue;
+
                 foreach (var entry in task.Result)
                 {
                     results.Add(entry);

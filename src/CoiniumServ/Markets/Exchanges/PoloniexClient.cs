@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Converters;
@@ -69,6 +70,10 @@ namespace CoiniumServ.Markets.Exchanges
                             Exchange = Exchange.Poloniex,
                             MarketCurrency = temp.Last(),
                             BaseCurrency = temp.First(),
+                            Ask = double.Parse(kvp.Value.lowestAsk, CultureInfo.InvariantCulture),
+                            Bid = double.Parse(kvp.Value.highestBid, CultureInfo.InvariantCulture),
+                            VolumeInMarketCurrency = double.Parse(kvp.Value.quoteVolume, CultureInfo.InvariantCulture),
+                            VolumeInBaseCurrency = double.Parse(kvp.Value.baseVolume, CultureInfo.InvariantCulture),
                         };
 
                         list.Add(entry);
@@ -84,7 +89,7 @@ namespace CoiniumServ.Markets.Exchanges
                 _logger.Error(e.Message);
             }
 
-            return null;
+            return list;
         }
     }
 }
