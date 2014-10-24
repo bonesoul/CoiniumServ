@@ -96,6 +96,8 @@ namespace CoiniumServ.Factories
 
         INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig);
 
+        IMarketInfo GetMarketInfo(IPoolConfig poolConfig);
+
         IBlockRepository GetBlockRepository(IStorageLayer storageLayer);
 
         IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,IBanManager banManager);

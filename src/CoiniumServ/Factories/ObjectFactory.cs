@@ -226,6 +226,16 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<INetworkInfo>(@params);
         }
 
+        public IMarketInfo GetMarketInfo(IPoolConfig poolConfig)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"poolConfig", poolConfig}
+            };
+
+            return _applicationContext.Container.Resolve<IMarketInfo>(@params);
+        }
+
         public IBlockRepository GetBlockRepository(IStorageLayer storageLayer)
         {
             var @params = new NamedParameterOverloads

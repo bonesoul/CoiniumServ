@@ -21,18 +21,17 @@
 // 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using CoiniumServ.Utils.Repository;
+using Newtonsoft.Json;
 
-namespace CoiniumServ.Markets
+namespace CoiniumServ.Pools
 {
-    public interface IMarketManager : IRepository<IMarketData>
+    [JsonObject(MemberSerialization.OptIn)]
+    public interface IMarketInfo
     {
-        event EventHandler Update;
+        [JsonProperty("priceInBtc")]
+        decimal PriceInBtc { get; }
 
-        IEnumerable<IMarketData> GetMarketsFor(string marketCurrency, string baseCurrency);
-
-        IMarketData GetBestMarketFor(string marketCurrency, string baseCurrency);
+        [JsonProperty("priceInUsd")]
+        decimal PriceInUsd { get; }
     }
 }

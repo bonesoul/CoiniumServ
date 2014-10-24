@@ -41,7 +41,11 @@ namespace CoiniumServ.Markets
 
         private readonly IList<IExchangeClient> _exchanges;
 
-        private HashSet<IMarketData> _storage; 
+        private HashSet<IMarketData> _storage;
+
+        public event EventHandler Update;
+
+        public int Count { get { return _storage.Count; } }
 
         public MarketManager(IBittrexClient bittrexClient, IPoloniexClient poloniexClient, ICryptsyClient cryptsyClient)
         {
@@ -57,10 +61,7 @@ namespace CoiniumServ.Markets
             };
 
             // update the data initially
-            _timer = new Timer(Run, null, Timeout.Infinite, Timeout.Infinite); // create the timer as disabled.
-            Run(null);
-
-            var ltc = GetMarketsFor("LTC", "BTC");
+            _timer = new Timer(Run, null, 1, Timeout.Infinite); // schedule the timer for the first run.
         }
 
         private void Run(object state)
@@ -87,11 +88,21 @@ namespace CoiniumServ.Markets
             }
 
             _storage = results;
+
+            OnUpdate(EventArgs.Empty); // notify the listeners about the data update.
+        }
+
+        private void OnUpdate(EventArgs e)
+        {
+            var handler = Update;
+
+            if (handler != null)
+                handler(this, e);
         }
 
         public IEnumerable<IMarketData> GetMarketsFor(string marketCurrency, string baseCurrency)
         {
-            return _storage.Where(x => x.MarketCurrency == marketCurrency && x.BaseCurrency == baseCurrency);
+            return _storage.Where(x => x.MarketCurrency == marketCurrency && x.BaseCurrency == baseCurrency).OrderByDescending(x => x.Bid);
         }
 
         public IMarketData GetBestMarketFor(string marketCurrency, string baseCurrency)
@@ -136,8 +147,6 @@ namespace CoiniumServ.Markets
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-        public int Count { get { return _storage.Count; } }
+        }      
     }
 }

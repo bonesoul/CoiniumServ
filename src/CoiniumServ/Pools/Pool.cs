@@ -68,6 +68,8 @@ namespace CoiniumServ.Pools
 
         public INetworkInfo NetworkInfo { get; private set; }
 
+        public IMarketInfo MarketInfo { get; private set; }
+
         public IBlockRepository BlockRepository { get; private set; }
 
         public IPaymentRepository PaymentRepository { get; private set; }
@@ -196,6 +198,8 @@ namespace CoiniumServ.Pools
                 var blockAccounter = _objectFactory.GetBlockAccounter(Config, _storage, AccountManager);
                 var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _storage, Daemon, AccountManager);
                 _objectFactory.GetPaymentManager(Config, blockProcessor, blockAccounter, paymentProcessor);
+
+                MarketInfo = _objectFactory.GetMarketInfo(Config);
             }
             catch (Exception e)
             {

@@ -22,17 +22,36 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using CoiniumServ.Utils.Repository;
+using CoiniumServ.Markets;
+using Serilog;
 
-namespace CoiniumServ.Markets
+namespace CoiniumServ.Pools
 {
-    public interface IMarketManager : IRepository<IMarketData>
+    public class MarketInfo : IMarketInfo
     {
-        event EventHandler Update;
+        private readonly IPoolConfig _poolConfig;
 
-        IEnumerable<IMarketData> GetMarketsFor(string marketCurrency, string baseCurrency);
+        private readonly IMarketManager _marketManager;
 
-        IMarketData GetBestMarketFor(string marketCurrency, string baseCurrency);
+        private readonly ILogger _logger;
+
+        public decimal PriceInBtc { get; private set; }
+
+        public decimal PriceInUsd { get; private set; }
+
+        public MarketInfo(IMarketManager marketManager, IPoolConfig poolConfig)
+        {
+            _logger = Log.ForContext<MarketInfo>().ForContext("Component", poolConfig.Coin.Name);
+
+            _poolConfig = poolConfig;
+            _marketManager = marketManager;
+            _marketManager.Update += OnMarketUpdate;
+        }
+
+        private void OnMarketUpdate(object sender, EventArgs e)
+        {
+            PriceInBtc = Math.Round((decimal) _marketManager.GetBestMarketFor(_poolConfig.Coin.Symbol, "BTC").Bid, 8);
+            PriceInUsd = Math.Round((decimal) _marketManager.GetBestMarketFor("BTC", "USD").Bid*PriceInBtc, 8);
+        }
     }
 }
