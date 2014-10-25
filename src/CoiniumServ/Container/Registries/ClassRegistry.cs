@@ -67,8 +67,6 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IJsonConfigReader, JsonConfigReader>().AsSingleton();
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
             _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
-            _applicationContext.Container.Register<IDaemonManagerConfig, DaemonManagerConfig>().AsMultiInstance(); // todo: this should be singleton!
-            _applicationContext.Container.Register<IStandaloneDaemonConfig, StandaloneDaemonConfig>().AsMultiInstance();
             _applicationContext.Container.Register<IMiningSoftwareConfig, MiningSoftwareConfig>().AsMultiInstance();
 
             // web
