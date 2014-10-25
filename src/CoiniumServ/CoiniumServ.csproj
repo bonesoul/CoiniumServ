@@ -744,7 +744,6 @@
     <None Include="config\coins\zetacoin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="config\daemons-example.json" />
     <None Include="config\pools\default-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
