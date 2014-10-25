@@ -54,7 +54,7 @@ using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Container
 {
     /// <summary>
     /// Object factory that creates instances of objects

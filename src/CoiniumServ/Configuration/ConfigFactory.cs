@@ -22,14 +22,12 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
-using CoiniumServ.Daemon.Config;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
 using Nancy.TinyIoc;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Configuration
 {
     /// <summary>
     /// Configuration factory that handles configs.

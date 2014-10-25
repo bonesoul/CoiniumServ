@@ -203,7 +203,7 @@ namespace CoiniumServ.Pools
             }
             catch (RpcException e)
             {
-                _logger.Error("Can not read getdifficulty() - the coin may not support the request: {0:l}", e.Message);
+                _logger.Error("Can not read getdifficulty(): {0:l}", e.Message);
             }
         }
     }

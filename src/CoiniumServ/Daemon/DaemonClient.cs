@@ -37,9 +37,9 @@ using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Daemon.Requests;
 using CoiniumServ.Daemon.Responses;
-using CoiniumServ.Factories;
 
 namespace CoiniumServ.Daemon
 {
