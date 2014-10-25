@@ -131,7 +131,7 @@ namespace CoiniumServ.Transactions
             ExtraNonce = extraNonce;
             PoolConfig = poolConfig;
 
-            Version = (UInt32)(poolConfig.Coin.Options.TxMessageSupported ? 2 : 1);
+            Version = blockTemplate.Version;
             TxMessage = Serializers.SerializeString(poolConfig.Meta.TxMessage);
             LockTime = 0;
 
