@@ -21,17 +21,25 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Configuration;
+using FluentMigrator;
 
-namespace CoiniumServ.Daemon.Config
-{
-    public interface IStandaloneDaemonConfig :IConfig
+namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
+{    
+    /// <summary>
+    /// Fixes a bug in M002Payment.cs where default values for Block.Accounted and Payment.Completed was not set.
+    /// </summary>
+    [Migration(20141024)]
+    public class M003FixDefaults : Migration
     {
-        bool Enabled { get; }
+        public override void Up()
+        {
+            Alter.Table("Block").AlterColumn("Accounted").AsBoolean().NotNullable().WithDefaultValue("0"); // let Block.Accounted have default value of 0.
+            Alter.Table("Payment").AlterColumn("Completed").AsBoolean().NotNullable().WithDefaultValue("0"); // let Payment.Completed have default value of 0.
+        }
 
-        ICoinConfig Coin { get; }
-
-        IDaemonConfig Daemon { get; }
+        public override void Down()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -46,8 +46,6 @@ namespace CoiniumServ.Configuration
 
         List<IPoolConfig> PoolConfigs { get; }
 
-        IDaemonManagerConfig DaemonManagerConfig { get; }
-
         ISoftwareRepositoryConfig SoftwareRepositoryConfig { get; }
 
         ICoinConfig GetCoinConfig(string name);
