@@ -21,8 +21,8 @@
 // 
 #endregion
 
+using System;
 using CoiniumServ.Algorithms;
-using CoiniumServ.Coin.Helpers;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Errors;
 using CoiniumServ.Daemon.Exceptions;
@@ -34,15 +34,27 @@ namespace CoiniumServ.Pools
     public class NetworkInfo:INetworkInfo
     {
         public double Difficulty { get; private set; }
+
         public int Round { get; private set; }
+
         public ulong Hashrate { get; private set; }
+
+        public UInt64 Reward { get; private set; }
+
         public string CoinVersion { get; private set; }
+
         public int ProtocolVersion { get; private set; }
+
         public int WalletVersion { get; private set; }
+
         public bool Testnet { get; private set; }
+
         public long Connections { get; private set; }
+
         public string Errors { get; private set; }
+
         public bool Healthy { get; private set; }
+
         public string ServiceResponse { get; private set; } // todo implement this too for /pool/COIN/network
 
         private readonly IDaemonClient _daemonClient;
@@ -52,8 +64,6 @@ namespace CoiniumServ.Pools
         private readonly IPoolConfig _poolConfig;
 
         private readonly ILogger _logger;
-
-        // todo: add %51 hash power detection support.
 
         public NetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig)
         {
@@ -91,7 +101,7 @@ namespace CoiniumServ.Pools
                 Healthy = false; // set healthy status to false as we couldn't get a reply.
             }
 
-            try // read mininginfo() based data.
+            try // read getmininginfo() based data.
             {
                 var miningInfo = _daemonClient.GetMiningInfo();
 
@@ -102,11 +112,22 @@ namespace CoiniumServ.Pools
             }
             catch (RpcException e)
             {
-                _logger.Error("Can not read mininginfo(): {0:l}", e.Message);
+                _logger.Error("Can not read getmininginfo(): {0:l}", e.Message);
                 Hashrate = 0;
                 Difficulty = 0;
                 Round = -1;
                 Healthy = false; // set healthy status to false as we couldn't get a reply.
+            }
+
+            try // read getblocktemplate() based data.
+            {
+                var blockTemplate = _daemonClient.GetBlockTemplate(_poolConfig.Coin.Options.BlockTemplateModeRequired);
+                Reward = (UInt64)blockTemplate.Coinbasevalue / 100000000; // coinbasevalue is in satoshis, convert it to actual coins.
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Can not read getblocktemplate(): {0:l}", e.Message);
+                Reward = 0;
             }
         }
 

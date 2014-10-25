@@ -26,12 +26,30 @@ using Newtonsoft.Json;
 namespace CoiniumServ.Pools
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public interface IMarketInfo
+    public interface IProfitInfo
     {
         [JsonProperty("priceInBtc")]
         decimal PriceInBtc { get; }
 
         [JsonProperty("priceInUsd")]
         decimal PriceInUsd { get; }
+
+        [JsonProperty("blocksPerMhPerHour")]
+        double BlocksPerMhPerHour { get; }
+
+        [JsonProperty("coinsPerMhPerHour")]
+        double CoinsPerMhPerHour { get; }
+
+        [JsonProperty("btcPerMhPerHour")]
+        double BtcPerMhPerHour { get; }
+
+        [JsonProperty("btcPerMhPerDay")]
+        double BtcPerMhPerDay { get; }
+
+        [JsonProperty("usdPerMhPerHour")]
+        double UsdPerMhPerHour { get; }
+
+        [JsonProperty("usdPerMhPerDay")]
+        double UsdPerMhPerDay { get; }
     }
 }

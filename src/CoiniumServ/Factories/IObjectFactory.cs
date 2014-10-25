@@ -96,7 +96,7 @@ namespace CoiniumServ.Factories
 
         INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig);
 
-        IMarketInfo GetMarketInfo(IPoolConfig poolConfig);
+        IProfitInfo GetProfitInfo(INetworkInfo networkInfo, IPoolConfig poolConfig);
 
         IBlockRepository GetBlockRepository(IStorageLayer storageLayer);
 
