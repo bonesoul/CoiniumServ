@@ -57,7 +57,6 @@ namespace CoiniumServ.Daemon
             _storage = new Dictionary<string, IDaemonClient>(); // initialize the daemon storage.
 
             ReadPoolDaemons(); // read pool daemons.
-            // LoadPaymentDaemons(); // load payment daemons. - disabled until we need it.
         }
 
         private void ReadPoolDaemons()
@@ -66,24 +65,6 @@ namespace CoiniumServ.Daemon
             foreach (var pool in _poolManager)
             {
                 _storage.Add(pool.Config.Coin.Symbol, pool.Daemon);
-            }
-        }
-
-        private void LoadPaymentDaemons()
-        {
-            foreach (var config in _configManager.DaemonManagerConfig.Configs)
-            {
-                if (!config.Enabled)
-                    continue;
-
-                if (_storage.ContainsKey(config.Coin.Symbol))
-                {
-                    _logger.Error("Can not add stand-alone daemon config as there already exists a daemon connection for {0:l}", config.Coin.Name);
-                    continue;
-                }
-
-                var daemon = _objectFactory.GetDaemonClient(config.Daemon, config.Coin);
-                _storage.Add(config.Coin.Symbol, daemon);
             }
         }
 

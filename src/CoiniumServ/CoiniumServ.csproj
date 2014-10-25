@@ -187,8 +187,6 @@
     <Compile Include="Algorithms\X14.cs" />
     <Compile Include="Algorithms\X15.cs" />
     <Compile Include="Algorithms\X17.cs" />
-    <Compile Include="Daemon\Config\DaemonManagerConfig.cs" />
-    <Compile Include="Daemon\Config\IDaemonManagerConfig.cs" />
     <Compile Include="Factories\ConfigFactory.cs" />
     <Compile Include="Factories\IConfigFactory.cs" />
     <Compile Include="Factories\IObjectFactory.cs" />
@@ -223,11 +221,9 @@
     <Compile Include="Mining\Software\IMiningSoftware.cs" />
     <Compile Include="Daemon\IDaemonManager.cs" />
     <Compile Include="Daemon\DaemonManager.cs" />
-    <Compile Include="Daemon\Config\IStandaloneDaemonConfig.cs" />
     <Compile Include="Payments\Config\IRewardsConfig.cs" />
     <Compile Include="Jobs\Manager\JobConfig.cs" />
     <Compile Include="Mining\MinerConfig.cs" />
-    <Compile Include="Daemon\Config\StandaloneDaemonConfig.cs" />
     <Compile Include="Persistance\Query\PaginationQuery.cs" />
     <Compile Include="Server\Web\Models\Algorithm\AlgorithmsModel.cs" />
     <Compile Include="Server\Web\Models\Pool\PoolsModel.cs" />
