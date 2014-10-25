@@ -77,26 +77,6 @@ namespace CoiniumServ.Factories
             return _applicationContext.Container.Resolve<ICoinConfig>(@params);
         }
 
-        public IDaemonManagerConfig GetDaemonManagerConfig(dynamic config)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"config", config},
-            };
-
-            return _applicationContext.Container.Resolve<IDaemonManagerConfig>(@params);
-        }
-
-        public IStandaloneDaemonConfig GetStandaloneDaemonConfig(dynamic config)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"config", config},
-            };
-
-            return _applicationContext.Container.Resolve<IStandaloneDaemonConfig>(@params);
-        }
-
         public IMiningSoftwareConfig GetMiningSoftwareConfig(dynamic config)
         {
             var @params = new NamedParameterOverloads
