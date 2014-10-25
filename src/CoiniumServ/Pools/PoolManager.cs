@@ -28,7 +28,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using CoiniumServ.Configuration;
-using CoiniumServ.Factories;
+using CoiniumServ.Container;
 using Newtonsoft.Json;
 using Serilog;
 

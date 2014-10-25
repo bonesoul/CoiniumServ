@@ -24,8 +24,8 @@
 using System;
 using System.Globalization;
 using System.Threading;
+using CoiniumServ.Configuration;
 using CoiniumServ.Container;
-using CoiniumServ.Factories;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
 using Nancy.TinyIoc;

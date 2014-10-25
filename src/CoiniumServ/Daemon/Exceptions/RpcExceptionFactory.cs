@@ -23,16 +23,30 @@
 
 using System;
 using CoiniumServ.Daemon.Errors;
-using CoiniumServ.Daemon.Exceptions;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Daemon.Exceptions
 {
-    public interface IRpcExceptionFactory
+    public class RpcExceptionFactory:IRpcExceptionFactory
     {
-        RpcException GetRpcException(Exception inner);
+        public RpcException GetRpcException(Exception inner)
+        {
+            if (inner.Message.Equals("The operation has timed out", StringComparison.OrdinalIgnoreCase))
+                return new RpcTimeoutException(inner);
 
-        RpcException GetRpcException(string message, Exception inner);
+            if (inner.Message.Equals("Unable to connect to the remote server", StringComparison.OrdinalIgnoreCase))
+                return new RpcConnectionException(inner);
 
-        RpcException GetRpcErrorException(RpcErrorResponse response);
+            return new RpcException(inner);
+        }
+
+        public RpcException GetRpcException(string message, Exception inner)
+        {
+            return new RpcException(message, inner);
+        }
+
+        public RpcException GetRpcErrorException(RpcErrorResponse response)
+        {
+            return new RpcErrorException(response);
+        }
     }
 }

@@ -21,33 +21,25 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Daemon.Errors;
-using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Mining.Software;
+using CoiniumServ.Pools;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Configuration
 {
-    public class RpcExceptionFactory:IRpcExceptionFactory
+    /// <summary>
+    /// Configuration factory that handles configs.
+    /// </summary>
+    public interface IConfigFactory
     {
-        public RpcException GetRpcException(Exception inner)
-        {
-            if (inner.Message.Equals("The operation has timed out", StringComparison.OrdinalIgnoreCase))
-                return new RpcTimeoutException(inner);
+        IConfigManager GetConfigManager();
 
-            if (inner.Message.Equals("Unable to connect to the remote server", StringComparison.OrdinalIgnoreCase))
-                return new RpcConnectionException(inner);
+        IJsonConfigReader GetJsonConfigReader();
 
-            return new GenericRpcException(inner);
-        }
+        IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
 
-        public RpcException GetRpcException(string message, Exception inner)
-        {
-            return new GenericRpcException(inner);
-        }
+        ICoinConfig GetCoinConfig(dynamic config);
 
-        public RpcException GetRpcErrorException(RpcErrorResponse response)
-        {
-            return new RpcErrorException(response);
-        }
+        IMiningSoftwareConfig GetMiningSoftwareConfig(dynamic config);
     }
 }
