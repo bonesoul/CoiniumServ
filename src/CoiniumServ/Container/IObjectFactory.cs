@@ -51,7 +51,7 @@ using CoiniumServ.Utils.Metrics;
 using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Container
 {
     /// <summary>
     /// Object factory that creates instances of objects

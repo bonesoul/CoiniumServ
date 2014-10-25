@@ -21,8 +21,9 @@
 // 
 #endregion
 
+using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
-using CoiniumServ.Factories;
+using CoiniumServ.Daemon.Exceptions;
 
 namespace CoiniumServ.Container.Registries
 {

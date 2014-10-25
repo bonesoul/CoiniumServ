@@ -24,7 +24,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using CoiniumServ.Factories;
+using CoiniumServ.Configuration;
 using Serilog;
 
 namespace CoiniumServ.Mining.Software

@@ -22,17 +22,16 @@
 #endregion
 
 using System;
+using CoiniumServ.Daemon.Errors;
 
 namespace CoiniumServ.Daemon.Exceptions
 {
-    public class GenericRpcException : RpcException
+    public interface IRpcExceptionFactory
     {
-        public GenericRpcException(Exception inner)
-            : base(inner.Message, inner)
-        { }
+        RpcException GetRpcException(Exception inner);
 
-        public GenericRpcException(string message, Exception inner)
-            :base(message, inner)
-        { }
+        RpcException GetRpcException(string message, Exception inner);
+
+        RpcException GetRpcErrorException(RpcErrorResponse response);
     }
 }

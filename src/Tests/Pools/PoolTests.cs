@@ -22,9 +22,9 @@
 #endregion
 using System;
 using CoiniumServ.Configuration;
+using CoiniumServ.Container;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
-using CoiniumServ.Factories;
 using CoiniumServ.Pools;
 using NSubstitute;
 using Should.Fluent;
