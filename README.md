@@ -1,5 +1,5 @@
 # ![Screenshot](http://blog.coinium.org/assets/images/logo/coinium-icon-48.png) CoiniumServ 
-[![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv) [![Documentation Status](https://readthedocs.org/projects/coiniumserv/badge/?version=latest)](https://readthedocs.org/projects/coiniumserv/?badge=latest) [![Stories in In Progress](https://badge.waffle.io/CoiniumServ/CoiniumServ.png?label=in%20progress&title=In%20Progress)](http://waffle.io/CoiniumServ/CoiniumServ) [![Project Stats](https://www.openhub.net/p/CoiniumServ/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CoiniumServ)
+[![Build Status](https://travis-ci.org/CoiniumServ/CoiniumServ.svg?branch=develop)](https://travis-ci.org/CoiniumServ/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/raistlinthewiz/coiniumserv) [![Documentation Status](https://readthedocs.org/projects/coiniumserv/badge/?version=latest)](https://readthedocs.org/projects/coiniumserv/?badge=latest) [![Project Stats](https://www.openhub.net/p/CoiniumServ/widgets/project_thin_badge.gif)](https://www.openhub.net/p/CoiniumServ)
  
 [CoiniumServ](http://www.coiniumserv.com) is a high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features stratum and vanilla services, reward, payment, share processors, vardiff & ban managers, user-friendly embedded web-server & front-end and a full-stack API.
 
@@ -19,7 +19,7 @@ CoiniumServ was created to be used for [Coinium.org](http://www.coinium.org) min
 
 ### Status
 
-Latest release: [v0.2.1 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.1-beta)
+Latest release: [v0.2.3 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.3-beta)
 
 ### Getting Started
 

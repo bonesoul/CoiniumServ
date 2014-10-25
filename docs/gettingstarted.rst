@@ -7,13 +7,13 @@ Getting Started
 Requirements
 ============
 
-CoiniumServ is an platform-agnostic software which can either run over mono or .net. To get CoiniumServ running, all you have to do is ensuring you do have either mono or .net installed on your system;
+CoiniumServ is an platform-agnostic software which can run on any platform that dotNet_ or mono_ framework is available including Windows, Linux and Mac/OS.
 
-* Linux/Unix over mono_.
-* MacOS over mono_.
-* Windows over dotNet_.
+* Windows: dotNet_ v4.5+.
+* Linux: mono_ v3.2+.
+* MacOS over mono_ v3.2+.
 
-Once you do have either mono/.net installed, you can then run CoiniumServ. You have basically two options; compiling from source or using a binary distribution.
+Once you do have either .net / mono installed, you can then run CoiniumServ. You have basically two options; compiling from source or using a binary distribution.
 
 Binary Distribution
 ===================
@@ -26,20 +26,18 @@ Once you download the package, extract the contents to a suitable folder. Then y
 
 .. image:: http://i.imgur.com/MhJkZxT.png
 
-Then you have to [configure](https://github.com/CoiniumServ/CoiniumServ/wiki/Configuration) the server to get it working.
+Then you have to configure the server to get it working.
 
 Compiling from source
 =====================
 
 If you like you can get the sources of the project and compile yourself.
 
-_Django: http://www.djangoproject.com/
-
   * Windows_
   * Linux_
   * MacOS_
   
-Then you have to [configure](https://github.com/CoiniumServ/CoiniumServ/wiki/Configuration) the server to get it working.
+Then you have to configure the server to get it working.
 
 .. _Mono: http://www.mono-project.com/
 .. _dotNet: http://www.microsoft.com/net
