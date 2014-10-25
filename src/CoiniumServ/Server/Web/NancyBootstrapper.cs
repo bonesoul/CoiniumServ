@@ -28,6 +28,7 @@ using CoiniumServ.Statistics;
 using Metrics;
 using Nancy;
 using Nancy.Bootstrapper;
+using Nancy.Conventions;
 using Nancy.CustomErrors;
 using Nancy.Diagnostics;
 using Nancy.TinyIoc;
@@ -79,6 +80,14 @@ namespace CoiniumServ.Server.Web
             #endif
 
             CustomErrors.Enable(pipelines, new ErrorConfiguration());
+        }
+
+        protected override void ConfigureConventions(NancyConventions nancyConventions)
+        {
+            base.ConfigureConventions(nancyConventions);
+
+            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddFile("/favicon.ico", "/Content/favicon.ico"));
+            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddFile("/robots.txt","/Content/robots.txt"));
         }
 
         protected override IRootPathProvider RootPathProvider
