@@ -124,7 +124,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="e"></param>
         private void OnClientConnection(object sender, ConnectionEventArgs e)
         {
-            _logger.Information("Stratum client connected: {0}", e.Connection.ToString());
+            _logger.Debug("Stratum client connected: {0}", e.Connection.ToString());
 
             // TODO: remove the jobManager dependency by instead injecting extranonce counter.
             var miner = _minerManager.Create<StratumMiner>(_jobManager.ExtraNonce.Next(), e.Connection, _pool);
@@ -138,14 +138,14 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="e"></param>
         private void OnClientDisconnect(object sender, ConnectionEventArgs e)
         {
-            _logger.Information("Stratum client disconnected: {0}", e.Connection.ToString());
+            _logger.Debug("Stratum client disconnected: {0}", e.Connection.ToString());
 
             _minerManager.Remove(e.Connection);
         }
 
         private void OnBannedConnection(object sender, BannedConnectionEventArgs e)
         {
-            _logger.Information("Rejected connection from banned ip: {0:l}", e.Endpoint.Address.ToString());
+            _logger.Debug("Rejected connection from banned ip: {0:l}", e.Endpoint.Address.ToString());
         }
 
         /// <summary>
