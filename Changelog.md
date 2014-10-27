@@ -2,11 +2,15 @@
 
 **Features**
 * Implemented basic market data support initially from Cryptsy, Bittrex and Poloniex.
+ 
+**Improvements**
+* Marked miner connection, disconnection, share-submission log messages as debug level, so server.log file by default doesn't get spammed with them.
+* Improved exception handlers for daemon connections.
 
 **Bug Fixes**
 * Fixed a bug in hybrid-storage where Block.Accounted and Payment.Completed fields default values was not set correctly.
 * Fixed a bug in generation-transaction - version is now correctly set.
-* Fixed a bug that was causing prevent frequent crashes.
+* Fixed a bug in Payment Processor which was causing crashes for invalid addresses.
 
 **Web**
 * Added robots.txt
