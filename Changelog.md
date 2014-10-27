@@ -1,3 +1,21 @@
+### [v0.2.4 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.4-beta)
+
+**Features**
+Implemented basic market data support initially from Cryptsy, Bittrex and Poloniex.
+
+**Bug Fixes**
+* Fixed a bug in hybrid-storage where Block.Accounted and Payment.Completed fields default values was not set correctly.
+* Fixed a bug in generation-transaction - version is now correctly set.
+* Fixed a bug that was causing prevent frequent crashes.
+
+**Web**
+* Added robots.txt
+* Added custom.css and custom.js for easier CSS and javascript additions.
+* Added analytics.html for easier addition of tracker codes.
+* Fixed a bug that was affecting mono based systems where favicon was not correctly rendered.
+
+---
+
 ### [v0.2.3 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.3-beta)
 
 **Web**
@@ -7,6 +25,8 @@
 * /help/termsofservice has been moved to /tos.
 * Time zones in embedded front-end are localized & rendered as relative.
 * Removed social icons configuration - social icons can be now enabled by editing navbar.cshtml.
+
+---
 
 ### [v0.2.2 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.2-beta)
 
