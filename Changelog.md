@@ -1,7 +1,7 @@
 ### [v0.2.4 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.4-beta)
 
 **Features**
-Implemented basic market data support initially from Cryptsy, Bittrex and Poloniex.
+* Implemented basic market data support initially from Cryptsy, Bittrex and Poloniex.
 
 **Bug Fixes**
 * Fixed a bug in hybrid-storage where Block.Accounted and Payment.Completed fields default values was not set correctly.
