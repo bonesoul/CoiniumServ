@@ -20,28 +20,16 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace libCoiniumServ.Versions
+
+using CoiniumServ.Configuration;
+
+namespace CoiniumServ.Markets
 {
-    /// <summary>
-    /// Supported Versions Info.
-    /// </summary>
-    /// <remarks>Put anything related to versions here.</remarks>
-    public static class VersionInfo
+    public interface IMarketsConfig : IConfig
     {
         /// <summary>
-        /// Codename.
+        /// interval for recaching data.
         /// </summary>
-        public const string CodeName = "Aurora";
-
-        /// <summary>
-        /// Main assembly versions info.
-        /// </summary>
-        public static class Assembly
-        {
-            /// <summary>
-            /// Main assemby version.
-            /// </summary>
-            public const string Version = "0.2.4.*";
-        }
+        int UpdateInterval { get; }
     }
 }

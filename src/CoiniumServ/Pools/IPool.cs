@@ -55,6 +55,9 @@ namespace CoiniumServ.Pools
         [JsonProperty("network")]
         INetworkInfo NetworkInfo { get; }
 
+        [JsonProperty("profit")]
+        IProfitInfo ProfitInfo { get; }
+
         [JsonProperty("blocks")]
         IBlockRepository BlockRepository { get; }
 

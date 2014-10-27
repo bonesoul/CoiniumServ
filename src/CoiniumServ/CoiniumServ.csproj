@@ -118,6 +118,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\..\build\packages\RestSharp.104.5.0\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Serilog, Version=1.4.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Serilog.1.4.14\lib\net45\Serilog.dll</HintPath>
@@ -151,8 +154,24 @@
     <Compile Include="Coin\Config\CoinOptions.cs" />
     <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
     <Compile Include="Coin\Config\ICoinOptions.cs" />
+    <Compile Include="Markets\Exchanges\BittrexClient.cs" />
+    <Compile Include="Markets\Exchanges\ExchangeApi.cs" />
+    <Compile Include="Markets\Exchanges\CryptsyClient.cs" />
+    <Compile Include="Markets\Exchange.cs" />
+    <Compile Include="Markets\Exchanges\IBittrexClient.cs" />
+    <Compile Include="Markets\Exchanges\ICryptsyClient.cs" />
+    <Compile Include="Markets\Exchanges\IExchangeClient.cs" />
+    <Compile Include="Markets\Exchanges\IPoloniexClient.cs" />
+    <Compile Include="Markets\Exchanges\PoloniexClient.cs" />
+    <Compile Include="Markets\IMarketData.cs" />
+    <Compile Include="Markets\IMarketsConfig.cs" />
+    <Compile Include="Markets\MarketData.cs" />
+    <Compile Include="Markets\MarketsConfig.cs" />
     <Compile Include="Persistance\Layers\Hybrid\Migrations\M003FixDefaults.cs" />
+    <Compile Include="Pools\IProfitInfo.cs" />
+    <Compile Include="Pools\ProfitInfo.cs" />
     <Compile Include="Server\Web\Modules\TosModule.cs" />
+    <Compile Include="Utils\Extensions\LinqExtensions.cs" />
     <Compile Include="Utils\Helpers\Humanize.cs" />
     <Compile Include="Configuration\IJsonConfigReader.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />
@@ -516,6 +535,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\coins\viacoin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="config\markets-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\software-example.json">

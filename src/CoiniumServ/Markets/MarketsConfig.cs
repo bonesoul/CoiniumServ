@@ -20,28 +20,32 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace libCoiniumServ.Versions
-{
-    /// <summary>
-    /// Supported Versions Info.
-    /// </summary>
-    /// <remarks>Put anything related to versions here.</remarks>
-    public static class VersionInfo
-    {
-        /// <summary>
-        /// Codename.
-        /// </summary>
-        public const string CodeName = "Aurora";
 
-        /// <summary>
-        /// Main assembly versions info.
-        /// </summary>
-        public static class Assembly
+using System;
+using Serilog;
+
+namespace CoiniumServ.Markets
+{
+    public class MarketsConfig : IMarketsConfig
+    {
+        public int UpdateInterval { get; private set; }
+
+        public bool Valid { get; private set; }
+
+        public MarketsConfig(dynamic config)
         {
-            /// <summary>
-            /// Main assemby version.
-            /// </summary>
-            public const string Version = "0.2.4.*";
+            try
+            {
+                // load the config data.
+                UpdateInterval = config.updateInterval == 0 ? 60 : config.updateInterval;
+
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<MarketsConfig>().Error(e, "Error loading website statistics configuration");
+            }
         }
     }
 }
