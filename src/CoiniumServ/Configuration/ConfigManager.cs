@@ -23,18 +23,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Daemon.Config;
-using CoiniumServ.Factories;
 using CoiniumServ.Logging;
+using CoiniumServ.Markets;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Stack;
-using CoiniumServ.Server.Web;
 using CoiniumServ.Server.Web.Config;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers;
@@ -52,16 +49,16 @@ namespace CoiniumServ.Configuration
         
         public IWebServerConfig WebServerConfig { get; private set; }
         
+        public IMarketsConfig MarketsConfig { get; private set; }
+
         public ILogConfig LogConfig { get; private set; }
         
         public List<IPoolConfig> PoolConfigs { get; private set; }
-        
-        public IDaemonManagerConfig DaemonManagerConfig { get; private set; }
 
         public ISoftwareRepositoryConfig SoftwareRepositoryConfig { get; private set; }
 
         private const string GlobalConfigFilename = "config/config.json"; // global config filename.
-        private const string DaemonManagerConfigFilename = "config/daemons.json"; // daemon manager config filename.
+        private const string MarketsConfigFilename = "config/markets.json"; // markets config filename.
         private const string SoftwareManagerConfigFilename = "config/software.json"; // software manager config filename.
         private const string PoolConfigRoot = "config/pools"; // root of pool configs.
         private const string CoinConfigRoot = "config/coins"; // root of pool configs.
@@ -82,7 +79,7 @@ namespace CoiniumServ.Configuration
             _logger = Log.ForContext<ConfigManager>();
 
             LoadGlobalConfig(); // read the global config.
-            // LoadDaemonManagerConfig(); // load the global daemon manager config. - disabled until we need it.
+            LoadMarketsManagerConfig();
             LoadSoftwareManagerConfig(); // load software manager config file.
             LoadDefaultPoolConfig(); // load default pool config if exists.
             LoadPoolConfigs(); // load the per-pool config files.
@@ -114,10 +111,15 @@ namespace CoiniumServ.Configuration
             WebServerConfig = new WebServerConfig(data.website);
         }
 
+        private void LoadMarketsManagerConfig()
+        {
+            var data = _jsonConfigReader.Read(MarketsConfigFilename); // read the config data.
+            MarketsConfig = new MarketsConfig(data);
+        }
+
         private void LoadSoftwareManagerConfig()
         {
-            var data = _jsonConfigReader.Read(SoftwareManagerConfigFilename); // read the global config data.
-
+            var data = _jsonConfigReader.Read(SoftwareManagerConfigFilename); // read the config data.
             SoftwareRepositoryConfig = new SoftwareRepositoryConfig(_configFactory, data);
         }
 
@@ -169,16 +171,6 @@ namespace CoiniumServ.Configuration
 
             _logger.Information("Discovered a total of {0} enabled pool configurations: {1:l}", PoolConfigs.Count,
                 PoolConfigs.Select(config => config.Coin.Name).ToList());
-        }
-
-        private void LoadDaemonManagerConfig()
-        {
-            var data = _jsonConfigReader.Read(DaemonManagerConfigFilename); // read the global config data.
-
-            if (data == null) // if we can't read daemon manager config file.
-                data = new ExpandoObject(); // create a fake object.                
-
-            DaemonManagerConfig = _configFactory.GetDaemonManagerConfig(data);
         }
 
         public ICoinConfig GetCoinConfig(string name)

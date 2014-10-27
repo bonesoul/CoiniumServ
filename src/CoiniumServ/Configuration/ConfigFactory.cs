@@ -22,14 +22,12 @@
 #endregion
 
 using CoiniumServ.Coin.Config;
-using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
-using CoiniumServ.Daemon.Config;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
 using Nancy.TinyIoc;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Configuration
 {
     /// <summary>
     /// Configuration factory that handles configs.
@@ -75,26 +73,6 @@ namespace CoiniumServ.Factories
             };
 
             return _applicationContext.Container.Resolve<ICoinConfig>(@params);
-        }
-
-        public IDaemonManagerConfig GetDaemonManagerConfig(dynamic config)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"config", config},
-            };
-
-            return _applicationContext.Container.Resolve<IDaemonManagerConfig>(@params);
-        }
-
-        public IStandaloneDaemonConfig GetStandaloneDaemonConfig(dynamic config)
-        {
-            var @params = new NamedParameterOverloads
-            {
-                {"config", config},
-            };
-
-            return _applicationContext.Container.Resolve<IStandaloneDaemonConfig>(@params);
         }
 
         public IMiningSoftwareConfig GetMiningSoftwareConfig(dynamic config)

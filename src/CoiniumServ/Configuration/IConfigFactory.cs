@@ -21,18 +21,25 @@
 // 
 #endregion
 
-using System;
+using CoiniumServ.Coin.Config;
+using CoiniumServ.Mining.Software;
+using CoiniumServ.Pools;
 
-namespace CoiniumServ.Daemon.Exceptions
+namespace CoiniumServ.Configuration
 {
-    public class GenericRpcException : RpcException
+    /// <summary>
+    /// Configuration factory that handles configs.
+    /// </summary>
+    public interface IConfigFactory
     {
-        public GenericRpcException(Exception inner)
-            : base(inner.Message, inner)
-        { }
+        IConfigManager GetConfigManager();
 
-        public GenericRpcException(string message, Exception inner)
-            :base(message, inner)
-        { }
+        IJsonConfigReader GetJsonConfigReader();
+
+        IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
+
+        ICoinConfig GetCoinConfig(dynamic config);
+
+        IMiningSoftwareConfig GetMiningSoftwareConfig(dynamic config);
     }
 }

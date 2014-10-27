@@ -21,18 +21,15 @@
 // 
 #endregion
 
-using System;
-using CoiniumServ.Daemon.Errors;
-using CoiniumServ.Daemon.Exceptions;
+using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Markets
 {
-    public interface IRpcExceptionFactory
+    public interface IMarketsConfig : IConfig
     {
-        RpcException GetRpcException(Exception inner);
-
-        RpcException GetRpcException(string message, Exception inner);
-
-        RpcException GetRpcErrorException(RpcErrorResponse response);
+        /// <summary>
+        /// interval for recaching data.
+        /// </summary>
+        int UpdateInterval { get; }
     }
 }

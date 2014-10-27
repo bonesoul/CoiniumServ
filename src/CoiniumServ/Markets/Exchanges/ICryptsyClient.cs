@@ -21,31 +21,9 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Configuration;
-using CoiniumServ.Daemon.Config;
-using CoiniumServ.Mining.Software;
-using CoiniumServ.Pools;
-
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Markets.Exchanges
 {
-    /// <summary>
-    /// Configuration factory that handles configs.
-    /// </summary>
-    public interface IConfigFactory
+    public interface ICryptsyClient:IExchangeClient
     {
-        IConfigManager GetConfigManager();
-
-        IJsonConfigReader GetJsonConfigReader();
-
-        IPoolConfig GetPoolConfig(dynamic config, ICoinConfig coinConfig);
-
-        ICoinConfig GetCoinConfig(dynamic config);
-
-        IDaemonManagerConfig GetDaemonManagerConfig(dynamic config);
-
-        IStandaloneDaemonConfig GetStandaloneDaemonConfig(dynamic config);
-
-        IMiningSoftwareConfig GetMiningSoftwareConfig(dynamic config);
     }
 }

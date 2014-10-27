@@ -20,28 +20,26 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace libCoiniumServ.Versions
-{
-    /// <summary>
-    /// Supported Versions Info.
-    /// </summary>
-    /// <remarks>Put anything related to versions here.</remarks>
-    public static class VersionInfo
-    {
-        /// <summary>
-        /// Codename.
-        /// </summary>
-        public const string CodeName = "Aurora";
 
-        /// <summary>
-        /// Main assembly versions info.
-        /// </summary>
-        public static class Assembly
+using FluentMigrator;
+
+namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
+{    
+    /// <summary>
+    /// Fixes a bug in M002Payment.cs where default values for Block.Accounted and Payment.Completed was not set.
+    /// </summary>
+    [Migration(20141024)]
+    public class M003FixDefaults : Migration
+    {
+        public override void Up()
         {
-            /// <summary>
-            /// Main assemby version.
-            /// </summary>
-            public const string Version = "0.2.4.*";
+            Alter.Table("Block").AlterColumn("Accounted").AsBoolean().NotNullable().WithDefaultValue("0"); // let Block.Accounted have default value of 0.
+            Alter.Table("Payment").AlterColumn("Completed").AsBoolean().NotNullable().WithDefaultValue("0"); // let Payment.Completed have default value of 0.
+        }
+
+        public override void Down()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

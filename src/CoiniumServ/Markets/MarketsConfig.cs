@@ -22,32 +22,30 @@
 #endregion
 
 using System;
-using CoiniumServ.Daemon.Errors;
-using CoiniumServ.Daemon.Exceptions;
+using Serilog;
 
-namespace CoiniumServ.Factories
+namespace CoiniumServ.Markets
 {
-    public class RpcExceptionFactory:IRpcExceptionFactory
+    public class MarketsConfig : IMarketsConfig
     {
-        public RpcException GetRpcException(Exception inner)
+        public int UpdateInterval { get; private set; }
+
+        public bool Valid { get; private set; }
+
+        public MarketsConfig(dynamic config)
         {
-            if (inner.Message.Equals("The operation has timed out", StringComparison.OrdinalIgnoreCase))
-                return new RpcTimeoutException(inner);
+            try
+            {
+                // load the config data.
+                UpdateInterval = config.updateInterval == 0 ? 60 : config.updateInterval;
 
-            if (inner.Message.Equals("Unable to connect to the remote server", StringComparison.OrdinalIgnoreCase))
-                return new RpcConnectionException(inner);
-
-            return new GenericRpcException(inner);
-        }
-
-        public RpcException GetRpcException(string message, Exception inner)
-        {
-            return new GenericRpcException(inner);
-        }
-
-        public RpcException GetRpcErrorException(RpcErrorResponse response)
-        {
-            return new RpcErrorException(response);
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<MarketsConfig>().Error(e, "Error loading website statistics configuration");
+            }
         }
     }
 }

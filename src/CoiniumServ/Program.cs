@@ -24,8 +24,8 @@
 using System;
 using System.Globalization;
 using System.Threading;
+using CoiniumServ.Configuration;
 using CoiniumServ.Container;
-using CoiniumServ.Factories;
 using CoiniumServ.Utils;
 using CoiniumServ.Utils.Commands;
 using Nancy.TinyIoc;
@@ -81,6 +81,9 @@ namespace CoiniumServ
 
         private static void RunGlobalManagers(IObjectFactory objectFactory)
         {
+            // run market manager.
+            objectFactory.GetMarketManager();
+
             // start pool manager.
             objectFactory.GetPoolManager();
 
@@ -92,9 +95,6 @@ namespace CoiniumServ
 
             // run statistics manager.
             objectFactory.GetStatisticsManager();
-
-            // run market manager.
-            objectFactory.GetMarketManager();
 
             // run software repository.
             objectFactory.GetSoftwareRepository();

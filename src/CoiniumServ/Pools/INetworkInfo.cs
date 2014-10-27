@@ -47,6 +47,12 @@ namespace CoiniumServ.Pools
         /// </summary>
         [JsonProperty("hashrate")]
         UInt64 Hashrate { get; }
+        
+        /// <summary>
+        /// Reward for next block in coins.
+        /// </summary>
+        [JsonProperty("reward")]
+        UInt64 Reward { get; }
 
         /// <summary>
         /// Coin version.

@@ -192,10 +192,10 @@ namespace CoiniumServ.Blocks
 
                 return null;
             }
-            catch (GenericRpcException e)
+            catch (RpcException e)
             {
                 block.Status = BlockStatus.Pending; // and let block stay in pending status so we can query it again later.
-                _logger.Error("Unhandled rpc-exception: {0:l}", e);
+                _logger.Error("Unhandled rpc-exception: {0:l}", e.Message);
                 return null;
             }
         }
@@ -233,10 +233,10 @@ namespace CoiniumServ.Blocks
 
                 return null;
             }
-            catch (GenericRpcException e)
+            catch (RpcException e)
             {
                 block.Status = BlockStatus.Pending; // and let block stay in pending status so we can query it again later.
-                _logger.Error("Unhandled rpc-exception: {0:l}", e);
+                _logger.Error("Unhandled rpc-exception: {0:l}", e.Message);
                 return null;
             }
         }

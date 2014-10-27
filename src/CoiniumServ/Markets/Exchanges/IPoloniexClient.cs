@@ -21,17 +21,10 @@
 // 
 #endregion
 
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Daemon.Config
+namespace CoiniumServ.Markets.Exchanges
 {
-    public interface IStandaloneDaemonConfig :IConfig
+    public interface IPoloniexClient : IExchangeClient
     {
-        bool Enabled { get; }
-
-        ICoinConfig Coin { get; }
-
-        IDaemonConfig Daemon { get; }
     }
 }

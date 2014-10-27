@@ -22,40 +22,31 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using CoiniumServ.Factories;
-using JsonConfig;
-using Serilog;
+using CoiniumServ.Daemon.Errors;
 
-namespace CoiniumServ.Daemon.Config
+namespace CoiniumServ.Daemon.Exceptions
 {
-    public class DaemonManagerConfig : IDaemonManagerConfig
+    public class RpcExceptionFactory:IRpcExceptionFactory
     {
-        public IList<IStandaloneDaemonConfig> Configs { get { return _configs; }}
-
-        private readonly List<IStandaloneDaemonConfig> _configs;
-
-        public bool Valid { get; private set; }
-
-        public DaemonManagerConfig(IConfigFactory configFactory, dynamic config)
+        public RpcException GetRpcException(Exception inner)
         {
-            try
-            {
-                _configs = new List<IStandaloneDaemonConfig>();
+            if (inner.Message.Equals("The operation has timed out", StringComparison.OrdinalIgnoreCase))
+                return new RpcTimeoutException(inner);
 
-                if (config.daemons is NullExceptionPreventer)
-                    return;
+            if (inner.Message.Equals("Unable to connect to the remote server", StringComparison.OrdinalIgnoreCase))
+                return new RpcConnectionException(inner);
 
-                foreach (var entry in config.daemons)
-                {
-                    _configs.Add(configFactory.GetStandaloneDaemonConfig(entry));
-                }
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<DaemonManagerConfig>().Error(e, "Error loading daemon manager configuration");
-            }            
+            return new RpcException(inner);
+        }
+
+        public RpcException GetRpcException(string message, Exception inner)
+        {
+            return new RpcException(message, inner);
+        }
+
+        public RpcException GetRpcErrorException(RpcErrorResponse response)
+        {
+            return new RpcErrorException(response);
         }
     }
 }

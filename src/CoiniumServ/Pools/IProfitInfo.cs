@@ -20,28 +20,36 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace libCoiniumServ.Versions
-{
-    /// <summary>
-    /// Supported Versions Info.
-    /// </summary>
-    /// <remarks>Put anything related to versions here.</remarks>
-    public static class VersionInfo
-    {
-        /// <summary>
-        /// Codename.
-        /// </summary>
-        public const string CodeName = "Aurora";
 
-        /// <summary>
-        /// Main assembly versions info.
-        /// </summary>
-        public static class Assembly
-        {
-            /// <summary>
-            /// Main assemby version.
-            /// </summary>
-            public const string Version = "0.2.4.*";
-        }
+using Newtonsoft.Json;
+
+namespace CoiniumServ.Pools
+{
+    [JsonObject(MemberSerialization.OptIn)]
+    public interface IProfitInfo
+    {
+        [JsonProperty("priceInBtc")]
+        decimal PriceInBtc { get; }
+
+        [JsonProperty("priceInUsd")]
+        decimal PriceInUsd { get; }
+
+        [JsonProperty("blocksPerMhPerHour")]
+        double BlocksPerMhPerHour { get; }
+
+        [JsonProperty("coinsPerMhPerHour")]
+        double CoinsPerMhPerHour { get; }
+
+        [JsonProperty("btcPerMhPerHour")]
+        double BtcPerMhPerHour { get; }
+
+        [JsonProperty("btcPerMhPerDay")]
+        double BtcPerMhPerDay { get; }
+
+        [JsonProperty("usdPerMhPerHour")]
+        double UsdPerMhPerHour { get; }
+
+        [JsonProperty("usdPerMhPerDay")]
+        double UsdPerMhPerDay { get; }
     }
 }

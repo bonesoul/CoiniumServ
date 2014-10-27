@@ -29,8 +29,8 @@ using CoiniumServ.Accounts;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Banning;
 using CoiniumServ.Configuration;
+using CoiniumServ.Container;
 using CoiniumServ.Daemon;
-using CoiniumServ.Factories;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;
 using CoiniumServ.Payments;
@@ -67,6 +67,8 @@ namespace CoiniumServ.Pools
         public IMinerManager MinerManager { get; private set; }
 
         public INetworkInfo NetworkInfo { get; private set; }
+
+        public IProfitInfo ProfitInfo { get; private set; }
 
         public IBlockRepository BlockRepository { get; private set; }
 
@@ -196,6 +198,8 @@ namespace CoiniumServ.Pools
                 var blockAccounter = _objectFactory.GetBlockAccounter(Config, _storage, AccountManager);
                 var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _storage, Daemon, AccountManager);
                 _objectFactory.GetPaymentManager(Config, blockProcessor, blockAccounter, paymentProcessor);
+
+                ProfitInfo = _objectFactory.GetProfitInfo(NetworkInfo, Config);
             }
             catch (Exception e)
             {

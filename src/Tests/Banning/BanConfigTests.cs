@@ -23,7 +23,6 @@
 using CoiniumServ.Banning;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container;
-using CoiniumServ.Factories;
 using Nancy.TinyIoc;
 using Should.Fluent;
 using Xunit;

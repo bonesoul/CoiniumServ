@@ -21,13 +21,9 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Configuration;
-
-namespace CoiniumServ.Daemon.Config
+namespace CoiniumServ.Markets.Exchanges
 {
-    public interface IDaemonManagerConfig : IConfig
+    public interface IBittrexClient:IExchangeClient
     {
-        IList<IStandaloneDaemonConfig> Configs { get; }
     }
 }

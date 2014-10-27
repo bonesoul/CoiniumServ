@@ -20,28 +20,18 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace libCoiniumServ.Versions
-{
-    /// <summary>
-    /// Supported Versions Info.
-    /// </summary>
-    /// <remarks>Put anything related to versions here.</remarks>
-    public static class VersionInfo
-    {
-        /// <summary>
-        /// Codename.
-        /// </summary>
-        public const string CodeName = "Aurora";
 
-        /// <summary>
-        /// Main assembly versions info.
-        /// </summary>
-        public static class Assembly
-        {
-            /// <summary>
-            /// Main assemby version.
-            /// </summary>
-            public const string Version = "0.2.4.*";
-        }
+using System;
+using CoiniumServ.Daemon.Errors;
+
+namespace CoiniumServ.Daemon.Exceptions
+{
+    public interface IRpcExceptionFactory
+    {
+        RpcException GetRpcException(Exception inner);
+
+        RpcException GetRpcException(string message, Exception inner);
+
+        RpcException GetRpcErrorException(RpcErrorResponse response);
     }
 }

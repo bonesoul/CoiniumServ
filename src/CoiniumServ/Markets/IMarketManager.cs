@@ -20,9 +20,19 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
+
+using System;
+using System.Collections.Generic;
+using CoiniumServ.Utils.Repository;
+
 namespace CoiniumServ.Markets
 {
-    public interface IMarketManager
+    public interface IMarketManager : IRepository<IMarketData>
     {
+        event EventHandler Update;
+
+        IEnumerable<IMarketData> GetMarketsFor(string marketCurrency, string baseCurrency);
+
+        IMarketData GetBestMarketFor(string marketCurrency, string baseCurrency);
     }
 }
