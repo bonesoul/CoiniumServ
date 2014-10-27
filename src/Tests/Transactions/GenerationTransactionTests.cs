@@ -158,8 +158,8 @@ namespace CoiniumServ.Tests.Transactions
             generationTransaction.Create();
 
             // test version.
-            generationTransaction.Version.Should().Equal((UInt32)1);
-            generationTransaction.Initial.Take(4).ToHexString().Should().Equal("01000000");
+            generationTransaction.Version.Should().Equal((UInt32)2);
+            generationTransaction.Initial.Take(4).ToHexString().Should().Equal("02000000");
 
             // test inputs count.
             generationTransaction.InputsCount.Should().Equal((UInt32)1);
@@ -196,7 +196,7 @@ namespace CoiniumServ.Tests.Transactions
             generationTransaction.Final.Skip(87).Take(4).ToHexString().Should().Equal("00000000");
 
             // test the generation transaction initial part.
-            generationTransaction.Initial.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703be9d04062f503253482f04c3e89a5308");
+            generationTransaction.Initial.ToHexString().Should().Equal("02000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703be9d04062f503253482f04c3e89a5308");
 
             // test the generation transaction final part.
             generationTransaction.Final.ToHexString().Should().Equal("0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
