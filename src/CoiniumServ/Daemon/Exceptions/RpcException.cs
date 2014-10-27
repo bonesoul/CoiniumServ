@@ -32,7 +32,7 @@ namespace CoiniumServ.Daemon.Exceptions
         { }
 
         public RpcException(Exception inner) :
-            base("Generic rpc exception", inner)
+            base(inner.Message, inner)
         { }
 
         public RpcException(string message, Exception innerException) :
