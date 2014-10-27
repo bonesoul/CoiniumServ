@@ -141,7 +141,7 @@ namespace CoiniumServ.Mining
             // if username validation is not on just authenticate the miner, else ask the current storage layer to do so.
             miner.Authenticated = !_poolConfig.Miner.ValidateUsername || _storageLayer.Authenticate(miner);
 
-            _logger.Information(
+            _logger.Debug(
                 miner.Authenticated ? "Authenticated miner: {0:l} [{1:l}]" : "Miner authentication failed: {0:l} [{1:l}]",
                 miner.Username, ((IClient) miner).Connection.RemoteEndPoint);
 

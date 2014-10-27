@@ -1,5 +1,4 @@
-﻿@using System
-@using System.Linq
+﻿@using System.Linq
 @using CoiniumServ.Utils.Helpers
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IEnumerable<CoiniumServ.Pools.IPool>>
 
@@ -17,15 +16,15 @@
                     <thead>
                         <tr>
                             <th class="hidden-xs" style="width: 40px;"></th>
-                            <th>Pool</th>
-                            <th>Hashrate</th>
-                            <th>Network</th>
-                            <th>Difficulty</th>
-                            <th class="hidden-xs">Profitability (BTC/Mh/Day)</th>
-                            <th class="hidden-xs">Workers</th>
-                            <th class="hidden-xs">Algorithm</th>
-                            <th class="hidden-xs">Last Block</th>
-                            <th class="hidden-xs">Status</th>
+                            <th title="Pool's name">Pool</th>
+                            <th title="Total hashrate of the pool">Hashrate</th>
+                            <th title="Total hashrate of the network">Network</th>
+                            <th title="Difficulty of the network">Difficulty</th>
+                            <th class="hidden-xs" title="Profitability of pool in USD for 1 MH/s per hour">Profitability</th>
+                            <th class="hidden-xs" title="Number of connected workers">Workers</th>
+                            <th class="hidden-xs" title="The algorithm used by the pool">Algorithm</th>
+                            <th class="hidden-xs" title="Time of the last found block">Last Block</th>
+                            <th class="hidden-xs" title="Status of the pool">Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,14 +36,14 @@
                                 <td>@pool.Hashrate.GetReadableHashrate()</td>
                                 <td>@pool.NetworkInfo.Hashrate.GetReadableHashrate()</td>
                                 <td title="@string.Format("{0:n8}",pool.NetworkInfo.Difficulty)">@pool.NetworkInfo.Difficulty.GetReadableDifficulty()</td>
-                                <td>@pool.ProfitInfo.BtcPerMhPerDay</td>
+                                <td>@(pool.ProfitInfo.UsdPerMhPerHour > 0 ? string.Format("{0:n2} $/hour", pool.ProfitInfo.UsdPerMhPerHour) : "N/A")</td>
                                 <td class="hidden-xs">@pool.MinerManager.Count</td>
                                 <td class="hidden-xs"><a href="/algorithm/@pool.Config.Coin.Algorithm">@pool.Config.Coin.Algorithm</a></td>
                                 <td class="hidden-xs">
                                     @{
-                            var lastBlock = pool.BlockRepository.Latest.Count > 0 ? pool.BlockRepository.Latest.First().CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ") : "N/A";
+                                        var lastBlock = pool.BlockRepository.Latest.Count > 0 ? pool.BlockRepository.Latest.First().CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ") : "N/A";
                                         <time class="timeago" datetime="@lastBlock">@lastBlock</time>
-                                    }                                    
+                                    }
                                 </td>
                                 <td class="hidden-xs">
                                     <div class="label @(pool.NetworkInfo.Healthy? "label-info" : "label-danger")">@(pool.NetworkInfo.Healthy ? "Healthy" : "Warnings!")</div>

@@ -46,10 +46,8 @@ namespace CoiniumServ.Pools
         public double CoinsPerMhPerHour { get; private set; }
 
         public double BtcPerMhPerHour { get; private set; }
-        public double BtcPerMhPerDay { get; private set; }
 
         public double UsdPerMhPerHour { get; private set; }
-        public double UsdPerMhPerDay { get; private set; }
 
         public ProfitInfo(IMarketManager marketManager, INetworkInfo networkInfo, IPoolConfig poolConfig)
         {
@@ -88,9 +86,7 @@ namespace CoiniumServ.Pools
             BlocksPerMhPerHour = interval / ((_networkInfo.Difficulty * Math.Pow(2, 32)) / hashrate);
             CoinsPerMhPerHour = BlocksPerMhPerHour*_networkInfo.Reward;
             BtcPerMhPerHour = CoinsPerMhPerHour*Convert.ToDouble(PriceInBtc);
-            BtcPerMhPerDay = BtcPerMhPerHour*24;
             UsdPerMhPerHour = CoinsPerMhPerHour*Convert.ToDouble(PriceInUsd);
-            UsdPerMhPerDay = UsdPerMhPerHour*24;
         }
     }
 }
