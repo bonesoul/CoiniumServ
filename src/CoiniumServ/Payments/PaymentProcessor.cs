@@ -94,28 +94,32 @@ namespace CoiniumServ.Payments
              
             foreach (var payment in pendingPayments)
             {
-                // query the user for the payment.
-                var user = _accountManager.GetAccountById(payment.AccountId);
+                try { 
+                    // query the user for the payment.
+                    var user = _accountManager.GetAccountById(payment.AccountId);
 
-                if (user == null)
-                    continue;
+                    if (user == null) // if the user doesn't exist
+                        continue; // just skip.
 
-                if (!perUserTransactions.ContainsKey(user.Username)) // check if our list of transactions to be executed already contains an entry for the user.
-                {
-                    // if not, create an entry that contains the list of transactions for the user.
+                    if (!perUserTransactions.ContainsKey(user.Username)) // check if our list of transactions to be executed already contains an entry for the user.
+                    {
+                        // if not, create an entry that contains the list of transactions for the user.
 
-                    // see if user payout address is directly payable from the pool's main daemon connection
-                    // which happens when a user connects an XYZ pool and want his payments in XYZ coin.
+                        // see if user payout address is directly payable from the pool's main daemon connection
+                        // which happens when a user connects an XYZ pool and want his payments in XYZ coin.
 
-                    var result = _daemonClient.ValidateAddress(user.Address); // does the user have a directly payable address set?
+                        var result = _daemonClient.ValidateAddress(user.Address); // does the user have a directly payable address set?
 
-                    if (!result.IsValid) // if not skip the payment and let it handled by auto-exchange module.
-                        continue;
+                        if (!result.IsValid) // if not skip the payment and let it handled by auto-exchange module.
+                            continue;
 
-                    perUserTransactions.Add(user.Username, new List<ITransaction>());
+                        perUserTransactions.Add(user.Username, new List<ITransaction>());
+                    }
+
+                    perUserTransactions[user.Username].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
                 }
-
-                perUserTransactions[user.Username].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
+                catch(RpcException)
+                { } // on rpc exception; just skip the payment for now.
             }
 
             return perUserTransactions;

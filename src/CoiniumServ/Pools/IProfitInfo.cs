@@ -43,13 +43,7 @@ namespace CoiniumServ.Pools
         [JsonProperty("btcPerMhPerHour")]
         double BtcPerMhPerHour { get; }
 
-        [JsonProperty("btcPerMhPerDay")]
-        double BtcPerMhPerDay { get; }
-
         [JsonProperty("usdPerMhPerHour")]
         double UsdPerMhPerHour { get; }
-
-        [JsonProperty("usdPerMhPerDay")]
-        double UsdPerMhPerDay { get; }
     }
 }
