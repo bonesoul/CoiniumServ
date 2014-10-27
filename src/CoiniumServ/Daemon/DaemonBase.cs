@@ -145,9 +145,13 @@ namespace CoiniumServ.Daemon
                     dataStream.Close();
                 }
             }
-            catch (WebException exception)
+            catch (WebException webException)
             {
-                throw _rpcExceptionFactory.GetRpcException(exception);
+                throw _rpcExceptionFactory.GetRpcException(webException);
+            }
+            catch (Exception exception)
+            {
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);
             }
 
             return webRequest;
@@ -173,6 +177,10 @@ namespace CoiniumServ.Daemon
             {
                 throw new Exception("There was a problem deserializing the response from the coin wallet.", jsonEx);
             }
+            catch (Exception exception)
+            {
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", exception);
+            }
         }
 
         /// <summary>
@@ -188,12 +196,17 @@ namespace CoiniumServ.Daemon
 
                 // Deserialize the json response
                 using (var stream = webResponse.GetResponseStream())
-                using (var reader = new StreamReader(stream))
                 {
-                    string result = reader.ReadToEnd();
-                    reader.Close();
+                    if (stream == null)
+                        return string.Empty;
 
-                    return result;
+                    using (var reader = new StreamReader(stream))
+                    {
+                        string result = reader.ReadToEnd();
+                        reader.Close();
+
+                        return result;
+                    }
                 }
             }
             catch (ProtocolViolationException protocolException)
@@ -207,28 +220,45 @@ namespace CoiniumServ.Daemon
                 if (response == null)
                     throw _rpcExceptionFactory.GetRpcException("Error while reading json response", webException);
 
-                using (var stream = response.GetResponseStream())
-                {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        string error = reader.ReadToEnd(); // read the error response.
+                var error = ReadJsonError(response); // try to read the error response.
 
-                        // we actually expect a json error response here, but it seems some coins may return non-json responses.
-                        try
-                        {
-                            var errorResponse = JsonConvert.DeserializeObject<RpcErrorResponse>(error); // so let's try parsing the error response as json.
-                            throw _rpcExceptionFactory.GetRpcErrorException(errorResponse); // if we can use the error json
-                        }
-                        catch (JsonException e) // if we can't parse the error response as json
-                        {
-                            throw _rpcExceptionFactory.GetRpcException(error, e); // then just use the error text.
-                        }
-                    }
-                }
+                if(error != null)
+                    throw _rpcExceptionFactory.GetRpcErrorException(error); //throw the error.
+                else
+                    throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", webException);
             }
             catch (Exception exception)
             {
-                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while trying to read the JSON response.", exception);
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", exception);
+            }
+        }
+
+        private RpcErrorResponse ReadJsonError(HttpWebResponse response)
+        {
+            using (var stream = response.GetResponseStream())
+            {
+                if (stream == null)
+                    return null;
+
+                using (var reader = new StreamReader(stream))
+                {
+                    string data = reader.ReadToEnd(); // read the error response.
+
+                    // we actually expect a json error response here, but it seems some coins may return non-json responses.
+                    try
+                    {
+                        var error = JsonConvert.DeserializeObject<RpcErrorResponse>(data); // so let's try parsing the error response as json.    
+                        return error;
+                    }
+                    catch (JsonException e) // if we can't parse the error response as json
+                    {
+                        throw _rpcExceptionFactory.GetRpcException(data, e); // then just use the error text.
+                    }
+                    catch (Exception exception)
+                    {
+                        throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", exception);
+                    }
+                }
             }
         }
     }
