@@ -38,12 +38,11 @@ namespace CoiniumServ.Markets.Exchanges
         private const string PrivateApiBase = " https://api.cryptsy.com/";
         private const string PrivateApiEndpoint = "api";
 
-        private readonly ExpandoObjectConverter _converter = new ExpandoObjectConverter();
         private readonly ILogger _logger;
 
         public CryptsyClient()
         {
-            _logger = Log.ForContext<BittrexClient>();
+            _logger = Log.ForContext<CryptsyClient>();
         }
 
         public async Task<IList<IMarketData>> GetMarkets()
@@ -77,6 +76,8 @@ namespace CoiniumServ.Markets.Exchanges
                         };
                         list.Add(entry);
                     }
+                    catch (ArgumentNullException)
+                    { } // just skip the exception that occurs when a field can not be read.
                     catch (Exception e)
                     {
                         _logger.Error(e.Message);

@@ -164,7 +164,9 @@
     <Compile Include="Markets\Exchanges\IPoloniexClient.cs" />
     <Compile Include="Markets\Exchanges\PoloniexClient.cs" />
     <Compile Include="Markets\IMarketData.cs" />
+    <Compile Include="Markets\IMarketsConfig.cs" />
     <Compile Include="Markets\MarketData.cs" />
+    <Compile Include="Markets\MarketsConfig.cs" />
     <Compile Include="Persistance\Layers\Hybrid\Migrations\M003FixDefaults.cs" />
     <Compile Include="Pools\IProfitInfo.cs" />
     <Compile Include="Pools\ProfitInfo.cs" />
@@ -533,6 +535,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\coins\viacoin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="config\markets-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\software-example.json">

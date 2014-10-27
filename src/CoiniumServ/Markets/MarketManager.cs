@@ -24,9 +24,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
+using CoiniumServ.Configuration;
 using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Utils.Extensions;
 using Serilog;
@@ -35,22 +37,27 @@ namespace CoiniumServ.Markets
 {
     public class MarketManager : IMarketManager
     {
-        private readonly Timer _timer;
+        public event EventHandler Update;
 
-        private readonly ILogger _logger;
+        private readonly Stopwatch _stopWatch = new Stopwatch();
+
+        private readonly Timer _timer;
 
         private readonly IList<IExchangeClient> _exchanges;
 
         private HashSet<IMarketData> _storage;
 
-        public event EventHandler Update;
+        private readonly IMarketsConfig _config;
+
+        private readonly ILogger _logger;
 
         public int Count { get { return _storage.Count; } }
 
-        public MarketManager(IBittrexClient bittrexClient, IPoloniexClient poloniexClient, ICryptsyClient cryptsyClient)
+        public MarketManager(IConfigManager configManager, IBittrexClient bittrexClient, IPoloniexClient poloniexClient, ICryptsyClient cryptsyClient)
         {
             _logger = Log.ForContext<MarketManager>();
             _storage = new HashSet<IMarketData>();
+            _config = configManager.MarketsConfig;
            
             // init the exchanges.
             _exchanges = new List<IExchangeClient>
@@ -66,8 +73,14 @@ namespace CoiniumServ.Markets
 
         private void Run(object state)
         {
-            UpdateMarkets();    
-            _timer.Change(5 * 1000, Timeout.Infinite); // reset the timer.
+            _stopWatch.Start();
+
+            UpdateMarkets();
+
+            _logger.Debug("Recached market data - took {0:0.000} seconds", (float)_stopWatch.ElapsedMilliseconds / 1000);
+            _stopWatch.Reset();
+
+            _timer.Change(_config.UpdateInterval * 1000, Timeout.Infinite); // reset the timer.
         }
 
         private void UpdateMarkets()

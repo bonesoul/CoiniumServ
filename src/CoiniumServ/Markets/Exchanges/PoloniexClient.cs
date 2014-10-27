@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Converters;
 using Serilog;
 
 namespace CoiniumServ.Markets.Exchanges
@@ -37,7 +36,6 @@ namespace CoiniumServ.Markets.Exchanges
         private const string PublicApiEndpoint = "public";
         private const string PrivateApiEndpoint = "tradingApi";
 
-        private readonly ExpandoObjectConverter _converter = new ExpandoObjectConverter();
         private readonly ILogger _logger;
 
         public PoloniexClient()

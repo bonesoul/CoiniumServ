@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.CSharp.RuntimeBinder;
 using Serilog;
 
 namespace CoiniumServ.Markets.Exchanges
@@ -58,7 +59,7 @@ namespace CoiniumServ.Markets.Exchanges
                         {
                             Exchange = Exchange.Bittrex,
                             MarketCurrency = temp.Last(),
-                            BaseCurrency = temp.First(),                            
+                            BaseCurrency = temp.First(),
                             Ask = market.Ask,
                             Bid = market.Bid,
                             VolumeInMarketCurrency = market.Volume,
@@ -67,6 +68,8 @@ namespace CoiniumServ.Markets.Exchanges
 
                         list.Add(entry);
                     }
+                    catch (RuntimeBinderException)
+                    { } // just skip the exception that occurs when a field can not be read.
                     catch (Exception e)
                     {
                         _logger.Error(e.Message);

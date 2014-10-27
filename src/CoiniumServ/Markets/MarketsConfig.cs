@@ -21,34 +21,31 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Logging;
-using CoiniumServ.Markets;
-using CoiniumServ.Mining.Software;
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Stack;
-using CoiniumServ.Server.Web.Config;
-using CoiniumServ.Statistics;
+using System;
+using Serilog;
 
-namespace CoiniumServ.Configuration
+namespace CoiniumServ.Markets
 {
-    public interface IConfigManager
+    public class MarketsConfig : IMarketsConfig
     {
-        IStackConfig StackConfig { get; }
+        public int UpdateInterval { get; private set; }
 
-        IStatisticsConfig StatisticsConfig { get; }
+        public bool Valid { get; private set; }
 
-        IWebServerConfig WebServerConfig { get; }
+        public MarketsConfig(dynamic config)
+        {
+            try
+            {
+                // load the config data.
+                UpdateInterval = config.updateInterval == 0 ? 60 : config.updateInterval;
 
-        IMarketsConfig MarketsConfig { get; }
-
-        ILogConfig LogConfig { get; }
-
-        List<IPoolConfig> PoolConfigs { get; }
-
-        ISoftwareRepositoryConfig SoftwareRepositoryConfig { get; }
-
-        ICoinConfig GetCoinConfig(string name);
+                Valid = true;
+            }
+            catch (Exception e)
+            {
+                Valid = false;
+                Log.Logger.ForContext<MarketsConfig>().Error(e, "Error loading website statistics configuration");
+            }
+        }
     }
 }

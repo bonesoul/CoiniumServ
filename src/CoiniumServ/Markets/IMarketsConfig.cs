@@ -21,34 +21,15 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Coin.Config;
-using CoiniumServ.Logging;
-using CoiniumServ.Markets;
-using CoiniumServ.Mining.Software;
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Stack;
-using CoiniumServ.Server.Web.Config;
-using CoiniumServ.Statistics;
+using CoiniumServ.Configuration;
 
-namespace CoiniumServ.Configuration
+namespace CoiniumServ.Markets
 {
-    public interface IConfigManager
+    public interface IMarketsConfig : IConfig
     {
-        IStackConfig StackConfig { get; }
-
-        IStatisticsConfig StatisticsConfig { get; }
-
-        IWebServerConfig WebServerConfig { get; }
-
-        IMarketsConfig MarketsConfig { get; }
-
-        ILogConfig LogConfig { get; }
-
-        List<IPoolConfig> PoolConfigs { get; }
-
-        ISoftwareRepositoryConfig SoftwareRepositoryConfig { get; }
-
-        ICoinConfig GetCoinConfig(string name);
+        /// <summary>
+        /// interval for recaching data.
+        /// </summary>
+        int UpdateInterval { get; }
     }
 }
