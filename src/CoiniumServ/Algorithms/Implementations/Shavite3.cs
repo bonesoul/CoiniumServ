@@ -23,17 +23,17 @@
 
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Sha1 : HashAlgorithmBase
+    public sealed class Shavite3 : HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
         private readonly IHash _hasher;
 
-        public Sha1()
+        public Shavite3()
         {
-            _hasher = HashFactory.Crypto.CreateSHA512();
+            _hasher = HashFactory.Crypto.SHA3.CreateSHAvite3_512();
 
             Multiplier = 1;
         }

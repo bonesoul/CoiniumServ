@@ -24,17 +24,17 @@
 using System;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Keccak : HashAlgorithmBase
+    public sealed class Fugue : HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
         private readonly IHash _hasher;
 
-        public Keccak()
+        public Fugue()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateKeccak256();
+            _hasher = HashFactory.Crypto.SHA3.CreateFugue256();
 
             Multiplier = (UInt32)Math.Pow(2, 8);
         }

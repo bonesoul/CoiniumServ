@@ -218,7 +218,7 @@ namespace CoiniumServ.Daemon
                 var response = webException.Response as HttpWebResponse;
 
                 if (response == null)
-                    throw _rpcExceptionFactory.GetRpcException("Error while reading json response", webException);
+                    throw _rpcExceptionFactory.GetRpcException(webException);
 
                 var error = ReadJsonError(response); // try to read the error response.
 
