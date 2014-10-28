@@ -36,27 +36,6 @@ namespace CoiniumServ.Algorithms
 {
     public class AlgorithmManager:IAlgorithmManager
     {
-        public const string Blake = "blake";
-        public const string Fresh = "fresh";
-        public const string Fugue = "fugue";
-        public const string Groestl = "groestl";
-        public const string Keccak = "keccak";
-        public const string Nist5 = "nist5";
-        public const string Qubit = "qubit";
-        public const string Scrypt = "scrypt";
-        public const string ScryptOg = "scrypt-og";
-        public const string Sha1 = "sha1";
-        public const string Sha256 = "sha256";
-        public const string Shavite3 = "shavite3";
-        public const string Skein = "skein";
-        public const string X11 = "x11";
-        public const string X13 = "x13";
-        public const string X14 = "x14";
-        public const string X15 = "x15";
-        public const string X17 = "x17";
-
-        // todo: add hefty1, qubit support
-
         /// <summary>
         /// Global diff1
         /// </summary>

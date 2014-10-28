@@ -29,6 +29,29 @@ namespace CoiniumServ.Algorithms
 {
     public class AlgorithmRegistry : IRegistry
     {
+        // algorithm names
+        public const string Blake = "blake";
+        public const string Fresh = "fresh";
+        public const string Fugue = "fugue";
+        public const string Groestl = "groestl";
+        public const string Keccak = "keccak";
+        public const string Nist5 = "nist5";
+        public const string Qubit = "qubit";
+        public const string Scrypt = "scrypt";
+        public const string ScryptOg = "scrypt-og";
+        public const string ScryptN = "scrypt-n";
+        public const string Sha1 = "sha1";
+        public const string Sha256 = "sha256";
+        public const string Shavite3 = "shavite3";
+        public const string Skein = "skein";
+        public const string X11 = "x11";
+        public const string X13 = "x13";
+        public const string X14 = "x14";
+        public const string X15 = "x15";
+        public const string X17 = "x17";
+
+        // todo: add hefty1, qubit support
+
         private readonly IApplicationContext _applicationContext;
 
         public AlgorithmRegistry(IApplicationContext applicationContext)
@@ -43,25 +66,32 @@ namespace CoiniumServ.Algorithms
             // algorithm manager
             _applicationContext.Container.Register<IAlgorithmManager, AlgorithmManager>().AsSingleton();
 
-            // hash algorithms           
-            _applicationContext.Container.Register<IHashAlgorithm, Blake>(AlgorithmManager.Blake).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Fresh>(AlgorithmManager.Fresh).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Fugue>(AlgorithmManager.Fugue).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Groestl>(AlgorithmManager.Groestl).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Keccak>(AlgorithmManager.Keccak).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Nist5>(AlgorithmManager.Nist5).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Qubit>(AlgorithmManager.Qubit).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(AlgorithmManager.Scrypt).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, ScryptOg>(AlgorithmManager.ScryptOg).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Sha1>(AlgorithmManager.Sha1).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Sha256>(AlgorithmManager.Sha256).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Shavite3>(AlgorithmManager.Shavite3).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Skein>(AlgorithmManager.Skein).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X11>(AlgorithmManager.X11).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X13>(AlgorithmManager.X13).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X14>(AlgorithmManager.X14).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X15>(AlgorithmManager.X15).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X17>(AlgorithmManager.X17).AsSingleton();
+            // sha variants
+            _applicationContext.Container.Register<IHashAlgorithm, Sha256>(Sha256).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Sha1>(Sha1).AsSingleton();
+
+            // scrypt variants
+            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(Scrypt).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, ScryptOg>(ScryptOg).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, ScryptN>(ScryptN).AsSingleton();
+
+            // multi-hashers
+            _applicationContext.Container.Register<IHashAlgorithm, X11>(X11).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, X13>(X13).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, X14>(X14).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, X15>(X15).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, X17>(X17).AsSingleton();
+
+            // misc ones           
+            _applicationContext.Container.Register<IHashAlgorithm, Blake>(Blake).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Fresh>(Fresh).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Fugue>(Fugue).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Groestl>(Groestl).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Keccak>(Keccak).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Nist5>(Nist5).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Qubit>(Qubit).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Shavite3>(Shavite3).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Skein>(Skein).AsSingleton();
         }
     }
 }

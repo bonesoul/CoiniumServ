@@ -147,6 +147,7 @@
   <ItemGroup>
     <Compile Include="Accounts\AccountManager.cs" />
     <Compile Include="Accounts\IAccountManager.cs" />
+    <Compile Include="Algorithms\Implementations\ScryptN.cs" />
     <Compile Include="Blocks\BlockProcessor.cs" />
     <Compile Include="Blocks\IBlockProcessor.cs" />
     <Compile Include="Coin\Address\Exceptions\AddressNotOwnedException.cs" />

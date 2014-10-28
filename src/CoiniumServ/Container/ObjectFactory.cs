@@ -353,14 +353,9 @@ namespace CoiniumServ.Container
 
         #region hash algorithms
 
-        /// <summary>
-        /// Returns instance of the given hash algorithm.
-        /// </summary>
-        /// <param name="algorithm"></param>
-        /// <returns></returns>
-        public IHashAlgorithm GetHashAlgorithm(string algorithm)
+        public IHashAlgorithm GetHashAlgorithm(string name)
         {
-            return _applicationContext.Container.Resolve<IHashAlgorithm>(algorithm);
+            return _applicationContext.Container.Resolve<IHashAlgorithm>(name);
         }
 
         public IAlgorithmManager GetAlgorithmManager()
