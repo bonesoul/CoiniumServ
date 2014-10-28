@@ -22,7 +22,11 @@
 #endregion
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
+using CoiniumServ.Utils.Helpers;
 using CryptSharp.Utility;
+using JsonConfig;
 
 namespace CoiniumServ.Algorithms.Implementations
 {
@@ -39,6 +43,20 @@ namespace CoiniumServ.Algorithms.Implementations
         /// </summary>
         private readonly int _p;
 
+        // default time-table for scrypt-n
+        private readonly Dictionary<Int32, UInt64> _defaultTimeTable = new Dictionary<Int32, UInt64>
+        {
+            {2048, 1389306217},
+            {4096, 1456415081},
+            {8192, 1506746729},
+            {16384, 1557078377},
+            {32768, 1657741673},
+            {65536, 1859068265},
+            {131072, 2060394857},
+            {262144, 1722307603},
+            {524288, 1769642992},
+        };
+
         public ScryptN()
         {
             // we don't set N value here on initialization because N is computed dynamically for scrypt-n coins.
@@ -50,8 +68,23 @@ namespace CoiniumServ.Algorithms.Implementations
 
         public override byte[] Hash(byte[] input, dynamic config)
         {
-            //return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
-            return null;
+            var timeTable = new Dictionary<Int32, UInt64>();
+            var now = (UInt64)TimeHelpers.NowInUnixTimestamp();
+
+            if (config.timeTable is NullExceptionPreventer) // if we are not provided a timeTable
+                timeTable = _defaultTimeTable; // use the default table.
+            else
+            {
+                foreach (KeyValuePair<string, object> pair in config.timeTable)
+                {
+                    timeTable.Add(Int32.Parse(pair.Key), UInt64.Parse(pair.Value.ToString()));
+                }
+            }
+
+            var n = timeTable.OrderBy(x => x.Key).First(x => x.Value < now).Key;
+            var nFactor = (int) (Math.Log(n)/Math.Log(2));
+
+            return SCrypt.ComputeDerivedKey(input, input, nFactor, _r, _p, null, 32);
         }
     }
 }
