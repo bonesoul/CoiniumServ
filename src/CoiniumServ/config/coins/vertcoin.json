@@ -1,15 +1,19 @@
 {
     "name": "Vertcoin",
     "symbol": "VTC",
-    "algorithm": "scrypt-n",
-	"site": "https://vertcoin.org/",
+    "algorithm": "scryptn",
+    "site": "http://ultracoin.net/",
     "blockExplorer": {
-        "block": "https://explorer.vertcoin.org/block/",
-        "tx": "https://explorer.vertcoin.org/tx/",
-        "address": "https://explorer.vertcoin.org/address/"
+        "block": "http://ultracha.in/block/",
+        "tx": "http://ultracha.in/tx/",
+        "address": "http://ultracha.in/address/"
     },
-    "node": {
-        "magic": "fabfb5da",
-        "testnetMagic": "76657274"
-    }
+	"extra": {
+        "chainStartTime": 1388361600,
+        "timeTable": {
+        		"2048": 1389306217, "4096": 1456415081, "8192": 1506746729, "16384": 1557078377, "32768": 1657741673,
+                	"65536": 1859068265, "131072": 2060394857, "262144": 1722307603, "524288": 1769642992
+            	}
+	}
 }
+           
