@@ -55,7 +55,7 @@ namespace CoiniumServ.Algorithms.Implementations
             Multiplier = 1;
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
             var buffer = input;
 

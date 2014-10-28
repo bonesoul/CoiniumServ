@@ -53,7 +53,7 @@ namespace CoiniumServ.Algorithms.Implementations
             Multiplier = (UInt32)Math.Pow(2, 16);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
             return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
         }

@@ -38,7 +38,7 @@ namespace CoiniumServ.Algorithms.Implementations
             Multiplier = 1;           
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
             return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
         }
