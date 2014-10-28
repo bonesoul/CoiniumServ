@@ -24,6 +24,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using CoiniumServ.Coin.Config;
 using CoiniumServ.Utils.Helpers;
 using CryptSharp.Utility;
 using JsonConfig;
@@ -57,34 +58,42 @@ namespace CoiniumServ.Algorithms.Implementations
             {524288, 1769642992},
         };
 
-        public ScryptN()
+        private Dictionary<Int32, UInt64> _timeTable; // timeTable for the coin.
+
+        public ScryptN(ICoinConfig coinConfig)
         {
-            // we don't set N value here on initialization because N is computed dynamically for scrypt-n coins.
             _r = 1;
             _p = 1;
-
             Multiplier = (UInt32)Math.Pow(2, 16);
+
+            InitTimeTable(coinConfig.Extra.timeTable); // init the timeTable for the coin.
+        }
+
+        private void InitTimeTable(dynamic table)
+        {
+            _timeTable = new Dictionary<int, ulong>();
+
+            if (table is NullExceptionPreventer) // if we are not provided a timeTable
+                _timeTable = _defaultTimeTable; // use the default table.
+            else
+            {
+                // else use the table provided by the coin configuration within extra.timeTable section.
+                foreach (KeyValuePair<string, object> pair in table)
+                {
+                    _timeTable.Add(Int32.Parse(pair.Key), UInt64.Parse(pair.Value.ToString()));
+                }
+            }
         }
 
         public override byte[] Hash(byte[] input, dynamic config)
         {
-            var timeTable = new Dictionary<Int32, UInt64>();
             var now = (UInt64)TimeHelpers.NowInUnixTimestamp();
 
-            if (config.timeTable is NullExceptionPreventer) // if we are not provided a timeTable
-                timeTable = _defaultTimeTable; // use the default table.
-            else
-            {
-                foreach (KeyValuePair<string, object> pair in config.timeTable)
-                {
-                    timeTable.Add(Int32.Parse(pair.Key), UInt64.Parse(pair.Value.ToString()));
-                }
-            }
+            var index = _timeTable.OrderBy(x => x.Key).First(x => x.Value < now).Key;
+            var nFactor = (int)(Math.Log(index) / Math.Log(2));
+            var n = 1 << nFactor;
 
-            var n = timeTable.OrderBy(x => x.Key).First(x => x.Value < now).Key;
-            var nFactor = (int) (Math.Log(n)/Math.Log(2));
-
-            return SCrypt.ComputeDerivedKey(input, input, nFactor, _r, _p, null, 32);
+            return SCrypt.ComputeDerivedKey(input, input, n, _r, _p, null, 32);
         }
     }
 }

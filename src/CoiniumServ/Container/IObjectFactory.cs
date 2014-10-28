@@ -128,7 +128,7 @@ namespace CoiniumServ.Container
         /// Returns the given hash algorithm helper.
         /// </summary>
         /// <returns></returns>
-        IHashAlgorithm GetHashAlgorithm(string name);
+        IHashAlgorithm GetHashAlgorithm(ICoinConfig coinConfig);
 
         IAlgorithmManager GetAlgorithmManager();
 

@@ -64,34 +64,34 @@ namespace CoiniumServ.Algorithms
             // available cryptographic hash functions: http://en.wikipedia.org/wiki/List_of_hash_functions#Cryptographic_hash_functions
 
             // algorithm manager
-            _applicationContext.Container.Register<IAlgorithmManager, AlgorithmManager>().AsSingleton();
+            _applicationContext.Container.Register<IAlgorithmManager, AlgorithmManager>().AsMultiInstance();
 
             // sha variants
-            _applicationContext.Container.Register<IHashAlgorithm, Sha256>(Sha256).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Sha1>(Sha1).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Sha256>(Sha256).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Sha1>(Sha1).AsMultiInstance();
 
             // scrypt variants
-            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(Scrypt).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, ScryptOg>(ScryptOg).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, ScryptN>(ScryptN).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Scrypt>(Scrypt).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, ScryptOg>(ScryptOg).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, ScryptN>(ScryptN).AsMultiInstance();
 
             // multi-hashers
-            _applicationContext.Container.Register<IHashAlgorithm, X11>(X11).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X13>(X13).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X14>(X14).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X15>(X15).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, X17>(X17).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, X11>(X11).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, X13>(X13).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, X14>(X14).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, X15>(X15).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, X17>(X17).AsMultiInstance();
 
             // misc ones           
-            _applicationContext.Container.Register<IHashAlgorithm, Blake>(Blake).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Fresh>(Fresh).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Fugue>(Fugue).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Groestl>(Groestl).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Keccak>(Keccak).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Nist5>(Nist5).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Qubit>(Qubit).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Shavite3>(Shavite3).AsSingleton();
-            _applicationContext.Container.Register<IHashAlgorithm, Skein>(Skein).AsSingleton();
+            _applicationContext.Container.Register<IHashAlgorithm, Blake>(Blake).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Fresh>(Fresh).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Fugue>(Fugue).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Groestl>(Groestl).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Keccak>(Keccak).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Nist5>(Nist5).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Qubit>(Qubit).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Shavite3>(Shavite3).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Skein>(Skein).AsMultiInstance();
         }
     }
 }

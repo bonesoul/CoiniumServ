@@ -353,9 +353,14 @@ namespace CoiniumServ.Container
 
         #region hash algorithms
 
-        public IHashAlgorithm GetHashAlgorithm(string name)
+        public IHashAlgorithm GetHashAlgorithm(ICoinConfig coinConfig)
         {
-            return _applicationContext.Container.Resolve<IHashAlgorithm>(name);
+            var @params = new NamedParameterOverloads
+            {
+                {"coinConfig", coinConfig},
+            };
+
+            return _applicationContext.Container.Resolve<IHashAlgorithm>(coinConfig.Algorithm, @params);
         }
 
         public IAlgorithmManager GetAlgorithmManager()
