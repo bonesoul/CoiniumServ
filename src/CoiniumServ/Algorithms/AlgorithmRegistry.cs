@@ -21,10 +21,11 @@
 // 
 #endregion
 
-using CoiniumServ.Algorithms;
+using CoiniumServ.Algorithms.Implementations;
 using CoiniumServ.Container.Context;
+using CoiniumServ.Container.Registries;
 
-namespace CoiniumServ.Container.Registries
+namespace CoiniumServ.Algorithms
 {
     public class AlgorithmRegistry : IRegistry
     {

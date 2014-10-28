@@ -24,7 +24,7 @@
 using System.Collections.Generic;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
     public sealed class X14 : HashAlgorithmBase
     {

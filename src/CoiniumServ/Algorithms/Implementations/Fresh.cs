@@ -21,41 +21,39 @@
 // 
 #endregion
 
-using System;
-using CryptSharp.Utility;
+using System.Collections.Generic;
+using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class ScryptOg : HashAlgorithmBase
+    public sealed class Fresh : HashAlgorithmBase
     {
-        /// <summary>
-        /// N parameter - CPU/memory cost parameter.
-        /// </summary>
-        private readonly int _n;
+        public override uint Multiplier { get; protected set; }
 
-        /// <summary>
-        /// R parameter - block size.
-        /// </summary>
-        private readonly int _r;
+        private readonly List<IHash> _hashers;
 
-        /// <summary>
-        /// P - parallelization parameter -  a large value of p can increase computational 
-        /// cost of scrypt without increasing the memory usage.
-        /// </summary>
-        private readonly int _p;
-
-        public ScryptOg()
+        public Fresh()
         {
-            _n = 64;
-            _r = 1;
-            _p = 1;
+            _hashers = new List<IHash>
+            {
+                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
+                HashFactory.Crypto.SHA3.CreateSIMD512(),
+                HashFactory.Crypto.SHA3.CreateEcho512(),
+            };
 
-            Multiplier = (UInt32)Math.Pow(2, 16);
+            Multiplier = 1;
         }
 
         public override byte[] Hash(byte[] input, dynamic config)
         {
-            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
+            var buffer = input;
+
+            foreach (var hasher in _hashers)
+            {
+                buffer = hasher.ComputeBytes(buffer).GetBytes();
+            }
+
+            return buffer;
         }
     }
 }
