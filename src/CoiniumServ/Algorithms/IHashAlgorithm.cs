@@ -56,9 +56,8 @@ namespace CoiniumServ.Algorithms
         /// Hashes the input data.
         /// </summary>
         /// <param name="input"></param>
-        /// <param name="config"></param>
         /// <returns></returns>
-        byte[] Hash(byte[] input, dynamic config);
+        byte[] Hash(byte[] input);
 
         /// <summary>
         /// Assigns pools that runs on the algorithm.

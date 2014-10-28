@@ -39,7 +39,7 @@ namespace CoiniumServ.Algorithms.Implementations
             Multiplier = (UInt32)Math.Pow(2, 8);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
             return _hasher.ComputeBytes(input).GetBytes();
         }

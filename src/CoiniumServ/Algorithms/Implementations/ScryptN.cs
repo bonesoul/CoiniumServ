@@ -85,7 +85,7 @@ namespace CoiniumServ.Algorithms.Implementations
             }
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
             var now = (UInt64)TimeHelpers.NowInUnixTimestamp();
 
