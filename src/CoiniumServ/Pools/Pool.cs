@@ -113,23 +113,17 @@ namespace CoiniumServ.Pools
         public Pool(IPoolConfig poolConfig, IConfigManager configManager, IObjectFactory objectFactory)
         {
             Initialized = false; // mark the pool as un-initiliazed until all services are up and running.
+
+            // ensure dependencies are supplied.
+            Enforce.ArgumentNotNull(() => poolConfig);
+            Enforce.ArgumentNotNull(() => configManager);
+            Enforce.ArgumentNotNull(() => objectFactory);
+
+            _configManager = configManager;
+            _objectFactory = objectFactory;
+            Config = poolConfig;
+
             _logger = Log.ForContext<Pool>().ForContext("Component", poolConfig.Coin.Name);
-
-            try
-            {
-                // ensure dependencies are supplied.
-                Enforce.ArgumentNotNull(() => poolConfig);
-                Enforce.ArgumentNotNull(() => configManager);
-                Enforce.ArgumentNotNull(() => objectFactory);
-
-                _configManager = configManager;
-                _objectFactory = objectFactory;
-                Config = poolConfig;
-            }
-            catch (ArgumentNullException e)
-            {
-                _logger.Error("Pool initialization failed; {0:l}", e.Message);
-            }            
         }
 
         public void Initialize()
