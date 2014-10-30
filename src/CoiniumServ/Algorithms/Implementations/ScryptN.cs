@@ -31,8 +31,10 @@ using JsonConfig;
 
 namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class ScryptN : HashAlgorithmBase
+    public sealed class ScryptN : IHashAlgorithm
     {
+        public uint Multiplier { get; private set; }
+
         /// <summary>
         /// R parameter - block size.
         /// </summary>
@@ -85,7 +87,7 @@ namespace CoiniumServ.Algorithms.Implementations
             }
         }
 
-        public override byte[] Hash(byte[] input)
+        public byte[] Hash(byte[] input)
         {
             var now = (UInt64)TimeHelpers.NowInUnixTimestamp();
 

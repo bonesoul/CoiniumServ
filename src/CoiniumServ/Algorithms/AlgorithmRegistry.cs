@@ -66,6 +66,9 @@ namespace CoiniumServ.Algorithms
             // algorithm manager
             _applicationContext.Container.Register<IAlgorithmManager, AlgorithmManager>().AsMultiInstance();
 
+            // per-algorithm statistics
+            _applicationContext.Container.Register<IHashAlgorithmStatistics, HashAlgorithmStatistics>().AsMultiInstance();
+
             // sha variants
             _applicationContext.Container.Register<IHashAlgorithm, Sha256>(Sha256).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, Sha1>(Sha1).AsMultiInstance();

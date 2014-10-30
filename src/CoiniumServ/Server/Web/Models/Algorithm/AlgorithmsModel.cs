@@ -28,6 +28,6 @@ namespace CoiniumServ.Server.Web.Models.Algorithm
 {
     public class AlgorithmsModel
     {
-        public IReadOnlyCollection<IHashAlgorithm> Algorithms { get; set; }
+        public IReadOnlyCollection<IHashAlgorithmStatistics> Algorithms { get; set; }
     }
 }

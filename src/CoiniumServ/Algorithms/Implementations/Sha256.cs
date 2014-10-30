@@ -25,9 +25,9 @@ using System.Security.Cryptography;
 
 namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Sha256:HashAlgorithmBase
+    public sealed class Sha256 : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
         private readonly SHA256Managed _algorithm;
 
@@ -38,7 +38,7 @@ namespace CoiniumServ.Algorithms.Implementations
             Multiplier = 1;           
         }
 
-        public override byte[] Hash(byte[] input)
+        public byte[] Hash(byte[] input)
         {
             return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
         }

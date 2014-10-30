@@ -21,26 +21,33 @@
 // 
 #endregion
 
-using HashLib;
+using System;
+using System.Collections.Generic;
+using CoiniumServ.Pools;
+using CoiniumServ.Server.Web.Service;
+using CoiniumServ.Utils.Repository;
+using Newtonsoft.Json;
 
-namespace CoiniumServ.Algorithms.Implementations
+namespace CoiniumServ.Algorithms
 {
-    public sealed class Sha1 : IHashAlgorithm
+    [JsonObject(MemberSerialization.OptIn)]
+    public interface IHashAlgorithmStatistics : IRepository<IPool>, IJsonService
     {
-        public uint Multiplier { get; private set; }
+        /// <summary>
+        /// Algorithm name.
+        /// </summary>
+        string Name { get; }
 
-        private readonly IHash _hasher;
+        [JsonProperty("miners")]
+        Int32 MinerCount { get; }
 
-        public Sha1()
-        {
-            _hasher = HashFactory.Crypto.CreateSHA512();
+        [JsonProperty("hashrate")]
+        UInt64 Hashrate { get; }
 
-            Multiplier = 1;
-        }
-
-        public byte[] Hash(byte[] input)
-        {
-            return _hasher.ComputeBytes(input).GetBytes();
-        }
+        /// <summary>
+        /// Assigns pools that runs on the algorithm.
+        /// </summary>
+        /// <param name="pools"></param>
+        void AssignPools(IEnumerable<IPool> pools);
     }
 }

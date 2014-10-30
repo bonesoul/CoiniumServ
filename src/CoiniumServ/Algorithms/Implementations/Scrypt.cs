@@ -26,9 +26,9 @@ using CryptSharp.Utility;
 
 namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Scrypt : HashAlgorithmBase
+    public sealed class Scrypt : IHashAlgorithm
     {
-        public override UInt32 Multiplier { get; protected set; }
+        public UInt32 Multiplier { get; private set; }
 
         /// <summary>
         /// N parameter - CPU/memory cost parameter.
@@ -55,7 +55,7 @@ namespace CoiniumServ.Algorithms.Implementations
             Multiplier = (UInt32) Math.Pow(2, 16);
         }
 
-        public override byte[] Hash(byte[] input)
+        public byte[] Hash(byte[] input)
         {
             return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
         }

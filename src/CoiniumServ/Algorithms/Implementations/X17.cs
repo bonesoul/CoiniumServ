@@ -26,9 +26,9 @@ using HashLib;
 
 namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class X17 : HashAlgorithmBase
+    public sealed class X17 : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
         private readonly List<IHash> _hashers;
 
@@ -58,7 +58,7 @@ namespace CoiniumServ.Algorithms.Implementations
             Multiplier = 1;
         }
 
-        public override byte[] Hash(byte[] input)
+        public byte[] Hash(byte[] input)
         {
             var buffer = input;
 

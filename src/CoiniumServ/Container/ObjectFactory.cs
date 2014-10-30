@@ -368,6 +368,16 @@ namespace CoiniumServ.Container
             return _applicationContext.Container.Resolve<IAlgorithmManager>();
         }
 
+        public IHashAlgorithmStatistics GetHashAlgorithmStatistics(string name)
+        {
+            var @params = new NamedParameterOverloads
+            {
+                {"name", name}
+            };
+
+            return _applicationContext.Container.Resolve<IHashAlgorithmStatistics>(@params);
+        }
+
         #endregion
 
         #region storage objects
