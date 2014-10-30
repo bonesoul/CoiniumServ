@@ -58,6 +58,7 @@ namespace CoiniumServ.Shares
         public byte[] HeaderHash { get; private set; }
         public BigInteger HeaderValue { get; private set; }
         public Double Difficulty { get; private set; }
+        public Double MinerDifficulty { get; private set; }
         public double BlockDiffAdjusted { get; private set; }
         public byte[] BlockHex { get; private set; }
         public byte[] BlockHash { get; private set; }
@@ -133,6 +134,9 @@ namespace CoiniumServ.Shares
 
             // calculate the share difficulty
             Difficulty = ((double)new BigRational(AlgorithmManager.Diff1, HeaderValue)) * Job.HashAlgorithm.Multiplier;
+
+            // set miner difficulty
+            MinerDifficulty = miner.Difficulty;
 
             // calculate the block difficulty
             BlockDiffAdjusted = Job.Difficulty * Job.HashAlgorithm.Multiplier;
