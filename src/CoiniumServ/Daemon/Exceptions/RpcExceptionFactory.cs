@@ -23,15 +23,21 @@
 
 using System;
 using CoiniumServ.Daemon.Errors;
+using Metrics;
 
 namespace CoiniumServ.Daemon.Exceptions
 {
     public class RpcExceptionFactory:IRpcExceptionFactory
     {
+        private readonly Meter _timeoutMeter = Metric.Meter("[Daemon] Timeouts", Unit.Requests, TimeUnit.Seconds);
+
         public RpcException GetRpcException(Exception inner)
         {
             if (inner.Message.Equals("The operation has timed out", StringComparison.OrdinalIgnoreCase))
+            {
+                _timeoutMeter.Mark();
                 return new RpcTimeoutException(inner);
+            }
 
             if (inner.Message.Equals("Unable to connect to the remote server", StringComparison.OrdinalIgnoreCase))
                 return new RpcConnectionException(inner);

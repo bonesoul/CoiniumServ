@@ -55,7 +55,7 @@ namespace CoiniumServ.Logging
 
             // create the default console.
 #if DEBUG
-            _mainConfig.WriteTo.ColoredConsole(LogEventLevel.Debug, ConsoleLogFormat); // use debug level for debug mode.
+            _mainConfig.WriteTo.ColoredConsole(LogEventLevel.Verbose, ConsoleLogFormat); // use debug level for debug mode.
 #else
             _mainConfig.WriteTo.ColoredConsole(LogEventLevel.Information, ConsoleLogFormat); // use information level for release mode.
 #endif
