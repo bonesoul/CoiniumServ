@@ -22,40 +22,26 @@
 #endregion
 
 using System;
-using CryptSharp.Utility;
+using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class ScryptOg : HashAlgorithmBase
+    public sealed class Fugue : HashAlgorithmBase
     {
-        /// <summary>
-        /// N parameter - CPU/memory cost parameter.
-        /// </summary>
-        private readonly int _n;
+        public override uint Multiplier { get; protected set; }
 
-        /// <summary>
-        /// R parameter - block size.
-        /// </summary>
-        private readonly int _r;
+        private readonly IHash _hasher;
 
-        /// <summary>
-        /// P - parallelization parameter -  a large value of p can increase computational 
-        /// cost of scrypt without increasing the memory usage.
-        /// </summary>
-        private readonly int _p;
-
-        public ScryptOg()
+        public Fugue()
         {
-            _n = 64;
-            _r = 1;
-            _p = 1;
+            _hasher = HashFactory.Crypto.SHA3.CreateFugue256();
 
-            Multiplier = (UInt32)Math.Pow(2, 16);
+            Multiplier = (UInt32)Math.Pow(2, 8);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
-            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
+            return _hasher.ComputeBytes(input).GetBytes();
         }
     }
 }

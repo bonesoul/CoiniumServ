@@ -21,25 +21,24 @@
 // 
 #endregion
 
-using System;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Groestl : HashAlgorithmBase
+    public sealed class Sha1 : HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
         private readonly IHash _hasher;
 
-        public Groestl()
+        public Sha1()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateGroestl512();
+            _hasher = HashFactory.Crypto.CreateSHA512();
 
-            Multiplier = (UInt32)Math.Pow(2, 8);
+            Multiplier = 1;
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
             return _hasher.ComputeBytes(input).GetBytes();
         }

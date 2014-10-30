@@ -21,26 +21,43 @@
 // 
 #endregion
 
-using HashLib;
+using System;
+using CryptSharp.Utility;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Sha1 : HashAlgorithmBase
+    public sealed class Scrypt : HashAlgorithmBase
     {
-        public override uint Multiplier { get; protected set; }
+        public override UInt32 Multiplier { get; protected set; }
 
-        private readonly IHash _hasher;
+        /// <summary>
+        /// N parameter - CPU/memory cost parameter.
+        /// </summary>
+        private readonly int _n;
 
-        public Sha1()
+        /// <summary>
+        /// R parameter - block size.
+        /// </summary>
+        private readonly int _r;
+
+        /// <summary>
+        /// P - parallelization parameter -  a large value of p can increase computational 
+        /// cost of scrypt without increasing the memory usage.
+        /// </summary>
+        private readonly int _p;
+
+        public Scrypt()
         {
-            _hasher = HashFactory.Crypto.CreateSHA512();
+            _n = 1024;
+            _r = 1;
+            _p = 1;
 
-            Multiplier = 1;
+            Multiplier = (UInt32) Math.Pow(2, 16);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
-            return _hasher.ComputeBytes(input).GetBytes();
+            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
         }
     }
 }

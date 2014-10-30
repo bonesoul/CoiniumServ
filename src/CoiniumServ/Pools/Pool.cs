@@ -44,6 +44,7 @@ using CoiniumServ.Server.Mining;
 using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Helpers;
+using Nancy.TinyIoc;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -116,8 +117,6 @@ namespace CoiniumServ.Pools
             Enforce.ArgumentNotNull(() => configManager); // make sure we have a config-manager instance supplied.
             Enforce.ArgumentNotNull(() => objectFactory); // make sure we have a objectFactory instance supplied.
 
-            // TODO: validate pool central wallet & rewards within the startup.
-
             _configManager = configManager;
             _objectFactory = objectFactory;
             Config = poolConfig;
@@ -127,6 +126,9 @@ namespace CoiniumServ.Pools
 
             try
             {
+                if (!InitAlgorithm()) // init the hash algorithm required by the coin.
+                    return;
+
                 InitDaemon(); // init coin daemon.
                 InitStorage(); // init storage support.
                 InitManagers(); // init managers.
@@ -140,6 +142,21 @@ namespace CoiniumServ.Pools
             }
         }
 
+        private bool InitAlgorithm()
+        {
+            try
+            {
+                HashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin);
+                _shareMultiplier = Math.Pow(2, 32) / HashAlgorithm.Multiplier; // will be used in hashrate calculation.
+                return true;
+            }
+            catch (TinyIoCResolutionException)
+            {
+                _logger.Error("Unknown hash algorithm: {0:l}, pool initializing failed", Config.Coin.Algorithm);
+                return false;
+            }            
+        }
+
         private void InitDaemon()
         {
             if (Config.Daemon == null || Config.Daemon.Valid == false)
@@ -149,10 +166,7 @@ namespace CoiniumServ.Pools
             }
 
             Daemon = _objectFactory.GetDaemonClient(Config.Daemon, Config.Coin);
-            HashAlgorithm = _objectFactory.GetHashAlgorithm(Config.Coin.Algorithm);
             NetworkInfo = _objectFactory.GetNetworkInfo(Daemon, HashAlgorithm, Config);
-
-            _shareMultiplier = Math.Pow(2, 32) / HashAlgorithm.Multiplier; // will be used in hashrate calculation.
         }
 
         private void InitStorage()

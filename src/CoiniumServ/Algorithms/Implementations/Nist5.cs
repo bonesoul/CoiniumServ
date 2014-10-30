@@ -24,29 +24,29 @@
 using System.Collections.Generic;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Qubit : HashAlgorithmBase
+    public sealed class Nist5 : HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
         private readonly List<IHash> _hashers;
 
-        public Qubit()
+        public Nist5()
         {
             _hashers = new List<IHash>
             {
-                HashFactory.Crypto.SHA3.CreateLuffa512(),
-                HashFactory.Crypto.SHA3.CreateCubeHash512(),
-                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
-                HashFactory.Crypto.SHA3.CreateSIMD512(),
-                HashFactory.Crypto.SHA3.CreateEcho512()
+                HashFactory.Crypto.SHA3.CreateBlake512(),
+                HashFactory.Crypto.SHA3.CreateGroestl512(),
+                HashFactory.Crypto.SHA3.CreateSkein512(),
+                HashFactory.Crypto.SHA3.CreateJH512(),
+                HashFactory.Crypto.SHA3.CreateKeccak512()
             };
 
             Multiplier = 1;
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
             var buffer = input;
 

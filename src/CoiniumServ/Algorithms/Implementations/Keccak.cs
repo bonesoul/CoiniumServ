@@ -24,7 +24,7 @@
 using System;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
     public sealed class Keccak : HashAlgorithmBase
     {
@@ -39,7 +39,7 @@ namespace CoiniumServ.Algorithms
             Multiplier = (UInt32)Math.Pow(2, 8);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
             return _hasher.ComputeBytes(input).GetBytes();
         }

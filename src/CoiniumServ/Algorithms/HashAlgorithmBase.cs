@@ -46,7 +46,7 @@ namespace CoiniumServ.Algorithms
             _storage = new List<IPool>(); // initialize the pool storage.            
         }
         
-        public virtual byte[] Hash(byte[] input, dynamic config)
+        public virtual byte[] Hash(byte[] input)
         {
             throw new NotImplementedException();
         }

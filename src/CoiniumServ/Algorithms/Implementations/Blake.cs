@@ -24,22 +24,22 @@
 using System;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Fugue : HashAlgorithmBase
+    public sealed class Blake : HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
         private readonly IHash _hasher;
 
-        public Fugue()
+        public Blake()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateFugue256();
+            _hasher = HashFactory.Crypto.SHA3.CreateBlake256();
 
-            Multiplier = (UInt32)Math.Pow(2, 8);
+            Multiplier = (UInt32) Math.Pow(2, 8);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
             return _hasher.ComputeBytes(input).GetBytes();
         }

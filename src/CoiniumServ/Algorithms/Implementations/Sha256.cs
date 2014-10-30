@@ -21,26 +21,32 @@
 // 
 #endregion
 
-using HashLib;
+using System.Security.Cryptography;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Skein : HashAlgorithmBase
+    public sealed class Sha256:HashAlgorithmBase
     {
         public override uint Multiplier { get; protected set; }
 
-        private readonly IHash _hasher;
+        private readonly SHA256Managed _algorithm;
 
-        public Skein()
+        public Sha256()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateSkein512();
+            _algorithm = new SHA256Managed();
 
-            Multiplier = 1;
+            Multiplier = 1;           
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
-            return _hasher.ComputeBytes(input).GetBytes();
+            return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
+        }
+
+        public byte[] DoubleDigest(byte[] input)
+        {
+            var first = _algorithm.ComputeHash(input);
+            return _algorithm.ComputeHash(first);
         }
     }
 }

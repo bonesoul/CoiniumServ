@@ -22,26 +22,40 @@
 #endregion
 
 using System;
-using HashLib;
+using CryptSharp.Utility;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Blake : HashAlgorithmBase
+    public sealed class ScryptOg : HashAlgorithmBase
     {
-        public override uint Multiplier { get; protected set; }
+        /// <summary>
+        /// N parameter - CPU/memory cost parameter.
+        /// </summary>
+        private readonly int _n;
 
-        private readonly IHash _hasher;
+        /// <summary>
+        /// R parameter - block size.
+        /// </summary>
+        private readonly int _r;
 
-        public Blake()
+        /// <summary>
+        /// P - parallelization parameter -  a large value of p can increase computational 
+        /// cost of scrypt without increasing the memory usage.
+        /// </summary>
+        private readonly int _p;
+
+        public ScryptOg()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateBlake256();
+            _n = 64;
+            _r = 1;
+            _p = 1;
 
-            Multiplier = (UInt32) Math.Pow(2, 8);
+            Multiplier = (UInt32)Math.Pow(2, 16);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public override byte[] Hash(byte[] input)
         {
-            return _hasher.ComputeBytes(input).GetBytes();
+            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
         }
     }
 }
