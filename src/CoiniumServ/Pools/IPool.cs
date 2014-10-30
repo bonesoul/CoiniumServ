@@ -36,7 +36,10 @@ namespace CoiniumServ.Pools
     [JsonObject(MemberSerialization.OptIn)]
     public interface IPool : IJsonService
     {
-        bool Enabled { get; }
+        /// <summary>
+        /// Is the pool initialized?
+        /// </summary>
+        bool Initialized { get; }
 
         [JsonProperty("hashrate")]
         UInt64 Hashrate { get; }
@@ -70,8 +73,6 @@ namespace CoiniumServ.Pools
 
         IAccountManager AccountManager { get; }
 
-        void Start();
-
-        void Stop();
+        void Initialize();
     }
 }

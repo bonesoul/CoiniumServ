@@ -64,7 +64,7 @@ namespace CoiniumServ.Algorithms
             // available cryptographic hash functions: http://en.wikipedia.org/wiki/List_of_hash_functions#Cryptographic_hash_functions
 
             // algorithm manager
-            _applicationContext.Container.Register<IAlgorithmManager, AlgorithmManager>().AsMultiInstance();
+            _applicationContext.Container.Register<IAlgorithmManager, AlgorithmManager>().AsSingleton();
 
             // per-algorithm statistics
             _applicationContext.Container.Register<IHashAlgorithmStatistics, HashAlgorithmStatistics>().AsMultiInstance();
