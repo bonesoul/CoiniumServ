@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container;
 using Newtonsoft.Json;
@@ -62,7 +63,8 @@ namespace CoiniumServ.Pools
             // run the initialized pools
             foreach (var pool in _storage)
             {
-                pool.Start();
+                var t = new Thread(pool.Start);
+                t.Start();
             }
         }
 

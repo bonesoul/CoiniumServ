@@ -334,13 +334,13 @@
                         <div class="list-group-item" title="Estimated profitability in BTC per Mh / Day">
                             <div class="row">
                                 <div class="col-xs-6"><i class="fa fa-btc"></i> Profitability</div>
-                                <div class="col-xs-6 text-right">@string.Format("{0:n2}", Model.Pool.ProfitInfo.BtcPerMhPerHour) <i class="fa fa-btc"></i> / hour</div>
+                                <div class="col-xs-6 text-right">@string.Format("{0:n8}", Model.Pool.ProfitInfo.BtcPerMhPerHour) <i class="fa fa-btc"></i> / hour</div>
                             </div>
                         </div>
                         <div class="list-group-item" title="Estimated profitability in USD per MH / Day">
                             <div class="row">
                                 <div class="col-xs-6"><i class="fa fa-usd"></i> Profitability</div>
-                                <div class="col-xs-6 text-right">@string.Format("{0:n2}", Model.Pool.ProfitInfo.UsdPerMhPerHour) <i class="fa fa-usd"></i> / hour</div>
+                                <div class="col-xs-6 text-right">@string.Format("{0:n3}", Model.Pool.ProfitInfo.UsdPerMhPerHour) <i class="fa fa-usd"></i> / hour</div>
                             </div>
                         </div>
                     }
