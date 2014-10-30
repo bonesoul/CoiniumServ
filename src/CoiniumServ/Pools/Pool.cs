@@ -55,7 +55,7 @@ namespace CoiniumServ.Pools
     /// </summary>
     public class Pool : IPool
     {
-        public bool Enabled { get; private set; }
+        public bool Initialized { get; private set; }
 
         public ulong Hashrate { get; private set; }
 
@@ -79,10 +79,9 @@ namespace CoiniumServ.Pools
 
         public IAccountManager AccountManager { get; private set; }
 
-        // object factory.
-        private readonly IObjectFactory _objectFactory;
+        public string ServiceResponse { get; private set; }
 
-        // dependent objects.
+        private readonly IObjectFactory _objectFactory;
 
         private IJobManager _jobManager;
 
@@ -113,19 +112,69 @@ namespace CoiniumServ.Pools
         /// <param name="objectFactory"></param>
         public Pool(IPoolConfig poolConfig, IConfigManager configManager, IObjectFactory objectFactory)
         {
-            Enforce.ArgumentNotNull(() => poolConfig); // make sure we have a pool-config instance supplied.
-            Enforce.ArgumentNotNull(() => configManager); // make sure we have a config-manager instance supplied.
-            Enforce.ArgumentNotNull(() => objectFactory); // make sure we have a objectFactory instance supplied.
+            Initialized = false; // mark the pool as un-initiliazed until all services are up and running.
+            _logger = Log.ForContext<Pool>().ForContext("Component", poolConfig.Coin.Name);
 
-            _configManager = configManager;
-            _objectFactory = objectFactory;
-            Config = poolConfig;
-            Enabled = Config.Enabled;
+            try
+            {
+                // ensure dependencies are supplied.
+                Enforce.ArgumentNotNull(() => poolConfig);
+                Enforce.ArgumentNotNull(() => configManager);
+                Enforce.ArgumentNotNull(() => objectFactory);
 
-            _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);
+                _configManager = configManager;
+                _objectFactory = objectFactory;
+                Config = poolConfig;
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.Error("Pool initialization failed; {0:l}", e.Message);
+            }            
         }
 
-        private bool InitAlgorithm()
+        public void Initialize()
+        {
+            if (Initialized)
+                return;
+
+            try
+            {
+                if (!Config.Valid) // make sure we have valid configuration.
+                {
+                    _logger.Error("Can't start pool as configuration is not valid.");
+                    return;
+                }
+
+                GenerateInstanceId(); // generate unique instance id for the pool.
+
+                if (!InitHashAlgorithm()) // init the hash algorithm required by the coin.
+                    return;
+
+                if (!InitDaemonClient()) // init the coin daemon client.
+                    return;
+
+                if (!InitStorage()) // init storage support.
+                    return;
+
+                if (!InitCoreServices()) // init core services.
+                    return;
+
+                if (!InitStatisticsServices()) // init statistics services.
+                    return;
+
+                if (!InitNetworkServers()) // init network servers.
+                    return;
+
+                Initialized = true;
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Pool initilization failed; {0:l}", e);
+                Initialized = false;
+            }
+        }
+
+        private bool InitHashAlgorithm()
         {
             try
             {
@@ -135,24 +184,24 @@ namespace CoiniumServ.Pools
             }
             catch (TinyIoCResolutionException)
             {
-                _logger.Error("Unknown hash algorithm: {0:l}, pool initializing failed", Config.Coin.Algorithm);
+                _logger.Error("Unknown hash algorithm: {0:l}, pool initilization failed", Config.Coin.Algorithm);
                 return false;
             }            
         }
 
-        private void InitDaemon()
+        private bool InitDaemonClient()
         {
             if (Config.Daemon == null || Config.Daemon.Valid == false)
             {
                 _logger.Error("Coin daemon configuration is not valid!");
-                return;
+                return false;
             }
 
             Daemon = _objectFactory.GetDaemonClient(Config.Daemon, Config.Coin);
-            NetworkInfo = _objectFactory.GetNetworkInfo(Daemon, HashAlgorithm, Config);
+            return true;
         }
 
-        private void InitStorage()
+        private bool InitStorage()
         {
             // load the providers for the current storage layer.
             var providers =
@@ -169,45 +218,48 @@ namespace CoiniumServ.Pools
             // load the storage layer.
             if (Config.Storage.Layer is HybridStorageConfig)
                 _storage = _objectFactory.GetStorageLayer(StorageLayers.Hybrid, providers, Daemon, Config);
+
             else if (Config.Storage.Layer is MposStorageConfig)
                 _storage = _objectFactory.GetStorageLayer(StorageLayers.Mpos, providers, Daemon, Config);
+
             else if (Config.Storage.Layer is NullStorageConfig)
                 _storage = _objectFactory.GetStorageLayer(StorageLayers.Empty, providers, Daemon, Config);
+
+            return true;
         }
 
-        private void InitManagers()
+        private bool InitCoreServices()
         {
-            try
-            {
-                AccountManager = _objectFactory.GetAccountManager(_storage, Config);
-                BlockRepository = _objectFactory.GetBlockRepository(_storage);
-                PaymentRepository = _objectFactory.GetPaymentRepository(_storage);
-                MinerManager = _objectFactory.GetMinerManager(Config, _storage, AccountManager);
+            AccountManager = _objectFactory.GetAccountManager(_storage, Config);
+            MinerManager = _objectFactory.GetMinerManager(Config, _storage, AccountManager);
 
-                var jobTracker = _objectFactory.GetJobTracker(Config);
-                _shareManager = _objectFactory.GetShareManager(Config, Daemon, jobTracker, _storage);
-                _objectFactory.GetVardiffManager(Config, _shareManager);
-                _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
-                _jobManager = _objectFactory.GetJobManager(Config, Daemon, jobTracker, _shareManager, MinerManager, HashAlgorithm);
-                _jobManager.Initialize(InstanceId);
+            var jobTracker = _objectFactory.GetJobTracker(Config);
+            _shareManager = _objectFactory.GetShareManager(Config, Daemon, jobTracker, _storage);
+            _objectFactory.GetVardiffManager(Config, _shareManager);
+            _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
+            _jobManager = _objectFactory.GetJobManager(Config, Daemon, jobTracker, _shareManager, MinerManager, HashAlgorithm);
+            _jobManager.Initialize(InstanceId);
 
-                var blockProcessor =_objectFactory.GetBlockProcessor(Config, Daemon, _storage);
-                var blockAccounter = _objectFactory.GetBlockAccounter(Config, _storage, AccountManager);
-                var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _storage, Daemon, AccountManager);
-                _objectFactory.GetPaymentManager(Config, blockProcessor, blockAccounter, paymentProcessor);
+            var blockProcessor = _objectFactory.GetBlockProcessor(Config, Daemon, _storage);
+            var blockAccounter = _objectFactory.GetBlockAccounter(Config, _storage, AccountManager);
+            var paymentProcessor = _objectFactory.GetPaymentProcessor(Config, _storage, Daemon, AccountManager);
+            _objectFactory.GetPaymentManager(Config, blockProcessor, blockAccounter, paymentProcessor);
 
-                ProfitInfo = _objectFactory.GetProfitInfo(NetworkInfo, Config);
-            }
-            catch (Exception e)
-            {
-                _logger.Error("Pool initialization error: {0:l}", e.Message);
-            }
+            return true;
         }
 
-        private void InitServers()
+        private bool InitStatisticsServices()
         {
-            // todo: merge this with InitManagers so we don't have use private declaration of class instances
+            NetworkInfo = _objectFactory.GetNetworkInfo(Daemon, HashAlgorithm, Config);
+            ProfitInfo = _objectFactory.GetProfitInfo(NetworkInfo, Config);
+            BlockRepository = _objectFactory.GetBlockRepository(_storage);
+            PaymentRepository = _objectFactory.GetPaymentRepository(_storage);
 
+            return true;
+        }
+
+        private bool InitNetworkServers()
+        {
             _servers = new Dictionary<IMiningServer, IRpcService>();
 
             if (Config.Stratum != null && Config.Stratum.Enabled)
@@ -228,46 +280,13 @@ namespace CoiniumServ.Pools
 
                 _servers.Add(getworkServer, getworkService);
             }
-        }
-
-        public void Start()
-        {
-            try
-            {
-                GenerateInstanceId(); // generate unique instance id for the pool.
-
-                if (!InitAlgorithm()) // init the hash algorithm required by the coin.
-                    return;
-
-                InitDaemon(); // init coin daemon.
-                InitStorage(); // init storage support.
-                InitManagers(); // init managers.
-                InitServers(); // init servers.
-            }
-            catch (Exception e)
-            {
-                _logger.Error("Error initializing pool; {0:l}", e);
-                Enabled = false;
-            }
-
-            if (!Config.Valid)
-            {
-                _logger.Error("Can't start pool as configuration is not valid.");
-                return;
-            }
 
             foreach (var server in _servers)
             {
                 server.Key.Start();
             }
-        }
 
-        public void Stop()
-        {
-            if (Enabled == false)
-                return;
-
-            throw new NotImplementedException();
+            return true;
         }
 
         /// <summary>
@@ -282,10 +301,11 @@ namespace CoiniumServ.Pools
             _logger.Debug("Generated cryptographically random instance Id: {0}", InstanceId);
         }
 
-        public string ServiceResponse { get; private set; }
-
         public void Recache()
         {
+            if (!Initialized)
+                return;
+
             BlockRepository.Recache(); // recache the blocks.
             NetworkInfo.Recache(); // let network statistics recache.
             CalculateHashrate(); // calculate the pool hashrate.

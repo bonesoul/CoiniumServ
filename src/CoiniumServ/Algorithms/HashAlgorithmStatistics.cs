@@ -40,7 +40,7 @@ namespace CoiniumServ.Algorithms
 
         public ulong Hashrate { get; private set; }
 
-        public int Count { get; private set; }
+        public int Count { get { return _storage.Count; } }
 
         public string ServiceResponse { get; private set; }
 
@@ -89,6 +89,9 @@ namespace CoiniumServ.Algorithms
 
             foreach (var pool in _storage)
             {
+                if (!pool.Initialized)
+                    continue;
+                
                 MinerCount += pool.MinerManager.Count;
                 Hashrate += pool.Hashrate;
             }

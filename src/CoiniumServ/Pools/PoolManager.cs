@@ -37,6 +37,10 @@ namespace CoiniumServ.Pools
 {
     public class PoolManager : IPoolManager
     {
+        public int Count { get { return _storage.Count; } }
+
+        public string ServiceResponse { get; private set; }
+
         private readonly IList<IPool> _storage; 
 
         private readonly ILogger _logger;
@@ -51,7 +55,7 @@ namespace CoiniumServ.Pools
             {
                 var pool = objectFactory.GetPool(config); // create pool for the given configuration.
                 
-                if(pool.Enabled) // make sure pool was succesfully initialized.
+                if(pool.Config.Enabled) // make sure pool was succesfully initialized.
                     _storage.Add(pool); // add it to storage.
             }
 
@@ -63,7 +67,7 @@ namespace CoiniumServ.Pools
             // run the initialized pools
             foreach (var pool in _storage)
             {
-                var t = new Thread(pool.Start);
+                var t = new Thread(pool.Initialize);
                 t.Start();
             }
         }
@@ -87,10 +91,6 @@ namespace CoiniumServ.Pools
         {
             return new ReadOnlyCollection<IPool>(_storage);
         }
-
-        public int Count { get { return _storage.Count; } }
-
-        public string ServiceResponse { get; private set; }
 
         public void Recache()
         {
