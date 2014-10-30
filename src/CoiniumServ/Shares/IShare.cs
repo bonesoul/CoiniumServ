@@ -85,6 +85,8 @@ namespace CoiniumServ.Shares
 
         Double Difficulty { get; }
 
+        Double MinerDifficulty { get; }
+
         Double BlockDiffAdjusted { get; }
 
         byte[] BlockHex { get; }
