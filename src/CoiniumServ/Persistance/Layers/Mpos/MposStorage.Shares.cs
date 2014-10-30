@@ -65,7 +65,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                             upstream_result = upstreamResult,
                             reason = errorReason,
                             solution = share.BlockHash.ToHexString(),
-                            difficulty = share.Difficulty, // should we consider mpos difficulty multiplier here?
+                            difficulty = share.MinerDifficulty, // should we consider mpos difficulty multiplier here?
                             time = DateTime.Now
                         });
                 }
