@@ -32,31 +32,34 @@ using Newtonsoft.Json;
 
 namespace CoiniumServ.Algorithms
 {
-    public class HashAlgorithmBase : IHashAlgorithm
+    public class HashAlgorithmStatistics:IHashAlgorithmStatistics
     {
         public string Name { get; private set; }
 
-        public virtual uint Multiplier { get; protected set; }
+        public int MinerCount { get; private set; }
+
+        public ulong Hashrate { get; private set; }
+
+        public int Count { get; private set; }
+
+        public string ServiceResponse { get; private set; }
 
         private readonly IList<IPool> _storage;
 
-        public HashAlgorithmBase()
+        public HashAlgorithmStatistics(string name)
         {
-            Name = this.GetType().Name.ToLower(); // set the algorithm name.
-            _storage = new List<IPool>(); // initialize the pool storage.            
-        }
-        
-        public virtual byte[] Hash(byte[] input)
-        {
-            throw new NotImplementedException();
+            Name = name;
+            _storage = new List<IPool>(); // initialize the pool storage.   
         }
 
-        public void AssignPools(IEnumerable<IPool> pools)
+        public IEnumerator<IPool> GetEnumerator()
         {
-            foreach (var pool in pools)
-            {
-                _storage.Add(pool);
-            }
+            return _storage.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public IQueryable<IPool> SearchFor(Expression<Func<IPool, bool>> predicate)
@@ -79,23 +82,6 @@ namespace CoiniumServ.Algorithms
             return new ReadOnlyCollection<IPool>(_storage);
         }
 
-        public int Count { get { return _storage.Count; } }
-
-        public IEnumerator<IPool> GetEnumerator()
-        {
-            return _storage.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public int MinerCount { get; private set; }
-        public ulong Hashrate { get; private set; }
-
-        public string ServiceResponse { get; private set; }
-
         public void Recache()
         {
             MinerCount = 0;
@@ -109,6 +95,14 @@ namespace CoiniumServ.Algorithms
 
             // cache the json-service response
             ServiceResponse = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+        }
+
+        public void AssignPools(IEnumerable<IPool> pools)
+        {
+            foreach (var pool in pools)
+            {
+                _storage.Add(pool);
+            }
         }
     }
 }

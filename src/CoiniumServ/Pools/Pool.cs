@@ -120,26 +120,9 @@ namespace CoiniumServ.Pools
             _configManager = configManager;
             _objectFactory = objectFactory;
             Config = poolConfig;
+            Enabled = Config.Enabled;
+
             _logger = Log.ForContext<Pool>().ForContext("Component", Config.Coin.Name);
-
-            GenerateInstanceId(); // generate unique instance id for the pool.
-
-            try
-            {
-                if (!InitAlgorithm()) // init the hash algorithm required by the coin.
-                    return;
-
-                InitDaemon(); // init coin daemon.
-                InitStorage(); // init storage support.
-                InitManagers(); // init managers.
-                InitServers(); // init servers.
-                Enabled = true;
-            }
-            catch (Exception e)
-            {
-                _logger.Error("Error initializing pool; {0:l}", e);
-                Enabled = false;
-            }
         }
 
         private bool InitAlgorithm()
@@ -249,8 +232,23 @@ namespace CoiniumServ.Pools
 
         public void Start()
         {
-            if (Enabled == false)
-                return;
+            try
+            {
+                GenerateInstanceId(); // generate unique instance id for the pool.
+
+                if (!InitAlgorithm()) // init the hash algorithm required by the coin.
+                    return;
+
+                InitDaemon(); // init coin daemon.
+                InitStorage(); // init storage support.
+                InitManagers(); // init managers.
+                InitServers(); // init servers.
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Error initializing pool; {0:l}", e);
+                Enabled = false;
+            }
 
             if (!Config.Valid)
             {

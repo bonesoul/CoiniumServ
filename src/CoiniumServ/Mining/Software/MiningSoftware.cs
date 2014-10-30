@@ -34,7 +34,7 @@ namespace CoiniumServ.Mining.Software
 
         public Version Version { get; private set; }
 
-        public IList<IHashAlgorithm> Algorithms { get; private set; }
+        public IList<IHashAlgorithmStatistics> Algorithms { get; private set; }
 
         public Platforms Platforms { get; private set; }
 
@@ -49,7 +49,7 @@ namespace CoiniumServ.Mining.Software
             if(config.Version!=null)
                 Version = new Version(config.Version);
 
-            Algorithms = new List<IHashAlgorithm>();
+            Algorithms = new List<IHashAlgorithmStatistics>();
             foreach(var entry in config.Algorithms)
             {
                 var algorithm = algorithmManager.Get(entry);

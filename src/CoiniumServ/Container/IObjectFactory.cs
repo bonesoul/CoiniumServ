@@ -132,6 +132,8 @@ namespace CoiniumServ.Container
 
         IAlgorithmManager GetAlgorithmManager();
 
+        IHashAlgorithmStatistics GetHashAlgorithmStatistics(string name);
+
         #endregion
 
         #region storage objects

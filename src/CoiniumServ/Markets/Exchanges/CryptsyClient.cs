@@ -68,8 +68,8 @@ namespace CoiniumServ.Markets.Exchanges
                         var entry = new MarketData
                         {
                             Exchange = Exchange.Cryptsy,
-                            MarketCurrency = kvp.Value.primarycode,
-                            BaseCurrency = kvp.Value.secondarycode,
+                            MarketCurrency = kvp.Value.primarycode.ToUpperInvariant(),
+                            BaseCurrency = kvp.Value.secondarycode.ToUpperInvariant(),
                             Ask = double.Parse(sellOrders.First().price, CultureInfo.InvariantCulture),
                             Bid = double.Parse(buyOrders.First().price, CultureInfo.InvariantCulture),
                             VolumeInMarketCurrency = double.Parse(kvp.Value.volume, CultureInfo.InvariantCulture),

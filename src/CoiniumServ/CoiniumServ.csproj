@@ -147,6 +147,8 @@
   <ItemGroup>
     <Compile Include="Accounts\AccountManager.cs" />
     <Compile Include="Accounts\IAccountManager.cs" />
+    <Compile Include="Algorithms\HashAlgorithmStatistics.cs" />
+    <Compile Include="Algorithms\IHashAlgorithmStatistics.cs" />
     <Compile Include="Algorithms\Implementations\ScryptN.cs" />
     <Compile Include="Blocks\BlockProcessor.cs" />
     <Compile Include="Blocks\IBlockProcessor.cs" />
@@ -191,7 +193,6 @@
     <Compile Include="Algorithms\Implementations\Fresh.cs" />
     <Compile Include="Algorithms\Implementations\Fugue.cs" />
     <Compile Include="Algorithms\Implementations\Groestl.cs" />
-    <Compile Include="Algorithms\HashAlgorithmBase.cs" />
     <Compile Include="Algorithms\IAlgorithmManager.cs" />
     <Compile Include="Algorithms\Implementations\Keccak.cs" />
     <Compile Include="Algorithms\Implementations\Nist5.cs" />

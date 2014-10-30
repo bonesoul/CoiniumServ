@@ -25,9 +25,9 @@ using HashLib;
 
 namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Skein : HashAlgorithmBase
+    public sealed class Skein : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
         private readonly IHash _hasher;
 
@@ -38,7 +38,7 @@ namespace CoiniumServ.Algorithms.Implementations
             Multiplier = 1;
         }
 
-        public override byte[] Hash(byte[] input)
+        public byte[] Hash(byte[] input)
         {
             return _hasher.ComputeBytes(input).GetBytes();
         }
