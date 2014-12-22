@@ -67,8 +67,9 @@ namespace CoiniumServ.Pools
             // run the initialized pools
             foreach (var pool in _storage)
             {
-                var t = new Thread(pool.Initialize);
-                t.Start();
+                // var t = new Thread(pool.Initialize);
+                // t.Start();
+                pool.Initialize();
             }
         }
 
