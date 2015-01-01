@@ -144,7 +144,7 @@ Start reading by these;
 
 ### License
 
-Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coiniumserv.com
+Copyright (C) 2013 - 2015, CoiniumServ Project - http://www.coiniumserv.com
 
 This software is dual-licensed: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
