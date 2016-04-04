@@ -1,6 +1,6 @@
 {
     "name": "Zetacoin",
-    "symbol": "ZTC",
+    "symbol": "ZET",
     "algorithm": "sha256",
 	"site": "http://zetacoin.cc/",
     "blockExplorer": {

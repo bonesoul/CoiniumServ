@@ -21,24 +21,25 @@
 // 
 #endregion
 
+using System;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Shavite3 : HashAlgorithmBase
+    public sealed class Fugue : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
         private readonly IHash _hasher;
 
-        public Shavite3()
+        public Fugue()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateSHAvite3_512();
+            _hasher = HashFactory.Crypto.SHA3.CreateFugue256();
 
-            Multiplier = 1;
+            Multiplier = (UInt32)Math.Pow(2, 8);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public byte[] Hash(byte[] input)
         {
             return _hasher.ComputeBytes(input).GetBytes();
         }

@@ -32,7 +32,7 @@ namespace CoiniumServ.Server.Web.Models
     {
         public IReadOnlyCollection<IPool> Pools { get; set; }
 
-        public IReadOnlyCollection<IHashAlgorithm> Algorithms { get; set; }
+        public IReadOnlyCollection<IHashAlgorithmStatistics> Algorithms { get; set; }
 
         public IStatisticsManager Statistics { get; set; }
     }

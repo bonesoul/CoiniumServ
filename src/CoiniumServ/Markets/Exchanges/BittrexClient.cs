@@ -58,8 +58,8 @@ namespace CoiniumServ.Markets.Exchanges
                         var entry = new MarketData
                         {
                             Exchange = Exchange.Bittrex,
-                            MarketCurrency = temp.Last(),
-                            BaseCurrency = temp.First(),
+                            MarketCurrency = temp.Last().ToUpperInvariant(),
+                            BaseCurrency = temp.First().ToUpperInvariant(),
                             Ask = market.Ask,
                             Bid = market.Bid,
                             VolumeInMarketCurrency = market.Volume,

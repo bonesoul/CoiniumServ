@@ -26,8 +26,8 @@ using CoiniumServ.Utils.Repository;
 
 namespace CoiniumServ.Algorithms
 {
-    public interface IAlgorithmManager : IRepository<IHashAlgorithm>, IJsonService
+    public interface IAlgorithmManager : IRepository<IHashAlgorithmStatistics>, IJsonService
     {
-        IHashAlgorithm Get(string name);
+        IHashAlgorithmStatistics Get(string name);
     }
 }

@@ -21,27 +21,41 @@
 // 
 #endregion
 
-using System;
+using System.Collections.Generic;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Blake : HashAlgorithmBase
+    public sealed class Nist5 : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
-        private readonly IHash _hasher;
+        private readonly List<IHash> _hashers;
 
-        public Blake()
+        public Nist5()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateBlake256();
+            _hashers = new List<IHash>
+            {
+                HashFactory.Crypto.SHA3.CreateBlake512(),
+                HashFactory.Crypto.SHA3.CreateGroestl512(),
+                HashFactory.Crypto.SHA3.CreateSkein512(),
+                HashFactory.Crypto.SHA3.CreateJH512(),
+                HashFactory.Crypto.SHA3.CreateKeccak512()
+            };
 
-            Multiplier = (UInt32) Math.Pow(2, 8);
+            Multiplier = 1;
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public byte[] Hash(byte[] input)
         {
-            return _hasher.ComputeBytes(input).GetBytes();
+            var buffer = input;
+
+            foreach (var hasher in _hashers)
+            {
+                buffer = hasher.ComputeBytes(buffer).GetBytes();
+            }
+
+            return buffer;
         }
     }
 }

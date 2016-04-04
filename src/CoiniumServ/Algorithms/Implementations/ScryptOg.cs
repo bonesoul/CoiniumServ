@@ -21,39 +21,43 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using HashLib;
+using System;
+using CryptSharp.Utility;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Fresh : HashAlgorithmBase
+    public sealed class ScryptOg : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
-        private readonly List<IHash> _hashers;
+        /// <summary>
+        /// N parameter - CPU/memory cost parameter.
+        /// </summary>
+        private readonly int _n;
 
-        public Fresh()
+        /// <summary>
+        /// R parameter - block size.
+        /// </summary>
+        private readonly int _r;
+
+        /// <summary>
+        /// P - parallelization parameter -  a large value of p can increase computational 
+        /// cost of scrypt without increasing the memory usage.
+        /// </summary>
+        private readonly int _p;
+
+        public ScryptOg()
         {
-            _hashers = new List<IHash>
-            {
-                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
-                HashFactory.Crypto.SHA3.CreateSIMD512(),
-                HashFactory.Crypto.SHA3.CreateEcho512(),
-            };
+            _n = 64;
+            _r = 1;
+            _p = 1;
 
-            Multiplier = 1;
+            Multiplier = (UInt32)Math.Pow(2, 16);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public byte[] Hash(byte[] input)
         {
-            var buffer = input;
-
-            foreach (var hasher in _hashers)
-            {
-                buffer = hasher.ComputeBytes(buffer).GetBytes();
-            }
-
-            return buffer;
+            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
         }
     }
 }

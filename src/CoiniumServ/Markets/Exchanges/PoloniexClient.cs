@@ -66,8 +66,8 @@ namespace CoiniumServ.Markets.Exchanges
                         var entry = new MarketData
                         {
                             Exchange = Exchange.Poloniex,
-                            MarketCurrency = temp.Last(),
-                            BaseCurrency = temp.First(),
+                            MarketCurrency = temp.Last().ToUpperInvariant(),
+                            BaseCurrency = temp.First().ToUpperInvariant(),
                             Ask = double.Parse(kvp.Value.lowestAsk, CultureInfo.InvariantCulture),
                             Bid = double.Parse(kvp.Value.highestBid, CultureInfo.InvariantCulture),
                             VolumeInMarketCurrency = double.Parse(kvp.Value.quoteVolume, CultureInfo.InvariantCulture),

@@ -21,27 +21,32 @@
 // 
 #endregion
 
-using System;
-using HashLib;
+using System.Security.Cryptography;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Groestl : HashAlgorithmBase
+    public sealed class Sha256 : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
-        private readonly IHash _hasher;
+        private readonly SHA256Managed _algorithm;
 
-        public Groestl()
+        public Sha256()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateGroestl512();
+            _algorithm = new SHA256Managed();
 
-            Multiplier = (UInt32)Math.Pow(2, 8);
+            Multiplier = 1;           
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public byte[] Hash(byte[] input)
         {
-            return _hasher.ComputeBytes(input).GetBytes();
+            return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
+        }
+
+        public byte[] DoubleDigest(byte[] input)
+        {
+            var first = _algorithm.ComputeHash(input);
+            return _algorithm.ComputeHash(first);
         }
     }
 }

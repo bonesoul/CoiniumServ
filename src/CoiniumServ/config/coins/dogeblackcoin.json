@@ -4,7 +4,7 @@
     "algorithm": "sha256",
     "site": "http://www.dogeblackcoin.info/",
     "blockExplorer": {
-        "block": "http://cryptobe.com/chain/DogeBlackCoin",
+        "block": "http://cryptobe.com/block/",
         "tx": "http://cryptobe.com/tx/",
         "address": "http://cryptobe.com/address/"
     }

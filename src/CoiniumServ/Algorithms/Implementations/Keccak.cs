@@ -21,41 +21,27 @@
 // 
 #endregion
 
-using System.Collections.Generic;
+using System;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Qubit : HashAlgorithmBase
+    public sealed class Keccak : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
-        private readonly List<IHash> _hashers;
+        private readonly IHash _hasher;
 
-        public Qubit()
+        public Keccak()
         {
-            _hashers = new List<IHash>
-            {
-                HashFactory.Crypto.SHA3.CreateLuffa512(),
-                HashFactory.Crypto.SHA3.CreateCubeHash512(),
-                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
-                HashFactory.Crypto.SHA3.CreateSIMD512(),
-                HashFactory.Crypto.SHA3.CreateEcho512()
-            };
+            _hasher = HashFactory.Crypto.SHA3.CreateKeccak256();
 
-            Multiplier = 1;
+            Multiplier = (UInt32)Math.Pow(2, 8);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public byte[] Hash(byte[] input)
         {
-            var buffer = input;
-
-            foreach (var hasher in _hashers)
-            {
-                buffer = hasher.ComputeBytes(buffer).GetBytes();
-            }
-
-            return buffer;
+            return _hasher.ComputeBytes(input).GetBytes();
         }
     }
 }

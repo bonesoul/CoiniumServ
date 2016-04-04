@@ -42,9 +42,9 @@ namespace CoiniumServ.Utils.Metrics
             _logger = Log.ForContext<MetricsManager>();
 
             Metric.Config
-                .WithReporting(c => c
-                    .WithTextFileReport(string.Format("{0}/logs/metrics/report.log", FileHelpers.AssemblyRoot),TimeSpan.FromSeconds(5))
-                    .WithCSVReports(string.Format(@"{0}/logs/metrics/csv", FileHelpers.AssemblyRoot),TimeSpan.FromSeconds(5)))
+                //.WithReporting(c => c
+                //    .WithTextFileReport(string.Format("{0}/logs/metrics/report.log", FileHelpers.AssemblyRoot),TimeSpan.FromSeconds(5))
+                //    .WithCSVReports(string.Format(@"{0}/logs/metrics/csv", FileHelpers.AssemblyRoot),TimeSpan.FromSeconds(5)))
                 .WithErrorHandler(exception => _logger.Error("Metrics error: {0}", exception.Message));
 
             if (PlatformManager.Framework == Frameworks.DotNet)

@@ -24,15 +24,15 @@
 using System.Collections.Generic;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class X17 : HashAlgorithmBase
+    public sealed class X11 : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
         private readonly List<IHash> _hashers;
 
-        public X17()
+        public X11()
         {
             _hashers = new List<IHash>
             {
@@ -47,18 +47,12 @@ namespace CoiniumServ.Algorithms
                 HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
                 HashFactory.Crypto.SHA3.CreateSIMD512(),
                 HashFactory.Crypto.SHA3.CreateEcho512(),
-                HashFactory.Crypto.SHA3.CreateHamsi512(),
-                HashFactory.Crypto.SHA3.CreateFugue512(),
-                HashFactory.Crypto.SHA3.CreateShabal512(),
-                HashFactory.Crypto.CreateWhirlpool(),
-                HashFactory.Crypto.CreateSHA512(),
-                HashFactory.Crypto.CreateHaval_5_256(),
             };
 
             Multiplier = 1;
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public byte[] Hash(byte[] input)
         {
             var buffer = input;
 

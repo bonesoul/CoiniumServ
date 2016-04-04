@@ -21,32 +21,43 @@
 // 
 #endregion
 
-using System.Security.Cryptography;
+using System;
+using CryptSharp.Utility;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Sha256:HashAlgorithmBase
+    public sealed class Scrypt : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public UInt32 Multiplier { get; private set; }
 
-        private readonly SHA256Managed _algorithm;
+        /// <summary>
+        /// N parameter - CPU/memory cost parameter.
+        /// </summary>
+        private readonly int _n;
 
-        public Sha256()
+        /// <summary>
+        /// R parameter - block size.
+        /// </summary>
+        private readonly int _r;
+
+        /// <summary>
+        /// P - parallelization parameter -  a large value of p can increase computational 
+        /// cost of scrypt without increasing the memory usage.
+        /// </summary>
+        private readonly int _p;
+
+        public Scrypt()
         {
-            _algorithm = new SHA256Managed();
+            _n = 1024;
+            _r = 1;
+            _p = 1;
 
-            Multiplier = 1;           
+            Multiplier = (UInt32) Math.Pow(2, 16);
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public byte[] Hash(byte[] input)
         {
-            return DoubleDigest(input); // coins like bitcoin (sha256d coins) uses double-digest.
-        }
-
-        public byte[] DoubleDigest(byte[] input)
-        {
-            var first = _algorithm.ComputeHash(input);
-            return _algorithm.ComputeHash(first);
+            return SCrypt.ComputeDerivedKey(input, input, _n, _r, _p, null, 32);
         }
     }
 }
