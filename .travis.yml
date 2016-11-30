@@ -4,9 +4,15 @@ env:
   - EnableNuGetPackageRestore=true
   matrix:
   - MONO_VER="3.2.7"
+    - SUFFIX_MONO=""
+  - MONO_VER="3.2.8"
+    - SUFFIX_MONO=""
   - MONO_VER="3.4.0"
+    - SUFFIX_MONO=""
   - MONO_VER="3.6.0"
+    - SUFFIX_MONO=""
   - MONO_VER="3.8.0"  
+    - SUFFIX_MONO=""
   - MONO_VER="4.2.1"  
     - SUFFIX_MONO=".102"
 before_install:
