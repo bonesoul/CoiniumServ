@@ -4,12 +4,20 @@ env:
   - EnableNuGetPackageRestore=true
   matrix:
   - MONO_VER="3.2.7"
+    - SUFFIX_MONO=""
+  - MONO_VER="3.2.8"
+    - SUFFIX_MONO=""
   - MONO_VER="3.4.0"
+    - SUFFIX_MONO=""
   - MONO_VER="3.6.0"
+    - SUFFIX_MONO=""
   - MONO_VER="3.8.0"  
+    - SUFFIX_MONO=""
+  - MONO_VER="4.2.1"  
+    - SUFFIX_MONO=".102"
 before_install:
-- wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg"
-- sudo installer -pkg "MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg" -target /
+- wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}${SUFFIX_MONO}.macos10.xamarin.x86.pkg"
+- sudo installer -pkg "MonoFramework-MDK-${MONO_VER}${SUFFIX_MONO}.macos10.xamarin.x86.pkg" -target /
 script:
 - xbuild build/CoiniumServ.sln /p:Configuration="Debug"
 - xbuild build/CoiniumServ.sln /p:Configuration="Release"
