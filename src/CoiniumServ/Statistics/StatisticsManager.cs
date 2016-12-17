@@ -93,7 +93,8 @@ namespace CoiniumServ.Statistics
             foreach (var pool in Pools)
             {
                 Hashrate += pool.Hashrate;
-                MinerCount += pool.MinerManager.Count;
+                if(pool.MinerManager != null)
+                    MinerCount += pool.MinerManager.Count;
             }
         }
         

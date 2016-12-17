@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Container.Context;
 using Nancy.TinyIoc;
 

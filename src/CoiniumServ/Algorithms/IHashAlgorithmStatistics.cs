@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // 
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
@@ -22,24 +22,32 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using CoiniumServ.Pools;
+using CoiniumServ.Server.Web.Service;
+using CoiniumServ.Utils.Repository;
+using Newtonsoft.Json;
 
 namespace CoiniumServ.Algorithms
 {
-    public interface IHashAlgorithm
+    [JsonObject(MemberSerialization.OptIn)]
+    public interface IHashAlgorithmStatistics : IRepository<IPool>, IJsonService
     {
         /// <summary>
-        /// Gets the multiplier.
+        /// Algorithm name.
         /// </summary>
-        /// <value>
-        /// The multiplier.
-        /// </value>
-        UInt32 Multiplier { get; }
+        string Name { get; }
+
+        [JsonProperty("miners")]
+        Int32 MinerCount { get; }
+
+        [JsonProperty("hashrate")]
+        UInt64 Hashrate { get; }
 
         /// <summary>
-        /// Hashes the input data.
+        /// Assigns pools that runs on the algorithm.
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        byte[] Hash(byte[] input);
+        /// <param name="pools"></param>
+        void AssignPools(IEnumerable<IPool> pools);
     }
 }

@@ -124,8 +124,16 @@ namespace CoiniumServ.Jobs.Manager
         }
 
         private void CreateAndBroadcastNewJob(bool initiatedByTimer)
-        {            
-            var job = GetNewJob(); // create a new job.
+        {
+            IJob job = null;
+
+            for (var i = 0; i < 3; i++) // try creating a new job 5 times at least.
+            {
+                job = GetNewJob(); // create a new job.
+
+                if (job != null)
+                    break;
+            }
 
             if (job != null) // if we were able to create a new job
             {
