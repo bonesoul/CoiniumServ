@@ -16,7 +16,7 @@ CoiniumServ was created to be used for Coinium.org mining pool network at first 
 
 ### Status
 
-Latest release: [v0.2.4 beta](https://github.com/bonesoul/CoiniumServ/releases/tag/v0.2.4-beta)
+Latest release: [v0.2.5 beta](https://github.com/bonesoul/CoiniumServ/releases/tag/v0.2.5-beta)
 
 ### Getting Started
 
