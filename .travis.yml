@@ -10,6 +10,9 @@ mono:
   - 4.2.4.4   
   - 4.0.5.1
   - 3.12
+dotnet: 
+  - 1.0.0-preview2-003121  
+  - 1.0.0-preview2-003131
 script:
 - xbuild build/CoiniumServ.sln /p:Configuration="Debug"
 - xbuild build/CoiniumServ.sln /p:Configuration="Release"
