@@ -1,0 +1,21 @@
+{
+
+    "name": "HamRadioCoin",
+
+    "symbol": "HAM",
+
+    "algorithm": "sha256",
+
+    "site": "http://www.hamradiocoin.com/",
+
+    "blockExplorer": {
+
+        "block": "http://www.multifaucet.tk/index.php?blockexplorer=HAM&block=",
+
+        "tx": "http://www.multifaucet.tk/index.php?blockexplorer=HAM&txid=",
+
+        "address": "http://www.multifaucet.tk/index.php?blockexplorer=HAM&address="
+
+    }
+
+}

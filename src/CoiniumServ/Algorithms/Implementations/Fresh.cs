@@ -21,26 +21,39 @@
 // 
 #endregion
 
+using System.Collections.Generic;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Skein : HashAlgorithmBase
+    public sealed class Fresh : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
-        private readonly IHash _hasher;
+        private readonly List<IHash> _hashers;
 
-        public Skein()
+        public Fresh()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateSkein512();
+            _hashers = new List<IHash>
+            {
+                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
+                HashFactory.Crypto.SHA3.CreateSIMD512(),
+                HashFactory.Crypto.SHA3.CreateEcho512(),
+            };
 
             Multiplier = 1;
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public byte[] Hash(byte[] input)
         {
-            return _hasher.ComputeBytes(input).GetBytes();
+            var buffer = input;
+
+            foreach (var hasher in _hashers)
+            {
+                buffer = hasher.ComputeBytes(buffer).GetBytes();
+            }
+
+            return buffer;
         }
     }
 }

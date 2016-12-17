@@ -21,25 +21,24 @@
 // 
 #endregion
 
-using System;
 using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Keccak : HashAlgorithmBase
+    public sealed class Sha1 : IHashAlgorithm
     {
-        public override uint Multiplier { get; protected set; }
+        public uint Multiplier { get; private set; }
 
         private readonly IHash _hasher;
 
-        public Keccak()
+        public Sha1()
         {
-            _hasher = HashFactory.Crypto.SHA3.CreateKeccak256();
+            _hasher = HashFactory.Crypto.CreateSHA512();
 
-            Multiplier = (UInt32)Math.Pow(2, 8);
+            Multiplier = 1;
         }
 
-        public override byte[] Hash(byte[] input, dynamic config)
+        public byte[] Hash(byte[] input)
         {
             return _hasher.ComputeBytes(input).GetBytes();
         }

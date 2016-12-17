@@ -22,22 +22,11 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Utils.Repository;
-using Newtonsoft.Json;
 
 namespace CoiniumServ.Algorithms
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IHashAlgorithm: IRepository<IPool>, IJsonService
+    public interface IHashAlgorithm
     {
-        /// <summary>
-        /// Algorithm name.
-        /// </summary>
-        string Name { get; }
-
         /// <summary>
         /// Gets the multiplier.
         /// </summary>
@@ -46,24 +35,11 @@ namespace CoiniumServ.Algorithms
         /// </value>
         UInt32 Multiplier { get; }
 
-        [JsonProperty("miners")]
-        Int32 MinerCount { get; }
-
-        [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
-
         /// <summary>
         /// Hashes the input data.
         /// </summary>
         /// <param name="input"></param>
-        /// <param name="config"></param>
         /// <returns></returns>
-        byte[] Hash(byte[] input, dynamic config);
-
-        /// <summary>
-        /// Assigns pools that runs on the algorithm.
-        /// </summary>
-        /// <param name="pools"></param>
-        void AssignPools(IEnumerable<IPool> pools);
+        byte[] Hash(byte[] input);
     }
 }

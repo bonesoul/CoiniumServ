@@ -24,6 +24,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
@@ -31,6 +32,8 @@ using CoiniumServ.Daemon.Errors;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Logging;
 using CoiniumServ.Utils.Extensions;
+using libCoiniumServ.Versions;
+using Metrics;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -48,6 +51,8 @@ namespace CoiniumServ.Daemon
         private readonly IRpcExceptionFactory _rpcExceptionFactory;
 
         private readonly ILogger _logger;
+
+        private static readonly Meter RequestsMeter = Metric.Meter("[Daemon] Requests", Unit.Requests, TimeUnit.Seconds);
 
         public DaemonBase(IDaemonConfig daemonConfig, ICoinConfig coinConfig, IRpcExceptionFactory rpcExceptionFactory)
         {
@@ -124,10 +129,13 @@ namespace CoiniumServ.Daemon
         /// <returns>The HTTP request object.</returns>
         private HttpWebRequest MakeHttpRequest(DaemonRequest walletRequest)
         {
+            RequestsMeter.Mark();
+
             var webRequest = (HttpWebRequest)WebRequest.Create(RpcUrl);
             webRequest.Credentials = new NetworkCredential(RpcUser, RpcPassword);
 
             // Important, otherwise the service can't deserialse your request properly
+            webRequest.UserAgent = string.Format("CoiniumServ {0:} {1:}", VersionInfo.CodeName, Assembly.GetAssembly(typeof (Program)).GetName().Version);
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
             webRequest.Timeout = _timeout;
@@ -142,19 +150,20 @@ namespace CoiniumServ.Daemon
                 using (Stream dataStream = webRequest.GetRequestStream())
                 {
                     dataStream.Write(byteArray, 0, byteArray.Length);
-                    dataStream.Close();
                 }
+
+                return webRequest;
             }
             catch (WebException webException)
             {
+                webRequest = null;
                 throw _rpcExceptionFactory.GetRpcException(webException);
             }
             catch (Exception exception)
             {
-                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);
+                webRequest = null;
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);                
             }
-
-            return webRequest;
         }
 
         /// <summary>
@@ -175,10 +184,12 @@ namespace CoiniumServ.Daemon
             }
             catch (JsonException jsonEx)
             {
+                httpWebRequest = null;
                 throw new Exception("There was a problem deserializing the response from the coin wallet.", jsonEx);
             }
             catch (Exception exception)
             {
+                httpWebRequest = null;
                 throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", exception);
             }
         }
@@ -190,22 +201,22 @@ namespace CoiniumServ.Daemon
         /// <returns>The raw JSON string.</returns>
         private string GetJsonResponse(HttpWebRequest httpWebRequest)
         {
+            WebResponse webResponse = null;
+
             try
             {
-                WebResponse webResponse = httpWebRequest.GetResponse();
-
-                // Deserialize the json response
-                using (var stream = webResponse.GetResponseStream())
+                using (webResponse = httpWebRequest.GetResponse())
                 {
-                    if (stream == null)
-                        return string.Empty;
-
-                    using (var reader = new StreamReader(stream))
+                    // Deserialize the json response
+                    using (var stream = webResponse.GetResponseStream())
                     {
-                        string result = reader.ReadToEnd();
-                        reader.Close();
+                        if (stream == null)
+                            return string.Empty;
 
-                        return result;
+                        using (var reader = new StreamReader(stream))
+                        {
+                            return reader.ReadToEnd();
+                        }
                     }
                 }
             }
@@ -218,18 +229,27 @@ namespace CoiniumServ.Daemon
                 var response = webException.Response as HttpWebResponse;
 
                 if (response == null)
-                    throw _rpcExceptionFactory.GetRpcException("Error while reading json response", webException);
+                    throw _rpcExceptionFactory.GetRpcException(webException);
 
                 var error = ReadJsonError(response); // try to read the error response.
 
-                if(error != null)
+                if (error != null)
                     throw _rpcExceptionFactory.GetRpcErrorException(error); //throw the error.
                 else
-                    throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", webException);
+                    throw _rpcExceptionFactory.GetRpcException(
+                        "An unknown exception occured while reading json response.", webException);
             }
             catch (Exception exception)
             {
-                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", exception);
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.",
+                    exception);
+            }
+            finally
+            {
+                if (webResponse != null)
+                    webResponse.Close(); //Close webresponse connection
+
+                webResponse = null; //To clear up the webresponse
             }
         }
 

@@ -125,13 +125,14 @@ namespace CoiniumServ.Container
         #region hash algorithms
 
         /// <summary>
-        /// Returns instance of the given hash algorithm
+        /// Returns the given hash algorithm helper.
         /// </summary>
-        /// <param name="algorithm"></param>
         /// <returns></returns>
-        IHashAlgorithm GetHashAlgorithm(string algorithm);
+        IHashAlgorithm GetHashAlgorithm(ICoinConfig coinConfig);
 
         IAlgorithmManager GetAlgorithmManager();
+
+        IHashAlgorithmStatistics GetHashAlgorithmStatistics(string name);
 
         #endregion
 

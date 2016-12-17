@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Algorithms;
+using CoiniumServ.Algorithms.Implementations;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;

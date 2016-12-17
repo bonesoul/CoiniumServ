@@ -20,28 +20,34 @@
 //     license or white-label it as set out in licenses/commercial.txt.
 // 
 #endregion
-namespace libCoiniumServ.Versions
+
+using System;
+using System.Collections.Generic;
+using CoiniumServ.Pools;
+using CoiniumServ.Server.Web.Service;
+using CoiniumServ.Utils.Repository;
+using Newtonsoft.Json;
+
+namespace CoiniumServ.Algorithms
 {
-    /// <summary>
-    /// Supported Versions Info.
-    /// </summary>
-    /// <remarks>Put anything related to versions here.</remarks>
-    public static class VersionInfo
+    [JsonObject(MemberSerialization.OptIn)]
+    public interface IHashAlgorithmStatistics : IRepository<IPool>, IJsonService
     {
         /// <summary>
-        /// Codename.
+        /// Algorithm name.
         /// </summary>
-        public const string CodeName = "Aurora";
+        string Name { get; }
+
+        [JsonProperty("miners")]
+        Int32 MinerCount { get; }
+
+        [JsonProperty("hashrate")]
+        UInt64 Hashrate { get; }
 
         /// <summary>
-        /// Main assembly versions info.
+        /// Assigns pools that runs on the algorithm.
         /// </summary>
-        public static class Assembly
-        {
-            /// <summary>
-            /// Main assemby version.
-            /// </summary>
-            public const string Version = "0.2.5.*";
-        }
+        /// <param name="pools"></param>
+        void AssignPools(IEnumerable<IPool> pools);
     }
 }

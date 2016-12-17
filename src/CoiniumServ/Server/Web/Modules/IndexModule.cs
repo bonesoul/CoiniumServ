@@ -33,18 +33,20 @@ namespace CoiniumServ.Server.Web.Modules
     {
         public IndexModule(IStatisticsManager statisticsManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
         {
+            var model = new IndexModel
+            {
+                Pools = poolManager.GetAllAsReadOnly(),
+                Algorithms = algorithmManager.GetAllAsReadOnly(),
+                Statistics = statisticsManager
+            };
+
             Get["/"] = _ =>
             {
                 // include common data required by layout.                
                 ViewBag.Header = "Welcome";
 
                 // return our view
-                return View["index", new IndexModel
-                {
-                    Pools = poolManager.GetAllAsReadOnly(),
-                    Algorithms = algorithmManager.GetAllAsReadOnly(),
-                    Statistics = statisticsManager
-                }];
+                return View["index", model];
             };
         }
     }

@@ -33,7 +33,7 @@ namespace CoiniumServ.Mining.Software
 
         Version Version { get; }
 
-        IList<IHashAlgorithm> Algorithms { get; }
+        IList<IHashAlgorithmStatistics> Algorithms { get; }
 
         Platforms Platforms { get; }
 

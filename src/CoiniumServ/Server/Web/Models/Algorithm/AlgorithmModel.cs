@@ -27,6 +27,6 @@ namespace CoiniumServ.Server.Web.Models.Algorithm
 {
     public class AlgorithmModel
     {
-        public IHashAlgorithm Algorithm { get; set; }
+        public IHashAlgorithmStatistics Algorithm { get; set; }
     }
 }
