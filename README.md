@@ -3,8 +3,6 @@ CoiniumServ
  
 **CoiniumServ** is a high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features stratum and vanilla services, reward, payment, share processors, vardiff & ban managers, user-friendly embedded web-server & front-end and a full-stack API.
 
-Even better multi-pool & auto-exchange module is being developed which once completed will allow you to setup pools that can pay users in any crypto-currency that can be traded over exchanges.
-
 CoiniumServ was created to be used for Coinium.org mining pool network at first hand. You can check [some of pools](https://github.com/bonesoul/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
 ### Screenshots
@@ -32,9 +30,9 @@ Start by checking our [Getting Started](https://github.com/bonesoul/CoiniumServ/
 
 ### User Support
 
-Start by reading our [FAQ](https://github.com/bonesoul/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/bonesoul/CoiniumServ/wiki/). If you need further help, join us over our IRC channel. You can also use our [issues](https://github.com/bonesoul/CoiniumServ/issues) page to report bugs.
+Start by reading our [FAQ](https://github.com/bonesoul/CoiniumServ/wiki/FAQ) and [wiki](https://github.com/bonesoul/CoiniumServ/wiki/). You can also use our [issues](https://github.com/bonesoul/CoiniumServ/issues) page to report bugs.
 
-##### Where to get support?
+##### Discussions
 
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
@@ -74,9 +72,6 @@ Here is a list of our generous donors that keep the project ongoing;
 * Multiple coin daemon connections
 * Supports POW (proof-of-work) coins
 * Supports POS (proof-of-stake) coins
- 
-##### Auto Exchange & Multipool
-* Being developed, stay tuned!
 
 ##### Algorithms
 
