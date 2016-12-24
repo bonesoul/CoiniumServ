@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using CoiniumServ.Utils.Helpers;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
 {
@@ -46,7 +47,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     var data = result.Split(':');
                     var share = double.Parse(data[0].Replace(',', '.'), CultureInfo.InvariantCulture);
-                    var worker = data[1];
+                    var worker = data[1].Substring(0, data[1].Length - 8);
 
                     if (!hashrates.ContainsKey(worker))
                         hashrates.Add(worker, 0);
