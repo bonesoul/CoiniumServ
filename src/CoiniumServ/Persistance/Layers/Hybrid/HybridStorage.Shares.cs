@@ -28,6 +28,7 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Helpers;
+using CoiniumServ.Server.Mining.Stratum;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
 {
@@ -44,7 +45,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 // add the share to round 
                 var currentKey = string.Format("{0}:shares:round:current", _coin);
-                _redisProvider.Client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
+                var miner = (IStratumMiner)share.Miner;
+                _redisProvider.Client.HIncrByFloat(currentKey, miner.Username, (double)miner.Difficulty);
 
                 // increment shares stats.
                 var statsKey = string.Format("{0}:stats", _coin);
@@ -54,7 +56,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 if (share.IsValid)
                 {
                     var hashrateKey = string.Format("{0}:hashrate", _coin);
-                    var entry = string.Format("{0}:{1}", share.Difficulty, share.Miner.Username);
+                    var randomModifier = Convert.ToString(miner.ValidShareCount, 16).PadLeft(8, '0');
+                    string modifiedUsername = miner.Username + randomModifier;
+                    var entry = string.Format("{0}:{1}", (double)miner.Difficulty, modifiedUsername);
                     _redisProvider.Client.ZAdd(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTimestamp(), entry));
                 }
 
