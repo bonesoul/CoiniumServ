@@ -26,7 +26,6 @@ namespace CoiniumServ.Markets
     public enum Exchange
     {
         Unknown,
-        Cryptsy,
         Bittrex,
         Poloniex
     }
