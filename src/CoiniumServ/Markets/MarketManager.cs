@@ -53,7 +53,7 @@ namespace CoiniumServ.Markets
 
         public int Count { get { return _storage.Count; } }
 
-        public MarketManager(IConfigManager configManager, IBittrexClient bittrexClient, IPoloniexClient poloniexClient, ICryptsyClient cryptsyClient)
+        public MarketManager(IConfigManager configManager, IBittrexClient bittrexClient, IPoloniexClient poloniexClient)
         {
             _logger = Log.ForContext<MarketManager>();
             _storage = new HashSet<IMarketData>();
@@ -63,7 +63,6 @@ namespace CoiniumServ.Markets
             _exchanges = new List<IExchangeClient>
             {
                 bittrexClient,
-                cryptsyClient,
                 poloniexClient
             };
 

@@ -159,10 +159,8 @@
     <Compile Include="Coin\Config\ICoinOptions.cs" />
     <Compile Include="Markets\Exchanges\BittrexClient.cs" />
     <Compile Include="Markets\Exchanges\ExchangeApi.cs" />
-    <Compile Include="Markets\Exchanges\CryptsyClient.cs" />
     <Compile Include="Markets\Exchange.cs" />
     <Compile Include="Markets\Exchanges\IBittrexClient.cs" />
-    <Compile Include="Markets\Exchanges\ICryptsyClient.cs" />
     <Compile Include="Markets\Exchanges\IExchangeClient.cs" />
     <Compile Include="Markets\Exchanges\IPoloniexClient.cs" />
     <Compile Include="Markets\Exchanges\PoloniexClient.cs" />
