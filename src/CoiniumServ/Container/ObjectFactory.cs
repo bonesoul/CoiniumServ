@@ -447,11 +447,6 @@ namespace CoiniumServ.Container
             return _applicationContext.Container.Resolve<IBittrexClient>();
         }
 
-        public ICryptsyClient GetCryptsyClient()
-        {
-            return _applicationContext.Container.Resolve<ICryptsyClient>();
-        }
-
         public IPoloniexClient GetPoloniexClient()
         {
             return _applicationContext.Container.Resolve<IPoloniexClient>();
