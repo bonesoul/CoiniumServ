@@ -171,6 +171,7 @@
     <Compile Include="Persistance\Layers\Hybrid\Migrations\M003FixDefaults.cs" />
     <Compile Include="Pools\IProfitInfo.cs" />
     <Compile Include="Pools\ProfitInfo.cs" />
+    <Compile Include="Server\Web\Modules\ContactModule.cs" />
     <Compile Include="Server\Web\Modules\TosModule.cs" />
     <Compile Include="Utils\Extensions\LinqExtensions.cs" />
     <Compile Include="Utils\Helpers\Humanize.cs" />
