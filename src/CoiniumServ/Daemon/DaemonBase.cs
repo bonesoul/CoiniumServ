@@ -32,7 +32,6 @@ using CoiniumServ.Daemon.Errors;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Logging;
 using CoiniumServ.Utils.Extensions;
-using libCoiniumServ.Versions;
 using Metrics;
 using Newtonsoft.Json;
 using Serilog;

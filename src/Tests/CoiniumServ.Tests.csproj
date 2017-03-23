@@ -110,10 +110,6 @@
       <Project>{5fca1e48-0751-4625-9532-cb804df55db5}</Project>
       <Name>CoiniumServ</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libCoiniumServ\libCoiniumServ.csproj">
-      <Project>{f908636c-bc75-4b93-a774-e4878f3d39af}</Project>
-      <Name>libCoiniumServ</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
