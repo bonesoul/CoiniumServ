@@ -36,7 +36,6 @@ using CoiniumServ.Server.Web.Config;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers;
 using CoiniumServ.Utils.Platform;
-using libCoiniumServ.Versions;
 using Serilog;
 
 namespace CoiniumServ.Configuration
