@@ -59,12 +59,9 @@
     </Reference>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
+	</Reference>
     <Reference Include="csredis, Version=3.2.1.0, Culture=neutral, PublicKeyToken=1afd0264bbe4a44a, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\csredis.3.2.1\lib\net40\csredis.dll</HintPath>
-    </Reference>
-    <Reference Include="Dapper, Version=1.37.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Dapper.1.37\lib\net45\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
