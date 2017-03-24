@@ -995,15 +995,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\libCoiniumServ\libCoiniumServ.csproj">
-      <Project>{f908636c-bc75-4b93-a774-e4878f3d39af}</Project>
-      <Name>libCoiniumServ</Name>
-    <ProjectReference Include="..\..\deps\csredis\CSRedis\CSRedis.csproj">
-      <Project>{d35e185e-a7e1-41e1-846c-21944f56074f}</Project>
-      <Name>CSRedis</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Server\Mining\Stratum\StratumServerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
