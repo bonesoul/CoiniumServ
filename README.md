@@ -115,8 +115,3 @@ Start reading by these;
 * [Developer's Guide](https://github.com/bonesoul/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/bonesoul/CoiniumServ/wiki/Technical-Documentation)
 
-### Commercial Licensing
-
-Alternatively, you can license this software under a commercial
-license or white-label it as set out in [licenses/commercial.txt](https://github.com/bonesoul/CoiniumServ/blob/develop/licenses/commercial.txt).
-
