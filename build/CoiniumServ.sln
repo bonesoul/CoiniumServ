@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoiniumServ", "..\src\Coini
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoiniumServ.Tests", "..\src\Tests\CoiniumServ.Tests.csproj", "{73CE2C0A-12E6-42FD-8021-C75827D014E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSRedis", "..\deps\csredis\CSRedis\CSRedis.csproj", "{D35E185E-A7E1-41E1-846C-21944F56074F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,23 +63,6 @@ Global
 		{73CE2C0A-12E6-42FD-8021-C75827D014E3}.Testing|Mixed Platforms.Build.0 = Release|Any CPU
 		{73CE2C0A-12E6-42FD-8021-C75827D014E3}.Testing|x86.ActiveCfg = Release|Any CPU
 		{73CE2C0A-12E6-42FD-8021-C75827D014E3}.Testing|x86.Build.0 = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Debug|x86.Build.0 = Debug|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Release|x86.ActiveCfg = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Release|x86.Build.0 = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Testing|Any CPU.ActiveCfg = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Testing|Any CPU.Build.0 = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Testing|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Testing|Mixed Platforms.Build.0 = Release|Any CPU
-		{D35E185E-A7E1-41E1-846C-21944F56074F}.Testing|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
