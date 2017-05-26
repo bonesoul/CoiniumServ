@@ -7,9 +7,9 @@ CoiniumServ was created to be used for Coinium.org mining pool network at first 
 ### Buy package
 You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/nz3642swqrv8s5ofisy3jpbv) if you are having difficulties doing so yourself. You can then just configure & run it.
 
-![Buy with Bitcoin](http://satoshibox.com/img/button-bitcoin.svg)
-![Buy with Litecoin](http://satoshibox.com/img/button-litecoin.svg)
-![Buy with Ether](http://satoshibox.com/img/button-ethereum.svg)
+[![Buy with Bitcoin](http://satoshibox.com/img/button-bitcoin.svg)](https://satoshibox.com/nz3642swqrv8s5ofisy3jpbv)
+[![Buy with Litecoin](http://satoshibox.com/img/button-litecoin.svg)](https://satoshibox.com/nz3642swqrv8s5ofisy3jpbv)
+[![Buy with Ether](http://satoshibox.com/img/button-ethereum.svg)](https://satoshibox.com/nz3642swqrv8s5ofisy3jpbv)
 
 **VirusTotal scan results**: [0/56 clean](https://www.virustotal.com/en/file/29a17a38785ae3a535572a08b8dce5dd937718748e9c30f2e0088ed23d157968/analysis/1495791384/)
 
