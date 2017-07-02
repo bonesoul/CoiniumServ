@@ -54,7 +54,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 {
                     return connection.Query<Account>(
                         @"SELECT a.id, w.username, a.coin_address as address FROM pool_worker as w
-                            INNER JOIN coin_addresses as a ON a.id=w.account_id
+                            INNER JOIN coin_addresses as a ON a.account_id=w.account_id
                             WHERE w.username = @username",
                         new {username}).Single();
                 }
