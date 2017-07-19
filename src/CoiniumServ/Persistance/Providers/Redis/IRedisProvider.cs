@@ -27,14 +27,12 @@
 // 
 #endregion
 
-using CSRedis;
 
 namespace CoiniumServ.Persistance.Providers.Redis
 {
     public interface IRedisProvider:IStorageProvider
     {
         bool IsConnected { get; }
-
         RedisClient Client { get; }
     }
 }

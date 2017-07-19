@@ -196,6 +196,9 @@ namespace CoiniumServ.Server.Mining.Stratum
                     case "cudaminer":
                         Software = MinerSoftware.CudaMiner;
                         break;
+					case "cpuminer":
+						Software = MinerSoftware.CPUMiner;
+						break;
                     default:
                         Software = MinerSoftware.Unknown;
                         break;

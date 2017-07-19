@@ -33,7 +33,8 @@ using System.Collections.Generic;
 namespace CoiniumServ.Daemon.Responses
 {
     /// <summary>
-    /// getblocktemplate is the new decentralized Bitcoin mining protocol, openly developed by the Bitcoin community over mid 2012. It supercedes the old getwork mining protocol.
+    /// getblocktemplate is the new decentralized Bitcoin mining protocol, 
+	/// openly developed by the Bitcoin community over mid 2012. It supercedes the old getwork mining protocol.
     /// <remarks>
     /// https://en.bitcoin.it/wiki/Getblocktemplate
     /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
