@@ -97,9 +97,6 @@
     <Reference Include="MySql.Data">
       <HintPath>packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy">
-      <HintPath>packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
-    </Reference>
     <Reference Include="Nancy.CustomErrors">
       <HintPath>packages\Nancy.CustomErrors.1.2.0.0\lib\net40\Nancy.CustomErrors.dll</HintPath>
     </Reference>
@@ -140,6 +137,9 @@
       <HintPath>packages\StackExchange.Redis.1.2.4\lib\net45\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression" />
+    <Reference Include="Nancy">
+      <HintPath>packages\Nancy.1.4.4\lib\net40\Nancy.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\AccountManager.cs" />
@@ -3487,6 +3487,9 @@
     </None>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Server\Mining\Stratum\Pool\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="BeforeBuild">
