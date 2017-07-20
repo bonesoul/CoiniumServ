@@ -77,7 +77,7 @@ namespace CoiniumServ.Pools
             if (coinMarket == null)
                 return;
 
-            var btcMarket = _marketManager.GetBestMarketFor("BTC", "USD");
+            var btcMarket = _marketManager.GetBestMarketFor("BTC", "USDT");
             if (btcMarket == null)
                 return;
 
