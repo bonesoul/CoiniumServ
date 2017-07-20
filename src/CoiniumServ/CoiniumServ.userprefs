@@ -1,0 +1,78 @@
+﻿<Properties StartupConfiguration="{5FCA1E48-0751-4625-9532-CB804DF55DB5}|Default">
+  <MonoDevelop.Ide.ItemProperties.CoiniumServ PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Utils/Helpers/TimeHelpers.cs">
+    <Files>
+      <File FileName="Markets/Exchanges/PoloniexClient.cs" Line="97" Column="1" />
+      <File FileName="Configuration/ConfigManager.cs" Line="138" Column="1" />
+      <File FileName="Program.cs" Line="100" Column="53" />
+      <File FileName="Container/ObjectFactory.cs" Line="92" Column="1" />
+      <File FileName="Pools/Pool.cs" Line="254" Column="1" />
+      <File FileName="Daemon/DaemonBase.cs" Line="64" Column="1" />
+      <File FileName="Daemon/DaemonClient.cs" Line="771" Column="1" />
+      <File FileName="Transactions/Outputs.cs" Line="60" Column="1" />
+      <File FileName="Transactions/GenerationTransaction.cs" Line="180" Column="1" />
+      <File FileName="Payments/PaymentProcessor.cs" Line="189" Column="1" />
+      <File FileName="Markets/MarketManager.cs" Line="89" Column="1" />
+      <File FileName="web/default/views/pool/pool.cshtml" Line="320" Column="63" />
+      <File FileName="Pools/ProfitInfo.cs" Line="72" Column="1" />
+      <File FileName="Utils/Extensions/LinqExtensions.cs" Line="60" Column="1" />
+      <File FileName="Logging/LogManager.cs" Line="160" Column="1" />
+      <File FileName="Utils/Helpers/TimeHelpers.cs" Line="37" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Shares/ShareManager.cs" relfile="Shares/ShareManager.cs" line="92" column="1" />
+      <Breakpoint file="/home/strannix/structure/projects/csredis/CSRedis/IRedisClientSync.cs" line="62" column="1" />
+      <Breakpoint file="/home/strannix/structure/projects/csredis/CSRedis/Internal/RedisConnector.cs" line="123" column="29" />
+      <Breakpoint file="/home/strannix/structure/projects/csredis/CSRedis/Internal/RedisConnector.cs" line="141" column="1" />
+      <Breakpoint file="/home/strannix/structure/projects/csredis/CSRedis/Internal/RedisConnector.cs" line="148" column="1" />
+      <Breakpoint file="/home/strannix/structure/projects/csredis/CSRedis/Internal/RedisListener.cs" line="30" column="51" />
+      <Breakpoint file="/home/strannix/structure/projects/csredis/CSRedis/Internal/IO/RedisWriter.cs" line="29" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Persistance/Layers/Hybrid/HybridStorage.Shares.cs" relfile="Persistance/Layers/Hybrid/HybridStorage.Shares.cs" line="120" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Program.cs" relfile="Program.cs" line="100" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Program.cs" relfile="Program.cs" line="93" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Container/ObjectFactory.cs" relfile="Container/ObjectFactory.cs" line="92" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/Pool.cs" relfile="Pools/Pool.cs" line="153" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/Pool.cs" relfile="Pools/Pool.cs" line="200" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Daemon/DaemonBase.cs" relfile="Daemon/DaemonBase.cs" line="64" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/Pool.cs" relfile="Pools/Pool.cs" line="245" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/Pool.cs" relfile="Pools/Pool.cs" line="246" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Payments/PaymentProcessor.cs" relfile="Payments/PaymentProcessor.cs" line="62" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Payments/PaymentProcessor.cs" relfile="Payments/PaymentProcessor.cs" line="189" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Configuration/ConfigManager.cs" relfile="Configuration/ConfigManager.cs" line="138" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Configuration/ConfigManager.cs" relfile="Configuration/ConfigManager.cs" line="80" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/ProfitInfo.cs" relfile="Pools/ProfitInfo.cs" line="59" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/ProfitInfo.cs" relfile="Pools/ProfitInfo.cs" line="69" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/ProfitInfo.cs" relfile="Pools/ProfitInfo.cs" line="75" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/ProfitInfo.cs" relfile="Pools/ProfitInfo.cs" line="89" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/Pool.cs" relfile="Pools/Pool.cs" line="254" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Utils/Extensions/LinqExtensions.cs" relfile="Utils/Extensions/LinqExtensions.cs" line="59" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Markets/MarketManager.cs" relfile="Markets/MarketManager.cs" line="130" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/ProfitInfo.cs" relfile="Pools/ProfitInfo.cs" line="80" column="1" />
+      <Breakpoint file="/home/strannix/structure/CoiniumServ/src/CoiniumServ/Markets/MarketManager.cs" relfile="Markets/MarketManager.cs" line="108" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="Daemon/DaemonClient.cs" line="263" offsetX="896" offsetY="4192" expression="data" liveUpdate="False" />
+    <Watch file="Server/Mining/Stratum/Sockets/SocketServer.cs" line="389" offsetX="400" offsetY="6208" expression="ClientConnected" liveUpdate="False" />
+    <Watch file="Jobs/Manager/JobManager.cs" line="167" offsetX="497" offsetY="2673" expression="generationTransaction" liveUpdate="False" />
+    <Watch file="Daemon/DaemonRequest.cs" line="71" offsetX="760" offsetY="1121" expression="Parameters" liveUpdate="False" />
+    <Watch file="Daemon/DaemonBase.cs" line="139" offsetX="654" offsetY="2188" expression="webRequest" liveUpdate="False" />
+    <Watch file="Daemon/DaemonBase.cs" line="101" offsetX="576" offsetY="1600" expression="httpWebRequest" liveUpdate="False" />
+    <Watch file="Daemon/DaemonBase.cs" line="182" offsetX="528" offsetY="2896" expression="json" liveUpdate="False" />
+    <Watch file="Daemon/DaemonBase.cs" line="209" offsetX="408" offsetY="3328" expression="webResponse" liveUpdate="False" />
+    <Watch file="Daemon/DaemonBase.cs" line="213" offsetX="595" offsetY="3392" expression="httpWebRequest" liveUpdate="False" />
+    <Watch file="Daemon/DaemonBase.cs" line="180" offsetX="720" offsetY="2864" expression="httpWebRequest" liveUpdate="False" />
+    <Watch file="Daemon/DaemonBase.cs" line="88" offsetX="904" offsetY="1392" expression="method" liveUpdate="False" />
+    <Watch file="Daemon/DaemonBase.cs" line="88" offsetX="902" offsetY="1414" expression="parameters" liveUpdate="False" />
+    <Watch file="Daemon/DaemonBase.cs" line="89" offsetX="364" offsetY="1440" expression="rpcResponse" liveUpdate="False" />
+    <Watch file="Pools/NetworkInfo.cs" line="91" offsetX="472" offsetY="1440" expression="info" liveUpdate="False" />
+    <Watch file="Pools/NetworkInfo.cs" line="112" offsetX="569" offsetY="1776" expression="miningInfo" liveUpdate="False" />
+    <Watch file="../../../projects/csredis/CSRedis/RedisClient.cs" line="213" offsetX="840" offsetY="3392" expression="_connector.IsConnected" liveUpdate="False" />
+    <Watch file="../../../projects/csredis/CSRedis/Internal/IO/RedisWriter.cs" line="27" offsetX="441" offsetY="418" expression="stream" liveUpdate="False" />
+    <Watch file="../../../projects/csredis/CSRedis/Internal/RedisConnector.cs" line="83" offsetX="485" offsetY="1211" expression="_io.Stream" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <MultiItemStartupConfigurations />
+</Properties>

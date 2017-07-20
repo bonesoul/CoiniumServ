@@ -38,7 +38,8 @@ namespace CoiniumServ.Markets.Exchanges
 {
     public class PoloniexClient : ExchangeApi, IPoloniexClient
     {
-        private const string ApiBase = "https://poloniex.com/";
+		//https://poloniex.com/public?command=returnTicker
+		private const string ApiBase = "https://poloniex.com/";
         private const string PublicApiEndpoint = "public";
         private const string PrivateApiEndpoint = "tradingApi";
 
