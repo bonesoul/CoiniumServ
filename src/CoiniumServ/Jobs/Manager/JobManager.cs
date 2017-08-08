@@ -34,6 +34,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Mining;
+using CoiniumServ.Overpool;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
@@ -46,6 +47,7 @@ namespace CoiniumServ.Jobs.Manager
     public class JobManager : IJobManager
     {
         private readonly IDaemonClient _daemonClient;
+        private readonly IOverpoolClient _overpoolClient;
 
         private readonly IJobTracker _jobTracker;
 
@@ -69,10 +71,11 @@ namespace CoiniumServ.Jobs.Manager
 
         private Timer _blockPollerTimer; // timer for polling new blocks.
 
-        public JobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
+        public JobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IOverpoolClient overpoolClient, IJobTracker jobTracker, IShareManager shareManager,
             IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             _daemonClient = daemonClient;
+            _overpoolClient = overpoolClient;
             _jobTracker = jobTracker;
             _shareManager = shareManager;
             _minerManager = minerManager;
@@ -117,6 +120,7 @@ namespace CoiniumServ.Jobs.Manager
             try
             {
                 var blockTemplate = _daemonClient.GetBlockTemplate(_poolConfig.Coin.Options.BlockTemplateModeRequired);
+                //_overpoolClient.Subscribe();
 
                 if (blockTemplate.Height == _jobTracker.Current.Height) // if network reports the same block-height with our current job.
                     return; // just return.

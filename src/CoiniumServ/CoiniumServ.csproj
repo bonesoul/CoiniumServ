@@ -112,9 +112,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="AustinHarris.JsonRpc">
-      <HintPath>packages\AustinHarris.JsonRpc.1.1.63\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
-    </Reference>
     <Reference Include="RestSharp">
       <HintPath>packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
     </Reference>
@@ -133,12 +130,16 @@
     <Reference Include="Serilog.Sinks.ColoredConsole">
       <HintPath>packages\Serilog.Sinks.ColoredConsole.3.0.1\lib\net45\Serilog.Sinks.ColoredConsole.dll</HintPath>
     </Reference>
-    <Reference Include="StackExchange.Redis">
-      <HintPath>packages\StackExchange.Redis.1.2.4\lib\net45\StackExchange.Redis.dll</HintPath>
-    </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="Nancy">
       <HintPath>packages\Nancy.1.4.4\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="AustinHarris.JsonRpc">
+      <HintPath>packages\AustinHarris.JsonRpc.1.1.70\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis">
+      <HintPath>packages\StackExchange.Redis.1.2.6\lib\net45\StackExchange.Redis.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -558,6 +559,18 @@
     <Compile Include="Persistance\Providers\Redis\RedisClient.cs" />
     <Compile Include="Persistance\Providers\Redis\IRedisClient.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisArgs.cs" />
+    <Compile Include="Overpool\Config\OverpoolConfig.cs" />
+    <Compile Include="Overpool\Config\IOverpoolConfig.cs" />
+    <Compile Include="Overpool\IOverpoolClient.cs" />
+    <Compile Include="Overpool\OverpoolClient.cs" />
+    <Compile Include="Overpool\OverpoolBase.cs" />
+    <Compile Include="Overpool\IOverpoolBase.cs" />
+    <Compile Include="Overpool\OverpoolRequest.cs" />
+    <Compile Include="Overpool\OverpoolResponse.cs" />
+    <Compile Include="Overpool\StratumClient.cs" />
+    <Compile Include="Overpool\StratumUtilities.cs" />
+    <Compile Include="Logging\Loggee.cs" />
+    <Compile Include="Logging\ILoggee.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -3488,7 +3501,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Folder Include="Server\Mining\Stratum\Pool\" />
+    <Folder Include="Overpool\" />
+    <Folder Include="Overpool\Config\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -3504,7 +3518,7 @@
       <Properties>
         <Policies>
           <VersionControlPolicy>
-            <CommitMessageStyle LastFilePostfix=":&#xA;  " IncludeDirectoryPaths="True" />
+            <CommitMessageStyle LastFilePostfix=":&#xA;  " LineAlign="0" IncludeDirectoryPaths="True" />
             <inheritsSet />
             <inheritsScope />
           </VersionControlPolicy>

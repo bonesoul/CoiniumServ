@@ -42,6 +42,8 @@ using CoiniumServ.Markets;
 using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Mining;
 using CoiniumServ.Mining.Software;
+using CoiniumServ.Overpool;
+using CoiniumServ.Overpool.Config;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
@@ -86,9 +88,11 @@ namespace CoiniumServ.Container
         /// <returns></returns>
         IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
 
+        IOverpoolClient GetOverpoolClient(IOverpoolConfig overpoolConfig, ICoinConfig coinConfig);
+
         IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager);
 
-        IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
+        IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IOverpoolClient overpoolClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
 
         IJobTracker GetJobTracker(IPoolConfig poolConfig);
 
@@ -169,6 +173,7 @@ namespace CoiniumServ.Container
         IBittrexClient GetBittrexClient();
 
         IPoloniexClient GetPoloniexClient();
+
 
         #endregion
 

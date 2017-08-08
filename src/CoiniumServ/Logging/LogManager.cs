@@ -107,7 +107,7 @@ namespace CoiniumServ.Logging
                 }
             }
             /**
-             * AnNDenisov 2017-07-16: changed file logger init because of exception*/
+             * Vagabondan 2017-07-16: changed file logger init because of exception*/
             if (config.Targets.Count(x => x.Type == LogTargetType.File) > 0) // if we have added new file loggers.
                 Log.Logger = _mainConfig.CreateLogger(); // recreate the global logger.
 
