@@ -1,0 +1,1334 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CryptSharp</name>
+    </assembly>
+    <members>
+        <member name="T:CryptSharp.LdapCrypterVariant">
+            <summary>
+            LDAP password schemes.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.SSha">
+            <summary>
+            Salted SHA-1. This is the default.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.Sha">
+            <summary>
+            Unsalted SHA-1. Used in htpasswd files.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.SSha256">
+            <summary>
+            Salted SHA-256.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.Sha256">
+            <summary>
+            Unsalted SHA-256.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.SSha384">
+            <summary>
+            Salted SHA-384.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.Sha384">
+            <summary>
+            Unsalted SHA-384.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.SSha512">
+            <summary>
+            Salted SHA-512.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.Sha512">
+            <summary>
+            Unsalted SHA-512.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.SMD5">
+            <summary>
+            Salted MD-5.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.MD5">
+            <summary>
+            Unsalted MD-5.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.Cleartext">
+            <summary>
+            No crypt operation is performed. The password can be read easily.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterVariant.Crypt">
+            <summary>
+            Any crypt algorithm.
+            
+            If you specify this for <see cref="F:CryptSharp.CrypterOption.Variant"/>,
+            you must also set <see cref="F:CryptSharp.LdapCrypterOption.Crypter"/>
+            and may optionally set <see cref="F:CryptSharp.LdapCrypterOption.CrypterOptions"/>.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.Utility.Base16Encoding">
+            <summary>
+            Base-16 binary-to-text encodings.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.Base16Encoding.Hex">
+            <summary>
+            Hexadecimal base-16 uses the numbers 0-9 for 0-9, and the letters A-F for 10-15.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.LdapCrypterOption">
+            <summary>
+            Options that modify the LDAP crypt operation.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.CrypterOption">
+            <summary>
+            Options that modify the crypt operation.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.CrypterOption.Rounds">
+            <summary>
+            The number of rounds to iterate.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.CrypterOption.Variant">
+            <summary>
+            The variant of the crypt algorithm to use.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterOption.Crypter">
+            <summary>
+            The crypter to use with <see cref="F:CryptSharp.LdapCrypterVariant.Crypt"/>.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.LdapCrypterOption.CrypterOptions">
+            <summary>
+            The options to pass to the crypter specified by <see cref="F:CryptSharp.LdapCrypterOption.Crypter"/>.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.Utility.SCrypt">
+            <summary>
+            Implements the SCrypt key derivation function.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.Utility.SCrypt.ComputeDerivedKey(System.Byte[],System.Byte[],System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32},System.Int32)">
+            <summary>
+            Computes a derived key.
+            </summary>
+            <param name="key">The key to derive from.</param>
+            <param name="salt">
+                The salt.
+                A unique salt means a unique SCrypt stream, even if the original key is identical.
+            </param>
+            <param name="cost">
+                The cost parameter, typically a fairly large number such as 262144.
+                Memory usage and CPU time scale approximately linearly with this parameter.
+            </param>
+            <param name="blockSize">
+                The mixing block size, typically 8.
+                Memory usage and CPU time scale approximately linearly with this parameter.
+            </param>
+            <param name="parallel">
+                The level of parallelism, typically 1.
+                CPU time scales approximately linearly with this parameter.
+            </param>
+            <param name="maxThreads">
+                The maximum number of threads to spawn to derive the key.
+                This is limited by the <paramref name="parallel"/> value.
+                <c>null</c> will use as many threads as possible.
+            </param>
+            <param name="derivedKeyLength">The desired length of the derived key.</param>
+            <returns>The derived key.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.SCrypt.GetEffectivePbkdf2Salt(System.Byte[],System.Byte[],System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            The SCrypt algorithm creates a salt which it then uses as a one-iteration
+            PBKDF2 key stream with SHA256 HMAC. This method lets you retrieve this intermediate salt.
+            </summary>
+            <param name="key">The key to derive from.</param>
+            <param name="salt">
+                The salt.
+                A unique salt means a unique SCrypt stream, even if the original key is identical.
+            </param>
+            <param name="cost">
+                The cost parameter, typically a fairly large number such as 262144.
+                Memory usage and CPU time scale approximately linearly with this parameter.
+            </param>
+            <param name="blockSize">
+                The mixing block size, typically 8.
+                Memory usage and CPU time scale approximately linearly with this parameter.
+            </param>
+            <param name="parallel">
+                The level of parallelism, typically 1.
+                CPU time scales approximately linearly with this parameter.
+            </param>
+            <param name="maxThreads">
+                The maximum number of threads to spawn to derive the key.
+                This is limited by the <paramref name="parallel"/> value.
+                <c>null</c> will use as many threads as possible.
+            </param>
+            <returns>The effective salt.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.SCrypt.GetStream(System.Byte[],System.Byte[],System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Creates a derived key stream from which a derived key can be read.
+            </summary>
+            <param name="key">The key to derive from.</param>
+            <param name="salt">
+                The salt.
+                A unique salt means a unique scrypt stream, even if the original key is identical.
+            </param>
+            <param name="cost">
+                The cost parameter, typically a fairly large number such as 262144.
+                Memory usage and CPU time scale approximately linearly with this parameter.
+            </param>
+            <param name="blockSize">
+                The mixing block size, typically 8.
+                Memory usage and CPU time scale approximately linearly with this parameter.
+            </param>
+            <param name="parallel">
+                The level of parallelism, typically 1.
+                CPU time scales approximately linearly with this parameter.
+            </param>
+            <param name="maxThreads">
+                The maximum number of threads to spawn to derive the key.
+                This is limited by the <paramref name="parallel"/> value.
+                <c>null</c> will use as many threads as possible.
+            </param>
+            <returns>The derived key stream.</returns>
+        </member>
+        <member name="T:CryptSharp.Utility.Base64Encoding">
+            <summary>
+            Base-64 binary-to-text encodings.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.Base64Encoding.Blowfish">
+            <summary>
+            Blowfish crypt orders characters differently from standard crypt, and begins encoding from
+            the most-significant bit instead of the least-significant bit.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.Base64Encoding.UnixCrypt">
+            <summary>
+            Traditional DES crypt base-64, as seen on Unix /etc/passwd, many websites, database servers, etc.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.Base64Encoding.UnixMD5">
+            <summary>
+            MD5, SHA256, and SHA512 crypt base-64, as seen on Unix /etc/passwd, many websites, database servers, etc.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.CrypterProperty">
+            <summary>
+            Properties inherent to particular crypt algorithms. 
+            </summary>
+        </member>
+        <member name="F:CryptSharp.CrypterProperty.MaxPasswordLength">
+            <summary>
+            The maximum password length. Bytes beyond this length will have no effect.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.CrypterProperty.MinRounds">
+            <summary>
+            The minimum number for <see cref="F:CryptSharp.CrypterOption.Rounds"/>.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.CrypterProperty.MaxRounds">
+            <summary>
+            The maximum number for <see cref="F:CryptSharp.CrypterOption.Rounds"/>.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.BlowfishCrypterVariant">
+             <summary>
+             Variations of the Blowfish crypt algorithm.
+             
+             You only need concern yourself with Blowfish crypt variations if you have passwords
+             generated pre-2011 using the C-language crypt_blowfish library or a port thereof.
+            
+             CryptSharp was implemented from specification and is not a port, and therefore never had the bug
+             these variants pertain to.
+             </summary>
+        </member>
+        <member name="F:CryptSharp.BlowfishCrypterVariant.Unspecified">
+            <summary>
+            The $2a$ prefix indicates nothing about whether or not the crypted password was created with
+            a pre-2011 version of the C-language crypt_blowfish library. Pre-2011, that library had a
+            sign extension bug affecting non-ASCII passwords.
+            
+            See <see cref="F:CryptSharp.Utility.EksBlowfishKeyExpansionFlags.EmulateCryptBlowfishSignExtensionBug"/>
+            for a more detailed explanation of the bug in question.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.BlowfishCrypterVariant.Compatible">
+            <summary>
+            The $2x$ prefix indicates that these passwords were generated with pre-2011 crypt_blowfish
+            or a port originating from it.
+            
+            If you have old crypted non-ASCII passwords you can't re-derive, and still want to verify them with CryptSharp,
+            ensure that they have the $2x$ prefix instead of the $2a$ prefix. This will indicate to CryptSharp
+            that it should emulate the bug when verifying the password.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.BlowfishCrypterVariant.Corrected">
+            <summary>
+            The $2y$ prefix indicates that pre-2011 crypt_blowfish's sign extension bug does not affect
+            these crypted passwords.
+            
+            For passwords crypted with CryptSharp, this has always been true and as such selecting this
+            variant changes the prefix but otherwise does not affect the output.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.Crypter">
+            <summary>
+            Crypts and verifies passwords. The main class for most uses of this library.
+            </summary>
+            
+            <example>
+            <code title="Crypting a Password">
+            using CryptSharp;
+            
+            // Crypt using the Blowfish crypt ("BCrypt") algorithm.
+            string cryptedPassword = Crypter.Blowfish.Crypt(password);
+            </code>
+            <code title="Checking a Password">
+            using CryptSharp;
+            
+            // Do the passwords match?
+            // You can also check a password using the Crypt method, but this approach way is easier.
+            bool matches = Crypter.CheckPassword(testPassword, cryptedPassword);
+            </code>
+            <code title="Specifying Options">
+            using CryptSharp;
+            
+            // Specify the $apr1$ Apache htpasswd variant of the MD5 crypt algorithm.
+            string cryptedPassword = Crypter.MD5.Crypt(password, new CrypterOptions()
+                {
+                    { CrypterOption.Variant, MD5CrypterVariant.Apache }
+                });
+            </code>
+            </example>
+        </member>
+        <member name="M:CryptSharp.Crypter.CheckPassword(System.String,System.String)">
+            <summary>
+            Checks if the crypted password matches the given password string.
+            </summary>
+            <param name="password">The password string to test. Characters are UTF-8 encoded.</param>
+            <param name="cryptedPassword">The crypted password.</param>
+            <returns><c>true</c> if the passwords match.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.CheckPassword(System.Byte[],System.String)">
+            <summary>
+            Checks if the crypted password matches the given password bytes.
+            </summary>
+            <param name="password">The password bytes to test.</param>
+            <param name="cryptedPassword">The crypted password.</param>
+            <returns><c>true</c> if the passwords match.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.GetCrypter(System.String)">
+            <summary>
+            Searches for a crypt algorithm compatible with the specified crypted password or prefix.
+            </summary>
+            <param name="cryptedPassword">The crypted password or prefix.</param>
+            <returns>A compatible crypt algorithm.</returns>
+            <exception cref="T:System.ArgumentException">No compatible crypt algorithm was found.</exception>
+        </member>
+        <member name="M:CryptSharp.Crypter.CanCrypt(System.String)">
+            <summary>
+            Checks if the particular crypt algorithm is compatible with the salt string or crypted password.
+            </summary>
+            <param name="salt">The salt string or crypted password.</param>
+            <returns><c>true</c> if the algorithm is compatible.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.Crypt(System.String)">
+            <summary>
+            Creates a one-way password hash (crypted password) from a password string.
+            </summary>
+            <param name="password">The password string. Characters are UTF-8 encoded.</param>
+            <returns>The crypted password.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.Crypt(System.String,CryptSharp.CrypterOptions)">
+            <summary>
+            Creates a one-way password hash (crypted password) from a password string.
+            Options modify the crypt operation.
+            </summary>
+            <param name="password">The password string. Characters are UTF-8 encoded.</param>
+            <param name="options">Options modifying the crypt operation.</param>
+            <returns>The crypted password.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.Crypt(System.String,System.String)">
+            <summary>
+            Creates a one-way password hash (crypted password) from a password string and a salt string.
+            
+            The salt can be produced using <see cref="M:CryptSharp.Crypter.GenerateSalt(CryptSharp.CrypterOptions)"/>.
+            Because crypted passwords take the form <c>algorithm+salt+hash</c>, if you pass
+            a crypted password as the salt parameter, the same algorithm and salt will be used to re-crypt the
+            password. Since randomness comes from the salt, the same salt means the same hash, and so the
+            same crypted password will result. Therefore, this method can both generate *and* verify crypted passwords.
+            </summary>
+            <param name="password">The password string. Characters are UTF-8 encoded.</param>
+            <param name="salt">The salt string or crypted password containing a salt string.</param>
+            <returns>The crypted password.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.Crypt(System.Byte[])">
+            <summary>
+            Creates a one-way password hash (crypted password) from password bytes.
+            </summary>
+            <param name="password">The bytes of the password.</param>
+            <returns>The crypted password.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.Crypt(System.Byte[],CryptSharp.CrypterOptions)">
+            <summary>
+            Creates a one-way password hash (crypted password) from password bytes.
+            Options modify the crypt operation.
+            </summary>
+            <param name="password">The bytes of the password.</param>
+            <param name="options">Options modifying the crypt operation.</param>
+            <returns>The crypted password.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.Crypt(System.Byte[],System.String)">
+            <summary>
+            Creates a one-way password hash (crypted password) from password bytes and a salt string.
+            
+            The salt can be produced using <see cref="M:CryptSharp.Crypter.GenerateSalt(CryptSharp.CrypterOptions)"/>.
+            Because crypted passwords take the form <c>algorithm+salt+hash</c>, if you pass
+            a crypted password as the salt parameter, the same algorithm and salt will be used to re-crypt the
+            password. Since randomness comes from the salt, the same salt means the same hash, and so the
+            same crypted password will result. Therefore, this method can both generate *and* verify crypted passwords.
+            </summary>
+            <param name="password">The bytes of the password.</param>
+            <param name="salt">The salt string or crypted password containing a salt string.</param>
+            <returns>The crypted password.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.GenerateSalt">
+            <summary>
+            Generates a salt string with default options.
+            The purpose of salt is to make dictionary attacks against a whole password database much harder,
+            by causing the crypted password to be different even if two users have the same uncrypted password.
+            </summary>
+            <returns>The salt string.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.GenerateSalt(System.Int32)">
+            <summary>
+            Generates a salt string using the specified number of rounds.
+            The purpose of salt is to make dictionary attacks against a whole password database much harder,
+            by causing the crypted password to be different even if two users have the same uncrypted password.
+            </summary>
+            <returns>The salt string.</returns>
+        </member>
+        <member name="M:CryptSharp.Crypter.GenerateSalt(CryptSharp.CrypterOptions)">
+            <summary>
+            Generates a salt string. Options are used to modify the salt generation.
+            The purpose of salt is to make dictionary attacks against a whole password database much harder,
+            by causing the crypted password to be different even if two users have the same uncrypted password.
+            
+            Randomness in a crypted password comes from its salt string, as do all recorded options.
+            The same salt string, when combined with the same password, will generate the same crypted password.
+            If the salt string differs, the same password will generate a different crypted password
+            (crypted passwords have the form <c>algorithm+salt+hash</c>, so the salt is always carried along
+            with the crypted password).
+            </summary>
+            <param name="options">Options modifying the salt generation.</param>
+            <returns>The salt string.</returns>
+        </member>
+        <member name="P:CryptSharp.Crypter.Blowfish">
+            <summary>
+            Blowfish crypt, sometimes called BCrypt. A very good choice.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Crypter.TraditionalDes">
+            <summary>
+            Traditional DES crypt.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Crypter.ExtendedDes">
+            <summary>
+            Extended DES crypt.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Crypter.Ldap">
+            <summary>
+            LDAP schemes such as {SHA}.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Crypter.MD5">
+            <summary>
+            MD5 crypt, supported by nearly all systems. A variant supports Apache htpasswd files.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Crypter.Phpass">
+            <summary>
+            PHPass crypt. Used by WordPress. Variants support phpBB and Drupal 7+.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Crypter.Sha256">
+            <summary>
+            SHA256 crypt. A reasonable choice if you cannot use Blowfish crypt for policy reasons.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Crypter.Sha512">
+            <summary>
+            SHA512 crypt. A reasonable choice if you cannot use Blowfish crypt for policy reasons.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Crypter.Properties">
+            <summary>
+            Properties inherent to the particular crypt algorithm. These cannot be modified.
+            See <see cref="T:CryptSharp.CrypterProperty"/> for possible keys.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.LdapCrypter">
+            <summary>
+            LDAP schemes such as {SHA}.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.LdapCrypter.#ctor(CryptSharp.CrypterEnvironment)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CryptSharp.LdapCrypter"/> class.
+            The specified environment is searched for the {CRYPT} password scheme.
+            </summary>
+            <param name="cryptSchemeEnvironment">The environment for the {CRYPT} passwod scheme.</param>
+        </member>
+        <member name="M:CryptSharp.LdapCrypter.GenerateSalt(CryptSharp.CrypterOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.LdapCrypter.CanCrypt(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.LdapCrypter.Crypt(System.Byte[],System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:CryptSharp.CrypterEnvironment">
+            <summary>
+            Lets you customize the list of crypt algorithms your program will accept.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.CrypterEnvironment.CheckPassword(System.String,System.String)">
+            <summary>
+            Checks if the crypted password matches the given password string.
+            </summary>
+            <param name="password">The password string to test. Characters are UTF-8 encoded.</param>
+            <param name="cryptedPassword">The crypted password.</param>
+            <returns><c>true</c> if the passwords match.</returns>
+        </member>
+        <member name="M:CryptSharp.CrypterEnvironment.CheckPassword(System.Byte[],System.String)">
+            <summary>
+            Checks if the crypted password matches the given password bytes.
+            </summary>
+            <param name="password">The password bytes to test.</param>
+            <param name="cryptedPassword">The crypted password.</param>
+            <returns><c>true</c> if the passwords match.</returns>
+        </member>
+        <member name="M:CryptSharp.CrypterEnvironment.GetCrypter(System.String)">
+            <summary>
+            Searches for a crypt algorithm compatible with the specified crypted password or prefix.
+            </summary>
+            <param name="cryptedPassword">The crypted password or prefix.</param>
+            <returns>A compatible crypt algorithm.</returns>
+            <exception cref="T:System.ArgumentException">No compatible crypt algorithm was found.</exception>
+        </member>
+        <member name="M:CryptSharp.CrypterEnvironment.TryGetCrypter(System.String,CryptSharp.Crypter@)">
+            <summary>
+            Searches for a crypt algorithm compatible with the specified crypted password or prefix,
+            </summary>
+            <param name="cryptedPassword">The crypted password or prefix.</param>
+            <param name="crypter">A compatible crypt algorithm.</param>
+            <returns><c>true</c> if a compatible crypt algorithm was found.</returns>
+        </member>
+        <member name="M:CryptSharp.CrypterEnvironment.MakeReadOnly">
+            <summary>
+            Prevents future changes to the environment.
+            </summary>
+            <returns>The same <see cref="T:CryptSharp.CrypterEnvironment"/>.</returns>
+        </member>
+        <member name="P:CryptSharp.CrypterEnvironment.Crypters">
+            <summary>
+            The collection of crypters in this environment.
+            
+            
+            </summary>
+        </member>
+        <member name="P:CryptSharp.CrypterEnvironment.Default">
+            <summary>
+            The default environment.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.CrypterEnvironment.IsReadOnly">
+            <summary>
+            <c>true</c> if the environment cannot be changed.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.Utility.BaseEncoding">
+            <summary>
+            Performs generic binary-to-text encoding.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetMaxCharCount(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetChars(System.Byte[],System.Int32,System.Int32,System.Char[],System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetChars(System.Byte[],System.Int32,System.Int32,System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Converts bytes from their binary representation to a text representation.
+            </summary>
+            <param name="bytes">An input array of bytes.</param>
+            <param name="byteIndex">The index of the first byte.</param>
+            <param name="byteCount">The number of bytes to read.</param>
+            <param name="chars">An output array of characters.</param>
+            <param name="charIndex">The index of the first character.</param>
+            <param name="charCount">The number of characters to write.</param>
+            <returns>The number of characters written.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetCharCount(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetMaxByteCount(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetBytes(System.Char[],System.Int32,System.Int32,System.Byte[],System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetBytes(System.Char[],System.Int32,System.Int32,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Converts characters from their text representation to a binary representation.
+            </summary>
+            <param name="chars">An input array of characters.</param>
+            <param name="charIndex">The index of the first character.</param>
+            <param name="charCount">The number of characters to read.</param>
+            <param name="bytes">An output array of bytes.</param>
+            <param name="byteIndex">The index of the first byte.</param>
+            <param name="byteCount">The number of bytes to write.</param>
+            <returns>The number of bytes written.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetByteCount(System.Char[],System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.#ctor(System.String,System.Boolean)">
+            <summary>
+            Defines a binary-to-text encoding.
+            </summary>
+            <param name="characterSet">The characters of the encoding.</param>
+            <param name="msbComesFirst">
+                <c>true</c> to begin with the most-significant bit of each byte.
+                Otherwise, the encoding begins with the least-significant bit.
+            </param>
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.#ctor(System.String,System.Boolean,System.Collections.Generic.IDictionary{System.Char,System.Int32},CryptSharp.Utility.BaseEncodingDecodeFilterCallback)">
+            <summary>
+            Defines a binary-to-text encoding.
+            Additional decode characters let you add aliases, and a filter callback can be used
+            to make decoding case-insensitive among other things.
+            </summary>
+            <param name="characterSet">The characters of the encoding.</param>
+            <param name="msbComesFirst">
+                <c>true</c> to begin with the most-significant bit of each byte.
+                Otherwise, the encoding begins with the least-significant bit.
+            </param>
+            <param name="additionalDecodeCharacters">
+                A dictionary of alias characters, or <c>null</c> if no aliases are desired.
+            </param>
+            <param name="decodeFilterCallback">
+                A callback to map arbitrary characters onto the characters that can be decoded.
+            </param>
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetValue(System.Char)">
+            <summary>
+            Gets the value corresponding to the specified character.
+            </summary>
+            <param name="character">A character.</param>
+            <returns>A value, or <c>-1</c> if the character is not part of the encoding.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.BaseEncoding.GetChar(System.Int32)">
+            <summary>
+            Gets the character corresponding to the specified value.
+            </summary>
+            <param name="value">A value.</param>
+            <returns>A character.</returns>
+        </member>
+        <member name="P:CryptSharp.Utility.BaseEncoding.BitMask">
+            <summary>
+            The bit mask for a single character in the current encoding.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.BaseEncoding.BitsPerCharacter">
+            <summary>
+            The number of bits per character in the current encoding.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.BaseEncoding.MsbComesFirst">
+            <summary>
+            <c>true</c> if the encoding begins with the most-significant bit of each byte.
+            Otherwise, the encoding begins with the least-significant bit.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.CrypterOptionKey">
+            <summary>
+            The key type for options.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.CrypterOptionKey.#ctor(System.String,System.Type)">
+            <summary>
+            Creates a new option key.
+            </summary>
+            <param name="description">A description of the option.</param>
+            <param name="valueType">The type of the option's value.</param>
+        </member>
+        <member name="M:CryptSharp.CrypterOptionKey.CheckValue(System.Object)">
+            <summary>
+            Throws an exception if the value is incompatible with this option.
+            </summary>
+            <param name="value">The value to check.</param>
+        </member>
+        <member name="M:CryptSharp.CrypterOptionKey.OnCheckValue(System.Object)">
+            <summary>
+            Override this to provide additional validation for an option.
+            </summary>
+            <param name="value">The value to check.</param>
+        </member>
+        <member name="M:CryptSharp.CrypterOptionKey.ToString">
+            <inheritdoc />
+        </member>
+        <member name="P:CryptSharp.CrypterOptionKey.Description">
+            <summary>
+            A description of the option.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.CrypterOptionKey.ValueType">
+            <summary>
+            The type of the option's value.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.Utility.Salsa20Core">
+            <summary>
+            Implements the Salsa20 hash function.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.Utility.Salsa20Core.Compute(System.Int32,System.UInt32[],System.Int32,System.UInt32[],System.Int32)">
+            <summary>
+            Applies the Salsa20 hash function.
+            It maps a 16 element input to an output of the same size.
+            </summary>
+            <param name="rounds">The number of rounds. SCrypt uses 8.</param>
+            <param name="input">The input buffer.</param>
+            <param name="inputOffset">The offset into the input buffer.</param>
+            <param name="output">The output buffer.</param>
+            <param name="outputOffset">The offset into the output buffer.</param>
+        </member>
+        <member name="T:CryptSharp.Sha256Crypter">
+            <summary>
+            SHA256 crypt. A reasonable choice if you cannot use Blowfish crypt for policy reasons.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.ShaCrypter">
+            <summary>
+            Base class for Sha256Crypter and Sha512Crypter. 
+            </summary>
+        </member>
+        <member name="M:CryptSharp.ShaCrypter.GenerateSalt(CryptSharp.CrypterOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.ShaCrypter.CanCrypt(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.ShaCrypter.Crypt(System.Byte[],System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:CryptSharp.ShaCrypter.Properties">
+            <inheritdoc />
+        </member>
+        <member name="T:CryptSharp.Utility.SecureComparison">
+            <summary>
+            Provides comparison methods resistant to timing attack.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.Utility.SecureComparison.Equals(System.String,System.String)">
+            <summary>
+            Compares two strings in a timing-insensitive manner.
+            </summary>
+            <param name="potentialAttackerSuppliedString">The string controlled by a potential attacker.</param>
+            <param name="referenceString">The string not controlled by a potential attacker.</param>
+            <returns><c>true</c> if the strings are equal.</returns>
+            <remarks>
+                If the reference string is zero-length, this method does not protect it against timing attacks.
+                If the reference string is extremely long, memory caching effects may reveal that fact.
+            </remarks>
+        </member>
+        <member name="T:CryptSharp.Utility.BlowfishCipher">
+            <summary>
+            Performs low-level encryption and decryption using the Blowfish cipher.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.Dispose">
+            <summary>
+            Clears all memory used by the cipher.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.Create(System.Byte[])">
+            <summary>
+            Creates a Blowfish cipher using the provided key.
+            </summary>
+            <param name="key">The Blowfish key. This must be between 4 and 56 bytes.</param>
+            <returns>A Blowfish cipher.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.CreateEks(System.Byte[],System.Byte[],System.Int32)">
+            <summary>
+            Performs an Expensive Key Schedule (EKS) Blowfish key expansion and
+            creates a Blowfish cipher using the result.
+            </summary>
+            <param name="key">
+                The key. This must be between 1 and 72 bytes.
+                Unlike <see cref="T:CryptSharp.BlowfishCrypter"/>, this method does NOT automatically add a null byte to the key.
+            </param>
+            <param name="salt">The salt. This must be 16 bytes.</param>
+            <param name="cost">
+                The expansion cost. This is a value between 4 and 31,
+                specifying the logarithm of the number of iterations.
+            </param>
+            <returns>A Blowfish cipher.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.CreateEks(System.Byte[],System.Byte[],System.Int32,CryptSharp.Utility.EksBlowfishKeyExpansionFlags)">
+            <summary>
+            Performs an Expensive Key Schedule (EKS) Blowfish key expansion and
+            creates a Blowfish cipher using the result. Flags may modify the key expansion.
+            </summary>
+            <param name="key">
+                The key. This must be between 1 and 72 bytes.
+                Unlike <see cref="T:CryptSharp.BlowfishCrypter"/>, this method does NOT automatically add a null byte to the key.
+            </param>
+            <param name="salt">The salt. This must be 16 bytes.</param>
+            <param name="cost">
+                The expansion cost. This is a value between 4 and 31,
+                specifying the logarithm of the number of iterations.
+            </param>
+            <param name="flags">Flags modifying the key expansion.</param>
+            <returns>A Blowfish cipher.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.BCrypt(System.Byte[],System.Byte[],System.Int32)">
+            <summary>
+            Uses the given key, salt, and cost to generate a BCrypt hash.
+            </summary>
+            <param name="key">
+                The key. This must be between 1 and 72 bytes.
+                Unlike <see cref="T:CryptSharp.BlowfishCrypter"/>, this method does NOT automatically add a null byte to the key.
+            </param>
+            <param name="salt">The salt. This must be 16 bytes.</param>
+            <param name="cost">
+                The expansion cost. This is a value between 4 and 31,
+                specifying the logarithm of the number of iterations.
+            </param>
+            <returns>A BCrypt hash.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.BCrypt(System.Byte[],System.Byte[],System.Int32,CryptSharp.Utility.EksBlowfishKeyExpansionFlags)">
+            <summary>
+            Uses the given key, salt, and cost to generate a BCrypt hash.
+            Flags may modify the key expansion.
+            </summary>
+            <param name="key">
+                The key. This must be between 1 and 72 bytes.
+                Unlike <see cref="T:CryptSharp.BlowfishCrypter"/>, this method does NOT automatically add a null byte to the key.
+            </param>
+            <param name="salt">The salt. This must be 16 bytes.</param>
+            <param name="cost">
+                The expansion cost. This is a value between 4 and 31,
+                specifying the logarithm of the number of iterations.
+            </param>
+            <param name="flags">Flags modifying the key expansion.</param>
+            <returns>A BCrypt hash.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.BCrypt">
+            <summary>
+            Uses the cipher to generate a BCrypt hash.
+            </summary>
+            <returns>A BCrypt hash.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.Encipher(System.Byte[],System.Int32)">
+            <summary>
+            Enciphers eight bytes of data in-place.
+            </summary>
+            <param name="buffer">The buffer containing the data.</param>
+            <param name="offset">The offset of the first byte to encipher.</param>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.Encipher(System.Byte[],System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Enciphers eight bytes of data from one buffer and places the result in another buffer.
+            </summary>
+            <param name="inputBuffer">The buffer to read plaintext data from.</param>
+            <param name="inputOffset">The offset of the first plaintext byte.</param>
+            <param name="outputBuffer">The buffer to write enciphered data to.</param>
+            <param name="outputOffset">The offset at which to place the first enciphered byte.</param>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.Encipher(System.UInt32@,System.UInt32@)">
+            <summary>
+            Enciphers eight bytes of data.
+            </summary>
+            <param name="xl">The first four bytes.</param>
+            <param name="xr">The last four bytes.</param>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.Decipher(System.Byte[],System.Int32)">
+            <summary>
+            Reverses the encipherment of eight bytes of data in-place.
+            </summary>
+            <param name="buffer">The buffer containing the data.</param>
+            <param name="offset">The offset of the first byte to decipher.</param>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.Decipher(System.Byte[],System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Reverses the encipherment of eight bytes of data from one buffer and places the result in another buffer.
+            </summary>
+            <param name="inputBuffer">The buffer to read enciphered data from.</param>
+            <param name="inputOffset">The offset of the first enciphered byte.</param>
+            <param name="outputBuffer">The buffer to write plaintext data to.</param>
+            <param name="outputOffset">The offset at which to place the first plaintext byte.</param>
+        </member>
+        <member name="M:CryptSharp.Utility.BlowfishCipher.Decipher(System.UInt32@,System.UInt32@)">
+            <summary>
+            Reverses the encipherment of eight bytes of data.
+            </summary>
+            <param name="xl">The first four bytes.</param>
+            <param name="xr">The last four bytes.</param>
+        </member>
+        <member name="P:CryptSharp.Utility.BlowfishCipher.BCryptMagic">
+            <summary>
+            The special string used encrypted in the BCrypt algorithm.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.BlowfishCipher.BCryptLength">
+            <summary>
+            The number of bytes returned by <see cref="M:CryptSharp.Utility.BlowfishCipher.BCrypt"/>.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.BlowfishCipher.IsKeyWeak">
+            <summary>
+            A Blowfish key is weak if one of its S-boxes has a duplicate entry.
+            See http://www.schneier.com/paper-blowfish-oneyear.html for more information.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.PhpassCrypterVariant">
+            <summary>
+            Modified versions of the PHPass crypt algorithm.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.PhpassCrypterVariant.Standard">
+            <summary>
+            Standard PHPass. WordPress uses this.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.PhpassCrypterVariant.Phpbb">
+            <summary>
+            phpBB changes the prefix but the algorithm is otherwise identical.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.PhpassCrypterVariant.Drupal">
+            <summary>
+            Drupal 7+ uses SHA512 instead of MD5.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.ExtendedDesCrypter">
+            <summary>
+            Extended DES crypt.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.ExtendedDesCrypter.GenerateSalt(CryptSharp.CrypterOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.ExtendedDesCrypter.CanCrypt(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.ExtendedDesCrypter.Crypt(System.Byte[],System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:CryptSharp.ExtendedDesCrypter.Properties">
+            <inheritdoc />
+        </member>
+        <member name="T:CryptSharp.Utility.DesCipher">
+            <summary>
+            Performs low-level encryption and decryption using the DES cipher.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.Utility.DesCipher.Dispose">
+            <summary>
+            Clears all memory used by the cipher.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.Utility.DesCipher.Create(System.Byte[])">
+            <summary>
+            Creates a DES cipher using the provided key.
+            </summary>
+            <param name="key">The DES key. This must be eight bytes.</param>
+            <returns>A DES cipher.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.DesCipher.Encipher(System.Byte[],System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Enciphers eight bytes of data from one buffer and places the result in another buffer.
+            </summary>
+            <param name="inputBuffer">The buffer to read plaintext data from.</param>
+            <param name="inputOffset">The offset of the first plaintext byte.</param>
+            <param name="outputBuffer">The buffer to write enciphered data to.</param>
+            <param name="outputOffset">The offset at which to place the first enciphered byte.</param>
+        </member>
+        <member name="M:CryptSharp.Utility.DesCipher.Decipher(System.Byte[],System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Reverses the encipherment of eight bytes of data from one buffer and places the result in another buffer.
+            </summary>
+            <param name="inputBuffer">The buffer to read enciphered data from.</param>
+            <param name="inputOffset">The offset of the first enciphered byte.</param>
+            <param name="outputBuffer">The buffer to write plaintext data to.</param>
+            <param name="outputOffset">The offset at which to place the first plaintext byte.</param>
+        </member>
+        <member name="M:CryptSharp.Utility.DesCipher.Crypt(System.Byte[],System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Crypts eight bytes of data in-place.
+            </summary>
+            <param name="buffer">The buffer to crypt. For traditional DES crypt, this is zero-initialized.</param>
+            <param name="offset">The offset into the buffer.</param>
+            <param name="iterations">The number of iterations to run.</param>
+            <param name="salt">The salt, up to 24 bits.</param>
+        </member>
+        <member name="T:CryptSharp.Utility.Base32Encoding">
+            <summary>
+            Base-32 binary to text encodings.
+            
+            I needed multiple variations of base-64 for the various crypt algorithms, and base-16 (hex) for test vectors,
+            so base-32 is mostly a freebie. It's great for e-mail verifications, product keys - really anywhere you need
+            someone to type in a randomly-generated code.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.Base32Encoding.Crockford">
+            <summary>
+            Crockford base-32 is somewhat traditional, but still better than the RFC 4648 standard.
+            It is specified at http://www.crockford.com/wrmg/base32.html.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.Base32Encoding.ZBase32">
+            <summary>
+            z-base-32 is a lowercase base-32 encoding designed to be easily hand-written and read.
+            It is specified at http://www.zer7.com/files/oss/cryptsharp/zbase32.txt.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.Sha512Crypter">
+            <summary>
+            SHA512 crypt. A reasonable choice if you cannot use Blowfish crypt for policy reasons.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.Utility.Pbkdf2">
+             <summary>
+             Implements the PBKDF2 key derivation function.
+             </summary>
+             
+             <example>
+             <code title="Computing a Derived Key">
+             using System.Security.Cryptography;
+             using CryptSharp.Utility;
+             
+             // Compute a 128-byte derived key using HMAC-SHA256, 1000 iterations, and a given key and salt.
+             byte[] derivedKey = Pbkdf2.ComputeDerivedKey(new HMACSHA256(key), salt, 1000, 128);
+             </code>
+             <code title="Creating a Derived Key Stream">
+             using System.IO;
+             using System.Security.Cryptography;
+             using CryptSharp.Utility;
+            
+             // Create a stream using HMAC-SHA512, 1000 iterations, and a given key and salt.
+             Stream derivedKeyStream = new Pbkdf2(new HMACSHA512(key), salt, 1000);
+             </code>
+             </example>
+        </member>
+        <member name="M:CryptSharp.Utility.Pbkdf2.#ctor(System.Security.Cryptography.KeyedHashAlgorithm,System.Byte[],System.Int32)">
+            <summary>
+            Creates a new PBKDF2 stream.
+            </summary>
+            <param name="hmacAlgorithm">
+                The HMAC algorithm to use, for example <see cref="T:System.Security.Cryptography.HMACSHA256"/>.
+                Make sure to set <see cref="P:System.Security.Cryptography.KeyedHashAlgorithm.Key"/>.
+            </param>
+            <param name="salt">
+                The salt.
+                A unique salt means a unique PBKDF2 stream, even if the original key is identical.
+            </param>
+            <param name="iterations">The number of iterations to apply.</param>
+        </member>
+        <member name="M:CryptSharp.Utility.Pbkdf2.Read(System.Int32)">
+            <summary>
+            Reads from the derived key stream.
+            </summary>
+            <param name="count">The number of bytes to read.</param>
+            <returns>Bytes from the derived key stream.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.Pbkdf2.ComputeDerivedKey(System.Security.Cryptography.KeyedHashAlgorithm,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Computes a derived key.
+            </summary>
+            <param name="hmacAlgorithm">
+                The HMAC algorithm to use, for example <see cref="T:System.Security.Cryptography.HMACSHA256"/>.
+                Make sure to set <see cref="P:System.Security.Cryptography.KeyedHashAlgorithm.Key"/>.
+            </param>
+            <param name="salt">
+                The salt.
+                A unique salt means a unique derived key, even if the original key is identical.
+            </param>
+            <param name="iterations">The number of iterations to apply.</param>
+            <param name="derivedKeyLength">The desired length of the derived key.</param>
+            <returns>The derived key.</returns>
+        </member>
+        <member name="M:CryptSharp.Utility.Pbkdf2.Close">
+            <summary>
+            Closes the stream, clearing memory and disposing of the HMAC algorithm.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.Utility.Pbkdf2.Flush">
+            <exclude />
+        </member>
+        <member name="M:CryptSharp.Utility.Pbkdf2.Read(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.Utility.Pbkdf2.Seek(System.Int64,System.IO.SeekOrigin)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.Utility.Pbkdf2.SetLength(System.Int64)">
+            <exclude />
+        </member>
+        <member name="M:CryptSharp.Utility.Pbkdf2.Write(System.Byte[],System.Int32,System.Int32)">
+            <exclude />
+        </member>
+        <member name="P:CryptSharp.Utility.Pbkdf2.CanRead">
+            <exclude />
+        </member>
+        <member name="P:CryptSharp.Utility.Pbkdf2.CanSeek">
+            <exclude />
+        </member>
+        <member name="P:CryptSharp.Utility.Pbkdf2.CanWrite">
+            <exclude />
+        </member>
+        <member name="P:CryptSharp.Utility.Pbkdf2.Length">
+            <summary>
+            The maximum number of bytes that can be derived is 2^32-1 times the HMAC size.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.Pbkdf2.Position">
+            <summary>
+            The position within the derived key stream.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.Utility.Base2Encoding">
+            <summary>
+            Base-2 binary-to-text encodings.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.Utility.Base2Encoding.Binary">
+            <summary>
+            Binary. Useful for debugging.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.TraditionalDesCrypter">
+            <summary>
+            Traditional DES crypt.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.TraditionalDesCrypter.GenerateSalt(CryptSharp.CrypterOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.TraditionalDesCrypter.CanCrypt(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.TraditionalDesCrypter.Crypt(System.Byte[],System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:CryptSharp.TraditionalDesCrypter.Properties">
+            <inheritdoc />
+        </member>
+        <member name="T:CryptSharp.BlowfishCrypter">
+            <summary>
+            Blowfish crypt, sometimes called BCrypt. A very good choice.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.BlowfishCrypter.GenerateSalt(CryptSharp.CrypterOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.BlowfishCrypter.CanCrypt(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.BlowfishCrypter.Crypt(System.Byte[],System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:CryptSharp.BlowfishCrypter.Properties">
+            <inheritdoc />
+        </member>
+        <member name="T:CryptSharp.Utility.BaseEncodingDecodeFilterCallback">
+            <summary>
+            A callback to map arbitrary characters onto the characters that can be decoded.
+            </summary>
+            <param name="originalCharacter">The original character.</param>
+            <returns>the replacement character.</returns>
+        </member>
+        <member name="T:CryptSharp.PhpassCrypter">
+            <summary>
+            PHPass crypt. Used by WordPress. Variants support phpBB and Drupal 7+.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.PhpassCrypter.GenerateSalt(CryptSharp.CrypterOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.PhpassCrypter.CanCrypt(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.PhpassCrypter.Crypt(System.Byte[],System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:CryptSharp.PhpassCrypter.Properties">
+            <inheritdoc />
+        </member>
+        <member name="T:CryptSharp.MD5CrypterVariant">
+            <summary>
+            Modified versions of the MD5 crypt algorithm.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.MD5CrypterVariant.Standard">
+            <summary>
+            Standard MD5 crypt.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.MD5CrypterVariant.Apache">
+            <summary>
+            Apache htpasswd files have a different prefix.
+            Due to the nature of MD5 crypt, this also affects the crypted password.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.CrypterOptions">
+            <summary>
+            Stores options for the crypt operation.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.CrypterOptions.Add(CryptSharp.CrypterOptionKey,System.Object)">
+            <summary>
+            Sets the value of an option, if the option has not already been set.
+            </summary>
+            <param name="key">The key of the option.</param>
+            <param name="value">The value of the option.</param>
+        </member>
+        <member name="M:CryptSharp.CrypterOptions.Clear">
+            <summary>
+            Clears all options.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.CrypterOptions.ContainsKey(CryptSharp.CrypterOptionKey)">
+            <summary>
+            Checks if an option is set.
+            </summary>
+            <param name="key">The key of the option.</param>
+            <returns><c>true</c> if the option is set.</returns>
+        </member>
+        <member name="M:CryptSharp.CrypterOptions.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through all options.
+            </summary>
+            <returns>An enumerator for the options.</returns>
+        </member>
+        <member name="M:CryptSharp.CrypterOptions.GetValue``1(CryptSharp.CrypterOptionKey)">
+            <summary>
+            Gets the value of an option, if the option is set, or a default value otherwise.
+            </summary>
+            <typeparam name="T">The type of the option's value.</typeparam>
+            <param name="key">The key of the option.</param>
+            <returns>The option's value.</returns>
+        </member>
+        <member name="M:CryptSharp.CrypterOptions.GetValue``1(CryptSharp.CrypterOptionKey,``0)">
+            <summary>
+            Gets the value of an option, if the option is set, or a specified default value otherwise.
+            </summary>
+            <typeparam name="T">The type of the option's value.</typeparam>
+            <param name="key">The key of the option.</param>
+            <param name="defaultValue">The default value if the option is not set.</param>
+            <returns>The option's value.</returns>
+        </member>
+        <member name="M:CryptSharp.CrypterOptions.Remove(CryptSharp.CrypterOptionKey)">
+            <summary>
+            Clears an option.
+            </summary>
+            <param name="key">The key of the option.</param>
+            <returns><c>true</c> if the option was found and cleared.</returns>
+        </member>
+        <member name="M:CryptSharp.CrypterOptions.TryGetValue(CryptSharp.CrypterOptionKey,System.Object@)">
+            <summary>
+            Gets the value of an option, if the option is set.
+            </summary>
+            <param name="key">The key of the option.</param>
+            <param name="value">The value, or <c>null</c> if the option is not set.</param>
+            <returns><c>true</c> if the option is set.</returns>
+        </member>
+        <member name="M:CryptSharp.CrypterOptions.MakeReadOnly">
+            <summary>
+            Prevents future changes to the options.
+            </summary>
+            <returns>The same <see cref="T:CryptSharp.CrypterOptions"/>.</returns>
+        </member>
+        <member name="P:CryptSharp.CrypterOptions.Count">
+            <summary>
+            The number of options that have been set.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.CrypterOptions.Item(CryptSharp.CrypterOptionKey)">
+            <summary>
+            Gets or sets an option.
+            </summary>
+            <param name="key">The key of the option.</param>
+            <returns>The value of the option.</returns>
+        </member>
+        <member name="P:CryptSharp.CrypterOptions.None">
+            <summary>
+            No options.
+            </summary>
+        </member>
+        <member name="P:CryptSharp.CrypterOptions.IsReadOnly">
+            <summary>
+            <c>true</c> if the options cannot be changed.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.Utility.EksBlowfishKeyExpansionFlags">
+            <summary>
+            Modifiers for Expensive Key Schedule (EKS) Blowfish key expansion behavior.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.Utility.EksBlowfishKeyExpansionFlags.None">
+            <summary>
+            Default behavior.
+            </summary>
+        </member>
+        <member name="F:CryptSharp.Utility.EksBlowfishKeyExpansionFlags.EmulateCryptBlowfishSignExtensionBug">
+            <summary>
+            The EksBlowfish code in CryptSharp was implemented as per the specification
+            at http://static.usenix.org/event/usenix99/provos/provos_html/node4.html.
+            
+            Many other BCrypt implementations, however, are ports originating
+            originating with the crypt_blowfish C implementation. Pre-2011, crypt_blowfish
+            had a sign extension bug that caused up to three characters previous to any
+            8-bit character to match 0xFF.
+            
+            CryptSharp never had this bug. However, for those who need backwards
+            compatibility for old password databases created with one of these libraries,
+            I have added *support* for the bug. You can enable it with this flag.
+            </summary>
+        </member>
+        <member name="T:CryptSharp.MD5Crypter">
+            <summary>
+            MD5 crypt, supported by nearly all systems. A variant supports Apache htpasswd files.
+            </summary>
+        </member>
+        <member name="M:CryptSharp.MD5Crypter.GenerateSalt(CryptSharp.CrypterOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.MD5Crypter.CanCrypt(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:CryptSharp.MD5Crypter.Crypt(System.Byte[],System.String)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

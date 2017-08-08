@@ -1,0 +1,864 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nancy.ViewEngines.Razor</name>
+    </assembly>
+    <members>
+        <member name="T:Nancy.ViewEngines.Razor.AttributeValue">
+            <summary>
+            Class to represent attribute values and, more importantly, 
+            decipher them from tuple madness slightly.
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.ClrTypeResolver`2">
+            <summary>
+            Converts language-specific type name into CRL Type
+            </summary>
+            <typeparam name="TSymbolType">Symbol type enum</typeparam>
+            <typeparam name="TSymbol">Symbol class</typeparam>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.ClrTypeResolver`2.#ctor(`0,`0,`0,`0,`0,`0)">
+            <summary>
+            Initializes new instance of ClrTypeResolver class. 
+            Provided parameters are used to recognized specific symbols in particular language
+            </summary>
+            <param name="identifier">Symbol type for identifier</param>
+            <param name="keyword">Symbol type for keyword</param>
+            <param name="dot">Symbol type for dot ('.')</param>
+            <param name="whiteSpace">Symbol type for whitespace</param>
+            <param name="arrayBegin">Type of symbol that begins array</param>
+            <param name="arrayEnd">Type of symbol that ends array</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.ClrTypeResolver`2.Resolve(System.Collections.Generic.List{`1})">
+            <summary>
+            Parses given list of symbols in order to get CLR type
+            </summary>
+            <param name="symbols">List of symbols</param>
+            <returns>CLR type</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.ClrTypeResolver`2.MoveToGenericArguments">
+            <summary>
+            Dequeues symbols until first symbol of first generic argument
+            </summary>
+            <returns>Returns true if move was successful</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.ClrTypeResolver`2.MoveToNextGenericArgument">
+            <summary>
+            Dequeues symbols representing separator between generic arguments
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.ClrTypeResolver`2.MoveOutOfGenericArguments">
+            <summary>
+            Dequeues symbols representing end of generic arguments
+            </summary>
+            <returns>Returns true if move was successful</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.ClrTypeResolver`2.ResolvePrimitiveType(System.String)">
+            <summary>
+            Gets CLR from name (keyword) used by specific language 
+            </summary>
+            <param name="typeName">Type name to resolve</param>
+            <returns>CLR type</returns>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.ClrTypeResolver`2.Symbols">
+            <summary>
+            Gets remaining symbols that need to be parsed
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.ClrTypeResolver`2.TypeNameParserStep.Resolve(System.Func{System.String,System.Type})">
+            <summary>
+            Resolves CLR type that is represented by this instance
+            </summary>
+            <param name="resolveType">Function that allows resolving any simple (like int or MyNamespace.SuperClass) type name to CLR type</param>
+            <returns>Resolved CLR type</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.CodeParserHelper.ThrowTypeNotFound(System.String)">
+            <summary>
+            Throws exception says that given type was not found in any accessible assembly
+            </summary>
+            <param name="type">Type that was not found</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.CodeParserHelper.GetAssemblyDirectories">
+            <summary>
+            Returns the directories containing dll files. It uses the default convention as stated by microsoft.
+            </summary>
+            <see cref="!:http://msdn.microsoft.com/en-us/library/system.appdomainsetup.privatebinpathprobe.aspx"/>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.CSharp.CSharpClrTypeResolver">
+            <summary>
+            Resolves C# type name to CLR type
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.CSharp.CSharpClrTypeResolver.MoveOutOfGenericArguments">
+            <summary>
+            Dequeues symbols '>' representing end of generic arguments
+            </summary>
+            <returns>Returns true if move was successful</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.CSharp.CSharpClrTypeResolver.MoveToNextGenericArgument">
+            <summary>
+            Dequeues symbol ',' and whitespace representing separator between generic arguments
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.CSharp.CSharpClrTypeResolver.MoveToGenericArguments">
+            <summary>
+            equeues symbol '&lt;' representing begin of generic arguments
+            </summary>
+            <returns>Returns true if move was successful</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.CSharp.CSharpClrTypeResolver.ResolvePrimitiveType(System.String)">
+            <summary>
+            Gets CLR from name (keyword) used by C#
+            </summary>
+            <param name="typeName">Type name to resolve</param>
+            <returns>CLR type</returns>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.CSharp.CSharpRazorViewRenderer">
+            <summary>
+            Renderer for CSharp razor files.
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.IRazorViewRenderer">
+            <summary>
+            Renders a view.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.IRazorViewRenderer.Assemblies">
+            <summary>
+            Gets the assemblies.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.IRazorViewRenderer.ModelCodeGenerator">
+            <summary>
+            Gets the <see cref="T:System.Web.Razor.Generator.SetBaseTypeCodeGenerator"/> that should be used with the renderer.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.IRazorViewRenderer.Extension">
+            <summary>
+            Gets the extension this view renderer supports.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.IRazorViewRenderer.Host">
+            <summary>
+            Gets the host.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.IRazorViewRenderer.Provider">
+            <summary>
+            Gets the provider that is used to generate code.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.CSharp.CSharpRazorViewRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.CSharp.CSharpRazorViewRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.CSharp.CSharpRazorViewRenderer.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.CSharp.CSharpRazorViewRenderer.Assemblies">
+            <summary>
+            Gets the assemblies.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.CSharp.CSharpRazorViewRenderer.Extension">
+            <summary>
+            Gets the extension this view renderer supports.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.CSharp.CSharpRazorViewRenderer.ModelCodeGenerator">
+            <summary>
+            Gets the <see cref="T:System.Web.Razor.Generator.SetBaseTypeCodeGenerator"/> that should be used with the renderer.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.CSharp.CSharpRazorViewRenderer.Host">
+            <summary>
+            Gets the host.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.CSharp.CSharpRazorViewRenderer.Provider">
+            <summary>
+            Gets the provider that is used to generate code.
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.DefaultRazorConfiguration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.IRazorConfiguration">
+            <summary>
+            Configuration for the razor view engine.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.IRazorConfiguration.GetAssemblyNames">
+            <summary>
+            Gets the assembly names.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.IRazorConfiguration.GetDefaultNamespaces">
+            <summary>
+            Gets the default namespaces.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.IRazorConfiguration.AutoIncludeModelNamespace">
+            <summary>
+            Gets a value indicating whether to automatically include the model's namespace in the generated code.
+            </summary>
+            <value>
+                <c>true</c> if the model's namespace should be automatically included in the generated code; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.DefaultRazorConfiguration.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.DefaultRazorConfiguration"/> class.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.DefaultRazorConfiguration.GetAssemblyNames">
+            <summary>
+            Gets the assembly names to include in the generated assembly.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.DefaultRazorConfiguration.GetDefaultNamespaces">
+            <summary>
+            Gets the default namespaces to be included in the generated code.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.DefaultRazorConfiguration.AutoIncludeModelNamespace">
+            <summary>
+            Gets a value indicating whether to automatically include the model's namespace in the generated code.
+            </summary>
+            <value>
+            	<c>true</c> if the model's namespace should be automatically included in the generated code; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.HelperResult">
+            <summary>
+            Helped class used by Razor to render generated code.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.IHtmlString.ToHtmlString">
+            <summary>
+            Returns an HTML-encoded string.
+            </summary>
+            <returns>An HTML-encoded string.</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HelperResult.#ctor(System.Action{System.IO.TextWriter})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.HelperResult"/> class,
+            with the provided <paramref name="action"/>.
+            </summary>
+            <param name="action">The action that should be used to produce the result.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HelperResult.ToHtmlString">
+            <summary>
+            Returns a HTML formatted <see cref="T:System.String"/> that represents the current <see cref="T:Nancy.ViewEngines.Razor.HelperResult"/>.
+            </summary>
+            <returns>A HTML formatted <see cref="T:System.String"/> that represents the current <see cref="T:Nancy.ViewEngines.Razor.HelperResult"/>.</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HelperResult.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:Nancy.ViewEngines.Razor.HelperResult"/>.
+            </summary>
+            <returns>A <see cref="T:System.String"/> that represents the current <see cref="T:Nancy.ViewEngines.Razor.HelperResult"/>.</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HelperResult.WriteTo(System.IO.TextWriter)">
+            <summary>
+            Writes the output of the <see cref="T:Nancy.ViewEngines.Razor.HelperResult"/> to the provided <paramref name="writer"/>.
+            </summary>
+            <param name="writer">A <see cref="T:System.IO.TextWriter"/> instance that the output should be written to.</param>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.HtmlHelpers`1">
+            <summary>
+            Helpers to generate html content.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.HtmlHelpers">
+            <summary>
+            Base helpers to generate html content.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HtmlHelpers.#ctor(Nancy.ViewEngines.Razor.RazorViewEngine,Nancy.ViewEngines.IRenderContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.HtmlHelpers"/> class.
+            </summary>
+            <param name="engine">The razor view engine instance that the helpers are being used by.</param>
+            <param name="renderContext">The <see cref="T:Nancy.ViewEngines.IRenderContext"/> that the helper are being used by.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HtmlHelpers.Partial(System.String)">
+            <summary>
+            Renders a partial with the given view name.
+            </summary>
+            <param name="viewName">Name of the view.</param>
+            <returns>An <see cref="T:Nancy.ViewEngines.Razor.IHtmlString"/> representation of the partial.</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HtmlHelpers.Partial(System.String,System.Object)">
+            <summary>
+            Renders a partial with the given view name.
+            </summary>
+            <param name="viewName">Name of the partial view.</param>
+            <param name="modelForPartial">The model that is passed to the partial.</param>
+            <returns>An <see cref="T:Nancy.ViewEngines.Razor.IHtmlString"/> representation of the partial.</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HtmlHelpers.Raw(System.String)">
+            <summary>
+            Returns an html string composed of raw, non-encoded text.
+            </summary>
+            <param name="text">The text.</param>
+            <returns>An <see cref="T:Nancy.ViewEngines.Razor.IHtmlString"/> representation of the raw text.</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HtmlHelpers.AntiForgeryToken">
+            <summary>
+            Creates an anti-forgery token.
+            </summary>
+            <returns>An <see cref="T:Nancy.ViewEngines.Razor.IHtmlString"/> representation of the anti forgery token.</returns>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.HtmlHelpers.Engine">
+            <summary>
+            The engine that is currently rendering the view.
+            </summary>
+            <value>A <see cref="T:Nancy.ViewEngines.Razor.RazorViewEngine"/> instance.</value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.HtmlHelpers.RenderContext">
+            <summary>
+            The context of the current render operation.
+            </summary>
+            <value>An <see cref="T:Nancy.ViewEngines.IRenderContext"/> instance.</value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.HtmlHelpers.CurrentLocale">
+            <summary>
+            Returns current culture name
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.HtmlHelpers.CurrentUser">
+            <summary>
+            Returns current authenticated user name
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.HtmlHelpers.IsAuthenticated">
+            <summary>
+            Determines if current user is authenticated
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HtmlHelpers`1.#ctor(Nancy.ViewEngines.Razor.RazorViewEngine,Nancy.ViewEngines.IRenderContext,`0)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.HtmlHelpers`1"/> class.
+            </summary>
+            <param name="engine">The razor view engine instance that the helpers are being used by.</param>
+            <param name="renderContext">The <see cref="T:Nancy.ViewEngines.IRenderContext"/> that the helper are being used by.</param>
+            <param name="model">The model that is used by the page where the helpers are invoked.</param>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.HtmlHelpers`1.Model">
+            <summary>
+            The model that is being used by the current view.
+            </summary>
+            <value>An instance of the view model.</value>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.HtmlHelpersExtensions">
+            <summary>
+            Razor HTML Helper Extensions
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.HtmlHelpersExtensions.HttpMethodOverride``1(Nancy.ViewEngines.Razor.HtmlHelpers{``0},System.String)">
+            <summary>
+            Create a hidden input field called X-HTTP-Method-Override for the specified <paramref name="method"/>
+            </summary>
+            <typeparam name="T">The model type.</typeparam>
+            <param name="helpers">A reference to the <see cref="T:Nancy.ViewEngines.Razor.HtmlHelpers`1"/> instance.</param>
+            <param name="method">The HTTP method to use.</param>
+            <returns>A string representation of the input field.</returns>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.CSharp.NancyCSharpRazorCodeParser">
+            <summary>
+            Nancy razor parser for csharp files.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.CSharp.NancyCSharpRazorCodeParser.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.CSharp.NancyCSharpRazorCodeParser"/> class.
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.ModelCodeGenerator">
+            <summary>
+            Adds base type with model type as generic argument for Razor view class
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.NancyRazorEngineHost">
+            <summary>
+            A custom razor engine host responsible for decorating the existing code generators with nancy versions.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorEngineHost.#ctor(System.Web.Razor.RazorCodeLanguage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.NancyRazorEngineHost"/> class.
+            </summary>
+            <param name="language">The language.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorEngineHost.DecorateCodeParser(System.Web.Razor.Parser.ParserBase)">
+            <summary>
+            Decorates the code parser.
+            </summary>
+            <param name="incomingCodeParser">The incoming code parser.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.NancyRazorErrorView">
+            <summary>
+            Razor view used when compilation of the view fails.
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.NancyRazorViewBase">
+            <summary>
+            Default base class for nancy razor views
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.NancyRazorViewBase`1">
+            <summary>
+            Base class for nancy razor views.
+            </summary>
+            <typeparam name="TModel">Model type</typeparam>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Execute">
+            <summary>
+            Executes the view.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Initialize(Nancy.ViewEngines.Razor.RazorViewEngine,Nancy.ViewEngines.IRenderContext,System.Object)">
+            <summary>
+            Initializes the specified engine.
+            </summary>
+            <param name="engine">The engine.</param>
+            <param name="renderContext">The render context.</param>
+            <param name="model">The model.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.NancyRazorViewBase"/> class.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Write(System.Object)">
+            <summary>
+            Writes the results of expressions like: "@foo.Bar"
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.WriteLiteral(System.Object)">
+            <summary>
+            Writes literals like markup: "<p>Foo</p>"
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.WriteTo(System.IO.TextWriter,System.Object)">
+            <summary>
+            Writes the provided <paramref name="value"/> to the provided <paramref name="writer"/>.
+            </summary>
+            <param name="writer">The <see cref="T:System.IO.TextWriter"/> that should be written to.</param>
+            <param name="value">The value that should be written.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.WriteLiteralTo(System.IO.TextWriter,System.Object)">
+            <summary>
+            Writes the provided <paramref name="value"/>, as a literal, to the provided <paramref name="writer"/>.
+            </summary>
+            <param name="writer">The <see cref="T:System.IO.TextWriter"/> that should be written to.</param>
+            <param name="value">The value that should be written as a literal.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.WriteTo(System.IO.TextWriter,Nancy.ViewEngines.Razor.HelperResult)">
+            <summary>
+            Writes the provided <paramref name="value"/> to the provided <paramref name="writer"/>.
+            </summary>
+            <param name="writer">The <see cref="T:System.IO.TextWriter"/> that should be written to.</param>
+            <param name="value">The <see cref="T:Nancy.ViewEngines.Razor.HelperResult"/> that should be written.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.WriteLiteralTo(System.IO.TextWriter,Nancy.ViewEngines.Razor.HelperResult)">
+            <summary>
+            Writes the provided <paramref name="value"/>, as a literal, to the provided <paramref name="writer"/>.
+            </summary>
+            <param name="writer">The <see cref="T:System.IO.TextWriter"/> that should be written to.</param>
+            <param name="value">The <see cref="T:Nancy.ViewEngines.Razor.HelperResult"/> that should be written as a literal.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.DefineSection(System.String,System.Action)">
+            <summary>
+            Stores sections
+            </summary>
+            <param name="sectionName">Name of the section.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.RenderSection(System.String)">
+            <summary>
+            Renders the section.
+            </summary>
+            <param name="sectionName">Name of the section.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.RenderSection(System.String,System.Boolean)">
+            <summary>
+            Renders the section.
+            </summary>
+            <param name="sectionName">Name of the section.</param>
+            <param name="required">if set to <c>true</c> [required].</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.RenderBody">
+            <summary>
+            Renders the body.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.IsSectionDefined(System.String)">
+            <summary>
+            Indicates if a section is defined.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.ExecuteView(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Executes the view.
+            </summary>
+            <param name="body">The body.</param>
+            <param name="sectionContents">The section contents.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.HtmlEncode(System.Object)">
+            <summary>
+            Html encodes an object if required
+            </summary>
+            <param name="value">Object to potentially encode</param>
+            <returns>String representation, encoded if necessary</returns>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Html">
+            <summary>
+            Gets the Html helper.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Model">
+            <summary>
+            Gets the model.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Url">
+            <summary>
+            Gets the Url helper.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.ViewBag">
+            <summary>
+            Non-model specific data for rendering in the response
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Body">
+            <summary>
+            Gets the body.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.SectionContents">
+            <summary>
+            Gets or sets the section contents.
+            </summary>
+            <value>
+            The section contents.
+            </value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Layout">
+            <summary>
+            Gets or sets the layout.
+            </summary>
+            <value>
+            The layout.
+            </value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.HasLayout">
+            <summary>
+            Gets a value indicating whether this instance has layout.
+            </summary>
+            <value>
+            	<c>true</c> if this instance has layout; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Code">
+            <summary>
+            Gets or sets the code.
+            </summary>
+            <value>
+            The code.
+            </value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Path">
+            <summary>
+            Gets or sets the path.
+            </summary>
+            <value>
+            The path.
+            </value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Sections">
+            <summary>
+            Gets or sets the sections.
+            </summary>
+            <value>
+            The sections.
+            </value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Text">
+            <summary>
+            Used to return text resources
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Context">
+            <summary>
+            Gets the current <see cref="T:Nancy.NancyContext"/> instance.
+            </summary>
+            <value>A <see cref="T:Nancy.NancyContext"/> instance.</value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Request">
+            <summary>
+            Gets the current <see cref="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Request"/> instance.
+            </summary>
+            <value>A <see cref="P:Nancy.ViewEngines.Razor.NancyRazorViewBase`1.Request"/> instance.</value>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorErrorView.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.NancyRazorErrorView"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NancyRazorErrorView.Execute">
+            <summary>
+            Executes this instance.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorErrorView.Template">
+            <summary>
+            Gets or sets the template for rendering errors.
+            The token "[DETAILS]" will be replaced by the HTML for
+            the actual error.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.NancyRazorErrorView.Message">
+            <summary>
+            Gets the message.
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.NonEncodedHtmlString">
+            <summary>
+            An html string that is not encoded.
+            </summary>
+        </member>
+        <member name="F:Nancy.ViewEngines.Razor.NonEncodedHtmlString.Empty">
+            <summary>
+            Represents the empty <see cref="T:Nancy.ViewEngines.Razor.NonEncodedHtmlString"/>. This field is readonly.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NonEncodedHtmlString.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.NonEncodedHtmlString"/> class.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.NonEncodedHtmlString.ToHtmlString">
+            <summary>
+            Returns an HTML-encoded string.
+            </summary>
+            <returns>An HTML-encoded string.</returns>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.RazorViewEngine">
+            <summary>
+            View engine for rendering razor views.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.RazorViewEngine.#ctor(Nancy.ViewEngines.Razor.IRazorConfiguration)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.RazorViewEngine"/> class.
+            </summary>
+            <param name="configuration">The <see cref="T:Nancy.ViewEngines.Razor.IRazorConfiguration"/> that should be used by the engine.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.RazorViewEngine.Initialize(Nancy.ViewEngines.ViewEngineStartupContext)">
+            <summary>
+            Initialise the view engine (if necessary)
+            </summary>
+            <param name="viewEngineStartupContext">Startup context</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.RazorViewEngine.RenderView(Nancy.ViewEngines.ViewLocationResult,System.Object,Nancy.ViewEngines.IRenderContext)">
+            <summary>
+            Renders the view.
+            </summary>
+            <param name="viewLocationResult">A <see cref="T:Nancy.ViewEngines.ViewLocationResult"/> instance, containing information on how to get the view template.</param>
+            <param name="model">The model that should be passed into the view</param>
+            <param name="renderContext">The render context.</param>
+            <returns>A response.</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.RazorViewEngine.RenderView(Nancy.ViewEngines.ViewLocationResult,System.Object,Nancy.ViewEngines.IRenderContext,System.Boolean)">
+            <summary>
+            Renders the view.
+            </summary>
+            <param name="viewLocationResult">A <see cref="T:Nancy.ViewEngines.ViewLocationResult"/> instance, containing information on how to get the view template.</param>
+            <param name="model">The model that should be passed into the view</param>
+            <param name="renderContext">The render context.</param>
+            <param name="isPartial">Used by HtmlHelpers to declare a view as partial</param>
+            <returns>A response.</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.RazorViewEngine.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.RazorViewEngine.Extensions">
+            <summary>
+            Gets the extensions file extensions that are supported by the view engine.
+            </summary>
+            <value>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> instance containing the extensions.</value>
+            <remarks>The extensions should not have a leading dot in the name.</remarks>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.RazorViewEngineRegistrations">
+            <summary>
+            Default dependency registrations for the <see cref="T:Nancy.ViewEngines.Razor.RazorViewEngine"/> class.
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.UrlHelpers`1">
+            <summary>
+            Helpers for url related functions.
+            </summary>
+            <typeparam name="TModel">The type of the model.</typeparam>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.UrlHelpers`1.#ctor(Nancy.ViewEngines.Razor.RazorViewEngine,Nancy.ViewEngines.IRenderContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.UrlHelpers`1"/> class.
+            </summary>
+            <param name="razorViewEngine">The razor view engine.</param>
+            <param name="renderContext">The render context.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.UrlHelpers`1.Content(System.String)">
+            <summary>
+            Retrieves the absolute url of the specified path.
+            </summary>
+            <param name="path">The path.</param>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.UrlHelpers`1.RazorViewEngine">
+            <summary>
+            The engine that is currently rendering the view.
+            </summary>
+            <value>A <see cref="P:Nancy.ViewEngines.Razor.UrlHelpers`1.RazorViewEngine"/> instance.</value>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.UrlHelpers`1.RenderContext">
+            <summary>
+            The context of the current render operation.
+            </summary>
+            <value>An <see cref="T:Nancy.ViewEngines.IRenderContext"/> instance.</value>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.VisualBasic.NancyVisualBasicRazorCodeParser">
+            <summary>
+            Nancy razor parser for visual basic files.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.VisualBasic.NancyVisualBasicRazorCodeParser.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.VisualBasic.NancyVisualBasicRazorCodeParser"/> class.
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicClrTypeResolver">
+            <summary>
+            Resolves VB.NET type name to CLR type
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicClrTypeResolver.MoveOutOfGenericArguments">
+            <summary>
+            Dequeues symbol ')' representing end of generic arguments
+            </summary>
+            <returns>Returns true if move was successful</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicClrTypeResolver.MoveToNextGenericArgument">
+            <summary>
+            Dequeues symbol ',' and whitespace representing separator between generic arguments
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicClrTypeResolver.MoveToGenericArguments">
+            <summary>
+            Dequeues symbols '(Of' representing begin of generic arguments
+            </summary>
+            <returns>Returns true if move was successful</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicClrTypeResolver.ResolvePrimitiveType(System.String)">
+            <summary>
+            Gets CLR from name (keyword) used by VB.NET
+            </summary>
+            <param name="typeName">Type name to resolve</param>
+            <returns>CLR type</returns>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicRazorViewRenderer">
+            <summary>
+            Renderer for Visual Basic razor files.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicRazorViewRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicRazorViewRenderer"/> class.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicRazorViewRenderer.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicRazorViewRenderer.Assemblies">
+            <summary>
+            Gets the assemblies.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicRazorViewRenderer.Extension">
+            <summary>
+            Gets the extension this view renderer supports.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicRazorViewRenderer.ModelCodeGenerator">
+            <summary>
+            Gets the <see cref="T:System.Web.Razor.Generator.SetBaseTypeCodeGenerator"/> that should be used with the renderer.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicRazorViewRenderer.Host">
+            <summary>
+            Gets the host.
+            </summary>
+        </member>
+        <member name="P:Nancy.ViewEngines.Razor.VisualBasic.VisualBasicRazorViewRenderer.Provider">
+            <summary>
+            Gets the provider that is used to generate code.
+            </summary>
+        </member>
+        <member name="T:Nancy.ViewEngines.Razor.EncodedHtmlString">
+            <summary>
+            An html string that is encoded.
+            </summary>
+        </member>
+        <member name="F:Nancy.ViewEngines.Razor.EncodedHtmlString.Empty">
+            <summary>
+            Represents the empty <see cref="T:Nancy.ViewEngines.Razor.EncodedHtmlString"/>. This field is readonly.
+            </summary>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.EncodedHtmlString.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Nancy.ViewEngines.Razor.EncodedHtmlString"/> class.
+            </summary>
+            <param name="value">The encoded value.</param>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.EncodedHtmlString.ToHtmlString">
+            <summary>
+            Returns an HTML-encoded string.
+            </summary>
+            <returns>An HTML-encoded string.</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.EncodedHtmlString.op_Implicit(System.String)~Nancy.ViewEngines.Razor.EncodedHtmlString">
+            <summary>
+            Implicitly cast a string to an <see cref="T:Nancy.ViewEngines.Razor.EncodedHtmlString"/> instance.
+            </summary>
+            <param name="value">The string that should be encoded.</param>
+            <returns>An <see cref="T:Nancy.ViewEngines.Razor.EncodedHtmlString"/> instance</returns>
+        </member>
+        <member name="M:Nancy.ViewEngines.Razor.EncodedHtmlString.op_Implicit(Nancy.ViewEngines.Razor.EncodedHtmlString)~System.String">
+            <summary>
+            Implicitly cast an <see cref="T:Nancy.ViewEngines.Razor.EncodedHtmlString"/> instance to a string.
+            </summary>
+            <param name="encoded">The <see cref="T:Nancy.ViewEngines.Razor.EncodedHtmlString"/> instance.</param>
+            <returns>A string containing the encoded value.</returns>
+        </member>
+    </members>
+</doc>
