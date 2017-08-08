@@ -27,28 +27,49 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Logging;
+using Newtonsoft.Json;
 
-namespace CoiniumServ.Cryptology.Merkle
+namespace CoiniumServ.Overpool
 {
     /// <summary>
-    /// Merkle tree builder.
+    /// Class containing the information contained in a JSON RPC response received from
+    /// the coin wallet.
     /// </summary>
-    /// <remarks>
-    /// To get a better understanding of merkle trees check: http://www.youtube.com/watch?v=gUwXCt1qkBU#t=09m09s 
-    /// </remarks>
-    /// <specification>https://en.bitcoin.it/wiki/Protocol_specification#Merkle_Trees</specification>
-    /// <example>
-    /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-2-for-python
-    /// Original implementation: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
-    /// </example>
-    public interface IMerkleTree:ILoggee
+    /// <typeparam name="T">
+    /// Type of the result object. This can simply be a string like a transaction id, 
+    /// or a more complex object like TransactionDetails.
+    /// </typeparam>
+    public class OverpoolResponse<T>
     {
-        IList<byte[]> Steps { get; }
+        /// <summary>
+        /// The result object.
+        /// </summary>
+        [JsonProperty(PropertyName = "result", Order = 0)]
+        public T Result { get; set; }
 
-        List<string> Branches { get; }
+        /// <summary>
+        /// The id of the corresponding request.
+        /// </summary>
+        [JsonProperty(PropertyName = "id", Order = 1)]
+        public int Id { get; set; }
 
-        byte[] WithFirst(byte[] first);
+        /// <summary>
+        /// The error returned by the wallet, if any.
+        /// </summary>
+        [JsonProperty(PropertyName = "error", Order = 2)]
+        public string Error { get; set; }
+
+        /// <summary>
+        /// Create a new JSON RPC response with the given id, error and result object.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="error">The error.</param>
+        /// <param name="result">The result object.</param>
+        public OverpoolResponse(int id, string error, T result)
+        {
+            Id = id;
+            Error = error;
+            Result = result;
+        }
     }
 }

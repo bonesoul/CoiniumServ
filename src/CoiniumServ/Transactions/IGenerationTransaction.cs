@@ -29,10 +29,11 @@
 
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Logging;
 
 namespace CoiniumServ.Transactions
 {
-    public interface IGenerationTransaction
+    public interface IGenerationTransaction: ILoggee
     {
         UInt32 Version { get; }
 

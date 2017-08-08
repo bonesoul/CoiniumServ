@@ -37,6 +37,7 @@ using CoiniumServ.Banning;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container;
 using CoiniumServ.Daemon;
+using CoiniumServ.Overpool;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;
 using CoiniumServ.Payments;
@@ -82,6 +83,8 @@ namespace CoiniumServ.Pools
         public IPaymentRepository PaymentRepository { get; private set; }
 
         public IDaemonClient Daemon { get; private set; }
+
+        public IOverpoolClient Overpool { get; private set; }
 
         public IAccountManager AccountManager { get; private set; }
 
@@ -153,6 +156,9 @@ namespace CoiniumServ.Pools
                 if (!InitDaemonClient()) // init the coin daemon client.
                     return;
 
+				if (!InitOverpoolClient()) // init the overpool stratum client.
+					return;
+
                 if (!InitStorage()) // init storage support.
                     return;
 
@@ -173,6 +179,7 @@ namespace CoiniumServ.Pools
                 Initialized = false;
             }
         }
+
 
         private bool InitHashAlgorithm()
         {
@@ -200,6 +207,36 @@ namespace CoiniumServ.Pools
             Daemon = _objectFactory.GetDaemonClient(Config.Daemon, Config.Coin);
             return true;
         }
+
+		private bool InitOverpoolClient()
+		{
+			if (Config.Overpool != null && Config.Overpool.Valid == false)
+			{
+				_logger.Error("Overpool configuration is not valid!");
+				return false;
+			}
+			/*
+             * Pool initilization failed; "Nancy.TinyIoc.TinyIoCResolutionException: Unable to resolve type: 
+             * CoiniumServ.Overpool.IOverpoolClient
+             * at Nancy.TinyIoc.TinyIoCContainer.ResolveInternal 
+             * (Nancy.TinyIoc.TinyIoCContainer+TypeRegistration registration, Nancy.TinyIoc.NamedParameterOverloads parameters, 
+             * Nancy.TinyIoc.ResolveOptions options) [0x001d1] in <bb3027f50b35411088f45475912cc2ff>:0
+             * at Nancy.TinyIoc.TinyIoCContainer.Resolve (System.Type resolveType, Nancy.TinyIoc.NamedParameterOverloads parameters) 
+             * [0x0000d] in <bb3027f50b35411088f45475912cc2ff>:0
+             * at Nancy.TinyIoc.TinyIoCContainer.Resolve[ResolveType] (Nancy.TinyIoc.NamedParameterOverloads parameters) 
+             * [0x00000] in <bb3027f50b35411088f45475912cc2ff>:0 \n  at 
+             * CoiniumServ.Container.ObjectFactory.GetOverpoolClient (CoiniumServ.Overpool.Config.IOverpoolConfig overpoolConfig, 
+             * CoiniumServ.Coin.Config.ICoinConfig coinConfig) 
+             * [0x00021] in /home/strannix/structure/CoiniumServ/src/CoiniumServ/Container/ObjectFactory.cs:153
+             * at CoiniumServ.Pools.Pool.InitOverpoolClient () 
+             * [0x0003e] in /home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/Pool.cs:219
+             * at CoiniumServ.Pools.Pool.Initialize () [0x00066] in /home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/Pool.cs:159 "
+             * 
+            */
+
+			Overpool = _objectFactory.GetOverpoolClient(Config.Overpool, Config.Coin);
+			return true;
+		}
 
         private bool InitStorage()
         {
@@ -237,7 +274,7 @@ namespace CoiniumServ.Pools
             _shareManager = _objectFactory.GetShareManager(Config, Daemon, jobTracker, _storage);
             _objectFactory.GetVardiffManager(Config, _shareManager);
             _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
-            _jobManager = _objectFactory.GetJobManager(Config, Daemon, jobTracker, _shareManager, MinerManager, HashAlgorithm);
+            _jobManager = _objectFactory.GetJobManager(Config, Daemon, Overpool, jobTracker, _shareManager, MinerManager, HashAlgorithm);
             _jobManager.Initialize(InstanceId);
 
             var blockProcessor = _objectFactory.GetBlockProcessor(Config, Daemon, _storage);

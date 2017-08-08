@@ -27,28 +27,10 @@
 // 
 #endregion
 
-using System.Collections.Generic;
-using CoiniumServ.Logging;
-
-namespace CoiniumServ.Cryptology.Merkle
+namespace CoiniumServ.Overpool
 {
-    /// <summary>
-    /// Merkle tree builder.
-    /// </summary>
-    /// <remarks>
-    /// To get a better understanding of merkle trees check: http://www.youtube.com/watch?v=gUwXCt1qkBU#t=09m09s 
-    /// </remarks>
-    /// <specification>https://en.bitcoin.it/wiki/Protocol_specification#Merkle_Trees</specification>
-    /// <example>
-    /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-2-for-python
-    /// Original implementation: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
-    /// </example>
-    public interface IMerkleTree:ILoggee
+    public interface IOverpoolBase
     {
-        IList<byte[]> Steps { get; }
-
-        List<string> Branches { get; }
-
-        byte[] WithFirst(byte[] first);
+        string MakeRawRequest(string method, params object[] parameters);
     }
 }

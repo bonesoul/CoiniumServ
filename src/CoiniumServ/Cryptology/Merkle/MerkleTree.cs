@@ -27,8 +27,10 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoiniumServ.Logging;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers;
 
@@ -45,7 +47,7 @@ namespace CoiniumServ.Cryptology.Merkle
     /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-2-for-python
     /// Original implementation: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
     /// </example>
-    public class MerkleTree : IMerkleTree
+    public class MerkleTree : Loggee<MerkleTree>,IMerkleTree
     {
         /// <summary>
         /// The steps in tree.
@@ -54,8 +56,12 @@ namespace CoiniumServ.Cryptology.Merkle
 
         /// <summary>
         /// List of hashes, will be used for calculation of merkle root. 
-        /// <remarks>This is not a list of all transactions, it only contains prepared hashes of steps of merkle tree algorithm. Please read some materials (http://en.wikipedia.org/wiki/Hash_tree) for understanding how merkle trees calculation works. (http://mining.bitcoin.cz/stratum-mining)</remarks>
-        /// <remarks>The coinbase transaction is hashed against the merkle branches to build the final merkle root.</remarks>
+        /// <remarks>This is not a list of all transactions, it only contains prepared hashes of steps 
+        /// of merkle tree algorithm. Please read some materials (http://en.wikipedia.org/wiki/Hash_tree) 
+        /// for understanding how merkle trees calculation works. 
+        /// (http://mining.bitcoin.cz/stratum-mining)</remarks>
+        /// <remarks>The coinbase transaction is hashed against the merkle branches to build the final 
+        /// merkle root.</remarks>
         /// </summary>
         public List<string> Branches
         {
@@ -144,6 +150,20 @@ namespace CoiniumServ.Cryptology.Merkle
             }
 
             return first;
+        }
+
+        protected override void DescribeYourself()
+        {
+                _logger.Debug("Branches:");
+                foreach(string branch in Branches) {
+                    _logger.Debug("{0}",branch);
+                }
+
+                _logger.Debug("Steps:");
+				foreach (byte[] step in Steps)
+				{
+                    _logger.Debug("{0}", step.ToHexString());
+				}
         }
     }
 }

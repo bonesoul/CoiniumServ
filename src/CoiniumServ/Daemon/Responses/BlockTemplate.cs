@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Logging;
 
 namespace CoiniumServ.Daemon.Responses
 {
@@ -40,8 +41,9 @@ namespace CoiniumServ.Daemon.Responses
     /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
     /// </remarks>
     /// </summary>
-    public class BlockTemplate : IBlockTemplate
+    public class BlockTemplate : Loggee<BlockTemplate>,IBlockTemplate
     {
+
         /// <summary>
         /// the compressed difficulty in hexadecimal
         /// </summary>
@@ -111,6 +113,45 @@ namespace CoiniumServ.Daemon.Responses
         public List<string> Mutable { get; set; }
 
         public string NonceRange { get; set; }
+
+        protected override void DescribeYourself()
+        {
+                _logger.Debug(
+                    "\nBits={0}\n" +
+                    "Coinbasevalue={1}\n" +
+                    "CurTime={2}\n" +
+                    "Height={3}\n" +
+                    "MinTime={4}\n" +
+                    "NonceRange={5}\n" +
+                    "PreviousBlockHash={6}\n" +
+                    "SigOpLimit={7}\n" +
+                    "SizeLimit={8}\n" +
+                    "Target={9}\n" +
+                    "Version={10}\n",
+                    Bits,Coinbasevalue,
+                    CurTime,
+                    Height,
+                    MinTime,
+                    NonceRange,
+                    PreviousBlockHash,
+                    SigOpLimit,
+                    SizeLimit,
+                    Target,
+                    Version
+                );
+
+
+
+                _logger.Debug("Mutable:");
+                foreach(string m in Mutable){
+                    _logger.Debug("{0}\n",m);
+                }
+
+
+                foreach(BlockTemplateTransaction tx in Transactions){
+                    tx.DescribeYourselfSafely();
+                }
+        }
     }
 
     /// <summary>
