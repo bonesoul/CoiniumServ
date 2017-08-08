@@ -28,6 +28,8 @@
 #endregion
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using CoiniumServ.Utils.Extensions;
@@ -43,7 +45,7 @@ namespace CoiniumServ.Cryptology
     /// map. It also checks that the length is correct and provides a bit more type safety.
     /// </summary>
     [Serializable]
-    public class Hash
+    public class Hash:IEnumerable<byte>
     {
         private readonly byte[] _bytes;
 
@@ -109,6 +111,16 @@ namespace CoiniumServ.Cryptology
         public Hash Duplicate()
         {
             return new Hash(_bytes);
+        }
+
+        IEnumerator<byte> IEnumerable<byte>.GetEnumerator()
+        {
+            return (IEnumerator<byte>)_bytes.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _bytes.GetEnumerator();
         }
 
         public static implicit operator byte[](Hash hash)

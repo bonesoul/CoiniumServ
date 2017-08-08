@@ -31,14 +31,18 @@ using System;
 using System.IO;
 using System.Text;
 using CoiniumServ.Jobs;
+using CoiniumServ.Logging;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers;
 using Gibbed.IO;
+using Serilog;
 
 namespace CoiniumServ.Coin.Coinbase
 {
     public static class Serializers
     {
+        static readonly ILogger _logger = Log.ForContext("Component", typeof(Serializers).Name);
+
         /// <summary>
         /// Block data structure.
         /// </summary>

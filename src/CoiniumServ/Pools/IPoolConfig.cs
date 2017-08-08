@@ -31,6 +31,7 @@ using CoiniumServ.Banning;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
 using CoiniumServ.Daemon.Config;
+using CoiniumServ.Overpool.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;
 using CoiniumServ.Payments.Config;
@@ -53,6 +54,8 @@ namespace CoiniumServ.Pools
         ICoinConfig Coin { get; }
 
         IDaemonConfig Daemon { get; }
+
+        IOverpoolConfig Overpool { get; }
 
         IMetaConfig Meta { get; }
 
