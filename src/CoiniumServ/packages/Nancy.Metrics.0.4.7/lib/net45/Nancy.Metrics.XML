@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nancy.Metrics</name>
+    </assembly>
+    <members>
+        <member name="M:Nancy.Metrics.NancyGlobalMetrics.WithAllMetrics">
+            <summary>
+            Registers a Meter metric named "NancyFx.Errors" that records the rate at witch unhanded errors occurred while 
+            processing Nancy requests.
+            Registers a Timer metric named "NancyFx.Requests" that records how many requests per second are handled and also
+            keeps a histogram of the request duration.
+            Registers a counter for the number of active requests.
+            Registers a histogram for the size of POST, PUT and PATCH requests.
+            Registers a timer metric for each non-error request.
+            </summary>
+        </member>
+        <member name="M:Nancy.Metrics.NancyGlobalMetrics.WithRequestTimer(System.String)">
+            <summary>
+            Registers a Timer metric named "NancyFx.Requests" that records how many requests per second are handled and also
+            keeps a histogram of the request duration.
+            </summary>
+            <param name="metricName">Name of the metric.</param>
+        </member>
+        <member name="M:Nancy.Metrics.NancyGlobalMetrics.WithErrorsMeter(System.String)">
+            <summary>
+            Registers a Meter metric named "NancyFx.Errors" that records the rate at witch unhanded errors occurred while 
+            processing Nancy requests.
+            </summary>
+            <param name="metricName">Name of the metric.</param>
+        </member>
+        <member name="M:Nancy.Metrics.NancyGlobalMetrics.WithActiveRequestCounter(System.String)">
+            <summary>
+            Registers a Counter metric named "NancyFx.ActiveRequests" that shows the current number of active requests
+            </summary>
+            <param name="metricName">Name of the metric.</param>
+        </member>
+        <member name="M:Nancy.Metrics.NancyGlobalMetrics.WithPostPutAndPatchRequestSizeHistogram(System.String)">
+            <summary>
+            Register a Histogram metric named "Nancy.PostPutAndPatchRequestsSize" on the size of the POST, PUT, and PATCH requests
+            </summary>
+            <param name="metricName">Name of the metric.</param>
+        </member>
+        <member name="M:Nancy.Metrics.NancyGlobalMetrics.WithTimerForEachRequest">
+            <summary>
+            Registers a timer for each request.
+            Timer is created based on route and will be named:
+            [NancyFx] {HTTP_METHOD_NAME} {ROUTE_PATH}
+            </summary>
+        </member>
+        <member name="M:Nancy.Metrics.NancyMetricsConfig.WithNancyMetrics(System.Action{Nancy.Metrics.NancyGlobalMetrics},System.String)">
+            <summary>
+            Configure global NancyFx Metrics.
+            Available global metrics are: Request Timer, Active Requests Counter, Error Meter
+            <code>
+            protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+            {
+                base.ApplicationStartup(container, pipelines);
+            
+                NancyMetrics.Configure()
+                    .WithGlobalMetrics(config => config.RegisterAllMetrics(pipelines))
+                    .WithMetricsEndpoint();
+            }
+            </code>
+            </summary>
+            <param name="config">Action to configure which global metrics to enable.</param>
+            <param name="context">Name of the MetricsContext where to register the NancyFx metrics.</param>
+            <returns>This instance to allow chaining of the configuration.</returns>
+        </member>
+        <member name="M:Nancy.Metrics.NancyMetricsConfig.WithMetricsModule(System.String)">
+            <summary>
+            Expose the metrics information at:
+            /metrics in human readable format
+            /metrics/json in json format
+            <code>
+            protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+            {
+                base.ApplicationStartup(container, pipelines);
+            
+                NancyMetrics.Configure()
+                    .WithGlobalMetrics(config => config.RegisterAllMetrics(pipelines))
+                    .WithMetricsEndpoint(m => m.RequiresAuthentication()); // to enable authentication
+            }
+            </code>
+            </summary>
+            <param name="metricsPath">Path where to expose the metrics</param>
+            <returns>This instance to allow chaining of the configuration.</returns>
+        </member>
+        <member name="M:Nancy.Metrics.NancyMetricsConfig.WithMetricsModule(System.Action{Metrics.Reports.MetricsEndpointReports},System.String)">
+            <summary>
+            Expose the metrics information at:
+            /metrics in human readable format
+            /metrics/json in json format
+            <code>
+            protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+            {
+                base.ApplicationStartup(container, pipelines);
+            
+                NancyMetrics.Configure()
+                    .WithGlobalMetrics(config => config.RegisterAllMetrics(pipelines))
+                    .WithMetricsEndpoint(m => m.RequiresAuthentication()); // to enable authentication
+            }
+            </code>
+            </summary>
+            <param name="config">Action that can configure the endpoint reports</param>
+            <param name="metricsPath">Path where to expose the metrics</param>
+            <returns>This instance to allow chaining of the configuration.</returns>
+        </member>
+        <member name="M:Nancy.Metrics.NancyMetricsConfig.WithMetricsModule(System.Action{Nancy.INancyModule},System.Action{Metrics.Reports.MetricsEndpointReports},System.String)">
+            <summary>
+            Expose the metrics information at:
+            /metrics in human readable format
+            /metrics/json in json format
+            <code>
+            protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+            {
+                base.ApplicationStartup(container, pipelines);
+            
+                NancyMetrics.Configure()
+                    .WithGlobalMetrics(config => config.RegisterAllMetrics(pipelines))
+                    .WithMetricsEndpoint(m => m.RequiresAuthentication()); // to enable authentication
+            }
+            </code>
+            </summary>
+            <param name="moduleConfig">Action that can configure the Metrics Module ( for example to apply authentication )</param>
+            <param name="config">Action that can configure the endpoint reports</param>
+            <param name="metricsPath">Path where to expose the metrics</param>
+            <returns>This instance to allow chaining of the configuration.</returns>
+        </member>
+        <member name="T:Nancy.Metrics.NancyModuleMetricExtensions.NullStream">
+            <summary>
+            Fake stream used for getting the response size.
+            This class is stolen from NancyFx sources.
+            https://github.com/NancyFx/Nancy/blob/master/src/Nancy/HeadResponse.cs#L45
+            </summary>
+        </member>
+        <member name="T:Metrics.NancyMetrics">
+            <summary>
+            Helper class to register a few NancyFx related metrics.
+            </summary>
+        </member>
+        <member name="M:Metrics.NancyMetrics.WithNancy(Metrics.MetricsConfig,Nancy.Bootstrapper.IPipelines)">
+            <summary>
+            Configure NancyFx integration
+            </summary>
+            <param name="config">Chainable configuration object.</param>
+            <param name="nancyPipelines">Pipelines to hook on.</param>
+            <returns>Chainable configuration object.</returns>
+        </member>
+        <member name="M:Metrics.NancyMetrics.WithNancy(Metrics.MetricsConfig,Nancy.Bootstrapper.IPipelines,System.Action{Nancy.Metrics.NancyMetricsConfig})">
+            <summary>
+            Configure NancyFx integration
+            </summary>
+            <param name="config">Chainable configuration object.</param>
+            <param name="nancyPipelines">Pipelines to hook on.</param>
+            <param name="nancyConfig">Nancy specific configuration options.</param>
+            <returns>Chainable configuration object.</returns>
+        </member>
+    </members>
+</doc>
