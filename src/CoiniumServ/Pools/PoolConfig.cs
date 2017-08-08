@@ -31,6 +31,7 @@ using System;
 using CoiniumServ.Banning;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
+using CoiniumServ.Overpool.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;
 using CoiniumServ.Payments.Config;
@@ -51,6 +52,7 @@ namespace CoiniumServ.Pools
         public bool Enabled { get; private set; }
         public ICoinConfig Coin { get; private set; }
         public IDaemonConfig Daemon { get; private set; }
+        public IOverpoolConfig Overpool { get; private set; }
         public IMetaConfig Meta { get; private set; }
         public IWalletConfig Wallet { get; private set; }
         public IRewardsConfig Rewards { get; private set; }
@@ -83,6 +85,7 @@ namespace CoiniumServ.Pools
                 // load the sections.
                 Coin = coinConfig; // assign the coin config.
                 Daemon = new DaemonConfig(config.daemon);
+                Overpool = new OverpoolConfig(config.overpool);
                 Meta = new MetaConfig(config.meta);
                 Wallet = new WalletConfig(config.wallet);
                 Rewards = new RewardsConfig(config.rewards);

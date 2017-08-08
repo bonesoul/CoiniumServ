@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Cryptology.Merkle;
 using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Logging;
 using CoiniumServ.Shares;
 using CoiniumServ.Transactions;
 using CoiniumServ.Utils.Numerics;
@@ -41,7 +42,7 @@ namespace CoiniumServ.Jobs
 {
 
     [JsonArray]
-    public interface IJob : IEnumerable<object>
+    public interface IJob : IEnumerable<object>, ILoggee
     {
         /// <summary>
         /// ID of the job. Use this ID while submitting share generated from this job.
@@ -128,5 +129,7 @@ namespace CoiniumServ.Jobs
         new IEnumerator<object> GetEnumerator();
 
         bool RegisterShare(IShare share);
+
+
     }
 }

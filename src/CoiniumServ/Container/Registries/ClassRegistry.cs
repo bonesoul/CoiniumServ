@@ -34,6 +34,8 @@ using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
+using CoiniumServ.Overpool;
+using CoiniumServ.Overpool.Config;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Mining.Software;
@@ -58,6 +60,7 @@ namespace CoiniumServ.Container.Registries
             // per-pool objects
             _applicationContext.Container.Register<IPool, Pool>().AsMultiInstance();
             _applicationContext.Container.Register<IDaemonClient, DaemonClient>().AsMultiInstance();
+            _applicationContext.Container.Register<IOverpoolClient, OverpoolClient>().AsMultiInstance();
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<INetworkInfo, NetworkInfo>().AsMultiInstance();

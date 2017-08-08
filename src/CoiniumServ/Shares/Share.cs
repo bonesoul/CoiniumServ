@@ -28,21 +28,24 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Coinbase;
 using CoiniumServ.Cryptology;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
+using CoiniumServ.Logging;
 using CoiniumServ.Mining;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers;
 using CoiniumServ.Utils.Numerics;
 
+
 namespace CoiniumServ.Shares
 {
-    public class Share : IShare
-    {
+    public class Share : Loggee<Share>, IShare
+	{
         public bool IsValid { get { return Error == ShareError.None; } }
         public bool IsBlockCandidate { get; private set; }
         public Block Block { get; private set; }
@@ -68,7 +71,8 @@ namespace CoiniumServ.Shares
         public byte[] BlockHex { get; private set; }
         public byte[] BlockHash { get; private set; }
 
-        public Share(IStratumMiner miner, UInt64 jobId, IJob job, string extraNonce2, string nTimeString, string nonceString)
+		public Share(IStratumMiner miner, UInt64 jobId, IJob job, string extraNonce2, string nTimeString, 
+                     string nonceString)
         {
             Miner = miner;
             JobId = jobId;
@@ -84,13 +88,13 @@ namespace CoiniumServ.Shares
             }
 
             // check size of miner supplied extraNonce2
-            if (extraNonce2.Length/2 != ExtraNonce.ExpectedExtraNonce2Size)
+            if (extraNonce2.Length / 2 != ExtraNonce.ExpectedExtraNonce2Size)
             {
                 Error = ShareError.IncorrectExtraNonce2Size;
                 return;
             }
             ExtraNonce2 = Convert.ToUInt32(extraNonce2, 16); // set extraNonce2 for the share.
-            
+
             // check size of miner supplied nTime.
             if (nTimeString.Length != 8)
             {
@@ -98,7 +102,7 @@ namespace CoiniumServ.Shares
                 return;
             }
             NTime = Convert.ToUInt32(nTimeString, 16); // read ntime for the share
-            
+
             // make sure NTime is within range.
             if (NTime < job.BlockTemplate.CurTime || NTime > submitTime + 7200)
             {
@@ -126,7 +130,7 @@ namespace CoiniumServ.Shares
             }
 
             // construct the coinbase.
-            CoinbaseBuffer = Serializers.SerializeCoinbase(Job, ExtraNonce1, ExtraNonce2); 
+            CoinbaseBuffer = Serializers.SerializeCoinbase(Job, ExtraNonce1, ExtraNonce2);
             CoinbaseHash = Coin.Coinbase.Utils.HashCoinbase(CoinbaseBuffer);
 
             // create the merkle root.
@@ -143,12 +147,65 @@ namespace CoiniumServ.Shares
             // calculate the block difficulty
             BlockDiffAdjusted = Job.Difficulty * Job.HashAlgorithm.Multiplier;
 
+
+            /*
+             * Test false pozitive block candidates: negative bigints were the problem
+            byte[] testbytes = new byte[] { 
+                0xf7, 0xdf, 0xed, 0xbd, 
+                0x9a, 0x2b, 0xa5, 0x1f,
+                0x7b, 0x0d, 0x68, 0x76,
+                0xbe, 0x1f, 0x18, 0xd6,
+                0x2d, 0x49, 0x94, 0x91,
+                0x69, 0x11, 0x39, 0x41,
+                0xdf, 0x1f, 0x25, 0xdb,
+                0x9b, 0x4e, 0x97, 0xb7
+            };
+            string teststr = testbytes.ReverseBuffer().ToHexString();
+            HeaderValue = new BigInteger(testbytes);
+            */
+
             // check if block candicate
             if (Job.Target >= HeaderValue)
+            //if (true) //for Debug only
             {
+				
                 IsBlockCandidate = true;
                 BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer, miner.Pool.Config.Coin.Options.IsProofOfStakeHybrid);
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
+
+				try
+				{
+                    _logger.Debug("Job.Target is greater than or equal HeaderValue(POW-SCRYPT)!!!:\n{9}\n{10}\n\n" +
+                                  "Big-Endian values for Block Header:\n" +
+								  "job.BlockTemplate.Version={0}\n" +
+								  "job.PreviousBlockHash={1}\n" +
+								  "MerkleRoot={2}\n" +
+								  "NTime={3}\n" +
+								  "job.EncodedDifficulty={4}\n" +
+								  "Nonce={5}\n" +
+								  "==============\n" +
+								  "result={6}\n\n" +
+                                  "Big-Endian:\n" +
+                                  "BlockHex={7}\n" +
+                                  "BlockHash(2xSHA256)={8}\n",
+								  job.BlockTemplate.Version,
+								  BitConverter.ToString(job.PreviousBlockHash.HexToByteArray()).Replace("-", string.Empty),
+								  BitConverter.ToString(MerkleRoot).Replace("-", string.Empty),
+								  NTime,
+								  job.EncodedDifficulty,
+								  Nonce,
+                                  BitConverter.ToString(HeaderBuffer).Replace("-", string.Empty),
+								  BlockHex,
+                                  BitConverter.ToString(BlockHash).Replace("-", string.Empty),
+								  Job.Target.ToByteArray().ReverseBuffer().ToHexString(),
+                                  HeaderValue.ToByteArray().ReverseBuffer().ToHexString()
+							);
+
+				}
+				catch (Exception e)
+				{
+					_logger.Error("Something has happened while logging: ", e);
+				}
             }
             else
             {
@@ -156,7 +213,7 @@ namespace CoiniumServ.Shares
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
 
                 // Check if share difficulty reaches miner difficulty.
-                var lowDifficulty = Difficulty/miner.Difficulty < 0.99; // share difficulty should be equal or more then miner's target difficulty.
+                var lowDifficulty = Difficulty / miner.Difficulty < 0.99; // share difficulty should be equal or more then miner's target difficulty.
 
                 if (!lowDifficulty) // if share difficulty is high enough to match miner's current difficulty.
                     return; // just accept the share.
@@ -173,6 +230,37 @@ namespace CoiniumServ.Shares
         {
             Block = block;
             GenerationTransaction = genTx;
+        }
+
+
+        protected override void DescribeYourself()
+        {
+				_logger.Debug(
+					"\nBlockDiffAdjusted={0}\n" +
+					"Difficulty={1}\n" +
+					"ExtraNonce1={2}\n" +
+					"ExtraNonce2={3}\n" +
+					"Height={4}\n" +
+					"NTime={5}\n" +
+					"Nonce={6}",
+					BlockDiffAdjusted,
+					Difficulty,
+					ExtraNonce1,
+					ExtraNonce2,
+					Height,
+					NTime,
+					Nonce
+			    );
+				LogMeSafelyHexString(BlockHash, "BlockHash");
+				LogMeSafelyHexString(CoinbaseBuffer, "CoinbaseBuffer");
+				//LogMeSafely(CoinbaseHash, "CoinbaseHash");
+            _logger.Debug("CoinbaseHash={0}", CoinbaseHash.ToString());
+            _logger.Debug("HeaderBuffer={0}",BitConverter.ToString(HeaderBuffer).Replace("-", string.Empty));
+				LogMeSafelyHexString(HeaderHash, "HeaderHash");
+            _logger.Debug("HeaderValue={0}",BitConverter.ToString(HeaderValue.ToByteArray()).Replace("-", string.Empty));
+				LogMeSafelyHexString(MerkleRoot, "MerkleRoot");
+
+				Job.DescribeYourselfSafely();
         }
     }
 }

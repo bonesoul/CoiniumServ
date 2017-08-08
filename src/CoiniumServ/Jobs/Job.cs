@@ -35,6 +35,7 @@ using CoiniumServ.Algorithms;
 using CoiniumServ.Coin.Coinbase;
 using CoiniumServ.Cryptology.Merkle;
 using CoiniumServ.Daemon.Responses;
+using CoiniumServ.Logging;
 using CoiniumServ.Shares;
 using CoiniumServ.Transactions;
 using CoiniumServ.Transactions.Utils;
@@ -42,10 +43,11 @@ using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers;
 using CoiniumServ.Utils.Numerics;
 using Gibbed.IO;
+using Serilog;
 
 namespace CoiniumServ.Jobs
 {
-    public class Job : IJob
+    public class Job : Loggee<Job>,IJob
     {
         public UInt64 Id { get; private set; }
 
@@ -81,6 +83,7 @@ namespace CoiniumServ.Jobs
 
         public IMerkleTree MerkleTree { get; private set; }
 
+
         /// <summary>
         /// List of shares submitted by miners in order to determine duplicate shares.
         /// </summary>
@@ -93,7 +96,8 @@ namespace CoiniumServ.Jobs
         /// <param name="algorithm"></param>
         /// <param name="blockTemplate"></param>
         /// <param name="generationTransaction"></param>
-        public Job(UInt64 id, IHashAlgorithm algorithm, IBlockTemplate blockTemplate, IGenerationTransaction generationTransaction)
+        public Job(UInt64 id, IHashAlgorithm algorithm, IBlockTemplate blockTemplate, 
+                   IGenerationTransaction generationTransaction)
         {
             // init the values.
             Id = id;
@@ -155,6 +159,7 @@ namespace CoiniumServ.Jobs
 
         public bool RegisterShare(IShare share)
         {
+            // TODO: redesign hash function?
             var submissionId = (UInt64) (share.ExtraNonce1 + share.ExtraNonce2 + share.NTime + share.Nonce); // simply hash the share by summing them..
 
             if(_shares.Contains(submissionId)) // if our list already contain the share
@@ -162,6 +167,32 @@ namespace CoiniumServ.Jobs
 
             _shares.Add(submissionId); // if the code flows here, that basically means we just recieved a new share.
             return true;
+        }
+
+
+
+        protected override void DescribeYourself()
+        {
+				_logger.Debug(
+					"\nCoinbaseInitial={0}\nCoinbaseFinal={1}\nCreationTime={2}\n" +
+					"Difficulty={3}\nEncodedDifficulty={4}\nNTime={5}\n" +
+                    "PreviousBlockHash={6}\nPreviousBlockHashReversed={7}\nVersion={8}",
+					CoinbaseInitial,
+                    CoinbaseFinal,
+                    CreationTime,
+					Difficulty,
+                    EncodedDifficulty,
+                    NTime,
+					PreviousBlockHash,
+                    PreviousBlockHashReversed,
+                    Version
+			    );
+                //LogMeSafely(Target, "Target");
+            _logger.Debug("Target={0}",BitConverter.ToString(Target.ToByteArray()).Replace("-", string.Empty));
+
+                MerkleTree.DescribeYourselfSafely();
+                BlockTemplate.DescribeYourselfSafely();
+                GenerationTransaction.DescribeYourselfSafely();
         }
     }
 }

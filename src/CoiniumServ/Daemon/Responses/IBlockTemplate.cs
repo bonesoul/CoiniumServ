@@ -29,10 +29,11 @@
 
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Logging;
 
 namespace CoiniumServ.Daemon.Responses
 {
-    public interface IBlockTemplate
+    public interface IBlockTemplate: ILoggee
     {
         string Bits { get; set; }
 
@@ -65,5 +66,6 @@ namespace CoiniumServ.Daemon.Responses
         List<string> Mutable { get; set; }
 
         string NonceRange { get; set; }
+
     }
 }

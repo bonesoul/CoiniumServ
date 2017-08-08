@@ -100,6 +100,9 @@ namespace CoiniumServ.Transactions
                 List.Add(txOut);
         }
 
+        /*
+         *Possibly here need to be changed logic for segwit
+        */
         public byte[] GetBuffer()
         {
             byte[] result;
