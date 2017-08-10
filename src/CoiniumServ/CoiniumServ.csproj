@@ -61,16 +61,16 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Gibbed.IO">
-      <HintPath>..\..\build\packages\Gibbed.IO.1.0.0\lib\Gibbed.IO.dll</HintPath>
+      <HintPath>packages\Gibbed.IO.1.0.0\lib\Gibbed.IO.dll</HintPath>
     </Reference>
     <Reference Include="HashLib">
-      <HintPath>..\..\build\packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
+      <HintPath>packages\HashLib.2.0.1\lib\net40\HashLib.dll</HintPath>
     </Reference>
     <Reference Include="JsonConfig">
-      <HintPath>..\..\build\packages\JsonConfig.1.0.0\lib\JsonConfig.dll</HintPath>
+      <HintPath>packages\JsonConfig.1.0.0\lib\JsonConfig.dll</HintPath>
     </Reference>
     <Reference Include="JsonFx">
-      <HintPath>..\..\build\packages\JsonFx.2.0.1209.2802\lib\net40\JsonFx.dll</HintPath>
+      <HintPath>packages\JsonFx.2.0.1209.2802\lib\net40\JsonFx.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="BouncyCastle.Crypto">
