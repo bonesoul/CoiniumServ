@@ -3,7 +3,6 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="CoiniumServ Status">
     <Files>
       <File FileName="CoiniumServ Status" />
-      <File FileName="Utils/Numerics/BigInteger.cs" Line="303" Column="107" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
