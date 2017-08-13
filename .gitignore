@@ -13,6 +13,7 @@ DotNetStratumMiner
 *.suo
 *.user
 *.sln.docstates
+*.userprefs
 suply2prod.sh
 
 # Build results
