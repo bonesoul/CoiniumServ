@@ -55,10 +55,10 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             Delete.Column("Id").FromTable("Block"); // delete the 'Id' column as we don't need it anymore.
 
             // add reward column to block table.
-            Execute.Sql("ALTER TABLE Block ADD Reward DECIMAL(19,5) NOT NULL AFTER Amount");
+            Execute.Sql("ALTER TABLE Block ADD Reward DECIMAL(19,5) NOT NULL DEFAULT 0 AFTER Amount");
 
             // add accounted column to block table
-            Execute.Sql("ALTER TABLE Block ADD Accounted Boolean NOT NULL AFTER Confirmed");
+            Execute.Sql("ALTER TABLE Block ADD Accounted Boolean NOT NULL DEFAULT 0 AFTER Confirmed");
 
             // create the users table.
             Create.Table("Account")                
