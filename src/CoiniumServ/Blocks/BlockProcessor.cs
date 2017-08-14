@@ -148,7 +148,7 @@ namespace CoiniumServ.Blocks
             }
 
             // set the reward of the block to miners.
-            block.Reward = (decimal) poolOutput.Amount;
+            block.Reward = (decimal)poolOutput.Amount - (decimal)_poolConfig.Wallet.TxFee;
 
             // find the block status
             switch (poolOutput.Category)
