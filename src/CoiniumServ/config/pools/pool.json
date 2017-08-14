@@ -7,11 +7,13 @@
         "password": "password"
     },
     "wallet": {
-        "address": "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"
+        "address": "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY",
+        "txfee": 0.001
     },
     "rewards": [
         {
-            "myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1
+            "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY": 0.1,
+            "myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 0.9
         }
     ],
     "stratum": {
