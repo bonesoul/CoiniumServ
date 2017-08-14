@@ -114,31 +114,36 @@ namespace CoiniumServ.Daemon.Responses
 
         public string NonceRange { get; set; }
 
+		//BIP-145: total weight allowed in blocks
+		public UInt32 Weightlimit { get; set ; }
+
         protected override void DescribeYourself()
         {
-                _logger.Debug(
-                    "\nBits={0}\n" +
-                    "Coinbasevalue={1}\n" +
-                    "CurTime={2}\n" +
-                    "Height={3}\n" +
-                    "MinTime={4}\n" +
-                    "NonceRange={5}\n" +
-                    "PreviousBlockHash={6}\n" +
-                    "SigOpLimit={7}\n" +
-                    "SizeLimit={8}\n" +
-                    "Target={9}\n" +
-                    "Version={10}\n",
-                    Bits,Coinbasevalue,
-                    CurTime,
-                    Height,
-                    MinTime,
-                    NonceRange,
-                    PreviousBlockHash,
-                    SigOpLimit,
-                    SizeLimit,
-                    Target,
-                    Version
-                );
+            _logger.Debug(
+                "\nBits={0}\n" +
+                "Coinbasevalue={1}\n" +
+                "CurTime={2}\n" +
+                "Height={3}\n" +
+                "MinTime={4}\n" +
+                "NonceRange={5}\n" +
+                "PreviousBlockHash={6}\n" +
+                "SigOpLimit={7}\n" +
+                "SizeLimit={8}\n" +
+                "Target={9}\n" +
+                "Version={10}\n" +
+                "Weightlimit={11}\n",
+                Bits,Coinbasevalue,
+                CurTime,
+                Height,
+                MinTime,
+                NonceRange,
+                PreviousBlockHash,
+                SigOpLimit,
+                SizeLimit,
+                Target,
+                Version,
+                Weightlimit
+            );
 
 
 
