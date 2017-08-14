@@ -31,11 +31,11 @@ namespace CoiniumServ.Persistance.Providers.Redis
 		/// <param name="port">Redis server port</param>
 		public RedisClient(string host, int port, string password = "", string extraopts = "")			
 		{
-			// create the connection		
-			 CM = ConnectionMultiplexer.Connect(host 
+			// create the connection
+			CM = ConnectionMultiplexer.Connect(host 
 												+ ((port == 0) ? "" : ":" + port)
 												+ (string.IsNullOrEmpty(password) ? "" : (",password="+password))
-                                                + (string.IsNullOrEmpty(extraopts) ? "" : (","+extraopts))                                           );					
+                                                + (string.IsNullOrEmpty(extraopts) ? "" : (","+extraopts)));					
 		}
 
 
