@@ -94,7 +94,7 @@ namespace CoiniumServ.Jobs.Manager
             _minerManager.MinerAuthenticated += OnMinerAuthenticated;
 
             // create the timers as disabled.
-            _reBroadcastTimer = new Timer(IdleJobTimer, null,Timeout.Infinite, Timeout.Infinite);
+            _reBroadcastTimer = new Timer(IdleJobTimer, null, Timeout.Infinite, Timeout.Infinite);
             _blockPollerTimer = new Timer(BlockPoller, null, Timeout.Infinite, Timeout.Infinite);
 
             CreateAndBroadcastNewJob(true); // broadcast a new job initially - which will also setup the timers.
