@@ -67,5 +67,8 @@ namespace CoiniumServ.Daemon.Responses
 
         string NonceRange { get; set; }
 
+		//BIP-145: segwit changes for getblocktemplate, see: https://github.com/bitcoin/bips/blob/master/bip-0145.mediawiki
+		UInt32 Weightlimit { get; set; }
+
     }
 }
