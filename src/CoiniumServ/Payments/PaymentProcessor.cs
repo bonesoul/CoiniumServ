@@ -141,13 +141,15 @@ namespace CoiniumServ.Payments
                 var filtered = paymentsToExecute.Where(
                         x => x.Value.Sum(y => y.Payment.Amount) >= (decimal)_poolConfig.Payments.Minimum)
                         .ToDictionary(x => x.Key, x => x.Value);
-
+                
                 if (filtered.Count <= 0)  // make sure we have payments to execute even after our filter.
                     return executed;
 
                 // coin daemon expects us to handle outputs in <wallet_address,amount> format, create the data structure so.
                 var outputs = filtered.ToDictionary(x => x.Key, x => x.Value.Sum(y => y.Payment.Amount));
-
+                
+                _logger.Debug("Payment Outputs: {0}", outputs);
+                
                 // send the payments all-together.
                 var txHash = _daemonClient.SendMany(_poolAccount, outputs);
 
