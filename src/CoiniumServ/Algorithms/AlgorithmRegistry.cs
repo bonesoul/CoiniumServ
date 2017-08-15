@@ -56,7 +56,7 @@ namespace CoiniumServ.Algorithms
         public const string X15 = "x15";
         public const string X17 = "x17";
 
-        // todo: add hefty1, qubit support
+        // todo: add hefty1 support
 
         private readonly IApplicationContext _applicationContext;
 
