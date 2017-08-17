@@ -126,6 +126,7 @@ namespace CoiniumServ.Daemon.Responses
 
 		public List<string> Rules { get; set; }
 
+
         protected override void DescribeYourself()
         {
             _logger.Debug(

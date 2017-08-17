@@ -96,7 +96,7 @@ namespace CoiniumServ.Daemon.Responses
                 "Fee={1}\n" +
                 "Hash={2}\n" +
                 "Txid={3}\n" +
-                "Wieght={4}\n" +
+                "Weight={4}\n" +
                 "Sigops={5}\n",
                 Data,
                 Fee,
