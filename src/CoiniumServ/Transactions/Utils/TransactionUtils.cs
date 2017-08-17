@@ -46,7 +46,12 @@ namespace CoiniumServ.Transactions.Utils
 
         public static List<byte[]> GetHashList(this BlockTemplateTransaction[] transactions)
         {
-            return transactions.Select(transaction => transaction.Hash.HexToByteArray().ReverseBuffer()).ToList();
+            //segwit
+            try{
+                return transactions.Select(transaction => transaction.Txid.HexToByteArray().ReverseBuffer()).ToList();
+            }catch{
+                return transactions.Select(transaction => transaction.Hash.HexToByteArray().ReverseBuffer()).ToList();
+            }
         }
     }
 }

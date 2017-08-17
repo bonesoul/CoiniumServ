@@ -95,15 +95,15 @@ namespace CoiniumServ.Daemon.Responses
                 "Data={0}\n" +
                 "Fee={1}\n" +
                 "Hash={2}\n" +
-                "Sigops={3}\n" +
-                "Txid={4}\n" +
-                "Wieght={5}\n",
+                "Txid={3}\n" +
+                "Weight={4}\n" +
+                "Sigops={5}\n",
                 Data,
                 Fee,
                 Hash,
-                Sigops,
                 Txid,
-                Weight
+                Weight,
+                Sigops
             );
         }
     }

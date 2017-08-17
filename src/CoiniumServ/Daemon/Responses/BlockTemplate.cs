@@ -117,6 +117,16 @@ namespace CoiniumServ.Daemon.Responses
 		//BIP-145: total weight allowed in blocks
 		public UInt32 Weightlimit { get; set ; }
 
+		//segwit
+		public string Default_witness_commitment { get; set; }
+
+        public string LongPollId { get;  set;}
+
+		public List<string> Capabilities { get; set; }
+
+		public List<string> Rules { get; set; }
+
+
         protected override void DescribeYourself()
         {
             _logger.Debug(
@@ -131,7 +141,8 @@ namespace CoiniumServ.Daemon.Responses
                 "SizeLimit={8}\n" +
                 "Target={9}\n" +
                 "Version={10}\n" +
-                "Weightlimit={11}\n",
+                "Weightlimit={11}" +
+                "Default_witness_commitment={12}\n",
                 Bits,Coinbasevalue,
                 CurTime,
                 Height,
@@ -142,7 +153,8 @@ namespace CoiniumServ.Daemon.Responses
                 SizeLimit,
                 Target,
                 Version,
-                Weightlimit
+                Weightlimit,
+                Default_witness_commitment
             );
 
 
