@@ -70,6 +70,8 @@ namespace CoiniumServ.Statistics
         }
 
         public string ServiceResponse { get; private set; }
+        
+        public string HistoricHashrate { get; private set; }
 
         public void Recache()
         {

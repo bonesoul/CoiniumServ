@@ -65,6 +65,8 @@ namespace CoiniumServ.Pools
         public bool Initialized { get; private set; }
 
         public ulong Hashrate { get; private set; }
+        
+        public Dictionary<string, double> MinersHashrate { get; private set; }
 
         public Dictionary<string, double> RoundShares { get; private set; }
 
@@ -89,6 +91,8 @@ namespace CoiniumServ.Pools
         public IAccountManager AccountManager { get; private set; }
 
         public string ServiceResponse { get; private set; }
+        
+        public string HistoricHashrate { get; private set; }
 
         private readonly IObjectFactory _objectFactory;
 
@@ -345,7 +349,7 @@ namespace CoiniumServ.Pools
 
             BlockRepository.Recache(); // recache the blocks.
             NetworkInfo.Recache(); // let network statistics recache.
-            CalculateHashrate(); // calculate the pool hashrate.
+            CalculateHashrate(); // calculate the pool & workers hashrate.
 
             RoundShares = _storage.GetCurrentShares(); // recache current round.
 
@@ -357,11 +361,49 @@ namespace CoiniumServ.Pools
         {
             // read hashrate stats.
             var windowTime = TimeHelpers.NowInUnixTimestamp() - _configManager.StatisticsConfig.HashrateWindow;
-            _storage.DeleteExpiredHashrateData(windowTime);
+            var untilWindowTime = TimeHelpers.NowInUnixTimestamp() - _configManager.StatisticsConfig.HistoryWindow;
+            _storage.DeleteExpiredHashrateData(untilWindowTime);
             var hashrates = _storage.GetHashrateData(windowTime);
+            var miners = new Dictionary<string, double>();
+            
+            foreach (var hashrate in hashrates)
+            {
+                var minerHashrate = _shareMultiplier * hashrate.Value / _configManager.StatisticsConfig.HashrateWindow;
+
+                if (!miners.ContainsKey(hashrate.Key))
+                {
+                    miners.Add(hashrate.Key, minerHashrate);
+                }
+                else
+                {
+                    miners[hashrate.Key] += minerHashrate;
+                }
+            }
+            MinersHashrate = miners;
 
             double total = hashrates.Sum(pair => pair.Value);
             Hashrate = Convert.ToUInt64(_shareMultiplier * total / _configManager.StatisticsConfig.HashrateWindow);
+            
+            
+            // calculate historic hashrate
+            var historicHashrates = _storage.GetHistoricHashrateData(_configManager.StatisticsConfig.HashrateWindow,
+                                                                        _configManager.StatisticsConfig.HistoryWindow);
+            
+            var historicHashratesPerSecond = new Dictionary<string, double>();
+            foreach (var hashrate in historicHashrates)
+            {
+                var periodHashrate = _shareMultiplier * hashrate.Value / _configManager.StatisticsConfig.HashrateWindow;
+
+                if (!historicHashratesPerSecond.ContainsKey(hashrate.Key))
+                {
+                    historicHashratesPerSecond.Add(hashrate.Key, periodHashrate);
+                }
+                else
+                {
+                    historicHashratesPerSecond[hashrate.Key] += periodHashrate;
+                }
+            }
+            HistoricHashrate = JsonConvert.SerializeObject(historicHashratesPerSecond, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
     }
 }

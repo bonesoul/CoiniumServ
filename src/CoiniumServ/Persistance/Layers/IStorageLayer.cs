@@ -241,6 +241,8 @@ namespace CoiniumServ.Persistance.Layers
         IDictionary<string, double> GetHashrateData(int since);
 
         void DeleteExpiredHashrateData(int until);
+        
+        IDictionary<string, double> GetHistoricHashrateData(int hashrateWindow, int window);
 
         #endregion
     }

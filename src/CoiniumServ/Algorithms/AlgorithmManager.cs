@@ -53,6 +53,8 @@ namespace CoiniumServ.Algorithms
         public int Count { get { return _storage.Count; } }
 
         public string ServiceResponse { get; private set; }
+        
+        public string HistoricHashrate { get; private set; }
 
         public AlgorithmManager(IPoolManager poolManager, IObjectFactory objectFactory)
         {

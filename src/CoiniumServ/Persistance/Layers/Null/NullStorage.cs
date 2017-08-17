@@ -193,5 +193,10 @@ namespace CoiniumServ.Persistance.Layers.Null
         {
             return;
         }
+        
+        public IDictionary<string, double> GetHistoricHashrateData(int hashrateWindow, int window)
+        {
+            return new Dictionary<string, double>();
+        }
     }
 }

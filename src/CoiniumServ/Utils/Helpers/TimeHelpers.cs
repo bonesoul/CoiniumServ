@@ -56,5 +56,14 @@ namespace CoiniumServ.Utils.Helpers
             dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToUniversalTime();
             return dtDateTime;
         }
+        
+        // Round to next X minutes
+        // Ex.
+        //    var dt3 = RoundUp(DateTime.Parse("2011-08-11 17:01"), TimeSpan.FromMinutes(15));
+        //    // dt3 == {11/08/2011 17:15:00}
+        public static DateTime RoundUp(DateTime dt, TimeSpan d)
+        {
+            return new DateTime(((dt.Ticks + d.Ticks - 1) / d.Ticks) * d.Ticks);
+        }
     }
 }
