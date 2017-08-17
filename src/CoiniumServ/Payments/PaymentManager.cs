@@ -38,10 +38,14 @@ namespace CoiniumServ.Payments
     public class PaymentManager:IPaymentManager
     {
         private readonly Timer _timer;
+        
+        private readonly Timer _timerCheck;
 
         private readonly IPoolConfig _poolConfig;
 
         private readonly IList<IPaymentLabor> _labors;
+        
+        private readonly IList<IPaymentLabor> _laborsCheck;
 
         private readonly ILogger _logger;
 
@@ -50,9 +54,12 @@ namespace CoiniumServ.Payments
             _poolConfig = poolConfig;
             _labors = new List<IPaymentLabor>
             {
-                blockProcessor,
-                blockAccounter, 
+                blockAccounter,
                 paymentProcessor
+            };
+            _laborsCheck = new List<IPaymentLabor>
+            {
+                blockProcessor
             };
 
             _logger = Log.ForContext<PaymentManager>().ForContext("Component", poolConfig.Coin.Name);
@@ -62,6 +69,7 @@ namespace CoiniumServ.Payments
 
             // setup the timer to run payment laberos 
             _timer = new Timer(Run, null, _poolConfig.Payments.Interval * 1000, Timeout.Infinite);
+            _timerCheck = new Timer(RunCheck, null, _poolConfig.Payments.CheckInterval * 1000, Timeout.Infinite);
         }
 
         private void Run(object state)
@@ -76,6 +84,20 @@ namespace CoiniumServ.Payments
             }
 
             _timer.Change(_poolConfig.Payments.Interval * 1000, Timeout.Infinite); // reset the timer.
+        }
+        
+        private void RunCheck(object state)
+        {
+            // loop through each payment labors and execute them.
+            foreach (var labor in _laborsCheck)
+            {
+                if (!labor.Active) // make sure labor is active
+                    continue;
+
+                labor.Run(); // run the labor.
+            }
+
+            _timerCheck.Change(_poolConfig.Payments.CheckInterval * 1000, Timeout.Infinite); // reset the timer.
         }
     }
 }
