@@ -15,6 +15,7 @@ DotNetStratumMiner
 *.sln.docstates
 *.userprefs
 suply2prod.sh
+src/CoiniumServ/CoiniumServ.userprefs
 
 # Build results
 [Dd]ebug/
