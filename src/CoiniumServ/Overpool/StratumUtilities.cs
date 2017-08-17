@@ -157,7 +157,7 @@ namespace CoiniumServ.Overpool.Stratum
         /// </summary>        
         /// <typeparam name="T">type of object to deserialize as</typeparam>        
         /// <param name="json">UTF-8 encoded JSON string</param>        
-        /// <returns>deserialized object</returns>
+        /// <returns>deserialized object</returns>f pfxtv gsnftntcm ckfnm vtnhbrb
         public static T JsonDeserialize<T>(string json)
         {
             T result = default(T);

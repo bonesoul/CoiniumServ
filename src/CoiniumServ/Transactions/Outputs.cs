@@ -90,7 +90,7 @@ namespace CoiniumServ.Transactions
             var txOut = new TxOut
             {
                 Value = ((UInt64)amount).LittleEndian(),
-                PublicKeyScriptLenght = Serializers.VarInt((UInt32)recipientScript.Length),
+                PublicKeyScriptLength = Serializers.VarInt((UInt32)recipientScript.Length),
                 PublicKeyScript = recipientScript
             };
 
@@ -114,7 +114,7 @@ namespace CoiniumServ.Transactions
                 foreach (var transaction in List)
                 {
                     stream.WriteValueU64(transaction.Value);
-                    stream.WriteBytes(transaction.PublicKeyScriptLenght);
+                    stream.WriteBytes(transaction.PublicKeyScriptLength);
                     stream.WriteBytes(transaction.PublicKeyScript);
                 }
 
@@ -123,5 +123,29 @@ namespace CoiniumServ.Transactions
 
             return result;
         }
+
+
+		/*
+		 * A secondary merkle root MUST be calculated as per BIP 141's commitment structure specification 
+		 * (see https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki#Commitment_structure)
+		 * to be inserted into the generation (coinbase) transaction.
+		 * Clients MUST insert the commitment as an additional output at the end of the final generation (coinbase) transaction.
+		 * Ref:
+         * https://github.com/bitcoin/bips/blob/master/bip-0145.mediawiki#block-assembly-with-witness-transactions
+         * Example:
+         * https://github.com/slush0/stratum-mining/pull/16/files?diff=unified
+         */
+		public void AddWitnessOutput(byte[] witness_commitment)
+        {
+			var txOut = new TxOut
+			{
+				Value = ((UInt64)0).LittleEndian(),
+				PublicKeyScriptLength = Serializers.VarInt((UInt32)witness_commitment.Length),
+				PublicKeyScript = witness_commitment
+			};
+
+			List.Add(txOut);
+
+		}
     }
 }

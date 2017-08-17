@@ -40,5 +40,6 @@ namespace CoiniumServ.Transactions
         void AddRecipient(string address, double amount);
 
         byte[] GetBuffer();
+        void AddWitnessOutput(byte[] witness_commitment);
     }
 }
