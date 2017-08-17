@@ -37,6 +37,7 @@ namespace CoiniumServ.Statistics
         public bool Valid { get; private set; }
         public int UpdateInterval { get; private set; }
         public int HashrateWindow { get; private set; }
+        public int HistoryWindow { get; private set; }
 
         public StatisticsConfig(dynamic config)
         {
@@ -45,6 +46,7 @@ namespace CoiniumServ.Statistics
                 // load the config data.
                 UpdateInterval = config.updateInterval == 0 ? 60 : config.updateInterval;
                 HashrateWindow = config.hashrateWindow == 0 ? 300 : config.hashrateWindow;
+                HistoryWindow = config.historyWindow == 0 ? 86400 : config.historyWindow;
 
                 Valid = true;
             }

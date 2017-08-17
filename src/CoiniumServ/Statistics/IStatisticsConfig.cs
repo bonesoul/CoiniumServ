@@ -42,5 +42,10 @@ namespace CoiniumServ.Statistics
         /// how many seconds worth of shares should be gathered to generate hashrate.
         /// </summary>
         int HashrateWindow { get; }
+        
+        /// <summary>
+        /// how many seconds to keep in the history stats
+        /// </summary>
+        int HistoryWindow { get; }
     }
 }

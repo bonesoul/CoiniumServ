@@ -84,5 +84,57 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 _logger.Error("An exception occured while deleting expired hashrate data: {0:l}", e.Message);
             }
         }
+        
+        public IDictionary<string, double> GetHistoricHashrateData(int hashrateWindow, int window)
+        {
+            var hashrates = new Dictionary<string, double>();
+
+            try
+            {
+                if (!IsEnabled || !_redisProvider.IsConnected)
+                    return hashrates;
+
+                var newTime = TimeHelpers.RoundUp(DateTime.Now, TimeSpan.FromMinutes(hashrateWindow / 60));
+                var key = string.Format("{0}:hashrate", _coin);
+
+                int iterations = (int)Math.Ceiling((double)window / hashrateWindow);
+                for (var i = iterations; i >= 0; i--)
+                {
+                    var startTime = TimeHelpers.ToUnixTimestamp(newTime) - i*hashrateWindow - hashrateWindow;
+                    var endTime = TimeHelpers.ToUnixTimestamp(newTime) - i*hashrateWindow;
+                    var endTimeString = endTime.ToString();
+                    
+                    var results = _redisProvider.Client.ZRangeByScore(key, startTime, endTime);
+
+                    foreach (var result in results)
+                    {
+                        var data = result.Split(':');
+                        var share = double.Parse(data[0].Replace(',', '.'), CultureInfo.InvariantCulture);
+                        var worker = data[1].Substring(0, data[1].Length - 8);
+
+                        if (!hashrates.ContainsKey(endTimeString))
+                            hashrates.Add(endTimeString, 0);
+
+                        hashrates[endTimeString] += share;
+                    }
+
+                    if (results.Length == 0)
+                    {
+                        if (!hashrates.ContainsKey(endTimeString))
+                            hashrates.Add(endTimeString, 0);
+
+                        hashrates[endTimeString] = 0;
+                    }
+                }
+                
+                //_logger.Debug("{0}", hashrates);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while getting hashrate data: {0:l}", e.Message);
+            }
+
+            return hashrates;
+        }
     }
 }

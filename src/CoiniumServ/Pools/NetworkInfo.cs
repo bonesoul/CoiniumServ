@@ -62,6 +62,8 @@ namespace CoiniumServ.Pools
         public bool Healthy { get; private set; }
 
         public string ServiceResponse { get; private set; } // todo implement this too for /pool/COIN/network
+        
+        public string HistoricHashrate { get; private set; }
 
         private readonly IDaemonClient _daemonClient;
 

@@ -11,7 +11,8 @@
     },
     "statistics": {
         "updateInterval": 60,
-        "hashrateWindow": 300
+        "hashrateWindow": 300,
+        "historyWindow": 86400
     },
     "website": {
         "enabled": true,
@@ -51,4 +52,4 @@
             }
         ]
     }
-} 
+}

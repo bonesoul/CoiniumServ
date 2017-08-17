@@ -20,7 +20,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>global</td>
+                            <td>/api/global</td>
                             <td>none</td>
                             <td><strong>Global Information</strong><br><small>Returns general statistics & information about the pool network.</small></td>
                             <td>
@@ -28,7 +28,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>pools</td>
+                            <td>/api/pools</td>
                             <td>none</td>
                             <td><strong>Pools List & Statistics</strong><br><small>Returns list of pools and detailed statistics for them.</small></td>
                             <td>
@@ -36,7 +36,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>pool</td>
+                            <td>/api/pool/{coin}</td>
                             <td><code>coin symbol</code></td>
                             <td><strong>Pool Statistics</strong><br><small>Returns detailed statistics for a given pool.</small></td>
                             <td>
@@ -47,7 +47,18 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>algorithms</td>
+                            <td>/api/pool/{coin}/graphs/hashrate</td>
+                            <td><code>coin symbol</code></td>
+                            <td><strong>Pool Graph Data</strong><br><small>Returns data for graph drawing for a given pool.</small></td>
+                            <td>
+                                @if (@Model.Coin != null)
+                                {
+                                    <a href="/api/pool/@Model.Coin.Symbol/graphs/hashrate" title="Raw view" target="_blank" class="btn btn-default"><i class="fa fa-eye"></i></a>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>/api/algorithms</td>
                             <td>none</td>
                             <td><strong>Algorithms List & Statistics</strong><br><small>Returns list of algorithms and detailed statistics for them.</small></td>
                             <td>
@@ -55,7 +66,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>algorithm</td>
+                            <td>/api/algorithm/{algo}</td>
                             <td><code>algorithm name</code></td>
                             <td><strong>Algorithm Statistics</strong><br><small>Returns detailed statistics for a given algorithm.</small></td>
                             <td>
