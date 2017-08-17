@@ -70,6 +70,7 @@ namespace CoiniumServ.Daemon.Responses
 		//BIP-145: segwit changes for getblocktemplate, see: https://github.com/bitcoin/bips/blob/master/bip-0145.mediawiki
 		UInt32 Weightlimit { get; set; }
 
+
         //segwit
         string Default_witness_commitment { get; set; }
 
@@ -80,6 +81,7 @@ namespace CoiniumServ.Daemon.Responses
         List<string> Capabilities { get; set;  }
 
         List<string> Rules { get; set;  }
+
 
     }
 }
