@@ -42,7 +42,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             // is valid address against the coin network.
             try
             {
-                return _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
+                char[] delimiterChars = { '.' };
+                string[] splittedUsername = miner.Username.Split(delimiterChars);
+                return _daemonClient.ValidateAddress(splittedUsername[0]).IsValid; // if so validate it against coin daemon as an address.
             }
             catch (RpcException)
             {

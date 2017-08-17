@@ -71,7 +71,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Username = @username",
+                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Username = @username LIMIT 1",
                         new { username }).Single();
                 }
             }
@@ -95,7 +95,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Address = @address",
+                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Address = @address LIMIT 1",
                         new { address }).Single();
                 }
             }

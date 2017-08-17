@@ -107,7 +107,7 @@ namespace CoiniumServ.Payments
                     if (user == null) // if the user doesn't exist
                         continue; // just skip.
 
-                    if (!perUserTransactions.ContainsKey(user.Username)) // check if our list of transactions to be executed already contains an entry for the user.
+                    if (!perUserTransactions.ContainsKey(user.Address)) // check if our list of transactions to be executed already contains an entry for the user.
                     {
                         // if not, create an entry that contains the list of transactions for the user.
 
@@ -119,10 +119,10 @@ namespace CoiniumServ.Payments
                         if (!result.IsValid) // if not skip the payment and let it handled by auto-exchange module.
                             continue;
 
-                        perUserTransactions.Add(user.Username, new List<ITransaction>());
+                        perUserTransactions.Add(user.Address, new List<ITransaction>());
                     }
 
-                    perUserTransactions[user.Username].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
+                    perUserTransactions[user.Address].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
                 }
                 catch(RpcException)
                 { } // on rpc exception; just skip the payment for now.

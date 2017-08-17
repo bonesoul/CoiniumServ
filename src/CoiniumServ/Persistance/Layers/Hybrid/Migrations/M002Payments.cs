@@ -63,8 +63,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             // create the users table.
             Create.Table("Account")                
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
-                .WithColumn("Username").AsString().NotNullable().Unique()
-                .WithColumn("Address").AsString(34).NotNullable().Unique()
+                .WithColumn("Username").AsString().NotNullable()
+                .WithColumn("Address").AsString().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
 
             // create the payout table.
@@ -83,7 +83,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
                 .WithColumn("PaymentId").AsInt32().ForeignKey("Payment", "Id")
                 .WithColumn("Amount").AsDecimal().NotNullable()
                 .WithColumn("Currency").AsString(5).NotNullable()
-                .WithColumn("TxHash").AsString(64).NotNullable()
+                .WithColumn("TxHash").AsString().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
         }
 
