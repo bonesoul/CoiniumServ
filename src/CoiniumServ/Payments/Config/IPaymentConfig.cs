@@ -40,6 +40,11 @@ namespace CoiniumServ.Payments.Config
         /// interval in seconds that payment-processor will be running.
         /// </summary>
         Int32 Interval { get; }
+        
+        /// <summary>
+        /// interval in seconds that payment-processor's block checks will be running.
+        /// </summary>
+        Int32 CheckInterval { get; }
 
         /// <summary>
         /// minimum amount of coins before a miner is eligable for getting a payment.

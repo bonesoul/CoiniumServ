@@ -37,5 +37,10 @@ namespace CoiniumServ.Payments.Config
         ///  Address that generated coins will arrive.
         /// </summary>
         string Adress { get; }
+        
+        /// <summary>
+        ///  Transaction fee to substract from block value
+        /// </summary>
+        double TxFee { get; }
     }
 }
