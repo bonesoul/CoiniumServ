@@ -98,7 +98,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 var key = string.Format("{0}:hashrate", _coin);
 
                 int iterations = (int)Math.Ceiling((double)window / hashrateWindow);
-                for (var i = iterations; i >= 0; i--)
+                for (var i = iterations; i > 0; i--)
                 {
                     var startTime = TimeHelpers.ToUnixTimestamp(newTime) - i*hashrateWindow - hashrateWindow;
                     var endTime = TimeHelpers.ToUnixTimestamp(newTime) - i*hashrateWindow;

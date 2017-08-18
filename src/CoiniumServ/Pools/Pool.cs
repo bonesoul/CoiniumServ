@@ -386,22 +386,19 @@ namespace CoiniumServ.Pools
             
             
             // calculate historic hashrate
-            var historicHashrates = _storage.GetHistoricHashrateData(_configManager.StatisticsConfig.HashrateWindow,
+            var historicHashrates = _storage.GetHistoricHashrateData(_configManager.StatisticsConfig.HistoryHashrateWindow,
                                                                         _configManager.StatisticsConfig.HistoryWindow);
             
-            var historicHashratesPerSecond = new Dictionary<string, double>();
+            var historicHashratesPerSecond = new List<Dictionary<string, object>>();
             foreach (var hashrate in historicHashrates)
             {
-                var periodHashrate = _shareMultiplier * hashrate.Value / _configManager.StatisticsConfig.HashrateWindow;
+                var periodHashrate = _shareMultiplier * hashrate.Value / _configManager.StatisticsConfig.HistoryHashrateWindow;
 
-                if (!historicHashratesPerSecond.ContainsKey(hashrate.Key))
-                {
-                    historicHashratesPerSecond.Add(hashrate.Key, periodHashrate);
-                }
-                else
-                {
-                    historicHashratesPerSecond[hashrate.Key] += periodHashrate;
-                }
+                var hashrateToInsert = new Dictionary<string, object>();
+                hashrateToInsert.Add("date", (int)Int32.Parse(hashrate.Key));
+                hashrateToInsert.Add("value", (double)periodHashrate);
+                
+                historicHashratesPerSecond.Add(hashrateToInsert);
             }
             HistoricHashrate = JsonConvert.SerializeObject(historicHashratesPerSecond, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
