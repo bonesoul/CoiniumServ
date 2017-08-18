@@ -1,0 +1,15 @@
+{
+    "name": "Litecoin-Test",
+    "symbol": "LTC",
+    "algorithm": "scrypt",
+    "site": "https://litecoin.org/",
+    "blockExplorer": {
+        "block": "http://explorer.litecointools.com/block/",
+        "tx": "http://explorer.litecointools.com/tx/",
+        "address": "http://explorer.litecointools.com/address/"
+    },
+    "node": {
+        "magic": "fbc0b6db",
+        "testnetMagic": "fcc1b7dc"
+    }
+}
