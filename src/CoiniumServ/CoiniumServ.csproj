@@ -1011,6 +1011,7 @@
     <None Include="web\default\Content\js\custom.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="config\coins\litecoin-test.json" />
     <Content Include="web\default\Content\js\jquery.timeago.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
