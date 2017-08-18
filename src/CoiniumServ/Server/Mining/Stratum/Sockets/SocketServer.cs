@@ -303,11 +303,13 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
                 {
                     try
                     {
+                        connection.Socket.Shutdown(SocketShutdown.Both);
                         connection.Socket.Disconnect(true);
+                        //connection.Socket.Close();
                     }
                     catch(Exception ex)
                     {
-                        _logger.Error(ex,"Exception on client disconnection");
+                        _logger.Error(ex, "Exception on client disconnection");
                     }
                 }
             }
