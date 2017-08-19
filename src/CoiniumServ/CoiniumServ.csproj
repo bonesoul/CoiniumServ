@@ -135,11 +135,11 @@
       <HintPath>packages\Nancy.1.4.4\lib\net40\Nancy.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="AustinHarris.JsonRpc">
-      <HintPath>packages\AustinHarris.JsonRpc.1.1.70\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
-    </Reference>
     <Reference Include="StackExchange.Redis">
       <HintPath>packages\StackExchange.Redis.1.2.4\lib\net45\StackExchange.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="AustinHarris.JsonRpc">
+      <HintPath>packages\AustinHarris.JsonRpc.1.1.70\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
