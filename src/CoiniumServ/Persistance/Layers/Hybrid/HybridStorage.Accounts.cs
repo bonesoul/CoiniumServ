@@ -75,9 +75,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         new { username }).Single();
                 }
             }
-            catch (InvalidOperationException e) // fires when no result is found.
+            catch (InvalidOperationException) // fires when no result is found.
             {
-                _logger.Error(e,"InvalidOperationException while GetAccountByUsername");
+                _logger.Debug("No results found for GetAccountByUsername");
                 return null;
             }
             catch (Exception e)

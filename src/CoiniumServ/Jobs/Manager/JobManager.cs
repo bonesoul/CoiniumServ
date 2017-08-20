@@ -153,16 +153,16 @@ namespace CoiniumServ.Jobs.Manager
 
                 var count = BroadcastJob(job); // broadcast to miners.  
 
-                _blockPollerTimer.Change(_poolConfig.Job.BlockRefreshInterval, Timeout.Infinite); // reset the block-poller timer so we can start or keep polling for a new block in the network.
-
                 if (initiatedByTimer)
                     _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds", job.Id, count, _poolConfig.Job.RebroadcastTimeout);
                 else
                     _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as network found a new block", job.Id, count);
             }
+			// reset the block-poller timer so we can start or keep polling for a new block in the network.
+			_blockPollerTimer.Change(_poolConfig.Job.BlockRefreshInterval, Timeout.Infinite); 
 
-            // no matter we created a job successfully or not, reset the rebroadcast timer, so we can keep trying. 
-            _reBroadcastTimer.Change(_poolConfig.Job.RebroadcastTimeout * 1000, Timeout.Infinite);
+			// no matter we created a job successfully or not, reset the rebroadcast timer, so we can keep trying. 
+			_reBroadcastTimer.Change(_poolConfig.Job.RebroadcastTimeout * 1000, Timeout.Infinite);
         }
 
         private IJob GetNewJob()

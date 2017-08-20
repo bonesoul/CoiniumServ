@@ -164,7 +164,7 @@ namespace CoiniumServ.Jobs
             if (_shares.Contains(submissionId))
             { // if our list already contain the share
                 //return false; // it basically means we hit a duplicate share.
-                _logger.Debug("Share {0} is duplicated, but we accept it anyway!", share.Nonce);
+                _logger.Debug("Share is duplicated, but we accept it anyway: {0}", share.Nonce);
             }
 
             _shares.Add(submissionId); // if the code flows here, that basically means we just recieved a new share.
