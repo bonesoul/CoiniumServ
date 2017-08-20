@@ -31,6 +31,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using CoiniumServ.Utils.Helpers;
+using Dapper;
+using MySql.Data.MySqlClient;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
 {
@@ -135,6 +137,40 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
 
             return hashrates;
+        }
+        
+        public void AddHistoricValue(List<Dictionary<string, object>> data)
+        {
+            try
+            {
+                if (!IsEnabled)
+                    return;
+
+                using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
+                {
+                    _logger.Debug("{0}", data);
+                    
+                    foreach (var query in data)
+                    {
+                        connection.Execute(
+                            @"INSERT INTO Statistics(Type, Domain, Attached, Value, CreatedAt) VALUES (@type, @domain, @attached, @value, @createdAt)",
+                            new
+                            {
+                                type = query["type"],
+                                domain = query["domain"],
+                                attached = query["attached"],
+                                value = query["value"],
+                                createdAt = TimeHelpers.NowInUnixTimestamp().UnixTimestampToDateTime()
+                            });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error("An exception occured while adding historic value to MySQL; {0:l}", e.Message);
+            }
+            
+            return;
         }
     }
 }

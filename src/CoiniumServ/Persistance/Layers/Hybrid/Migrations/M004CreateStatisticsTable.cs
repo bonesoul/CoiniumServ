@@ -31,26 +31,24 @@ using FluentMigrator;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
 {
-    [Migration(20140901)]
-    public class M001CreateBlocksTable : Migration
+    [Migration(20170819)]
+    public class M004CreateStatisticsTable : Migration
     {
         public override void Up()
         {
             // create the blocks table.
-            Create.Table("blocks")
-                .WithColumn("id").AsInt32().NotNullable().PrimaryKey().Identity()
-                .WithColumn("height").AsInt32().NotNullable()
-                .WithColumn("orphaned").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("confirmed").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("blockHash").AsString().NotNullable()
-                .WithColumn("txHash").AsString().NotNullable()
-                .WithColumn("amount").AsDecimal().NotNullable()
-                .WithColumn("time").AsDateTime().NotNullable();
+            Create.Table("Statistics")
+                .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
+                .WithColumn("Type").AsString().NotNullable()
+                .WithColumn("Domain").AsString().NotNullable()
+                .WithColumn("Attached").AsString().NotNullable()
+                .WithColumn("Value").AsDecimal(19,2).NotNullable()
+                .WithColumn("CreatedAt").AsDateTime().NotNullable();
         }
 
         public override void Down()
         {
-            Delete.Table("blocks");
+            Delete.Table("Statistics");
         }
     }
 }

@@ -350,6 +350,7 @@ namespace CoiniumServ.Pools
             BlockRepository.Recache(); // recache the blocks.
             NetworkInfo.Recache(); // let network statistics recache.
             CalculateHashrate(); // calculate the pool & workers hashrate.
+            SaveStatistics();
 
             RoundShares = _storage.GetCurrentShares(); // recache current round.
 
@@ -386,6 +387,7 @@ namespace CoiniumServ.Pools
             
             
             // calculate historic hashrate
+            /*
             var historicHashrates = _storage.GetHistoricHashrateData(_configManager.StatisticsConfig.HistoryHashrateWindow,
                                                                         _configManager.StatisticsConfig.HistoryWindow);
             
@@ -401,6 +403,43 @@ namespace CoiniumServ.Pools
                 historicHashratesPerSecond.Add(hashrateToInsert);
             }
             HistoricHashrate = JsonConvert.SerializeObject(historicHashratesPerSecond, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            */
+        }
+
+        private void SaveStatistics()
+        {
+            var dataToSave = new List<Dictionary<string, object>>();
+
+            
+            dataToSave.Add(new Dictionary<string, object>
+            {
+                { "type", "miners_count" },
+                { "domain", "pool" },
+                { "attached", (string)Config.Coin.Name },
+                { "value", (decimal)MinersHashrate.Count }
+            });
+
+            dataToSave.Add(new Dictionary<string, object>
+            {
+                { "type", "hashrate" },
+                { "domain", "pool" },
+                { "attached", (string)Config.Coin.Name },
+                { "value", (decimal)Hashrate }
+            });
+
+            
+            foreach (var miner in MinersHashrate)
+            {
+                dataToSave.Add(new Dictionary<string, object>
+                {
+                    { "type", "hashrate" },
+                    { "domain", "miner" },
+                    { "attached", (string)miner.Key },
+                    { "value", (decimal)miner.Value }
+                });
+            }
+
+            _storage.AddHistoricValue(dataToSave);
         }
     }
 }

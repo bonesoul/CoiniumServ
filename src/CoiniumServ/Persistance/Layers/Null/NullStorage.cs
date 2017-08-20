@@ -198,5 +198,10 @@ namespace CoiniumServ.Persistance.Layers.Null
         {
             return new Dictionary<string, double>();
         }
+        
+        public void AddHistoricValue(List<Dictionary<string, object>> data)
+        {
+            return;
+        }
     }
 }
