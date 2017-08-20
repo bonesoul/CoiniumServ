@@ -225,8 +225,9 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
                 else
                     RemoveConnection(connection); // Connection was lost.
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                _logger.Error(e,"SocketException on ReceiveCallback");
                 RemoveConnection(connection); // An error occured while receiving, connection has disconnected.
             }
         }

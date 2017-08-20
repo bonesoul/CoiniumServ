@@ -171,20 +171,23 @@ namespace CoiniumServ.Blocks
             {
                 return _daemonClient.GetBlock(block.BlockHash); // query the block.
             }
-            catch (RpcTimeoutException)
+            catch (RpcTimeoutException e)
             {
+                _logger.Error(e,"RpcTimeoutException while getting block from daemon");
                 // on rpc-timeout exception, let block stay in pending status so we can query it again later.
                 block.Status = BlockStatus.Pending;
                 return null;
             }
-            catch (RpcConnectionException)
+            catch (RpcConnectionException e)
             {
+                _logger.Error(e,"RpcConnectionException while getting block from daemon");
                 // on rpc-connection exception, let block stay in pending status so we can query it again later.
                 block.Status = BlockStatus.Pending;
                 return null;
             }
             catch (RpcErrorException e)
             {
+                _logger.Error(e, "RpcErrorException while getting block from daemon");
                 // block not found
                 if (e.Code == (int)RpcErrorCode.RPC_INVALID_ADDRESS_OR_KEY)
                     block.Status = BlockStatus.Orphaned; // orphan the block if block does not exist.
@@ -212,20 +215,23 @@ namespace CoiniumServ.Blocks
             {
                 return _daemonClient.GetTransaction(block.TransactionHash); // query the transaction
             }
-            catch (RpcTimeoutException)
+            catch (RpcTimeoutException e)
             {
+                _logger.Error(e,"RpcTimeoutException while GetGenerationTx");
                 // on rpc-timeout exception, let block stay in pending status so we can query it again later.
                 block.Status = BlockStatus.Pending;
                 return null;
             }
-            catch (RpcConnectionException)
+            catch (RpcConnectionException e)
             {
+                _logger.Error(e,"RpcConnectionException while GetGenerationTx");
                 // on rpc-connection exception, let block stay in pending status so we can query it again later.
                 block.Status = BlockStatus.Pending;
                 return null;
             }
             catch (RpcErrorException e)
             {
+                _logger.Error(e,"RpcErrorException while GetGenerationTx");
                 // Invalid or non-wallet transaction id
                 if (e.Code == (int) RpcErrorCode.RPC_INVALID_ADDRESS_OR_KEY)
                     block.Status = BlockStatus.Orphaned; // orphan the block if block does not exist.

@@ -87,7 +87,7 @@ namespace CoiniumServ.Jobs
         /// <summary>
         /// List of shares submitted by miners in order to determine duplicate shares.
         /// </summary>
-        private readonly IList<string> _shares;
+        private readonly IList<UInt64> _shares;
 
         /// <summary>
         /// Creates a new instance of JobNotification.
@@ -111,7 +111,7 @@ namespace CoiniumServ.Jobs
             CoinbaseFinal = generationTransaction.Final.ToHexString();
             CreationTime = TimeHelpers.NowInUnixTimestamp();
 
-            _shares = new List<string>();
+            _shares = new List<UInt64>();
 
             // calculate the merkle tree
             MerkleTree = new MerkleTree(BlockTemplate.Transactions.GetHashList());
@@ -159,16 +159,16 @@ namespace CoiniumServ.Jobs
 
         public bool RegisterShare(IShare share)
         {
-            // TODO: redesign hash function?
-            //var submissionId = (UInt64) (share.ExtraNonce1 + share.ExtraNonce2 + share.NTime + share.Nonce); // simply hash the share by summing them..
-            //
-            var submissionId = share.ExtraNonce1.ToString() + share.ExtraNonce2.ToString() + 
-                                    share.NTime.ToString() + share.Nonce.ToString(); // simply hash the share by concatenating them into string..
+            var submissionId = (UInt64) (share.ExtraNonce1 + share.ExtraNonce2 + share.NTime + share.Nonce); // simply hash the share by summing them..
 
-			if(_shares.Contains(submissionId)) // if our list already contain the share
-                return false; // it basically means we hit a duplicate share.
+            if (_shares.Contains(submissionId))
+            { // if our list already contain the share
+                //return false; // it basically means we hit a duplicate share.
+                _logger.Debug("Share {0} is duplicated, but we accept it anyway!", share.Nonce);
+            }
 
             _shares.Add(submissionId); // if the code flows here, that basically means we just recieved a new share.
+            _logger.Debug("Share list length: {0}",_shares.Count);
             return true;
         }
 

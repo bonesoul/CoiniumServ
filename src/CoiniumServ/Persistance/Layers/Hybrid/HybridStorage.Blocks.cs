@@ -110,8 +110,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         new { height }).Single();
                 }
             }
-            catch (InvalidOperationException) // fires when no result is found.
+            catch (InvalidOperationException e) // fires when no result is found.
             {
+                _logger.Error(e,"InvalidOperationException while GetBlock");
                 return null;
             }
             catch (Exception e)
@@ -144,8 +145,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     blocks.AddRange(results);
                 }
             }
-            catch (InvalidOperationException) // fires when no result is found.
+            catch (InvalidOperationException e) // fires when no result is found.
             {
+                _logger.Error(e,"InvalidOperationException while GetBlocks");
                 return null;
             }
             catch (Exception e)
@@ -183,8 +185,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     blocks.AddRange(results);
                 }
             }
-            catch (InvalidOperationException) // fires when no result is found.
+            catch (InvalidOperationException e) // fires when no result is found.
             {
+                _logger.Error(e,"InvalidOperationException while GetPaidBlocks");
                 return null;
             }
             catch (Exception e)

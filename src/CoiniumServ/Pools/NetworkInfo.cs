@@ -170,6 +170,7 @@ namespace CoiniumServ.Pools
             }
             catch(RpcException e)
             {
+                _logger.Error(e,"RpcException while DetectSubmitBlockSupport");
                 if (e is RpcErrorException)
                 {
                     var error = e as RpcErrorException;

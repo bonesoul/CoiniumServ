@@ -61,8 +61,9 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                         new {username}).Single();
                 }
             }
-            catch (InvalidOperationException) // fires when no result is found.
+            catch (InvalidOperationException e) // fires when no result is found.
             {
+                _logger.Error(e,"InvalidOperationException");
                 return null;
             }
             catch (Exception e)

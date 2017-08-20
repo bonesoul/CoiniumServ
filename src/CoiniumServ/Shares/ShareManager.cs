@@ -95,6 +95,7 @@ namespace CoiniumServ.Shares
             var id = Convert.ToUInt64(jobId, 16);
             var job = _jobTracker.Get(id);
 
+            _logger.Debug("TakeShare before share constructor: nonce={0:l}, extranonce2={1:l}",nonceString,extraNonce2);
             // create the share
             var share = new Share(miner, id, job, extraNonce2, nTimeString, nonceString);
 

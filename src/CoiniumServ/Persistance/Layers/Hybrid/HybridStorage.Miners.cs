@@ -44,8 +44,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             {
                 return _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
             }
-            catch (RpcException)
+            catch (RpcException e)
             {
+                _logger.Error(e,"RpcException while Authenticate");
                 return false;
             }
         }

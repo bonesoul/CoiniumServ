@@ -75,8 +75,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         new { username }).Single();
                 }
             }
-            catch (InvalidOperationException) // fires when no result is found.
+            catch (InvalidOperationException e) // fires when no result is found.
             {
+                _logger.Error(e,"InvalidOperationException while GetAccountByUsername");
                 return null;
             }
             catch (Exception e)
@@ -99,8 +100,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                         new { address }).Single();
                 }
             }
-            catch (InvalidOperationException) // fires when no result is found.
+            catch (InvalidOperationException e) // fires when no result is found.
             {
+                _logger.Error(e,"InvalidOperationException while GetAccountByAddress");
                 return null;
             }
             catch (Exception e)

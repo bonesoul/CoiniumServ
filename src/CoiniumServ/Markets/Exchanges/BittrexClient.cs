@@ -74,11 +74,13 @@ namespace CoiniumServ.Markets.Exchanges
 
                         list.Add(entry);
                     }
-                    catch (RuntimeBinderException)
-                    { } // just skip the exception that occurs when a field can not be read.
+                    catch (RuntimeBinderException e)
+                    { 
+                        _logger.Error(e, "RuntimeBinderException while getting market data from Bittrex");
+                    } // just skip the exception that occurs when a field can not be read.
                     catch (Exception e)
                     {
-                        _logger.Error(e.Message);
+                        _logger.Error(e, "Exception while getting data from Bittrex");
                     }
                 }
             }

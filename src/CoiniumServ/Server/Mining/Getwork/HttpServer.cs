@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using Serilog;
 
 // source from: http://stackoverflow.com/a/4673210/170181
 
@@ -130,8 +131,9 @@ namespace CoiniumServ.Server.Mining.Getwork
                     _ready.Set();
                 }
             }
-            catch
+            catch(Exception e)
             {
+                Log.Logger.ForContext<HttpServer>().Error(e, "Exception on ContextReady");
                 return;
             }
         }
@@ -159,6 +161,7 @@ namespace CoiniumServ.Server.Mining.Getwork
                 }
                 catch (Exception e)
                 {
+                    Log.Logger.ForContext<HttpServer>().Error(e, "Exception on Worker");
                     Console.Error.WriteLine(e);
                 }
             }

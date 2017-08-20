@@ -74,6 +74,7 @@ namespace CoiniumServ.Shares
 		public Share(IStratumMiner miner, UInt64 jobId, IJob job, string extraNonce2, string nTimeString, 
                      string nonceString)
         {
+            _logger.Debug("Entering share constructor: {0}",nonceString);
             Miner = miner;
             JobId = jobId;
             Job = job;
@@ -83,21 +84,34 @@ namespace CoiniumServ.Shares
 
             if (Job == null)
             {
+                _logger.Error("Job is null");
                 Error = ShareError.JobNotFound;
                 return;
             }
 
+			if (extraNonce2 == null)
+			{
+				_logger.Error("extraNonce2 is NULL!");
+			}
+
             // check size of miner supplied extraNonce2
             if (extraNonce2.Length / 2 != ExtraNonce.ExpectedExtraNonce2Size)
             {
+                _logger.Error("Incorrect Extranonce2 size: {0} while expecting {1}",extraNonce2.Length,ExtraNonce.ExpectedExtraNonce2Size*2);
                 Error = ShareError.IncorrectExtraNonce2Size;
                 return;
             }
             ExtraNonce2 = Convert.ToUInt32(extraNonce2, 16); // set extraNonce2 for the share.
 
+
+			if (nTimeString == null)
+			{
+				_logger.Error("nTimeString is NULL!");
+			}
             // check size of miner supplied nTime.
             if (nTimeString.Length != 8)
             {
+                _logger.Error("nTimeString length !=8: {0}",nTimeString.Length);
                 Error = ShareError.IncorrectNTimeSize;
                 return;
             }
@@ -106,17 +120,29 @@ namespace CoiniumServ.Shares
             // make sure NTime is within range.
             if (NTime < job.BlockTemplate.CurTime || NTime > submitTime + 7200)
             {
+                _logger.Error("NTime Out Of Range!");
                 Error = ShareError.NTimeOutOfRange;
                 return;
             }
 
+
+			if (nonceString == null)
+			{
+				_logger.Error("nonceString is NULL!");
+			}
             // check size of miner supplied nonce.
             if (nonceString.Length != 8)
             {
+                _logger.Error("nonceString.Length != 8: {0}",nonceString.Length);
                 Error = ShareError.IncorrectNonceSize;
                 return;
             }
             Nonce = Convert.ToUInt32(nonceString, 16); // nonce supplied by the miner for the share.
+
+			if (miner == null)
+			{
+				_logger.Error("miner is NULL!");
+			}
 
             // set job supplied parameters.
             Height = job.BlockTemplate.Height; // associated job's block height.
@@ -125,10 +151,12 @@ namespace CoiniumServ.Shares
             // check for duplicate shares.
             if (!Job.RegisterShare(this)) // try to register share with the job and see if it's duplicated or not.
             {
+                _logger.Error("Duplicate share: {0:l}",nonceString);
                 Error = ShareError.DuplicateShare;
                 return;
             }
 
+            _logger.Debug("Serialize Share {0}", nonceString);
             // construct the coinbase.
             CoinbaseBuffer = Serializers.SerializeCoinbase(Job, ExtraNonce1, ExtraNonce2);
             CoinbaseHash = Coin.Coinbase.Utils.HashCoinbase(CoinbaseBuffer);
@@ -137,8 +165,12 @@ namespace CoiniumServ.Shares
             MerkleRoot = Job.MerkleTree.WithFirst(CoinbaseHash).ReverseBuffer();
 
             // create the block headers
+            _logger.Debug("Getting Header buffer for Share {0}",nonceString);
             HeaderBuffer = Serializers.SerializeHeader(Job, MerkleRoot, NTime, Nonce);
             HeaderHash = Job.HashAlgorithm.Hash(HeaderBuffer);
+            _logger.Debug("Got share {0} of length: {1}\nPOW: {2,64:l}\nTGT: {3,64:l}",nonceString,HeaderHash.Length,
+                          HeaderHash.ReverseBytes().ToHexString(),Job.Target.ToByteArray().ReverseBytes().ToHexString()
+                          );
             HeaderValue = new BigInteger(HeaderHash);
 
             // calculate the share difficulty

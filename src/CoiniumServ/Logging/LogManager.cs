@@ -65,8 +65,8 @@ namespace CoiniumServ.Logging
 #else
             _mainConfig.WriteTo.ColoredConsole(LogEventLevel.Information, ConsoleLogFormat); // use information level for release mode.
 #endif
-			// bind the config to global log.
-			//Log.Logger = _mainConfig.CreateLogger();
+            // bind the config to global log.
+            //Log.Logger = _mainConfig.CreateLogger();
 
             // set the packet log configuration.
             _packetLoggerConfig = new LoggerConfiguration(); // will be used for packet logger.

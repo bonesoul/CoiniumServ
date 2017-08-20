@@ -124,8 +124,10 @@ namespace CoiniumServ.Payments
 
                     perUserTransactions[user.Username].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
                 }
-                catch(RpcException)
-                { } // on rpc exception; just skip the payment for now.
+                catch(RpcException e)
+                { 
+                    _logger.Error(e,"RpcException on GetTransactionCandidates");
+                } // on rpc exception; just skip the payment for now.
             }
 
             return perUserTransactions;
