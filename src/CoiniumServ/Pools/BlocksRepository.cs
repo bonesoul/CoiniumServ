@@ -76,8 +76,6 @@ namespace CoiniumServ.Pools
         private readonly IStorageLayer _storageLayer;
 
         public string ServiceResponse { get; private set; }
-        
-        public string HistoricHashrate { get; private set; }
 
         public BlocksRepository(IStorageLayer storageLayer)
         {

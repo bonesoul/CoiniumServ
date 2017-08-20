@@ -49,9 +49,6 @@ namespace CoiniumServ.Pools
 
         [JsonProperty("hashrate")]
         UInt64 Hashrate { get; }
-        
-        [JsonProperty("minersHashrate")]
-        Dictionary<string, double> MinersHashrate { get; }
 
         [JsonProperty("round")]
         Dictionary<string, double> RoundShares { get; }

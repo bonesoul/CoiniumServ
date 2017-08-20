@@ -130,14 +130,11 @@ namespace CoiniumServ
 
             if (e.IsTerminating)
             {
-                // From .NET 1.x there are no IsTerminating == false exceptions...
-                _logger.Error(exception, "Caught unhandled exception");
-                
-                //_logger.Fatal(exception, "Terminating because of unhandled exception!");
-                #if !DEBUG
-                    // prevent console window from being closed when we are in development mode.
-                    //Environment.Exit(-1);
-                #endif
+                _logger.Fatal(exception, "Terminating because of unhandled exception!");
+#if !DEBUG 
+                // prevent console window from being closed when we are in development mode.
+                Environment.Exit(-1);
+#endif
             }
             else
                 _logger.Error(exception, "Caught unhandled exception");

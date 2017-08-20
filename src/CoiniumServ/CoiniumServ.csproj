@@ -167,7 +167,6 @@
     <Compile Include="Markets\MarketData.cs" />
     <Compile Include="Markets\MarketsConfig.cs" />
     <Compile Include="Persistance\Layers\Hybrid\Migrations\M003FixDefaults.cs" />
-    <Compile Include="Persistance\Layers\Hybrid\Migrations\M004CreateStatisticsTable.cs" />
     <Compile Include="Pools\IProfitInfo.cs" />
     <Compile Include="Pools\ProfitInfo.cs" />
     <Compile Include="Server\Web\Modules\ContactModule.cs" />
@@ -1012,7 +1011,6 @@
     <None Include="web\default\Content\js\custom.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="config\coins\litecoin-test.json" />
     <Content Include="web\default\Content\js\jquery.timeago.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
