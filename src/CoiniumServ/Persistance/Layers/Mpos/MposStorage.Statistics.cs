@@ -68,16 +68,5 @@ namespace CoiniumServ.Persistance.Layers.Mpos
         {
             // MPOS doesn't use another hashrate data structure except the shares, which are already handled by MPOS.
         }
-        
-        public IDictionary<string, double> GetHistoricHashrateData(int hashrateWindow, int window)
-        {
-            // MPOS doesn't use another hashrate data structure except the shares, which are already handled by MPOS.
-            return new Dictionary<string, double>();
-        }
-        
-        public void AddHistoricValue(List<Dictionary<string, object>> data)
-        {
-            // MPOS doesn't use Statistics table(used only in Hybrid storage).
-        }
     }
 }

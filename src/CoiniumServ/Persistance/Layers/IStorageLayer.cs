@@ -241,18 +241,7 @@ namespace CoiniumServ.Persistance.Layers
         IDictionary<string, double> GetHashrateData(int since);
 
         void DeleteExpiredHashrateData(int until);
-        
-        IDictionary<string, double> GetHistoricHashrateData(int hashrateWindow, int window);
 
-        /// <summary>
-        /// Adds a new historic value to MySQL.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="domain"></param>
-        /// <param name="attached"></param>
-        /// <param name="value"></param>
-        void AddHistoricValue(List<Dictionary<string, object>> data);
-        
         #endregion
     }
 }

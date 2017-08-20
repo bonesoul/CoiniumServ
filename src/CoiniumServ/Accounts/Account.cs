@@ -47,14 +47,7 @@ namespace CoiniumServ.Accounts
         }
 
         public Account(IMiner miner)
-        {
-            Id = -1;
-            
-            char[] delimiterChars = { '.' };
-            string[] splittedUsername = miner.Username.Split(delimiterChars);
-            //Username = miner.Username.Remove(0, miner.Username.IndexOf('.') + 1);
-            Username = miner.Username;
-            Address = splittedUsername[0];
-        }
+            :this(-1, miner.Username, miner.Username)
+        { }
     }
 }

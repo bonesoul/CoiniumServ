@@ -62,7 +62,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/pools"] = _ =>
             {
-                var response = (Response)poolManager.ServiceResponse;
+                var response = (Response) poolManager.ServiceResponse;
                 response.ContentType = "application/json";
                 return response;
             };
@@ -72,15 +72,6 @@ namespace CoiniumServ.Server.Web.Modules
                 var pool = poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // query the requested pool.
 
                 var response = pool != null ? (Response)pool.ServiceResponse : PoolNotFound;
-                response.ContentType = "application/json";
-                return response;
-            };
-            
-            Get["/pool/{slug}/graphs/hashrate"] = _ =>
-            {
-                var pool = poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // query the requested pool.
-
-                var response = pool != null ? (Response)pool.HistoricHashrate : PoolNotFound;
                 response.ContentType = "application/json";
                 return response;
             };
@@ -103,7 +94,7 @@ namespace CoiniumServ.Server.Web.Modules
 
             Get["/global"] = _ =>
             {
-                var response = (Response)statisticsManager.ServiceResponse;
+                var response = (Response) statisticsManager.ServiceResponse;
                 response.ContentType = "application/json";
                 return response;
             };          
