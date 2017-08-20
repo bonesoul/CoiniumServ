@@ -65,6 +65,8 @@ namespace CoiniumServ.Pools
         public bool Initialized { get; private set; }
 
         public ulong Hashrate { get; private set; }
+        
+        public Dictionary<string, double> MinersHashrate { get; private set; }
 
         public Dictionary<string, double> RoundShares { get; private set; }
 
@@ -89,6 +91,8 @@ namespace CoiniumServ.Pools
         public IAccountManager AccountManager { get; private set; }
 
         public string ServiceResponse { get; private set; }
+        
+        public string HistoricHashrate { get; private set; }
 
         private readonly IObjectFactory _objectFactory;
 
@@ -345,7 +349,8 @@ namespace CoiniumServ.Pools
 
             BlockRepository.Recache(); // recache the blocks.
             NetworkInfo.Recache(); // let network statistics recache.
-            CalculateHashrate(); // calculate the pool hashrate.
+            CalculateHashrate(); // calculate the pool & workers hashrate.
+            SaveStatistics();
 
             RoundShares = _storage.GetCurrentShares(); // recache current round.
 
@@ -357,11 +362,84 @@ namespace CoiniumServ.Pools
         {
             // read hashrate stats.
             var windowTime = TimeHelpers.NowInUnixTimestamp() - _configManager.StatisticsConfig.HashrateWindow;
-            _storage.DeleteExpiredHashrateData(windowTime);
+            var untilWindowTime = TimeHelpers.NowInUnixTimestamp() - _configManager.StatisticsConfig.HistoryWindow;
+            _storage.DeleteExpiredHashrateData(untilWindowTime);
             var hashrates = _storage.GetHashrateData(windowTime);
+            var miners = new Dictionary<string, double>();
+            
+            foreach (var hashrate in hashrates)
+            {
+                var minerHashrate = _shareMultiplier * hashrate.Value / _configManager.StatisticsConfig.HashrateWindow;
+
+                if (!miners.ContainsKey(hashrate.Key))
+                {
+                    miners.Add(hashrate.Key, minerHashrate);
+                }
+                else
+                {
+                    miners[hashrate.Key] += minerHashrate;
+                }
+            }
+            MinersHashrate = miners;
 
             double total = hashrates.Sum(pair => pair.Value);
             Hashrate = Convert.ToUInt64(_shareMultiplier * total / _configManager.StatisticsConfig.HashrateWindow);
+            
+            
+            // calculate historic hashrate
+            /*
+            var historicHashrates = _storage.GetHistoricHashrateData(_configManager.StatisticsConfig.HistoryHashrateWindow,
+                                                                        _configManager.StatisticsConfig.HistoryWindow);
+            
+            var historicHashratesPerSecond = new List<Dictionary<string, object>>();
+            foreach (var hashrate in historicHashrates)
+            {
+                var periodHashrate = _shareMultiplier * hashrate.Value / _configManager.StatisticsConfig.HistoryHashrateWindow;
+
+                var hashrateToInsert = new Dictionary<string, object>();
+                hashrateToInsert.Add("date", (int)Int32.Parse(hashrate.Key));
+                hashrateToInsert.Add("value", (double)periodHashrate);
+                
+                historicHashratesPerSecond.Add(hashrateToInsert);
+            }
+            HistoricHashrate = JsonConvert.SerializeObject(historicHashratesPerSecond, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            */
+        }
+
+        private void SaveStatistics()
+        {
+            var dataToSave = new List<Dictionary<string, object>>();
+
+            
+            dataToSave.Add(new Dictionary<string, object>
+            {
+                { "type", "miners_count" },
+                { "domain", "pool" },
+                { "attached", (string)Config.Coin.Name },
+                { "value", (decimal)MinersHashrate.Count }
+            });
+
+            dataToSave.Add(new Dictionary<string, object>
+            {
+                { "type", "hashrate" },
+                { "domain", "pool" },
+                { "attached", (string)Config.Coin.Name },
+                { "value", (decimal)Hashrate }
+            });
+
+            
+            foreach (var miner in MinersHashrate)
+            {
+                dataToSave.Add(new Dictionary<string, object>
+                {
+                    { "type", "hashrate" },
+                    { "domain", "miner" },
+                    { "attached", (string)miner.Key },
+                    { "value", (decimal)miner.Value }
+                });
+            }
+
+            _storage.AddHistoricValue(dataToSave);
         }
     }
 }

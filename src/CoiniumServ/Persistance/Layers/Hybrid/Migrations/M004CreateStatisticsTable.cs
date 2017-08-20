@@ -27,43 +27,28 @@
 // 
 #endregion
 
-using System;
+using FluentMigrator;
 
-namespace CoiniumServ.Utils.Helpers
+namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
 {
-    public static class TimeHelpers
+    [Migration(20170819)]
+    public class M004CreateStatisticsTable : Migration
     {
-        public static Int32 NowInUnixTimestamp()
+        public override void Up()
         {
-            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            // create the blocks table.
+            Create.Table("Statistics")
+                .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
+                .WithColumn("Type").AsString().NotNullable()
+                .WithColumn("Domain").AsString().NotNullable()
+                .WithColumn("Attached").AsString().NotNullable()
+                .WithColumn("Value").AsDecimal(19,2).NotNullable()
+                .WithColumn("CreatedAt").AsDateTime().NotNullable();
         }
 
-        public static int ToUnixTimestamp(this DateTime value)
+        public override void Down()
         {
-            return (int)Math.Truncate((value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
-        }
-
-
-        public static int UnixTimestamp(this DateTime value)
-        {
-            return (int)Math.Truncate((value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
-        }
-
-        public static DateTime UnixTimestampToDateTime(this int unixTimeStamp)
-        {
-            // Unix timestamp is seconds past epoch
-            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToUniversalTime();
-            return dtDateTime;
-        }
-        
-        // Round to next X minutes
-        // Ex.
-        //    var dt3 = RoundUp(DateTime.Parse("2011-08-11 17:01"), TimeSpan.FromMinutes(15));
-        //    // dt3 == {11/08/2011 17:15:00}
-        public static DateTime RoundUp(DateTime dt, TimeSpan d)
-        {
-            return new DateTime(((dt.Ticks + d.Ticks - 1) / d.Ticks) * d.Ticks);
+            Delete.Table("Statistics");
         }
     }
 }
