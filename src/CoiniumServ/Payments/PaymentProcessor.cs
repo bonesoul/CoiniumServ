@@ -27,6 +27,7 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -128,6 +129,9 @@ namespace CoiniumServ.Payments
                 { 
                     _logger.Error(e,"RpcException on GetTransactionCandidates");
                 } // on rpc exception; just skip the payment for now.
+                catch(Exception e){
+                    _logger.Error(e,"Unknown exception");
+                }
             }
 
             return perUserTransactions;
@@ -164,13 +168,17 @@ namespace CoiniumServ.Payments
 
                 executed = filtered.SelectMany(x => x.Value).ToList();
 
-                return executed;
+
             }
             catch (RpcException e)
             {
                 _logger.Error("An error occured while trying to execute payment; {0}", e.Message);
-                return executed;
             }
+            catch(Exception e){
+                _logger.Error(e,"Unknown exception");
+            }
+
+            return executed;
         }
 
         private void CommitTransactions(IList<ITransaction> executedPayments)
@@ -204,6 +212,10 @@ namespace CoiniumServ.Payments
                 _logger.Error("Halted as we can not connect to configured coin daemon: {0:l}", e.Message);
                 return false;
             }
+            catch(Exception e){
+                _logger.Error(e,"Unknown exception");
+                return false;
+            }
         }
 
         private bool GetPoolAccount()
@@ -218,6 +230,10 @@ namespace CoiniumServ.Payments
             catch (RpcException e)
             {
                 _logger.Error("Cannot determine pool's central wallet account: {0:l}", e.Message);
+                return false;
+            }
+            catch(Exception e){
+                _logger.Error(e,"Unknown exception");
                 return false;
             }
         }

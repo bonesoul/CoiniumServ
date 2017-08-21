@@ -123,10 +123,15 @@ namespace CoiniumServ
         /// <param name="e"></param>
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
+            _logger.Error("We've just entered in UnhadledExceptionHandler");
             var exception = e.ExceptionObject as Exception;
 
             if (exception == null) // if we can't get the exception, whine about it.
-                throw new ArgumentNullException("e");
+            {
+                _logger.Error("We can't get Exception object from UnhandledExceptionEventArgs");
+                throw new ArgumentNullException(nameof(e));
+            }
+                
 
             if (e.IsTerminating)
             {

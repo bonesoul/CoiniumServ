@@ -27,6 +27,7 @@
 // 
 #endregion
 
+using System;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Mining;
 using CoiniumServ.Server.Mining.Stratum;
@@ -49,6 +50,10 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             catch (RpcException e)
             {
                 _logger.Error(e,"RpcException while Authenticate");
+                return false;
+            }
+            catch(Exception e){
+                _logger.Error(e,"Unknown exception");
                 return false;
             }
         }
