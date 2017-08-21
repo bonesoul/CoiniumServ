@@ -184,7 +184,8 @@ namespace CoiniumServ.Daemon
         {
             string json = GetJsonResponse(httpWebRequest);
 
-            _logger.Verbose("rx: {0}", json.PrettifyJson());
+            _logger.Verbose("rx: {0}", json.PrettifyJson());//too many exceptions here! Should be fixed later
+            //_logger.Verbose("rx: {0}", json);//it is much safer log json string as it is
 
             try
             {
