@@ -127,7 +127,12 @@ namespace CoiniumServ.Utils.Extensions
 
         public static bool IsEscaped(this StringBuilder str, int index)
         {
-            return str.ToString().IsEscaped(index);
+            try
+            {
+                return str.ToString().IsEscaped(index);
+            }catch(Exception){
+                return false;
+            }
         }
     }
 }

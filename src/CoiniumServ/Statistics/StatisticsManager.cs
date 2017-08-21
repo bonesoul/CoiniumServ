@@ -108,7 +108,12 @@ namespace CoiniumServ.Statistics
         
         private void Recache(object state)
         {
-            Recache();
+            try{
+                Recache();
+            }catch(Exception e){
+                _logger.Error(e,"Unknown exception");
+            }
+
         }
     }
 }
