@@ -43,6 +43,8 @@ namespace CoiniumServ.Utils.Extensions
 
         public static string PrettifyJson(this string input)
         {
+            return input;
+            /*
             try
             {
                 input = input.Replace('\"', '\'');
@@ -111,6 +113,7 @@ namespace CoiniumServ.Utils.Extensions
             {
                 return input; // in case we fail to prettify json, handle the exception and just return the input.
             }
+            */
         }
 
         public static string Repeat(this string str, int count)
