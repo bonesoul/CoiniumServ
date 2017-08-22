@@ -43,6 +43,7 @@ namespace CoiniumServ.Utils.Extensions
 
         public static string PrettifyJson(this string input)
         {
+            //this is very unstable function! let's just return json back as it is
             return input;
             /*
             try
