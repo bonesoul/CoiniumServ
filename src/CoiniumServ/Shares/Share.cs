@@ -236,7 +236,7 @@ namespace CoiniumServ.Shares
 				}
 				catch (Exception e)
 				{
-					_logger.Error("Something has happened while logging: ", e);
+					_logger.Error(e,"Something has happened while logging");
 				}
             }
             else
