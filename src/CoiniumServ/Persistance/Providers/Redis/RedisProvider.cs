@@ -72,11 +72,11 @@ namespace CoiniumServ.Persistance.Providers.Redis
                 
                 _logger.Information("Redis storage initialized: {0:l}:{1}, v{2:l}.", _config.Host, _config.Port, version);
                 */
-                _logger.Information("Redis storage initialized: {0:l}:{1}, v{2:l}.", _config.Host, _config.Port);
+                _logger.Information("Redis storage initialized: {0:l}:{1}.", _config.Host, _config.Port);
             }
             catch (Exception e)
             {
-                _logger.Error("Redis storage initialization failed: {0:l}:{1} - {2:l}", _config.Host, _config.Port, e.Message);
+                _logger.Error(e,"Redis storage initialization failed: {0:l}:{1}", _config.Host, _config.Port);
             }
         }
 
