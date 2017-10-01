@@ -203,8 +203,7 @@ namespace CoiniumServ.Server.Mining.Stratum
                         Software = MinerSoftware.Unknown;
                         break;
                 }
-
-                SoftwareVersion = new Version(version);
+                SoftwareVersion = new Version(Regex.Replace(version,"[a-zA-Z]",""));
             }
             catch (Exception e) // on unknown signature
             {
