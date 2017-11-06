@@ -68,7 +68,6 @@ namespace CoiniumServ.Utils
             Console.WriteLine(" BTC : 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D");
             Console.WriteLine(" LTC : LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa");
             Console.WriteLine(" DOGE: DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr");
-            Console.WriteLine(" RDD : Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr");
             Console.WriteLine();
             Console.ResetColor();
         }
