@@ -4,6 +4,15 @@
 
 CoiniumServ was created to be used for Coinium.org mining pool network at first hand. You can check [some of pools](https://github.com/bonesoul/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
+### Buy package
+You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/nz3642swqrv8s5ofisy3jpbv) if you are having difficulties doing so yourself. You can then just configure & run it.
+
+[![Buy with Bitcoin](http://satoshibox.com/img/button-bitcoin.svg)](https://satoshibox.com/nz3642swqrv8s5ofisy3jpbv)
+[![Buy with Litecoin](http://satoshibox.com/img/button-litecoin.svg)](https://satoshibox.com/nz3642swqrv8s5ofisy3jpbv)
+[![Buy with Ether](http://satoshibox.com/img/button-ethereum.svg)](https://satoshibox.com/nz3642swqrv8s5ofisy3jpbv)
+
+**VirusTotal scan results**: [0/56 clean](https://www.virustotal.com/en/file/29a17a38785ae3a535572a08b8dce5dd937718748e9c30f2e0088ed23d157968/analysis/1495791384/)
+
 ### Screenshots
 
 ##### Console
@@ -48,7 +57,6 @@ You can contribute the development of the project by donating;
 * BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
 * LTC: `LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa`
 * DOGE: `DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr`
-* RDD: `Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr`
 
 If you would like to automatically donate a percentage of your pool's earning to support the project, check the [donation setup](https://github.com/bonesoul/CoiniumServ/wiki/Donation) guide.
 
@@ -114,9 +122,4 @@ Start reading by these;
 
 * [Developer's Guide](https://github.com/bonesoul/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/bonesoul/CoiniumServ/wiki/Technical-Documentation)
-
-### Commercial Licensing
-
-Alternatively, you can license this software under a commercial
-license or white-label it as set out in [licenses/commercial.txt](https://github.com/bonesoul/CoiniumServ/blob/develop/licenses/commercial.txt).
 
