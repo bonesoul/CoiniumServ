@@ -74,7 +74,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
                     connection.Execute(
-                        "UPDATE pool_worker SET difficulty = @difficulty WHERE username = @username", new
+                        "INSERT INTO pool_worker (username,difficulty) VALUES (@username,@difficulty) ON DUPLICATE KEY UPDATE difficulty = @difficulty", new
                         {
                             difficulty = miner.Difficulty,
                             username = miner.Username
