@@ -35,24 +35,21 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AustinHarris.JsonRpc, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\AustinHarris.JsonRpc.1.0.4.22\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
+    <Reference Include="AustinHarris.JsonRpc, Version=1.1.70.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\AustinHarris.JsonRpc.1.1.70\lib\net40\AustinHarris.JsonRpc.dll</HintPath>
     </Reference>
-    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\..\build\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
-    <Reference Include="ExposedObject">
+    <Reference Include="ExposedObject, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8a876670e4b7f0f5, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\ExposedObject.1.2.0.0\lib\net40\ExposedObject.dll</HintPath>
     </Reference>
     <Reference Include="Nancy, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Nancy.0.23.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NSubstitute, Version=1.7.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
