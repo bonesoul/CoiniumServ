@@ -300,7 +300,14 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
             lock (connection)
             {
                 if (connection.IsConnected) // disconnect the client
-                    connection.Socket.Disconnect(true);
+                {
+                    try
+                    {
+                        connection.Socket.Disconnect(true);
+                    } catch(Exception ex){
+                        _logger.Error(ex,"Exception on client disconnection");
+                    }
+                }
             }
 
             connection.Client = null;
