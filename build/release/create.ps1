@@ -6,4 +6,4 @@ $msbuildExe = join-path -path (Get-ItemProperty $regKey).$regProperty -childpath
 &$msbuildExe ../../build/CoiniumServ.sln /p:Configuration=Release /t:rebuild /p:DebugSymbols=false /p:DebugType=None /p:AllowedReferenceRelatedFileExtensions=none
 
 # run the tests.
-../../contrib/xunit/xunit.console.clr4.x86.exe ../../src/Tests/bin/Release/CoiniumServ.Tests.dll
+../../build/packages/xunit.runner.console.2.3.1/tools/net452/xunit.console.exe ../../src/Tests/bin/Release/CoiniumServ.Tests.dll
