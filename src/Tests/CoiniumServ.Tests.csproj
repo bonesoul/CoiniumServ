@@ -45,9 +45,8 @@
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\..\build\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
-    <Reference Include="ExposedObject">
-      <HintPath>..\..\build\packages\ExposedObject.1.2.0.0\lib\net40\ExposedObject.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ExposedObject, Version=1.3.0.0, Culture=neutral, PublicKeyToken=8a876670e4b7f0f5, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\ExposedObject.1.3.0\lib\net461\ExposedObject.dll</HintPath>
     </Reference>
     <Reference Include="Nancy, Version=1.4.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\Nancy.1.4.4\lib\net40\Nancy.dll</HintPath>
