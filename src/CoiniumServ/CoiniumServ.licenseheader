@@ -1,4 +1,6 @@
-﻿#region License
+﻿extensions: designer.cs generated.cs
+extensions: .cs .cpp .h
+#region License
 // 
 //     MIT License
 //
@@ -26,30 +28,3 @@
 //     SOFTWARE.
 // 
 #endregion
-
-using Newtonsoft.Json;
-
-namespace CoiniumServ.Pools
-{
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IProfitInfo
-    {
-        [JsonProperty("priceInBtc")]
-        decimal PriceInBtc { get; }
-
-        [JsonProperty("priceInUsd")]
-        decimal PriceInUsd { get; }
-
-        [JsonProperty("blocksPerMhPerHour")]
-        double BlocksPerMhPerHour { get; }
-
-        [JsonProperty("coinsPerMhPerHour")]
-        double CoinsPerMhPerHour { get; }
-
-        [JsonProperty("btcPerMhPerHour")]
-        double BtcPerMhPerHour { get; }
-
-        [JsonProperty("usdPerMhPerHour")]
-        double UsdPerMhPerHour { get; }
-    }
-}

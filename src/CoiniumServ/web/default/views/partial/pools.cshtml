@@ -40,7 +40,6 @@
                                 <td>@pool.Hashrate.GetReadableHashrate()</td>
                                 <td>@pool.NetworkInfo.Hashrate.GetReadableHashrate()</td>
                                 <td title="@string.Format("{0:n8}",pool.NetworkInfo.Difficulty)">@pool.NetworkInfo.Difficulty.GetReadableDifficulty()</td>
-                                <td>@(pool.ProfitInfo.UsdPerMhPerHour > 0 ? string.Format("{0:n2} $/hour", pool.ProfitInfo.UsdPerMhPerHour) : "N/A")</td>
                                 <td class="hidden-xs">@pool.MinerManager.Count</td>
                                 <td class="hidden-xs"><a href="/algorithm/@pool.Config.Coin.Algorithm">@pool.Config.Coin.Algorithm</a></td>
                                 <td class="hidden-xs">
