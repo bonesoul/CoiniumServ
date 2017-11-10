@@ -2,6 +2,8 @@
 
 **CoiniumServ** is a high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features stratum and vanilla services, reward, payment, share processors, vardiff & ban managers, user-friendly embedded web-server & front-end and a full-stack API.
 
+SEGWIT BIP-145 implemented; CS has been migrated from CSRedis to StackExchange.Redis due to this discussion: https://github.com/bonesoul/CoiniumServ/issues/803#issuecomment-316026766
+
 CoiniumServ was created to be used for Coinium.org mining pool network at first hand. You can check [some of pools](https://github.com/bonesoul/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
 
