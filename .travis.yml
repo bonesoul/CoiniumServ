@@ -17,9 +17,7 @@ mono:
   
 script:
 - xbuild build/CoiniumServ.sln /p:Configuration="Debug"
-- xbuild build/CoiniumServ.sln /p:Configuration="Release"
-- mono contrib/xunit/xunit.console.clr4.x86.exe src/Tests/bin/Debug/CoiniumServ.Tests.dll
-- mono contrib/xunit/xunit.console.clr4.x86.exe src/Tests/bin/Release/CoiniumServ.Tests.dll
+- mono mono packages/xunit.runner.console.2.3.1/tools/net452/xunit.console.exe src/Tests/bin/Debug/CoiniumServ.Tests.dll
 
 notifications:
   email: false
