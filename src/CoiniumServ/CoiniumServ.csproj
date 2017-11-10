@@ -485,6 +485,7 @@
     <Compile Include="Utils\Numerics\BigInteger.cs" />
     <Compile Include="Utils\Numerics\BigRational.cs" />
     <Compile Include="VersionInfo.cs" />
+    <None Include="CoiniumServ.licenseheader" />
     <None Include="config\coins\bitcoindark.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -171,6 +171,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Tests.licenseheader" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoiniumServ\CoiniumServ.csproj">
