@@ -27,6 +27,7 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -107,7 +108,7 @@ namespace CoiniumServ.Payments
                     if (user == null) // if the user doesn't exist
                         continue; // just skip.
 
-                    if (!perUserTransactions.ContainsKey(user.Username)) // check if our list of transactions to be executed already contains an entry for the user.
+                    if (!perUserTransactions.ContainsKey(user.Address)) // check if our list of transactions to be executed already contains an entry for the user.
                     {
                         // if not, create an entry that contains the list of transactions for the user.
 
@@ -119,13 +120,18 @@ namespace CoiniumServ.Payments
                         if (!result.IsValid) // if not skip the payment and let it handled by auto-exchange module.
                             continue;
 
-                        perUserTransactions.Add(user.Username, new List<ITransaction>());
+                        perUserTransactions.Add(user.Address, new List<ITransaction>());
                     }
 
-                    perUserTransactions[user.Username].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
+                    perUserTransactions[user.Address].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
                 }
-                catch(RpcException)
-                { } // on rpc exception; just skip the payment for now.
+                catch(RpcException e)
+                { 
+                    _logger.Error(e,"RpcException on GetTransactionCandidates");
+                } // on rpc exception; just skip the payment for now.
+                catch(Exception e){
+                    _logger.Error(e,"Unknown exception");
+                }
             }
 
             return perUserTransactions;
@@ -141,13 +147,15 @@ namespace CoiniumServ.Payments
                 var filtered = paymentsToExecute.Where(
                         x => x.Value.Sum(y => y.Payment.Amount) >= (decimal)_poolConfig.Payments.Minimum)
                         .ToDictionary(x => x.Key, x => x.Value);
-
+                
                 if (filtered.Count <= 0)  // make sure we have payments to execute even after our filter.
                     return executed;
 
                 // coin daemon expects us to handle outputs in <wallet_address,amount> format, create the data structure so.
                 var outputs = filtered.ToDictionary(x => x.Key, x => x.Value.Sum(y => y.Payment.Amount));
-
+                
+                _logger.Debug("Payment Outputs: {0}", outputs);
+                
                 // send the payments all-together.
                 var txHash = _daemonClient.SendMany(_poolAccount, outputs);
 
@@ -160,13 +168,17 @@ namespace CoiniumServ.Payments
 
                 executed = filtered.SelectMany(x => x.Value).ToList();
 
-                return executed;
+
             }
             catch (RpcException e)
             {
                 _logger.Error("An error occured while trying to execute payment; {0}", e.Message);
-                return executed;
             }
+            catch(Exception e){
+                _logger.Error(e,"Unknown exception");
+            }
+
+            return executed;
         }
 
         private void CommitTransactions(IList<ITransaction> executedPayments)
@@ -200,6 +212,10 @@ namespace CoiniumServ.Payments
                 _logger.Error("Halted as we can not connect to configured coin daemon: {0:l}", e.Message);
                 return false;
             }
+            catch(Exception e){
+                _logger.Error(e,"Unknown exception");
+                return false;
+            }
         }
 
         private bool GetPoolAccount()
@@ -214,6 +230,10 @@ namespace CoiniumServ.Payments
             catch (RpcException e)
             {
                 _logger.Error("Cannot determine pool's central wallet account: {0:l}", e.Message);
+                return false;
+            }
+            catch(Exception e){
+                _logger.Error(e,"Unknown exception");
                 return false;
             }
         }

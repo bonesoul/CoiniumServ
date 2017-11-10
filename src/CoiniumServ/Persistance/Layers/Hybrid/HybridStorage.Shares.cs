@@ -65,15 +65,20 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     var randomModifier = Convert.ToString(miner.ValidShareCount, 16).PadLeft(8, '0');
                     string modifiedUsername = miner.Username + randomModifier;
                     var entry = string.Format("{0}:{1}", (double)miner.Difficulty, modifiedUsername);
-                    _redisProvider.Client.ZAdd(hashrateKey, Tuple.Create(TimeHelpers.NowInUnixTimestamp(), entry));
+                    _redisProvider.Client.ZAdd(hashrateKey, Tuple.Create((double)TimeHelpers.NowInUnixTimestamp(), entry));
                 }
 
                 //_client.EndPipe(); // execute the batch commands.
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while comitting share: {0:l}", e.Message);
-            }
+                _logger.Error("An exception occured while comitting share: {0:l}\n{1:l}", e.Message,e.StackTrace);
+                //Bug 2017-07-17 16:00
+                //An exception occured while comitting share: 
+                //"Cannot write to a BufferedStream while the read buffer is not empty if the underlying stream is not seekable. 
+                //Ensure that the stream underlying this BufferedStream can seek or avoid interleaving read and write operations on this BufferedStream."
+
+			}
         }
 
         public void MoveCurrentShares(int height)

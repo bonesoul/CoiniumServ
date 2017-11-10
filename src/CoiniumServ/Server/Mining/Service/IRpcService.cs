@@ -27,8 +27,13 @@
 // 
 #endregion
 
+
+
 namespace CoiniumServ.Server.Mining.Service
 {
     public interface IRpcService
     { }
+
+	
+
 }

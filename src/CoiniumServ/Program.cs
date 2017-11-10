@@ -120,18 +120,26 @@ namespace CoiniumServ
         /// <param name="e"></param>
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
+            _logger.Error("We've just entered in UnhadledExceptionHandler");
             var exception = e.ExceptionObject as Exception;
 
             if (exception == null) // if we can't get the exception, whine about it.
-                throw new ArgumentNullException("e");
+            {
+                _logger.Error("We can't get Exception object from UnhandledExceptionEventArgs");
+                throw new ArgumentNullException(nameof(e));
+            }
+                
 
             if (e.IsTerminating)
             {
-                _logger.Fatal(exception, "Terminating because of unhandled exception!");
-#if !DEBUG 
-                // prevent console window from being closed when we are in development mode.
-                Environment.Exit(-1);
-#endif
+                // From .NET 1.x there are no IsTerminating == false exceptions...
+                _logger.Error(exception, "Caught unhandled exception");
+                
+                //_logger.Fatal(exception, "Terminating because of unhandled exception!");
+                #if !DEBUG
+                    // prevent console window from being closed when we are in development mode.
+                    //Environment.Exit(-1);
+                #endif
             }
             else
                 _logger.Error(exception, "Caught unhandled exception");

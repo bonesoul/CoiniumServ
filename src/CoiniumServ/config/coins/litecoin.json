@@ -4,9 +4,9 @@
     "algorithm": "scrypt",
     "site": "https://litecoin.org/",
     "blockExplorer": {
-        "block": "http://block-explorer.com/block/",
-        "tx": "http://block-explorer.com/tx/",
-        "address": "http://block-explorer.com/address/"
+        "block": "https://live.blockcypher.com/ltc/block/",
+        "tx": "https://live.blockcypher.com/ltc/tx/",
+        "address": "https://live.blockcypher.com/ltc/address/"
     },
     "node": {
         "magic": "fbc0b6db",

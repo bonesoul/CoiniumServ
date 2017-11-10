@@ -36,10 +36,12 @@ using CoiniumServ.Cryptology;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
+using CoiniumServ.Logging;
 using CoiniumServ.Pools;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Helpers;
 using Gibbed.IO;
+using CoiniumServ.Utils.Extensions;
 
 namespace CoiniumServ.Transactions
 {
@@ -60,7 +62,7 @@ namespace CoiniumServ.Transactions
     /// https://en.bitcoin.it/wiki/Protocol_specification#tx
     /// https://en.bitcoin.it/wiki/Transactions#Generation
     /// </specification>
-    public class GenerationTransaction : IGenerationTransaction
+    public class GenerationTransaction : Loggee<GenerationTransaction>,IGenerationTransaction
     {
         /// <summary>
         /// Transaction data format version
@@ -128,7 +130,8 @@ namespace CoiniumServ.Transactions
         /// https://github.com/zone117x/node-stratum-pool/blob/b24151729d77e0439e092fe3a1cdbba71ca5d12e/lib/transactions.js
         /// https://github.com/Crypto-Expert/stratum-mining/blob/master/lib/coinbasetx.py
         /// </remarks>
-        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, IBlockTemplate blockTemplate, IPoolConfig poolConfig)
+        public GenerationTransaction(IExtraNonce extraNonce, IDaemonClient daemonClient, 
+                                     IBlockTemplate blockTemplate, IPoolConfig poolConfig)
         {
             // TODO: we need a whole refactoring here.
             // we should use DI and it shouldn't really require daemonClient connection to function.
@@ -160,25 +163,31 @@ namespace CoiniumServ.Transactions
                             (byte) extraNonce.ExtraNoncePlaceholder.Length,
                             "/CoiniumServ/")
                 }
-            }; 
+            };
 
             // transaction outputs
             Outputs = new Outputs(daemonClient, poolConfig.Coin);
-
             double blockReward = BlockTemplate.Coinbasevalue; // the amount rewarded by the block.
 
             // generate output transactions for recipients (set in config).
             foreach (var pair in poolConfig.Rewards)
             {
-                var amount = blockReward * pair.Value / 100; // calculate the amount he recieves based on the percent of his shares.
+                var amount = blockReward * pair.Value / 100; // calculate the amount the recieves based on the percent of his shares.
                 blockReward -= amount;
-
                 Outputs.AddRecipient(pair.Key, amount);
             }
 
             // send the remaining coins to pool's central wallet.
-            Outputs.AddPoolWallet(poolConfig.Wallet.Adress, blockReward); 
-        }
+            Outputs.AddPoolWallet(poolConfig.Wallet.Adress, blockReward);
+
+			// Final output is witness
+			//https://github.com/slush0/stratum-mining/pull/16/files?diff=unified
+            if (!string.IsNullOrEmpty(BlockTemplate.Default_witness_commitment)){
+                Outputs.AddWitnessOutput(BlockTemplate.Default_witness_commitment.HexToByteArray());
+            }
+
+
+		}
 
         public void Create()
         {
@@ -195,7 +204,7 @@ namespace CoiniumServ.Transactions
                 stream.WriteBytes(Inputs.First().PreviousOutput.Hash.Bytes);
                 stream.WriteValueU32(Inputs.First().PreviousOutput.Index.LittleEndian());
 
-                // write signature script lenght
+                // write signature script length
                 var signatureScriptLenght = (UInt32)(Inputs.First().SignatureScript.Initial.Length + ExtraNonce.ExtraNoncePlaceholder.Length + Inputs.First().SignatureScript.Final.Length);
                 stream.WriteBytes(Serializers.VarInt(signatureScriptLenght).ToArray());
 
@@ -228,6 +237,23 @@ namespace CoiniumServ.Transactions
 
                 Final = stream.ToArray();
             }
+        }
+
+        protected override void DescribeYourself()
+        {
+                LogMeSafelyHexString(Final,"Final");
+                LogMeSafelyHexString(Initial,"Initial");
+				LogMeSafelyHexString(TxMessage, "TxMessage");
+				_logger.Debug("Version={0}", Version);
+
+                _logger.Debug("Inputs:");
+                foreach(TxIn input in Inputs){
+                    _logger.Debug(
+                        "input.PreviousOutput[{0}].Hash={1}",
+                        input.PreviousOutput.Index,
+                        input.PreviousOutput.Hash.ToString()                               
+                                 );
+                }			
         }
     }    
 }

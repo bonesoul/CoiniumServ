@@ -46,6 +46,8 @@ namespace CoiniumServ.Pools
         public int Count { get { return _storage.Count; } }
 
         public string ServiceResponse { get; private set; }
+        
+        public string HistoricHashrate { get; private set; }
 
         private readonly IList<IPool> _storage; 
 
@@ -114,7 +116,7 @@ namespace CoiniumServ.Pools
             }
             catch (Exception e)
             {
-                _logger.Error("Error recaching statistics; {0:l}", e.Message);
+                _logger.Error(e, "Error recaching statistics");
             }
         }
 

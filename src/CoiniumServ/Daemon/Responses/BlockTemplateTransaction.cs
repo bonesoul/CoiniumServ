@@ -28,6 +28,7 @@
 #endregion
 
 using System;
+using CoiniumServ.Logging;
 
 namespace CoiniumServ.Daemon.Responses
 {
@@ -36,8 +37,9 @@ namespace CoiniumServ.Daemon.Responses
     /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki#Transactions%20Object%20Format
     /// </remarks>
     /// </summary>
-    public class BlockTemplateTransaction
+    public class BlockTemplateTransaction:Loggee<BlockTemplateTransaction>
     {
+
         /// <summary>
         /// transaction data encoded in hexadecimal (byte-for-byte)
         /// </summary>
@@ -66,9 +68,43 @@ namespace CoiniumServ.Daemon.Responses
         public bool Required { get; set; }
 
         /// <summary>
-        /// total number of SigOps, as counted for purposes of block limits; if key is not present, sigop count is unknown and clients MUST NOT assume 
-        /// there aren't any
+        /// total number of SigOps, as counted for purposes of block limits; if key is not present, sigop count is unknown 
+        /// and clients MUST NOT assume there aren't any
         /// </summary>
         public int Sigops { get; set; }
+
+        /// <summary>
+        /// BIP-145:
+        /// transaction id encoded in hexadecimal; required for transactions with witness data
+        /// </summary>
+        public string Txid { get; set; }
+
+        /// <summary>
+        /// BIP-145:
+        /// numeric weight of the transaction, as counted for purposes of the block's weightlimit; 
+        /// if key is not present, weight is unknown and clients MUST NOT assume it is zero, 
+        /// although they MAY choose to calculate it themselves
+        /// </summary>
+        public UInt32 Weight { get; set; }
+
+
+
+        protected override void DescribeYourself()
+        {
+            _logger.Debug(
+                "Data={0}\n" +
+                "Fee={1}\n" +
+                "Hash={2}\n" +
+                "Txid={3}\n" +
+                "Weight={4}\n" +
+                "Sigops={5}\n",
+                Data,
+                Fee,
+                Hash,
+                Txid,
+                Weight,
+                Sigops
+            );
+        }
     }
 }

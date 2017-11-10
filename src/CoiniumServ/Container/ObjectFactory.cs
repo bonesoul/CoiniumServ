@@ -36,6 +36,8 @@ using CoiniumServ.Coin.Config;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Config;
+using CoiniumServ.Overpool;
+using CoiniumServ.Overpool.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
@@ -134,6 +136,21 @@ namespace CoiniumServ.Container
             return _applicationContext.Container.Resolve<IDaemonClient>(@params);
         }
 
+		/// <summary>
+		/// Returns a new instance of overpool client.
+		/// </summary>
+		/// <returns></returns>
+        public IOverpoolClient GetOverpoolClient(IOverpoolConfig overpoolConfig, ICoinConfig coinConfig)
+		{
+			var @params = new NamedParameterOverloads
+			{
+                {"overpoolConfig", overpoolConfig},
+				{"coinConfig", coinConfig}
+			};
+
+            return _applicationContext.Container.Resolve<IOverpoolClient>(@params);
+		}
+
         public IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager)
         {
             var @params = new NamedParameterOverloads
@@ -146,12 +163,13 @@ namespace CoiniumServ.Container
             return _applicationContext.Container.Resolve<IMinerManager>(@params);
         }
 
-        public IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
+        public IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IOverpoolClient overpoolClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             var @params = new NamedParameterOverloads
             {
                 {"poolConfig", poolConfig},
                 {"daemonClient", daemonClient},
+                {"overpoolClient", overpoolClient},
                 {"jobTracker", jobTracker},
                 {"shareManager", shareManager},
                 {"minerManager", minerManager},

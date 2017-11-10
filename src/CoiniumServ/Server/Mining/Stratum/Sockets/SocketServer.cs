@@ -1,22 +1,22 @@
 ﻿#region License
-// 
+//
 //     MIT License
 //
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2017, CoiniumServ Project
 //     Hüseyin Uslu, shalafiraistlin at gmail dot com
 //     https://github.com/bonesoul/CoiniumServ
-// 
+//
 //     Permission is hereby granted, free of charge, to any person obtaining a copy
 //     of this software and associated documentation files (the "Software"), to deal
 //     in the Software without restriction, including without limitation the rights
 //     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //     copies of the Software, and to permit persons to whom the Software is
 //     furnished to do so, subject to the following conditions:
-//     
+//
 //     The above copyright notice and this permission notice shall be included in all
 //     copies or substantial portions of the Software.
-//     
+//
 //     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,7 @@
 //     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //     SOFTWARE.
-// 
+//
 #endregion
 
 using System;
@@ -99,7 +99,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         protected virtual bool Listen(string bindIP, int port)
         {
             // Check if the server instance has been already disposed.
-            if (_disposed) 
+            if (_disposed)
                 throw new ObjectDisposedException(GetType().Name, "Server instance has been already disposed.");
 
             // Check if the server is already listening.
@@ -113,7 +113,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
 
                 // Setup our options:
                 // * NoDelay - true - don't use packet coalescing
-                // * DontLinger - true - don't keep sockets around once they've been disconnected            
+                // * DontLinger - true - don't keep sockets around once they've been disconnected
                 Listener.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
                 Listener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
 
@@ -122,19 +122,19 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
                 Port = port;
 
                 // Start listening for incoming connections.
-                Listener.Listen(int.MaxValue); // let the maximum amount of accept backlog - we are basically leaving it to OS to determine the value. 
+                Listener.Listen(int.MaxValue); // let the maximum amount of accept backlog - we are basically leaving it to OS to determine the value.
                                                // by setting the maximum available value, we can make sure that we can handle large amounts of concurrent
                                                // connection requests (maybe after a server restart).
-                
+
                 // http://blog.stephencleary.com/2009/05/using-socket-as-server-listening-socket.html
-                // The “backlog” parameter to Socket.Listen is how many connections the OS may accept on behalf of the application. This is not 
-                // the total number of active connections; it is only how many connections will be established if the application “gets behind”. 
+                // The “backlog” parameter to Socket.Listen is how many connections the OS may accept on behalf of the application. This is not
+                // the total number of active connections; it is only how many connections will be established if the application “gets behind”.
                 // Once connections are Accepted, they move out of the backlog queue and no longer “count” against the backlog limit.
 
-                // The .NET docs fail to mention that int.MaxValue can be used to invoke the “dynamic backlog” feature (Windows Server systems only), 
-                // essentially leaving it up to the OS. It is tempting to set this value very high (e.g., always passing int.MaxValue), but this would 
-                // hurt system performance (on non-server machines) by pre-allocating a large amount of scarce resources. This value should be set to a 
-                // reasonable amount (usually between 2 and 5), based on how many connections one is realistically expecting and how quickly they can be 
+                // The .NET docs fail to mention that int.MaxValue can be used to invoke the “dynamic backlog” feature (Windows Server systems only),
+                // essentially leaving it up to the OS. It is tempting to set this value very high (e.g., always passing int.MaxValue), but this would
+                // hurt system performance (on non-server machines) by pre-allocating a large amount of scarce resources. This value should be set to a
+                // reasonable amount (usually between 2 and 5), based on how many connections one is realistically expecting and how quickly they can be
                 // Accepted.
 
                 IsListening = true;
@@ -158,7 +158,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         /// <param name="result"></param>
         private void AcceptCallback(IAsyncResult result)
         {
-            if (Listener == null) 
+            if (Listener == null)
                 return;
 
             try
@@ -206,8 +206,8 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         private void ReceiveCallback(IAsyncResult result)
         {
             var connection = result.AsyncState as Connection; // Get the connection connection passed to the callback.
-            
-            if (connection == null)                 
+
+            if (connection == null)
                 return;
 
             try
@@ -238,10 +238,10 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
 
         public virtual int Send(Connection connection, byte[] buffer, int start, int count, SocketFlags flags)
         {
-            if (connection == null) 
+            if (connection == null)
                 throw new ArgumentNullException("connection");
 
-            if (buffer == null) 
+            if (buffer == null)
                 throw new ArgumentNullException("buffer");
 
             if (!connection.IsConnected)
@@ -254,7 +254,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
             {
                 while (bytesRemaining > 0) // Ensure we send every byte.
                 {
-                    int bytesSent = connection.Socket.Send(buffer, start, count, flags);                       
+                    int bytesSent = connection.Socket.Send(buffer, start, count, flags);
 
                     if (bytesSent > 0)
                         OnDataSent(new ConnectionDataEventArgs(connection, buffer.Enumerate(totalBytesSent, bytesSent))); // Raise the Data Sent event.
@@ -279,10 +279,10 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         }
         public virtual int Send(Connection connection, IEnumerable<byte> data, SocketFlags flags)
         {
-            if (connection == null) 
+            if (connection == null)
                 throw new ArgumentNullException("connection");
 
-            if (data == null) 
+            if (data == null)
                 throw new ArgumentNullException("data");
 
             var buffer = data.ToArray();
@@ -329,11 +329,11 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         public virtual void Shutdown()
         {
             // Check if the server has been disposed.
-            if (_disposed) 
+            if (_disposed)
                 throw new ObjectDisposedException(GetType().Name, "Server has been already disposed.");
 
             // Check if the server is actually listening.
-            if (!IsListening) 
+            if (!IsListening)
                 return;
 
             // Close the listener socket.
@@ -396,7 +396,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         {
             var handler = ClientConnected;
 
-            if (handler != null) 
+            if (handler != null)
                 handler(this, e);
         }
 
@@ -404,7 +404,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         {
             var handler = ClientDisconnected;
 
-            if (handler != null) 
+            if (handler != null)
                 handler(this, e);
         }
 
@@ -420,7 +420,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         {
             var handler = DataReceived;
 
-            if (handler != null) 
+            if (handler != null)
                 handler(this, e);
         }
 
@@ -428,7 +428,7 @@ namespace CoiniumServ.Server.Mining.Stratum.Sockets
         {
             var handler = DataSent;
 
-            if (handler != null) 
+            if (handler != null)
                 handler(this, e);
         }
 

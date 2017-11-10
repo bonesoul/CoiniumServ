@@ -130,16 +130,16 @@ namespace CoiniumServ.Mining
         public void Remove(IConnection connection)
         {
             // find the miner associated with the connection.
-            var miner = (from pair in _miners
-                let client = (IClient) pair.Value
-                where client.Connection == connection
-                select pair.Value).FirstOrDefault();
+            lock (_minersLock)
+            {// lock the list before we Enumerate or modify the collection.
+                var miner = (from pair in _miners
+                             let client = (IClient)pair.Value
+                             where client.Connection == connection
+                             select pair.Value).FirstOrDefault();
 
-            if (miner == null) // make sure the miner exists
-                return;
-
-            lock (_minersLock) // lock the list before we modify the collection.
-                _miners.Remove(miner.Id); // remove the miner.
+                if (miner != null) // make sure the miner exists
+                    _miners.Remove(miner.Id); // remove the miner.
+            }
         }
 
         public void Authenticate(IMiner miner)

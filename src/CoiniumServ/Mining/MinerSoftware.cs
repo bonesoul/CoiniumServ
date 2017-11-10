@@ -35,6 +35,7 @@ namespace CoiniumServ.Mining
         BfgMiner,
         CCMiner,
         CGMiner,
-        CudaMiner
+        CudaMiner,
+		CPUMiner //Added by Vagabondan 2017-06-19
     }
 }

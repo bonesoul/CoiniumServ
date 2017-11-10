@@ -70,6 +70,8 @@ namespace CoiniumServ.Statistics
         }
 
         public string ServiceResponse { get; private set; }
+        
+        public string HistoricHashrate { get; private set; }
 
         public void Recache()
         {
@@ -106,7 +108,12 @@ namespace CoiniumServ.Statistics
         
         private void Recache(object state)
         {
-            Recache();
+            try{
+                Recache();
+            }catch(Exception e){
+                _logger.Error(e,"Unknown exception");
+            }
+
         }
     }
 }

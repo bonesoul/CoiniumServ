@@ -2,5 +2,6 @@
 cd ../..
 git submodule init
 git submodule update
-xbuild build/CoiniumServ.sln /p:Configuration="Debug"
+mozroots --import --ask-remove
+xbuild src/CoiniumServ/CoiniumServ.sln /p:Configuration="Debug"
 mono contrib/xunit/xunit.console.clr4.x86.exe src/Tests/bin/Debug/CoiniumServ.Tests.dll

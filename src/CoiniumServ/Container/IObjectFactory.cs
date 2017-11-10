@@ -1,22 +1,22 @@
 ﻿#region License
-// 
+//
 //     MIT License
 //
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2017, CoiniumServ Project
 //     Hüseyin Uslu, shalafiraistlin at gmail dot com
 //     https://github.com/bonesoul/CoiniumServ
-// 
+//
 //     Permission is hereby granted, free of charge, to any person obtaining a copy
 //     of this software and associated documentation files (the "Software"), to deal
 //     in the Software without restriction, including without limitation the rights
 //     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //     copies of the Software, and to permit persons to whom the Software is
 //     furnished to do so, subject to the following conditions:
-//     
+//
 //     The above copyright notice and this permission notice shall be included in all
 //     copies or substantial portions of the Software.
-//     
+//
 //     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,7 @@
 //     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //     SOFTWARE.
-// 
+//
 #endregion
 
 using System.Collections.Generic;
@@ -40,6 +40,8 @@ using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
 using CoiniumServ.Mining;
 using CoiniumServ.Mining.Software;
+using CoiniumServ.Overpool;
+using CoiniumServ.Overpool.Config;
 using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
@@ -84,9 +86,11 @@ namespace CoiniumServ.Container
         /// <returns></returns>
         IDaemonClient GetDaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig);
 
+        IOverpoolClient GetOverpoolClient(IOverpoolConfig overpoolConfig, ICoinConfig coinConfig);
+
         IMinerManager GetMinerManager(IPoolConfig poolConfig, IStorageLayer storageLayer, IAccountManager accountManager);
 
-        IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
+        IJobManager GetJobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IOverpoolClient overpoolClient, IJobTracker jobTracker, IShareManager shareManager, IMinerManager minerManager, IHashAlgorithm hashAlgorithm);
 
         IJobTracker GetJobTracker(IPoolConfig poolConfig);
 
@@ -108,9 +112,9 @@ namespace CoiniumServ.Container
 
         IAccountManager GetAccountManager(IStorageLayer storageLayer, IPoolConfig poolConfig);
 
-        #endregion        
+        #endregion
 
-        #region payment objects 
+        #region payment objects
 
         IPaymentManager GetPaymentManager(IPoolConfig poolConfig, IBlockProcessor blockProcessor, IBlockAccounter blockAccounter, IPaymentProcessor paymentProcessor);
 
@@ -155,6 +159,17 @@ namespace CoiniumServ.Container
         INancyBootstrapper GetWebBootstrapper();
 
         IMetricsManager GetMetricsManager();
+
+        #endregion
+
+        #region market objects
+
+        IMarketManager GetMarketManager();
+
+        IBittrexClient GetBittrexClient();
+
+        IPoloniexClient GetPoloniexClient();
+
 
         #endregion
 

@@ -55,16 +55,16 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
             Delete.Column("Id").FromTable("Block"); // delete the 'Id' column as we don't need it anymore.
 
             // add reward column to block table.
-            Execute.Sql("ALTER TABLE Block ADD Reward DECIMAL(19,5) NOT NULL AFTER Amount");
+            Execute.Sql("ALTER TABLE Block ADD Reward DECIMAL(19,5) NOT NULL DEFAULT 0 AFTER Amount");
 
             // add accounted column to block table
-            Execute.Sql("ALTER TABLE Block ADD Accounted Boolean NOT NULL AFTER Confirmed");
+            Execute.Sql("ALTER TABLE Block ADD Accounted Boolean NOT NULL DEFAULT 0 AFTER Confirmed");
 
             // create the users table.
             Create.Table("Account")                
                 .WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
-                .WithColumn("Username").AsString().NotNullable().Unique()
-                .WithColumn("Address").AsString(34).NotNullable().Unique()
+                .WithColumn("Username").AsString().NotNullable()
+                .WithColumn("Address").AsString().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
 
             // create the payout table.
@@ -82,8 +82,8 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
                 .WithColumn("AccountId").AsInt32().ForeignKey("Account", "Id")
                 .WithColumn("PaymentId").AsInt32().ForeignKey("Payment", "Id")
                 .WithColumn("Amount").AsDecimal().NotNullable()
-                .WithColumn("Currency").AsString(4).NotNullable()
-                .WithColumn("TxHash").AsString(64).NotNullable()
+                .WithColumn("Currency").AsString(5).NotNullable()
+                .WithColumn("TxHash").AsString().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
         }
 

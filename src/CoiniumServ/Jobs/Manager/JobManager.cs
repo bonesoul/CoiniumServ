@@ -34,6 +34,7 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Mining;
+using CoiniumServ.Overpool;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
@@ -46,6 +47,7 @@ namespace CoiniumServ.Jobs.Manager
     public class JobManager : IJobManager
     {
         private readonly IDaemonClient _daemonClient;
+        private readonly IOverpoolClient _overpoolClient;
 
         private readonly IJobTracker _jobTracker;
 
@@ -69,10 +71,11 @@ namespace CoiniumServ.Jobs.Manager
 
         private Timer _blockPollerTimer; // timer for polling new blocks.
 
-        public JobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IJobTracker jobTracker, IShareManager shareManager,
+        public JobManager(IPoolConfig poolConfig, IDaemonClient daemonClient, IOverpoolClient overpoolClient, IJobTracker jobTracker, IShareManager shareManager,
             IMinerManager minerManager, IHashAlgorithm hashAlgorithm)
         {
             _daemonClient = daemonClient;
+            _overpoolClient = overpoolClient;
             _jobTracker = jobTracker;
             _shareManager = shareManager;
             _minerManager = minerManager;
@@ -91,7 +94,7 @@ namespace CoiniumServ.Jobs.Manager
             _minerManager.MinerAuthenticated += OnMinerAuthenticated;
 
             // create the timers as disabled.
-            _reBroadcastTimer = new Timer(IdleJobTimer, null,Timeout.Infinite, Timeout.Infinite);
+            _reBroadcastTimer = new Timer(IdleJobTimer, null, Timeout.Infinite, Timeout.Infinite);
             _blockPollerTimer = new Timer(BlockPoller, null, Timeout.Infinite, Timeout.Infinite);
 
             CreateAndBroadcastNewJob(true); // broadcast a new job initially - which will also setup the timers.
@@ -117,23 +120,27 @@ namespace CoiniumServ.Jobs.Manager
             try
             {
                 var blockTemplate = _daemonClient.GetBlockTemplate(_poolConfig.Coin.Options.BlockTemplateModeRequired);
+                //_overpoolClient.Subscribe();
 
-                if (blockTemplate.Height == _jobTracker.Current.Height) // if network reports the same block-height with our current job.
-                    return; // just return.
-                
-                _logger.Verbose("A new block {0} emerged in network, rebroadcasting new work", blockTemplate.Height);
-                CreateAndBroadcastNewJob(false); // broadcast a new job.
+                if (blockTemplate.Height != _jobTracker.Current.Height)
+                { // if network reports different block-height from our current job.
+                    _logger.Verbose("A new block {0} emerged in network, rebroadcasting new work", blockTemplate.Height);
+                    CreateAndBroadcastNewJob(false); // broadcast a new job.
+                }
             }
-            catch (RpcException) { } // just skip any exceptions caused by the block-pooler queries.
-
-            _blockPollerTimer.Change(_poolConfig.Job.BlockRefreshInterval, Timeout.Infinite); // reset the block-poller timer so we can keep polling.
+            catch (RpcException e) { 
+                _logger.Error(e,"RPCException");
+            } // just skip any exceptions caused by the block-poller queries.
+            finally{
+                _blockPollerTimer.Change(_poolConfig.Job.BlockRefreshInterval, Timeout.Infinite); // reset the block-poller timer so we can keep polling.
+			}
         }
 
         private void CreateAndBroadcastNewJob(bool initiatedByTimer)
         {
             IJob job = null;
 
-            for (var i = 0; i < 3; i++) // try creating a new job 5 times at least.
+            for (var i = 0; i < 5; i++) // try creating a new job 5 times at least.
             {
                 job = GetNewJob(); // create a new job.
 
@@ -143,18 +150,19 @@ namespace CoiniumServ.Jobs.Manager
 
             if (job != null) // if we were able to create a new job
             {
-                var count = BroadcastJob(job); // broadcast to miners.  
 
-                _blockPollerTimer.Change(_poolConfig.Job.BlockRefreshInterval, Timeout.Infinite); // reset the block-poller timer so we can start or keep polling for a new block in the network.
+                var count = BroadcastJob(job); // broadcast to miners.  
 
                 if (initiatedByTimer)
                     _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as no new blocks found for last {2} seconds", job.Id, count, _poolConfig.Job.RebroadcastTimeout);
                 else
                     _logger.Information("Broadcasted new job 0x{0:x} to {1} subscribers as network found a new block", job.Id, count);
             }
+			// reset the block-poller timer so we can start or keep polling for a new block in the network.
+			_blockPollerTimer.Change(_poolConfig.Job.BlockRefreshInterval, Timeout.Infinite); 
 
-            // no matter we created a job successfully or not, reset the rebroadcast timer, so we can keep trying. 
-            _reBroadcastTimer.Change(_poolConfig.Job.RebroadcastTimeout * 1000, Timeout.Infinite);
+			// no matter we created a job successfully or not, reset the rebroadcast timer, so we can keep trying. 
+			_reBroadcastTimer.Change(_poolConfig.Job.RebroadcastTimeout * 1000, Timeout.Infinite);
         }
 
         private IJob GetNewJob()
@@ -240,6 +248,8 @@ namespace CoiniumServ.Jobs.Manager
 
             if (_jobTracker.Current != null) // if we have a valid job,
                 SendJobToMiner(miner, _jobTracker.Current); // send it to newly connected miner.
+            else
+                _logger.Error("We do not have a valid Job!");
         }
     }
 }

@@ -41,6 +41,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid.Migrations
         {
             Alter.Table("Block").AlterColumn("Accounted").AsBoolean().NotNullable().WithDefaultValue("0"); // let Block.Accounted have default value of 0.
             Alter.Table("Payment").AlterColumn("Completed").AsBoolean().NotNullable().WithDefaultValue("0"); // let Payment.Completed have default value of 0.
+            Alter.Table("Block").AlterColumn("Reward").AsDecimal().NotNullable().WithDefaultValue("0"); // let Block.Reward have default value of 0
         }
 
         public override void Down()

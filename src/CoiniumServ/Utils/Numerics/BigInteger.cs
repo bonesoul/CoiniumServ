@@ -28,6 +28,7 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
@@ -97,7 +98,8 @@ namespace CoiniumServ.Utils.Numerics
      *
      * ***************************************************************************/
 
-    public struct BigInteger : IComparable, IFormattable, IComparable<BigInteger>, IEquatable<BigInteger>
+    public struct BigInteger : IComparable, IFormattable, IComparable<BigInteger>, IEquatable<BigInteger>,
+    IEnumerable<byte>
     {
         //LSB on [0]
         readonly uint[] data;
@@ -289,8 +291,29 @@ namespace CoiniumServ.Utils.Numerics
         }
 
         [CLSCompliant(false)]
-        public BigInteger(byte[] value)
+        public BigInteger(byte[] _value, bool isPozitive = true)
         {
+			/* Vagabondan 2017-08:
+             * Be especially careful with initializing BigIntegers in such way!
+             * It is Integer rather than UNSIGNED Integer, but we need to have only positive numbers 
+             * to make correct comparisons of hashes with targets!
+             * To be sure BigInteger is positive we have to add additional zero leading byte, because it'll 
+             * guarantee zero leading bit in leading byte which is considered as sign bit (https://en.wikipedia.org/wiki/Sign_bit).
+             * To get back to previous logic just provide second parameter to this constructor as false.
+             * But remember that you will get too many false positive comparison results with target then.
+             */
+			byte[] value;
+
+            if (isPozitive)
+            {
+                value = new byte[_value.Length + 1];
+                for (int i = 0; i < _value.Length; ++i)
+                    value[i] = _value[i];
+                value[value.Length-1] = 0;
+            }
+            else
+                value = _value;
+            
             if (value == null)
                 throw new ArgumentNullException("value");
 
@@ -3139,6 +3162,16 @@ namespace CoiniumServ.Utils.Numerics
                 q = new uint[] { 0 };
                 r = u;
             }
+        }
+
+        IEnumerator<byte> IEnumerable<byte>.GetEnumerator()
+        {
+            return (IEnumerator<byte>)data.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return data.GetEnumerator();
         }
     }
 }

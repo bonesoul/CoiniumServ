@@ -37,6 +37,7 @@ using CoiniumServ.Banning;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container;
 using CoiniumServ.Daemon;
+using CoiniumServ.Overpool;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Mining;
 using CoiniumServ.Payments;
@@ -64,6 +65,8 @@ namespace CoiniumServ.Pools
         public bool Initialized { get; private set; }
 
         public ulong Hashrate { get; private set; }
+        
+        public Dictionary<string, double> MinersHashrate { get; private set; }
 
         public Dictionary<string, double> RoundShares { get; private set; }
 
@@ -81,9 +84,13 @@ namespace CoiniumServ.Pools
 
         public IDaemonClient Daemon { get; private set; }
 
+        public IOverpoolClient Overpool { get; private set; }
+
         public IAccountManager AccountManager { get; private set; }
 
         public string ServiceResponse { get; private set; }
+        
+        public string HistoricHashrate { get; private set; }
 
         private readonly IObjectFactory _objectFactory;
 
@@ -151,6 +158,9 @@ namespace CoiniumServ.Pools
                 if (!InitDaemonClient()) // init the coin daemon client.
                     return;
 
+				if (!InitOverpoolClient()) // init the overpool stratum client.
+					return;
+
                 if (!InitStorage()) // init storage support.
                     return;
 
@@ -171,6 +181,7 @@ namespace CoiniumServ.Pools
                 Initialized = false;
             }
         }
+
 
         private bool InitHashAlgorithm()
         {
@@ -198,6 +209,36 @@ namespace CoiniumServ.Pools
             Daemon = _objectFactory.GetDaemonClient(Config.Daemon, Config.Coin);
             return true;
         }
+
+		private bool InitOverpoolClient()
+		{
+			if (Config.Overpool != null && Config.Overpool.Valid == false)
+			{
+				_logger.Error("Overpool configuration is not valid!");
+				return false;
+			}
+			/*
+             * Pool initilization failed; "Nancy.TinyIoc.TinyIoCResolutionException: Unable to resolve type: 
+             * CoiniumServ.Overpool.IOverpoolClient
+             * at Nancy.TinyIoc.TinyIoCContainer.ResolveInternal 
+             * (Nancy.TinyIoc.TinyIoCContainer+TypeRegistration registration, Nancy.TinyIoc.NamedParameterOverloads parameters, 
+             * Nancy.TinyIoc.ResolveOptions options) [0x001d1] in <bb3027f50b35411088f45475912cc2ff>:0
+             * at Nancy.TinyIoc.TinyIoCContainer.Resolve (System.Type resolveType, Nancy.TinyIoc.NamedParameterOverloads parameters) 
+             * [0x0000d] in <bb3027f50b35411088f45475912cc2ff>:0
+             * at Nancy.TinyIoc.TinyIoCContainer.Resolve[ResolveType] (Nancy.TinyIoc.NamedParameterOverloads parameters) 
+             * [0x00000] in <bb3027f50b35411088f45475912cc2ff>:0 \n  at 
+             * CoiniumServ.Container.ObjectFactory.GetOverpoolClient (CoiniumServ.Overpool.Config.IOverpoolConfig overpoolConfig, 
+             * CoiniumServ.Coin.Config.ICoinConfig coinConfig) 
+             * [0x00021] in /home/strannix/structure/CoiniumServ/src/CoiniumServ/Container/ObjectFactory.cs:153
+             * at CoiniumServ.Pools.Pool.InitOverpoolClient () 
+             * [0x0003e] in /home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/Pool.cs:219
+             * at CoiniumServ.Pools.Pool.Initialize () [0x00066] in /home/strannix/structure/CoiniumServ/src/CoiniumServ/Pools/Pool.cs:159 "
+             * 
+            */
+
+			Overpool = _objectFactory.GetOverpoolClient(Config.Overpool, Config.Coin);
+			return true;
+		}
 
         private bool InitStorage()
         {
@@ -235,7 +276,7 @@ namespace CoiniumServ.Pools
             _shareManager = _objectFactory.GetShareManager(Config, Daemon, jobTracker, _storage);
             _objectFactory.GetVardiffManager(Config, _shareManager);
             _banningManager = _objectFactory.GetBanManager(Config, _shareManager);
-            _jobManager = _objectFactory.GetJobManager(Config, Daemon, jobTracker, _shareManager, MinerManager, HashAlgorithm);
+            _jobManager = _objectFactory.GetJobManager(Config, Daemon, Overpool, jobTracker, _shareManager, MinerManager, HashAlgorithm);
             _jobManager.Initialize(InstanceId);
 
             var blockProcessor = _objectFactory.GetBlockProcessor(Config, Daemon, _storage);
@@ -305,7 +346,8 @@ namespace CoiniumServ.Pools
 
             BlockRepository.Recache(); // recache the blocks.
             NetworkInfo.Recache(); // let network statistics recache.
-            CalculateHashrate(); // calculate the pool hashrate.
+            CalculateHashrate(); // calculate the pool & workers hashrate.
+            SaveStatistics();
 
             RoundShares = _storage.GetCurrentShares(); // recache current round.
 
@@ -317,11 +359,84 @@ namespace CoiniumServ.Pools
         {
             // read hashrate stats.
             var windowTime = TimeHelpers.NowInUnixTimestamp() - _configManager.StatisticsConfig.HashrateWindow;
-            _storage.DeleteExpiredHashrateData(windowTime);
+            var untilWindowTime = TimeHelpers.NowInUnixTimestamp() - _configManager.StatisticsConfig.HistoryWindow;
+            _storage.DeleteExpiredHashrateData(untilWindowTime);
             var hashrates = _storage.GetHashrateData(windowTime);
+            var miners = new Dictionary<string, double>();
+            
+            foreach (var hashrate in hashrates)
+            {
+                var minerHashrate = _shareMultiplier * hashrate.Value / _configManager.StatisticsConfig.HashrateWindow;
+
+                if (!miners.ContainsKey(hashrate.Key))
+                {
+                    miners.Add(hashrate.Key, minerHashrate);
+                }
+                else
+                {
+                    miners[hashrate.Key] += minerHashrate;
+                }
+            }
+            MinersHashrate = miners;
 
             double total = hashrates.Sum(pair => pair.Value);
             Hashrate = Convert.ToUInt64(_shareMultiplier * total / _configManager.StatisticsConfig.HashrateWindow);
+            
+            
+            // calculate historic hashrate
+            /*
+            var historicHashrates = _storage.GetHistoricHashrateData(_configManager.StatisticsConfig.HistoryHashrateWindow,
+                                                                        _configManager.StatisticsConfig.HistoryWindow);
+            
+            var historicHashratesPerSecond = new List<Dictionary<string, object>>();
+            foreach (var hashrate in historicHashrates)
+            {
+                var periodHashrate = _shareMultiplier * hashrate.Value / _configManager.StatisticsConfig.HistoryHashrateWindow;
+
+                var hashrateToInsert = new Dictionary<string, object>();
+                hashrateToInsert.Add("date", (int)Int32.Parse(hashrate.Key));
+                hashrateToInsert.Add("value", (double)periodHashrate);
+                
+                historicHashratesPerSecond.Add(hashrateToInsert);
+            }
+            HistoricHashrate = JsonConvert.SerializeObject(historicHashratesPerSecond, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            */
+        }
+
+        private void SaveStatistics()
+        {
+            var dataToSave = new List<Dictionary<string, object>>();
+
+            
+            dataToSave.Add(new Dictionary<string, object>
+            {
+                { "type", "miners_count" },
+                { "domain", "pool" },
+                { "attached", (string)Config.Coin.Name },
+                { "value", (decimal)MinersHashrate.Count }
+            });
+
+            dataToSave.Add(new Dictionary<string, object>
+            {
+                { "type", "hashrate" },
+                { "domain", "pool" },
+                { "attached", (string)Config.Coin.Name },
+                { "value", (decimal)Hashrate }
+            });
+
+            
+            foreach (var miner in MinersHashrate)
+            {
+                dataToSave.Add(new Dictionary<string, object>
+                {
+                    { "type", "hashrate" },
+                    { "domain", "miner" },
+                    { "attached", (string)miner.Key },
+                    { "value", (decimal)miner.Value }
+                });
+            }
+
+            _storage.AddHistoricValue(dataToSave);
         }
     }
 }

@@ -161,13 +161,16 @@ namespace CoiniumServ.Daemon
             }
             catch (WebException webException)
             {
+                _logger.Error(webException,"WebException on MakeHTTPRequest");
                 webRequest = null;
                 throw _rpcExceptionFactory.GetRpcException(webException);
             }
             catch (Exception exception)
             {
                 webRequest = null;
-                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);                
+                _logger.Error(exception,"Exception occured while making json request");
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);
+                //return webRequest;
             }
         }
 
@@ -181,7 +184,8 @@ namespace CoiniumServ.Daemon
         {
             string json = GetJsonResponse(httpWebRequest);
 
-            _logger.Verbose("rx: {0}", json.PrettifyJson());
+            _logger.Verbose("rx: {0}", json.PrettifyJson());//too many exceptions here! Should be fixed later
+            //_logger.Verbose("rx: {0}", json);//it is much safer log json string as it is
 
             try
             {
@@ -189,11 +193,13 @@ namespace CoiniumServ.Daemon
             }
             catch (JsonException jsonEx)
             {
+                _logger.Error(jsonEx,"JsonException");
                 httpWebRequest = null;
                 throw new Exception("There was a problem deserializing the response from the coin wallet.", jsonEx);
             }
             catch (Exception exception)
             {
+                _logger.Error(exception,"Exception");
                 httpWebRequest = null;
                 throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", exception);
             }
@@ -227,10 +233,12 @@ namespace CoiniumServ.Daemon
             }
             catch (ProtocolViolationException protocolException)
             {
+                _logger.Error(protocolException.Message);
                 throw _rpcExceptionFactory.GetRpcException(protocolException);
             }
             catch (WebException webException)
             {
+                _logger.Error(webException.Message);
                 var response = webException.Response as HttpWebResponse;
 
                 if (response == null)
@@ -246,6 +254,7 @@ namespace CoiniumServ.Daemon
             }
             catch (Exception exception)
             {
+                _logger.Error(exception.Message);
                 throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.",
                     exception);
             }
@@ -277,10 +286,12 @@ namespace CoiniumServ.Daemon
                     }
                     catch (JsonException e) // if we can't parse the error response as json
                     {
+                        _logger.Error(e.Message);
                         throw _rpcExceptionFactory.GetRpcException(data, e); // then just use the error text.
                     }
                     catch (Exception exception)
                     {
+                        _logger.Error(exception.Message);
                         throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", exception);
                     }
                 }

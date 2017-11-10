@@ -95,10 +95,13 @@ namespace CoiniumServ.Shares
             var id = Convert.ToUInt64(jobId, 16);
             var job = _jobTracker.Get(id);
 
+            _logger.Debug("TakeShare before share constructor: nonce={0:l}, extranonce2={1:l}",nonceString,extraNonce2);
             // create the share
             var share = new Share(miner, id, job, extraNonce2, nTimeString, nonceString);
 
-            if (share.IsValid)
+			
+
+			if (share.IsValid)
                 HandleValidShare(share);
             else
                 HandleInvalidShare(share);
@@ -113,18 +116,24 @@ namespace CoiniumServ.Shares
             throw new NotImplementedException();
         }
 
+
         private void HandleValidShare(IShare share)
         {
             var miner = (IStratumMiner) share.Miner;
             miner.ValidShareCount++;
 
             _storageLayer.AddShare(share); // commit the share.
-            _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, miner.Difficulty, miner.Username);
+            _logger.Debug("Share accepted at {0:0.00}/{1} by miner {2:l}", share.Difficulty, 
+                          miner.Difficulty, miner.Username);
+
 
             // check if share is a block candidate
             if (!share.IsBlockCandidate)
                 return;
-            
+
+            //Wow cool!!! Log it!
+			share.DescribeYourselfSafely();
+
             // submit block candidate to daemon.
             var accepted = SubmitBlock(share);
 
@@ -227,6 +236,16 @@ namespace CoiniumServ.Shares
 
                 _logger.Information("Found block [{0}] with hash [{1:l}]", share.Height, share.BlockHash.ToHexString());
 
+				_logger.Debug("Block header details:\nnVersion={0}\nnPrevHash={1:l}\nnMerkleRoot={2:l}\nnTime={3}\nnBits={4:l}\nnNonce={5}\nnBlockHash={6:l}\n",
+							  share.Block.Version,
+							  share.Block.Hash,
+							  share.Block.MerkleRoot,
+							  share.Block.Time,
+							  share.Block.Bits,
+							  share.Block.Nonce,
+							  share.BlockHash.ToHexString()
+							 );
+
                 return true;
             }
             catch (RpcException e)
@@ -234,7 +253,17 @@ namespace CoiniumServ.Shares
                 // unlike BlockProcessor's detailed exception handling and decision making based on the error,
                 // here in share-manager we only one-shot submissions. If we get an error, basically we just don't care about the rest
                 // and flag the submission as failed.
-                _logger.Debug("We thought a block was found but it was rejected by the coin daemon; [{0:l}] - reason; {1:l}", share.BlockHash.ToHexString(), e.Message);
+                _logger.Debug("We thought a block was found but it was rejected by the coin daemon; [{0:l}] - reason; {1:l}", 
+                              share.BlockHash.ToHexString(), e.Message);
+                _logger.Debug("Block header details:\nnVersion={0}\nnPrevHash={1:l}\nnMerkleRoot={2:l}\nnTime={3}\nnBits={4:l}\nnNonce={5}\nnBlockHash={6:l}\n",
+                              share.Block.Version,
+                              share.Block.Hash,
+                              share.Block.MerkleRoot,
+                              share.Block.Time,
+                              share.Block.Bits,
+                              share.Block.Nonce,
+                              share.BlockHash.ToHexString()
+                             );
                 return false;
             }
         }

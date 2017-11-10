@@ -71,12 +71,13 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Username = @username",
+                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Username = @username LIMIT 1",
                         new { username }).Single();
                 }
             }
             catch (InvalidOperationException) // fires when no result is found.
             {
+                _logger.Debug("No results found for GetAccountByUsername");
                 return null;
             }
             catch (Exception e)
@@ -95,12 +96,13 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Address = @address",
+                    return connection.Query<Account>("SELECT Id, Username, Address FROM Account WHERE Address = @address LIMIT 1",
                         new { address }).Single();
                 }
             }
-            catch (InvalidOperationException) // fires when no result is found.
+            catch (InvalidOperationException e) // fires when no result is found.
             {
+                _logger.Error(e,"InvalidOperationException while GetAccountByAddress");
                 return null;
             }
             catch (Exception e)

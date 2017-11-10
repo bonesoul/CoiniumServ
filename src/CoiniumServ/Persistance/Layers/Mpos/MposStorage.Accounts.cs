@@ -1,22 +1,22 @@
 ﻿#region License
-// 
+//
 //     MIT License
 //
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2017, CoiniumServ Project
 //     Hüseyin Uslu, shalafiraistlin at gmail dot com
 //     https://github.com/bonesoul/CoiniumServ
-// 
+//
 //     Permission is hereby granted, free of charge, to any person obtaining a copy
 //     of this software and associated documentation files (the "Software"), to deal
 //     in the Software without restriction, including without limitation the rights
 //     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //     copies of the Software, and to permit persons to whom the Software is
 //     furnished to do so, subject to the following conditions:
-//     
+//
 //     The above copyright notice and this permission notice shall be included in all
 //     copies or substantial portions of the Software.
-//     
+//
 //     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,7 @@
 //     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //     SOFTWARE.
-// 
+//
 #endregion
 
 using System;
@@ -52,15 +52,18 @@ namespace CoiniumServ.Persistance.Layers.Mpos
 
                 using (var connection = new MySqlConnection(_mySqlProvider.ConnectionString))
                 {
-                    return connection.Query<Account>(
+					//Some fix from github:
+                    //https://github.com/bonesoul/CoiniumServ/pull/821/files
+					return connection.Query<Account>(
                         @"SELECT a.id, w.username, a.coin_address as address FROM pool_worker as w
-                            INNER JOIN coin_addresses as a ON a.account_id=w.account_id
+                            INNER JOIN accounts as a ON a.account_id=w.account_id
                             WHERE w.username = @username",
                         new {username}).Single();
                 }
             }
-            catch (InvalidOperationException) // fires when no result is found.
+            catch (InvalidOperationException e) // fires when no result is found.
             {
+                _logger.Error(e,"InvalidOperationException");
                 return null;
             }
             catch (Exception e)

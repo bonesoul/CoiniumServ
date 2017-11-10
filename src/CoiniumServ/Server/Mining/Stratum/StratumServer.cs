@@ -124,7 +124,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         }
 
         /// <summary>
-        /// Client on connectin handler.
+        /// Client on connection handler.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

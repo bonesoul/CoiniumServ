@@ -73,7 +73,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("Error initializing hybrid storage; {0:l}", e.Message);
+                _logger.Error(e,"Error initializing hybrid storage");
             }
         }
     }

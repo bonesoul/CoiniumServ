@@ -50,7 +50,7 @@ namespace CoiniumServ.Transactions
         /// <summary>
         /// Length of the pk_script
         /// </summary>
-        public byte[] PublicKeyScriptLenght { get; set; }
+        public byte[] PublicKeyScriptLength { get; set; }
 
         /// <summary>
         /// Usually contains the public key as a Bitcoin script setting up conditions to claim this output.

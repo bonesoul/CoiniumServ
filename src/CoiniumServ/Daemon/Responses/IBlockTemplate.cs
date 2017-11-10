@@ -29,10 +29,11 @@
 
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Logging;
 
 namespace CoiniumServ.Daemon.Responses
 {
-    public interface IBlockTemplate
+    public interface IBlockTemplate: ILoggee
     {
         string Bits { get; set; }
 
@@ -65,5 +66,22 @@ namespace CoiniumServ.Daemon.Responses
         List<string> Mutable { get; set; }
 
         string NonceRange { get; set; }
+
+		//BIP-145: segwit changes for getblocktemplate, see: https://github.com/bitcoin/bips/blob/master/bip-0145.mediawiki
+		UInt32 Weightlimit { get; set; }
+
+
+        //segwit
+        string Default_witness_commitment { get; set; }
+
+
+        //polling ID
+        string LongPollId { get; set; }
+
+        List<string> Capabilities { get; set;  }
+
+        List<string> Rules { get; set;  }
+
+
     }
 }

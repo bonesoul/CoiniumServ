@@ -29,18 +29,21 @@
 
 using System;
 using System.Collections.Generic;
+using CoiniumServ.Logging;
 
 namespace CoiniumServ.Daemon.Responses
 {
     /// <summary>
-    /// getblocktemplate is the new decentralized Bitcoin mining protocol, openly developed by the Bitcoin community over mid 2012. It supercedes the old getwork mining protocol.
+    /// getblocktemplate is the new decentralized Bitcoin mining protocol, 
+	/// openly developed by the Bitcoin community over mid 2012. It supercedes the old getwork mining protocol.
     /// <remarks>
     /// https://en.bitcoin.it/wiki/Getblocktemplate
     /// https://github.com/bitcoin/bips/blob/master/bip-0022.mediawiki
     /// </remarks>
     /// </summary>
-    public class BlockTemplate : IBlockTemplate
+    public class BlockTemplate : Loggee<BlockTemplate>,IBlockTemplate
     {
+
         /// <summary>
         /// the compressed difficulty in hexadecimal
         /// </summary>
@@ -110,6 +113,62 @@ namespace CoiniumServ.Daemon.Responses
         public List<string> Mutable { get; set; }
 
         public string NonceRange { get; set; }
+
+		//BIP-145: total weight allowed in blocks
+		public UInt32 Weightlimit { get; set ; }
+
+		//segwit
+		public string Default_witness_commitment { get; set; }
+
+        public string LongPollId { get;  set;}
+
+		public List<string> Capabilities { get; set; }
+
+		public List<string> Rules { get; set; }
+
+
+        protected override void DescribeYourself()
+        {
+            _logger.Debug(
+                "\nBits={0}\n" +
+                "Coinbasevalue={1}\n" +
+                "CurTime={2}\n" +
+                "Height={3}\n" +
+                "MinTime={4}\n" +
+                "NonceRange={5}\n" +
+                "PreviousBlockHash={6}\n" +
+                "SigOpLimit={7}\n" +
+                "SizeLimit={8}\n" +
+                "Target={9}\n" +
+                "Version={10}\n" +
+                "Weightlimit={11}" +
+                "Default_witness_commitment={12}\n",
+                Bits,Coinbasevalue,
+                CurTime,
+                Height,
+                MinTime,
+                NonceRange,
+                PreviousBlockHash,
+                SigOpLimit,
+                SizeLimit,
+                Target,
+                Version,
+                Weightlimit,
+                Default_witness_commitment
+            );
+
+
+
+                _logger.Debug("Mutable:");
+                foreach(string m in Mutable){
+                    _logger.Debug("{0}\n",m);
+                }
+
+
+                foreach(BlockTemplateTransaction tx in Transactions){
+                    tx.DescribeYourselfSafely();
+                }
+        }
     }
 
     /// <summary>

@@ -261,6 +261,7 @@ namespace CoiniumServ.Daemon
             {
                 // bitcoin variants can accept capabilities: https://github.com/bitcoin/bitcoin/blob/7388b74cd2c5e3b71e991d26953c89c059ba6f2f/src/rpcmining.cpp#L298            
                 data.Add("capabilities", new List<string> {"coinbasetxn", "workid", "coinbase/append"});
+				data.Add("rules", new List<string> {"segwit"});
             }
             else
             {

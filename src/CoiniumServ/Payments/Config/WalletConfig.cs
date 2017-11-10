@@ -35,6 +35,7 @@ namespace CoiniumServ.Payments.Config
     public class WalletConfig:IWalletConfig
     {
         public string Adress { get; private set; }
+        public double TxFee { get; private set; }
         public bool Valid { get; private set; }
 
         public WalletConfig(dynamic config)
@@ -42,6 +43,7 @@ namespace CoiniumServ.Payments.Config
             try
             {
                 Adress = config.address;
+                TxFee = config.txfee;
 
                 Valid = true;
             }

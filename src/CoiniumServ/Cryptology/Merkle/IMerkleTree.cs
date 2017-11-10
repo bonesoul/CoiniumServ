@@ -28,6 +28,7 @@
 #endregion
 
 using System.Collections.Generic;
+using CoiniumServ.Logging;
 
 namespace CoiniumServ.Cryptology.Merkle
 {
@@ -42,7 +43,7 @@ namespace CoiniumServ.Cryptology.Merkle
     /// Python implementation: http://runnable.com/U3HnDaMrJFk3gkGW/bitcoin-block-merkle-root-2-for-python
     /// Original implementation: https://code.google.com/p/bitcoinsharp/source/browse/src/Core/Block.cs#330
     /// </example>
-    public interface IMerkleTree
+    public interface IMerkleTree:ILoggee
     {
         IList<byte[]> Steps { get; }
 

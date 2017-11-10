@@ -29,6 +29,7 @@
 
 using System;
 using System.Text;
+using Serilog;
 
 namespace CoiniumServ.Utils.Extensions
 {
@@ -42,6 +43,9 @@ namespace CoiniumServ.Utils.Extensions
 
         public static string PrettifyJson(this string input)
         {
+            //this is very unstable function! let's just return json back as it is
+            return input;
+            /*
             try
             {
                 input = input.Replace('\"', '\'');
@@ -106,10 +110,11 @@ namespace CoiniumServ.Utils.Extensions
 
                 return output.ToString();
             }
-            catch (Exception)
+            catch(Exception)
             {
                 return input; // in case we fail to prettify json, handle the exception and just return the input.
             }
+            */
         }
 
         public static string Repeat(this string str, int count)
@@ -126,7 +131,12 @@ namespace CoiniumServ.Utils.Extensions
 
         public static bool IsEscaped(this StringBuilder str, int index)
         {
-            return str.ToString().IsEscaped(index);
+            try
+            {
+                return str.ToString().IsEscaped(index);
+            }catch(Exception){
+                return false;
+            }
         }
     }
 }

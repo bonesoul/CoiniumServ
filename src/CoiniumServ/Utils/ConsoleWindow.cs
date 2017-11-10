@@ -1,22 +1,22 @@
 ﻿#region License
-// 
+//
 //     MIT License
 //
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2017, CoiniumServ Project
 //     Hüseyin Uslu, shalafiraistlin at gmail dot com
 //     https://github.com/bonesoul/CoiniumServ
-// 
+//
 //     Permission is hereby granted, free of charge, to any person obtaining a copy
 //     of this software and associated documentation files (the "Software"), to deal
 //     in the Software without restriction, including without limitation the rights
 //     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //     copies of the Software, and to permit persons to whom the Software is
 //     furnished to do so, subject to the following conditions:
-//     
+//
 //     The above copyright notice and this permission notice shall be included in all
 //     copies or substantial portions of the Software.
-//     
+//
 //     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,7 @@
 //     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //     SOFTWARE.
-// 
+//
 #endregion
 
 using System;
@@ -42,12 +42,14 @@ namespace CoiniumServ.Utils
         public static void PrintBanner()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(@"-------------------------------------------------------------------");
             Console.WriteLine(@"             .__       .__                                         ");
             Console.WriteLine(@"  ____  ____ |__| ____ |__|__ __  _____   ______ ______________  __");
             Console.WriteLine(@"_/ ___\/  _ \|  |/    \|  |  |  \/     \ /  ___// __ \_  __ \  \/ /");
             Console.WriteLine(@"\  \__(  <_> )  |   |  \  |  |  /  Y Y  \\___ \\  ___/|  | \/\   / ");
             Console.WriteLine(@" \___  >____/|__|___|  /__|____/|__|_|  /____  >\___  >__|    \_/  ");
             Console.WriteLine(@"     \/              \/               \/     \/     \/             ");
+            Console.WriteLine(@"-------------------------------------------------------------------");
             Console.WriteLine();
         }
 
@@ -56,18 +58,19 @@ namespace CoiniumServ.Utils
         /// </summary>
         public static void PrintLicense()
         {
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("Copyright (C) 2013 - 2017, Coinium project - https://github.com/CoiniumServ/CoiniumServ");
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("CoiniumServ comes with ABSOLUTELY NO WARRANTY.");
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("You can contribute the development of the project by donating;");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(" BTC : 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D");
-            Console.WriteLine(" LTC : LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa");
-            Console.WriteLine(" DOGE: DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr");
+            //Console.ForegroundColor = ConsoleColor.Magenta;
+            //Console.WriteLine("Copyright (C) 2013 - 2017, Coinium project - https://github.com/CoiniumServ/CoiniumServ");
+            //Console.WriteLine();
+            //Console.ForegroundColor = ConsoleColor.DarkYellow;
+            //Console.WriteLine("CoiniumServ comes with ABSOLUTELY NO WARRANTY.");
+            //Console.WriteLine();
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //Console.WriteLine("You can contribute the development of the project by donating;");
+            //Console.ForegroundColor = ConsoleColor.Yellow;
+            //Console.WriteLine(" BTC : 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D");
+            //Console.WriteLine(" LTC : LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa");
+            //Console.WriteLine(" DOGE: DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr");
+            //Console.WriteLine(" RDD : Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr");
             Console.WriteLine();
             Console.ResetColor();
         }
