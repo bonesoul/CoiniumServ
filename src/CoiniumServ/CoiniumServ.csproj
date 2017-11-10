@@ -17,6 +17,8 @@
     <RestorePackages>true</RestorePackages>
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -83,30 +85,27 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\JsonFx.2.0.1209.2802\lib\net40\JsonFx.dll</HintPath>
     </Reference>
-    <Reference Include="Metrics, Version=0.4.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\build\packages\Metrics.NET.0.4.7\lib\net45\Metrics.dll</HintPath>
+    <Reference Include="Metrics, Version=0.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\Metrics.NET.0.5.3\lib\net45\Metrics.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\MySql.Data.6.9.3\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\build\packages\Nancy.1.2.0\lib\net40\Nancy.dll</HintPath>
+    <Reference Include="Nancy, Version=1.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\Nancy.1.4.4\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.CustomErrors, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Nancy.CustomErrors.1.0.6.0\lib\net40\Nancy.CustomErrors.dll</HintPath>
+    <Reference Include="Nancy.CustomErrors, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\Nancy.CustomErrors.1.2.0.0\lib\net40\Nancy.CustomErrors.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Hosting.Self, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Nancy.Hosting.Self.0.23.2\lib\net40\Nancy.Hosting.Self.dll</HintPath>
+    <Reference Include="Nancy.Hosting.Self, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\Nancy.Hosting.Self.1.4.1\lib\net40\Nancy.Hosting.Self.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.Metrics, Version=0.4.7.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\Nancy.Metrics.0.4.7\lib\net45\Nancy.Metrics.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.ViewEngines.Razor, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\packages\Nancy.Viewengines.Razor.0.23.2\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
+    <Reference Include="Nancy.ViewEngines.Razor, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\Nancy.Viewengines.Razor.1.4.3\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -3487,7 +3486,14 @@
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/BuildProviders/Nancy.ViewEngines.Razor.BuildProviders.dll" DestinationFolder="$(OutDir)" />
-    <Copy SourceFiles="$(SolutionDir)/packages/Nancy.Viewengines.Razor.0.23.2/lib/net40/Nancy.ViewEngines.Razor.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="$(SolutionDir)/packages/Nancy.Viewengines.Razor.1.4.3/BuildProviders/Nancy.ViewEngines.Razor.BuildProviders.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="$(SolutionDir)/packages/Nancy.Viewengines.Razor.1.4.3/lib/net40/Nancy.ViewEngines.Razor.dll" DestinationFolder="$(OutDir)" />
+  </Target>
+  <Import Project="..\..\build\packages\Nancy.Viewengines.Razor.1.4.3\build\Nancy.ViewEngines.Razor.targets" Condition="Exists('..\..\build\packages\Nancy.Viewengines.Razor.1.4.3\build\Nancy.ViewEngines.Razor.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\build\packages\Nancy.Viewengines.Razor.1.4.3\build\Nancy.ViewEngines.Razor.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\build\packages\Nancy.Viewengines.Razor.1.4.3\build\Nancy.ViewEngines.Razor.targets'))" />
   </Target>
 </Project>
