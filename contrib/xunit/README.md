@@ -1,1 +1,0 @@
-We have a binary version of xunit here to be able to run our tests within Travis CI.

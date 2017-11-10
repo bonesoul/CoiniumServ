@@ -1,4 +1,6 @@
-﻿#region License
+﻿extensions: designer.cs generated.cs
+extensions: .cs .cpp .h
+#region License
 // 
 //     MIT License
 //
@@ -26,32 +28,3 @@
 //     SOFTWARE.
 // 
 #endregion
-
-using System;
-using Serilog;
-
-namespace CoiniumServ.Markets
-{
-    public class MarketsConfig : IMarketsConfig
-    {
-        public int UpdateInterval { get; private set; }
-
-        public bool Valid { get; private set; }
-
-        public MarketsConfig(dynamic config)
-        {
-            try
-            {
-                // load the config data.
-                UpdateInterval = config.updateInterval == 0 ? 60 : config.updateInterval;
-
-                Valid = true;
-            }
-            catch (Exception e)
-            {
-                Valid = false;
-                Log.Logger.ForContext<MarketsConfig>().Error(e, "Error loading website statistics configuration");
-            }
-        }
-    }
-}

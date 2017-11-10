@@ -1,5 +1,5 @@
 [![Build Status](https://api.travis-ci.org/vagabondan/CoiniumServ.svg?branch=develop)](https://travis-ci.org/vagabondan/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/vagabondan/CoiniumServ) [![Documentation Status](https://readthedocs.org/projects/coiniumserv/badge/?version=latest)](https://readthedocs.org/projects/coiniumserv/?badge=latest)
- 
+
 **CoiniumServ** is a high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features stratum and vanilla services, reward, payment, share processors, vardiff & ban managers, user-friendly embedded web-server & front-end and a full-stack API.
 
 CoiniumServ was created to be used for Coinium.org mining pool network at first hand. You can check [some of pools](https://github.com/bonesoul/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
@@ -40,7 +40,7 @@ Start by reading our [FAQ](https://github.com/bonesoul/CoiniumServ/wiki/FAQ) and
 
 ##### Donations
 
-You can contribute the development of the project by donating; 
+You can contribute the development of the project by donating;
 
 * LTC: `LQQh6BWEoyJr5ckXQu6rmYhvH7ipcU4rGm`
 
@@ -101,4 +101,3 @@ Start reading by these;
 
 * [Developer's Guide](https://github.com/bonesoul/CoiniumServ/wiki/Developer's-Guide)
 * [Technical Documentation](https://github.com/bonesoul/CoiniumServ/wiki/Technical-Documentation)
-

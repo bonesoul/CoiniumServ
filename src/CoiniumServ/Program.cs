@@ -87,9 +87,6 @@ namespace CoiniumServ
 
         private static void RunGlobalManagers(IObjectFactory objectFactory)
         {
-            // run market manager.
-            objectFactory.GetMarketManager();
-
             // start pool manager.
             objectFactory.GetPoolManager();
 

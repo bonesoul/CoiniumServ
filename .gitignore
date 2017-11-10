@@ -67,7 +67,7 @@ _ReSharper*
 *.ncrunch*
 .*crunch*.local.xml
 
-# Installshield output folder 
+# Installshield output folder
 [Ee]xpress
 
 # DocProject is a documentation generator add-in
@@ -117,3 +117,4 @@ UpgradeLog*.XML
 
 # Misc
 Thumbs.db
+build/.vs/*
