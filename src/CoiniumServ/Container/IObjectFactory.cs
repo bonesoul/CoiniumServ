@@ -38,8 +38,6 @@ using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
-using CoiniumServ.Markets;
-using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Mining;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
@@ -102,8 +100,6 @@ namespace CoiniumServ.Container
 
         INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig);
 
-        IProfitInfo GetProfitInfo(INetworkInfo networkInfo, IPoolConfig poolConfig);
-
         IBlockRepository GetBlockRepository(IStorageLayer storageLayer);
 
         IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,IBanManager banManager);
@@ -159,16 +155,6 @@ namespace CoiniumServ.Container
         INancyBootstrapper GetWebBootstrapper();
 
         IMetricsManager GetMetricsManager();
-
-        #endregion
-
-        #region market objects
-
-        IMarketManager GetMarketManager();
-
-        IBittrexClient GetBittrexClient();
-
-        IPoloniexClient GetPoloniexClient();
 
         #endregion
 

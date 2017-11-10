@@ -151,20 +151,7 @@
     <Compile Include="Coin\Config\CoinOptions.cs" />
     <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
     <Compile Include="Coin\Config\ICoinOptions.cs" />
-    <Compile Include="Markets\Exchanges\BittrexClient.cs" />
-    <Compile Include="Markets\Exchanges\ExchangeApi.cs" />
-    <Compile Include="Markets\Exchange.cs" />
-    <Compile Include="Markets\Exchanges\IBittrexClient.cs" />
-    <Compile Include="Markets\Exchanges\IExchangeClient.cs" />
-    <Compile Include="Markets\Exchanges\IPoloniexClient.cs" />
-    <Compile Include="Markets\Exchanges\PoloniexClient.cs" />
-    <Compile Include="Markets\IMarketData.cs" />
-    <Compile Include="Markets\IMarketsConfig.cs" />
-    <Compile Include="Markets\MarketData.cs" />
-    <Compile Include="Markets\MarketsConfig.cs" />
     <Compile Include="Persistance\Layers\Hybrid\Migrations\M003FixDefaults.cs" />
-    <Compile Include="Pools\IProfitInfo.cs" />
-    <Compile Include="Pools\ProfitInfo.cs" />
     <Compile Include="Server\Web\Modules\ContactModule.cs" />
     <Compile Include="Server\Web\Modules\TosModule.cs" />
     <Compile Include="Utils\Extensions\LinqExtensions.cs" />
@@ -209,8 +196,6 @@
     <Compile Include="Banning\BanConfig.cs" />
     <Compile Include="Banning\IBanConfig.cs" />
     <Compile Include="Jobs\Manager\IJobConfig.cs" />
-    <Compile Include="Markets\IMarketManager.cs" />
-    <Compile Include="Markets\MarketManager.cs" />
     <Compile Include="Mining\Software\IMiningSoftwareConfig.cs" />
     <Compile Include="Mining\Software\ISoftwareRepository.cs" />
     <Compile Include="Mining\Software\ISoftwareRepositoryConfig.cs" />
@@ -531,9 +516,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\coins\viacoin.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="config\markets-example.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="config\software-example.json">

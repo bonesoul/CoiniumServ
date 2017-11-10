@@ -75,8 +75,6 @@ namespace CoiniumServ.Pools
 
         public INetworkInfo NetworkInfo { get; private set; }
 
-        public IProfitInfo ProfitInfo { get; private set; }
-
         public IBlockRepository BlockRepository { get; private set; }
 
         public IPaymentRepository PaymentRepository { get; private set; }
@@ -251,7 +249,6 @@ namespace CoiniumServ.Pools
         private bool InitStatisticsServices()
         {
             NetworkInfo = _objectFactory.GetNetworkInfo(Daemon, HashAlgorithm, Config);
-            ProfitInfo = _objectFactory.GetProfitInfo(NetworkInfo, Config);
             BlockRepository = _objectFactory.GetBlockRepository(_storage);
             PaymentRepository = _objectFactory.GetPaymentRepository(_storage);
 
