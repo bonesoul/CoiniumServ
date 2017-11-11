@@ -5,7 +5,7 @@
 CoiniumServ was created to be used for Coinium.org mining pool network at first hand. You can check [some of pools](https://github.com/bonesoul/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
 ### Buy package
-You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/nz3642swqrv8s5ofisy3jpbv) if you are having difficulties doing so yourself. You can then just configure & run it.
+You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/kt337prrdgahwx7jutqa8nb8) if you are having difficulties doing so yourself. You can then just configure & run it.
 
 [![Buy with Bitcoin](http://satoshibox.com/img/button-bitcoin.svg)](https://satoshibox.com/kt337prrdgahwx7jutqa8nb8)
 [![Buy with Litecoin](http://satoshibox.com/img/button-litecoin.svg)](https://satoshibox.com/kt337prrdgahwx7jutqa8nb8)
