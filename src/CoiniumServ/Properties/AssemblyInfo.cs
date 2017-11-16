@@ -54,7 +54,7 @@ using CoiniumServ;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c0e2bf42-f94f-4fa1-8202-bdb90fce0dfc")]
+[assembly: Guid("a1d6e088-c67d-4a4e-9e5c-3884c021d843")]
 
 // Set the assembly version from VersionInfo.cs file.
 [assembly: AssemblyVersion(VersionInfo.Assembly.Version)]
