@@ -36,9 +36,9 @@ using CoiniumServ;
 // associated with an assembly.
 [assembly: AssemblyTitle("CoiniumServ")]
 [assembly: AssemblyDescription("Next-gen crypto currency mining pool software")]
-[assembly: AssemblyCompany("Coinium.org")]
+[assembly: AssemblyCompany("CoiniumServ")]
 [assembly: AssemblyProduct("CoiniumServ - " + VersionInfo.CodeName)]
-[assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, CoiniumServ project, http://www.coinium.org -  http://www.coiniumserv.com")]
+[assembly: AssemblyCopyright("Copyright (C) 2013 - 2017, CoiniumServ project")]
 [assembly: AssemblyTrademark("CoiniumServ")]
 [assembly: AssemblyCulture("")]
 
