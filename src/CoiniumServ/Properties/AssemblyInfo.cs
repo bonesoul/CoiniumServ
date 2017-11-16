@@ -36,9 +36,9 @@ using CoiniumServ;
 // associated with an assembly.
 [assembly: AssemblyTitle("CoiniumServ")]
 [assembly: AssemblyDescription("Next-gen crypto currency mining pool software")]
-[assembly: AssemblyCompany("Coinium.org")]
+[assembly: AssemblyCompany("CoiniumServ")]
 [assembly: AssemblyProduct("CoiniumServ - " + VersionInfo.CodeName)]
-[assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, CoiniumServ project, http://www.coinium.org -  http://www.coiniumserv.com")]
+[assembly: AssemblyCopyright("Copyright (C) 2013 - 2017, CoiniumServ project")]
 [assembly: AssemblyTrademark("CoiniumServ")]
 [assembly: AssemblyCulture("")]
 
@@ -54,7 +54,7 @@ using CoiniumServ;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c0e2bf42-f94f-4fa1-8202-bdb90fce0dfc")]
+[assembly: Guid("a1d6e088-c67d-4a4e-9e5c-3884c021d843")]
 
 // Set the assembly version from VersionInfo.cs file.
 [assembly: AssemblyVersion(VersionInfo.Assembly.Version)]
