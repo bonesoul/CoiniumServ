@@ -19,9 +19,11 @@
     },
     "storage": {
         "hybrid": {
-            "mysql": {
-                "database": "dbname"
-            }
+          "mysql": {
+            "database": "dbname",
+            "username": "root",
+            "password": "" 
+          }
         }
     }
 }

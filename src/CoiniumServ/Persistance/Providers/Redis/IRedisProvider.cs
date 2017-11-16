@@ -27,8 +27,6 @@
 // 
 #endregion
 
-using CSRedis;
-
 namespace CoiniumServ.Persistance.Providers.Redis
 {
     public interface IRedisProvider:IStorageProvider
