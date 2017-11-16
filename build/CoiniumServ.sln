@@ -9,18 +9,38 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoiniumServ.Tests", "..\src
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		AutomatedRelease|Any CPU = AutomatedRelease|Any CPU
+		AutomatedRelease|x86 = AutomatedRelease|x86
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.AutomatedRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.AutomatedRelease|Any CPU.Build.0 = Release|Any CPU
+		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.AutomatedRelease|x86.ActiveCfg = Release|Any CPU
+		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.AutomatedRelease|x86.Build.0 = Release|Any CPU
 		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.Debug|x86.Build.0 = Debug|Any CPU
 		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.Release|x86.ActiveCfg = Release|Any CPU
+		{A1D6E088-C67D-4A4E-9E5C-3884C021D843}.Release|x86.Build.0 = Release|Any CPU
+		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.AutomatedRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.AutomatedRelease|Any CPU.Build.0 = Release|Any CPU
+		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.AutomatedRelease|x86.ActiveCfg = Release|Any CPU
+		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.AutomatedRelease|x86.Build.0 = Release|Any CPU
 		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.Debug|x86.Build.0 = Debug|Any CPU
 		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.Release|x86.ActiveCfg = Release|Any CPU
+		{9B4F88E1-1889-46AD-90CE-786E1DA56627}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
