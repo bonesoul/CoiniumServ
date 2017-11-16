@@ -30,7 +30,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using CoiniumServ.Utils.Helpers;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
 {

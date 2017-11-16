@@ -27,9 +27,7 @@
 // 
 #endregion
 
-using System;
 using CoiniumServ.Configuration;
-using CoiniumServ.Utils.Helpers;
 using CoiniumServ.Utils.Platform;
 using Metrics;
 using Serilog;
