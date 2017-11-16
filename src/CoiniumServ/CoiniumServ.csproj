@@ -57,9 +57,6 @@
     <Reference Include="CryptSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\CryptSharpOfficial.2.1.0.0\lib\CryptSharp.dll</HintPath>
     </Reference>
-    <Reference Include="csredis, Version=3.2.1.0, Culture=neutral, PublicKeyToken=1afd0264bbe4a44a, processorArchitecture=MSIL">
-      <HintPath>..\..\build\packages\csredis.3.2.1\lib\net40\csredis.dll</HintPath>
-    </Reference>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\build\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
     </Reference>
@@ -117,9 +114,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\packages\Serilog.1.4.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
     </Reference>
+    <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\build\packages\StackExchange.Redis.1.2.6\lib\net46\StackExchange.Redis.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -140,6 +141,7 @@
     <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
     <Compile Include="Coin\Config\ICoinOptions.cs" />
     <Compile Include="Persistance\Layers\Hybrid\Migrations\M003FixDefaults.cs" />
+    <Compile Include="Persistance\Providers\Redis\RedisClient.cs" />
     <Compile Include="Server\Web\Modules\ContactModule.cs" />
     <Compile Include="Server\Web\Modules\TosModule.cs" />
     <Compile Include="Utils\Extensions\LinqExtensions.cs" />
