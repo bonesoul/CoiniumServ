@@ -31,12 +31,10 @@ using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Pools;
 using CoiniumServ.Statistics;
-using Metrics;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.CustomErrors;
-using Nancy.Diagnostics;
 using Nancy.TinyIoc;
 
 namespace CoiniumServ.Server.Web

@@ -27,7 +27,6 @@
 // 
 #endregion
 
-using System.IO;
 using CoiniumServ.Utils.Helpers;
 using Nancy;
 
