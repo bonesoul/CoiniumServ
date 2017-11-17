@@ -5,14 +5,14 @@
 CoiniumServ was created to be used for Coinium.org mining pool network at first hand. You can check [some of pools](https://github.com/bonesoul/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
 ### Buy package
-You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/kt337prrdgahwx7jutqa8nb8) if you are having difficulties doing so yourself. You can then just configure & run it.
+You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d) if you are having difficulties doing so yourself. You can then just configure & run it.
 
-[![Buy with Bitcoin](http://satoshibox.com/img/button-bitcoin.svg)](https://satoshibox.com/kt337prrdgahwx7jutqa8nb8)
-[![Buy with Litecoin](http://satoshibox.com/img/button-litecoin.svg)](https://satoshibox.com/kt337prrdgahwx7jutqa8nb8)
-[![Buy with Ethereum](http://satoshibox.com/img/button-ethereum.svg)](https://satoshibox.com/kt337prrdgahwx7jutqa8nb8)
-[![Buy with Dash](http://satoshibox.com/img/button-dash.svg)](https://satoshibox.com/kt337prrdgahwx7jutqa8nb8)
+[![Buy with Bitcoin](http://satoshibox.com/img/button-bitcoin.svg)](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d)
+[![Buy with Litecoin](http://satoshibox.com/img/button-litecoin.svg)](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d)
+[![Buy with Ethereum](http://satoshibox.com/img/button-ethereum.svg)](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d)
+[![Buy with Dash](http://satoshibox.com/img/button-dash.svg)](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d)
 
-**VirusTotal scan results**: [0/56 clean](https://www.virustotal.com/en/file/29a17a38785ae3a535572a08b8dce5dd937718748e9c30f2e0088ed23d157968/analysis/1495791384/)
+**VirusTotal scan results**: [0/58 clean](https://www.virustotal.com/en/file/f03dd7753d6d209d99f6b5095d28f0f6d7b8a50067a3ce709009b87c727b980d/analysis/1510948542/)
 
 ### Screenshots
 
@@ -26,7 +26,7 @@ You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/kt33
 
 ### Status
 
-Latest release: [v0.2.5 beta](https://github.com/bonesoul/CoiniumServ/releases/tag/v0.2.5-beta)
+Latest release: [v0.2.6.2](https://github.com/bonesoul/CoiniumServ/releases/tag/0.2.6.2)
 
 ### Getting Started
 
@@ -34,6 +34,7 @@ Start by checking our [Getting Started](https://github.com/bonesoul/CoiniumServ/
 
 ### Documentation
 
+* [Docs](http://coiniumserv.readthedocs.io/en/latest/)
 * [Wiki](https://github.com/bonesoul/CoiniumServ/wiki/)
 * [FAQ](https://github.com/bonesoul/CoiniumServ/wiki/FAQ)
 
@@ -55,17 +56,11 @@ You can support the development of the project with different methods;
 
 You can contribute the development of the project by donating; 
 
-* BTC: `18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D`
-* LTC: `LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa`
-* DOGE: `DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr`
+* BTC: `1MMdwRZg4K9p6oH2bWUQdohbxGbAvXS1t1`
+* ETH: `0x61aa3e0709e20bcb4aedc2607d4070f1db72e69b`
+* LTC: `Ld8cy4ucf3FYThtfTnRQFFp5MKK9rZHjNg`
 
 If you would like to automatically donate a percentage of your pool's earning to support the project, check the [donation setup](https://github.com/bonesoul/CoiniumServ/wiki/Donation) guide.
-
-##### Donors
-
-Here is a list of our generous donors that keep the project ongoing;
-
-* [reddapi.com](https://www.reddapi.com)
 
 ### Features
 * __Platform Agnostic__; unlike other pool-servers, CoiniumServ doesn't dictate platforms and can run on anything including Windows, Linux or MacOS.
