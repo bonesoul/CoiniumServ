@@ -62,7 +62,7 @@ namespace CoiniumServ.Utils.Helpers
         /// <exception cref="System.ArgumentNullException"></exception>
         public static void ArgumentNotNull<T>(Expression<Func<T>> argument) where T : class
         {
-            string name = GetName(argument);
+            var name = GetName(argument);
             ArgumentNotNull((argument.Compile())(), name);
         }
 
