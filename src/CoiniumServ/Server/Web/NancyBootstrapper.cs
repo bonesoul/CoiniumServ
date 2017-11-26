@@ -36,6 +36,8 @@ using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.CustomErrors;
 using Nancy.TinyIoc;
+using Nancy.Diagnostics;
+using Metrics;
 
 namespace CoiniumServ.Server.Web
 {
