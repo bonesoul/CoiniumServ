@@ -53,4 +53,8 @@
     <ProjectReference Include="..\..\contrib\Nancy.CustomErrors\src\Nancy.CustomErrors.NetStandard1.6\Nancy.CustomErrors.NetStandard1.6.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /yS &quot;$(SolutionDir)config\*&quot; &quot;$(ProjectDir)$(OutDir)config\*&quot;&#xD;&#xA;xcopy /yS &quot;$(SolutionDir)web\*&quot; &quot;$(ProjectDir)$(OutDir)web\*&quot;" />
+  </Target>
+  
 </Project>
