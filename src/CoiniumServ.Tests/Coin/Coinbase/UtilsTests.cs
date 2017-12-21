@@ -45,7 +45,7 @@ namespace CoiniumServ.Tests.Coin.Coinbase
             const string expected = "76a914238fdcf8c710c698a1f2c32d378da10fcab1082888ac";
 
             var result = CoiniumServ.Coin.Coinbase.Utils.CoinAddressToScript(input);
-            result.ToHexString().Should().Equal(expected);
+            result.ToHexString().Should().Be(expected);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace CoiniumServ.Tests.Coin.Coinbase
             const string expected = "2103679839c140a5d48b19f8d3b7c799d7534c5716d7131c5d36ec26422ba52bd378ac";
 
             var result = CoiniumServ.Coin.Coinbase.Utils.PubKeyToScript(input);
-            result.ToHexString().Should().Equal(expected);
+            result.ToHexString().Should().Be(expected);
         }
 
         /// <summary>

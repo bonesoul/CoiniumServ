@@ -54,20 +54,20 @@ namespace CoiniumServ.Tests.Coin
 
             // test all instances against each other.
 
-            amount1.Coins.Should().Equal(amount2.Coins);
-            amount1.MilliBits.Should().Equal(amount2.MilliBits);
-            amount1.MicroBits.Should().Equal(amount2.MicroBits);
-            amount1.Satoshis.Should().Equal(amount2.Satoshis);
+            amount1.Coins.Should().Be(amount2.Coins);
+            amount1.MilliBits.Should().Be(amount2.MilliBits);
+            amount1.MicroBits.Should().Be(amount2.MicroBits);
+            amount1.Satoshis.Should().Be(amount2.Satoshis);
 
-            amount2.Coins.Should().Equal(amount3.Coins);
-            amount2.MilliBits.Should().Equal(amount3.MilliBits);
-            amount2.MicroBits.Should().Equal(amount3.MicroBits);
-            amount2.Satoshis.Should().Equal(amount3.Satoshis);
+            amount2.Coins.Should().Be(amount3.Coins);
+            amount2.MilliBits.Should().Be(amount3.MilliBits);
+            amount2.MicroBits.Should().Be(amount3.MicroBits);
+            amount2.Satoshis.Should().Be(amount3.Satoshis);
 
-            amount3.Coins.Should().Equal(amount4.Coins);
-            amount3.MilliBits.Should().Equal(amount4.MilliBits);
-            amount3.MicroBits.Should().Equal(amount4.MicroBits);
-            amount3.Satoshis.Should().Equal(amount4.Satoshis);
+            amount3.Coins.Should().Be(amount4.Coins);
+            amount3.MilliBits.Should().Be(amount4.MilliBits);
+            amount3.MicroBits.Should().Be(amount4.MicroBits);
+            amount3.Satoshis.Should().Be(amount4.Satoshis);
         }
     }
 }

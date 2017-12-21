@@ -42,10 +42,10 @@ namespace CoiniumServ.Tests.Coin
             public void TestEncode()
             {
                 var testbytes = Encoding.UTF8.GetBytes("Hello World");
-                Base58.Encode(testbytes).Should().Equal("JxF12TrwUP45BMd");
+                Base58.Encode(testbytes).Should().Be("JxF12TrwUP45BMd");
 
                 var bi = BigInteger.ValueOf(3471844090);
-                Base58.Encode(bi.ToByteArray()).Should().Equal("16Ho7Hs");
+                Base58.Encode(bi.ToByteArray()).Should().Be("16Ho7Hs");
             }
 
             [Fact]

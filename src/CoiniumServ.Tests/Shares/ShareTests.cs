@@ -225,11 +225,11 @@ namespace CoiniumServ.Tests.Shares
             string nTime = shareData[3];
             string nonce = shareData[4];
 
-            minerName.Should().Equal("mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc");
-            jobId.Should().Equal("2");
-            extraNonce2.Should().Equal("07000000");
-            nTime.Should().Equal("53aaa331");
-            nonce.Should().Equal("44725000");
+            minerName.Should().Be("mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc");
+            jobId.Should().Be("2");
+            extraNonce2.Should().Be("07000000");
+            nTime.Should().Be("53aaa331");
+            nonce.Should().Be("44725000");
 
             // create the share
             var id = Convert.ToUInt64(jobId, 16);
@@ -238,29 +238,29 @@ namespace CoiniumServ.Tests.Shares
             var share = new Share(_miner, id, job, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
-            share.NTime.Should().Equal((UInt32)0x53aaa331);
-            share.Nonce.Should().Equal((UInt32)0x44725000);
+            share.NTime.Should().Be((UInt32)0x53aaa331);
+            share.Nonce.Should().Be((UInt32)0x44725000);
 
             // test job provided extraNonce1 and extraNonce2
-            share.ExtraNonce1.Should().Equal((UInt32)0x58000000);
-            share.ExtraNonce2.Should().Equal((UInt32)0x07000000);
+            share.ExtraNonce1.Should().Be((UInt32)0x58000000);
+            share.ExtraNonce2.Should().Be((UInt32)0x07000000);
 
             // test coinbase
-            share.CoinbaseBuffer.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270310cf04062f503253482f0430a3aa530858000000070000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
-            share.CoinbaseHash.Bytes.ToHexString().Should().Equal("76a3f30f9dfdb980bf08a153f097c6456d5e0d290a41f760ce380c4b9c73f5d0");
+            share.CoinbaseBuffer.ToHexString().Should().Be("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270310cf04062f503253482f0430a3aa530858000000070000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+            share.CoinbaseHash.Bytes.ToHexString().Should().Be("76a3f30f9dfdb980bf08a153f097c6456d5e0d290a41f760ce380c4b9c73f5d0");
 
             // test merkle-root.
-            share.MerkleRoot.ToHexString().Should().Equal("7875fb5effb2f631634523f777090ba1568ec4c4ceee35a9b1c6832d24a23217");
+            share.MerkleRoot.ToHexString().Should().Be("7875fb5effb2f631634523f777090ba1568ec4c4ceee35a9b1c6832d24a23217");
 
             // test the block header
-            share.HeaderBuffer.ToHexString().Should().Equal("0100000062804ac7aa2748b16841fc12ac15721dc5be748c64c6b596b74c56478eb84e1c1732a2242d83c6b1a935eecec4c48e56a10b0977f723456331f6b2ff5efb757831a3aa53f7d4481d00507244");
+            share.HeaderBuffer.ToHexString().Should().Be("0100000062804ac7aa2748b16841fc12ac15721dc5be748c64c6b596b74c56478eb84e1c1732a2242d83c6b1a935eecec4c48e56a10b0977f723456331f6b2ff5efb757831a3aa53f7d4481d00507244");
 
             // test the block hash.
-            share.HeaderHash.ToHexString().Should().Equal("49c71381f71301c86b429ef1c731fb34bf4b06f566b12ef66de9b53efef61f7d");
-            share.HeaderValue.Should().Equal(BigInteger.Parse("56595583015948388667310925439783538703284674723883721372476934843162971850569"));
+            share.HeaderHash.ToHexString().Should().Be("49c71381f71301c86b429ef1c731fb34bf4b06f566b12ef66de9b53efef61f7d");
+            share.HeaderValue.Should().Be(BigInteger.Parse("56595583015948388667310925439783538703284674723883721372476934843162971850569"));
 
             // test the job
-            share.Job.Target.Should().Equal(BigInteger.Parse("1963543975774994773269086777481374456547162842587540503781935641788416"));
+            share.Job.Target.Should().Be(BigInteger.Parse("1963543975774994773269086777481374456547162842587540503781935641788416"));
             //share.Job.Difficulty.Should().Equal(0.013730039);
 
             // test the difficulty
@@ -273,7 +273,7 @@ namespace CoiniumServ.Tests.Shares
             //share.BlockHash.ToHexString().Should().Equal("e242093d92f4c98bfd5dd1f9f6489652d1165f5ce4eed1f28747d2b8e3efd8b6");
 
             // check the share itself.
-            share.IsValid.Should().Equal(true);
+            share.IsValid.Should().Be(true);
             // share.IsBlockCandidate.Should().Equal(true);
         }
 
@@ -313,11 +313,11 @@ namespace CoiniumServ.Tests.Shares
             string nTime = shareData[3];
             string nonce = shareData[4];
 
-            minerName.Should().Equal("mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc");
-            jobId.Should().Equal("2");
-            extraNonce2.Should().Equal("07000000");
-            nTime.Should().Equal("53aaa331");
-            nonce.Should().Equal("87500200");
+            minerName.Should().Be("mn4jUMneEBjZuDPEdFuj6BmFPmehmrT2Zc");
+            jobId.Should().Be("2");
+            extraNonce2.Should().Be("07000000");
+            nTime.Should().Be("53aaa331");
+            nonce.Should().Be("87500200");
 
             // create the share
             var id = Convert.ToUInt64(jobId, 16);
@@ -326,29 +326,29 @@ namespace CoiniumServ.Tests.Shares
             var share = new Share(_miner, id, job, extraNonce2, nTime, nonce);
 
             // test miner provided nonce and ntime
-            share.NTime.Should().Equal((UInt32)0x53aaa331);
-            share.Nonce.Should().Equal((UInt32)0x87500200);
+            share.NTime.Should().Be((UInt32)0x53aaa331);
+            share.Nonce.Should().Be((UInt32)0x87500200);
 
             // test job provided extraNonce1 and extraNonce2
-            share.ExtraNonce1.Should().Equal((UInt32)0x58000000);
-            share.ExtraNonce2.Should().Equal((UInt32)0x07000000);
+            share.ExtraNonce1.Should().Be((UInt32)0x58000000);
+            share.ExtraNonce2.Should().Be((UInt32)0x07000000);
 
             // test coinbase
-            share.CoinbaseBuffer.ToHexString().Should().Equal("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270310cf04062f503253482f0430a3aa530858000000070000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
-            share.CoinbaseHash.Bytes.ToHexString().Should().Equal("76a3f30f9dfdb980bf08a153f097c6456d5e0d290a41f760ce380c4b9c73f5d0");
+            share.CoinbaseBuffer.ToHexString().Should().Be("01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270310cf04062f503253482f0430a3aa530858000000070000000d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+            share.CoinbaseHash.Bytes.ToHexString().Should().Be("76a3f30f9dfdb980bf08a153f097c6456d5e0d290a41f760ce380c4b9c73f5d0");
 
             // test merkle-root.
-            share.MerkleRoot.ToHexString().Should().Equal("7875fb5effb2f631634523f777090ba1568ec4c4ceee35a9b1c6832d24a23217");
+            share.MerkleRoot.ToHexString().Should().Be("7875fb5effb2f631634523f777090ba1568ec4c4ceee35a9b1c6832d24a23217");
 
             // test the block header
-            share.HeaderBuffer.ToHexString().Should().Equal("0100000062804ac7aa2748b16841fc12ac15721dc5be748c64c6b596b74c56478eb84e1c1732a2242d83c6b1a935eecec4c48e56a10b0977f723456331f6b2ff5efb757831a3aa53f7d4481d00025087");
+            share.HeaderBuffer.ToHexString().Should().Be("0100000062804ac7aa2748b16841fc12ac15721dc5be748c64c6b596b74c56478eb84e1c1732a2242d83c6b1a935eecec4c48e56a10b0977f723456331f6b2ff5efb757831a3aa53f7d4481d00025087");
 
             // test the block hash.
-            share.HeaderHash.ToHexString().Should().Equal("b709d849b2079e41018d7838eaabcb21e1d0e8da9f0b0aa9ea2ec19a276a0a58");
-            share.HeaderValue.Should().Equal(BigInteger.Parse("39821931798823469742770006186359742132221210135666296384521732031216086419895"));
+            share.HeaderHash.ToHexString().Should().Be("b709d849b2079e41018d7838eaabcb21e1d0e8da9f0b0aa9ea2ec19a276a0a58");
+            share.HeaderValue.Should().Be(BigInteger.Parse("39821931798823469742770006186359742132221210135666296384521732031216086419895"));
 
             // test the job
-            share.Job.Target.Should().Equal(BigInteger.Parse("1963543975774994773269086777481374456547162842587540503781935641788416"));
+            share.Job.Target.Should().Be(BigInteger.Parse("1963543975774994773269086777481374456547162842587540503781935641788416"));
             //share.Job.Difficulty.Should().Equal(0.013730039);
 
             // test the difficulty
@@ -356,12 +356,12 @@ namespace CoiniumServ.Tests.Shares
             //share.BlockDiffAdjusted.Should().Equal(899.811835904);
 
             // check the block hex & block hash
-            share.BlockHex.Should().Be.Null();
-            share.BlockHash.ToHexString().Should().Equal("f701c5561c8a6aba30d5ab691cdddb4ae40f97644714b7c0bb10ee545e73d8c4");
+            share.BlockHex.Should().BeNull();
+            share.BlockHash.ToHexString().Should().Be("f701c5561c8a6aba30d5ab691cdddb4ae40f97644714b7c0bb10ee545e73d8c4");
 
             // check the share itself.
-            share.IsValid.Should().Equal(true);
-            share.IsBlockCandidate.Should().Equal(false);
+            share.IsValid.Should().Be(true);
+            share.IsBlockCandidate.Should().Be(false);
         }
     }
 }

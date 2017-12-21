@@ -64,16 +64,16 @@ namespace CoiniumServ.Tests.Cryptology.Merkle
             var tree = new MerkleTree(hashList);
 
             // steps counts should be zero
-            tree.Steps.Count.Should().Equal(0);
-            tree.Branches.Count.Should().Equal(0);
+            tree.Steps.Count.Should().Be(0);
+            tree.Branches.Count.Should().Be(0);
 
             // calculate the result
             var result = tree.WithFirst("a3291f854e60860ec74caf232ed34f98d0ff447dd7d38dbd7d451462b4b6f263".HexToByteArray());
             var root = result.ReverseBuffer();
 
             // check the result and root
-            result.ToHexString().Should().Equal("a3291f854e60860ec74caf232ed34f98d0ff447dd7d38dbd7d451462b4b6f263");
-            root.ToHexString().Should().Equal("63f2b6b46214457dbd8dd3d77d44ffd0984fd32e23af4cc70e86604e851f29a3");
+            result.ToHexString().Should().Be("a3291f854e60860ec74caf232ed34f98d0ff447dd7d38dbd7d451462b4b6f263");
+            root.ToHexString().Should().Be("63f2b6b46214457dbd8dd3d77d44ffd0984fd32e23af4cc70e86604e851f29a3");
         }
 
         [Fact]
@@ -99,13 +99,13 @@ namespace CoiniumServ.Tests.Cryptology.Merkle
             var tree = new MerkleTree(hashList);
 
             // tests steps
-            tree.Steps.Count.Should().Equal(1);
-            tree.Branches.Count.Should().Equal(1);
-            tree.Steps.First().ToHexString().Should().Equal("35f25037aed5a2342dccb9fb5d5659cfe16c02d5c4e269562c24514e1a5db6a0");
+            tree.Steps.Count.Should().Be(1);
+            tree.Branches.Count.Should().Be(1);
+            tree.Steps.First().ToHexString().Should().Be("35f25037aed5a2342dccb9fb5d5659cfe16c02d5c4e269562c24514e1a5db6a0");
 
             // check root
             var root = tree.WithFirst("357deb5f66416ac7bd10d21557f50d358d85581c4c2e725dc1113cd277869a1a".HexToByteArray()).ReverseBuffer();
-            root.ToHexString().Should().Equal("29b144ae2dfb6619502d541bbfd80ac9d800d8b44cf76e04459c7be4eb7c30da");
+            root.ToHexString().Should().Be("29b144ae2dfb6619502d541bbfd80ac9d800d8b44cf76e04459c7be4eb7c30da");
         }
     }
 }

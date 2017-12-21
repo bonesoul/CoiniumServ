@@ -187,31 +187,31 @@ namespace CoiniumServ.Tests.Jobs
             };
 
             // test previous block hash reversed.
-            job.Id.Should().Equal((UInt64)1);
-            job.PreviousBlockHashReversed.Should().Equal("54561e9e91f7d344768b6752c301b7557716776419febc959db64f1922a9174d");
+            job.Id.Should().Be((UInt64)1);
+            job.PreviousBlockHashReversed.Should().Be("54561e9e91f7d344768b6752c301b7557716776419febc959db64f1922a9174d");
 
             // test the Coinbase (generation transaction).
-            job.CoinbaseInitial.Should().Equal("02000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703c5a804062f503253482f0465e69e5308");
-            job.CoinbaseFinal.Should().Equal("0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
+            job.CoinbaseInitial.Should().Be("02000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703c5a804062f503253482f0465e69e5308");
+            job.CoinbaseFinal.Should().Be("0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000");
 
             // test the merkle branch
-            job.MerkleTree.Branches.Count.Should().Equal(0);
+            job.MerkleTree.Branches.Count.Should().Be(0);
 
             // test the version.
-            job.Version.Should().Equal("00000002");
+            job.Version.Should().Be("00000002");
 
             // test the bits (encoded network difficulty)
-            job.EncodedDifficulty.Should().Equal("1d2bd7c3");
+            job.EncodedDifficulty.Should().Be("1d2bd7c3");
 
             // test the current time
-            job.NTime.Should().Equal("539ee666");
+            job.NTime.Should().Be("539ee666");
 
             // test the clean jobs flag
-            job.CleanJobs.Should().Equal(true);
+            job.CleanJobs.Should().Be(true);
 
             // test the json
             var jobJson = JsonConvert.SerializeObject(job);
-            jobJson.Should().Equal("[\"1\",\"54561e9e91f7d344768b6752c301b7557716776419febc959db64f1922a9174d\",\"02000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703c5a804062f503253482f0465e69e5308\",\"0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000\",[],\"00000002\",\"1d2bd7c3\",\"539ee666\",true]");
+            jobJson.Should().Be("[\"1\",\"54561e9e91f7d344768b6752c301b7557716776419febc959db64f1922a9174d\",\"02000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2703c5a804062f503253482f0465e69e5308\",\"0d2f6e6f64655374726174756d2f000000000280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac00000000\",[],\"00000002\",\"1d2bd7c3\",\"539ee666\",true]");
         }
     }
 }
