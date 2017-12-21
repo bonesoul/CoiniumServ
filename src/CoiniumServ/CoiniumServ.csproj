@@ -36,9 +36,9 @@
     <PackageReference Include="HashLib" Version="2.0.1" />
     <PackageReference Include="JsonConfig" Version="1.0.0" />
     <PackageReference Include="MySql.Data" Version="6.8.8" />
-    <PackageReference Include="Nancy" Version="1.4.4" />
+    <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.CustomErrors" Version="1.2.0" />
-    <PackageReference Include="Nancy.Hosting.Self" Version="1.4.1" />
+    <PackageReference Include="Nancy.Hosting.Self" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Metrics" Version="0.4.7" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Serilog" Version="2.6.0" />

@@ -106,12 +106,17 @@ namespace CoiniumServ.Server.Web
             return _applicationContext.Container;
         }
 
-        #if DEBUG // on debug mode, enable http://website/_Nancy/
-        protected override DiagnosticsConfiguration DiagnosticsConfiguration
+        public override void Configure(Nancy.Configuration.INancyEnvironment environment)
         {
-            get { return new DiagnosticsConfiguration { Password = @"debug" }; }
+            #if DEBUG 
+                environment.Views(true, true); // on debug mode enable runtime view discovery
+                environment.Tracing(true, true); // enable tracing
+                environment.Diagnostics(password: "debug"); // on debug mode, enable http://website/_Nancy/
+            #else
+                environment.Views(false, false);
+                environment.Tracing(false, false); // enable tracing
+            #endif
         }
-        #endif
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
         {
