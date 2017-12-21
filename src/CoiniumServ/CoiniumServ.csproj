@@ -5,10 +5,11 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <Description>Next-gen crypto currency mining pool software</Description>
     <Company>Int6ware</Company>
-    <AssemblyVersion>0.2.6.2</AssemblyVersion>
-    <FileVersion>0.2.6.2</FileVersion>
+    <AssemblyVersion>0.2.7.0</AssemblyVersion>
+    <FileVersion>0.2.7.0</FileVersion>
     <StartupObject>CoiniumServ.Program</StartupObject>
     <ApplicationIcon>Coinium.ico</ApplicationIcon>
+    <Version>0.2.7.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
