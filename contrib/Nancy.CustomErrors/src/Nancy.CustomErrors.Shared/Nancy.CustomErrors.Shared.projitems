@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>0b0c2e66-9fd4-4475-ab31-81ab2f39f4da</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Nancy.CustomErrors.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomErrors.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomErrorsConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ErrorResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ErrorStatusCodeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ErrorViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ResponseFormatterExtensions.cs" />
+  </ItemGroup>
+</Project>

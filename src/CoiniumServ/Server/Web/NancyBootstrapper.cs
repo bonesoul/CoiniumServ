@@ -34,8 +34,10 @@ using CoiniumServ.Statistics;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
+using Nancy.CustomErrors;
 using Nancy.TinyIoc;
 using Nancy.Diagnostics;
+using Nancy.Responses;
 
 namespace CoiniumServ.Server.Web
 {
@@ -77,7 +79,7 @@ namespace CoiniumServ.Server.Web
                 ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
             };
 
-            // CustomErrors.Enable(pipelines, new ErrorConfiguration()); // todo: fix this.
+            CustomErrors.Enable(pipelines, new ErrorConfiguration(), new DefaultJsonSerializer(GetEnvironment())); // todo: fix this.
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)

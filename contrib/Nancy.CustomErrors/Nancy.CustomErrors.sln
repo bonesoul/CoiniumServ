@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.CustomErrors", "src\Nancy.CustomErrors\Nancy.CustomErrors.csproj", "{CD7A7211-6563-499B-913D-8E5AF649BFE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{56730B51-095D-4010-B942-DCB2696540C0}"
+	ProjectSection(SolutionItems) = preProject
+		build.ps1 = build.ps1
+		default.ps1 = default.ps1
+		Readme.md = Readme.md
+		version.json = version.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.CustomErrors.Tests", "tests\Nancy.CustomErrors.Tests\Nancy.CustomErrors.Tests.csproj", "{F1930050-9A83-42BB-9E14-1D5D7C6F255B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.CustomErrors.Example", "tests\Nancy.CustomErrors.Example\Nancy.CustomErrors.Example.csproj", "{5A8E7514-E653-4C00-8623-1E71D7DCE6C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nancy.CustomErrors.NetStandard1.6", "src\Nancy.CustomErrors.NetStandard1.6\Nancy.CustomErrors.NetStandard1.6.csproj", "{BBFAEB4A-212F-4F00-AAE7-6723231C6969}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Nancy.CustomErrors.Shared", "src\Nancy.CustomErrors.Shared\Nancy.CustomErrors.Shared.shproj", "{0B0C2E66-9FD4-4475-AB31-81AB2F39F4DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{ED70835A-FD7E-43C7-803D-84CD326DA186}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9CDF45E1-7B40-4BA2-A537-1407CA214AD0}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Nancy.CustomErrors.Shared\Nancy.CustomErrors.Shared.projitems*{0b0c2e66-9fd4-4475-ab31-81ab2f39f4da}*SharedItemsImports = 13
+		src\Nancy.CustomErrors.Shared\Nancy.CustomErrors.Shared.projitems*{cd7a7211-6563-499b-913d-8e5af649bfe7}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD7A7211-6563-499B-913D-8E5AF649BFE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD7A7211-6563-499B-913D-8E5AF649BFE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD7A7211-6563-499B-913D-8E5AF649BFE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD7A7211-6563-499B-913D-8E5AF649BFE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1930050-9A83-42BB-9E14-1D5D7C6F255B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1930050-9A83-42BB-9E14-1D5D7C6F255B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1930050-9A83-42BB-9E14-1D5D7C6F255B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1930050-9A83-42BB-9E14-1D5D7C6F255B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A8E7514-E653-4C00-8623-1E71D7DCE6C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A8E7514-E653-4C00-8623-1E71D7DCE6C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A8E7514-E653-4C00-8623-1E71D7DCE6C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A8E7514-E653-4C00-8623-1E71D7DCE6C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBFAEB4A-212F-4F00-AAE7-6723231C6969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBFAEB4A-212F-4F00-AAE7-6723231C6969}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBFAEB4A-212F-4F00-AAE7-6723231C6969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBFAEB4A-212F-4F00-AAE7-6723231C6969}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CD7A7211-6563-499B-913D-8E5AF649BFE7} = {ED70835A-FD7E-43C7-803D-84CD326DA186}
+		{F1930050-9A83-42BB-9E14-1D5D7C6F255B} = {9CDF45E1-7B40-4BA2-A537-1407CA214AD0}
+		{5A8E7514-E653-4C00-8623-1E71D7DCE6C5} = {9CDF45E1-7B40-4BA2-A537-1407CA214AD0}
+		{BBFAEB4A-212F-4F00-AAE7-6723231C6969} = {ED70835A-FD7E-43C7-803D-84CD326DA186}
+		{0B0C2E66-9FD4-4475-AB31-81AB2F39F4DA} = {ED70835A-FD7E-43C7-803D-84CD326DA186}
+	EndGlobalSection
+EndGlobal
