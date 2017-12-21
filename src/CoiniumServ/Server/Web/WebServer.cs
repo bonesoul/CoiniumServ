@@ -32,7 +32,6 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using CoiniumServ.Configuration;
-using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
 using Serilog;

@@ -53,7 +53,6 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
-using CoiniumServ.Utils.Metrics;
 using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 using Nancy.TinyIoc;
@@ -423,11 +422,6 @@ namespace CoiniumServ.Container
         public INancyBootstrapper GetWebBootstrapper()
         {
             return _applicationContext.Container.Resolve<INancyBootstrapper>();
-        }
-
-        public IMetricsManager GetMetricsManager()
-        {
-            return _applicationContext.Container.Resolve<IMetricsManager>();
         }
 
         public ISoftwareRepository GetSoftwareRepository()

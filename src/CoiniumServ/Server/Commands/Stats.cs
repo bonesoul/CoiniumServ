@@ -28,7 +28,6 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Text;
 using CoiniumServ.Utils.Commands;
 

@@ -102,11 +102,6 @@ namespace CoiniumServ
             // run software repository.
             objectFactory.GetSoftwareRepository();
 
-#if DEBUG
-            // only initialize metrics support in debug mode
-            objectFactory.GetMetricsManager();
-#endif
-
             // start web server.
             objectFactory.GetWebServer();
         }
