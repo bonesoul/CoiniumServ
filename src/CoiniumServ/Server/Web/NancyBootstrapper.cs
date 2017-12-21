@@ -85,7 +85,7 @@ namespace CoiniumServ.Server.Web
                 Metric.Config.WithNancy(pipelines);
             #endif
 
-            CustomErrors.Enable(pipelines, new ErrorConfiguration());
+            // CustomErrors.Enable(pipelines, new ErrorConfiguration()); // todo: fix this.
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)

@@ -45,7 +45,6 @@ namespace CoiniumServ.Utils.Helpers
         public static string GetAbsolutePath(string file)
         {
             var path = Path.Combine(AssemblyRoot, file); // first get the path as *unix paths.
-
             return path;
         }
 
