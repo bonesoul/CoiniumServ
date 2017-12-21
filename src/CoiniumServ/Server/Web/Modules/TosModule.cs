@@ -36,14 +36,14 @@ namespace CoiniumServ.Server.Web.Modules
         public TosModule()
             : base("/tos")
         {
-            Get["/"] = _ =>
+            Get("/", args =>
             {
                 // include common data required by layout.
                 ViewBag.Header = "Terms of Service";
 
                 // return our view
                 return View["tos"];
-            };
+            });
         }
     }
 }

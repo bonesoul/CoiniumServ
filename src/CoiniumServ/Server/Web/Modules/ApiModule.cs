@@ -46,7 +46,7 @@ namespace CoiniumServ.Server.Web.Modules
         public ApiModule(IStatisticsManager statisticsManager, IPoolManager poolManager, IAlgorithmManager algorithmManager)
             :base("/api")
         {
-            Get["/"] = _ =>
+            Get("/", args =>
             {
                 // include common data required by layout.
                 ViewBag.Header = "Public API";
@@ -57,47 +57,47 @@ namespace CoiniumServ.Server.Web.Modules
                     BaseUrl = Request.Url.SiteBase,
                     Coin = poolManager.First().Config.Coin
                 }];
-            };
+            });
 
 
-            Get["/pools"] = _ =>
+            Get("/pools", args =>
             {
                 var response = (Response) poolManager.ServiceResponse;
                 response.ContentType = "application/json";
                 return response;
-            };
+            });
 
-            Get["/pool/{slug}"] = _ =>
+            Get("/pool/{slug}", args =>
             {
-                var pool = poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // query the requested pool.
+                var pool = poolManager.Get(HttpUtility.HtmlEncode(args.slug)); // query the requested pool.
 
-                var response = pool != null ? (Response)pool.ServiceResponse : PoolNotFound;
+                var response = pool != null ? (Response) pool.ServiceResponse : PoolNotFound;
                 response.ContentType = "application/json";
                 return response;
-            };
+            });
 
-            Get["/algorithms"] = _ =>
+            Get("/algorithms", args =>
             {
                 var response = (Response)algorithmManager.ServiceResponse;
                 response.ContentType = "application/json";
                 return response;
-            };
+            });
 
-            Get["/algorithm/{slug}"] = _ =>
+            Get("/algorithm/{slug}", args =>
             {
-                var algorithm = algorithmManager.Get(HttpUtility.HtmlEncode(_.slug)); // query the requested pool.
+                var algorithm = algorithmManager.Get(HttpUtility.HtmlEncode(args.slug)); // query the requested pool.
 
-                var response = algorithm != null ? (Response)algorithm.ServiceResponse : AlgorithmNotFound;
+                var response = algorithm != null ? (Response) algorithm.ServiceResponse : AlgorithmNotFound;
                 response.ContentType = "application/json";
                 return response;
-            };
+            });
 
-            Get["/global"] = _ =>
+            Get("/global", args =>
             {
                 var response = (Response) statisticsManager.ServiceResponse;
                 response.ContentType = "application/json";
                 return response;
-            };          
+            });
         }
     }
 }
