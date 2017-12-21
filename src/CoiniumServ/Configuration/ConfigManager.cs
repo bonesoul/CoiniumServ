@@ -40,7 +40,6 @@ using CoiniumServ.Server.Stack;
 using CoiniumServ.Server.Web.Config;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers;
-using CoiniumServ.Utils.Platform;
 using Serilog;
 
 namespace CoiniumServ.Configuration
@@ -103,7 +102,6 @@ namespace CoiniumServ.Configuration
 
             // print a version banner.
             _logger.Information("CoiniumServ {0:l} {1:l} warming-up..", VersionInfo.CodeName, Assembly.GetAssembly(typeof(Program)).GetName().Version);
-            PlatformManager.PrintPlatformBanner();
 
             // load rest of the configs.
             StackConfig = new StackConfig(data.stack);

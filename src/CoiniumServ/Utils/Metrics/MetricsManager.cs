@@ -28,7 +28,6 @@
 #endregion
 
 using CoiniumServ.Configuration;
-using CoiniumServ.Utils.Platform;
 using Metrics;
 using Serilog;
 
@@ -51,8 +50,7 @@ namespace CoiniumServ.Utils.Metrics
                 //    .WithCSVReports(string.Format(@"{0}/logs/metrics/csv", FileHelpers.AssemblyRoot),TimeSpan.FromSeconds(5)))
                 .WithErrorHandler(exception => _logger.Error("Metrics error: {0}", exception.Message));
 
-            if (PlatformManager.Framework == Frameworks.DotNet)
-                Metric.Config.WithAllCounters(); // there is a still unresolved bug with mono borking with system.security.claimsidentity.
+            Metric.Config.WithAllCounters(); // there is a still unresolved bug with mono borking with system.security.claimsidentity.
         }
     }
 }
