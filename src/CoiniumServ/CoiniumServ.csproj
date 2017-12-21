@@ -54,7 +54,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /YS $(SolutionDir)config &quot;$(ProjectDir)$(OutDir)config/*&quot;&#xD;&#xA;" />
+    <Exec Command="xcopy /YS &quot;$(SolutionDir)config&quot; &quot;$(ProjectDir)$(OutDir)config/*&quot; &#xD;&#xA;xcopy /YS &quot;$(SolutionDir)web&quot; &quot;$(ProjectDir)$(OutDir)web/*&quot;&#xD;&#xA;" />
   </Target>
   
 </Project>
