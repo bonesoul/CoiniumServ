@@ -9,6 +9,5 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
     steps:
       - checkout
-      - run: dotnet restore
       - run: dotnet build -c CI
       - run: cd src/CoiniumServ.Tests/ && dotnet xunit
