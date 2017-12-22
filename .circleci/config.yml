@@ -10,5 +10,5 @@ jobs:
     steps:
       - checkout
       - run: dotnet restore
-      - run: dotnet build
+      - run: dotnet build -c CI
       - run: cd src/CoiniumServ.Tests/ && dotnet xunit

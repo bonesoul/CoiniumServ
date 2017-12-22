@@ -5,6 +5,7 @@
 	<RuntimeFrameworkVersion>2.0.4</RuntimeFrameworkVersion>	
     <IsPackable>false</IsPackable>
     <OutputType>Library</OutputType>
+    <Configurations>Debug;Release;CI</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -12,6 +13,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CI|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 

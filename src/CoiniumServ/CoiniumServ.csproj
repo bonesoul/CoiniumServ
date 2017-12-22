@@ -10,6 +10,7 @@
     <StartupObject>CoiniumServ.Program</StartupObject>
     <ApplicationIcon>Coinium.ico</ApplicationIcon>
     <Version>0.2.7.0</Version>
+    <Configurations>Debug;Release;CI</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -18,6 +19,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\..\build\bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CI|AnyCPU'">
     <LangVersion>latest</LangVersion>
     <OutputPath>..\..\build\bin\Debug\</OutputPath>
   </PropertyGroup>
@@ -52,9 +58,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\contrib\Nancy.CustomErrors\src\Nancy.CustomErrors.NetStandard1.6\Nancy.CustomErrors.NetStandard1.6.csproj" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /IEY &quot;$(SolutionDir)config&quot; &quot;$(ProjectDir)$(OutDir)config&quot; &#xD;&#xA;&#xD;&#xA;" />
-  </Target>
   
 </Project>
