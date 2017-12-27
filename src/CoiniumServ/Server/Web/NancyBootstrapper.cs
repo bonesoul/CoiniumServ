@@ -27,6 +27,7 @@
 // 
 #endregion
 
+using System.Collections.Generic;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Pools;
@@ -38,6 +39,7 @@ using Nancy.CustomErrors;
 using Nancy.TinyIoc;
 using Nancy.Diagnostics;
 using Nancy.Responses;
+using Nancy.ViewEngines.Razor;
 
 namespace CoiniumServ.Server.Web
 {
@@ -79,9 +81,9 @@ namespace CoiniumServ.Server.Web
                 ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
             };
 
-            pipelines.OnError += (ctx, ex) => {
-                return null;
-            };
+            //pipelines.OnError += (ctx, ex) => {
+            //    return null;
+            //};
 
             //CustomErrors.Enable(pipelines, new ErrorConfiguration(), new DefaultJsonSerializer(GetEnvironment())); // todo: fix this.
         }
@@ -119,6 +121,31 @@ namespace CoiniumServ.Server.Web
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
         {
             // prevents nancy from autoregistering it's own set of resolvers.
+        }
+
+        protected override void RegisterInstances(
+            TinyIoCContainer container, IEnumerable<InstanceRegistration> instanceRegistrations)
+        {
+            base.RegisterInstances(container, instanceRegistrations);
+            container.Register<IRazorConfiguration>(new CustomRazorConfiguration());
+        }
+    }
+
+    public class CustomRazorConfiguration : IRazorConfiguration
+    {
+        public bool AutoIncludeModelNamespace
+        {
+            get { return true; }
+        }
+
+        public IEnumerable<string> GetAssemblyNames()
+        {
+            yield return "CoiniumServ.Server.Web.Models";
+        }
+
+        public IEnumerable<string> GetDefaultNamespaces()
+        {
+            yield return "CoiniumServ.Server.Web.Models";
         }
     }
 }
