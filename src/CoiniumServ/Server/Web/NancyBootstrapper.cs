@@ -79,7 +79,11 @@ namespace CoiniumServ.Server.Web
                 ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
             };
 
-            CustomErrors.Enable(pipelines, new ErrorConfiguration(), new DefaultJsonSerializer(GetEnvironment())); // todo: fix this.
+            pipelines.OnError += (ctx, ex) => {
+                return null;
+            };
+
+            //CustomErrors.Enable(pipelines, new ErrorConfiguration(), new DefaultJsonSerializer(GetEnvironment())); // todo: fix this.
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)
@@ -102,7 +106,7 @@ namespace CoiniumServ.Server.Web
 
         public override void Configure(Nancy.Configuration.INancyEnvironment environment)
         {
-            #if DEBUG 
+            #if DEBUG
                 environment.Views(true, true); // on debug mode enable runtime view discovery
                 environment.Tracing(true, true); // enable tracing
                 environment.Diagnostics(password: "debug"); // on debug mode, enable http://website/_Nancy/

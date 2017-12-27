@@ -42,10 +42,11 @@
     <PackageReference Include="Gibbed.IO" Version="1.0.0" />
     <PackageReference Include="HashLib" Version="2.0.1" />
     <PackageReference Include="JsonConfig" Version="1.0.0" />
-    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
     <PackageReference Include="MySql.Data" Version="6.10.5" />
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Hosting.Self" Version="2.0.0-clinteastwood" />
+    <PackageReference Include="Nancy.Viewengines.Razor" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Serilog" Version="2.6.0" />
     <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
