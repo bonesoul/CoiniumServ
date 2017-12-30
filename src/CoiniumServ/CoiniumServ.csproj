@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CoiniumServ</RootNamespace>
     <AssemblyName>CoiniumServ</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -149,6 +149,13 @@
     <Compile Include="Coin\Config\CoinOptions.cs" />
     <Compile Include="Coin\Config\IBlockExplorerOptions.cs" />
     <Compile Include="Coin\Config\ICoinOptions.cs" />
+    <Compile Include="Daemon\Responses\BIP9Softforks.cs" />
+    <Compile Include="Daemon\Responses\BlockChainInfo.cs" />
+    <Compile Include="Daemon\Responses\MiningInfoData.cs" />
+    <Compile Include="Daemon\Responses\NetworkData.cs" />
+    <Compile Include="Daemon\Responses\NetworkInfo.cs" />
+    <Compile Include="Daemon\Responses\SoftForksData.cs" />
+    <Compile Include="Daemon\Responses\WalletInfo.cs" />
     <Compile Include="Persistance\Layers\Hybrid\Migrations\M003FixDefaults.cs" />
     <Compile Include="Persistance\Providers\Redis\RedisClient.cs" />
     <Compile Include="Server\Web\Modules\ContactModule.cs" />
