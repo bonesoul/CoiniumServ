@@ -378,6 +378,7 @@ namespace CoiniumServ.Daemon
             }
             catch (Exception) // fixme - should only catch if api doesn't exist || if vertcoin. - SCSLATER
             { }
+            return rval;
         }
 
         [Obsolete("Replaced in v0.7.0 with getblocktemplate, submitblock, getrawmempool")]
