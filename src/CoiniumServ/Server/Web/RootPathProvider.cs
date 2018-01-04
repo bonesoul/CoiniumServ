@@ -42,7 +42,7 @@ namespace CoiniumServ.Server.Web
             // determine the root path
             #if DEBUG // on debug mode use static files form source directory, so live edits can be possible
                 // note: we need to convert relative path to absolute path as nancy can only server static files with absolute path.
-                _rootPath = Path.GetFullPath(FileHelpers.GetAbsolutePath($"web/{template}")); // if not yet do so.
+                _rootPath = Path.GetFullPath(FileHelpers.GetAbsolutePath($"../../../../src/web/{template}")); // if not yet do so.
             #else // on release mode use static files from bin/Release.
                 _rootPath = FileHelpers.GetAbsolutePath($"web/{template}");
             #endif

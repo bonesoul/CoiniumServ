@@ -38,11 +38,12 @@
     <PackageReference Include="Gibbed.IO" Version="1.0.0" />
     <PackageReference Include="HashLib" Version="2.0.1" />
     <PackageReference Include="JsonConfig" Version="1.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.3" />
     <PackageReference Include="MySql.Data" Version="6.10.5" />
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Hosting.Self" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Viewengines.Razor" Version="2.0.0-clinteastwood" />
+    <PackageReference Include="Nancy.ViewEngines.Razor.BuildProviders" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Serilog" Version="2.6.0" />
     <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
@@ -64,5 +65,6 @@
 	<Copy SourceFiles="@(Web)" DestinationFiles="@(Web->'$(OutputPath)\web\%(RecursiveDir)%(Filename)%(Extension)')" />
 	<Copy SourceFiles="@(Config)" DestinationFiles="@(Config->'$(OutputPath)\config\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="$(SolutionDir)/packages/nancy.viewengines.razor/2.0.0-clinteastwood/lib/net452/Nancy.ViewEngines.Razor.dll" DestinationFolder="$(OutDir)" />	
+	<Copy SourceFiles="$(SolutionDir)/packages/nancy.viewengines.razor.buildproviders/2.0.0-clinteastwood/lib/net452/Nancy.ViewEngines.Razor.BuildProviders.dll" DestinationFolder="$(OutDir)" />
   </Target>   
 </Project>
