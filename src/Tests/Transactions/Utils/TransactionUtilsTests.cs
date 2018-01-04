@@ -27,28 +27,29 @@
 // 
 #endregion
 
-using System.Reflection;
-using System.Runtime.InteropServices;
-using CoiniumServ;
+using System;
+using CoiniumServ.Transactions.Utils;
+using CoiniumServ.Utils.Extensions;
+using Should.Fluent;
+using Xunit;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("CoiniumServ.Tests")]
-[assembly: AssemblyDescription("Tests for CoiniumServ")]
-[assembly: AssemblyCompany("Coinium.org")]
-[assembly: AssemblyProduct("CoiniumServ.Tests - " + VersionInfo.CodeName)]
-[assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, CoiniumServ project, http://www.coinium.org -  http://www.coiniumserv.com")]
-[assembly: AssemblyTrademark("CoiniumServ")]
-[assembly: AssemblyCulture("")]
+namespace CoiniumServ.Tests.Transactions.Utils
+{
+    public class TransactionUtilsTests
+    {
+        const long UnixDateTime = 1402265775319;
+        const long FinalUnixDateTime = UnixDateTime / 1000 | 0;
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
+        /// <summary>
+        /// -> date: 1402265775319 final:1402265775 serialized: 04afe09453
+        /// </summary>
+        [Fact]
+        public void SerializedUnixDateTimeTest()
+        {
+            FinalUnixDateTime.Should().Equal((Int64)1402265775);
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c2c43b17-b445-48d2-871a-8b244e6d5062")]
-
-// Set the assembly version from VersionInfo.cs file.
-[assembly: AssemblyVersion(VersionInfo.Assembly.Version)]
+            var serializedUnixTime = TransactionUtils.GetSerializedUnixDateTime(UnixDateTime);
+            serializedUnixTime.ToHexString().Should().Equal("04afe09453");
+        }
+    }
+}

@@ -27,28 +27,39 @@
 // 
 #endregion
 
-using System.Reflection;
-using System.Runtime.InteropServices;
-using CoiniumServ;
+using System.Text;
+using CoiniumServ.Coin.Address;
+using CoiniumServ.Coin.Address.Exceptions;
+using Org.BouncyCastle.Math;
+using Should.Fluent;
+using Xunit;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("CoiniumServ.Tests")]
-[assembly: AssemblyDescription("Tests for CoiniumServ")]
-[assembly: AssemblyCompany("Coinium.org")]
-[assembly: AssemblyProduct("CoiniumServ.Tests - " + VersionInfo.CodeName)]
-[assembly: AssemblyCopyright("Copyright (C) 2013 - 2014, CoiniumServ project, http://www.coinium.org -  http://www.coiniumserv.com")]
-[assembly: AssemblyTrademark("CoiniumServ")]
-[assembly: AssemblyCulture("")]
+namespace CoiniumServ.Tests.Coin
+{
+        public class Base58Test
+        {
+            [Fact]
+            public void TestEncode()
+            {
+                var testbytes = Encoding.UTF8.GetBytes("Hello World");
+                Base58.Encode(testbytes).Should().Equal("JxF12TrwUP45BMd");
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
+                var bi = BigInteger.ValueOf(3471844090);
+                Base58.Encode(bi.ToByteArray()).Should().Equal("16Ho7Hs");
+            }
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c2c43b17-b445-48d2-871a-8b244e6d5062")]
+            [Fact]
+            public void TestDecode()
+            {
+                var testbytes = Encoding.UTF8.GetBytes("Hello World");
+                var actualbytes = Base58.Decode("JxF12TrwUP45BMd");
+                actualbytes.Should().Equal(testbytes);
+            }
 
-// Set the assembly version from VersionInfo.cs file.
-[assembly: AssemblyVersion(VersionInfo.Assembly.Version)]
+            [Fact]
+            public void TestInvalidAddress()
+            {
+                Assert.Throws<AddressFormatException>(() => Base58.Decode("This isn't valid base58"));
+            }
+        }
+}
