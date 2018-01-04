@@ -172,11 +172,12 @@ namespace CoiniumServ.Pools
             {
                 if (e is RpcErrorException)
                 {
-                    var error = e as RpcErrorException;
+                    var error = (RpcErrorException) e;
                     switch (error.Code)
                     {
                         case (int)RpcErrorCode.RPC_METHOD_NOT_FOUND:
                             _poolConfig.Coin.Options.SubmitBlockSupported = false; // the coin doesn't support submitblock().
+                            _logger.Debug("submitblock() is NOT SUPPORTED by your wallet software.");
                             break;
                         case (int)RpcErrorCode.RPC_DESERIALIZATION_ERROR:
                             _poolConfig.Coin.Options.SubmitBlockSupported = true; // the coin supports submitblock().

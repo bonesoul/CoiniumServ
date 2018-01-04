@@ -44,7 +44,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 if (!IsEnabled || !_redisProvider.IsConnected)
                     return hashrates;
 
-                var key = string.Format("{0}:hashrate", _coin);
+                var key = $"{_coin}:hashrate";
 
                 var results = _redisProvider.Client.ZRangeByScore(key, since, double.PositiveInfinity);
 
@@ -52,7 +52,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     var data = result.Split(':');
                     var share = double.Parse(data[0].Replace(',', '.'), CultureInfo.InvariantCulture);
-                    var worker = data[1].Substring(0, data[1].Length - 8);
+                    var worker = data[1];
 
                     if (!hashrates.ContainsKey(worker))
                         hashrates.Add(worker, 0);
@@ -75,7 +75,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 if (!IsEnabled || !_redisProvider.IsConnected)
                     return;
 
-                var key = string.Format("{0}:hashrate", _coin);
+                var key = $"{_coin}:hashrate";
                 _redisProvider.Client.ZRemRangeByScore(key, double.NegativeInfinity, until);
             }
             catch (Exception e)

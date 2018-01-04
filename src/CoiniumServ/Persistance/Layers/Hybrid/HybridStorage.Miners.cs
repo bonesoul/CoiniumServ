@@ -27,7 +27,7 @@
 // 
 #endregion
 
-using CoiniumServ.Daemon.Exceptions;
+using System;
 using CoiniumServ.Mining;
 using CoiniumServ.Server.Mining.Stratum;
 
@@ -44,8 +44,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             {
                 return _daemonClient.ValidateAddress(miner.Username).IsValid; // if so validate it against coin daemon as an address.
             }
-            catch (RpcException)
+            catch (Exception e)
             {
+                _logger.Error(e, "An unexpected exception occured.");
                 return false;
             }
         }

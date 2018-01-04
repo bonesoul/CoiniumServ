@@ -102,11 +102,6 @@ namespace CoiniumServ
             // run software repository.
             objectFactory.GetSoftwareRepository();
 
-#if DEBUG
-            // only initialize metrics support in debug mode
-            objectFactory.GetMetricsManager();
-#endif
-
             // start web server.
             objectFactory.GetWebServer();
         }
@@ -123,7 +118,10 @@ namespace CoiniumServ
             var exception = e.ExceptionObject as Exception;
 
             if (exception == null) // if we can't get the exception, whine about it.
-                throw new ArgumentNullException("e");
+            {
+                _logger.Error("We can't get Exception object from UnhandledExceptionEventArgs");
+                throw new ArgumentNullException(nameof(e));
+            }
 
             if (e.IsTerminating)
             {
