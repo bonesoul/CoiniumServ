@@ -425,11 +425,6 @@ namespace CoiniumServ.Container
             return _applicationContext.Container.Resolve<INancyBootstrapper>();
         }
 
-        public IMetricsManager GetMetricsManager()
-        {
-            return _applicationContext.Container.Resolve<IMetricsManager>();
-        }
-
         public ISoftwareRepository GetSoftwareRepository()
         {
             return _applicationContext.Container.Resolve<ISoftwareRepository>();

@@ -154,8 +154,6 @@ namespace CoiniumServ.Container
 
         INancyBootstrapper GetWebBootstrapper();
 
-        IMetricsManager GetMetricsManager();
-
         #endregion
 
         #region mining software
