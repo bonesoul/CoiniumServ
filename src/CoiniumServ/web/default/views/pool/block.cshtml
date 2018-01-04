@@ -1,0 +1,121 @@
+﻿@using CoiniumServ.Persistance.Blocks
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.Pool.BlockModel>
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Block Details</h3>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th style="width: 10px" title="Height of the block">Height</th>
+                            <th title="Status of the block">Status</th>
+                            <th class="hidden-xs" title="Hash of the block">Block Hash</th>
+                            <th class="hidden-xs" title="Hash of the generation transaction">Tx Hash</th>
+                            <th title="Amount of coins generated">Amount</th>
+                            <th title="Did miners got paid for their contributions?">Paid</th>
+                            <th title="Time block was found">Date</th>
+                        </tr>
+                        <tr>
+                            <td>@Model.Block.Height</td>
+                            <td>
+                                @switch (@Model.Block.Status)
+                                {
+                                    case BlockStatus.Pending:
+                                        <div class="label label-warning">@Model.Block.Status</div>
+                                        break;
+                                    case BlockStatus.Orphaned:
+                                    <div class="label label-danger">@Model.Block.Status</div>
+                                        break;
+                                    case BlockStatus.Confirmed:
+                                    <div class="label label-info">@Model.Block.Status</div>
+                                        break;
+                                }
+                            </td>
+                            <td class="hidden-xs"><a href="@Model.Coin.BlockExplorer.Block@Model.Block.BlockHash" target="_blank">@Model.Block.BlockHash.Substring(0, 10)</a></td>
+                            <td class="hidden-xs"><a href="@Model.Coin.BlockExplorer.Tx@Model.Block.TransactionHash" target="_blank">@Model.Block.TransactionHash.Substring(0, 10)</a></td>
+                            <td>@Model.Block.Amount</td>
+                            <td><div class="label @(Model.Block.Accounted ?"bg-green":"bg-red")">@(Model.Block.Accounted ? "Yes" : "No")</div></td>
+                            <td><time class="timeago" datetime="@Model.Block.CreatedAt.ToString("o")">@Model.Block.CreatedAt.ToString("o")</time></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title">Payment Details</h3>
+            </div>
+            <div class="box-body no-padding">
+                @if (Model.Payments.Count == 0)
+                {
+                    <div class="box-footer">
+                        Waiting for block to get confirmed..
+                    </div>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th class="hidden-xs" title="Id of the payment">Payment Id</th>
+                                <th title="Payment address of the user">Address</th>
+                                <th title="Amount of the payment">Amount</th>
+                                <th class="hidden-xs" title="Is the payment executed?">Fullfilled</th>
+                                <th class="hidden-xs" title="Id of the transaction">Tx Id</th>
+                                <th class="hidden-xs" title="Date of the payment">Date</th>
+                            </tr>
+                            @foreach (var paymentDetails in @Model.Payments)
+                            {
+                                <tr>
+                                    <td class="hidden-xs"><a href="/pool/@Model.Coin.Symbol/payment/@paymentDetails.PaymentId">@paymentDetails.PaymentId</a></td>
+                                    <td><a href="/pool/@Model.Coin.Symbol/account/address/@paymentDetails.Address">@paymentDetails.Address</a></td>
+                                    <td>
+                                        @if (paymentDetails.Completed)
+                                        {
+                                            @: @paymentDetails.Amount @paymentDetails.Currency
+                                        }
+                                        else
+                                        {
+                                            @: @paymentDetails.Amount @Model.Coin.Symbol
+                                        }
+                                    </td>
+                                    <td class="hidden-xs"><div class="label @(paymentDetails.Completed ?"bg-green":"bg-red")">@(paymentDetails.Completed ? "Yes" : "No")</div></td>
+                                    <td class="hidden-xs">
+                                        @if (paymentDetails.Completed)
+                                        {
+                                            <a href="/pool/@Model.Coin.Symbol/tx/@paymentDetails.TransactionId">@paymentDetails.TransactionId</a>
+                                        }
+                                        else
+                                        {
+                                            @:-
+                                        }
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <time class="timeago" datetime="@(paymentDetails.Completed ? paymentDetails.TransactionDate.ToString("yyyy-MM-ddTHH:mm:ssZ") : paymentDetails.PaymentDate.ToString("yyyy-MM-ddTHH:mm:ssZ"))">@(paymentDetails.Completed ? paymentDetails.TransactionDate.ToString("yyyy-MM-ddTHH:mm:ssZ") : paymentDetails.PaymentDate.ToString("yyyy-MM-ddTHH:mm:ssZ"))</time>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <a href="/pool/@Model.Coin.Symbol/block/@(Model.Block.Height - 1)" type="button" class="btn btn-default btn-sm"><i class="fa fa-angle-double-left"></i> Prev</a>
+        <a href="/pool/@Model.Coin.Symbol/block/@(Model.Block.Height + 1)" type="button" class="btn btn-default btn-sm pull-right"><i class="fa fa-angle-double-right"></i> Next</a>
+    </div>
+</div>

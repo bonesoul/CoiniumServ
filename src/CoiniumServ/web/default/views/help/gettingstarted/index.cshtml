@@ -1,0 +1,131 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.GettingStarted.GettingStartedModel>
+
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary collapsed-box">
+            <div class="box-header">
+                <h3 class="box-title">What is Mining?</h3>
+                <div class="pull-right box-tools">
+                    <button class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="" style="margin-right: 5px;" data-original-title="Collapse"><i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+            <div style="display: none;" class="box-body">
+                <strong>Mining</strong> is the process of spending computing power to process transactions, secure the network, and keep everyone in the system synchronized together.
+                It can be perceived like the Bitcoin data center except that it has been designed to be fully decentralized with miners operating in all countries
+                and no individual having control over the network. This process is referred to as "mining" as an analogy to gold mining because it is also a temporary
+                mechanism used to issue new coins. Unlike gold mining, however, crypto-coin mining provides a reward in exchange for useful services required to operate
+                a secure payment network.
+
+                <br /><br />
+                <div class="hidden-xs hidden-sm text-center">
+                    <iframe width="853" height="480" src="//www.youtube.com/embed/GmOzih6I1zs?rel=0" frameborder="0" allowfullscreen="true"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid box-info">
+            <div class="box-header">
+                <h3 class="box-title">Get Hardware</h3>
+            </div>
+            <div class="box-body">
+                <div class="text-center"><i class="fa fa-cogs fa-5x"></i></div>
+                In order to get started mining, you need mining hardware. You can mine coins with your CPU, GPU or specialized
+                <a href="https://www.google.com/?q=mining+asic" target="_blank">asic chips</a>.
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="box box-solid box-success">
+            <div class="box-header">
+                <h3 class="box-title">Get Wallet Software</h3>
+            </div>
+            <div class="box-body">
+                <div class="text-center"><i class="fa fa-desktop fa-5x"></i></div>
+                In order to a mine a specific crypto-currency, you have first download the wallet software and create an address.
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid box-warning">
+            <div class="box-header">
+                <h3 class="box-title">Get Mining Software</h3>
+            </div>
+            <div class="box-body">
+                <div class="text-center"><i class="fa fa-cloud-download fa-5x"></i></div>
+                Next, you need a <a href="/help/miningsoftware/">mining software</a> that can connect our pools. Check our <a href="/help/miningsoftware/">list</a> to find a suitable one for you.
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title">Choose Your Pool</h3>
+            </div>
+            <div class="box-body">
+                <div class="text-center"><i class="fa fa-flask fa-5x"></i></div>
+                Finally you have to choose the <a href="/algorithms/">algorithm</a> and/or the <a href="/pools/">pool</a> you want to mine in. Follow the on-screen instructions to configure
+                your miners.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Configure Your Miner</h3>
+            </div>
+            <div class="box-body">
+                Finally, you have to configure your miner's to work against our stratum servers.<br /><br />
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th style="width: 10px">Location</th>
+                            <th>Stratum Address</th>
+                            <th class="hidden-xs">Username</th>
+                            <th class="hidden-xs">Password</th>
+                        </tr>
+                        @foreach (var node in Model.Stack.Nodes)
+                        {
+                            <tr>
+                                <td><img src="/Content/img/flags/@(node.Location).png" alt="@node.Location" /></td>
+                                <td>stratum+tcp://@node.Address</td>
+                                <td class="hidden-xs">Your wallet address</td>
+                                <td class="hidden-xs">Anything</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <br />You have to also set the port in your miner configuration;<br /><br />
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th style="width: 40px"></th>
+                            <th>Pool</th>
+                            <th>Port</th>
+                        </tr>
+                        @foreach (var pool in Model.Pools)
+                        {
+                            <tr>
+                                <td><img src="/Content/img/coins/icon/@(pool.Config.Coin.Symbol).png" /></td>
+                                <td><a href="/help/gettingstarted/pool/@pool.Config.Coin.Symbol/">@pool.Config.Coin.Name</a></td>
+                                <td>@pool.Config.Stratum.Port</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

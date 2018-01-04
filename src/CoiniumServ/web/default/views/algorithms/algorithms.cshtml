@@ -1,0 +1,5 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.Algorithm.AlgorithmsModel>
+
+@{ Layout = "layout/main.cshtml"; }
+
+@Html.Partial("partial/algorithms", Model.Algorithms)

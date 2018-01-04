@@ -481,8 +481,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <ItemGroup>
-      <Web Include="..\web\**\*.*" />
-      <Config Include="..\..\config\**\*.*" />
+      <Web Include="web\**\*.*" />
+      <Config Include="config\**\*.*" />
     </ItemGroup>
     <Microsoft.Build.Tasks.Copy SourceFiles="@(Web)" DestinationFiles="@(Web->'$(OutputPath)\web\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Microsoft.Build.Tasks.Copy SourceFiles="@(Config)" DestinationFiles="@(Config->'$(OutputPath)\config\%(RecursiveDir)%(Filename)%(Extension)')" />

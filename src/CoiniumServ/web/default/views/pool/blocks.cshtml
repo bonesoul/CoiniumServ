@@ -1,0 +1,64 @@
+﻿@using CoiniumServ.Persistance.Blocks
+@using CoiniumServ.Server.Web.Models.Pool
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.Pool.BlocksModel>
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Blocks</h3>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th style="width: 10px" title="Height of the block">Height</th>
+                            <th title="Status of the block">Status</th>
+                            <th title="Hash of the block">Block Hash</th>
+                            <th title="Hash of the generation transaction">Tx Hash</th>
+                            <th title="Amount of coins generated">Amount</th>
+                            <th title="Did miners got paid for their contributions?">Paid</th>
+                            <th title="Time block was found">Date</th>
+                        </tr>
+                        @foreach (var block in Model.Blocks)
+                        {
+                            <tr>
+                                <td><a href="/pool/@Model.Coin.Symbol/block/@block.Height">@block.Height</a></td>
+                                <td>
+                                    @switch (@block.Status)
+                                    {
+                                        case BlockStatus.Pending:
+                                            <div class="label label-warning">@block.Status</div>
+                                            break;
+                                        case BlockStatus.Orphaned:
+                                        <div class="label label-danger">@block.Status</div>
+                                            break;
+                                        case BlockStatus.Confirmed:
+                                        <div class="label label-info">@block.Status</div>
+                                            break;
+                                    }
+                                </td>
+                                <td><a href="@Model.Coin.BlockExplorer.Block@block.BlockHash" target="_blank">@block.BlockHash.Substring(0, 10)</a></td>
+                                <td><a href="@Model.Coin.BlockExplorer.Tx@block.TransactionHash" target="_blank">@block.TransactionHash.Substring(0, 10)</a></td>
+                                <td>@block.Amount</td>
+                                <td><div class="label @(block.Accounted ?"bg-green":"bg-red")">@(block.Accounted ? "Yes" : "No")</div></td>
+                                <td><time class="timeago" datetime="@block.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")">@block.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")</time></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.PaginationQuery.Page - 1 >= 1)
+        {
+            <a href="/pool/@Model.Coin.Symbol/blocks/@(Model.Filter == BlockFilter.PaidOnly ? "paid" : "")@(Model.PaginationQuery.Page - 1)" type="button" class="btn btn-default btn-sm"><i class="fa fa-angle-double-left"></i> Prev</a>
+        }
+        <a href="/pool/@Model.Coin.Symbol/blocks/@(Model.Filter == BlockFilter.PaidOnly ?"paid" : "")@(Model.PaginationQuery.Page + 1)" type="button" class="btn btn-default btn-sm pull-right"><i class="fa fa-angle-double-right"></i> Next</a>
+    </div>
+</div>
