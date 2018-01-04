@@ -48,7 +48,7 @@ namespace CoiniumServ
             /// <summary>
             /// Main assemby version.
             /// </summary>
-            public const string Version = "0.2.6.2";
+            public const string Version = "0.2.6.3";
         }
     }
 }
