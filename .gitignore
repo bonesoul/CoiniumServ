@@ -112,4 +112,4 @@ UpgradeLog*.XML
 # Misc
 Thumbs.db
 build/.vs/*
-/.vs/*
+.vs/*
