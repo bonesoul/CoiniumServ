@@ -474,7 +474,4 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /IEY "$(SolutionDir)config" "$(ProjectDir)$(OutDir)config"</PostBuildEvent>
-  </PropertyGroup>
 </Project>
