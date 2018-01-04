@@ -29,10 +29,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AustinHarris.JsonRpc" Version="1.1.70" />
     <PackageReference Include="BouncyCastle" Version="1.8.1" />
     <PackageReference Include="CryptSharpOfficial" Version="2.1.0" />
@@ -60,4 +56,12 @@
     <ProjectReference Include="..\..\contrib\Nancy.CustomErrors\src\Nancy.CustomErrors.NetStandard1.6\Nancy.CustomErrors.NetStandard1.6.csproj" />
   </ItemGroup>
   
+  <Target Name="Copy" AfterTargets="CoreCompile">
+	<ItemGroup>
+      <Web Include="..\web\**\*.*" />
+      <Config Include="..\..\config\**\*.*" />
+    </ItemGroup>
+	<Copy SourceFiles="@(Web)" DestinationFiles="@(Web->'$(OutputPath)\web\%(RecursiveDir)%(Filename)%(Extension)')" />
+	<Copy SourceFiles="@(Config)" DestinationFiles="@(Config->'$(OutputPath)\config\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>   
 </Project>
