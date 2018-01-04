@@ -1,0 +1,10 @@
+{
+    "name": "Elephantcoin",
+    "symbol": "ELP",
+    "algorithm": "scrypt",
+    "site": "http://elephantcoin.wordpress.com/",
+    "blockExplorer": {
+        "block": "http://www.exploretheblocks.com/elephantcoin/block_crawler.php?block_hash=",
+        "tx": "http://www.exploretheblocks.com/elephantcoin/block_crawler.php?transaction="
+    }
+}

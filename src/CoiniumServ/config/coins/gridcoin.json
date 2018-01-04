@@ -1,0 +1,11 @@
+{
+    "name": "Gridcoin",
+    "symbol": "GRC",
+    "algorithm": "scrypt",
+    "site": "http://www.gridcoin.us",
+    "blockExplorer": {
+        "block": "http://cryptoblox.com/chain/Gridcoin/block/",
+        "tx": "http://cryptoblox.com/chain/Gridcoin/tx/",
+        "address": "http://cryptoblox.com/chain/Gridcoin/address/"
+    }
+}

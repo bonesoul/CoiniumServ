@@ -1,0 +1,10 @@
+{
+    "name": "Alphacoin",
+    "symbol": "ALF",
+    "algorithm": "scrypt",
+    "site": "https://github.com/alphacoin/alphacoin",
+    "node": {
+        "magic": "fbc0b6db",
+        "testnetMagic": "fcc1b7dc"
+    }
+}

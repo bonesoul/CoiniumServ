@@ -1,0 +1,11 @@
+{
+    "name": "Potcoin",
+    "symbol": "POT",
+    "algorithm": "scrypt",
+	"site": "http://www.potcoin.com/",
+    "blockExplorer": {
+        "block": "http://potchain.net/block/",
+        "tx": "http://potchain.net/tx/",
+        "address": "http://potchain.net/address/"
+    }
+}

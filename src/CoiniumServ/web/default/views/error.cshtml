@@ -1,0 +1,14 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Nancy.CustomErrors.ErrorViewModel>
+
+@{ ViewBag.Title = "Error"; }
+@{ ViewBag.Heading = "Error"; }
+
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="error-page">
+    <h3><i class="fa fa-warning text-yellow"></i> Oups!</h3>
+    <p>
+        @Model.Details
+        @Model.Summary
+    </p>
+</div>

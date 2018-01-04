@@ -1,0 +1,16 @@
+{
+    "name": "Peercoin",
+    "symbol": "PPC",
+    "algorithm": "sha256",
+    "site": "http://peercoin.net/",
+    "blockExplorer": {
+        "block": "http://ppc.blockr.io/block/info/",
+        "tx": "http://ppc.blockr.io/tx/info/",
+        "address": "http://ppc.blockr.io/address/info/"
+    },
+    "options": {
+		"isProofOfStakeHybrid": true,
+		"blockTemplateModeRequired": true,
+		"useDefaultAccount": true
+    }
+}

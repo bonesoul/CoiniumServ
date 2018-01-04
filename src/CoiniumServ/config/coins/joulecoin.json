@@ -1,0 +1,11 @@
+{
+    "name": "Joulecoin",
+    "symbol": "XJO",
+    "algorithm": "sha256",
+    "site": "http://www.joulecoin.org/",
+    "blockExplorer": {
+        "block": "https://chainz.cryptoid.info/xjo/block.dws?",
+        "tx": "https://chainz.cryptoid.info/xjo/tx.dws?",
+        "address": "https://chainz.cryptoid.info/xjo/address.dws?"
+    }
+}

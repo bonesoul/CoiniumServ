@@ -1,0 +1,11 @@
+{
+    "name": "Feathercoin",
+    "symbol": "FTC",
+    "algorithm": "scrypt",
+    "site": "http://feathercoin.com/",
+    "blockExplorer": {
+        "block": "https://explorer.feathercoin.com/block/",
+        "tx": "https://explorer.feathercoin.com/tx/",
+        "address": "https://explorer.feathercoin.com/address/"
+    }
+}

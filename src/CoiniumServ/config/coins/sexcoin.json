@@ -1,0 +1,11 @@
+{
+    "name": "Sexcoin",
+    "symbol": "SXC",
+    "algorithm": "scrypt",
+	"site": "http://sex-coin.info/",
+    "blockExplorer": {
+        "block": "http://sxcexplorer.com/block/",
+        "tx": "http://sxcexplorer.com/tx/",
+        "address": "http://sxcexplorer.com/address/"
+    }
+}

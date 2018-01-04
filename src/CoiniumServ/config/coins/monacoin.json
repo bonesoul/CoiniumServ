@@ -1,0 +1,11 @@
+{
+    "name": "Monacoin",
+    "symbol": "MONA",
+    "algorithm": "scrypt",
+    "site": "http://monacoin.org/en/",
+    "blockExplorer": {
+        "block": "http://abe.monash.pw:3000/block/",
+        "tx": "http://abe.monash.pw:3000/tx/",
+        "address": "http://abe.monash.pw:3000/address/"
+    }
+}

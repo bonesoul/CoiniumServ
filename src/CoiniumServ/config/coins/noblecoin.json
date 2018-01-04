@@ -1,0 +1,10 @@
+{
+    "name": "Noblecoin",
+    "symbol": "NOBL",
+    "algorithm": "scrypt",
+    "site": "https://www.noblemovement.com/",
+    "blockExplorer": {
+        "block": "https://chainz.cryptoid.info/nobl/block.dws?",
+        "tx": "https://chainz.cryptoid.info/nobl/tx.dws?"
+    }
+}

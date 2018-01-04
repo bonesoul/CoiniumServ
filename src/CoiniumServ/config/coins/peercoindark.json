@@ -1,0 +1,12 @@
+{
+
+    "name": "PeerCoinDark",
+    "symbol": "PPCD",
+    "algorithm": "sha256",
+    "site": "http://www.peercoindark.net/",
+    "blockExplorer": {
+        "block": "http://explorer.x11-x13-pool.org:3006/block/",
+        "tx": "http://explorer.x11-x13-pool.org:3006/tx/",
+        "address": "http://explorer.x11-x13-pool.org:3006/address/"
+    }
+}

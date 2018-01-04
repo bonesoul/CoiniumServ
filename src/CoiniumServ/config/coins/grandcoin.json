@@ -1,0 +1,16 @@
+{
+    "name": "Grandcoin",
+    "symbol": "GDC",
+    "algorithm": "scrypt",
+	"site": "http://grandcoin.org/",
+    "blockExplorer": {
+        "block": "http://grandcoin.org/blocks/index.php?block_hash=",
+        "tx": "http://grandcoin.org/blocks/index.php?transaction="
+    },
+    "options": {
+        "txMessageSupported": true
+    },
+    "node": {
+        "magic": "fdc1a5db"
+    }    
+}

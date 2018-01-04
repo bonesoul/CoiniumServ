@@ -1,0 +1,11 @@
+﻿{
+    "name": "Namecoin",
+    "symbol": "NMC",
+    "algorithm": "sha256",
+	"site": "http://namecoin.info/",
+    "blockExplorer": {
+        "block": "http://explorer.namecoin.info/b/",
+        "tx": "http://explorer.namecoin.info/tx/",
+        "address": "http://explorer.namecoin.info/a/"
+    }
+}

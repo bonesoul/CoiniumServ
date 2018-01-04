@@ -1,0 +1,11 @@
+{
+    "name": "WeAreSatoshi",
+    "symbol": "WAS",
+    "algorithm": "sha256",
+	"site": "http://www.wsx.co.in/",
+    "blockExplorer": {
+        "block": "http://explorer.wsx.co.in/block.php?chain=2&hash=",
+        "tx": "http://explorer.wsx.co.in/transaction.php?chain=2&hash=",
+        "address": "http://explorer.wsx.co.in/address.php?chain=2&addr="
+    }
+}

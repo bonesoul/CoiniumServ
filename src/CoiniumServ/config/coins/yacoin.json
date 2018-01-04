@@ -1,0 +1,14 @@
+{
+    "name": "Yacoin",
+    "symbol": "YAC",
+    "algorithm": "scrypt-jane",
+	"site": "https://www.yacoin.org/",
+    "blockExplorer": {
+        "block": "http://explorer.yacoin.org/?blockhash=",
+        "tx": "http://explorer.yacoin.org/?txnhash=",
+        "address": "http://explorer.yacoin.org/?address="
+    },
+	"extra": {
+        "chainStartTime": 1367991200
+	}
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Continuumcoin",
+    "symbol": "CTM",
+    "algorithm": "sha256",
+    "site": "http://www.continuumcoin.com/",
+    "blockExplorer": {
+        "block": "http://ctminsight.buddylabsapps.com/block/",
+        "tx": "http://ctminsight.buddylabsapps.com/tx/",
+        "address": "http://ctminsight.buddylabsapps.com/address/"
+    }
+}

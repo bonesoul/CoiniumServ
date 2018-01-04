@@ -1,0 +1,11 @@
+{
+    "name": "Ixcoin",
+    "symbol": "IXC",
+	"site": "http://www.ixcoin.co/",
+    "algorithm": "sha256",
+    "blockExplorer": {
+        "block": "http://darkgamex.ch:2751/block/",
+        "tx": "http://darkgamex.ch:2751/tx/",
+        "address": "http://darkgamex.ch:2751/address/"
+    }
+}

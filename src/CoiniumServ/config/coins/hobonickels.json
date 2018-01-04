@@ -1,0 +1,11 @@
+{
+    "name": "Hobonickels",
+    "symbol": "HBN",
+    "algorithm": "scrypt",
+	"site": "http://hobonickels.info/",
+    "blockExplorer": {
+        "block": "http://hbn.blockx.info/block/",
+        "tx": "http://hbn.blockx.info/tx/",
+        "address": "http://hbn.blockx.info/address/"
+    }
+}

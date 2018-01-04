@@ -1,0 +1,11 @@
+{
+    "name": "Darkcoin",
+    "symbol": "DRK",
+    "algorithm": "x11",
+    "site": "https://www.darkcoin.io/",
+    "blockExplorer": {
+        "block": "http://explorer.darkcoin.io/block/",
+        "tx": "http://explorer.darkcoin.io/tx/",
+        "address": "http://explorer.darkcoin.io/address/"
+    }
+}

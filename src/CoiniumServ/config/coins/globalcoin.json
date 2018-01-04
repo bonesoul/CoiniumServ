@@ -1,0 +1,15 @@
+{
+    "name": "Globalcoin",
+    "symbol": "GLC",
+    "algorithm": "scrypt",
+	"site": "https://github.com/cryptoparts/Globalcoin",
+    "blockExplorer": {
+        "block": "https://chainz.cryptoid.info/glc/block.dws?",
+        "tx": "https://chainz.cryptoid.info/glc/tx.dws?",
+        "address": "https://chainz.cryptoid.info/glc/address.dws?"
+    },
+    "node": {
+        "magic": "fcd9b7dd",
+        "testnetMagic": "fbc0b8db"
+    }
+}

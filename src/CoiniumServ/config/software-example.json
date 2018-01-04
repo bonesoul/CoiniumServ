@@ -1,0 +1,157 @@
+{
+    "miner": [
+        {
+            "name": "CGMiner",
+            "version": "3.7.2",
+            "platforms": [
+                "ati",
+                "asic",
+                "cpu"
+            ],
+            "algorithms": [
+                "sha256",
+                "scrypt"
+            ],
+            "site": "https://bitcointalk.org/index.php?topic=28402.0",
+            "download": {
+                "windows": "http://ck.kolivas.org/apps/cgminer/",
+                "linux": "http://ck.kolivas.org/apps/cgminer/"
+            }
+        },
+        {
+            "name": "BFGMiner",
+            "version": "4.8.0",
+            "platforms": [
+                "ati",
+                "asic",
+                "cpu"
+            ],
+            "algorithms": [
+                "sha256",
+                "scrypt"
+            ],
+            "site": "http://bfgminer.org/",
+            "download": {
+                "windows": "http://bfgminer.org/",
+                "linux": "http://bfgminer.org/"
+            }
+        },
+        {
+            "name": "SGMiner",
+            "platforms": [
+                "ati"
+            ],
+            "algorithms": [
+                "scrypt"
+            ],
+            "site": "https://github.com/sgminer-dev/sgminer",
+            "download": {
+                "windows": "http://sgminer.builders/",
+                "linux": "https://github.com/sgminer-dev/sgminer"
+            }
+        },
+        {
+            "name": "SPH-SGMiner",
+            "platforms": [
+                "ati"
+            ],
+            "algorithms": [
+                "scrypt",
+                "x11",
+                "groestl"
+            ],
+            "site": "https://bitcointalk.org/index.php?topic=475795.0",
+            "download": {
+                "windows": "https://bitcointalk.org/index.php?topic=475795.0",
+                "linux": "https://github.com/prettyhatemachine/sph-sgminer/releases"
+            }
+        },
+        {
+            "name": "VertMiner",
+            "version": "0.5.2",
+            "platforms": [
+                "ati"
+            ],
+            "algorithms": [
+                "scrypt",
+                "scrypt-n"
+            ],
+            "site": "https://github.com/Bufius/vertminer-gpu",
+            "download": {
+                "windows": "https://vertcoin.org/downloads/vertminer-0.5.2.zip",
+                "linux": "https://vertcoin.org/downloads/vertminer.tgz"
+            }
+        },
+        {
+            "name": "CudaMiner",
+            "platforms": [
+                "nvidia"
+            ],
+            "algorithms": [
+                "scrypt",
+                "scrypt-n",
+                "scrypt-jane",
+                "keccak",
+                "blake"
+            ],
+            "site": "https://bitcointalk.org/index.php?topic=167229.0",
+            "download": {
+                "windows": "https://github.com/cbuchner1/CudaMiner/releases",
+                "linux": "https://github.com/cbuchner1/CudaMiner/releases"
+            }
+        },
+        {
+            "name": "CCMiner",
+            "platforms": [
+                "nvidia"
+            ],
+            "algorithms": [
+                "fugue",
+                "groestl",
+                "x11",
+                "x13"
+            ],
+            "site": "https://bitcointalk.org/index.php?topic=167229.0",
+            "download": {
+                "windows": "https://github.com/cbuchner1/ccminer/releases",
+                "linux": "https://github.com/cbuchner1/ccminer/releases"
+            }
+        },
+        {
+            "name": "Minerd",
+            "version": "2.4",
+            "platforms": [
+                "cpu"
+            ],
+            "algorithms": [
+                "fugue",
+                "groestl",
+                "x11",
+                "x13"
+            ],
+            "site": "https://bitcointalk.org/index.php?topic=55038",
+            "download": {
+                "windows": "http://sourceforge.net/projects/cpuminer/files/pooler-cpuminer-2.4-win32.zip",
+                "linux": "http://sourceforge.net/projects/cpuminer/files/pooler-cpuminer-2.4-linux-x86.tar.gz",
+                "macos": "http://sourceforge.net/projects/cpuminer/files/pooler-cpuminer-2.4-osx32.zip"
+            }
+        },
+        {
+            "name": "MacMiner",
+            "version": "1.5.21",
+            "platforms": [
+                "ati",
+                "asic",
+                "cpu"
+            ],
+            "algorithms": [
+                "sha256",
+                "scrypt"
+            ],
+            "site": "http://fabulouspanda.co.uk/macminer/",
+            "download": {
+                "macos": "http://fabulouspanda.co.uk/macminer/downloads/"
+            }
+        }
+    ]
+}

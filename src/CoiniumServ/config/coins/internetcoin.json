@@ -1,0 +1,13 @@
+{
+    "name": "Internetcoin",
+    "symbol": "ITC",
+	"site": "http://internetcoin.info/",
+    "algorithm": "scrypt-jane",
+    "blockExplorer": {
+        "block": "http://explorer.internetcoin.info/index.php?block_hash=",
+        "tx": "http://explorer.internetcoin.info/index.php?transaction="
+    },
+	"extra": {
+        "chainStartTime": 1388385602
+	}
+}

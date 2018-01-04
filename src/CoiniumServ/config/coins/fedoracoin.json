@@ -1,0 +1,11 @@
+{
+    "name": "FedoraCoin",
+    "symbol": "TiPS",
+    "algorithm": "scrypt",
+    "site": "http://fedoraco.in/",
+    "blockExplorer": {
+        "block": "http://fedoracha.in/block/",
+        "tx": "http://fedoracha.in/tx/",
+        "address": "http://fedoracha.in/address/"
+    }
+}

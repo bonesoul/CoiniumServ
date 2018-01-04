@@ -1,0 +1,14 @@
+{
+    "name": "Netcoin",
+    "symbol": "NET",
+    "algorithm": "scrypt",
+	"site": "http://netcoinfoundation.org/",
+    "blockExplorer": {
+        "block": "http://explorer.netcoinfoundation.org/block/",
+        "tx": "http://explorer.netcoinfoundation.org/tx/",
+        "address": "http://explorer.netcoinfoundation.org/address/"
+    },
+    "options": {
+        "txMessageSupported": true 
+    }
+}

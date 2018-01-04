@@ -1,0 +1,11 @@
+{
+    "name"       : "Phoenixcoin",
+    "symbol"     : "PXC",
+    "algorithm"  : "scrypt",
+	"site": "http://phoenixcoin.org/",
+    "blockExplorer": {
+        "block": "http://explorer.phoenixcoin.org/block/",
+        "tx": "http://explorer.phoenixcoin.org/tx/",
+        "address": "http://explorer.phoenixcoin.org/address/"
+    }
+}

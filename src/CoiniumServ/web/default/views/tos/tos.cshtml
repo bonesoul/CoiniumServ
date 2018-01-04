@@ -1,0 +1,81 @@
+﻿@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-paperclip"></i> Terms of Service</h3>
+            </div>
+            <div class="box-body">
+                <div class="callout callout-warning">
+                    <h4>This Agreement governs your use of <strong>@ViewBag.StackName</strong> pools & website.</h4>
+                    <p>
+                        By using <strong>@ViewBag.StackName</strong> and websites, you agree to be bound by the terms and conditions below. If you do not agree with the terms
+                        and conditions in this <strong>Agreement</strong>, you may not use the pools & service.
+                    </p>
+                </div>
+
+                <div class="callout callout-info">
+                    <h4>Modifications</h4>
+                    <p>
+                        The <strong>@ViewBag.StackName</strong> staff may modify this <strong>Agreement</strong> and any policies affecting the site at any point of time. Such modification is effective immediately upon posting to the website.
+                        Your continued use of the pools and websites following any modification to this <strong>Agreement</strong> shall be deemed an acceptance of all modifications.
+                    </p>
+                </div>
+
+                <p class="lead">Payments & Mining</p>
+                <ul>
+                    <li>@ViewBag.StackName pools charges miners with a fee for the service. This fee and reward system may change any time but prior notice will be given before doing so. Any changes on fee will be communicated through the pools news page and/or @ViewBag.StackName.</li>
+                    <li>Submitting shares through your miner software to @ViewBag.StackName pools does not mean that they will be instantly converted to coins. @ViewBag.StackName and it’s pools first need to find a block to claim blocks coin rewards and will be then paying your portion based on used payment system used by the pool. The shares you have sent should be obeying the payment sytems rules & conditions.</li>
+                    <li>Once coins have been sent from the pool, it is users responsibility to track their coins and ensure payment details are correct on the respective pool site. Committed transactions can not be undone by @ViewBag.StackName and by it’s pools.</li>
+                    <li>Coin mining is extremely luck based. @ViewBag.StackName and/or it’s pools does not guarantee any particular return on mining time or hashpower, only that any blocks found will be divided as specified under payment system above. All return rates displayed on the site are estimates based on statistical averages.</li>
+                    <li>Shares rejected by the Coinium.org and and/or it’s pools as stale or invalid will not be paid for.</li>
+                    <li>Oprhaned blocks will not be paid by @ViewBag.StackName pools as they are basically in-correct blocks.</li>
+                </ul>
+
+                <p class="lead">Maintenance & Downtimes</p>
+
+                <ul>
+                    <li>@ViewBag.StackName and its pools require continuous maintenance and @ViewBag.StackName and it’s operators are not responsible for any loss caused by any reason during these periods.</li>
+                    <li>Although @ViewBag.StackName operators are doing their best to keep the services up, maintenance and downtime may be required at times, so that uptime of the pools or website is not guaranteed. Users are responsible for configuring their miners so that they will automatically reconnect and switch to alternative stratum servers & pools we offer as backup.</li>
+                </ul>
+
+                <p class="lead">Feedback & Help</p>
+
+                <ul>
+                    <li>@ViewBag.StackName hosts an area for miners feedback & support requests where you can ask for operators help on pool specific issues. Still you have to first need to go through provided FAQ’s before going for so.</li>
+                    <li>Creating multiple topics for the exact same issue may get your topics get locked & account deleted.</li>
+                    <li>Naming & shaming the @ViewBag.StackName and it’s pools with insufficient proofs & lack of understanding how crypto-coins works may get your topics get locked and accounts deleted.</li>
+                </ul>
+
+                <p class="lead">Informations & Materials</p>
+
+                <ul>
+                    <li>Neither @ViewBag.StackName nor it’s operators provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials found or offered on @ViewBag.StackName and it’s pool’s websites for any particular purpose.</li>
+                    <li>Your use of any information or materials on this website is entirely at your own risk, for which we shall not be liable. It shall be your own responsibility to ensure that any products, services or information available through this website meet your specific requirements.</li>
+                </ul>
+
+                <p class="lead">Accounts</p>
+
+                <ul>
+                    <li>You agree to keep your account information secret, use a complex, unique password, and change your password immediately if it becomes compromised.</li>
+                    <li>@ViewBag.StackName and it’s pools are not an electronic wallet or banks for your coins. @ViewBag.StackName and it’s operators are not responsible for any loss of coins which were stored in the pool. It’s your responsibility to configure your account so that the crypto coins you mine are regularly transferred to your own secured offline wallet.</li>
+                    <li>Accounts which are inactive for longer than 3 months (no logins to profile and/or no mining activity) may get deleted. Remaining coin balances will be considered as a pool donation.</li>
+                    <li>You agree to notify @ViewBag.StackName operators immediately if you discover or suspect any security vulnerability in the site. Users who exploit or attempt to exploit any security vulnerability, or suspected security vulnerability, or users who publicly reveal the personal information of any user will get their accounts deleted.</li>
+                </ul>
+                <p class="lead">Service</p>
+
+                <ul>
+                    <li>In rare conditions (like when a coin network dies or any problematic conditions caused by coin network itself or code but not limited to them), @ViewBag.StackName operators can stop the mining services for the coin and eventually close the site assigned to coin’s pool with at least 3 days of prior notice. In this case, you need withdraw any remaining coins that stays in your account within the given notice period.</li>
+                    <li>In case of a block-chain fork (caused by too many miners hopping into same pool and eventually causing the specific pool to hold >=%51 hashrate of the network), the pool may find incorrectly marked blocks which are not accepted by the coin pool. In this rare case, @ViewBag.StackName operators will need to remove those incorrect blocks and any related transactions & credits in order to fix continued service of the pool.</li>
+                </ul>
+
+                <p class="lead">Misc</p>
+
+                <ul>
+                    <li>Botnets are not welcome. Accounts with a large amount of miners connecting from different IPs may be suspended without prior notice. If we are uncertian then an investigation will be opened and the user will be notified via their configured e-mail address. If we do not receive a response your account may be suspended. Multiple accounts controlled by one person may be considered as a botnet.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

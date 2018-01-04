@@ -1,0 +1,11 @@
+{
+    "name": "Skeincoin",
+    "symbol": "SKC",
+    "algorithm": "skein",
+	"site": "http://www.skeincoin.org/",
+    "blockExplorer": {
+        "block": "http://explorer.skeincoin.org/block/",
+        "tx": "http://explorer.skeincoin.org/tx/",
+        "address": "http://explorer.skeincoin.org/address/"
+    }
+}

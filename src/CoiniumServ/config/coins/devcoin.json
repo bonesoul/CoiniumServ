@@ -1,0 +1,11 @@
+{
+    "name": "Devcoin",
+    "symbol": "DVC",
+    "algorithm": "sha256",
+    "site": "http://devcoin.org/",
+    "blockExplorer": {
+        "block": "http://d.evco.in/abe/block/",
+        "tx": "http://d.evco.in/abe/tx/",
+        "address": "http://d.evco.in/abe/address/"
+    }
+}

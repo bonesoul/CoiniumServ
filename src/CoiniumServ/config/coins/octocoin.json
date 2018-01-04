@@ -1,0 +1,15 @@
+{
+    "name": "Octocoin",
+    "symbol": "888",
+    "algorithm": "scrypt",
+    "site": "https://octocoin.org/",
+    "blockExplorer": {
+        "block": "http://explorer.octocoin.org/block/",
+        "tx": "http://explorer.octocoin.org/tx/",
+        "address": "http://explorer.octocoin.org/address/"
+    },
+    "node": {
+        "magic": "fbc0b6db",
+        "testnetMagic": "fcc1b7dc"
+    }
+}

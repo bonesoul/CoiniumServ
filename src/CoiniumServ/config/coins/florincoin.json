@@ -1,0 +1,14 @@
+{
+    "name": "Florincoin",
+    "symbol": "FLO",
+    "algorithm": "scrypt",
+    "site": "http://florincoin.org/",
+    "blockExplorer": {
+        "block": "http://florincoin.info/explorer/block/?hash=",
+        "tx": "http://florincoin.info/explorer/tx/?txid=",
+        "address": "http://florincoin.info/explorer/address/?address="
+    },
+    "options": {
+		"txMessageSupported": true	 
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Stablecoin",
+    "symbol": "SBC",
+    "algorithm": "scrypt",
+	"site": "https://github.com/stablecoin/StableCoin",
+    "blockExplorer": {
+        "block": "http://sbc.blockexplorer.io/block/",
+        "tx": "http://sbc.blockexplorer.io/tx/",
+        "address": "http://sbc.blockexplorer.io/address/"
+    }
+}

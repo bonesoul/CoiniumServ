@@ -1,0 +1,13 @@
+{
+    "name": "Bottlecaps",
+    "symbol": "CAP",
+    "algorithm": "scrypt",
+    "site": "https://github.com/bottlecaps-foundation/bottlecaps",
+    "options": {
+        "isProofOfStakeHybrid": true
+    },
+    "node": {
+        "magic": "e4e8e9e5",
+        "testnetMagic": "cdf2c0ef"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Mintcoin",
+    "symbol": "MINT",
+    "algorithm": "scrypt",
+    "site": "http://mintcoin.cc/",
+    "blockExplorer": {
+        "block": "http://mint.blockexplorer.cc/block/",
+        "tx": "http://mint.blockexplorer.cc/tx/",
+        "address": "http://mint.blockexplorer.cc/address/"
+    }
+}
