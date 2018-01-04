@@ -1,7 +1,0 @@
-﻿{
-    "enabled": true,
-    "duration": 1,
-    "invalidPercent": 2,
-    "checkThreshold": 3,
-    "purgeInterval": 4
-}
