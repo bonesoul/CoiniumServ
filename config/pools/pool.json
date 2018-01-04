@@ -1,5 +1,5 @@
 {
-    "enabled": false,
+    "enabled": true,
     "coin": "litecoin.json",
     "daemon": {
         "port": 9333,
