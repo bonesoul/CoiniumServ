@@ -81,11 +81,7 @@ namespace CoiniumServ.Server.Web
                 ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
             };
 
-            //pipelines.OnError += (ctx, ex) => {
-            //    return null;
-            //};
-
-            //CustomErrors.Enable(pipelines, new ErrorConfiguration(), new DefaultJsonSerializer(GetEnvironment())); // todo: fix this.
+            CustomErrors.Enable(pipelines, new ErrorConfiguration(), new DefaultJsonSerializer(GetEnvironment())); // todo: fix this.
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)
