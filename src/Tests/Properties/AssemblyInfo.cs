@@ -38,7 +38,7 @@ using CoiniumServ;
 [assembly: AssemblyDescription("Tests for CoiniumServ")]
 [assembly: AssemblyCompany("CoiniumServ")]
 [assembly: AssemblyProduct("CoiniumServ.Tests - " + VersionInfo.CodeName)]
-[assembly: AssemblyCopyright("Copyright (C) 2013 - 2017, CoiniumServ project, http://www.coinium.org -  http://www.coiniumserv.com")]
+[assembly: AssemblyCopyright("Copyright (C) 2013 - 2018, CoiniumServ project, http://www.coinium.org -  http://www.coiniumserv.com")]
 [assembly: AssemblyTrademark("CoiniumServ")]
 [assembly: AssemblyCulture("")]
 
