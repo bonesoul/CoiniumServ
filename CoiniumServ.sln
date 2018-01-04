@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoiniumServ", "CoiniumServ.csproj", "{13004336-628D-4184-9AC7-72A62C6C1772}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{13004336-628D-4184-9AC7-72A62C6C1772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13004336-628D-4184-9AC7-72A62C6C1772}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13004336-628D-4184-9AC7-72A62C6C1772}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13004336-628D-4184-9AC7-72A62C6C1772}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB2BA376-D862-48ED-93D8-AAB72DE378EA}
+	EndGlobalSection
+EndGlobal
