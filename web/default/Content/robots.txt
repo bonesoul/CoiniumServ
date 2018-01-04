@@ -1,4 +1,0 @@
-﻿User-agent: *
-Disallow: /*?page=
-Disallow: /admin
-Disallow: /metrics

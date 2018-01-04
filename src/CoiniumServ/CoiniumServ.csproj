@@ -39,7 +39,7 @@
     <PackageReference Include="HashLib" Version="2.0.1" />
     <PackageReference Include="JsonConfig" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
-    <PackageReference Include="MySql.Data" Version="6.10.5" />
+    <PackageReference Include="MySql.Data" Version="6.8.8" />
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Hosting.Self" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Viewengines.Razor" Version="2.0.0-clinteastwood" />
@@ -48,7 +48,7 @@
     <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
-    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+    <PackageReference Include="StackExchange.Redis" Version="1.2.4" />
     <PackageReference Include="System.Security.Permissions" Version="4.4.1" />
   </ItemGroup>
 
@@ -63,5 +63,6 @@
     </ItemGroup>
 	<Copy SourceFiles="@(Web)" DestinationFiles="@(Web->'$(OutputPath)\web\%(RecursiveDir)%(Filename)%(Extension)')" />
 	<Copy SourceFiles="@(Config)" DestinationFiles="@(Config->'$(OutputPath)\config\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="$(SolutionDir)/packages/nancy.viewengines.razor/2.0.0-clinteastwood/lib/net452/Nancy.ViewEngines.Razor.dll" DestinationFolder="$(OutDir)" />	
   </Target>   
 </Project>
