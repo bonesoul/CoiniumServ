@@ -37,7 +37,6 @@ using Nancy.Conventions;
 using Nancy.CustomErrors;
 using Nancy.TinyIoc;
 using Nancy.Diagnostics;
-using Metrics;
 
 namespace CoiniumServ.Server.Web
 {
@@ -78,12 +77,6 @@ namespace CoiniumServ.Server.Web
                 ctx.ViewBag.Feed = _configManager.WebServerConfig.Feed;
                 ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
             };
-
-            #if DEBUG
-            // only enable metrics support in debug mode.
-            if (_configManager.WebServerConfig.Backend.MetricsEnabled)
-                Metric.Config.WithNancy(pipelines);
-            #endif
 
             CustomErrors.Enable(pipelines, new ErrorConfiguration());
         }

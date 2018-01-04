@@ -38,7 +38,6 @@ using CoiniumServ.Daemon.Errors;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Logging;
 using CoiniumServ.Utils.Extensions;
-using Metrics;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -56,8 +55,6 @@ namespace CoiniumServ.Daemon
         private readonly IRpcExceptionFactory _rpcExceptionFactory;
 
         private readonly ILogger _logger;
-
-        private static readonly Meter RequestsMeter = Metric.Meter("[Daemon] Requests", Unit.Requests, TimeUnit.Seconds);
 
         public DaemonBase(IDaemonConfig daemonConfig, ICoinConfig coinConfig, IRpcExceptionFactory rpcExceptionFactory)
         {
@@ -134,8 +131,6 @@ namespace CoiniumServ.Daemon
         /// <returns>The HTTP request object.</returns>
         private HttpWebRequest MakeHttpRequest(DaemonRequest walletRequest)
         {
-            RequestsMeter.Mark();
-
             var webRequest = (HttpWebRequest)WebRequest.Create(RpcUrl);
             webRequest.Credentials = new NetworkCredential(RpcUser, RpcPassword);
 
