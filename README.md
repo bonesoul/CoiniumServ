@@ -12,6 +12,8 @@ You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/33m3
 [![Buy with Ethereum](http://satoshibox.com/img/button-ethereum.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
 [![Buy with Dash](http://satoshibox.com/img/button-dash.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
 
+**VirusTotal scan results**: [0/58 clean](https://www.virustotal.com/en/file/f03dd7753d6d209d99f6b5095d28f0f6d7b8a50067a3ce709009b87c727b980d/analysis/1510948542/)
+
 ##### Donations
 
 CoiniumServ is an open-source project. Your donations will be a great help & motivation for the development of the project.
@@ -21,8 +23,6 @@ CoiniumServ is an open-source project. Your donations will be a great help & mot
 * DASH: `XwnjnCoTb7v3FgDNrHvXufiLmfr5P5ZpEo`
 * DOGE: `DE1JdC2wTeQERjnM25veQzd8CzB6vjm1JF`
 * LTC: `LV4tiNmt2UuWphzBJSb1XABzufEWQHJfhJ`
-
-**VirusTotal scan results**: [0/58 clean](https://www.virustotal.com/en/file/f03dd7753d6d209d99f6b5095d28f0f6d7b8a50067a3ce709009b87c727b980d/analysis/1510948542/)
 
 ### Screenshots
 
