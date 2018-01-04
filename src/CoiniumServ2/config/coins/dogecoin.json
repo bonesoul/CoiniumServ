@@ -1,0 +1,15 @@
+{
+    "name": "Dogecoin",
+    "symbol": "DOGE",
+    "algorithm": "scrypt",
+    "site": "http://dogecoin.com/",
+    "blockExplorer": {
+        "block": "https://chain.so/block/DOGE/",
+        "tx": "https://chain.so/tx/DOGE/",
+        "address": "https://chain.so/address/DOGE/"
+    },
+    "node": {
+        "magic": "c0c0c0c0",
+        "testnetMagic": "fcc1b7dc"
+    }
+}

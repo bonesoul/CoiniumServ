@@ -1,0 +1,25 @@
+﻿@if (!string.IsNullOrEmpty(@ViewBag.Feed))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <i class="fa fa-info"></i>
+                <div id="announcement">Loading announcements, please wait..</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $.ajax({
+            url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent('@ViewBag.Feed'),
+            dataType: 'json',
+            success: function(data) {
+                if (data.responseData.feed && data.responseData.feed.entries) {
+                    var entry = data.responseData.feed.entries[0];
+                    var output = "<a href='" + entry.link + "' target=_'blank'> <strong>[" + entry.publishedDate + "] " + entry.title + "</strong></a>";
+                    $('#announcement').html(output);
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Catcoin",
+    "symbol": "CAT",
+    "algorithm": "scrypt",
+    "site": "http://catcoins.biz/",
+    "blockExplorer": {
+        "block": "http://catchain.info/block/",
+        "tx": "http://catchain.info/tx/",
+        "address": "http://catchain.info/address/"
+    }
+}

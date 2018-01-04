@@ -1,0 +1,14 @@
+{
+    "name": "Ultracoin",
+    "symbol": "UTC",
+    "algorithm": "scrypt-jane",
+    "site": "http://ultracoin.net/",
+    "blockExplorer": {
+        "block": "http://ultracha.in/block/",
+        "tx": "http://ultracha.in/tx/",
+        "address": "http://ultracha.in/address/"
+    },
+	"extra": {
+        "chainStartTime": 1388361600
+	}
+}

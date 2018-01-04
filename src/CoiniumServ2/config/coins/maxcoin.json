@@ -1,0 +1,15 @@
+{
+    "name": "Maxcoin",
+    "symbol": "MAX",
+    "algorithm": "keccak",    
+    "site": "http://www.maxcoin.co.uk/",
+    "blockExplorer": {
+        "block": "http://max.cryptoexplore.com/block/",
+        "tx": "http://max.cryptoexplore.com/tx/",
+        "address": "http://max.cryptoexplore.com/address/"
+    },
+    "node": {
+        "magic": "f9bebbd2",
+        "testnetMagic": "0b11bb07"
+    }
+}

@@ -1,0 +1,69 @@
+{
+    "daemon": {
+        "host": "127.0.0.1",
+        "timeout": 5
+    },
+    "meta": {
+        "motd": "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coiniumserv.com",
+        "txMessage": "http://www.coiniumserv.com/"
+    },
+    "payments": {
+        "enabled": true,
+        "interval": 60,
+        "minimum": 0.01
+    },
+    "miner": {
+        "validateUsername": true,
+        "timeout": 300
+    },
+    "job": {
+        "blockRefreshInterval": 1000,
+        "rebroadcastTimeout": 55
+    },
+    "stratum": {
+        "enabled": true,
+        "bind": "0.0.0.0",
+        "diff": 16,
+        "vardiff": {
+            "enabled": true,
+            "minDiff": 8,
+            "maxDiff": 512,
+            "targetTime": 15,
+            "retargetTime": 90,
+            "variancePercent": 30
+        }
+    },
+    "banning": {
+        "enabled": true,
+        "duration": 600,
+        "invalidPercent": 50,
+        "checkThreshold": 100,
+        "purgeInterval": 300
+    },
+    "storage": {
+        "hybrid": {
+            "enabled": true,
+            "redis": {
+                "host": "127.0.0.1",
+                "port": 6379,
+                "password": "",
+                "databaseId": 0
+            },
+            "mysql": {
+                "host": "127.0.0.1",
+                "port": 3306,
+                "user": "username",
+                "password": "password"
+            }
+        },
+        "mpos": {
+            "enabled": false,
+            "mysql": {
+                "host": "127.0.0.1",
+                "port": 3306,
+                "user": "username",
+                "password": "password"
+            }
+        }
+    }
+}

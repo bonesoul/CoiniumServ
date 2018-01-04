@@ -1,0 +1,11 @@
+{
+    "name": "Anoncoin",
+    "symbol": "ANC",
+    "algorithm": "scrypt",
+    "site": "https://anoncoin.net/",
+    "blockExplorer": {
+        "block": "http://ancblockchain.com/block/",
+        "tx": "http://ancblockchain.com/tx/",
+        "address": "http://ancblockchain.com/address/"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Luckycoin",
+    "symbol": "LKY",
+    "algorithm": "scrypt",
+    "site": "http://www.luckycoin.cc/",
+    "blockExplorer": {
+        "block": "https://coinplorer.com/LKY/Blocks/",
+        "tx": "https://coinplorer.com/LKY/Transactions/",
+        "address": "https://coinplorer.com/LKY/Addresses/"
+    }
+}

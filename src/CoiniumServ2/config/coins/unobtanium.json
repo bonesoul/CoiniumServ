@@ -1,0 +1,11 @@
+{
+    "name": "Unobtanium",
+    "symbol": "UNO",
+    "algorithm": "sha256",
+    "site": "http://unobtanium.info/",
+    "blockExplorer": {
+        "block": "https://chainz.cryptoid.info/uno/block.dws?",
+        "tx": "https://chainz.cryptoid.info/uno/tx.dws?",
+        "address": "https://chainz.cryptoid.info/uno/address.dws?"
+    }
+}

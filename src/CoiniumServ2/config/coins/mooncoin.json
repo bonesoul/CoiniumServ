@@ -1,0 +1,10 @@
+{
+    "name": "Mooncoin",
+    "symbol": "MOON",
+    "algorithm": "scrypt",
+    "site": "https://bitcointalk.org/index.php?topic=389403.0",
+    "blockExplorer": {
+        "block": "http://moonchain.net/block/",
+        "tx": "http://moonchain.net/tx/"
+    }
+}

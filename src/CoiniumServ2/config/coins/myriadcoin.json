@@ -1,0 +1,10 @@
+{
+    "name": "Myriadcoin",
+    "symbol": "MYR",
+    "algorithm": "scrypt",
+    "blockExplorer": {
+        "block": "http://birdonwheels5.no-ip.org/block/",
+        "tx": "http://birdonwheels5.no-ip.org/tx/",
+        "address": "http://birdonwheels5.no-ip.org/address/"
+    }      
+}

@@ -1,0 +1,10 @@
+{
+    "name": "Tekcoin",
+    "symbol": "TEK",
+    "algorithm": "sha256",
+    "site": "http://tekcoin.org/",
+    "options": {
+        "isProofOfStakeHybrid": true,
+        "txMessageSupported": true
+    }
+}

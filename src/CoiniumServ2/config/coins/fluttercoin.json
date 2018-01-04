@@ -1,0 +1,15 @@
+﻿{
+    "name": "Fluttercoin",
+    "symbol": "FLT",
+    "algorithm": "scrypt",
+    "site": "http://fluttercoin.us/",
+    "blockExplorer": {
+        "block": "http://blockexperts.com/flt/hash/",
+        "tx": "http://blockexperts.com/flt/tx/",
+        "address": "http://blockexperts.com/flt/address/"
+    },
+    "options": {
+        "isProofOfStakeHybrid": true,
+        "txMessageSupported": true	
+    }
+}

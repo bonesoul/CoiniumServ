@@ -1,0 +1,6 @@
+{
+    "name": "365coin",
+    "symbol": "365",
+    "algorithm": "keccak",
+    "site": "https://github.com/365-Coin/365Coin"
+}

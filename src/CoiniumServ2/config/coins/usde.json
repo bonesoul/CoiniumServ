@@ -1,0 +1,10 @@
+{
+    "name": "USDE",
+    "symbol": "USDE",
+    "algorithm": "scrypt",
+    "site": "http://usd-e.com/",
+    "blockExplorer": {
+        "block": "https://altexplorer.net/block/",
+        "tx": "https://altexplorer.net/tx/"
+    }
+}

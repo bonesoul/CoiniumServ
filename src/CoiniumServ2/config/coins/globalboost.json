@@ -1,0 +1,11 @@
+{
+    "name": "GlobalBoost",
+    "symbol": "BST",
+    "algorithm": "scrypt",
+	"site": "https://globalboo.st/",
+    "blockExplorer": {
+        "block": "http://explorer.globalboost.info/block/",
+        "tx": "http://explorer.globalboost.info/tx/",
+        "address": "http://explorer.globalboost.info/address/"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Hirocoin",
+    "symbol": "HIRO",
+    "algorithm": "x11",
+	"site": "https://www.hirocoin.org/",
+    "blockExplorer": {
+        "block": "http://explorer.hirocoin.org/block/",
+        "tx": "http://explorer.hirocoin.org/tx/",
+        "address": "http://explorer.hirocoin.org/address/"
+    }
+}

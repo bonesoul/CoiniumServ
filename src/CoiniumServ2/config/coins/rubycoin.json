@@ -1,0 +1,11 @@
+{
+    "name": "Rubycoin",
+    "symbol": "RUBY",
+    "algorithm": "scrypt",
+	"site": "http://www.rubycoin.org/",
+    "blockExplorer": {
+        "block": "https://chainz.cryptoid.info/rby/block.dws?",
+        "tx": "https://chainz.cryptoid.info/rby/tx.dws",
+        "address": "https://chainz.cryptoid.info/rby/address.dws"
+    }
+}

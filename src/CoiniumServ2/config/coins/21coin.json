@@ -1,0 +1,10 @@
+{
+    "name": "21coin",
+    "symbol": "21",
+    "algorithm": "sha256",
+    "site": "https://github.com/21coin/21coin",    	
+    "node": {
+        "magic": "21212121",
+        "testnetMagic": "01fefe05"
+    }
+}

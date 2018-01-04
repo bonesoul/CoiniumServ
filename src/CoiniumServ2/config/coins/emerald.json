@@ -1,0 +1,11 @@
+{
+    "name": "Emerald",
+    "symbol": "EMD",
+    "algorithm": "scrypt",
+    "site": "https://github.com/emeraldproject/emerald",
+    "blockExplorer": {
+        "block": "http://emd.blockexp.info/block/",
+        "tx": "http://emd.blockexp.info/tx/",
+        "address": "http://emd.blockexp.info/address/"
+    }
+}

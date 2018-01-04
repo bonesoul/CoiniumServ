@@ -1,0 +1,61 @@
+﻿@using System.Linq
+@using CoiniumServ.Utils.Helpers
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IEnumerable<CoiniumServ.Pools.IPool>>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-flask"></i> Pools</h3>
+                <div class="box-tools pull-right">
+                    <a href="/pools/" type="button" class="btn btn-danger"><i class="fa fa-angle-double-right"></i></a>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="hidden-xs" style="width: 40px;"></th>
+                            <th title="Pool's name">Pool</th>
+                            <th title="Total hashrate of the pool">Hashrate</th>
+                            <th title="Total hashrate of the network">Network</th>
+                            <th title="Difficulty of the network">Difficulty</th>
+                            <th class="hidden-xs" title="Profitability of pool in USD for 1 MH/s per hour">Profitability</th>
+                            <th class="hidden-xs" title="Number of connected workers">Workers</th>
+                            <th class="hidden-xs" title="The algorithm used by the pool">Algorithm</th>
+                            <th class="hidden-xs" title="Time of the last found block">Last Block</th>
+                            <th class="hidden-xs" title="Status of the pool">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pool in Model)
+                        {
+                            if (!pool.Initialized)
+                            {
+                                continue;
+                            }
+                            <tr>
+                                <td class="hidden-xs"><img src="/Content/img/coins/icon/@(pool.Config.Coin.Symbol).png" /></td>
+                                <td><a href="/pool/@pool.Config.Coin.Symbol/">@pool.Config.Coin.Name</a></td>
+                                <td>@pool.Hashrate.GetReadableHashrate()</td>
+                                <td>@pool.NetworkInfo.Hashrate.GetReadableHashrate()</td>
+                                <td title="@string.Format("{0:n8}",pool.NetworkInfo.Difficulty)">@pool.NetworkInfo.Difficulty.GetReadableDifficulty()</td>
+                                <td class="hidden-xs">@pool.MinerManager.Count</td>
+                                <td class="hidden-xs"><a href="/algorithm/@pool.Config.Coin.Algorithm">@pool.Config.Coin.Algorithm</a></td>
+                                <td class="hidden-xs">
+                                    @{
+                                        var lastBlock = pool.BlockRepository.Latest.Count > 0 ? pool.BlockRepository.Latest.First().CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ") : "N/A";
+                                        <time class="timeago" datetime="@lastBlock">@lastBlock</time>
+                                    }
+                                </td>
+                                <td class="hidden-xs">
+                                    <div class="label @(pool.NetworkInfo.Healthy? "label-info" : "label-danger")">@(pool.NetworkInfo.Healthy ? "Healthy" : "Warnings!")</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

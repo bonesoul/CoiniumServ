@@ -1,0 +1,11 @@
+{
+    "name": "Kittehcoin",
+    "symbol": "MEOW",
+    "algorithm": "scrypt",
+    "site": "https://kittehcoin.info/",
+    "blockExplorer": {
+        "block": "http://kittehcoinblockexplorer.com/block/",
+        "tx": "http://kittehcoinblockexplorer.com/tx/",
+        "address": "http://kittehcoinblockexplorer.com/address/"
+    }
+}

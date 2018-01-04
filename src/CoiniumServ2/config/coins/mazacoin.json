@@ -1,0 +1,15 @@
+{
+    "name": "Mazacoin",
+    "symbol": "MZC",
+    "algorithm": "sha256",
+    "site": "https://mazacoin.org/",
+    "blockExplorer": {
+        "block": "https://mazacha.in/block/",
+        "tx": "https://mazacha.in/tx/",
+        "address": "https://mazacha.in/address/"
+    },
+    "node": {
+        "magic": "f8b503df",
+        "testnetMagic": "05fea901"
+    }
+}

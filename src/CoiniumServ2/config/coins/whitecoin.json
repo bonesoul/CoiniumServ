@@ -1,0 +1,11 @@
+{
+    "name": "Whitecoin",
+    "symbol": "WC",
+    "algorithm": "scrypt",
+	"site": "http://whitecoin.info/",
+    "blockExplorer": {
+        "block": "http://explorer.whitecoin.info/block/",
+        "tx": "http://explorer.whitecoin.info/tx/",
+        "address": "http://explorer.whitecoin.info/address/"
+    }
+}

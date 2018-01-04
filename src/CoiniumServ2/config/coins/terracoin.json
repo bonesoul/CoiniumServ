@@ -1,0 +1,11 @@
+{
+    "name": "Terracoin",
+    "symbol": "TRC",
+    "algorithm": "sha256",
+    "site": "http://terracoin.sourceforge.net/",
+    "blockExplorer": {
+        "block": "http://bitinfocharts.com/terracoin/block/",
+        "tx": "http://bitinfocharts.com/terracoin/tx/",
+        "address": "http://bitinfocharts.com/terracoin/address/"
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "name": "GlobalDenomination",
+    "symbol": "GDN",
+    "algorithm": "x11",
+    "site": "http://www.globaldenomination.org/",
+    "node": {
+        "magic": "fec3b9de",
+        "testnetMagic": "fec4bade"
+    }
+}

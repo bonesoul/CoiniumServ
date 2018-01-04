@@ -1,0 +1,15 @@
+{
+    "name": "saffroncoin",
+    "symbol": "SFR",
+    "algorithm": "scrypt",
+    "site": "http://saffroncoin.com/",
+    "blockExplorer": {
+        "block": "http://explorer.saffroncoin.com/block/",
+        "tx": "http://explorer.saffroncoin.com/tx/",
+        "address": "http://explorer.saffroncoin.com/address/"
+    },
+    "node": {
+        "magic": "cf0567ea",
+        "testnetMagic": "01f555a4"
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "name": "Spartancoin",
+    "symbol": "SPN",
+    "algorithm": "scrypt",
+	"site": "http://www.spartancoin.org/",
+    "blockExplorer": {
+        "block": "http://blockexplorer.spartancoin.org/index.php?block_hash=",
+        "tx": "http://blockexplorer.spartancoin.org/index.php?transaction="
+    }
+}

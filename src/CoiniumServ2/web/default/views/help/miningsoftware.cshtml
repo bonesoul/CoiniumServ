@@ -1,0 +1,67 @@
+﻿@using CoiniumServ.Mining.Software
+@{ Layout = "layout/main.cshtml"; }
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-cog"></i> Mining Software</h3>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="hidden-xs">ATI</th>
+                            <th class="hidden-xs">Nvidia</th>
+                            <th class="hidden-xs">ASIC</th>
+                            <th class="hidden-xs">CPU</th>
+                            <th>Algorithms</th>
+                            <th>Site</th>
+                            <th class="hidden-xs"><i class="fa fa-windows"></i></th>
+                            <th class="hidden-xs"><i class="fa fa-linux"></i></th>
+                            <th class="hidden-xs"><i class="fa fa-apple"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var software in Model)
+                        {
+                            <tr>
+                                <td>@software.Name</td>
+                                <td class="hidden-xs">@(software.Platforms.HasFlag(Platforms.Ati) ? "✓" : "")</td>
+                                <td class="hidden-xs">@(software.Platforms.HasFlag(Platforms.Nvidia) ? "✓" : "")</td>
+                                <td class="hidden-xs">@(software.Platforms.HasFlag(Platforms.Asic) ? "✓" : "")</td>
+                                <td class="hidden-xs">@(software.Platforms.HasFlag(Platforms.Cpu) ? "✓" : "")</td>
+                                <td>
+                                    @foreach (var algorithm in software.Algorithms)
+                                    {
+                                        @algorithm.Name@:,
+                                    }
+                                </td>
+                                <td><a href="@software.Site" target="_blank"><i class="fa fa-globe"></i></a></td>
+                                <td class="hidden-xs">
+                                    @if (software.Downloads.ContainsKey("windows"))
+                                    {
+                                        <a href="@software.Downloads["windows"]" target="_blank"><i class="fa fa-download"></i></a>
+                                    }
+                                </td>
+                                <td class="hidden-xs">
+                                    @if (software.Downloads.ContainsKey("linux"))
+                                    {
+                                        <a href="@software.Downloads["linux"]" target="_blank"><i class="fa fa-download"></i></a>
+                                    }
+                                </td>
+                                <td class="hidden-xs">
+                                    @if (software.Downloads.ContainsKey("macos"))
+                                    {
+                                        <a href="@software.Downloads["macos"]" target="_blank"><i class="fa fa-download"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

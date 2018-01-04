@@ -1,0 +1,15 @@
+{
+    "name": "Infinitecoin",
+    "symbol": "IFC",
+    "algorithm": "scrypt",
+	"site": "http://www.infinitecoin.com/",
+    "blockExplorer": {
+        "block": "http://exploretheblocks.com:2750/block/",
+        "tx": "http://exploretheblocks.com:2750/tx/",
+        "address": "http://exploretheblocks.com:2750/address/"
+    },
+    "node": {
+        "magic": "fbc0b6db",
+        "testnetMagic": "fcc1b7dc"
+    }
+}

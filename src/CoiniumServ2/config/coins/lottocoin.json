@@ -1,0 +1,17 @@
+{
+    "name": "Lottocoin",
+    "symbol": "LOT",
+    "algorithm": "scrypt",
+    "site": "http://www.lottocoin.org/",
+    "blockExplorer": {
+        "block": "http://coinbomb.biz/lotblocks/index.php?block_hash=",
+        "tx": "http://coinbomb.biz/lotblocks/index.php?transaction="
+    },
+    "options": {
+        "txMessageSupported": true
+    },
+    "node": {
+        "magic": "a5fdb6c1",
+        "testnetMagic": "fdc3b6f1"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "GroestlCoin",
+    "symbol": "GRS",
+    "algorithm": "groestl",
+	"site": "http://www.groestlcoin.org/",
+    "blockExplorer": {
+        "block": "https://chainz.cryptoid.info/grs/block.dws?",
+        "tx": "https://chainz.cryptoid.info/grs/tx.dws?",
+        "address": "https://chainz.cryptoid.info/grs/address.dws?"
+    }
+}

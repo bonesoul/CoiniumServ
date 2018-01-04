@@ -1,0 +1,14 @@
+{
+    "name": "Ultimatecoin",
+    "symbol": "ULT",
+    "algorithm": "scrypt",
+    "site": "http://ultcoin.org/",
+    "blockExplorer": {
+        "block": "http://ultexplorer.ultcoin.org/block/",
+        "tx": "http://ultexplorer.ultcoin.org/tx/",
+        "address": "http://ultexplorer.ultcoin.org/address/"
+    },
+    "node": {
+        "magic": "f9f7c0e8"
+    }
+}
