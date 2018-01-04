@@ -39,7 +39,7 @@
     <PackageReference Include="HashLib" Version="2.0.1" />
     <PackageReference Include="JsonConfig" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
-    <PackageReference Include="MySql.Data" Version="6.8.8" />
+    <PackageReference Include="MySql.Data" Version="6.10.5" />
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Hosting.Self" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Viewengines.Razor" Version="2.0.0-clinteastwood" />
