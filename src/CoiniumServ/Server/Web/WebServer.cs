@@ -75,7 +75,7 @@ namespace CoiniumServ.Server.Web
         public bool Start()
         {
             // if BindInterface is configured as empty, nacy to listen on all available interfaces thanks to RewriteLocalhost
-            var uri = new Uri(string.Format("http://{0}:{1}", BindInterface, Port));            
+            var uri = new Uri($"http://{BindInterface}:{Port}");            
 
             var hostConfiguration = new HostConfiguration
             {
