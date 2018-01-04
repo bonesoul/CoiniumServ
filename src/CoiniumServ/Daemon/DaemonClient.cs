@@ -337,7 +337,48 @@ namespace CoiniumServ.Daemon
         /// <returns>An object containing some general information.</returns>
         public Info GetInfo()
         {
-            return MakeRequest<Info>("getinfo", null);
+            Info rval = new Info();
+            try
+            {
+                rval = MakeRequest<Info>("getinfo", null);
+            }
+            catch (Exception) // fixme - should only catch if api doesn't exist || if vertcoin. - SCSLATER
+            {
+                // VertCoin decided to break protocol - yay!
+                // -The deprecated RPC `getinfo` was removed. It is recommended that the more specific RPCs are used:
+                // * `getblockchaininfo`
+                // * `getnetworkinfo`
+                // * `getwalletinfo`
+                // * `getmininginfo`                
+            }
+            return rval;
+        }
+
+        private Info GetVertCoinInfo()
+        {
+            Info rval = new Info();
+            try
+            {
+                BlockChainInfo BCInfo = MakeRequest<BlockChainInfo>("getblockchaininfo", null);
+                NetworkInfo netInfo = MakeRequest<NetworkInfo>("getnetworkinfo", null);
+                WalletInfo wallInfo = MakeRequest<WalletInfo>("getwalletinfo", null);
+                MiningInfoData miningData = MakeRequest<MiningInfoData>("getmininginfo", null);
+
+                rval.Version = Convert.ToString(netInfo.version);
+                rval.ProtocolVersion = netInfo.protocolversion;
+                rval.WalletVersion = wallInfo.walletversion;
+                rval.Balance = wallInfo.balance;
+                rval.Blocks = BCInfo.blocks;
+                rval.TimeOffset = netInfo.timeoffset;
+                rval.Connections = netInfo.connections;
+                rval.Difficulty = BCInfo.difficulty;
+                rval.KeyPoolEldest = wallInfo.keypoololdest;
+                rval.KeyPoolSize = wallInfo.keypoolsize;
+                rval.PayTxFee = wallInfo.paytxfee;
+            }
+            catch (Exception) // fixme - should only catch if api doesn't exist || if vertcoin. - SCSLATER
+            { }
+            return rval;
         }
 
         [Obsolete("Replaced in v0.7.0 with getblocktemplate, submitblock, getrawmempool")]
