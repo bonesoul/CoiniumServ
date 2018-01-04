@@ -10,5 +10,5 @@ jobs:
       - run: apt-get --yes --force-yes install wget
       - run: wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
       - run: mono nuget.exe restore build/CoiniumServ.sln
-      - run: msbuild build/CoiniumServ.sln /p:Configuration=Debug
+      - run: msbuild CoiniumServ.sln /p:Configuration=Debug
       - run: mono build/packages/xunit.runner.console.2.3.1/tools/net452/xunit.console.exe src/Tests/bin/Debug/CoiniumServ.Tests.dll
