@@ -470,16 +470,21 @@
     <Compile Include="VersionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
+    <None Include="web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" /> 
-    <Target Name="AfterBuild">
-        <ItemGroup>
-            <Web Include="..\web\**\*.*"/>
-			<Config Include="..\..\config\**\*.*"/>
-        </ItemGroup>
-         <Microsoft.Build.Tasks.Copy SourceFiles="@(Web)"  DestinationFiles="@(Web->'$(OutputPath)\web\%(RecursiveDir)%(Filename)%(Extension)')"/>
-		 <Microsoft.Build.Tasks.Copy SourceFiles="@(Config)"  DestinationFiles="@(Config->'$(OutputPath)\config\%(RecursiveDir)%(Filename)%(Extension)')"/>
-    </Target>  
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <Web Include="..\web\**\*.*" />
+      <Config Include="..\..\config\**\*.*" />
+    </ItemGroup>
+    <Microsoft.Build.Tasks.Copy SourceFiles="@(Web)" DestinationFiles="@(Web->'$(OutputPath)\web\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Microsoft.Build.Tasks.Copy SourceFiles="@(Config)" DestinationFiles="@(Config->'$(OutputPath)\config\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
 </Project>
