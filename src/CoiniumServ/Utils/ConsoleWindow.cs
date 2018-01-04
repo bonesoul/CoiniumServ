@@ -57,7 +57,7 @@ namespace CoiniumServ.Utils
         public static void PrintLicense()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("Copyright (C) 2013 - 2017, Coinium project - https://github.com/CoiniumServ/CoiniumServ");
+            Console.WriteLine("Copyright (C) 2013 - 2018, Coinium project - https://github.com/CoiniumServ/CoiniumServ");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("CoiniumServ comes with ABSOLUTELY NO WARRANTY.");

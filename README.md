@@ -5,12 +5,12 @@
 CoiniumServ was created to be used for Coinium.org mining pool network at first hand. You can check [some of pools](https://github.com/bonesoul/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
 ### Buy package
-You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d) if you are having difficulties doing so yourself. You can then just configure & run it.
+You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi) if you are having difficulties doing so yourself. You can then just configure & run it.
 
-[![Buy with Bitcoin](http://satoshibox.com/img/button-bitcoin.svg)](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d)
-[![Buy with Litecoin](http://satoshibox.com/img/button-litecoin.svg)](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d)
-[![Buy with Ethereum](http://satoshibox.com/img/button-ethereum.svg)](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d)
-[![Buy with Dash](http://satoshibox.com/img/button-dash.svg)](https://satoshibox.com/e4brcge36t3v4psh7fd6zf3d)
+[![Buy with Bitcoin](http://satoshibox.com/img/button-bitcoin.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
+[![Buy with Litecoin](http://satoshibox.com/img/button-litecoin.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
+[![Buy with Ethereum](http://satoshibox.com/img/button-ethereum.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
+[![Buy with Dash](http://satoshibox.com/img/button-dash.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
 
 **VirusTotal scan results**: [0/58 clean](https://www.virustotal.com/en/file/f03dd7753d6d209d99f6b5095d28f0f6d7b8a50067a3ce709009b87c727b980d/analysis/1510948542/)
 
