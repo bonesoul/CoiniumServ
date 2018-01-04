@@ -26,6 +26,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CI|AnyCPU'">
     <LangVersion>latest</LangVersion>
     <OutputPath>..\..\build\bin\Debug\</OutputPath>
+  </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>none</DebugType>
