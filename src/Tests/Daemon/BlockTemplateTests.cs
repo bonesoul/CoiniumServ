@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using Newtonsoft.Json;
-using Should.Fluent;
+using FluentAssertions;
 using Xunit;
 
 /* sample data - https://github.com/CoiniumServ/CoiniumServ/wiki/Litecoin-Testnet-Stream
@@ -144,29 +144,29 @@ namespace CoiniumServ.Tests.Daemon
             var blockTemplate = @object.Result;
 
             // test the values.
-            blockTemplate.Version.Should().Equal(_expected.Version);
-            blockTemplate.PreviousBlockHash.Should().Equal(_expected.PreviousBlockHash);
+            blockTemplate.Version.Should().Be(_expected.Version);
+            blockTemplate.PreviousBlockHash.Should().Be(_expected.PreviousBlockHash);
 
             for(int i=0;i<blockTemplate.Transactions.Length;i++)
             {
-                blockTemplate.Transactions[i].Data.Should().Equal(_expected.Transactions[i].Data);
-                blockTemplate.Transactions[i].Hash.Should().Equal(_expected.Transactions[i].Hash);
+                blockTemplate.Transactions[i].Data.Should().Be(_expected.Transactions[i].Data);
+                blockTemplate.Transactions[i].Hash.Should().Be(_expected.Transactions[i].Hash);
                 blockTemplate.Transactions[i].Depends.Should().Equal(_expected.Transactions[i].Depends);
-                blockTemplate.Transactions[i].Fee.Should().Equal(_expected.Transactions[i].Fee);
-                blockTemplate.Transactions[i].Sigops.Should().Equal(_expected.Transactions[i].Sigops);
+                blockTemplate.Transactions[i].Fee.Should().Be(_expected.Transactions[i].Fee);
+                blockTemplate.Transactions[i].Sigops.Should().Be(_expected.Transactions[i].Sigops);
             }
 
-            blockTemplate.CoinBaseAux.Flags.Should().Equal(_expected.CoinBaseAux.Flags);
-            blockTemplate.Coinbasevalue.Should().Equal(_expected.Coinbasevalue);
-            blockTemplate.Target.Should().Equal(_expected.Target);
-            blockTemplate.MinTime.Should().Equal(_expected.MinTime);
+            blockTemplate.CoinBaseAux.Flags.Should().Be(_expected.CoinBaseAux.Flags);
+            blockTemplate.Coinbasevalue.Should().Be(_expected.Coinbasevalue);
+            blockTemplate.Target.Should().Be(_expected.Target);
+            blockTemplate.MinTime.Should().Be(_expected.MinTime);
             blockTemplate.Mutable.Should().Equal(_expected.Mutable);
-            blockTemplate.NonceRange.Should().Equal(_expected.NonceRange);
-            blockTemplate.SigOpLimit.Should().Equal(_expected.SigOpLimit);
-            blockTemplate.SizeLimit.Should().Equal(_expected.SizeLimit);
-            blockTemplate.CurTime.Should().Equal(_expected.CurTime);
-            blockTemplate.Bits.Should().Equal(_expected.Bits);
-            blockTemplate.Height.Should().Equal(_expected.Height);
+            blockTemplate.NonceRange.Should().Be(_expected.NonceRange);
+            blockTemplate.SigOpLimit.Should().Be(_expected.SigOpLimit);
+            blockTemplate.SizeLimit.Should().Be(_expected.SizeLimit);
+            blockTemplate.CurTime.Should().Be(_expected.CurTime);
+            blockTemplate.Bits.Should().Be(_expected.Bits);
+            blockTemplate.Height.Should().Be(_expected.Height);
         }
     }
 }

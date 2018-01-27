@@ -38,10 +38,13 @@ namespace CoiniumServ.Server.Web.Modules
         public PoolsModule(IPoolManager poolManager)
             : base("/pools")
         {
-            Get["/"] = _ => View["pools", new PoolsModel
+            Get("/", args =>
             {
-                Pools = poolManager.GetAllAsReadOnly()
-            }];
+                return View["pools", new PoolsModel
+                {
+                    Pools = poolManager.GetAllAsReadOnly()
+                }];
+            });
         }
     }
 }

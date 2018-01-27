@@ -36,14 +36,14 @@ namespace CoiniumServ.Server.Web.Modules
         public ContactModule()
             : base("/contact")
         {
-            Get["/"] = _ =>
+            Get("/", args =>
             {
                 // include common data required by layout.
                 ViewBag.Header = "Contact Us";
 
                 // return our view
                 return View["contact"];
-            };
+            });
         }
     }
 }

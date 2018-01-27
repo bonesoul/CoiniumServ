@@ -30,8 +30,8 @@
 using CoiniumServ.Banning;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container;
+using FluentAssertions;
 using Nancy.TinyIoc;
-using Should.Fluent;
 using Xunit;
 
 namespace CoiniumServ.Tests.Banning
@@ -97,7 +97,7 @@ namespace CoiniumServ.Tests.Banning
             var config = new BanConfig(data);
 
             // as we have just supplied an invalid json, config should be just marked as invalid.
-            config.Valid.Should().Equal(false);
+            config.Valid.Should().Be(false);
         }
     }
 }

@@ -28,7 +28,7 @@
 #endregion
 
 using CoiniumServ.Utils.Extensions;
-using Should.Fluent;
+using FluentAssertions;
 using Xunit;
 
 namespace CoiniumServ.Tests.Utils.Extensions

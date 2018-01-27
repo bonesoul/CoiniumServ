@@ -34,8 +34,8 @@ using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Transactions;
 using CoiniumServ.Utils.Extensions;
+using FluentAssertions;
 using NSubstitute;
-using Should.Fluent;
 using Xunit;
 
 /*
@@ -87,17 +87,17 @@ namespace CoiniumServ.Tests.Transactions
             outputs.AddPoolWallet(poolWallet, blockReward);
 
             // test the recipient rewards
-            outputs.List.Last().Value.Should().Equal((UInt64)0x0000000002faf080); // packInt64LE: 80f0fa0200000000
+            outputs.List.Last().Value.Should().Be((UInt64)0x0000000002faf080); // packInt64LE: 80f0fa0200000000
             outputs.List.Last().PublicKeyScriptLenght.Should().Equal(new byte[] { 0x19 });
-            outputs.List.Last().PublicKeyScript.ToHexString().Should().Equal("76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac");
+            outputs.List.Last().PublicKeyScript.ToHexString().Should().Be("76a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac");
 
             // test the pool wallet 
-            outputs.List.First().Value.Should().Equal((UInt64)0x00000001270b0180); // packInt64LE: 80010b2701000000
+            outputs.List.First().Value.Should().Be((UInt64)0x00000001270b0180); // packInt64LE: 80010b2701000000
             outputs.List.First().PublicKeyScriptLenght.Should().Equal(new byte[] { 0x19 });
-            outputs.List.First().PublicKeyScript.ToHexString().Should().Equal("76a914329035234168b8da5af106ceb20560401236849888ac");
+            outputs.List.First().PublicKeyScript.ToHexString().Should().Be("76a914329035234168b8da5af106ceb20560401236849888ac");
 
             // test the outputs buffer.
-            outputs.GetBuffer().ToHexString().Should().Equal("0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac");
+            outputs.GetBuffer().ToHexString().Should().Be("0280010b27010000001976a914329035234168b8da5af106ceb20560401236849888ac80f0fa02000000001976a9147d576fbfca48b899dc750167dd2a2a6572fff49588ac");
         }
     }
 }

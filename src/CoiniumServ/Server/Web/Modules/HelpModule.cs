@@ -42,14 +42,14 @@ namespace CoiniumServ.Server.Web.Modules
         public HelpModule(IPoolManager poolManager, IConfigManager configManager, ISoftwareRepository softwareRepository)
             :base("/help")
         {
-            Get["/faq"] = _ =>
+            Get("/faq", args =>
             {
                 ViewBag.Header = "Frequently Asked Questions";
 
                 return View["faq"];
-            };
+            });
 
-            Get["/gettingstarted/"] = _ =>
+            Get("/gettingstarted/", args =>
             {
                 var model = new GettingStartedModel
                 {
@@ -58,17 +58,17 @@ namespace CoiniumServ.Server.Web.Modules
                 };
 
                 return View["gettingstarted/index", model];
-            };
+            });
 
-            Get["/gettingstarted/pool/{slug}"] = _ =>
+            Get("/gettingstarted/pool/{slug}", args =>
             {
-                var pool = poolManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested pool.
+                var pool = poolManager.Get(HttpUtility.HtmlEncode(args.slug)); // find the requested pool.
 
                 if (pool == null)
                 {
                     return View["error", new ErrorViewModel
                     {
-                        Details = string.Format("The requested pool does not exist: {0}", _.slug)
+                        Details = string.Format("The requested pool does not exist: {0}", args.slug)
                     }];
                 }
 
@@ -79,12 +79,12 @@ namespace CoiniumServ.Server.Web.Modules
                 };
 
                 return View["gettingstarted/pool", model];
-            };
+            });
 
-            Get["/miningsoftware/"] = _ =>
+            Get("/miningsoftware/", args =>
             {
                 return View["miningsoftware", softwareRepository];
-            };
+            });
         }
     }
 }

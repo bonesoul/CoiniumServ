@@ -46,14 +46,14 @@ namespace CoiniumServ.Server.Web.Modules
                 Statistics = statisticsManager
             };
 
-            Get["/"] = _ =>
+            Get("/", args =>
             {
                 // include common data required by layout.                
                 ViewBag.Header = "Welcome";
 
                 // return our view
                 return View["index", model];
-            };
+            });
         }
     }
 }

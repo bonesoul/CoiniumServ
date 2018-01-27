@@ -36,14 +36,14 @@ namespace CoiniumServ.Server.Web.Modules
         public DonateModule()
             :base("/donate")
         {
-            Get["/"] = _ =>
+            Get("/", args =>
             {
                 // include common data required by layout.
                 ViewBag.Header = "Donation";
 
                 // return our view
                 return View["donate"];
-            };
+            });
         }
     }
 }

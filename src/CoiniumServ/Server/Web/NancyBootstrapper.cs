@@ -27,6 +27,7 @@
 // 
 #endregion
 
+using System.Collections.Generic;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Pools;
@@ -37,6 +38,8 @@ using Nancy.Conventions;
 using Nancy.CustomErrors;
 using Nancy.TinyIoc;
 using Nancy.Diagnostics;
+using Nancy.Responses;
+using Nancy.ViewEngines.Razor;
 
 namespace CoiniumServ.Server.Web
 {
@@ -78,7 +81,7 @@ namespace CoiniumServ.Server.Web
                 ctx.ViewBag.LastUpdate = _statisticsManager.LastUpdate.ToString("HH:mm:ss tt zz"); // last statistics update.
             };
 
-            CustomErrors.Enable(pipelines, new ErrorConfiguration());
+            CustomErrors.Enable(pipelines, new ErrorConfiguration(), new DefaultJsonSerializer(GetEnvironment())); // todo: fix this.
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)
@@ -99,16 +102,46 @@ namespace CoiniumServ.Server.Web
             return _applicationContext.Container;
         }
 
-        #if DEBUG // on debug mode, enable http://website/_Nancy/
-        protected override DiagnosticsConfiguration DiagnosticsConfiguration
+        public override void Configure(Nancy.Configuration.INancyEnvironment environment)
         {
-            get { return new DiagnosticsConfiguration { Password = @"debug" }; }
+            #if DEBUG
+                environment.Views(true, true); // on debug mode enable runtime view discovery
+                environment.Tracing(true, true); // enable tracing
+                environment.Diagnostics(password: "debug"); // on debug mode, enable http://website/_Nancy/
+            #else
+                environment.Views(false, false);
+                environment.Tracing(false, false); // enable tracing
+            #endif
         }
-        #endif
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
         {
             // prevents nancy from autoregistering it's own set of resolvers.
+        }
+
+        protected override void RegisterInstances(
+            TinyIoCContainer container, IEnumerable<InstanceRegistration> instanceRegistrations)
+        {
+            base.RegisterInstances(container, instanceRegistrations);
+            container.Register<IRazorConfiguration>(new CustomRazorConfiguration());
+        }
+    }
+
+    public class CustomRazorConfiguration : IRazorConfiguration
+    {
+        public bool AutoIncludeModelNamespace
+        {
+            get { return true; }
+        }
+
+        public IEnumerable<string> GetAssemblyNames()
+        {
+            yield return "CoiniumServ.Server.Web.Models";
+        }
+
+        public IEnumerable<string> GetDefaultNamespaces()
+        {
+            yield return "CoiniumServ.Server.Web.Models";
         }
     }
 }

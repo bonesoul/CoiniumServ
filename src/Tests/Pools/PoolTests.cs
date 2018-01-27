@@ -33,8 +33,8 @@ using CoiniumServ.Container;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Pools;
+using FluentAssertions;
 using NSubstitute;
-using Should.Fluent;
 using Xunit;
 
 namespace CoiniumServ.Tests.Pools
@@ -77,7 +77,7 @@ namespace CoiniumServ.Tests.Pools
         {
             var pool = new Pool(_config,_configManager, _objectFactory); // create the pool instance.
 
-            pool.Should().Not.Be.Null();
+            pool.Should().NotBeNull();
             //pool.InstanceId.Should().Be.GreaterThan((UInt32)0); // pool should be already created an instance id.
         }
 

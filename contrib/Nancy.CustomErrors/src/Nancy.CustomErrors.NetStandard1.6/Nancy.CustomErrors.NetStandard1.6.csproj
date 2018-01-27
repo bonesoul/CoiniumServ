@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <RootNamespace>Nancy.CustomErrors</RootNamespace>
+    <AssemblyName>Nancy.CustomErrors</AssemblyName>
+    <Configurations>Debug;Release;CI</Configurations>
+  </PropertyGroup>
+
+  <Import Project="..\Nancy.CustomErrors.Shared\Nancy.CustomErrors.Shared.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
+  </ItemGroup>
+
+</Project>

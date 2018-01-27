@@ -38,14 +38,14 @@ namespace CoiniumServ.Server.Web.Modules
         public AlgorithmsModule(IAlgorithmManager algorithmManager)
             : base("/algorithms")
         {
-            Get["/"] = _ =>
+            Get("/" , args =>
             {
                 // return our view
                 return View["algorithms", new AlgorithmsModel
                 {
                     Algorithms = algorithmManager.GetAllAsReadOnly()
                 }];
-            };
+            });
         }
     }
 }

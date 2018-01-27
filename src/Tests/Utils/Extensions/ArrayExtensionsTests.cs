@@ -29,7 +29,7 @@
 
 using System.Linq;
 using CoiniumServ.Utils.Extensions;
-using Should.Fluent;
+using FluentAssertions;
 using Xunit;
 
 namespace CoiniumServ.Tests.Utils.Extensions
@@ -46,7 +46,7 @@ namespace CoiniumServ.Tests.Utils.Extensions
             };
 
             var output = input.ToHexString();
-            output.Should().Equal("71f6391e10600e54d83bd8c0265303cccaafe375bcc3b0117296ebd144e3f95a");
+            output.Should().Be("71f6391e10600e54d83bd8c0265303cccaafe375bcc3b0117296ebd144e3f95a");
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace CoiniumServ.Tests.Utils.Extensions
             }.Take(32);
 
             var output = input.ToHexString();
-            output.Should().Equal("71f6391e10600e54d83bd8c0265303cccaafe375bcc3b0117296ebd144e3f95a");            
+            output.Should().Be("71f6391e10600e54d83bd8c0265303cccaafe375bcc3b0117296ebd144e3f95a");            
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace CoiniumServ.Tests.Utils.Extensions
             var input = "2fb6f87a2eaa2f5ca970ef355d66d394ab907fb1ebe3b7688e5979e7a4d2120a".HexToByteArray();
             var output = input.ReverseByteOrder().ToHexString();
 
-            output.Should().Equal("a4d2120a8e5979e7ebe3b768ab907fb15d66d394a970ef352eaa2f5c2fb6f87a");
+            output.Should().Be("a4d2120a8e5979e7ebe3b768ab907fb15d66d394a970ef352eaa2f5c2fb6f87a");
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace CoiniumServ.Tests.Utils.Extensions
             var input = "5af9e344d1eb967211b0c3bc75e3afcacc035326c0d83bd8540e60101e39f671".HexToByteArray();
             var output = input.ReverseBuffer().ToHexString();
 
-            output.Should().Equal("71f6391e10600e54d83bd8c0265303cccaafe375bcc3b0117296ebd144e3f95a");
+            output.Should().Be("71f6391e10600e54d83bd8c0265303cccaafe375bcc3b0117296ebd144e3f95a");
         }
     }
 }

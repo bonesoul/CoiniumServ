@@ -31,8 +31,8 @@ using AustinHarris.JsonRpc;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
+using FluentAssertions;
 using NSubstitute;
-using Should.Fluent;
 using Xunit;
 
 namespace CoiniumServ.Tests.Server.Mining.Stratum
@@ -64,7 +64,7 @@ namespace CoiniumServ.Tests.Server.Mining.Stratum
             var task = JsonRpcProcessor.Process(_poolConfig.Coin.Name, request,_stratumContext);
             task.Wait();
 
-            task.Result.Should().Equal(expectedResult);
+            task.Result.Should().Be(expectedResult);
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace CoiniumServ.Tests.Server.Mining.Stratum
             var task = JsonRpcProcessor.Process(_poolConfig.Coin.Name, request, _stratumContext);
             task.Wait();
 
-            task.Result.Should().Equal(expectedResult);
+            task.Result.Should().Be(expectedResult);
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace CoiniumServ.Tests.Server.Mining.Stratum
             var task = JsonRpcProcessor.Process(_poolConfig.Coin.Name, request, _stratumContext);
             task.Wait();
 
-            task.Result.Should().Equal(expectedResult);
+            task.Result.Should().Be(expectedResult);
         }
     }
 }

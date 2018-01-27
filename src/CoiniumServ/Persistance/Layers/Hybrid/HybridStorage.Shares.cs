@@ -34,7 +34,6 @@ using CoiniumServ.Payments;
 using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Helpers;
-using CoiniumServ.Server.Mining.Stratum;
 
 namespace CoiniumServ.Persistance.Layers.Hybrid
 {

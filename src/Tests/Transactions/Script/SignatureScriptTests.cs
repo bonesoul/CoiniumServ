@@ -32,8 +32,8 @@ using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Transactions.Script;
 using CoiniumServ.Utils.Extensions;
+using FluentAssertions;
 using Newtonsoft.Json;
-using Should.Fluent;
 using Xunit;
 
 /*  sample data
@@ -77,8 +77,8 @@ namespace CoiniumServ.Tests.Transactions.Script
                 "/nodeStratum/");
 
             // test the objects.
-            signatureScript.Initial.ToHexString().Should().Equal("03547f04062f503253482f04afe0945308");
-            signatureScript.Final.ToHexString().Should().Equal("0d2f6e6f64655374726174756d2f");
+            signatureScript.Initial.ToHexString().Should().Be("03547f04062f503253482f04afe0945308");
+            signatureScript.Final.ToHexString().Should().Be("0d2f6e6f64655374726174756d2f");
         }
     }
 }

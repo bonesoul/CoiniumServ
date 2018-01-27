@@ -32,7 +32,6 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using CoiniumServ.Configuration;
-using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Hosting.Self;
 using Serilog;
@@ -87,16 +86,6 @@ namespace CoiniumServ.Server.Web
 
             try
             {
-                #if DEBUG // on debug mode enable runtime view discovery & request tracing
-                    StaticConfiguration.Caching.EnableRuntimeViewDiscovery = true;
-                    StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
-                    StaticConfiguration.EnableRequestTracing = true;
-                #else
-                    StaticConfiguration.Caching.EnableRuntimeViewDiscovery = false;
-                    StaticConfiguration.Caching.EnableRuntimeViewUpdates = false;
-                    StaticConfiguration.EnableRequestTracing = false;
-                #endif
-
                 var host = new NancyHost(_webBootstrapper, hostConfiguration, uri); // create nancy host.
 
                 host.Start();
@@ -131,7 +120,7 @@ namespace CoiniumServ.Server.Web
                 if (baseException is DirectoryNotFoundException)
                     _logger.Error("Invalid template path for web-server given; {0:l}", baseException.Message);
                 else
-                    _logger.Error("An error occured while starting web-server: {0:l}", e);
+                    _logger.Error("An error occurred while starting web-server: {0:l}", e);
 
                 IsListening = false;
                 return false;

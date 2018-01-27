@@ -30,7 +30,7 @@
 using System;
 using CoiniumServ.Transactions.Utils;
 using CoiniumServ.Utils.Extensions;
-using Should.Fluent;
+using FluentAssertions;
 using Xunit;
 
 namespace CoiniumServ.Tests.Transactions.Utils
@@ -46,10 +46,10 @@ namespace CoiniumServ.Tests.Transactions.Utils
         [Fact]
         public void SerializedUnixDateTimeTest()
         {
-            FinalUnixDateTime.Should().Equal((Int64)1402265775);
+            FinalUnixDateTime.Should().Be((Int64)1402265775);
 
             var serializedUnixTime = TransactionUtils.GetSerializedUnixDateTime(UnixDateTime);
-            serializedUnixTime.ToHexString().Should().Equal("04afe09453");
+            serializedUnixTime.ToHexString().Should().Be("04afe09453");
         }
     }
 }

@@ -31,7 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CoiniumServ.Utils.Platform;
 using Serilog;
 
 namespace CoiniumServ.Utils.Helpers
@@ -46,10 +45,6 @@ namespace CoiniumServ.Utils.Helpers
         public static string GetAbsolutePath(string file)
         {
             var path = Path.Combine(AssemblyRoot, file); // first get the path as *unix paths.
-
-            if (PlatformManager.Framework == Frameworks.DotNet) // if we are running on windows,
-                path = path.Replace('/', '\\'); // replace to windows-native paths.
-
             return path;
         }
 

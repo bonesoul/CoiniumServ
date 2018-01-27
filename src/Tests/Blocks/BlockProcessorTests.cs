@@ -38,8 +38,8 @@ using CoiniumServ.Persistance.Blocks;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using ExposedObject;
+using FluentAssertions;
 using NSubstitute;
-using Should.Fluent;
 using Xunit;
 
 namespace CoiniumServ.Tests.Blocks
@@ -80,7 +80,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should be marked as orphaned.
-            block.Status.Should().Equal(BlockStatus.Orphaned);
+            block.Status.Should().Be(BlockStatus.Orphaned);
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should be marked as orphaned.
-            block.Status.Should().Equal(BlockStatus.Orphaned);
+            block.Status.Should().Be(BlockStatus.Orphaned);
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should be marked as orphaned.
-            block.Status.Should().Equal(BlockStatus.Orphaned);
+            block.Status.Should().Be(BlockStatus.Orphaned);
         }
 
         [Fact]
@@ -136,7 +136,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should be marked as orphaned.
-            block.Status.Should().Equal(BlockStatus.Orphaned);
+            block.Status.Should().Be(BlockStatus.Orphaned);
         }
 
         [Fact]
@@ -152,7 +152,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should be marked as orphaned.
-            block.Status.Should().Equal(BlockStatus.Orphaned);
+            block.Status.Should().Be(BlockStatus.Orphaned);
         }
 
         [Fact]
@@ -173,7 +173,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should be marked as orphaned.
-            block.Status.Should().Equal(BlockStatus.Orphaned);
+            block.Status.Should().Be(BlockStatus.Orphaned);
         }
 
         [Fact]
@@ -194,7 +194,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should be marked as orphaned.
-            block.Status.Should().Equal(BlockStatus.Orphaned);
+            block.Status.Should().Be(BlockStatus.Orphaned);
         }
 
         [Fact]
@@ -215,7 +215,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block reward should be set to 999
-            block.Reward.Should().Equal((decimal)999);
+            block.Reward.Should().Be((decimal)999);
         }
 
         [Fact]
@@ -236,7 +236,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should still stay as pending
-            block.Status.Should().Equal(BlockStatus.Pending);
+            block.Status.Should().Be(BlockStatus.Pending);
         }
 
         [Fact]
@@ -257,7 +257,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should still stay as pending
-            block.Status.Should().Equal(BlockStatus.Confirmed);
+            block.Status.Should().Be(BlockStatus.Confirmed);
         }
 
         [Fact]
@@ -278,7 +278,7 @@ namespace CoiniumServ.Tests.Blocks
             exposed.QueryBlock(block);
 
             // block should still stay as pending
-            block.Status.Should().Equal(BlockStatus.Orphaned);
+            block.Status.Should().Be(BlockStatus.Orphaned);
         }
     }
 }

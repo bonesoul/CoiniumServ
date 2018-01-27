@@ -40,16 +40,16 @@ namespace CoiniumServ.Server.Web.Modules
         public AlgorithmModule(IAlgorithmManager algorithmManager)
             :base("/algorithm")
         {
-            Get["/{slug}"] = _ =>
+            Get("/{slug}", args =>
             {
-                var algorithm = algorithmManager.Get(HttpUtility.HtmlEncode(_.slug)); // find the requested algorithm.
+                var algorithm = algorithmManager.Get(HttpUtility.HtmlEncode(args.slug)); // find the requested algorithm.
 
                 if (algorithm == null)
                 {
                     return View["error", new ErrorViewModel
                     {
-                        Details = string.Format("The requested algorithm does not exist: {0}", _.slug)
-                    }];                    
+                        Details = string.Format("The requested algorithm does not exist: {0}", args.slug)
+                    }];
                 }
 
                 ViewBag.Header = algorithm.Name;
@@ -58,7 +58,7 @@ namespace CoiniumServ.Server.Web.Modules
                 {
                     Algorithm = algorithm
                 }];
-            };
+            });
         }
     }
 }
