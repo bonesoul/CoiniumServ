@@ -69,7 +69,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while comitting share: {0:l}", e.Message);
+                _logger.Error("An exception occurred while committing share: {0:l}", e.Message);
             }
         }
 
@@ -87,7 +87,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while moving shares for new block: {0:l}", e.Message);
+                _logger.Error("An exception occurred while moving shares for new block: {0:l}", e.Message);
             }
         }
 
@@ -118,7 +118,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while moving shares: {0:l}", e.Message);
+                _logger.Error("An exception occurred while moving shares: {0:l}", e.Message);
             }
         }
 
@@ -135,7 +135,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while deleting shares: {0:l}", e.Message);
+                _logger.Error("An exception occurred while deleting shares: {0:l}", e.Message);
             }
         }
 
@@ -158,7 +158,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting shares for current round: {0:l}", e.Message);
+                _logger.Error("An exception occurred while getting shares for current round: {0:l}", e.Message);
             }
 
             return shares;
@@ -183,7 +183,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting shares for round; {0:l}", e.Message);
+                _logger.Error("An exception occurred while getting shares for round; {0:l}", e.Message);
             }
 
             return shares;
