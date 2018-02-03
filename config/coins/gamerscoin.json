@@ -1,0 +1,15 @@
+{
+    "name": "Gamerscoin",
+    "symbol": "GMC",
+    "algorithm": "scrypt",
+    "site": "http://gamers-coin.org/",
+    "blockExplorer": {
+        "block": "http://blockchain.gamers-coin.org/block/",
+        "tx": "http://blockchain.gamers-coin.org/tx/",
+        "address": "http://blockchain.gamers-coin.org/address/"
+    },
+    "node": {
+        "magic": "fbc0b6db",
+        "testnetMagic": "fcc1b7dc"
+    }
+}

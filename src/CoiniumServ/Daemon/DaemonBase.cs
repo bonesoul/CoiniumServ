@@ -1,29 +1,36 @@
 ﻿#region License
 // 
+//     MIT License
+//
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
-//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
+//     Copyright (C) 2013 - 2017, CoiniumServ Project
+//     Hüseyin Uslu, shalafiraistlin at gmail dot com
+//     https://github.com/bonesoul/CoiniumServ
 // 
-//     This software is dual-licensed: you can redistribute it and/or modify
-//     it under the terms of the GNU General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     This program is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU General Public License for more details.
-//    
-//     For the terms of this license, see licenses/gpl_v3.txt.
-// 
-//     Alternatively, you can license this software under a commercial
-//     license or white-label it as set out in licenses/commercial.txt.
+//     Permission is hereby granted, free of charge, to any person obtaining a copy
+//     of this software and associated documentation files (the "Software"), to deal
+//     in the Software without restriction, including without limitation the rights
+//     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//     copies of the Software, and to permit persons to whom the Software is
+//     furnished to do so, subject to the following conditions:
+//     
+//     The above copyright notice and this permission notice shall be included in all
+//     copies or substantial portions of the Software.
+//     
+//     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//     SOFTWARE.
 // 
 #endregion
 
 using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
@@ -128,6 +135,7 @@ namespace CoiniumServ.Daemon
             webRequest.Credentials = new NetworkCredential(RpcUser, RpcPassword);
 
             // Important, otherwise the service can't deserialse your request properly
+            webRequest.UserAgent = string.Format("CoiniumServ {0:} {1:}", VersionInfo.CodeName, Assembly.GetAssembly(typeof (Program)).GetName().Version);
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
             webRequest.Timeout = _timeout;
@@ -142,19 +150,20 @@ namespace CoiniumServ.Daemon
                 using (Stream dataStream = webRequest.GetRequestStream())
                 {
                     dataStream.Write(byteArray, 0, byteArray.Length);
-                    dataStream.Close();
                 }
+
+                return webRequest;
             }
             catch (WebException webException)
             {
+                webRequest = null;
                 throw _rpcExceptionFactory.GetRpcException(webException);
             }
             catch (Exception exception)
             {
-                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);
+                webRequest = null;
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);                
             }
-
-            return webRequest;
         }
 
         /// <summary>
@@ -175,10 +184,12 @@ namespace CoiniumServ.Daemon
             }
             catch (JsonException jsonEx)
             {
+                httpWebRequest = null;
                 throw new Exception("There was a problem deserializing the response from the coin wallet.", jsonEx);
             }
             catch (Exception exception)
             {
+                httpWebRequest = null;
                 throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", exception);
             }
         }
@@ -190,22 +201,22 @@ namespace CoiniumServ.Daemon
         /// <returns>The raw JSON string.</returns>
         private string GetJsonResponse(HttpWebRequest httpWebRequest)
         {
+            WebResponse webResponse = null;
+
             try
             {
-                WebResponse webResponse = httpWebRequest.GetResponse();
-
-                // Deserialize the json response
-                using (var stream = webResponse.GetResponseStream())
+                using (webResponse = httpWebRequest.GetResponse())
                 {
-                    if (stream == null)
-                        return string.Empty;
-
-                    using (var reader = new StreamReader(stream))
+                    // Deserialize the json response
+                    using (var stream = webResponse.GetResponseStream())
                     {
-                        string result = reader.ReadToEnd();
-                        reader.Close();
+                        if (stream == null)
+                            return string.Empty;
 
-                        return result;
+                        using (var reader = new StreamReader(stream))
+                        {
+                            return reader.ReadToEnd();
+                        }
                     }
                 }
             }
@@ -218,18 +229,27 @@ namespace CoiniumServ.Daemon
                 var response = webException.Response as HttpWebResponse;
 
                 if (response == null)
-                    throw _rpcExceptionFactory.GetRpcException("Error while reading json response", webException);
+                    throw _rpcExceptionFactory.GetRpcException(webException);
 
                 var error = ReadJsonError(response); // try to read the error response.
 
-                if(error != null)
+                if (error != null)
                     throw _rpcExceptionFactory.GetRpcErrorException(error); //throw the error.
                 else
-                    throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", webException);
+                    throw _rpcExceptionFactory.GetRpcException(
+                        "An unknown exception occured while reading json response.", webException);
             }
             catch (Exception exception)
             {
-                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.", exception);
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while reading json response.",
+                    exception);
+            }
+            finally
+            {
+                if (webResponse != null)
+                    webResponse.Close(); //Close webresponse connection
+
+                webResponse = null; //To clear up the webresponse
             }
         }
 

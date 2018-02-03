@@ -1,23 +1,29 @@
 ﻿#region License
 // 
+//     MIT License
+//
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
-//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
+//     Copyright (C) 2013 - 2017, CoiniumServ Project
+//     Hüseyin Uslu, shalafiraistlin at gmail dot com
+//     https://github.com/bonesoul/CoiniumServ
 // 
-//     This software is dual-licensed: you can redistribute it and/or modify
-//     it under the terms of the GNU General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     This program is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU General Public License for more details.
-//    
-//     For the terms of this license, see licenses/gpl_v3.txt.
-// 
-//     Alternatively, you can license this software under a commercial
-//     license or white-label it as set out in licenses/commercial.txt.
+//     Permission is hereby granted, free of charge, to any person obtaining a copy
+//     of this software and associated documentation files (the "Software"), to deal
+//     in the Software without restriction, including without limitation the rights
+//     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//     copies of the Software, and to permit persons to whom the Software is
+//     furnished to do so, subject to the following conditions:
+//     
+//     The above copyright notice and this permission notice shall be included in all
+//     copies or substantial portions of the Software.
+//     
+//     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//     SOFTWARE.
 // 
 #endregion
 
@@ -32,8 +38,6 @@ using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
-using CoiniumServ.Markets;
-using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Mining;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
@@ -48,7 +52,6 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
-using CoiniumServ.Utils.Metrics;
 using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 
@@ -96,8 +99,6 @@ namespace CoiniumServ.Container
 
         INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig);
 
-        IProfitInfo GetProfitInfo(INetworkInfo networkInfo, IPoolConfig poolConfig);
-
         IBlockRepository GetBlockRepository(IStorageLayer storageLayer);
 
         IMiningServer GetMiningServer(string type, IPoolConfig poolConfig, IPool pool, IMinerManager minerManager, IJobManager jobManager,IBanManager banManager);
@@ -125,13 +126,14 @@ namespace CoiniumServ.Container
         #region hash algorithms
 
         /// <summary>
-        /// Returns instance of the given hash algorithm
+        /// Returns the given hash algorithm helper.
         /// </summary>
-        /// <param name="algorithm"></param>
         /// <returns></returns>
-        IHashAlgorithm GetHashAlgorithm(string algorithm);
+        IHashAlgorithm GetHashAlgorithm(ICoinConfig coinConfig);
 
         IAlgorithmManager GetAlgorithmManager();
+
+        IHashAlgorithmStatistics GetHashAlgorithmStatistics(string name);
 
         #endregion
 
@@ -150,20 +152,6 @@ namespace CoiniumServ.Container
         IWebServer GetWebServer();
 
         INancyBootstrapper GetWebBootstrapper();
-
-        IMetricsManager GetMetricsManager();
-
-        #endregion
-
-        #region market objects
-
-        IMarketManager GetMarketManager();
-
-        IBittrexClient GetBittrexClient();
-
-        ICryptsyClient GetCryptsyClient();
-
-        IPoloniexClient GetPoloniexClient();
 
         #endregion
 

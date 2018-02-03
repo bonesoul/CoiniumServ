@@ -1,32 +1,38 @@
 ﻿#region License
 // 
+//     MIT License
+//
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
-//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
+//     Copyright (C) 2013 - 2017, CoiniumServ Project
+//     Hüseyin Uslu, shalafiraistlin at gmail dot com
+//     https://github.com/bonesoul/CoiniumServ
 // 
-//     This software is dual-licensed: you can redistribute it and/or modify
-//     it under the terms of the GNU General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     This program is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU General Public License for more details.
-//    
-//     For the terms of this license, see licenses/gpl_v3.txt.
-// 
-//     Alternatively, you can license this software under a commercial
-//     license or white-label it as set out in licenses/commercial.txt.
+//     Permission is hereby granted, free of charge, to any person obtaining a copy
+//     of this software and associated documentation files (the "Software"), to deal
+//     in the Software without restriction, including without limitation the rights
+//     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//     copies of the Software, and to permit persons to whom the Software is
+//     furnished to do so, subject to the following conditions:
+//     
+//     The above copyright notice and this permission notice shall be included in all
+//     copies or substantial portions of the Software.
+//     
+//     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//     SOFTWARE.
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using CoiniumServ.Accounts;
 using CoiniumServ.Daemon;
-using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
@@ -91,17 +97,20 @@ namespace CoiniumServ.Payments
         {
             var pendingPayments = _storageLayer.GetPendingPayments(); // get all pending payments.
             var perUserTransactions = new Dictionary<string, List<ITransaction>>();  // list of payments to be executed.
-             
+
+
             foreach (var payment in pendingPayments)
             {
-                try { 
+                try
+                {
                     // query the user for the payment.
                     var user = _accountManager.GetAccountById(payment.AccountId);
 
                     if (user == null) // if the user doesn't exist
                         continue; // just skip.
 
-                    if (!perUserTransactions.ContainsKey(user.Username)) // check if our list of transactions to be executed already contains an entry for the user.
+                    if (!perUserTransactions.ContainsKey(user.Username)
+                    ) // check if our list of transactions to be executed already contains an entry for the user.
                     {
                         // if not, create an entry that contains the list of transactions for the user.
 
@@ -118,8 +127,11 @@ namespace CoiniumServ.Payments
 
                     perUserTransactions[user.Username].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
                 }
-                catch(RpcException)
-                { } // on rpc exception; just skip the payment for now.
+                catch (Exception e)
+                {
+                    // on exception; just skip the payment for now - should be handled by the pool admin.
+                    _logger.Error(e, "An unexpected exception occured.");
+                }
             }
 
             return perUserTransactions;
@@ -156,7 +168,7 @@ namespace CoiniumServ.Payments
 
                 return executed;
             }
-            catch (RpcException e)
+            catch (Exception e)
             {
                 _logger.Error("An error occured while trying to execute payment; {0}", e.Message);
                 return executed;
@@ -189,7 +201,7 @@ namespace CoiniumServ.Payments
                 _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
                 return false;
             }
-            catch (RpcException e)
+            catch (Exception e)
             {
                 _logger.Error("Halted as we can not connect to configured coin daemon: {0:l}", e.Message);
                 return false;
@@ -205,7 +217,7 @@ namespace CoiniumServ.Payments
                     : ""; // use the default account.
                 return true;
             }
-            catch (RpcException e)
+            catch (Exception e)
             {
                 _logger.Error("Cannot determine pool's central wallet account: {0:l}", e.Message);
                 return false;

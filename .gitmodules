@@ -1,3 +1,0 @@
-[submodule "deps/csredis"]
-	path = deps/csredis
-	url = https://github.com/CoiniumServ/csredis.git

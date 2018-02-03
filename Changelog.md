@@ -1,3 +1,15 @@
+### v0.2.6.3 beta
+* Minor fixes & improvements.
+
+### v0.2.6.2 beta
+* Minor fixes.
+
+### v0.2.6.1 beta
+* Minor fixes.
+
+### v0.2.5 beta
+* Minor improvements.
+
 ### [v0.2.4 beta](https://github.com/CoiniumServ/CoiniumServ/releases/tag/v0.2.4-beta)
 
 **Features**

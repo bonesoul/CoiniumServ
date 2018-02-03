@@ -1,23 +1,29 @@
 ﻿#region License
 // 
+//     MIT License
+//
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
-//     Copyright (C) 2013 - 2014, CoiniumServ Project - http://www.coinium.org
-//     http://www.coiniumserv.com - https://github.com/CoiniumServ/CoiniumServ
+//     Copyright (C) 2013 - 2017, CoiniumServ Project
+//     Hüseyin Uslu, shalafiraistlin at gmail dot com
+//     https://github.com/bonesoul/CoiniumServ
 // 
-//     This software is dual-licensed: you can redistribute it and/or modify
-//     it under the terms of the GNU General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     This program is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU General Public License for more details.
-//    
-//     For the terms of this license, see licenses/gpl_v3.txt.
-// 
-//     Alternatively, you can license this software under a commercial
-//     license or white-label it as set out in licenses/commercial.txt.
+//     Permission is hereby granted, free of charge, to any person obtaining a copy
+//     of this software and associated documentation files (the "Software"), to deal
+//     in the Software without restriction, including without limitation the rights
+//     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//     copies of the Software, and to permit persons to whom the Software is
+//     furnished to do so, subject to the following conditions:
+//     
+//     The above copyright notice and this permission notice shall be included in all
+//     copies or substantial portions of the Software.
+//     
+//     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//     SOFTWARE.
 // 
 #endregion
 
@@ -28,7 +34,6 @@ using System.Linq;
 using System.Reflection;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Logging;
-using CoiniumServ.Markets;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Stack;
@@ -36,7 +41,6 @@ using CoiniumServ.Server.Web.Config;
 using CoiniumServ.Statistics;
 using CoiniumServ.Utils.Helpers;
 using CoiniumServ.Utils.Platform;
-using libCoiniumServ.Versions;
 using Serilog;
 
 namespace CoiniumServ.Configuration
@@ -47,9 +51,7 @@ namespace CoiniumServ.Configuration
         
         public IStatisticsConfig StatisticsConfig { get; private set; }
         
-        public IWebServerConfig WebServerConfig { get; private set; }
-        
-        public IMarketsConfig MarketsConfig { get; private set; }
+        public IWebServerConfig WebServerConfig { get; private set; }       
 
         public ILogConfig LogConfig { get; private set; }
         
@@ -58,7 +60,6 @@ namespace CoiniumServ.Configuration
         public ISoftwareRepositoryConfig SoftwareRepositoryConfig { get; private set; }
 
         private const string GlobalConfigFilename = "config/config.json"; // global config filename.
-        private const string MarketsConfigFilename = "config/markets.json"; // markets config filename.
         private const string SoftwareManagerConfigFilename = "config/software.json"; // software manager config filename.
         private const string PoolConfigRoot = "config/pools"; // root of pool configs.
         private const string CoinConfigRoot = "config/coins"; // root of pool configs.
@@ -79,7 +80,6 @@ namespace CoiniumServ.Configuration
             _logger = Log.ForContext<ConfigManager>();
 
             LoadGlobalConfig(); // read the global config.
-            LoadMarketsManagerConfig();
             LoadSoftwareManagerConfig(); // load software manager config file.
             LoadDefaultPoolConfig(); // load default pool config if exists.
             LoadPoolConfigs(); // load the per-pool config files.
@@ -109,12 +109,6 @@ namespace CoiniumServ.Configuration
             StackConfig = new StackConfig(data.stack);
             StatisticsConfig = new StatisticsConfig(data.statistics);
             WebServerConfig = new WebServerConfig(data.website);
-        }
-
-        private void LoadMarketsManagerConfig()
-        {
-            var data = _jsonConfigReader.Read(MarketsConfigFilename); // read the config data.
-            MarketsConfig = new MarketsConfig(data);
         }
 
         private void LoadSoftwareManagerConfig()
