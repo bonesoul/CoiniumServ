@@ -49,11 +49,11 @@ namespace CoiniumServ.Daemon.Responses
 
         public bool Generate { get; set; }
 
-        public int GenProcLimit { get; set; }
+        public double GenProcLimit { get; set; }
 
-        public int HashesPerSec { get; set; }
+        public double HashesPerSec { get; set; }
 
-        public int PooledTx { get; set; }
+        public double PooledTx { get; set; }
 
         public bool Testnet { get; set; }
 
@@ -83,7 +83,7 @@ namespace CoiniumServ.Daemon.Responses
             NetworkHashPerSec = 0;
 
             if (NetMHashps > 0)
-                NetworkHashPerSec = (double)(NetMHashps*1000*1000);
+                NetworkHashPerSec = (double)(NetMHashps * 1000 * 1000);
             else if (NetworkGhps > 0)
                 NetworkHashPerSec = (double)(NetworkGhps * 1000 * 1000 * 1000);
             else if (NetworkMhps > 0)
