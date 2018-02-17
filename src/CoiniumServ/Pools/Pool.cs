@@ -63,7 +63,7 @@ namespace CoiniumServ.Pools
     {
         public bool Initialized { get; private set; }
 
-        public ulong Hashrate { get; private set; }
+        public double Hashrate { get; private set; }
 
         public Dictionary<string, double> RoundShares { get; private set; }
 

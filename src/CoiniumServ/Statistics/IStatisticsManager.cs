@@ -39,7 +39,7 @@ namespace CoiniumServ.Statistics
     public interface IStatisticsManager:IJsonService
     {
         [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
+        double Hashrate { get; }
 
         [JsonProperty("miners")]
         Int32 MinerCount { get; }

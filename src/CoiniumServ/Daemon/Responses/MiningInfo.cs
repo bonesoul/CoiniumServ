@@ -72,10 +72,10 @@ namespace CoiniumServ.Daemon.Responses
         private double NetworkMhps { get; set; }
 
         [JsonProperty]
-        private UInt64 NetworkHashps { get; set; }
-
+        private double NetworkHashps { get; set; }
+    
         [JsonIgnore]
-        public UInt64 NetworkHashPerSec { get; set; }
+        public double NetworkHashPerSec { get; set; }
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
@@ -83,11 +83,11 @@ namespace CoiniumServ.Daemon.Responses
             NetworkHashPerSec = 0;
 
             if (NetMHashps > 0)
-                NetworkHashPerSec = (UInt64)(NetMHashps*1000*1000);
+                NetworkHashPerSec = (double)(NetMHashps*1000*1000);
             else if (NetworkGhps > 0)
-                NetworkHashPerSec = (UInt64)(NetworkGhps * 1000 * 1000 * 1000);
+                NetworkHashPerSec = (double)(NetworkGhps * 1000 * 1000 * 1000);
             else if (NetworkMhps > 0)
-                NetworkHashPerSec = (UInt64)(NetworkMhps * 1000 * 1000);
+                NetworkHashPerSec = (double)(NetworkMhps * 1000 * 1000);
             else if (NetworkHashps > 0)
                 NetworkHashPerSec = NetworkHashps;
         }

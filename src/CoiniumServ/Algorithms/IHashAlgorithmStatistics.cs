@@ -48,7 +48,7 @@ namespace CoiniumServ.Algorithms
         Int32 MinerCount { get; }
 
         [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
+        double Hashrate { get; }
 
         /// <summary>
         /// Assigns pools that runs on the algorithm.
