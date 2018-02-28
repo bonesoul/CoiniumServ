@@ -143,6 +143,7 @@
     <Compile Include="Algorithms\Implementations\X13.cs" />
     <Compile Include="Algorithms\Implementations\X14.cs" />
     <Compile Include="Algorithms\Implementations\X15.cs" />
+    <Compile Include="Algorithms\Implementations\X16r.cs" />
     <Compile Include="Algorithms\Implementations\X17.cs" />
     <Compile Include="Banning\BanConfig.cs" />
     <Compile Include="Banning\BanManager.cs" />
