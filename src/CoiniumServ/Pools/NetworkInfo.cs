@@ -43,7 +43,7 @@ namespace CoiniumServ.Pools
 
         public int Round { get; private set; }
 
-        public ulong Hashrate { get; private set; }
+        public double Hashrate { get; private set; }
 
         public UInt64 Reward { get; private set; }
 

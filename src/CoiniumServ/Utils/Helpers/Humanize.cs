@@ -40,7 +40,7 @@ namespace CoiniumServ.Utils.Helpers
         /// </summary>
         /// <param name="hashrate"></param>
         /// <returns></returns>
-        public static string GetReadableHashrate(this UInt64 hashrate)
+        public static string GetReadableHashrate(this double hashrate)
         {
             var index = -1;
             double rate = hashrate;

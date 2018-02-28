@@ -44,7 +44,7 @@ namespace CoiniumServ.Algorithms
 
         public int MinerCount { get; private set; }
 
-        public ulong Hashrate { get; private set; }
+        public double Hashrate { get; private set; }
 
         public int Count { get { return _storage.Count; } }
 
