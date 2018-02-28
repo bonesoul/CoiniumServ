@@ -55,6 +55,7 @@ namespace CoiniumServ.Algorithms
         public const string X14 = "x14";
         public const string X15 = "x15";
         public const string X17 = "x17";
+        public const string X16r = "x16r";
 
         // todo: add hefty1, qubit support
 
@@ -90,6 +91,7 @@ namespace CoiniumServ.Algorithms
             _applicationContext.Container.Register<IHashAlgorithm, X14>(X14).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, X15>(X15).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, X17>(X17).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, X16r>(X16r).AsMultiInstance();
 
             // misc ones           
             _applicationContext.Container.Register<IHashAlgorithm, Blake>(Blake).AsMultiInstance();
