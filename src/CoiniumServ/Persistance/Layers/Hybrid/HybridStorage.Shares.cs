@@ -52,7 +52,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 // add the share to round 
                 var currentKey = $"{_coin}:shares:round:current";
                 var miner = (IStratumMiner)share.Miner;
-                _redisProvider.Client.HIncrByFloat(currentKey, miner.Username, (double)share.Difficulty);
+                _redisProvider.Client.HIncrByFloat(currentKey, miner.Username, (double)miner.Difficulty);
                 //                _redisProvider.Client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
 
                 // increment shares stats.
