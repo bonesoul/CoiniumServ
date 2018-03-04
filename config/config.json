@@ -1,10 +1,10 @@
 {
     "stack": {
-        "name": "www.coiniumserv.com",
+        "name": "CoiniumServ.com",
         "nodes": [
             {
                 "location": "eu",
-                "address": "pool.coiniumserv.com",
+                "address": "127.0.0.1",
                 "default": true
             }
         ]
@@ -29,14 +29,14 @@
         "root": "logs",
         "targets": [
             {
-                "enabled": true,
+                "enabled": false,
                 "type": "file",
                 "filename": "server.log",
                 "rolling": true,
                 "level": "information"
             },
             {
-                "enabled": true,
+                "enabled": false,
                 "type": "file",
                 "filename": "debug.log",
                 "rolling": true,
