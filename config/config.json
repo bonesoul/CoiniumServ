@@ -1,10 +1,10 @@
 {
     "stack": {
-        "name": "CoiniumServ.com",
+        "name": "www.bit2pool.com",
         "nodes": [
             {
-                "location": "eu",
-                "address": "127.0.0.1",
+                "location": "kr",
+                "address": "pool.bit2pool.com:port",
                 "default": true
             }
         ]
@@ -32,14 +32,14 @@
                 "enabled": true,
                 "type": "file",
                 "filename": "server.log",
-                "rolling": false,
+                "rolling": true,
                 "level": "information"
             },
             {
                 "enabled": true,
                 "type": "file",
                 "filename": "debug.log",
-                "rolling": false,
+                "rolling": true,
                 "level": "verbose"
             },
             {
