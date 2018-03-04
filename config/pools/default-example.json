@@ -1,0 +1,164 @@
+{
+    # default pool configuration
+    # if a per-pool config file doesn't override a setting, default value from this file will be applied
+    
+    # -------------------------------
+    # Coin Daemon RPC Connection
+    # -------------------------------
+
+	# host: ip/hostname of coin-daemon.
+
+	"daemon": {
+		"host": "127.0.0.1"
+	},
+
+    # -------------------------------
+    # Meta Configuration
+    # -------------------------------
+
+    # motd: message of the day.
+    # txMessage: message to be included used within generation transactions.
+
+    "meta": {
+        "motd": "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coiniumserv.com",
+        "txMessage": "http://www.coiniumserv.com/"
+     },
+
+    # -------------------------------
+    # Payment Processing Configuration
+    # -------------------------------
+
+    # interval: interval in seconds that payment-processor will be running.
+    # minimum:  minimum amount of coins before a miner is eligable for getting a payment.
+
+	"payments": {
+        "interval": 60,
+		"minimum": 0.01
+	},
+
+    # -------------------------------
+    # Miner Configuration
+    # -------------------------------
+
+    # validateUsername: set true to validate miner usernames as an addresses against the coin daemon.
+    # timeout: timeout in seconds to disconnect miners that did not submit any shares for the period.
+
+    "miner":  {
+        "validateUsername": true,
+        "timeout": 300
+    },
+
+    # -------------------------------
+    # Job Manager Configuration
+    # -------------------------------
+
+    # blockRefresh: timeout in miliseconds to poll coin daemon for a new block.
+    # rebroadcast: if now new blocks are found in this many seconds, a new job will be created and broadcasted.
+
+    "job":  {
+        "blockRefreshInterval": 1000,
+        "rebroadcastTimeout": 55        
+    },
+
+    # -------------------------------
+    # Stratum Server Configuration
+    # -------------------------------
+
+    # stratum:
+    # bind: interface to bind stratum server.
+    # diff: default difficulty assigned to newly connected miners.
+
+    # vardiff:
+    # minDiff: minimum difficulty that can be assigned to miners.
+    # maxDiff: maximum difficulty that can be assigned to miners.
+    # targetTime: try to get a single share per this many seconds from miner.
+    # retargetTime: retarget a miners difficulty ever this many seconds.
+    # variancePercent: allow difficulty for a miner to vary this percent without retargeting.
+
+	"stratum": {
+        "bind": "0.0.0.0",
+		"diff": 16,
+        "vardiff": {
+            "minDiff": 8,
+            "maxDiff": 512,
+            "targetTime": 15,
+            "retargetTime": 90,
+            "variancePercent": 30
+        }
+	},
+
+    # -------------------------------
+    # Ban Configuration
+    # -------------------------------
+
+    # you can ban miners which submits invalid work / data to reduce system/network load.
+    # duration: duration of ban when a miner gets flagged for so.
+    # invalidPercent: percentage of invalid shares to trigger a ban.
+    # checkThreshold: number of shares required before a miner's shares are considered for a ban.
+    # purgeInterval: purge interval in seconds that bans are checked to see if they are expired.
+
+    "banning": {
+        "duration": 600,
+        "invalidPercent": 50,
+        "checkThreshold": 100,
+        "purgeInterval": 300
+    },
+
+    # -------------------------------
+    # Per-pool Storage Configuration
+    # -------------------------------
+
+    # hybrid storage layer
+    # enabled: set this true to enable hybrid storage mode where redis and mysql is used together.
+    
+    # mpos layer
+    # enabled: set this true to enable mpos compatibility mode - make sure to internal disable payment-processor!
+
+    # redis
+    # host: redis host.
+    # port: redis port.
+    # password: set the password if your redis installation requires one.
+    # databaseId: redis database instance id (optional)
+
+    # mysql
+    # host: database host.
+    # port: database port.
+    # username: username for connecting the database.
+    # password: password for connecting the database.
+
+	"storage": {
+        "hybrid": {
+		    "redis": {
+			    "host": "127.0.0.1",
+			    "port": 6379,
+                "password": "",
+                "databaseId": 0
+		    },
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "username",
+			    "password": "password"
+		    }
+        },
+        "mpos": {
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "username",
+			    "password": "password"
+		    }
+        }
+	},
+
+    # -------------------------------
+    # Getwork Server Configuration
+    # -------------------------------
+
+    # EXPERIMENTAL!; This feature is still in development and not complete yet.
+    # bind: interface to bind getwork server.
+
+	"vanilla": {
+		"bind": "localhost"		
+	}
+}
