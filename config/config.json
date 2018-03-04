@@ -1,10 +1,10 @@
 {
     "stack": {
-        "name": "www.bit2pool.com",
+        "name": "www.coiniumserv.com",
         "nodes": [
             {
-                "location": "kr",
-                "address": "pool.bit2pool.com:port",
+                "location": "eu",
+                "address": "pool.coiniumserv.com",
                 "default": true
             }
         ]
