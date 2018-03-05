@@ -4,7 +4,7 @@
 //
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
 //     Copyright (C) 2013 - 2017, CoiniumServ Project
-//     Hüseyin Uslu, shalafiraistlin at gmail dot com
+//     H?eyin Uslu, shalafiraistlin at gmail dot com
 //     https://github.com/bonesoul/CoiniumServ
 // 
 //     Permission is hereby granted, free of charge, to any person obtaining a copy
