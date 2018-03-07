@@ -86,48 +86,60 @@ namespace CoiniumServ.Pools
 
         public void Recache()
         {
-//        try // read getinfo() based data.
-//           {
-//               var info = _daemonClient.GetInfo();
-// 
-                 // read data.
-//                CoinVersion = info.Version;
-//                ProtocolVersion = info.ProtocolVersion;
-//                WalletVersion = info.WalletVersion;
-//                Testnet = info.Testnet;
-//                Connections = info.Connections;
-//                Errors = info.Errors;
-//
-//                // check if our network connection is healthy.
-//                 Healthy = Connections >= 0 && string.IsNullOrEmpty(Errors);
-//            }
-//             catch (RpcException e)
-//            {
-//                _logger.Error("Can not read getinfo(): {0:l}", e.Message);
-//                Healthy = false; // set healthy status to false as we couldn't get a reply.
-//            }
+            var Info = _daemonClient.GetNetworkInfo() //Defined a Variables to get CoinVersion info
+            CoinVersion = Info.Version; // CoinVersion is a string with version: 150100
+            int version = Int32.Parse (CoinVersion); // Convert a CoinVersion info to numeric value
+            MessageBox.Show(CoinVersion); // Check the CoinVerison is 150100
 
-            try // read getblockchaininfo() based data.
+        if (version == 150100)   // Compare the value same as condition, then running a GetInfo()
+        {
+            
+	        try // read getinfo() based data.
+	        {
+	            var info = _daemonClient.GetInfo();
+
+		        //read data.
+		        CoinVersion = info.Version;
+		        ProtocolVersion = info.ProtocolVersion;
+		        WalletVersion = info.WalletVersion;
+		        Testnet = info.Testnet;
+                Connections = info.Connections;
+		        Errors = info.Errors;
+
+		        // check if our network connection is healthy.
+		        Healthy = Connections >= 0 && string.IsNullOrEmpty(Errors);
+	        }
+		    catch (RpcException e)
+	        {
+		        _logger.Error("Can not read getinfo(): {0:l}", e.Message);
+		        Healthy = false; // set healthy status to false as we couldn't get a reply.
+	        }
+            
+            }
+            else // Except the version:150100, try to running following to get a general info from coin daemon
             {
-                var info = _daemonClient.GetBlockChainInfo();
+            
+	        try // read getblockchaininfo() based data.
+            {
+	            var info = _daemonClient.GetBlockChainInfo();
 
                 // read data.    
                 // Blocks = info.Blocks;
                 Testnet = info.Testnet;
                 Errors = info.Errors;
-
             }
             catch (RpcException e)
             {
                 _logger.Error("Can not read getblockchaininfo(): {0:l}", e.Message);
                 Healthy = false; // set healthy status to false as we couldn't get a reply.
             }
-
+         }
+         
             try // read getnetworkinfo() based data.
             {
                 var info = _daemonClient.GetNetworkInfo();
 
-                // read data.
+		        // read data.
                 CoinVersion = info.Version;
                 ProtocolVersion = info.ProtocolVersion;
                 // TimeOffset = info.TimeOffset;
@@ -137,7 +149,7 @@ namespace CoiniumServ.Pools
                 // check if our network connection is healthy.
                 Healthy = Connections >= 0 && string.IsNullOrEmpty(Errors);
             }
-            catch (RpcException e)
+		    catch (RpcException e)
             {
                 _logger.Error("Can not read getnetworkinfo(): {0:l}", e.Message);
                 Healthy = false; // set healthy status to false as we couldn't get a reply.
@@ -155,7 +167,7 @@ namespace CoiniumServ.Pools
                 _logger.Error("Can not read getwalletinfo(): {0:l}", e.Message);
                 Healthy = false; // set healthy status to false as we couldn't get a reply.
             }
-
+    
             try // read getmininginfo() based data.
             {
                 var miningInfo = _daemonClient.GetMiningInfo();
