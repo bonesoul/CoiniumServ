@@ -29,17 +29,17 @@
         "root": "logs",
         "targets": [
             {
-                "enabled": true,
+                "enabled": false,
                 "type": "file",
                 "filename": "server.log",
-                "rolling": false,
+                "rolling": true,
                 "level": "information"
             },
             {
-                "enabled": true,
+                "enabled": false,
                 "type": "file",
                 "filename": "debug.log",
-                "rolling": false,
+                "rolling": true,
                 "level": "verbose"
             },
             {

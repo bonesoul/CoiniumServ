@@ -1,4 +1,4 @@
-﻿#region License
+region License
 // 
 //     MIT License
 //
@@ -28,48 +28,29 @@
 #endregion
 
 using System.Collections.Generic;
-using CoiniumServ.Daemon.Responses;
 
-namespace CoiniumServ.Daemon
+namespace CoiniumServ.Daemon.Responses
 {
-    public interface IDaemonClient
+    public class Addressinfo
     {
-        BlockTemplate GetBlockTemplate(bool modeRequired = false);
+        public bool IsValid { get; set; }
 
-        BlockTemplate GetBlockTemplate(string blockHex);
+        public string Address { get; set; }
 
-        string SubmitBlock(string blockHex);
+        public bool IsMine { get; set; }
 
-        Block GetBlock(string hash);
+        public string GetAddressinfo { get; set; }
 
-        Getwork Getwork();
+        public bool IsScript { get; set; }
 
-        bool Getwork(string data);
+        public string Script { get; set; }
 
-        Info Getnetworkinfo();
+        public string PubKey { get; set; }
 
-        Info GetInfo();
+        public List<string> Addresses { get; set; }
 
-        Info GetBlockChainInfo();
+        public int SigsRequired { get; set; }
 
-        Info GetNetworkInfo();
-
-        Info GetWalletInfo();
-
-        MiningInfo GetMiningInfo();
-
-        ValidateAddress ValidateAddress(string walletAddress);
-
-        Transaction GetTransaction(string txId);
-
-        decimal GetBalance(string account = "");
-
-        string MakeRawRequest(string method, params object[] parameters);
-
-        Dictionary<string, decimal> ListAccounts();
-
-        string GetAccount(string bitcoinAddress);
-
-        string SendMany(string fromAccount, Dictionary<string, decimal> toBitcoinAddress, int minConf = 1, string comment = "");
+        public string Account { get; set; }
     }
 }

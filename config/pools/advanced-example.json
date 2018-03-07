@@ -1,0 +1,215 @@
+{
+    # detailed sample config file for pool which explicility sets all settings.
+
+	"enabled": false,	
+
+    # -------------------------------
+    # Coin configuration
+    # -------------------------------
+
+    # coin: name of the coin configuration file that should exist in config/coins/.
+
+	"coin": "litecoin.json",    
+
+    # -------------------------------
+    # Coin Daemon RPC Connection
+    # -------------------------------
+
+	# host: ip/hostname of coin-daemon.
+    # port: the port coin daemon is listening on.
+    # username: username for rpc connection.
+    # password: password for rpc connection.
+
+	"daemon": {
+		"host": "127.0.0.1",
+		"port": 9333,
+		"username": "user",
+		"password": "password"
+	},
+
+    # -------------------------------
+    # Meta Configuration
+    # -------------------------------
+
+    # motd: message of the day.
+    # txMessage: message to be included used within generation transactions.
+
+    "meta": {
+        "motd": "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coiniumserv.com",
+        "txMessage": "http://www.coiniumserv.com/"
+     },
+
+    # -------------------------------
+    # Wallet & Rewards Configuration
+    # -------------------------------
+    
+    # address: generated coins will arrive here.
+
+    "wallet" : {
+        "address":  "n3Mvrshbf4fMoHzWZkDVbhhx4BLZCcU9oY"
+    },
+
+    # rewards: list of addresses that gets a percentage from each mined block (ie, pool fee.)
+
+    "rewards":  [
+        {"myxWybbhUkGzGF7yaf2QVNx3hh3HWTya5t": 1} 
+    ],
+
+    # -------------------------------
+    # Payment Processing Configuration
+    # -------------------------------
+
+	# enabled: set this true to let CoiniumServ handle the payments, false if you would like some other software like mpos to handle them.
+    # interval: interval in seconds that payment-processor will be running.
+    # minimum:  minimum amount of coins before a miner is eligable for getting a payment.
+
+	"payments": {
+		"enabled": true,
+        "interval": 60,
+		"minimum": 0.01
+	},
+
+    # -------------------------------
+    # Miner Configuration
+    # -------------------------------
+
+    # validateUsername: set true to validate miner usernames as an addresses against the coin daemon.
+    # timeout: timeout in seconds to disconnect miners that did not submit any shares for the period.
+
+    "miner":  {
+        "validateUsername": true,
+        "timeout": 300
+    },
+
+    # -------------------------------
+    # Job Manager Configuration
+    # -------------------------------
+
+    # blockRefresh: timeout in miliseconds to poll coin daemon for a new block.
+    # rebroadcast: if now new blocks are found in this many seconds, a new job will be created and broadcasted.
+
+
+    "job":  {
+        "blockRefreshInterval": 1000,
+        "rebroadcastTimeout": 55        
+    },
+
+    # -------------------------------
+    # Stratum Server Configuration
+    # -------------------------------
+
+    # stratum:
+    # enabled: set this true to enable stratum server.
+    # bind: interface to bind stratum server.
+    # port: port to listen for stratum connections.
+    # diff: default difficulty assigned to newly connected miners.
+
+    # vardiff:
+    # enabled: set this true to enable variable-difficulty support.
+    # minDiff: minimum difficulty that can be assigned to miners.
+    # maxDiff: maximum difficulty that can be assigned to miners.
+    # targetTime: try to get a single share per this many seconds from miner.
+    # retargetTime: retarget a miners difficulty ever this many seconds.
+    # variancePercent: allow difficulty for a miner to vary this percent without retargeting.
+
+	"stratum": {
+		"enabled": true,
+		"bind": "0.0.0.0",
+		"port": 3333,
+		"diff": 16,
+        "vardiff": {
+            "enabled": true,
+            "minDiff": 8,
+            "maxDiff": 512,
+            "targetTime": 15,
+            "retargetTime": 90,
+            "variancePercent": 30
+        }
+	},
+    			
+    # -------------------------------
+    # Ban Configuration
+    # -------------------------------
+
+    # you can ban miners which submits invalid work / data to reduce system/network load.
+    # enabled: set this true to enable banning support.
+    # duration: duration of ban when a miner gets flagged for so.
+    # invalidPercent: percentage of invalid shares to trigger a ban.
+    # checkThreshold: number of shares required before a miner's shares are considered for a ban.
+    # purgeInterval: purge interval in seconds that bans are checked to see if they are expired.
+
+    "banning": {
+        "enabled": true,
+        "duration": 600,
+        "invalidPercent": 50,
+        "checkThreshold": 100,
+        "purgeInterval": 300
+    },
+
+    # -------------------------------
+    # Per-pool Storage Configuration
+    # -------------------------------
+
+    # hybrid storage layer
+    # enabled: set this true to enable hybrid storage mode where redis and mysql is used together.
+
+    # mpos layer
+    # enabled: set this true to enable mpos compatibility mode - make sure to internal disable payment-processor!
+
+    # redis
+    # host: redis host.
+    # port: redis port.
+    # password: set the password if your redis installation requires one.
+    # databaseId: redis database instance id (optional)
+
+    # mysql
+    # host: database host.
+    # port: database port.
+    # username: username for connecting the database.
+    # password: password for connecting the database.
+    # database: database name.
+
+	"storage": {
+        "hybrid": {
+            "enabled": false,
+		    "redis": {
+			    "host": "127.0.0.1",
+			    "port": 6379,
+                "password": "",
+                "databaseId": 0
+		    },
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "username",
+			    "password": "password",
+                "database": "db-name"
+		    }
+        },
+        "mpos": {
+            "enabled": false,
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "username",
+			    "password": "password",
+                "database": "db-name"
+		    }
+        }
+	},  
+
+    # -------------------------------
+    # Getwork Server Configuration
+    # -------------------------------
+
+    # EXPERIMENTAL!; This feature is still in development and not complete yet.
+    # enabled: Set this true to enable getwork server.
+    # bind: interface to bind getwork server.
+    # port: port to listen for getwork connections.
+
+	"vanilla": {
+		"enabled": false,
+		"bind": "localhost",
+		"port": 2223
+    }
+}
