@@ -84,13 +84,18 @@ namespace CoiniumServ.Pools
             PrintNetworkInfo(); // print the collected network info.
         }
 
+        /// <summary>
+        /// The followin if else phase will be checked a coin wallet, then running a different command
+        /// If coin wallet verison is same as 150100, then it uses a Getinfo(), if coin wallet not the same version then uses a new command as following
+        /// Getnetworkinfo() to get a Version, Perotocol, WalletVersion etc..
+        /// </summary>
         public void Recache()
         {
-                   var Info = _daemonClient.Getnetworkinfo(); //Defined a Variables to get CoinVersion info
-                   CoinVersion = Info.Version; // CoinVersion is a string with version: 150100
-                   int version = Int32.Parse(CoinVersion); // Convert a CoinVersion info to numeric value
+                   var Info = _daemonClient.Getnetworkinfo(); 
+                   CoinVersion = Info.Version; 
+                   int version = Int32.Parse(CoinVersion);
 
-            if (version == 150100)   // Compare the value same as condition, then running a GetInfo()
+            if (version == 150100)
 
                 try // read getinfo() based data.
                 {
@@ -113,7 +118,7 @@ namespace CoiniumServ.Pools
                     Healthy = false; // set healthy status to false as we couldn't get a reply.
                 }
 
-            else // Except the version:150100, try to running following to get a general info from coin daem
+            else
 
                 try // read getblockchaininfo() based data.
                 {
