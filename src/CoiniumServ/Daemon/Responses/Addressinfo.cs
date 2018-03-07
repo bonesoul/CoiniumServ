@@ -31,7 +31,7 @@ using System.Collections.Generic;
 
 namespace CoiniumServ.Daemon.Responses
 {
-    public class GetAddressinfo
+    public class Addressinfo
     {
         public bool IsValid { get; set; }
 
