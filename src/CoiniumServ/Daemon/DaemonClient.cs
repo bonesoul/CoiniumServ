@@ -359,6 +359,15 @@ namespace CoiniumServ.Daemon
         /// Returns an object containing various state info (version, protocolversion, timeoffset, connections, proxy, relayfee, warnings) for bitcoin wallet v0.16.0.
         /// </summary>
         /// <returns>An object containing some general information.</returns>
+        public Info Getnetworkinfo()
+        {
+            return MakeRequest<Info>("getnetworkinfo", null);
+        }
+
+        /// <summary>
+        /// Returns an object containing various state info (version, protocolversion, timeoffset, connections, proxy, relayfee, warnings) for bitcoin wallet v0.16.0.
+        /// </summary>
+        /// <returns>An object containing some general information.</returns>
         public Info GetNetworkInfo()
         {
             return MakeRequest<Info>("getnetworkinfo", null);

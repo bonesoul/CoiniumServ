@@ -84,147 +84,142 @@ namespace CoiniumServ.Pools
             PrintNetworkInfo(); // print the collected network info.
         }
 
-                public void Recache()
+        public void Recache()
         {
-            var Info = _daemonClient.GetNetworkInfo() //Defined a Variables to get CoinVersion info
-            CoinVersion = Info.Version; // CoinVersion is a string with version: 150100
-            int version = Int32.Parse (CoinVersion); // Convert a CoinVersion info to numeric value
-            MessageBox.Show(CoinVersion); // Check the CoinVerison is 150100
+                   var Info = _daemonClient.Getnetworkinfo(); //Defined a Variables to get CoinVersion info
+                   CoinVersion = Info.Version; // CoinVersion is a string with version: 150100
+                   int version = Int32.Parse(CoinVersion); // Convert a CoinVersion info to numeric value
 
-        if (version == 150100)   // Compare the value same as condition, then running a GetInfo()
-        {
-            
-			try // read getinfo() based data.
-			{
-	    	var info = _daemonClient.GetInfo();
+            if (version == 150100)   // Compare the value same as condition, then running a GetInfo()
 
-			//read data.
-			CoinVersion = info.Version;
-			ProtocolVersion = info.ProtocolVersion;
-			WalletVersion = info.WalletVersion;
-			Testnet = info.Testnet;
-            Connections = info.Connections;
-			Errors = info.Errors;
+                try // read getinfo() based data.
+                {
+                    var info = _daemonClient.GetInfo();
 
-			// check if our network connection is healthy.
-			Healthy = Connections >= 0 && string.IsNullOrEmpty(Errors);
-			}
-			catch (RpcException e)
-			{
-			_logger.Error("Can not read getinfo(): {0:l}", e.Message);
-	         Healthy = false; // set healthy status to false as we couldn't get a reply.
-			}
-			{
-			else // Except the version:150100, try to running following to get a general info from coin daem
-			
-			try // read getblockchaininfo() based data.
-            {
-	     	var info = _daemonClient.GetBlockChainInfo();
+                    //read data.
+                    CoinVersion = info.Version;
+                    ProtocolVersion = info.ProtocolVersion;
+                    WalletVersion = info.WalletVersion;
+                    Testnet = info.Testnet;
+                    Connections = info.Connections;
+                    Errors = info.Errors;
 
-  	        // read data.    
-                // Blocks = info.Blocks;
-                Testnet = info.Testnet;
-                Errors = info.Errors;
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read getblockchaininfo(): {0:l}", e.Message);
-                Healthy = false; // set healthy status to false as we couldn't get a reply.
-            }
-                   
-            try // read getnetworkinfo() based data.
-            {
-                var info = _daemonClient.GetNetworkInfo();
+                    // check if our network connection is healthy.
+                    Healthy = Connections >= 0 && string.IsNullOrEmpty(Errors);
+                }
+                catch (RpcException e)
+                {
+                    _logger.Error("Can not read getinfo(): {0:l}", e.Message);
+                    Healthy = false; // set healthy status to false as we couldn't get a reply.
+                }
 
-		        // read data.
-                CoinVersion = info.Version;
-                ProtocolVersion = info.ProtocolVersion;
-                // TimeOffset = info.TimeOffset;
-                Connections = info.Connections;
-                Errors = info.Errors;
+            else // Except the version:150100, try to running following to get a general info from coin daem
 
-                // check if our network connection is healthy.
-                Healthy = Connections >= 0 && string.IsNullOrEmpty(Errors);
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read getnetworkinfo(): {0:l}", e.Message);
-                Healthy = false; // set healthy status to false as we couldn't get a reply.
-            }
+                try // read getblockchaininfo() based data.
+                {
+                    var info = _daemonClient.GetBlockChainInfo();
 
-            try // read getwalletinfo() based data.
-            {
-                var info = _daemonClient.GetWalletInfo();
+                    // read data.    
+                    // Blocks = info.Blocks;
+                    Testnet = info.Testnet;
+                    Errors = info.Errors;
+                }
+                catch (RpcException e)
+                {
+                    _logger.Error("Can not read getblockchaininfo(): {0:l}", e.Message);
+                    Healthy = false; // set healthy status to false as we couldn't get a reply.
+                }
 
-                // read data.
-                WalletVersion = info.WalletVersion;
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read getwalletinfo(): {0:l}", e.Message);
-                Healthy = false; // set healthy status to false as we couldn't get a reply.
-            }
-    
-            try // read getmininginfo() based data.
-            {
-                var miningInfo = _daemonClient.GetMiningInfo();
+                try // read getnetworkinfo() based data.
+                {
+                    var info = _daemonClient.GetNetworkInfo();
 
-                // read data.
-                Hashrate = miningInfo.NetworkHashPerSec;
-                Difficulty = miningInfo.Difficulty;
-                Round = miningInfo.Blocks + 1;
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read getmininginfo(): {0:l}", e.Message);
-                Hashrate = 0;
-                Difficulty = 0;
-                Round = -1;
-                Healthy = false; // set healthy status to false as we couldn't get a reply.
-            }
+                    // read data.
+                    CoinVersion = info.Version;
+                    ProtocolVersion = info.ProtocolVersion;
+                    // TimeOffset = info.TimeOffset;
+                    Connections = info.Connections;
+                    Errors = info.Errors;
 
-            try // read getblocktemplate() based data.
-            {
-                var blockTemplate = _daemonClient.GetBlockTemplate(_poolConfig.Coin.Options.BlockTemplateModeRequired);
-                Reward = (UInt64)blockTemplate.Coinbasevalue / 100000000; // coinbasevalue is in satoshis, convert it to actual coins.
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read getblocktemplate(): {0:l}", e.Message);
-                Reward = 0;
-             }
-	   } 
-	}
+                    // check if our network connection is healthy.
+                    Healthy = Connections >= 0 && string.IsNullOrEmpty(Errors);
+                }
+                catch (RpcException e)
+                { 
+                    _logger.Error("Can not read getnetworkinfo(): {0:l}", e.Message);
+                    Healthy = false; // set healthy status to false as we couldn't get a reply.
+                }
 
-    
-            try // read getmininginfo() based data.
-            {
-                var miningInfo = _daemonClient.GetMiningInfo();
+                try // read getwalletinfo() based data.
+                {
+                    var info = _daemonClient.GetWalletInfo();
 
-                // read data.
-                Hashrate = miningInfo.NetworkHashPerSec;
-                Difficulty = miningInfo.Difficulty;
-                Round = miningInfo.Blocks + 1;
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read getmininginfo(): {0:l}", e.Message);
-                Hashrate = 0;
-                Difficulty = 0;
-                Round = -1;
-                Healthy = false; // set healthy status to false as we couldn't get a reply.
-            }
+                    // read data.
+                    WalletVersion = info.WalletVersion;
+                }
+                catch (RpcException e)
+                {
+                    _logger.Error("Can not read getwalletinfo(): {0:l}", e.Message);
+                    Healthy = false; // set healthy status to false as we couldn't get a reply.
+                }
 
-            try // read getblocktemplate() based data.
-            {
-                var blockTemplate = _daemonClient.GetBlockTemplate(_poolConfig.Coin.Options.BlockTemplateModeRequired);
-                Reward = (UInt64)blockTemplate.Coinbasevalue / 100000000; // coinbasevalue is in satoshis, convert it to actual coins.
-            }
-            catch (RpcException e)
-            {
-                _logger.Error("Can not read getblocktemplate(): {0:l}", e.Message);
-                Reward = 0;
-            }
+                try // read getmininginfo() based data.
+                {
+                    var miningInfo = _daemonClient.GetMiningInfo();
+
+                    // read data.
+                    Hashrate = miningInfo.NetworkHashPerSec;
+                    Difficulty = miningInfo.Difficulty;
+                    Round = miningInfo.Blocks + 1;
+                }
+                catch (RpcException e)
+                {
+                    _logger.Error("Can not read getmininginfo(): {0:l}", e.Message);
+                    Hashrate = 0;
+                    Difficulty = 0;
+                    Round = -1;
+                    Healthy = false; // set healthy status to false as we couldn't get a reply.
+                }
+
+                try // read getblocktemplate() based data.
+                {
+                    var blockTemplate = _daemonClient.GetBlockTemplate(_poolConfig.Coin.Options.BlockTemplateModeRequired);
+                    Reward = (UInt64)blockTemplate.Coinbasevalue / 100000000; // coinbasevalue is in satoshis, convert it to actual coins.
+                }
+                catch (RpcException e)
+                {
+                    _logger.Error("Can not read getblocktemplate(): {0:l}", e.Message);
+                    Reward = 0;
+                }
+                
+                try // read getmininginfo() based data.
+                {
+                    var miningInfo = _daemonClient.GetMiningInfo();
+
+                    // read data.
+                    Hashrate = miningInfo.NetworkHashPerSec;
+                    Difficulty = miningInfo.Difficulty;
+                    Round = miningInfo.Blocks + 1;
+                }
+                catch (RpcException e)
+                {
+                    _logger.Error("Can not read getmininginfo(): {0:l}", e.Message);
+                    Hashrate = 0;
+                    Difficulty = 0;
+                    Round = -1;
+                    Healthy = false; // set healthy status to false as we couldn't get a reply.
+                }
+
+                try // read getblocktemplate() based data.
+                {
+                    var blockTemplate = _daemonClient.GetBlockTemplate(_poolConfig.Coin.Options.BlockTemplateModeRequired);
+                    Reward = (UInt64)blockTemplate.Coinbasevalue / 100000000; // coinbasevalue is in satoshis, convert it to actual coins.
+                }
+                catch (RpcException e)
+                {
+                    _logger.Error("Can not read getblocktemplate(): {0:l}", e.Message);
+                    Reward = 0;
+                }
         }
 
         private void PrintNetworkInfo()

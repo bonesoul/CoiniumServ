@@ -65,7 +65,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                     var hashrateKey = $"{_coin}:hashrate";
                     var randomModifier = Convert.ToString(miner.ValidShareCount, 16).PadLeft(8, '0');
                     string modifiedUsername = miner.Username + randomModifier;
-                    var entry = string.Format("{0}:{1}", modifiedUsername, (double)miner.Difficulty);
+                    var entry = string.Format("{0}:{1}", (double)miner.Difficulty, modifiedUsername);
                     _redisProvider.Client.ZAdd(hashrateKey, Tuple.Create((double)TimeHelpers.NowInUnixTimestamp(), entry));
                     //                    var entry = $"{share.Difficulty}:{share.Miner.Username}";
                     //_redisProvider.Client.ZAdd(hashrateKey, Tuple.Create((double)TimeHelpers.NowInUnixTimestamp(), entry));
