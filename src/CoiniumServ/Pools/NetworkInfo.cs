@@ -86,8 +86,8 @@ namespace CoiniumServ.Pools
 
         /// <summary>
         /// The followin if else phase will be checked a coin wallet, then running a different command
-        /// If coin wallet verison is same as 150100, then it uses a Getinfo(), if coin wallet not the same version then uses a new command as following
-        /// Getnetworkinfo() to get a Version, Perotocol, WalletVersion etc..
+        /// If coin wallet verison is same as 150100, then it uses a Getinfo(), if not the same version then uses the following new command to get the same result like Getinfo()
+        /// Getnetworkinfo() used to get a Version, Protocol, Wallet Version etc information from on coin wallet version 0.16.0, which replced an old Getinfo() command.
         /// </summary>
         public void Recache()
         {
