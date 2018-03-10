@@ -331,6 +331,12 @@ namespace CoiniumServ.Daemon
             return MakeRequest<decimal>("gethashespersec", null);
         }
 
+    
+        public PreInfo Getnetworkinfo()
+        {
+            return MakeRequest<PreInfo>("getnetworkinfo", null);
+        }
+
         /// <summary>
         /// Returns an object containing various state info.
         /// </summary>
@@ -344,6 +350,33 @@ namespace CoiniumServ.Daemon
         public void GetMemoryPool()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns an object containing various state info(blocks, difficulty, chain) for bitcoin wallet v0.16.0.
+        /// </summary>
+        /// <returns>An object containing some general information.</returns>
+        public Info GetBlockChainInfo()
+        {
+            return MakeRequest<Info>("getblockchaininfo", null);
+        }
+
+        /// <summary>
+        /// Returns an object containing various state info (version, protocolversion, timeoffset, connections, proxy, relayfee, warnings) for bitcoin wallet v0.16.0.
+        /// </summary>
+        /// <returns>An object containing some general information.</returns>
+        public Info GetNetworkInfo()
+        {
+            return MakeRequest<Info>("getnetworkinfo", null);
+        }
+
+        /// <summary>
+        /// Returns an object containing various state info(balance, keypoololdest, keypoolsize, paytxfee, unlocked_until, walletversion) for bitcoin wallet v0.16.0.
+        /// </summary>
+        /// <returns>An object containing wallet information.</returns>
+        public Info GetWalletInfo()
+        {
+            return MakeRequest<Info>("getwalletinfo", null);
         }
 
         /// <summary>

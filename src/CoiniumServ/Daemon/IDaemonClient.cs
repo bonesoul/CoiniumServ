@@ -46,7 +46,15 @@ namespace CoiniumServ.Daemon
 
         bool Getwork(string data);
 
+        PreInfo Getnetworkinfo();
+
         Info GetInfo();
+
+        Info GetBlockChainInfo();
+
+        Info GetNetworkInfo();
+
+        Info GetWalletInfo();
 
         MiningInfo GetMiningInfo();
 
