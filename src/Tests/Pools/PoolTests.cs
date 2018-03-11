@@ -66,7 +66,7 @@ namespace CoiniumServ.Tests.Pools
             _daemonClient = _objectFactory.GetDaemonClient(_config.Daemon, _config.Coin);
             _daemonClient.Getnetworkinfo().Returns(new PreInfo());
             _daemonClient.GetInfo().Returns(new Info());
-            //_daemonClient.GetAddressInfo().Returns(new GetAddressInfo());
+//          _daemonClient.GetAddressInfo().Returns(new GetAddressInfo());
             _daemonClient.GetBlockChainInfo().Returns(new Info());
             _daemonClient.GetNetworkInfo().Returns(new Info());
             _daemonClient.GetWalletInfo().Returns(new Info());
