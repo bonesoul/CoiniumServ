@@ -60,7 +60,7 @@ namespace CoiniumServ.Daemon
 
         ValidateAddress ValidateAddress(string walletAddress);
 
-        GetAddressInfo GetAddressInfo(string walletAddress);
+        //GetAddressInfo GetAddressInfo(string walletAddress);
 
         Transaction GetTransaction(string txId);
 

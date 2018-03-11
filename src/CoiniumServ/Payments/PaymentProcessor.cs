@@ -71,8 +71,8 @@ namespace CoiniumServ.Payments
             if (!ValidatePoolAddress()) // try to validate the pool wallet.
                 return; // if we can't, stop the payment processor.
 
-            if (!GetAddressInfo()) // try to validate the globaltoken pool wallet.
-                return; // if we can't, stop the payment processor.
+            //if (!GetAddressInfo()) // try to validate the globaltoken pool wallet.
+            //    return; // if we can't, stop the payment processor.
 
             if (!GetPoolAccount()) // get the pool's account name if any.
                 return; // if we can't, stop the payment processor.
@@ -211,25 +211,25 @@ namespace CoiniumServ.Payments
             }
         }
 
-        private bool GetAddressInfo()
-        {
-            try
-            {
-                var result = _daemonClient.GetAddressInfo(_poolConfig.Wallet.Adress);
-
+        //private bool GetAddressInfo()
+        //{
+        //    try
+        //    {
+        //        var result = _daemonClient.GetAddressInfo(_poolConfig.Wallet.Adress);
+        //
                 // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
-                if (result.IsValid && result.IsMine)
-                    return true;
-
-                _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
-                return false;
-            }
-            catch (Exception e)
-            {
-                _logger.Error("Halted as we can not connect to configured coin daemon: {0:l}", e.Message);
-                return false;
-            }
-        }
+        //        if (result.IsValid && result.IsMine)
+        //            return true;
+        //
+        //        _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
+        //        return false;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger.Error("Halted as we can not connect to configured coin daemon: {0:l}", e.Message);
+        //        return false;
+        //    }
+        //}
 
         private bool GetPoolAccount()
         {

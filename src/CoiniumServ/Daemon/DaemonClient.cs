@@ -55,7 +55,7 @@ namespace CoiniumServ.Daemon
     /// </summary>
     public class DaemonClient : DaemonBase, IDaemonClient
     {
-        public static readonly object[] EmptyString = {}; // used as empty parameter.
+        public static readonly object[] EmptyString = { }; // used as empty parameter.
 
         public DaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig, IRpcExceptionFactory rpcExceptionFactory)
             : base(daemonConfig, coinConfig, rpcExceptionFactory)
@@ -260,7 +260,7 @@ namespace CoiniumServ.Daemon
             if (!modeRequired)
             {
                 // bitcoin variants can accept capabilities: https://github.com/bitcoin/bitcoin/blob/7388b74cd2c5e3b71e991d26953c89c059ba6f2f/src/rpcmining.cpp#L298            
-                data.Add("capabilities", new List<string> {"coinbasetxn", "workid", "coinbase/append"});
+                data.Add("capabilities", new List<string> { "coinbasetxn", "workid", "coinbase/append" });
             }
             else
             {
@@ -331,7 +331,7 @@ namespace CoiniumServ.Daemon
             return MakeRequest<decimal>("gethashespersec", null);
         }
 
-    
+
         public PreInfo Getnetworkinfo()
         {
             return MakeRequest<PreInfo>("getnetworkinfo", null);
@@ -458,16 +458,6 @@ namespace CoiniumServ.Daemon
         }
 
         /// <summary>
-        /// Return information about the bitcoin address. 
-        /// </summary>
-        /// <param name="walletAddress">The bitcoin address.</param>
-        /// <returns></returns>
-        public GetAddressInfo GetAddressInfo(string walletAddress)
-        {
-            return MakeRequest<GetAddressInfo>("getaddressinfo", walletAddress);
-        }
-
-        /// <summary>
         /// Returns the total amount received by bitcoinaddress in transactions with at 
         /// least [minconf] confirmations. While some might consider this obvious, value 
         /// reported by this only considers *receiving* transactions. It does not check 
@@ -482,6 +472,16 @@ namespace CoiniumServ.Daemon
         {
             return MakeRequest<decimal>("getreceivedbyaddress", bitcoinAddress, minconf);
         }
+
+        /// <summary>
+        /// Return information about the bitcoin address. 
+        /// </summary>
+        /// <param name="walletAddress">The bitcoin address.</param>
+        /// <returns></returns>
+        //public GetAddressInfo GetAddressInfo(string walletAddress)
+        //{
+        //    return MakeRequest<GetAddressInfo>("getaddressinfo", walletAddress);
+        //}
 
         /// <summary>
         /// Returns an object about the given transaction containing: 
@@ -534,7 +534,7 @@ namespace CoiniumServ.Daemon
         /// </summary>
         public Getwork Getwork()
         {
-            return MakeRequest<Getwork>("getwork", null);   
+            return MakeRequest<Getwork>("getwork", null);
         }
 
         /// <summary>
@@ -801,7 +801,7 @@ namespace CoiniumServ.Daemon
         {
             return MakeRequest<string>("stop", null);
         }
-       
+
 
         /// <summary>
         /// Return information about the bitcoin address. 
