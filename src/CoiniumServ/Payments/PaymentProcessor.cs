@@ -188,7 +188,6 @@ namespace CoiniumServ.Payments
             }
         }
 
-
         private bool ValidatePoolAddress()
         {
             try
