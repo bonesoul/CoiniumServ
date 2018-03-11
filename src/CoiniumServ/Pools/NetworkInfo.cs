@@ -88,7 +88,7 @@ namespace CoiniumServ.Pools
         {
 
             var PreInfo = _daemonClient.Getnetworkinfo(); //Defined a Variables to get CoinVersion info
-            string CoinVersion = PreInfo.Version; // CoinVersion is a string with version: 150100
+            CoinVersion = PreInfo.Version; // CoinVersion is a string with version: 150100
             int version = Int32.Parse(CoinVersion); // Convert a CoinVersion info to numeric value
 
             if (version <= 150100)   // Compare the value same as condition, then running a GetInfo()

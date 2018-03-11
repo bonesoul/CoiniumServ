@@ -458,6 +458,16 @@ namespace CoiniumServ.Daemon
         }
 
         /// <summary>
+        /// Return information about the bitcoin address. 
+        /// </summary>
+        /// <param name="walletAddress">The bitcoin address.</param>
+        /// <returns></returns>
+        public GetAddressInfo GetAddressInfo(string walletAddress)
+        {
+            return MakeRequest<GetAddressInfo>("getaddressinfo", walletAddress);
+        }
+
+        /// <summary>
         /// Returns the total amount received by bitcoinaddress in transactions with at 
         /// least [minconf] confirmations. While some might consider this obvious, value 
         /// reported by this only considers *receiving* transactions. It does not check 

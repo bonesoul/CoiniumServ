@@ -16,7 +16,7 @@
     "website": {
         "enabled": true,
         "bind": "",
-        "port": 80,
+        "port": 8081,
         "template": "default",
         "feed": "",
         "backend": {
