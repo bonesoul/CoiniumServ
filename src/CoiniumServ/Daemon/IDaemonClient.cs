@@ -58,9 +58,9 @@ namespace CoiniumServ.Daemon
 
         MiningInfo GetMiningInfo();
 
-        GetAddressInfo GetAddressInfo(string walletAddress);
-
         ValidateAddress ValidateAddress(string walletAddress);
+
+        GetAddressInfo GetAddressInfo(string walletAddress);
 
         Transaction GetTransaction(string txId);
 
