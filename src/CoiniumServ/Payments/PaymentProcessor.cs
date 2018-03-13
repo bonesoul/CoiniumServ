@@ -188,7 +188,7 @@ namespace CoiniumServ.Payments
             }
         }
 
-        private bool ValidatePoolAddress(bool newWallet)
+        private bool ValidatePoolAddress(bool? newWallet)
         {
             try
             {
