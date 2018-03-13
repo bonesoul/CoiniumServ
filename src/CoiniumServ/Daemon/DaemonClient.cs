@@ -474,16 +474,6 @@ namespace CoiniumServ.Daemon
         }
 
         /// <summary>
-        /// Return information about the bitcoin address. 
-        /// </summary>
-        /// <param name="walletAddress">The bitcoin address.</param>
-        /// <returns></returns>
-        //public GetAddressInfo GetAddressInfo(string walletAddress)
-        //{
-        //    return MakeRequest<GetAddressInfo>("getaddressinfo", walletAddress);
-        //}
-
-        /// <summary>
         /// Returns an object about the given transaction containing: 
         /// amount : total amount of the transaction 
         /// confirmations : number of confirmations of the transaction 
@@ -811,6 +801,16 @@ namespace CoiniumServ.Daemon
         public ValidateAddress ValidateAddress(string walletAddress)
         {
             return MakeRequest<ValidateAddress>("validateaddress", walletAddress);
+        }
+        
+        /// <summary>
+        /// Return information about the bitcoin address. 
+        /// </summary>
+        /// <param name="walletAddress">The bitcoin address.</param>
+        /// <returns></returns>
+        public GetAddressInfo GetAddressInfo(string walletAddress)
+        {
+            return MakeRequest<GetAddressInfo>("getaddressinfo", walletAddress);
         }
 
         /// <summary>
