@@ -192,7 +192,7 @@ namespace CoiniumServ.Payments
         {
             try
             {
-                if(newWallet)
+                if(newWallet == true)
                 {
                     var result = _daemonClient.ValidateAddress(_poolConfig.Wallet.Adress);
                     var resultnew = _daemonClient.GetAddressInfo(_poolConfig.Wallet.Adress);
