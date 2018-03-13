@@ -36,7 +36,7 @@ namespace CoiniumServ.Coin.Config
     {
         public bool Valid { get; private set; }
         
-        public bool? RpcUpdate { get; private set; }
+        public bool RpcUpdate { get; private set; }
 
         public string Name { get; private set; }
 
