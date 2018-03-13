@@ -57,7 +57,7 @@ namespace CoiniumServ.Coin.Config
         /// Does this Coin use the new getaddressinfo RPC call? true = yes, false = no
         /// </summary>
         [JsonProperty("rpcupdate")]
-        bool RpcUpdate { get; }
+        bool? RpcUpdate { get; }
 
         /// <summary>
         /// 
