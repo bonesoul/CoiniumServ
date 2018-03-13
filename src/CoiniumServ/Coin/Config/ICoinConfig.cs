@@ -52,6 +52,12 @@ namespace CoiniumServ.Coin.Config
         /// </summary>
         [JsonProperty("algorithm")]
         string Algorithm { get; }
+        
+        /// <summary>
+        /// Does this Coin use the new getaddressinfo RPC call? true = yes, false = no
+        /// </summary>
+        [JsonProperty("rpcupdate")]
+        bool RpcUpdate { get; }
 
         /// <summary>
         /// 
