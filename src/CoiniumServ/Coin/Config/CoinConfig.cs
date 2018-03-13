@@ -61,7 +61,7 @@ namespace CoiniumServ.Coin.Config
                 Symbol = config.symbol;
                 Algorithm = config.algorithm;
                 Site = string.IsNullOrEmpty(config.site) ? string.Empty : config.site;
-                RpcUpdate = RpcUpdate.HasValue ? false : config.RpcUpdate;
+                RpcUpdate = RpcUpdate.HasValue ? config.rpcupdate : false;
                 Options = new CoinOptions(config.options);
                 BlockExplorer = new BlockExplorerOptions(config.blockExplorer);
                 Extra = config.extra;
