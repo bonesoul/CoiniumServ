@@ -158,7 +158,7 @@ namespace CoiniumServ.Transactions
                             blockTemplate.CoinBaseAux.Flags,
                             TimeHelpers.NowInUnixTimestamp(),
                             (byte) extraNonce.ExtraNoncePlaceholder.Length,
-                            "/CoiniumServ/")
+                            "/Mined by bit2pool.com/") //Changed a mined message from CoiniumServ to mining pool name.
                 }
             }; 
 
