@@ -80,8 +80,8 @@
     <Reference Include="Nancy.ViewEngines.Razor, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Nancy.Viewengines.Razor.1.4.3\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Serilog.2.6.0\lib\net46\Serilog.dll</HintPath>
@@ -98,14 +98,14 @@
     <Reference Include="Serilog.Sinks.RollingFile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Serilog.Sinks.RollingFile.3.3.0\lib\net45\Serilog.Sinks.RollingFile.dll</HintPath>
     </Reference>
-    <Reference Include="StackExchange.Redis, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\StackExchange.Redis.1.2.4\lib\net46\StackExchange.Redis.dll</HintPath>
+    <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\StackExchange.Redis.1.2.6\lib\net46\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -216,6 +216,7 @@
     <Compile Include="Daemon\Responses\BlockTemplate.cs" />
     <Compile Include="Daemon\Responses\BlockTemplateTransaction.cs" />
     <Compile Include="Daemon\Responses\DecodedRawTransaction.cs" />
+    <Compile Include="Daemon\Responses\GetAddressInfo.cs" />
     <Compile Include="Daemon\Responses\Getwork.cs" />
     <Compile Include="Daemon\Responses\IBlockTemplate.cs" />
     <Compile Include="Daemon\Responses\Info.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Daemon\Responses\MultisigAddress.cs" />
     <Compile Include="Daemon\Responses\NodeAddress.cs" />
     <Compile Include="Daemon\Responses\PeerInfo.cs" />
+    <Compile Include="Daemon\Responses\PreInfo.cs" />
     <Compile Include="Daemon\Responses\SignedRawTransaction.cs" />
     <Compile Include="Daemon\Responses\Transaction.cs" />
     <Compile Include="Daemon\Responses\TransactionDetail.cs" />

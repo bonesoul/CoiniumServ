@@ -86,6 +86,13 @@ namespace CoiniumServ.Pools
 
         public void Recache()
         {
+
+            var PreInfo = _daemonClient.Getnetworkinfo(); //Defined a Variables to get CoinVersion info
+            CoinVersion = PreInfo.Version; // CoinVersion is a string with version: 150100
+            int version = Int32.Parse(CoinVersion); // Convert a CoinVersion info to numeric value
+
+            if (version <= 150100)   // Compare the value same as condition, then running a GetInfo()
+
             try // read getinfo() based data.
             {
                 var info = _daemonClient.GetInfo();
@@ -104,6 +111,56 @@ namespace CoiniumServ.Pools
             catch (RpcException e)
             {
                 _logger.Error("Can not read getinfo(): {0:l}", e.Message);
+                Healthy = false; // set healthy status to false as we couldn't get a reply.
+            }
+            else if (version >= 160000)
+
+            try // read getblockchaininfo() based data.
+            {
+                var info = _daemonClient.GetBlockChainInfo();
+
+                // read data.    
+                // Blocks = info.Blocks;
+                Testnet = info.Testnet;
+                Errors = info.Errors;
+
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Can not read getblockchaininfo(): {0:l}", e.Message);
+                Healthy = false; // set healthy status to false as we couldn't get a reply.
+            }
+
+            try // read getnetworkinfo() based data.
+            {
+                var info = _daemonClient.GetNetworkInfo();
+
+                // read data.
+                CoinVersion = info.Version;
+                ProtocolVersion = info.ProtocolVersion;
+                // TimeOffset = info.TimeOffset;
+                Connections = info.Connections;
+                Errors = info.Errors;
+
+                // check if our network connection is healthy.
+                Healthy = Connections >= 0 && string.IsNullOrEmpty(Errors);
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Can not read getnetworkinfo(): {0:l}", e.Message);
+                Healthy = false; // set healthy status to false as we couldn't get a reply.
+            }
+
+            try // read getwalletinfo() based data.
+            {
+                var info = _daemonClient.GetWalletInfo();
+
+                // read data.
+                WalletVersion = info.WalletVersion;
+            }
+            catch (RpcException e)
+            {
+                _logger.Error("Can not read getwalletinfo(): {0:l}", e.Message);
                 Healthy = false; // set healthy status to false as we couldn't get a reply.
             }
 
@@ -170,9 +227,8 @@ namespace CoiniumServ.Pools
             }
             catch(RpcException e)
             {
-                if (e is RpcErrorException)
+                if (e is RpcErrorException error)
                 {
-                    var error = (RpcErrorException) e;
                     switch (error.Code)
                     {
                         case (int)RpcErrorCode.RPC_METHOD_NOT_FOUND:
