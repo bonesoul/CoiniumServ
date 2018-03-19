@@ -1,0 +1,17 @@
+{
+	"name": "Universal Currency",
+	"symbol": "UNIT",
+	"algorithm": "sha256",
+	"site": "https://www.u-currency.com/",
+	"blockExplorer": {
+		"block": "https://explorer.u-currency.com/block/",
+		"tx": "https://explorer.u-currency.com/tx/",
+		"address": "https://explorer.u-currency.com/address/"
+	},
+	"options": {
+		"isProofOfStakeHybrid": true,
+		"blockTemplateModeRequired": false,
+		"useDefaultAccount": false,
+		"txMessageSupported": false
+	}
+}
