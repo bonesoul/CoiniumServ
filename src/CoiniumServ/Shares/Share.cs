@@ -174,5 +174,10 @@ namespace CoiniumServ.Shares
             Block = block;
             GenerationTransaction = genTx;
         }
+
+        public void FillBlockHex()
+        {
+            BlockHex = Serializers.SerializeBlock(Job, HeaderBuffer, CoinbaseBuffer, Miner.Pool.Config.Coin.Options.IsProofOfStakeHybrid);
+        }
     }
 }
