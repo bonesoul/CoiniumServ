@@ -322,7 +322,7 @@ namespace CoiniumServ.Pools
 
             double total = hashrates.Sum(pair => pair.Value);
             //Hashrate = Convert.ToUInt64(_shareMultiplier * total / _configManager.StatisticsConfig.HashrateWindow);
-            Hashrate = Convert.ToUInt64(_shareMultiplier * total / Math.Pow(2, 20) / _configManager.StatisticsConfig.HashrateWindow);
+            Hashrate = Convert.ToUInt64(_shareMultiplier * total / Math.Pow(2, 30) / _configManager.StatisticsConfig.HashrateWindow);
         }
     }
 }
