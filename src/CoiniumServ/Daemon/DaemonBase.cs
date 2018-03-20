@@ -162,7 +162,8 @@ namespace CoiniumServ.Daemon
             catch (Exception exception)
             {
                 webRequest = null;
-                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);                
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request."+exception.ToString(), exception);
+                //throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);                
             }
         }
 
