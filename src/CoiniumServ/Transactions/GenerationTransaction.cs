@@ -201,7 +201,6 @@ namespace CoiniumServ.Transactions
                 // write signature script lenght
                 var signatureScriptLenght = (UInt32)(Inputs.First().SignatureScript.Initial.Length + ExtraNonce.ExtraNoncePlaceholder.Length + Inputs.First().SignatureScript.Final.Length);
                 
-                
                 stream.WriteBytes(Serializers.VarInt(signatureScriptLenght).ToArray());
 
                 stream.WriteBytes(Inputs.First().SignatureScript.Initial);

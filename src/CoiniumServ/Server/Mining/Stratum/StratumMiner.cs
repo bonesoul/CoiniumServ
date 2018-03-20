@@ -280,7 +280,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             {
                 Id = null,
                 Method = "mining.set_difficulty",
-                Params = new List<object>{ Difficulty }
+                Params = new List<object> { Difficulty }
             };
 
             Send(notification); //send the difficulty update message.
