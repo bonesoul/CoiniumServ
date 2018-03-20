@@ -37,7 +37,6 @@ using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
-using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Numerics;
 using Serilog;
 
@@ -160,7 +159,6 @@ namespace CoiniumServ.Mining
             if (miner is IStratumMiner) // if we are handling a stratum-miner, apply stratum specific stuff.
             {
                 var stratumMiner = (IStratumMiner) miner;
-                var bits = AlgorithmManager.Diff1 * new BigRational(_poolConfig.Stratum.Diff);
                 stratumMiner.SetDifficulty(_poolConfig.Stratum.Diff); // set the initial difficulty for the miner and send it.
                 stratumMiner.SendMessage(_poolConfig.Meta.MOTD); // send the motd.
             }

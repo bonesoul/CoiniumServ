@@ -138,15 +138,12 @@ namespace CoiniumServ.Jobs
 
                 BitConverter.GetBytes(BlockTemplate.Version).ToHexString(), // Added to support of Equihash 
                 PreviousBlockHashReversed,
-                null,
                 CoinbaseInitial,
                 CoinbaseFinal,
                 MerkleTree.Branches,
                 Version,
-                EncodedDifficulty.HexToByteArray().ReverseByteOrder().ToHexString(), // Added to support of Equihash ReverseBuffer().ToHexString()
-                NTime.HexToByteArray().ReverseByteOrder().ToHexString(), // Added to support of Equihash ReverseBuffer().ToHexString()
-                //EncodedDifficulty,
-                //NTime,
+                EncodedDifficulty,
+                NTime,
                 CleanJobs
             };
 

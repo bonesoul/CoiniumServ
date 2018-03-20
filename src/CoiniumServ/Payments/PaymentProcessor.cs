@@ -39,7 +39,7 @@ using Serilog;
 
 namespace CoiniumServ.Payments
 {
-    public class PaymentProcessor : IPaymentProcessor
+    public class PaymentProcessor:IPaymentProcessor
     {
         public bool Active { get; private set; }
 

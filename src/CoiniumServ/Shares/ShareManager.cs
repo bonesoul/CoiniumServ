@@ -241,12 +241,18 @@ namespace CoiniumServ.Shares
 
         private void OnBlockFound(EventArgs e)
         {
-            BlockFound?.Invoke(this, e);
+            var handler = BlockFound;
+
+            if (handler != null)
+                handler(this, e);
         }
 
         private void OnShareSubmitted(EventArgs e)
         {
-            ShareSubmitted?.Invoke(this, e);
+            var handler = ShareSubmitted;
+
+            if (handler != null)
+                handler(this, e);
         }
 
         private void FindPoolAccount()
