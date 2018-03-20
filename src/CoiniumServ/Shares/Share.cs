@@ -38,6 +38,7 @@ using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers;
 using CoiniumServ.Utils.Numerics;
+using Gibbed.IO;
 
 namespace CoiniumServ.Shares
 {
@@ -84,7 +85,7 @@ namespace CoiniumServ.Shares
             }
 
             // check size of miner supplied extraNonce2
-            if (extraNonce2.Length/2 != ExtraNonce.ExpectedExtraNonce2Size)
+            if (extraNonce2.Length / 2 != ExtraNonce.ExpectedExtraNonce2Size)
             {
                 Error = ShareError.IncorrectExtraNonce2Size;
                 return;
@@ -97,7 +98,7 @@ namespace CoiniumServ.Shares
                 Error = ShareError.IncorrectNTimeSize;
                 return;
             }
-            NTime = Convert.ToUInt32(nTimeString, 16); // read ntime for the share
+            NTime = Convert.ToUInt32(nTimeString.HexToByteArray().ReverseBuffer().ToHexString(), 16); // read ntime for the share
             
             // make sure NTime is within range.
             if (NTime < job.BlockTemplate.CurTime || NTime > submitTime + 7200)
@@ -126,13 +127,17 @@ namespace CoiniumServ.Shares
             }
 
             // construct the coinbase.
-            CoinbaseBuffer = Serializers.SerializeCoinbase(Job, ExtraNonce1, ExtraNonce2); 
+            CoinbaseBuffer = Serializers.SerializeCoinbase(Job, ExtraNonce1); 
             CoinbaseHash = Coin.Coinbase.Utils.HashCoinbase(CoinbaseBuffer);
-
+            
+            string nonceString = extraNonce2.HexToByteArray().ReverseBuffer().ToHexString() + ExtraNonce1.BigEndian().ToString("x8");
+            byte[] nonce = nonceString.HexToByteArray();
+            
             // create the merkle root.
             MerkleRoot = Job.MerkleTree.WithFirst(CoinbaseHash).ReverseBuffer();
 
             // create the block headers
+            
             HeaderBuffer = Serializers.SerializeHeader(Job, MerkleRoot, NTime, Nonce);
             HeaderHash = Job.HashAlgorithm.Hash(HeaderBuffer);
             HeaderValue = new BigInteger(HeaderHash);
@@ -156,7 +161,7 @@ namespace CoiniumServ.Shares
                 BlockHash = HeaderBuffer.DoubleDigest().ReverseBuffer();
 
                 // Check if share difficulty reaches miner difficulty.
-                var lowDifficulty = Difficulty/miner.Difficulty < 0.99; // share difficulty should be equal or more then miner's target difficulty.
+                var lowDifficulty = Difficulty / miner.Difficulty < 0.99; // share difficulty should be equal or more then miner's target difficulty.
 
                 if (!lowDifficulty) // if share difficulty is high enough to match miner's current difficulty.
                     return; // just accept the share.
