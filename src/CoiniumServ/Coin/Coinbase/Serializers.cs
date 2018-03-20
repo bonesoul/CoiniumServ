@@ -88,7 +88,7 @@ namespace CoiniumServ.Coin.Coinbase
         /// <param name="nTime"></param>
         /// <param name="nonce"></param>
         /// <returns></returns>
-        public static byte[] SerializeHeader(IJob job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce, UInt32 nTime,byte[] solution)
+        public static byte[] SerializeHeader(IJob job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce,byte[] solution)
         {
             byte[] result;
 
