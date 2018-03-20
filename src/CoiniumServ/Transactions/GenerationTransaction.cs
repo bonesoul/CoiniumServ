@@ -38,8 +38,10 @@ using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
 using CoiniumServ.Pools;
 using CoiniumServ.Transactions.Script;
+using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers;
 using Gibbed.IO;
+using Newtonsoft.Json.Linq;
 
 namespace CoiniumServ.Transactions
 {
@@ -72,13 +74,13 @@ namespace CoiniumServ.Transactions
         /// </summary>
         public UInt32 InputsCount
         {
-            get { return (UInt32)Inputs.Count; } 
+            get { return (UInt32)Inputs.Count; }
         }
 
         /// <summary>
         /// A list of 1 or more transaction inputs or sources for coins
         /// </summary>
-        public List<TxIn> Inputs { get; private set; } 
+        public List<TxIn> Inputs { get; private set; }
 
         /// <summary>
         /// A list of 1 or more transaction outputs or destinations for coins
@@ -137,7 +139,8 @@ namespace CoiniumServ.Transactions
             ExtraNonce = extraNonce;
             PoolConfig = poolConfig;
 
-            Version = blockTemplate.Version;
+            //Version = blockTemplate.Version;
+            Version = 1;//change version for bitcoin like
             TxMessage = Serializers.SerializeString(poolConfig.Meta.TxMessage);
             LockTime = 0;
 
@@ -151,16 +154,18 @@ namespace CoiniumServ.Transactions
                         Hash = Hash.ZeroHash,
                         Index = (UInt32) Math.Pow(2, 32) - 1
                     },
-                    Sequence = 0x0,
+                    //Sequence = 0x0,
+                    Sequence = (UInt32) Math.Pow(2, 32) - 1
                     SignatureScript =
                         new SignatureScript(
                             blockTemplate.Height,
-                            blockTemplate.CoinBaseAux.Flags,
+                            //blockTemplate.CoinBaseAux.Flags,
+                            "",
                             TimeHelpers.NowInUnixTimestamp(),
                             (byte) extraNonce.ExtraNoncePlaceholder.Length,
                             "/CoiniumServ/")
                 }
-            }; 
+            };
 
             // transaction outputs
             Outputs = new Outputs(daemonClient, poolConfig.Coin);
@@ -187,7 +192,7 @@ namespace CoiniumServ.Transactions
             {
                 stream.WriteValueU32(Version.LittleEndian()); // write version
 
-                if(PoolConfig.Coin.Options.IsProofOfStakeHybrid) // if coin is a proof-of-stake coin
+                if (PoolConfig.Coin.Options.IsProofOfStakeHybrid) // if coin is a proof-of-stake coin
                     stream.WriteValueU32(BlockTemplate.CurTime); // include time-stamp in the transaction.
 
                 // write transaction input.
@@ -197,6 +202,8 @@ namespace CoiniumServ.Transactions
 
                 // write signature script lenght
                 var signatureScriptLenght = (UInt32)(Inputs.First().SignatureScript.Initial.Length + ExtraNonce.ExtraNoncePlaceholder.Length + Inputs.First().SignatureScript.Final.Length);
+                
+                
                 stream.WriteBytes(Serializers.VarInt(signatureScriptLenght).ToArray());
 
                 stream.WriteBytes(Inputs.First().SignatureScript.Initial);
@@ -213,12 +220,13 @@ namespace CoiniumServ.Transactions
             {
                 // transaction input
                 stream.WriteBytes(Inputs.First().SignatureScript.Final);
-                stream.WriteValueU32(Inputs.First().Sequence); 
+                
+                stream.WriteValueU32(Inputs.First().Sequence);
                 // transaction inputs end here.
 
                 // transaction output
                 var outputBuffer = Outputs.GetBuffer();
-                stream.WriteBytes(outputBuffer); 
+                stream.WriteBytes(outputBuffer);
                 // transaction output ends here.
 
                 stream.WriteValueU32(LockTime.LittleEndian());
@@ -229,5 +237,5 @@ namespace CoiniumServ.Transactions
                 Final = stream.ToArray();
             }
         }
-    }    
+    }
 }
