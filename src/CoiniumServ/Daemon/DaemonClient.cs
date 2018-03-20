@@ -47,6 +47,7 @@ using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Daemon.Requests;
 using CoiniumServ.Daemon.Responses;
+using Newtonsoft.Json.Linq;
 
 namespace CoiniumServ.Daemon
 {
@@ -268,7 +269,13 @@ namespace CoiniumServ.Daemon
                 data.Add("mode", "template");
             }
 
-            return MakeRequest<BlockTemplate>("getblocktemplate", data);
+            // return MakeRequest<BlockTemplate>("getblocktemplate", data);
+            var ret= MakeRequest<BlockTemplate>("getblocktemplate", data);
+            var ret2 = this.MakeRawRequest("getblocksubsidy", ret.Height);
+            double blockReward = double.Parse(JObject.Parse(ret2)["result"]["miner"].ToString());
+            // Amount reward by the block
+            ret.Coinbasevalue =(long) ( blockReward* 100000000);
+            return ret;
         }
 
         /// <summary>
