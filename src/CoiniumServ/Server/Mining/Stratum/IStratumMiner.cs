@@ -30,6 +30,7 @@
 using System;
 using CoiniumServ.Jobs;
 using CoiniumServ.Mining;
+using CoiniumServ.Utils.Numerics;
 using CoiniumServ.Vardiff;
 using Newtonsoft.Json;
 
@@ -69,5 +70,9 @@ namespace CoiniumServ.Server.Mining.Stratum
         void SendJob(IJob job);
 
         void Subscribe(string signature);
+        
+        void SetTarget(BigInteger target);
+        
+        BigInteger Target { get; }
     }
 }
