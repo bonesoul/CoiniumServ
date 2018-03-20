@@ -140,7 +140,7 @@ namespace CoiniumServ.Transactions
             PoolConfig = poolConfig;
 
             //Version = blockTemplate.Version;
-            Version = 1;//change version for bitcoin like
+            Version = blockTemplate.Version;//change version for bitcoin like
             TxMessage = Serializers.SerializeString(poolConfig.Meta.TxMessage);
             LockTime = 0;
 
@@ -154,13 +154,11 @@ namespace CoiniumServ.Transactions
                         Hash = Hash.ZeroHash,
                         Index = (UInt32) Math.Pow(2, 32) - 1
                     },
-                    //Sequence = 0x0,
-                    Sequence = (UInt32) Math.Pow(2, 32) - 1
+                    Sequence = 0x0,
                     SignatureScript =
                         new SignatureScript(
                             blockTemplate.Height,
-                            //blockTemplate.CoinBaseAux.Flags,
-                            "",
+                            blockTemplate.CoinBaseAux.Flags,
                             TimeHelpers.NowInUnixTimestamp(),
                             (byte) extraNonce.ExtraNoncePlaceholder.Length,
                             "/CoiniumServ/")
@@ -182,7 +180,7 @@ namespace CoiniumServ.Transactions
             }
 
             // send the remaining coins to pool's central wallet.
-            Outputs.AddPoolWallet(poolConfig.Wallet.Adress, blockReward); 
+            Outputs.AddPoolWallet(poolConfig.Wallet.Adress, blockReward);
         }
 
         public void Create()
@@ -220,8 +218,8 @@ namespace CoiniumServ.Transactions
             {
                 // transaction input
                 stream.WriteBytes(Inputs.First().SignatureScript.Final);
-                
                 stream.WriteValueU32(Inputs.First().Sequence);
+
                 // transaction inputs end here.
 
                 // transaction output

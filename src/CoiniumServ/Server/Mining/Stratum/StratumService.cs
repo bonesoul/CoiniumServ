@@ -58,6 +58,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         //public SubscribeResponse SubscribeMiner(string signature = null, string sessionId = null)
         public SubscribeResponse SubscribeMiner(string signature = null, string sessionId = null, string host=null,string port=null)
         {
+            System.Console.WriteLine("SubscribeMiner sig = {0}", signature);
             var context = (StratumContext) JsonRpcContext.Current().Value;         
 
             var response = new SubscribeResponse
@@ -92,10 +93,10 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <param name="nTime"> UNIX timestamp (32bit integer, big-endian, hex-encoded), must be >= ntime provided by mining,notify and <= current time'</param>
         /// <param name="nonce"> 32bit integer hex-encoded, big-endian </param>
         [JsonRpcMethod("mining.submit")]
-        public bool SubmitWork(string user, string jobId, string nTime, string extraNonce2, string nTime, string none)
+        public bool SubmitWork(string user, string jobId, string extraNonce2, string nTime, string nonce)
         {
             var context = (StratumContext)JsonRpcContext.Current().Value;
-            return _shareManager.ProcessShare(context.Miner, jobId, extraNonce2, nTime, none).IsValid;
+            return _shareManager.ProcessShare(context.Miner, jobId, extraNonce2, nTime, nonce).IsValid;
         }
     }
 }

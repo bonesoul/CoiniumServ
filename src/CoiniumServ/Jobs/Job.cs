@@ -102,8 +102,7 @@ namespace CoiniumServ.Jobs
             Height = blockTemplate.Height;
             GenerationTransaction = generationTransaction;
             PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ToHexString();
-            //PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
-            PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseBuffer().ToHexString();
+            PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString(); // Added to support of Equihash ReverseBuffer().ToHexString()
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();
             CreationTime = TimeHelpers.NowInUnixTimestamp();
@@ -136,16 +135,18 @@ namespace CoiniumServ.Jobs
             var data = new List<object>
             {
                 Id.ToString("x"),
-                BitConverter.GetBytes(BlockTemplate.Version).ToHexString(),
+
+                BitConverter.GetBytes(BlockTemplate.Version).ToHexString(), // Added to support of Equihash 
                 PreviousBlockHashReversed,
                 null,
                 CoinbaseInitial,
                 CoinbaseFinal,
                 MerkleTree.Branches,
-                new byte[32].ToHexString(),
-                NTime.HexToByteArray().ReverseBuffer().ToHexString(),
-                EncodedDifficulty.HexToByteArray().ReverseBuffer().ToHexString(),
                 Version,
+                EncodedDifficulty.HexToByteArray().ReverseByteOrder().ToHexString(), // Added to support of Equihash ReverseBuffer().ToHexString()
+                NTime.HexToByteArray().ReverseByteOrder().ToHexString(), // Added to support of Equihash ReverseBuffer().ToHexString()
+                //EncodedDifficulty,
+                //NTime,
                 CleanJobs
             };
 

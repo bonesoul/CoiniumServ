@@ -55,7 +55,7 @@ namespace CoiniumServ.Jobs
 
         public ExtraNonce(UInt32 instanceId)
         {
-            ExtraNoncePlaceholder = "f000000f".HexToByteArray();
+            ExtraNoncePlaceholder = "f000000ff".HexToByteArray();
             InitCounter(instanceId); // init. the extra nonce counter.
         }
 

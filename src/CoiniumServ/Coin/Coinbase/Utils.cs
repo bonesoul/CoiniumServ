@@ -68,15 +68,13 @@ namespace CoiniumServ.Coin.Coinbase
                 return null;
             }
 
-            // if (decoded.Length != 25)
-            if (decoded.Length < 25 || decoded.Length > 26)
+            if (decoded.Length != 25)
             {
                 Log.Error("invalid address length for {0:l}", address);
                 return null;
             }
 
-            // var pubkey = decoded.Slice(1, -4);
-            var pubkey = decoded.Slice(decoded.Length == 25 ? 1 : 2, -4);
+            var pubkey = decoded.Slice(1, -4);
             byte[] result;
 
             using (var stream = new MemoryStream())

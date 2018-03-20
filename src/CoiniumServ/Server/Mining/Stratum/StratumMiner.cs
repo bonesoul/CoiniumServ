@@ -30,15 +30,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using AustinHarris.JsonRpc;
 using CoiniumServ.Accounts;
-using CoiniumServ.Coin.Coinbase;
-using CoiniumServ.Cryptology;
-using CoiniumServ.Cryptology.Merkle;
 using CoiniumServ.Jobs;
 using CoiniumServ.Logging;
 using CoiniumServ.Mining;
@@ -48,7 +43,6 @@ using CoiniumServ.Server.Mining.Stratum.Errors;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
 using CoiniumServ.Utils.Buffers;
 using CoiniumServ.Utils.Extensions;
-using CoiniumServ.Utils.Numerics;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -215,27 +209,6 @@ namespace CoiniumServ.Server.Mining.Stratum
                 SoftwareVersion = new Version();
             }
         }
-        
-        
-        public BigInteger Target { get; private set; }
-        public void SetTarget(BigInteger target)
-        {
-            if (Target == target)
-                return;
-            Target = target;
-            byte[] arr = new byte[32];
-            var src = target.ToByteArray();
-            Array.Copy(src, arr, src.Length);
-            
-            var notification = new JsonRequest
-            {
-                Id = null,
-                Method = "mining.set_target",
-                Params = new List<object> { arr.ReverseBuffer().ToHexString() }
-            };
-            
-            Send(notification); //send
-        }
 
         /// <summary>
         /// Parses the incoming data.
@@ -263,10 +236,9 @@ namespace CoiniumServ.Server.Mining.Stratum
 
                 _packetLogger.Verbose("rx: {0}", line.PrettifyJson());
 
-                //var async = new JsonRpcStateAsync(_rpcResultHandler, rpcContext) {JsonRpc = line};
-                //JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
-                var async1 = new JsonRpcStateAsync(_rpcResultHandler, rpcContext) { JsonRpc = line };
-                JsonRpcProcessor.Process(Pool.Config.Coin.Name, async1, rpcContext);
+                var async = new JsonRpcStateAsync(_rpcResultHandler, rpcContext) {JsonRpc = line};
+                JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
+
             }
             catch (JsonReaderException e) // if client sent an invalid message
             {
@@ -275,11 +247,6 @@ namespace CoiniumServ.Server.Mining.Stratum
 
                 Connection.Disconnect(); // disconnect him.
             };
-            
-            Send(notification); //send the difficulty update message.
-            var t = Algorithms.AlgorithmManager.Diff1 / new BigRational((decimal)Difficulty);
-            SetTarget(t.GetWholePart());
-            _storageLayer.UpdateDifficulty(this); // store the new difficulty within persistance layer.
         }
 
         /// <summary>
@@ -325,20 +292,11 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// </summary>
         public void SendJob(IJob job)
         {
-                    {
-            var list = job.ToList();
-            var coinbaseBuffer = Serializers.SerializeCoinbase(job, ExtraNonce);
-            var coinbaseHash = Coin.Coinbase.Utils.HashCoinbase(coinbaseBuffer);
-            
-            // create the merkle root.
-            var merkleRoot = job.MerkleTree.WithFirst(coinbaseHash);
-            list[3] = merkleRoot.ToHexString();
             var notification = new JsonRequest
             {
                 Id = null,
                 Method = "mining.notify",
-                //Params = job
-                Params = list
+                Params = job
             };
 
             Send(notification);

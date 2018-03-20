@@ -184,7 +184,7 @@ namespace CoiniumServ.Pools
             {
                 _logger.Error("Unknown hash algorithm: {0:l}, pool initilization failed", Config.Coin.Algorithm);
                 return false;
-            }            
+            }
         }
 
         private bool InitDaemonClient()

@@ -89,7 +89,7 @@ namespace CoiniumServ.Shares
         /// <param name="nTimeString">The n time string.</param>
         /// <param name="nonceString">The nonce string.</param>
         /// <returns></returns>
-        public IShare ProcessShare(IStratumMiner miner, string jobId, string nTime, string extraNonce2, string nonceString)
+        public IShare ProcessShare(IStratumMiner miner, string jobId, string extraNonce2, string nTimeString, string nonceString)
         {
             // check if the job exists
             var id = Convert.ToUInt64(jobId, 16);
@@ -241,18 +241,12 @@ namespace CoiniumServ.Shares
 
         private void OnBlockFound(EventArgs e)
         {
-            var handler = BlockFound;
-
-            if (handler != null)
-                handler(this, e);
+            BlockFound?.Invoke(this, e);
         }
 
         private void OnShareSubmitted(EventArgs e)
         {
-            var handler = ShareSubmitted;
-
-            if (handler != null)
-                handler(this, e);
+            ShareSubmitted?.Invoke(this, e);
         }
 
         private void FindPoolAccount()

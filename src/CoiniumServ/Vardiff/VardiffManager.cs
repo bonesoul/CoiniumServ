@@ -111,7 +111,6 @@ namespace CoiniumServ.Vardiff
             miner.SetDifficulty(newDifficulty); // set the new difficulty and send it.
             _logger.Debug("Difficulty updated to {0} for miner: {1:l}", miner.Difficulty, miner.Username);
             
-            var bits = AlgorithmManager.Diff1 *  new BigRational( newDifficulty);
             miner.VardiffBuffer.Clear();        
         }
     }

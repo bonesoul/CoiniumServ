@@ -70,9 +70,5 @@ namespace CoiniumServ.Server.Mining.Stratum
         void SendJob(IJob job);
 
         void Subscribe(string signature);
-        
-        void SetTarget(BigInteger target);
-        
-        BigInteger Target { get; }
     }
 }
