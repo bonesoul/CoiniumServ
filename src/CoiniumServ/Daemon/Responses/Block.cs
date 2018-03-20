@@ -57,6 +57,8 @@ namespace CoiniumServ.Daemon.Responses
         public Int32 Time { get; set; }
 
         public UInt32 Nonce { get; set; }
+        
+        public byte[] Nonce { get; set; }
 
         public string Bits { get; set; }
 
