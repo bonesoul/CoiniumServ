@@ -319,13 +319,15 @@ namespace CoiniumServ.Container
             return _applicationContext.Container.Resolve<IPaymentProcessor>(@params);
         }
 
-        public IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager)
+        //public IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager)
+        public IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager, IPoolConfig poolConfig)
         {
             var @params = new NamedParameterOverloads
             {
                 {"block", block},
                 {"storageLayer", storageLayer},
-                {"accountManager", accountManager}
+                {"accountManager", accountManager},
+                {"poolConfig", poolConfig }
             };
 
             return _applicationContext.Container.Resolve<IPaymentRound>(@params);
