@@ -75,6 +75,7 @@ namespace CoiniumServ.Coin.Coinbase
             }
 
             var pubkey = decoded.Slice(1, -4);
+
             byte[] result;
 
             using (var stream = new MemoryStream())
@@ -157,7 +158,7 @@ namespace CoiniumServ.Coin.Coinbase
             var numBytes = Convert.ToByte(buffer.Take(1));
             var bigIntBits = new BigInteger(buffer.Slice(1, buffer.Length - 1));
 
-            var multiplier = new BigInteger(2 ^ 8 * (numBytes - 3));
+            var multiplier = new BigInteger(2 ^ 8*(numBytes - 3));
             var target = BigInteger.Multiply(bigIntBits, multiplier);
 
             return target;

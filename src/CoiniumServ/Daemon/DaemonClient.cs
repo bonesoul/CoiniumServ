@@ -47,7 +47,6 @@ using CoiniumServ.Daemon.Config;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Daemon.Requests;
 using CoiniumServ.Daemon.Responses;
-using Newtonsoft.Json.Linq;
 
 namespace CoiniumServ.Daemon
 {
@@ -270,7 +269,6 @@ namespace CoiniumServ.Daemon
             }
 
             return MakeRequest<BlockTemplate>("getblocktemplate", data);
-
         }
 
         /// <summary>

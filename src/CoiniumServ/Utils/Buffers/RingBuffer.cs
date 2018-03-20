@@ -42,8 +42,6 @@ namespace CoiniumServ.Utils.Buffers
         private int _cursor;
 
         private bool _isFull;
-        private double _bufferSize;
-
         private int Capacity { get { return _buffer.Length; } }
 
         public RingBuffer(int capacity)
@@ -51,11 +49,6 @@ namespace CoiniumServ.Utils.Buffers
             _buffer = new int[capacity];
             _cursor = 0;
             _isFull = false;
-        }
-
-        public RingBuffer(double bufferSize)
-        {
-            _bufferSize = bufferSize;
         }
 
         public void Clear()

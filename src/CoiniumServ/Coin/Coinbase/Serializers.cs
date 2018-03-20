@@ -103,9 +103,6 @@ namespace CoiniumServ.Coin.Coinbase
 
                 result = stream.ToArray();
                 result = result.ReverseBytes();
-                
-                
-                
             }
 
             return result;

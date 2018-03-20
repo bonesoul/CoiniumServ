@@ -42,16 +42,16 @@ namespace CoiniumServ.Transactions
     public class Outputs : IOutputs
     {
         public List<TxOut> List { get; private set; }
-        
+
         private readonly IDaemonClient _daemonClient;
-        
+
         private readonly ICoinConfig _coinConfig;
-        
+
         public Outputs(IDaemonClient daemonClient, ICoinConfig coinConfig)
         {
             _daemonClient = daemonClient;
             _coinConfig = coinConfig;
-            
+
             List = new List<TxOut>();
         }
 

@@ -40,7 +40,7 @@ namespace CoiniumServ.Vardiff
     {
         public IVardiffConfig Config { get; private set; }
 
-        private readonly double _bufferSize;
+        private readonly int _bufferSize;
         private readonly float _tMin;
         private readonly float _tMax;
         private readonly ILogger _logger;
@@ -107,8 +107,8 @@ namespace CoiniumServ.Vardiff
             var newDifficulty = miner.Difficulty*deltaDiff; // calculate the new difficulty.
             miner.SetDifficulty(newDifficulty); // set the new difficulty and send it.
             _logger.Debug("Difficulty updated to {0} for miner: {1:l}", miner.Difficulty, miner.Username);
-            
-            miner.VardiffBuffer.Clear();        
+
+            miner.VardiffBuffer.Clear();            
         }
     }
 }

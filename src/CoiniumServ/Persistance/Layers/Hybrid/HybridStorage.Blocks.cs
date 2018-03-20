@@ -53,7 +53,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 {
                     connection.Execute(
                         @"INSERT INTO Block(Height, BlockHash, TxHash, Amount, CreatedAt) VALUES (@height, @blockHash, @txHash, @amount, @createdAt)",
-			new
+                        new
                         {
                             height = share.Block.Height,
                             blockHash = share.BlockHash.ToHexString(),

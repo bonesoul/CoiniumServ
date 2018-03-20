@@ -117,10 +117,8 @@ namespace CoiniumServ.Container
 
         IPaymentProcessor GetPaymentProcessor(IPoolConfig poolConfig, IStorageLayer storageLayer, IDaemonClient daemonClient, IAccountManager accountManager);
 
-        //IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager);
+        IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager);
 
-        IPaymentRound GetPaymentRound(IPersistedBlock block, IStorageLayer storageLayer, IAccountManager accountManager, IPoolConfig poolConfig);
-        
         IPaymentRepository GetPaymentRepository(IStorageLayer storageLayer);
 
         #endregion

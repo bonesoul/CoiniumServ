@@ -31,13 +31,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoiniumServ.Accounts;
-using CoiniumServ.Algorithms;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Server.Mining.Stratum.Sockets;
-using CoiniumServ.Utils.Numerics;
 using Serilog;
 
 namespace CoiniumServ.Mining

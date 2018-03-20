@@ -39,8 +39,6 @@ using CoiniumServ.Server.Mining.Getwork;
 using CoiniumServ.Server.Mining.Stratum;
 using CoiniumServ.Shares;
 using CoiniumServ.Transactions;
-using CoiniumServ.Utils.Extensions;
-using CoiniumServ.Utils.Numerics;
 using Serilog;
 
 namespace CoiniumServ.Jobs.Manager
@@ -93,7 +91,7 @@ namespace CoiniumServ.Jobs.Manager
             _minerManager.MinerAuthenticated += OnMinerAuthenticated;
 
             // create the timers as disabled.
-            _reBroadcastTimer = new Timer(IdleJobTimer, null, Timeout.Infinite, Timeout.Infinite);
+            _reBroadcastTimer = new Timer(IdleJobTimer, null,Timeout.Infinite, Timeout.Infinite);
             _blockPollerTimer = new Timer(BlockPoller, null, Timeout.Infinite, Timeout.Infinite);
 
             CreateAndBroadcastNewJob(true); // broadcast a new job initially - which will also setup the timers.
@@ -220,9 +218,8 @@ namespace CoiniumServ.Jobs.Manager
             if (miner is IGetworkMiner) // only stratum miners needs to be submitted new jobs.
                 return false;
 
-            //var stratumMiner = (IStratumMiner) miner;
-            var stratumMiner = (IStratumMiner)miner;
-            
+            var stratumMiner = (IStratumMiner) miner;
+
             if (!stratumMiner.Authenticated)
                 return false;
 

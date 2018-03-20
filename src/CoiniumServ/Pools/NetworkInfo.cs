@@ -197,7 +197,7 @@ namespace CoiniumServ.Pools
         private void PrintNetworkInfo()
         {
             _logger.Information("symbol: {0:l} algorithm: {1:l} " +
-                                "version: {2:1} protocol: {3} wallet: {4} " +
+                                "version: {2:l} protocol: {3} wallet: {4} " +
                                 "network difficulty: {5:0.00000000} block difficulty: {6:0.00} network hashrate: {7:l} " +
                                 "network: {8:l} peers: {9} blocks: {10} errors: {11:l} ",
                 _poolConfig.Coin.Symbol,

@@ -102,7 +102,7 @@ namespace CoiniumServ.Jobs
             Height = blockTemplate.Height;
             GenerationTransaction = generationTransaction;
             PreviousBlockHash = blockTemplate.PreviousBlockHash.HexToByteArray().ToHexString();
-            PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString(); // Added to support of Equihash ReverseBuffer().ToHexString()
+            PreviousBlockHashReversed = blockTemplate.PreviousBlockHash.HexToByteArray().ReverseByteOrder().ToHexString();
             CoinbaseInitial = generationTransaction.Initial.ToHexString();
             CoinbaseFinal = generationTransaction.Final.ToHexString();
             CreationTime = TimeHelpers.NowInUnixTimestamp();
@@ -135,8 +135,6 @@ namespace CoiniumServ.Jobs
             var data = new List<object>
             {
                 Id.ToString("x"),
-
-                BitConverter.GetBytes(BlockTemplate.Version).ToHexString(), // Added to support of Equihash 
                 PreviousBlockHashReversed,
                 CoinbaseInitial,
                 CoinbaseFinal,
@@ -157,8 +155,8 @@ namespace CoiniumServ.Jobs
 
         public bool RegisterShare(IShare share)
         {
-            //var submissionId = (UInt64) (share.ExtraNonce1 + share.ExtraNonce2 + share.NTime + share.Nonce); // simply hash the share by summing them..
-            var submissionId = (UInt64) (share.ExtraNonce1 + (UInt64) share.ExtraNonce2.GetHashCode() + share.NTime + share.Nonce); // simply hash the share by summing them..
+            var submissionId = (UInt64) (share.ExtraNonce1 + share.ExtraNonce2 + share.NTime + share.Nonce); // simply hash the share by summing them..
+
             if(_shares.Contains(submissionId)) // if our list already contain the share
                 return false; // it basically means we hit a duplicate share.
 

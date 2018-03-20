@@ -162,7 +162,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             Username = user;
             _minerManager.Authenticate(this);
 
-            if (!Authenticated)
+            if(!Authenticated)
                 JsonRpcContext.SetException(new AuthenticationError(Username));
 
             return Authenticated;
@@ -238,7 +238,6 @@ namespace CoiniumServ.Server.Mining.Stratum
 
                 var async = new JsonRpcStateAsync(_rpcResultHandler, rpcContext) {JsonRpc = line};
                 JsonRpcProcessor.Process(Pool.Config.Coin.Name, async, rpcContext);
-
             }
             catch (JsonReaderException e) // if client sent an invalid message
             {
@@ -246,7 +245,7 @@ namespace CoiniumServ.Server.Mining.Stratum
                     Username ?? Connection.RemoteEndPoint.ToString(), e.Message);
 
                 Connection.Disconnect(); // disconnect him.
-            };
+            }
         }
 
         /// <summary>
@@ -258,8 +257,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             {
                 Id = null,
                 Method = "client.show_message",
-                //Params = new List<object> { message }
-                Params = new List<object> { Difficulty }
+                Params = new List<object> { message }
             };
 
             Send(notification);
@@ -280,7 +278,7 @@ namespace CoiniumServ.Server.Mining.Stratum
             {
                 Id = null,
                 Method = "mining.set_difficulty",
-                Params = new List<object> { Difficulty }
+                Params = new List<object>{ Difficulty }
             };
 
             Send(notification); //send the difficulty update message.

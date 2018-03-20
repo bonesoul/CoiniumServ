@@ -73,7 +73,7 @@ namespace CoiniumServ.Payments
 
             if (!GetPoolAccount()) // get the pool's account name if any.
                 return; // if we can't, stop the payment processor.
-                
+
             Active = true;
         }
 
@@ -143,12 +143,11 @@ namespace CoiniumServ.Payments
 
             try
             {
-                
                 // filter out users whom total amount doesn't exceed the configured minimum payment amount.
                 var filtered = paymentsToExecute.Where(
                         x => x.Value.Sum(y => y.Payment.Amount) >= (decimal)_poolConfig.Payments.Minimum)
                         .ToDictionary(x => x.Key, x => x.Value);
-                      
+
                 if (filtered.Count <= 0)  // make sure we have payments to execute even after our filter.
                     return executed;
 
@@ -238,6 +237,5 @@ namespace CoiniumServ.Payments
                 return false;
             }
         }
-        
     }
 }

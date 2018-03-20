@@ -50,14 +50,14 @@ namespace CoiniumServ.Payments
         private readonly IAccountManager _accountManager;
 
         private readonly ILogger _logger;
-        private readonly IPoolConfig _config;
+
         public BlockAccounter(IPoolConfig poolConfig, IObjectFactory objectFactory, IStorageLayer storageLayer, IAccountManager accountManager)
         {
             _objectFactory = objectFactory;
             _storageLayer = storageLayer;
             _accountManager = accountManager;
             _logger = Log.ForContext<BlockAccounter>().ForContext("Component", poolConfig.Coin.Name);
-            _config = poolConfig;
+
             if (!poolConfig.Payments.Enabled) // make sure payments are enabled.
                 return;
 
@@ -72,9 +72,8 @@ namespace CoiniumServ.Payments
             var unpaidBlocks = _storageLayer.GetUnpaidBlocks();
 
             // create the payouts.
-            //var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer, _accountManager)).ToList();
-            var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer, _accountManager, _config)).ToList();
-            
+            var rounds = unpaidBlocks.Select(block => _objectFactory.GetPaymentRound(block, _storageLayer, _accountManager)).ToList();
+
             // loop through rounds
             foreach (var round in rounds)
             {
