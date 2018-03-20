@@ -35,6 +35,7 @@ using CoiniumServ.Coin.Address.Exceptions;
 using CoiniumServ.Coin.Coinbase;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
+using CoiniumServ.Utils.Extensions;
 using Gibbed.IO;
 
 namespace CoiniumServ.Transactions
@@ -42,16 +43,16 @@ namespace CoiniumServ.Transactions
     public class Outputs : IOutputs
     {
         public List<TxOut> List { get; private set; }
-
+        
         private readonly IDaemonClient _daemonClient;
-
+        
         private readonly ICoinConfig _coinConfig;
-
+        
         public Outputs(IDaemonClient daemonClient, ICoinConfig coinConfig)
         {
             _daemonClient = daemonClient;
             _coinConfig = coinConfig;
-
+            
             List = new List<TxOut>();
         }
 
@@ -111,7 +112,8 @@ namespace CoiniumServ.Transactions
                 foreach (var transaction in List)
                 {
                     stream.WriteValueU64(transaction.Value);
-                    stream.WriteBytes(transaction.PublicKeyScriptLenght);
+                    //stream.WriteBytes(transaction.PublicKeyScriptLenght);
+                    stream.WriteBytes(transaction.PublicKeyScriptLenght.ReverseBytes());
                     stream.WriteBytes(transaction.PublicKeyScript);
                 }
 
