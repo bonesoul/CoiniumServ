@@ -28,10 +28,13 @@
 #endregion
 
 using System;
+using CoiniumServ.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Buffers;
+using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers;
+using CoiniumServ.Utils.Numerics;
 using Serilog;
 
 namespace CoiniumServ.Vardiff
@@ -107,8 +110,9 @@ namespace CoiniumServ.Vardiff
             var newDifficulty = miner.Difficulty*deltaDiff; // calculate the new difficulty.
             miner.SetDifficulty(newDifficulty); // set the new difficulty and send it.
             _logger.Debug("Difficulty updated to {0} for miner: {1:l}", miner.Difficulty, miner.Username);
-
-            miner.VardiffBuffer.Clear();            
+            
+            var bits = AlgorithmManager.Diff1 *  new BigRational( newDifficulty);
+            miner.VardiffBuffer.Clear();        
         }
     }
 }
