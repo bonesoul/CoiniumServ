@@ -28,13 +28,11 @@
 #endregion
 
 using System;
-using CoiniumServ.Algorithms;
 using CoiniumServ.Pools;
 using CoiniumServ.Shares;
 using CoiniumServ.Utils.Buffers;
-using CoiniumServ.Utils.Extensions;
 using CoiniumServ.Utils.Helpers;
-using CoiniumServ.Utils.Numerics;
+
 using Serilog;
 
 namespace CoiniumServ.Vardiff
@@ -43,7 +41,7 @@ namespace CoiniumServ.Vardiff
     {
         public IVardiffConfig Config { get; private set; }
 
-        private readonly int _bufferSize;
+        private readonly double _bufferSize;
         private readonly float _tMin;
         private readonly float _tMax;
         private readonly ILogger _logger;

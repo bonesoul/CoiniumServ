@@ -85,10 +85,10 @@ namespace CoiniumServ.Server.Mining.Stratum
         public int InvalidShareCount { get; set; }
 
         public IPool Pool { get; private set; }
+        
+        public float Difficulty { get; set; }
 
-        public double Difficulty { get; set; }  //public float Difficulty { get; set; }
-
-        public double PreviousDifficulty { get; set; } //public float PreviousDifficult { get; set; }
+        public float PreviousDifficulty { get; set; }
 
         /// <summary>
         /// Hex-encoded, per-connection unique string which will be used for coinbase serialization later. (http://mining.bitcoin.cz/stratum-mining)
@@ -268,7 +268,7 @@ namespace CoiniumServ.Server.Mining.Stratum
         /// <summary>
         /// Sets a new difficulty to the miner and sends it.
         /// </summary>
-        public void SetDifficulty(double difficulty) //public void SetDifficulty(float difficulty)
+        public void SetDifficulty(float difficulty)
         {
             if (Difficulty == difficulty) // if new difficulty is the same with current one,
                 return; // just skip.
