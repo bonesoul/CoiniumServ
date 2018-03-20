@@ -88,21 +88,27 @@ namespace CoiniumServ.Coin.Coinbase
         /// <param name="nTime"></param>
         /// <param name="nonce"></param>
         /// <returns></returns>
-        public static byte[] SerializeHeader(IJob job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce)
+        public static byte[] SerializeHeader(IJob job, byte[] merkleRoot, UInt32 nTime, UInt32 nonce, UInt32 nTime,byte[] solution)
         {
             byte[] result;
 
             using (var stream = new MemoryStream())
             {
+                stream.WriteBytes(solution);
+                stream.WriteBytes(nonce);
                 stream.WriteValueU32(nonce.BigEndian());
                 stream.WriteValueU32(Convert.ToUInt32(job.EncodedDifficulty, 16).BigEndian());
                 stream.WriteValueU32(nTime.BigEndian());
+                stream.WriteBytes(new byte[32]);
                 stream.WriteBytes(merkleRoot);
                 stream.WriteBytes(job.PreviousBlockHash.HexToByteArray());
                 stream.WriteValueU32(job.BlockTemplate.Version.BigEndian());
 
                 result = stream.ToArray();
                 result = result.ReverseBytes();
+                
+                
+                
             }
 
             return result;
