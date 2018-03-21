@@ -1,0 +1,22 @@
+{
+    "name": "zcash",
+    "symbol": "ZEC",
+    "algorithm": "equihash",
+	"site": "https://z.cash/",
+    "blockExplorer": {
+        "block": "https://zcash.blockexplorer.com//block/",
+        "tx": "https://zcash.blockexplorer.com/tx/",
+        "address": "https://zcash.blockexplorer.com/address/"
+    },
+    "options": {
+		"isProofOfStakeHybrid": false,
+		"blockTemplateModeRequired": false,
+		"useDefaultAccount": false,
+		"txMessageSupported": false			
+    },
+    "node": {
+        "magic": "24e92764"
+    },
+	"extra": {
+	}
+}
