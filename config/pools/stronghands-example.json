@@ -8,8 +8,8 @@
 		"password": "RPCPASSWORD"
 	},
 	"meta": {
-        "motd": "Welcome to bit2pool, enjoy your stay! - http://www.bit2pool.com/",
-        "txMessage": "http://www.bit2pool.com/"
+	"motd": "Welcome to CoiniumServ, enjoy your stay! - http://www.coiniumserv.com/",
+        "txMessage": "http://www.coiniumserv.com/"
      },
 	 "wallet" : {
         "address":  "Pool wallet address here"
