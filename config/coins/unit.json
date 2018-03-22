@@ -1,5 +1,5 @@
 {
-	"name": "Universal Currency",
+	"name": "UniversalCurrency",
 	"symbol": "UNIT",
 	"algorithm": "sha256",
 	"site": "https://www.u-currency.com/",
