@@ -45,11 +45,11 @@ namespace CoiniumServ.Utils.Helpers
             var index = -1;
             double rate = hashrate;
 
-            var units = new[] {"KH/s", "MH/s", "GH/s", "TH/s", "PH/s", "EH/s", "ZH/s", "YH/s"};
+            var units = new[] { "KH/s", "MH/s", "GH/s", "TH/s", "PH/s", "EH/s", "ZH/s", "YH/s" };
 
             do
             {
-                rate = rate/1000;
+                rate = rate / 1000;
                 index++;
             } while (rate > 1000);
 
@@ -66,14 +66,14 @@ namespace CoiniumServ.Utils.Helpers
             var index = -1;
             var rate = difficulty;
 
-            var units = new[] {"K", "M", "B", "T", "Q"};
+            var units = new[] { "K", "M", "B", "T", "Q" };
 
             if (difficulty < 1000)
                 return difficulty.ToString(CultureInfo.InvariantCulture);
 
             do
             {
-                rate = rate/1000;
+                rate = rate / 1000;
                 index++;
             } while (rate > 1000);
 
