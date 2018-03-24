@@ -8,7 +8,7 @@
 		"password": "password"
 	},
 	"meta": {
-		"motd": "Welcome to CoiniumServ, enjoy your stay! - http://www.coiniumserv.com/",
+	"motd": "Welcome to CoiniumServ, enjoy your stay! - http://www.coiniumserv.com/",
         "txMessage": "http://www.coiniumserv.com/"
      },
 	 "wallet" : {
