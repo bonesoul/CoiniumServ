@@ -1,0 +1,11 @@
+{
+    "name": "Litecoincash",
+    "symbol": "LCC",
+    "algorithm": "sha256",
+    "site": "https://www.litecoinca.sh/",
+    "blockExplorer": {
+        "block": "https://explorer.litecoinca.sh/block",
+        "tx": "https://explorer.litecoinca.sh/tx/",
+        "address": "https://explorer.litecoinca.sh/address/"
+		}
+}
