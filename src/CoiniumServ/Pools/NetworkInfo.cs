@@ -92,6 +92,7 @@ namespace CoiniumServ.Pools
             int version = Int32.Parse(CoinVersion); // Convert a CoinVersion info to numeric value
 
             if (version <= 150100)   // Compare the value same as condition, then running a GetInfo()
+                                     // if coin wallet version "less" than or "equal" to 150100 then run the following code or got to else if (version >= 160000)
 
             try // read getinfo() based data.
             {
