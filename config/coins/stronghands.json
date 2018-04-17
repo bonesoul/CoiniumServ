@@ -1,11 +1,11 @@
 {
-	"name": "stronghands",
-	"symbol": "SHND",
-	"algorithm": "sha256",
-	"site": "https://www.stronghands.info/",
-	"blockExplorer": {
-	"block": "https://cryptobe.com/chain/StrongHands",
-	"tx": "https://cryptobe.com/chain/StrongHands",
-	"address": "https://cryptobe.com/chain/StrongHands"
-	}
+    "name": "stronghands",
+    "symbol": "SHND",
+    "algorithm": "sha256",
+    "site": "https://www.stronghands.info/",
+    "blockExplorer": {
+        "block": "https://cryptobe.com/chain/StrongHands",
+        "tx": "https://cryptobe.com/chain/StrongHands",
+        "address": "https://cryptobe.com/chain/StrongHands"
+    }
 }

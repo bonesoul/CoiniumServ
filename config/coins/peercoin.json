@@ -4,9 +4,9 @@
     "algorithm": "sha256",
     "site": "http://peercoin.net/",
     "blockExplorer": {
-        "block": "http://ppc.blockr.io/block/info/",
-        "tx": "http://ppc.blockr.io/tx/info/",
-        "address": "http://ppc.blockr.io/address/info/"
+        "block": "https://abe.peercoinexplorer.net/block/",
+        "tx": "https://abe.peercoinexplorer.net/tx/",
+        "address": "https://abe.peercoinexplorer.net/address/"
     },
     "options": {
 		"isProofOfStakeHybrid": true,
