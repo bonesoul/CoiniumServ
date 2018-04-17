@@ -2,7 +2,7 @@
     "name": "Globaltoken",
     "symbol": "GLT",
     "algorithm": "sha256",
-    "rpcupdate" : true,
+    "rpcupdate" : true, // if you are using coin wallet version 0.16.0 or higher, then added this for payment system works.
     "site": "https://globaltoken.org/",
     "blockExplorer": {
         "block": "https://explorer.globaltoken.org/block/",
