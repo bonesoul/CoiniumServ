@@ -158,7 +158,7 @@ namespace CoiniumServ.Transactions
                             blockTemplate.CoinBaseAux.Flags,
                             TimeHelpers.NowInUnixTimestamp(),
                             (byte) extraNonce.ExtraNoncePlaceholder.Length,
-                            "/BIT2POOL.COM/")
+                            "/CoiniumServ/")
                 }
             }; 
 
