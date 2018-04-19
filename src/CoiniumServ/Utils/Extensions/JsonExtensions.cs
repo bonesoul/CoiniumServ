@@ -45,7 +45,7 @@ namespace CoiniumServ.Utils.Extensions
             try
             {
                 input = input.Replace('\"', '\'');
-                var output = new StringBuilder(input.Length*2);
+                var output = new StringBuilder(input.Length * 2);
                 char? quote = null;
                 int depth = 0;
 
