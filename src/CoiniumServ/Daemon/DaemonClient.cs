@@ -331,12 +331,6 @@ namespace CoiniumServ.Daemon
             return MakeRequest<decimal>("gethashespersec", null);
         }
 
-
-        public PreInfo Getnetworkinfo()
-        {
-            return MakeRequest<PreInfo>("getnetworkinfo", null);
-        }
-
         /// <summary>
         /// Returns an object containing various state info.
         /// </summary>
