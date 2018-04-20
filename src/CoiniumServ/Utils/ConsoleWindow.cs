@@ -49,6 +49,7 @@ namespace CoiniumServ.Utils
             Console.WriteLine(@" \___  >____/|__|___|  /__|____/|__|_|  /____  >\___  >__|    \_/  ");
             Console.WriteLine(@"     \/              \/               \/     \/     \/             ");
             Console.WriteLine();
+            Console.ResetColor();
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -190,6 +190,7 @@
     <Compile Include="Daemon\Config\DaemonConfig.cs" />
     <Compile Include="Daemon\Config\IDaemonConfig.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />
+    <Compile Include="Daemon\Converters\PropertyConverter.cs" />
     <Compile Include="Daemon\Converters\TimeConverter.cs" />
     <Compile Include="Daemon\DaemonBase.cs" />
     <Compile Include="Daemon\DaemonClient.cs" />
@@ -228,7 +229,6 @@
     <Compile Include="Daemon\Responses\MultisigAddress.cs" />
     <Compile Include="Daemon\Responses\NodeAddress.cs" />
     <Compile Include="Daemon\Responses\PeerInfo.cs" />
-    <Compile Include="Daemon\Responses\PreInfo.cs" />
     <Compile Include="Daemon\Responses\SignedRawTransaction.cs" />
     <Compile Include="Daemon\Responses\Transaction.cs" />
     <Compile Include="Daemon\Responses\TransactionDetail.cs" />

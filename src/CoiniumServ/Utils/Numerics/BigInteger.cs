@@ -3142,4 +3142,3 @@ namespace CoiniumServ.Utils.Numerics
         }
     }
 }
-

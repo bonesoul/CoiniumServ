@@ -51,6 +51,6 @@ namespace CoiniumServ.Daemon.Responses
 
         public string Account { get; set; }
         
-         public string PubKey { get; set; }
+        public string PubKey { get; set; }
     }
 }
