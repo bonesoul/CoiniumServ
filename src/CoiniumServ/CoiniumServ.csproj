@@ -190,6 +190,7 @@
     <Compile Include="Daemon\Config\DaemonConfig.cs" />
     <Compile Include="Daemon\Config\IDaemonConfig.cs" />
     <Compile Include="Daemon\Converters\DifficultyConverter.cs" />
+    <Compile Include="Daemon\Converters\PropertyConverter.cs" />
     <Compile Include="Daemon\Converters\TimeConverter.cs" />
     <Compile Include="Daemon\DaemonBase.cs" />
     <Compile Include="Daemon\DaemonClient.cs" />
