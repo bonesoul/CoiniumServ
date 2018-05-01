@@ -4,8 +4,8 @@
     "algorithm": "sha256",
     "site": "https://www.stronghands.info/",
     "blockExplorer": {
-        "block": "https://cryptobe.com/chain/StrongHands",
-        "tx": "https://cryptobe.com/chain/StrongHands",
-        "address": "https://cryptobe.com/chain/StrongHands"
+        "block": "https://cryptobe.com/block/",
+        "tx": "https://cryptobe.com/tx/",
+        "address": "https://cryptobe.com/address/"
     }
 }
