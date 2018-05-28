@@ -187,6 +187,9 @@ namespace CoiniumServ.Server.Mining.Stratum
                     case "bfgminer":
                         Software = MinerSoftware.BfgMiner;
                         break;
+                    case "bmminer":
+                        Software = MinerSoftware.BMminer;
+                        break;
                     case "ccminer":
                         Software = MinerSoftware.CCMiner;
                         break;
