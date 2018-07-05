@@ -38,7 +38,7 @@ namespace CoiniumServ
         /// <summary>
         /// Codename.
         /// </summary>
-        public const string CodeName = "Aurora";
+        public const string CodeName = "Atilla";
 
         /// <summary>
         /// Main assembly versions info.
@@ -48,7 +48,7 @@ namespace CoiniumServ
             /// <summary>
             /// Main assemby version.
             /// </summary>
-            public const string Version = "0.2.5.*";
+            public const string Version = "0.2.6.3";
         }
     }
 }

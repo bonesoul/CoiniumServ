@@ -48,9 +48,17 @@ namespace CoiniumServ.Daemon
 
         Info GetInfo();
 
+        Info GetBlockChainInfo();
+
+        Info GetNetworkInfo();
+
+        Info GetWalletInfo();
+
         MiningInfo GetMiningInfo();
 
         ValidateAddress ValidateAddress(string walletAddress);
+
+        GetAddressInfo GetAddressInfo(string walletAddress);
 
         Transaction GetTransaction(string txId);
 

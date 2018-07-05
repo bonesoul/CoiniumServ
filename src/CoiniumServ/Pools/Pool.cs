@@ -63,7 +63,7 @@ namespace CoiniumServ.Pools
     {
         public bool Initialized { get; private set; }
 
-        public ulong Hashrate { get; private set; }
+        public double Hashrate { get; private set; }
 
         public Dictionary<string, double> RoundShares { get; private set; }
 
@@ -74,8 +74,6 @@ namespace CoiniumServ.Pools
         public IMinerManager MinerManager { get; private set; }
 
         public INetworkInfo NetworkInfo { get; private set; }
-
-        public IProfitInfo ProfitInfo { get; private set; }
 
         public IBlockRepository BlockRepository { get; private set; }
 
@@ -251,7 +249,6 @@ namespace CoiniumServ.Pools
         private bool InitStatisticsServices()
         {
             NetworkInfo = _objectFactory.GetNetworkInfo(Daemon, HashAlgorithm, Config);
-            ProfitInfo = _objectFactory.GetProfitInfo(NetworkInfo, Config);
             BlockRepository = _objectFactory.GetBlockRepository(_storage);
             PaymentRepository = _objectFactory.GetPaymentRepository(_storage);
 

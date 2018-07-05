@@ -1,0 +1,310 @@
+﻿@using System.Linq
+@using CoiniumServ.Persistance.Blocks
+@using CoiniumServ.Utils.Helpers
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<CoiniumServ.Server.Web.Models.Pool.PoolModel>
+
+@{ Layout = "layout/main.cshtml"; }
+
+@if (!Model.Pool.NetworkInfo.Healthy)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                <i class="fa fa-ban"></i>
+                <b>Alert!</b>
+                We are experiencing technical difficulties with the pool. Please bear with us while we investigate the issues.
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-cloud"></i> Network</h3>
+            </div>
+            <div class="box-body no-padding">
+                <div class="list-group">
+                    <div class="list-group-item" title="The symbol of the coin">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-dollar"></i> Symbol</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.Config.Coin.Symbol</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="The hash algorithm that coin uses">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-cog"></i> Algorithm</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.Config.Coin.Algorithm</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Overall hashrate of network">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-flash"></i> Hashrate</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.NetworkInfo.Hashrate.GetReadableHashrate()</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Network difficulty">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-random"></i> Difficulty</div>
+                            <div class="col-xs-6 text-right" title="@string.Format("{0:n}", Model.Pool.NetworkInfo.Difficulty)">@Model.Pool.NetworkInfo.Difficulty.GetReadableDifficulty()</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Block chain height">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-bars"></i> Height</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.NetworkInfo.Round</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Version of the coin">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-code-fork"></i> Version</div>
+                            <div class="col-xs-6 text-right">@(Model.Pool.NetworkInfo.CoinVersion ?? "N/A")</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Is the pool's network connection healthy?">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-check"></i> Healthy</div>
+                            <div class="col-xs-6 text-right">
+                                <div class="label @(Model.Pool.NetworkInfo.Healthy? "label-info" : "label-danger")">@(Model.Pool.NetworkInfo.Healthy ? "Yes" : "No")</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="box box-solid box-success">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-flask"></i> Pool</h3>
+            </div>
+            <div class="box-body no-padding">
+                <div class="list-group">
+                    <div class="list-group-item" title="Overall hashrate of miners connect to pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-flash"></i> Hashrate</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.Hashrate.GetReadableHashrate()</div>
+                        </div>
+                    </div>
+                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/workers" class="list-group-item" title="Total of number of workers connected to pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-users"></i> Workers</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.MinerManager.Count</div>
+                        </div>
+                    </a>
+                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/round" class="list-group-item" title="Current round within the network">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-circle-o"></i> Current Round</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.NetworkInfo.Round</div>
+                        </div>
+                    </a>
+                    <div class="list-group-item" title="Last found block">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-clock-o"></i> Last Block</div>
+                            <div class="col-xs-6 text-right">
+                                @{
+                                    var lastBlock = Model.Pool.BlockRepository.Latest.Count > 0 ? Model.Pool.BlockRepository.Latest.First().CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ") : "N/A";
+                                    <time class="timeago" datetime="@lastBlock">@lastBlock</time>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Last paid block">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-credit-card"></i> Last Payment</div>
+                            <div class="col-xs-6 text-right">
+                                @{
+                                    var lastPayment = Model.Pool.BlockRepository.LatestPaid.Count > 0 ? Model.Pool.BlockRepository.LatestPaid.First().CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ") : "N/A";
+                                    <time class="timeago" datetime="@lastPayment">@lastPayment</time>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="box box-solid box-warning">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-hdd-o"></i> Block Stats</h3>
+            </div>
+            <div class="box-body no-padding">
+                <div class="list-group">
+                    <div class="list-group-item" title="Total number of blocks found by the pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-hdd-o"></i> Total</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.BlockRepository.Total</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Pending blocks found by the pool waiting to get confirmed">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-adjust"></i> Pending</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.BlockRepository.Pending</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Confirmed blocks found by the pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-check"></i> Confirmed</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.BlockRepository.Confirmed</div>
+                        </div>
+                    </div>
+                    <div class="list-group-item" title="Orphaned blocks found by the pool">
+                        <div class="row">
+                            <div class="col-xs-6"><i class="fa fa-times"></i> Orphaned</div>
+                            <div class="col-xs-6 text-right">@Model.Pool.BlockRepository.Orphaned</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="small-box bg-blue-gradient">
+            <div class="inner">
+                <h3><img src="/Content/img/coins/icon/@(Model.Pool.Config.Coin.Symbol).png" /> @Model.Pool.Config.Coin.Symbol (@Model.Pool.Config.Coin.Algorithm)</h3>
+                <p>Check the official site for more information about @Model.Pool.Config.Coin.Name</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-information-circled"></i>
+            </div>
+            <a href="@Model.Pool.Config.Coin.Site" target="_blank" class="small-box-footer">
+                @Model.Pool.Config.Coin.Site <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="small-box bg-purple-gradient">
+            <div class="inner">
+                <h3>Get Started</h3>
+                <p>Follow our getting started guide to start mining now!</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-flash"></i>
+            </div>
+            <a href="/help/gettingstarted/pool/@Model.Pool.Config.Coin.Symbol" class="small-box-footer">
+                Getting Started <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-hdd-o"></i> Latest Blocks</h3>
+                <div class="box-tools pull-right">
+                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/blocks/" type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i></a>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th style="width: 10px">Block</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Amount</th>
+                        </tr>
+                        @foreach (var block in Model.Pool.BlockRepository.Latest)
+                        {
+                            <tr>
+                                <td><a href="/pool/@Model.Pool.Config.Coin.Symbol/block/@block.Height">@block.Height</a></td>
+                                <td>
+                                    @switch (block.Status)
+                                    {
+                                        case BlockStatus.Pending:
+                                            <span class="label label-warning">@block.Status</span>
+                                            break;
+                                        case BlockStatus.Orphaned:
+                                        <span class="label label-danger">@block.Status</span>
+                                            break;
+                                        case BlockStatus.Confirmed:
+                                        <span class="label label-info">@block.Status</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    <time class="timeago" datetime="@block.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")">@block.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")</time>
+                                </td>
+                                <td>@block.Amount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer">
+                <form action="#" method="get" id="block-search">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> Lookup</button>
+                        </div>
+                        <input type="text" class="form-control" id="block-height" placeholder="Enter block height..">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-dollar"></i> Latest Paid Blocks</h3>
+                <div class="box-tools pull-right">
+                    <a href="/pool/@Model.Pool.Config.Coin.Symbol/blocks/paid/" type="button" class="btn btn-danger"><i class="fa fa-angle-double-right"></i></a>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th style="width: 10px;">Block</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Reward</th>
+                        </tr>
+                        @foreach (var block in Model.Pool.BlockRepository.LatestPaid)
+                        {
+                            <tr>
+                                <td><a href="/pool/@Model.Pool.Config.Coin.Symbol/block/@block.Height">@block.Height</a></td>
+                                <td>
+                                    @switch (block.Status)
+                                    {
+                                        case BlockStatus.Pending:
+                                            <span class="label label-warning">@block.Status</span>
+                                            break;
+                                        case BlockStatus.Orphaned:
+                                        <span class="label label-danger">@block.Status</span>
+                                            break;
+                                        case BlockStatus.Confirmed:
+                                        <span class="label label-info">@block.Status</span>
+                                            break;
+                                    }
+                                </td>
+                                <td><time class="timeago" datetime="@block.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")">@block.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ")</time></td>
+                                <td>@block.Reward</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer">
+                <form action="#" method="get" id="address-search">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-danger"><i class="fa fa-search"></i> Lookup</button>
+                        </div>
+                        <input type="text" class="form-control" id="address" placeholder="Enter your wallet address..">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

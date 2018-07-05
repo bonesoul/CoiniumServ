@@ -1,5 +1,4 @@
 ﻿#region License
-// 
 //     MIT License
 //
 //     CoiniumServ - Crypto Currency Mining Pool Server Software
@@ -34,11 +33,11 @@ using System.Reflection;
 using System.Text;
 using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon.Config;
+using CoiniumServ.Daemon.Converters;
 using CoiniumServ.Daemon.Errors;
 using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Logging;
 using CoiniumServ.Utils.Extensions;
-using Metrics;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -57,19 +56,17 @@ namespace CoiniumServ.Daemon
 
         private readonly ILogger _logger;
 
-        private static readonly Meter RequestsMeter = Metric.Meter("[Daemon] Requests", Unit.Requests, TimeUnit.Seconds);
-
         public DaemonBase(IDaemonConfig daemonConfig, ICoinConfig coinConfig, IRpcExceptionFactory rpcExceptionFactory)
         {
             _rpcExceptionFactory = rpcExceptionFactory;
             _logger = LogManager.PacketLogger.ForContext<DaemonClient>().ForContext("Component", coinConfig.Name);
 
             _timeout = daemonConfig.Timeout * 1000; // set the daemon timeout.
-        	
+
             RpcUrl = string.Format("http://{0}:{1}", daemonConfig.Host, daemonConfig.Port);
             RpcUser = daemonConfig.Username;
             RpcPassword = daemonConfig.Password;
-            
+
             RequestCounter = 0;
         }
 
@@ -134,13 +131,11 @@ namespace CoiniumServ.Daemon
         /// <returns>The HTTP request object.</returns>
         private HttpWebRequest MakeHttpRequest(DaemonRequest walletRequest)
         {
-            RequestsMeter.Mark();
-
             var webRequest = (HttpWebRequest)WebRequest.Create(RpcUrl);
             webRequest.Credentials = new NetworkCredential(RpcUser, RpcPassword);
 
             // Important, otherwise the service can't deserialse your request properly
-            webRequest.UserAgent = string.Format("CoiniumServ {0:} {1:}", VersionInfo.CodeName, Assembly.GetAssembly(typeof (Program)).GetName().Version);
+            webRequest.UserAgent = string.Format("CoiniumServ {0:} {1:}", VersionInfo.CodeName, Assembly.GetAssembly(typeof(Program)).GetName().Version);
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
             webRequest.Timeout = _timeout;
@@ -167,7 +162,7 @@ namespace CoiniumServ.Daemon
             catch (Exception exception)
             {
                 webRequest = null;
-                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);                
+                throw _rpcExceptionFactory.GetRpcException("An unknown exception occured while making json request.", exception);
             }
         }
 
@@ -181,11 +176,14 @@ namespace CoiniumServ.Daemon
         {
             string json = GetJsonResponse(httpWebRequest);
 
-            _logger.Verbose("rx: {0}", json.PrettifyJson());
+            // process response with converter. needed for all coin wallets which gives non-standard info.
+            string jsonLC = PropertyConverter.DeserializeWithLowerCasePropertyNames(json).ToString();
+
+            _logger.Verbose("rx: {0}", jsonLC.PrettifyJson());
 
             try
             {
-                return JsonConvert.DeserializeObject<DaemonResponse<T>>(json);
+                return JsonConvert.DeserializeObject<DaemonResponse<T>>(jsonLC);
             }
             catch (JsonException jsonEx)
             {

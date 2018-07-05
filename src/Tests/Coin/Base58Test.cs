@@ -27,7 +27,6 @@
 // 
 #endregion
 
-using System;
 using System.Text;
 using CoiniumServ.Coin.Address;
 using CoiniumServ.Coin.Address.Exceptions;

@@ -38,8 +38,6 @@ using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Manager;
 using CoiniumServ.Jobs.Tracker;
 using CoiniumServ.Logging;
-using CoiniumServ.Markets;
-using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Mining;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
@@ -54,7 +52,6 @@ using CoiniumServ.Server.Mining.Service;
 using CoiniumServ.Server.Web;
 using CoiniumServ.Shares;
 using CoiniumServ.Statistics;
-using CoiniumServ.Utils.Metrics;
 using CoiniumServ.Vardiff;
 using Nancy.Bootstrapper;
 
@@ -101,8 +98,6 @@ namespace CoiniumServ.Container
         IVardiffManager GetVardiffManager(IPoolConfig poolConfig, IShareManager shareManager);
 
         INetworkInfo GetNetworkInfo(IDaemonClient daemonClient, IHashAlgorithm hashAlgorithm, IPoolConfig poolConfig);
-
-        IProfitInfo GetProfitInfo(INetworkInfo networkInfo, IPoolConfig poolConfig);
 
         IBlockRepository GetBlockRepository(IStorageLayer storageLayer);
 
@@ -157,18 +152,6 @@ namespace CoiniumServ.Container
         IWebServer GetWebServer();
 
         INancyBootstrapper GetWebBootstrapper();
-
-        IMetricsManager GetMetricsManager();
-
-        #endregion
-
-        #region market objects
-
-        IMarketManager GetMarketManager();
-
-        IBittrexClient GetBittrexClient();
-
-        IPoloniexClient GetPoloniexClient();
 
         #endregion
 

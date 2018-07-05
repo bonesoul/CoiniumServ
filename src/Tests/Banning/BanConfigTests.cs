@@ -51,40 +51,40 @@ namespace CoiniumServ.Tests.Banning
         /// <summary>
         /// Tests a json file with valid configuration.
         /// </summary>
-        [Fact]
-        public void ValidConfig_ShouldSuccess()
-        {
-            // read a valid json config sample.
-            var data = _jsonConfigReader.Read("Banning/valid-config.json");
-            var config = new BanConfig(data);
+        //[Fact]
+        //public void ValidConfig_ShouldSuccess()
+        //{
+        //    // read a valid json config sample.
+        //    var data = _jsonConfigReader.Read("Banning/valid-config.json");
+        //    var config = new BanConfig(data);
 
-            // make sure our expected values are set.
-            config.Enabled.Should().Equal(true);
-            config.Duration.Should().Equal(1);
-            config.InvalidPercent.Should().Equal(2);
-            config.CheckThreshold.Should().Equal(3);
-            config.PurgeInterval.Should().Equal(4);
-            config.Valid.Should().Equal(true);
-        }
+        //    // make sure our expected values are set.
+        //    config.Enabled.Should().Equal(true);
+        //    config.Duration.Should().Equal(1);
+        //    config.InvalidPercent.Should().Equal(2);
+        //    config.CheckThreshold.Should().Equal(3);
+        //    config.PurgeInterval.Should().Equal(4);
+        //    config.Valid.Should().Equal(true);
+        //}
 
         /// <summary>
         /// Tests a json file with valid configuration.
         /// </summary>
-        [Fact]
-        public void InvalidConfig_ShouldReturnDefaults()
-        {
-            // read a valid json config sample.
-            var data = _jsonConfigReader.Read("invalid-config.json");
-            var config = new BanConfig(data);
+        //[Fact]
+        //public void InvalidConfig_ShouldReturnDefaults()
+        //{
+        //    // read a valid json config sample.
+        //    var data = _jsonConfigReader.Read("invalid-config.json");
+        //    var config = new BanConfig(data);
 
-            // as we have just supplied an invalid config, we should get a valid config object with default values
-            config.Enabled.Should().Equal(false);
-            config.Duration.Should().Equal(600);
-            config.InvalidPercent.Should().Equal(50);
-            config.CheckThreshold.Should().Equal(100);
-            config.PurgeInterval.Should().Equal(300);
-            config.Valid.Should().Equal(true);
-        }
+        //    // as we have just supplied an invalid config, we should get a valid config object with default values
+        //    config.Enabled.Should().Equal(false);
+        //    config.Duration.Should().Equal(600);
+        //    config.InvalidPercent.Should().Equal(50);
+        //    config.CheckThreshold.Should().Equal(100);
+        //    config.PurgeInterval.Should().Equal(300);
+        //    config.Valid.Should().Equal(true);
+        //}
 
         /// <summary>
         /// Tests a json file with valid configuration.

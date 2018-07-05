@@ -29,7 +29,6 @@
 
 using System;
 using CoiniumServ.Pools;
-using CSRedis;
 using Serilog;
 
 namespace CoiniumServ.Persistance.Providers.Redis
@@ -39,9 +38,10 @@ namespace CoiniumServ.Persistance.Providers.Redis
         public bool IsConnected { get { return Client.IsConnected; } }
 
         public RedisClient Client { get; private set; }
-        private readonly Version _requiredMinimumVersion = new Version(2, 6);
+        
+        // private readonly Version _requiredMinimumVersion = new Version(2, 6);
 
-        private readonly IRedisProviderConfig _config;        
+        private readonly IRedisProviderConfig _config;
 
         private readonly ILogger _logger;
 
@@ -58,33 +58,30 @@ namespace CoiniumServ.Persistance.Providers.Redis
         {
             try
             {
-                // create the connection
-                Client = new RedisClient(_config.Host, _config.Port)
-                {
-                    ReconnectAttempts = 3,
-                    ReconnectWait = 200
-                };
+
+                Client = new RedisClient(_config.Host, _config.Port, _config.Password, "version=2.6");
 
                 // select the database
                 Client.Select(_config.DatabaseId);
 
-                // authenticate if needed.
-                if (!string.IsNullOrEmpty(_config.Password))
-                    Client.Auth(_config.Password);
-
+                /*
                 // check the version
                 var version = GetVersion();
                 if (version < _requiredMinimumVersion)
                     throw new Exception(string.Format("You are using redis version {0}, minimum required version is 2.6", version));
-
+                
                 _logger.Information("Redis storage initialized: {0:l}:{1}, v{2:l}.", _config.Host, _config.Port, version);
+                */
+
+                _logger.Information("Redis storage initialized: {0:l}:{1}.", _config.Host, _config.Port);
             }
             catch (Exception e)
             {
-                _logger.Error("Redis storage initialization failed: {0:l}:{1} - {2:l}", _config.Host, _config.Port, e.Message);
+                _logger.Error(e,"Redis storage initialization failed: {0:l}:{1}", _config.Host, _config.Port);
             }
         }
 
+        /*
         private Version GetVersion()
         {
             Version version = null;
@@ -112,5 +109,6 @@ namespace CoiniumServ.Persistance.Providers.Redis
 
             return version;
         }
+        */
     }
 }

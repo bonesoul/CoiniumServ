@@ -36,7 +36,6 @@ using CoiniumServ.Coin.Config;
 using CoiniumServ.Daemon;
 using CoiniumServ.Daemon.Responses;
 using CoiniumServ.Jobs;
-using CoiniumServ.Payments;
 using CoiniumServ.Payments.Config;
 using CoiniumServ.Pools;
 using CoiniumServ.Transactions;
@@ -112,6 +111,7 @@ namespace CoiniumServ.Tests.Jobs
             // daemon client
             _daemonClient = Substitute.For<IDaemonClient>();
             _daemonClient.ValidateAddress(Arg.Any<string>()).Returns(new ValidateAddress { IsValid = true });
+            // _daemonClient.GetAddressInfo(Arg.Any<string>()).Returns(new GetAddressInfo { IsValid = true });
 
             // block template
             const string json = "{\"result\":{\"version\":2,\"previousblockhash\":\"22a9174d9db64f1919febc9577167764c301b755768b675291f7d34454561e9e\",\"transactions\":[],\"coinbaseaux\":{\"flags\":\"062f503253482f\"},\"coinbasevalue\":5000000000,\"target\":\"0000002bd7c30000000000000000000000000000000000000000000000000000\",\"mintime\":1402922277,\"mutable\":[\"time\",\"transactions\",\"prevblock\"],\"noncerange\":\"00000000ffffffff\",\"sigoplimit\":20000,\"sizelimit\":1000000,\"curtime\":1402922598,\"bits\":\"1d2bd7c3\",\"height\":305349},\"error\":null,\"id\":1}";

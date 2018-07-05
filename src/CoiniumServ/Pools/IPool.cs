@@ -48,7 +48,7 @@ namespace CoiniumServ.Pools
         bool Initialized { get; }
 
         [JsonProperty("hashrate")]
-        UInt64 Hashrate { get; }
+        double Hashrate { get; }
 
         [JsonProperty("round")]
         Dictionary<string, double> RoundShares { get; }
@@ -63,9 +63,6 @@ namespace CoiniumServ.Pools
 
         [JsonProperty("network")]
         INetworkInfo NetworkInfo { get; }
-
-        [JsonProperty("profit")]
-        IProfitInfo ProfitInfo { get; }
 
         [JsonProperty("blocks")]
         IBlockRepository BlockRepository { get; }

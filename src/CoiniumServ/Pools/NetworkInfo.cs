@@ -37,13 +37,13 @@ using Serilog;
 
 namespace CoiniumServ.Pools
 {
-    public class NetworkInfo:INetworkInfo
+    public class NetworkInfo : INetworkInfo
     {
         public double Difficulty { get; private set; }
 
         public int Round { get; private set; }
 
-        public ulong Hashrate { get; private set; }
+        public double Hashrate { get; private set; }
 
         public UInt64 Reward { get; private set; }
 
@@ -86,25 +86,60 @@ namespace CoiniumServ.Pools
 
         public void Recache()
         {
-            try // read getinfo() based data.
-            {
-                var info = _daemonClient.GetInfo();
 
-                // read data.
+            try // read getnetworkinfo() followed by getwalletinfo() based data.
+            {
+                var info = _daemonClient.GetNetworkInfo();
+
+                // read Getnetwork
                 CoinVersion = info.Version;
                 ProtocolVersion = info.ProtocolVersion;
-                WalletVersion = info.WalletVersion;
-                Testnet = info.Testnet;
                 Connections = info.Connections;
                 Errors = info.Errors;
 
-                // check if our network connection is healthy.
-                Healthy = Connections >= 0 && string.IsNullOrEmpty(Errors);
+                try // read getwalletinfo() based data.
+                {
+                    var infoWall = _daemonClient.GetWalletInfo();
+
+                    // read data
+                    WalletVersion = infoWall.WalletVersion;
+                }
+                catch (RpcException e)
+                {
+                    _logger.Error("Can not read getwalletinfo(): {0:l}", e.Message);
+                    Healthy = false; // set healthy status to false as we couldn't get a reply.
+                }
+
+                // check if our network connection is healthy. info: based errors are warnings only so ignore.
+                Healthy = Connections >= 0 && (string.IsNullOrEmpty(Errors) || Errors.Contains("Info:"));
+
             }
-            catch (RpcException e)
+            catch (RpcException) // catch exception, provide backwards compatability for getinfo() based data.
             {
-                _logger.Error("Can not read getinfo(): {0:l}", e.Message);
-                Healthy = false; // set healthy status to false as we couldn't get a reply.
+                // do not log this as an actual error, but rather as info only, then proceed to try getinfo().
+                //_logger.Error("Can not read getnetworkinfo(), trying getinfo() instead: {0:l}", c.Message); // do not log original error, try getinfo() first.   
+
+                try // catch exception, provide backwards compatability for getinfo() based data.
+                {
+                    var info = _daemonClient.GetInfo();
+
+                    // read data.
+                    CoinVersion = info.Version;
+                    ProtocolVersion = info.ProtocolVersion;
+                    WalletVersion = info.WalletVersion;
+                    Testnet = info.Testnet;
+                    Connections = info.Connections;
+                    Errors = info.Errors;
+
+                    // check if our network connection is healthy. info: based errors are warnings only so ignore.
+                    Healthy = Connections >= 0 && (string.IsNullOrEmpty(Errors) || Errors.Contains("Info:"));
+                }
+                catch (RpcException ee)
+                {
+                    _logger.Error("Can not read getinfo(): {0:l}", ee.Message);
+                    Healthy = false; // set healthy status to false as we couldn't get a reply.
+                }
+
             }
 
             try // read getmininginfo() based data.
@@ -115,6 +150,8 @@ namespace CoiniumServ.Pools
                 Hashrate = miningInfo.NetworkHashPerSec;
                 Difficulty = miningInfo.Difficulty;
                 Round = miningInfo.Blocks + 1;
+                if (!Testnet)
+                    Testnet = miningInfo.Testnet;
             }
             catch (RpcException e)
             {
@@ -149,7 +186,7 @@ namespace CoiniumServ.Pools
                 ProtocolVersion,
                 WalletVersion,
                 Difficulty,
-                Difficulty*_hashAlgorithm.Multiplier,
+                Difficulty * _hashAlgorithm.Multiplier,
                 Hashrate.GetReadableHashrate(),
                 Testnet ? "testnet" : "mainnet",
                 Connections,
@@ -168,15 +205,15 @@ namespace CoiniumServ.Pools
             {
                 var response = _daemonClient.SubmitBlock(string.Empty);
             }
-            catch(RpcException e)
+            catch (RpcException e)
             {
-                if (e is RpcErrorException)
+                if (e is RpcErrorException error)
                 {
-                    var error = e as RpcErrorException;
                     switch (error.Code)
                     {
                         case (int)RpcErrorCode.RPC_METHOD_NOT_FOUND:
                             _poolConfig.Coin.Options.SubmitBlockSupported = false; // the coin doesn't support submitblock().
+                            _logger.Debug("submitblock() is NOT SUPPORTED by your wallet software.");
                             break;
                         case (int)RpcErrorCode.RPC_DESERIALIZATION_ERROR:
                             _poolConfig.Coin.Options.SubmitBlockSupported = true; // the coin supports submitblock().

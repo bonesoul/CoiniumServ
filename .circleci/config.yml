@@ -1,0 +1,14 @@
+version: 2
+jobs:
+  build:
+    working_directory: /temp
+    docker:
+      - image: mono:latest
+    steps:
+      - checkout
+      - run: apt-get update
+      - run: apt-get --yes --force-yes install wget
+      - run: wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+      - run: mono nuget.exe restore CoiniumServ.sln
+      - run: msbuild CoiniumServ.sln /p:Configuration=Debug
+      - run: mono packages/xunit.runner.console.2.3.1/tools/net452/xunit.console.exe src/Tests/bin/Debug/CoiniumServ.Tests.dll

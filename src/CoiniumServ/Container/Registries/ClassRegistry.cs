@@ -33,9 +33,7 @@ using CoiniumServ.Coin.Config;
 using CoiniumServ.Configuration;
 using CoiniumServ.Container.Context;
 using CoiniumServ.Daemon;
-using CoiniumServ.Daemon.Config;
 using CoiniumServ.Jobs.Tracker;
-using CoiniumServ.Markets.Exchanges;
 using CoiniumServ.Mining.Software;
 using CoiniumServ.Payments;
 using CoiniumServ.Pools;
@@ -61,7 +59,6 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IJobTracker, JobTracker>().AsMultiInstance();
             _applicationContext.Container.Register<IBlockProcessor, BlockProcessor>().AsMultiInstance();
             _applicationContext.Container.Register<INetworkInfo, NetworkInfo>().AsMultiInstance();
-            _applicationContext.Container.Register<IProfitInfo, ProfitInfo>().AsMultiInstance();
             _applicationContext.Container.Register<IBlockRepository, BlocksRepository>().AsMultiInstance();
             _applicationContext.Container.Register<IPaymentRepository, PaymentRepository>().AsMultiInstance();
             _applicationContext.Container.Register<IAccountManager, AccountManager>().AsMultiInstance();
@@ -76,10 +73,6 @@ namespace CoiniumServ.Container.Registries
             _applicationContext.Container.Register<IPoolConfig, PoolConfig>().AsMultiInstance();
             _applicationContext.Container.Register<ICoinConfig, CoinConfig>().AsMultiInstance();
             _applicationContext.Container.Register<IMiningSoftwareConfig, MiningSoftwareConfig>().AsMultiInstance();
-
-            // markets
-            _applicationContext.Container.Register<IBittrexClient, BittrexClient>().AsSingleton();
-            _applicationContext.Container.Register<IPoloniexClient, PoloniexClient>().AsSingleton();
 
             // web
             _applicationContext.Container.Register<INancyBootstrapper, NancyBootstrapper>().AsSingleton();

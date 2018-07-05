@@ -40,7 +40,7 @@ namespace CoiniumServ.Statistics
 {
     public class StatisticsManager:IStatisticsManager
     {
-        public ulong Hashrate { get; private set; }
+        public double Hashrate { get; private set; }
 
         public int MinerCount { get; private set; }
         public DateTime LastUpdate { get; private set; }

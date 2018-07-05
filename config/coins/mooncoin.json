@@ -1,0 +1,11 @@
+{
+    "name": "Mooncoin",
+    "symbol": "MOON",
+    "algorithm": "scrypt",
+    "site": "https://www.mooncoin.eco",
+    "blockExplorer": {
+        "block": "https://bchain.info/MOON/block/",
+        "tx": "https://bchain.info/MOON/tx/",
+		"address": "https://bchain.info/MOON/addr/"
+    }
+}

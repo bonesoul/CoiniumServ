@@ -27,12 +27,12 @@
 // 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using CoiniumServ.Accounts;
 using CoiniumServ.Daemon;
-using CoiniumServ.Daemon.Exceptions;
 using CoiniumServ.Persistance.Layers;
 using CoiniumServ.Pools;
 using Serilog;
@@ -68,7 +68,7 @@ namespace CoiniumServ.Payments
             if (!_poolConfig.Payments.Enabled) // make sure payments are enabled.
                 return;
 
-            if (!ValidatePoolAddress()) // try to validate the pool wallet.
+            if (!ValidatePoolAddress(_poolConfig.Coin.RpcUpdate)) // try to validate the pool wallet.
                 return; // if we can't, stop the payment processor.
 
             if (!GetPoolAccount()) // get the pool's account name if any.
@@ -97,17 +97,20 @@ namespace CoiniumServ.Payments
         {
             var pendingPayments = _storageLayer.GetPendingPayments(); // get all pending payments.
             var perUserTransactions = new Dictionary<string, List<ITransaction>>();  // list of payments to be executed.
-             
+
+
             foreach (var payment in pendingPayments)
             {
-                try { 
+                try
+                {
                     // query the user for the payment.
                     var user = _accountManager.GetAccountById(payment.AccountId);
 
                     if (user == null) // if the user doesn't exist
                         continue; // just skip.
 
-                    if (!perUserTransactions.ContainsKey(user.Username)) // check if our list of transactions to be executed already contains an entry for the user.
+                    if (!perUserTransactions.ContainsKey(user.Username)
+                    ) // check if our list of transactions to be executed already contains an entry for the user.
                     {
                         // if not, create an entry that contains the list of transactions for the user.
 
@@ -124,8 +127,11 @@ namespace CoiniumServ.Payments
 
                     perUserTransactions[user.Username].Add(new Transaction(user, payment, _poolConfig.Coin.Symbol)); // add the payment to user.
                 }
-                catch(RpcException)
-                { } // on rpc exception; just skip the payment for now.
+                catch (Exception e)
+                {
+                    // on exception; just skip the payment for now - should be handled by the pool admin.
+                    _logger.Error(e, "An unexpected exception occured.");
+                }
             }
 
             return perUserTransactions;
@@ -162,7 +168,7 @@ namespace CoiniumServ.Payments
 
                 return executed;
             }
-            catch (RpcException e)
+            catch (Exception e)
             {
                 _logger.Error("An error occured while trying to execute payment; {0}", e.Message);
                 return executed;
@@ -182,20 +188,34 @@ namespace CoiniumServ.Payments
             }
         }
 
-        private bool ValidatePoolAddress()
+        private bool ValidatePoolAddress(bool newWallet)
         {
             try
             {
-                var result = _daemonClient.ValidateAddress(_poolConfig.Wallet.Adress);
+                if(newWallet == true)
+                {
+                    var result = _daemonClient.ValidateAddress(_poolConfig.Wallet.Adress);
+                    var resultnew = _daemonClient.GetAddressInfo(_poolConfig.Wallet.Adress);
+                    
+                    if (result.IsValid && resultnew.IsMine)
+                        return true;
+                                 
+                    _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
+                    return false;
+                }
+                else
+                {
+                    var result = _daemonClient.ValidateAddress(_poolConfig.Wallet.Adress);
 
-                // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
-                if (result.IsValid && result.IsMine)
-                    return true;
+                    // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
+                    if (result.IsValid && result.IsMine)
+                        return true;
 
-                _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
-                return false;
+                    _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
+                    return false;
+                }                               
             }
-            catch (RpcException e)
+            catch (Exception e)
             {
                 _logger.Error("Halted as we can not connect to configured coin daemon: {0:l}", e.Message);
                 return false;
@@ -211,7 +231,7 @@ namespace CoiniumServ.Payments
                     : ""; // use the default account.
                 return true;
             }
-            catch (RpcException e)
+            catch (Exception e)
             {
                 _logger.Error("Cannot determine pool's central wallet account: {0:l}", e.Message);
                 return false;
