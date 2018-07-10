@@ -1,0 +1,11 @@
+{
+    "name": "ChainCoin",
+    "symbol": "CHC",
+    "algorithm": "c11",
+    "site": "https://www.chaincoin.org/",
+    "blockExplorer": {
+        "block": "http://http://explorer.chaincoin.org",
+        "tx": "http://",
+        "address": "http://"
+    }
+}

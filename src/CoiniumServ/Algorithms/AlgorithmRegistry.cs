@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // 
 //     MIT License
 //
@@ -37,6 +37,7 @@ namespace CoiniumServ.Algorithms
     {
         // algorithm names
         public const string Blake = "blake";
+        public const string C11 = "c11";
         public const string Fresh = "fresh";
         public const string Fugue = "fugue";
         public const string Groestl = "groestl";
@@ -55,6 +56,7 @@ namespace CoiniumServ.Algorithms
         public const string X14 = "x14";
         public const string X15 = "x15";
         public const string X17 = "x17";
+        public const string X16r = "x16r";
 
         // todo: add hefty1, qubit support
 
@@ -90,8 +92,10 @@ namespace CoiniumServ.Algorithms
             _applicationContext.Container.Register<IHashAlgorithm, X14>(X14).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, X15>(X15).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, X17>(X17).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, X16r>(X16r).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, C11>(C11).AsMultiInstance();
 
-            // misc ones           
+            // misc ones
             _applicationContext.Container.Register<IHashAlgorithm, Blake>(Blake).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, Fresh>(Fresh).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, Fugue>(Fugue).AsMultiInstance();

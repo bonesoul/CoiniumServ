@@ -1,0 +1,92 @@
+{
+    # -------------------------------
+    # Stack Configuration
+    # -------------------------------
+
+    # name:  name of the pool stack.
+
+    "stack": {
+        "name": "CoiniumServ.com"
+    },
+
+    # -------------------------------
+    # Statistics Configuration
+    # -------------------------------
+    
+    # updateInterval: interval for recaching statistics.
+    # hashrateWindow: how many seconds worth of shares should be gathered to generate hashrate.
+
+    "statistics": {
+        "updateInterval": 60,
+        "hashrateWindow": 300
+    },
+
+    # -------------------------------
+    # Website Configuration
+    # -------------------------------
+
+    # enabled: set this true to enable frontend.
+    # bind: interface to bind webserver.
+    # port: port to listen for http connections.
+    # backend: 
+    # enabled: set this true to enable admin backend.
+    # password: password for enabling administrator 
+
+	"website": {
+		"enabled": true,
+		"bind": "127.0.0.1",
+		"port": 80,
+        "backend" : {
+            "metrics": {
+                "enabled": false
+            }
+        }
+	},
+
+    # -------------------------------
+    # Logging Configuration
+    # -------------------------------
+
+    # root: relative path of logs.
+    # targets: log targets.
+    
+    # target: 
+    # enabled: is the log target enabled?
+    # type: console, file or packet.
+    # filename: filename of the log file.
+    # rolling: set this true to get a seperate log file for every day.
+    # level: minimum log level.
+
+    # logging configuration
+	"logging": {
+		"root": "logs",
+		"targets": [
+			{
+				"enabled": true,
+				"type": "console",
+				"level": "debug"
+			},
+			{
+				"enabled": true,
+				"type": "file",
+				"filename": "server.log",
+				"rolling": false,
+				"level": "information"
+			},
+			{
+				"enabled": true,
+				"type": "file",
+				"filename": "debug.log",
+				"rolling": false,
+				"level": "verbose"
+			},
+			{
+				"enabled": true,
+				"type": "packet",
+				"filename": "packet.log",
+				"rolling": false,
+				"level": "verbose"
+			}			
+        ]	
+	}
+}

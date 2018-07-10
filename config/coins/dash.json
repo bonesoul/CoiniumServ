@@ -1,0 +1,11 @@
+{
+    "name": "DASH",
+    "symbol": "DASH",
+    "algorithm": "x11",
+    "site": "https://www.dash.org/",
+    "blockExplorer": {
+        "block": "https://explorer.dash.org/block/",
+        "tx": "https://explorer.dash.org/tx/",
+        "address": "https://explorer.dash.org/address/"
+    }
+}

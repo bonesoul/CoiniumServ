@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // 
 //     MIT License
 //
@@ -27,33 +27,30 @@
 // 
 #endregion
 
-using System;
 using System.Collections.Generic;
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Utils.Repository;
-using Newtonsoft.Json;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Daemon.Responses
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IHashAlgorithmStatistics : IRepository<IPool>, IJsonService
+    public class GetAddressInfo
     {
-        /// <summary>
-        /// Algorithm name.
-        /// </summary>
-        string Name { get; }
+        public string Address { get; set; }
+        
+        public string ScriptPubKey { get; set; }
 
-        [JsonProperty("miners")]
-        Int32 MinerCount { get; }
+        public bool IsMine { get; set; }
 
-        [JsonProperty("hashrate")]
-        double Hashrate { get; }
+        public bool Iswatchonly { get; set; }
 
-        /// <summary>
-        /// Assigns pools that runs on the algorithm.
-        /// </summary>
-        /// <param name="pools"></param>
-        void AssignPools(IEnumerable<IPool> pools);
+        public bool IsScript { get; set; }
+
+        public bool IsWittness { get; set; }
+
+        public List<string> Addresses { get; set; }
+
+        public int SigsRequired { get; set; }
+
+        public string Account { get; set; }
+        
+         public string PubKey { get; set; }
     }
 }

@@ -68,7 +68,7 @@ namespace CoiniumServ.Payments
             if (!_poolConfig.Payments.Enabled) // make sure payments are enabled.
                 return;
 
-            if (!ValidatePoolAddress()) // try to validate the pool wallet.
+            if (!ValidatePoolAddress(_poolConfig.Coin.RpcUpdate)) // try to validate the pool wallet.
                 return; // if we can't, stop the payment processor.
 
             if (!GetPoolAccount()) // get the pool's account name if any.
@@ -188,18 +188,32 @@ namespace CoiniumServ.Payments
             }
         }
 
-        private bool ValidatePoolAddress()
+        private bool ValidatePoolAddress(bool newWallet)
         {
             try
             {
-                var result = _daemonClient.ValidateAddress(_poolConfig.Wallet.Adress);
+                if(newWallet == true)
+                {
+                    var result = _daemonClient.ValidateAddress(_poolConfig.Wallet.Adress);
+                    var resultnew = _daemonClient.GetAddressInfo(_poolConfig.Wallet.Adress);
+                    
+                    if (result.IsValid && resultnew.IsMine)
+                        return true;
+                                 
+                    _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
+                    return false;
+                }
+                else
+                {
+                    var result = _daemonClient.ValidateAddress(_poolConfig.Wallet.Adress);
 
-                // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
-                if (result.IsValid && result.IsMine)
-                    return true;
+                    // make sure the pool central wallet address is valid and belongs to the daemon we are connected to.
+                    if (result.IsValid && result.IsMine)
+                        return true;
 
-                _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
-                return false;
+                    _logger.Error("Halted as daemon we are connected to does not own the pool address: {0:l}.", _poolConfig.Wallet.Adress);
+                    return false;
+                }                               
             }
             catch (Exception e)
             {

@@ -51,7 +51,9 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
 
                 // add the share to round 
                 var currentKey = $"{_coin}:shares:round:current";
-                _redisProvider.Client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
+                var miner = (IStratumMiner)share.Miner;
+                _redisProvider.Client.HIncrByFloat(currentKey, miner.Username, (double)share.Difficulty);
+                //_redisProvider.Client.HIncrByFloat(currentKey, share.Miner.Username, share.Difficulty);
 
                 // increment shares stats.
                 var statsKey = $"{_coin}:stats";
@@ -61,7 +63,10 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
                 if (share.IsValid)
                 {
                     var hashrateKey = $"{_coin}:hashrate";
-                    var entry = $"{share.Difficulty}:{share.Miner.Username}";
+                    var randomModifier = Convert.ToString(miner.ValidShareCount, 16).PadLeft(8, '0');
+                    string modifiedUsername = miner.Username + randomModifier;
+                    //var entry = $"{share.Difficulty}:{share.Miner.Username}";
+                    var entry = string.Format("{0}:{1}", (double)miner.Difficulty, modifiedUsername);
                     _redisProvider.Client.ZAdd(hashrateKey, Tuple.Create((double)TimeHelpers.NowInUnixTimestamp(), entry));
                 }
 
@@ -69,7 +74,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while comitting share: {0:l}", e.Message);
+                _logger.Error("An exception occurred while committing share: {0:l}", e.Message);
             }
         }
 
@@ -87,7 +92,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while moving shares for new block: {0:l}", e.Message);
+                _logger.Error("An exception occurred while moving shares for new block: {0:l}", e.Message);
             }
         }
 
@@ -118,7 +123,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while moving shares: {0:l}", e.Message);
+                _logger.Error("An exception occurred while moving shares: {0:l}", e.Message);
             }
         }
 
@@ -135,7 +140,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while deleting shares: {0:l}", e.Message);
+                _logger.Error("An exception occurred while deleting shares: {0:l}", e.Message);
             }
         }
 
@@ -158,7 +163,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting shares for current round: {0:l}", e.Message);
+                _logger.Error("An exception occurred while getting shares for current round: {0:l}", e.Message);
             }
 
             return shares;
@@ -183,7 +188,7 @@ namespace CoiniumServ.Persistance.Layers.Hybrid
             }
             catch (Exception e)
             {
-                _logger.Error("An exception occured while getting shares for round; {0:l}", e.Message);
+                _logger.Error("An exception occurred while getting shares for round; {0:l}", e.Message);
             }
 
             return shares;

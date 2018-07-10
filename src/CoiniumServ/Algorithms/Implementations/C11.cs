@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // 
 //     MIT License
 //
@@ -27,33 +27,47 @@
 // 
 #endregion
 
-using System;
 using System.Collections.Generic;
-using CoiniumServ.Pools;
-using CoiniumServ.Server.Web.Service;
-using CoiniumServ.Utils.Repository;
-using Newtonsoft.Json;
+using HashLib;
 
-namespace CoiniumServ.Algorithms
+namespace CoiniumServ.Algorithms.Implementations
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public interface IHashAlgorithmStatistics : IRepository<IPool>, IJsonService
+    public sealed class C11 : IHashAlgorithm
     {
-        /// <summary>
-        /// Algorithm name.
-        /// </summary>
-        string Name { get; }
+        public uint Multiplier { get; private set; }
 
-        [JsonProperty("miners")]
-        Int32 MinerCount { get; }
+        private readonly List<IHash> _hashers;
 
-        [JsonProperty("hashrate")]
-        double Hashrate { get; }
+        public C11()
+        {
+            _hashers = new List<IHash>
+            {
+                HashFactory.Crypto.SHA3.CreateBlake512(),
+                HashFactory.Crypto.SHA3.CreateBlueMidnightWish512(),
+                HashFactory.Crypto.SHA3.CreateGroestl512(),
+                HashFactory.Crypto.SHA3.CreateJH512(),
+                HashFactory.Crypto.SHA3.CreateKeccak512(),
+                HashFactory.Crypto.SHA3.CreateSkein512(),
+                HashFactory.Crypto.SHA3.CreateLuffa512(),
+                HashFactory.Crypto.SHA3.CreateCubeHash512(),
+                HashFactory.Crypto.SHA3.CreateSHAvite3_512(),
+                HashFactory.Crypto.SHA3.CreateSIMD512(),
+                HashFactory.Crypto.SHA3.CreateEcho512(),
+            };
 
-        /// <summary>
-        /// Assigns pools that runs on the algorithm.
-        /// </summary>
-        /// <param name="pools"></param>
-        void AssignPools(IEnumerable<IPool> pools);
+            Multiplier = 1;
+        }
+
+        public byte[] Hash(byte[] input)
+        {
+            var buffer = input;
+
+            foreach (var hasher in _hashers)
+            {
+                buffer = hasher.ComputeBytes(buffer).GetBytes();
+            }
+
+            return buffer;
+        }
     }
 }

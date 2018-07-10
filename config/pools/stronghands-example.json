@@ -1,0 +1,87 @@
+{
+	"enabled": false,
+	"coin": "stronghands.json",
+	"daemon": {
+		"host": "127.0.0.1",
+		"port": 6902,
+		"username": "RPCUSER",
+		"password": "RPCPASSWORD"
+	},
+	"meta": {
+        "motd": "Welcome to bit2pool, enjoy your stay! - http://www.bit2pool.com/",
+        "txMessage": "http://www.bit2pool.com/"
+     },
+	 "wallet" : {
+        "address":  "Pool wallet address here"
+    },
+	"rewards":  [
+        {"Reward address for pool OP": 1} 
+    ],
+	"banning": {
+        "enabled": true,
+        "duration": 600,
+        "invalidPercent": 50,
+        "checkThreshold": 100,
+        "purgeInterval": 300
+    },
+	"payments": {
+		"enabled": true,
+        "interval": 1800,
+		"minimum": 0.01
+	},
+	 "miner":  {
+        "validateUsername": true,
+        "timeout": 300
+    },
+    "job":  {
+        "blockRefreshInterval": 1000,
+        "rebroadcastTimeout": 125        
+    },
+	"stratum": {
+		"enabled": true,
+		"bind": "0.0.0.0",
+		"port": 3338,
+		"diff": 16,
+        "vardiff": {
+            "enabled": true,
+            "minDiff": 16,
+            "maxDiff": 16384,
+            "targetTime": 15,
+            "retargetTime": 90,
+            "variancePercent": 25
+        }
+	},	
+	"storage": {
+        "hybrid": {
+            "enabled": true,
+		    "redis": {
+			    "host": "127.0.0.1",
+			    "port": 6379,
+                "password": "",
+                "databaseId": 3
+		    },
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "root",
+			    "password": "Password",
+                "database": "database"
+		    }
+        },
+        "mpos": {
+            "enabled": false,
+		    "mysql": {
+			    "host": "127.0.0.1",
+			    "port": 3306,
+			    "user": "username",
+			    "password": "password",
+                "database": "db-name"
+		    }
+        }
+	},
+	"vanilla": {
+		"enabled": false,
+		"bind": "localhost",
+		"port": 2223
+    }
+}

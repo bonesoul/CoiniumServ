@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/bonesoul/CoiniumServ.svg?style=svg)](https://circleci.com/gh/bonesoul/CoiniumServ) [![Build status](https://ci.appveyor.com/api/projects/status/3x349ig9dt14943t)](https://ci.appveyor.com/project/bonesoul/coiniumserv) [![Documentation Status](https://readthedocs.org/projects/coiniumserv/badge/?version=latest)](https://readthedocs.org/projects/coiniumserv/?badge=latest)
+[![CircleCI](https://circleci.com/gh/bonesoul/CoiniumServ.svg?style=svg)](https://circleci.com/gh/bonesoul/CoiniumServ) [![Documentation Status](https://readthedocs.org/projects/coiniumserv/badge/?version=latest)](https://readthedocs.org/projects/coiniumserv/?badge=latest)
  
 **CoiniumServ** is a high performance, extremely efficient, platform-agnostic, easy to setup pool server implementation. It features stratum and vanilla services, reward, payment, share processors, vardiff & ban managers, user-friendly embedded web-server & front-end and a full-stack API.
 
@@ -13,6 +13,16 @@ You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/33m3
 [![Buy with Dash](http://satoshibox.com/img/button-dash.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
 
 **VirusTotal scan results**: [0/58 clean](https://www.virustotal.com/en/file/f03dd7753d6d209d99f6b5095d28f0f6d7b8a50067a3ce709009b87c727b980d/analysis/1510948542/)
+
+##### Donations
+
+CoiniumServ is an open-source project. Your donations will be a great help & motivation for the development of the project.
+
+* BTC: `1HTEVaWg8jp7HehfujrqupduLvZvX16Jih`
+* ETH: `0x61aa3e0709e20bcb4aedc2607d4070f1db72e69b`
+* DASH: `XwnjnCoTb7v3FgDNrHvXufiLmfr5P5ZpEo`
+* DOGE: `DE1JdC2wTeQERjnM25veQzd8CzB6vjm1JF`
+* LTC: `LV4tiNmt2UuWphzBJSb1XABzufEWQHJfhJ`
 
 ### Screenshots
 
@@ -52,14 +62,6 @@ You can support the development of the project with different methods;
 
 [![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1) [![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)  [![Gratipay](http://img.shields.io/badge/gratipay-donate-brightgreen.svg)](https://gratipay.com/on/github/CoiniumServ)
 
-##### Donations
-
-You can contribute the development of the project by donating; 
-
-* BTC: `1MMdwRZg4K9p6oH2bWUQdohbxGbAvXS1t1`
-* ETH: `0x61aa3e0709e20bcb4aedc2607d4070f1db72e69b`
-* LTC: `Ld8cy4ucf3FYThtfTnRQFFp5MKK9rZHjNg`
-
 If you would like to automatically donate a percentage of your pool's earning to support the project, check the [donation setup](https://github.com/bonesoul/CoiniumServ/wiki/Donation) guide.
 
 ### Features
@@ -78,7 +80,7 @@ If you would like to automatically donate a percentage of your pool's earning to
 
 ##### Algorithms
 
-* __Scrypt__, __SHA256d__, __X11__, __X13__, X14, X15, X17, Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, Scrypt-N, SHA1, SHAvite3, Skein, Qubit
+* __Scrypt__, __SHA256d__, __X11__, __X13__, X14, X15, X17, Blake, Fresh, Fugue, Groestl, Keccak, NIST5, Scrypt-OG, Scrypt-N, SHA1, SHAvite3, Skein, Qubit, C11
 
 ##### Protocols
 

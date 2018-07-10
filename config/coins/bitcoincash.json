@@ -1,0 +1,11 @@
+{
+    "name": "Bitcoincash",
+    "symbol": "BCH",
+    "algorithm": "sha256",
+    "site": "https://www.bitcoincash.org/",
+    "blockExplorer": {
+        "block": "https://bitcoincash.blockexplorer.com/block/",
+        "tx": "https://bitcoincash.blockexplorer.com/tx/",
+        "address": "https://bitcoincash.blockexplorer.com/address/"
+    }
+}

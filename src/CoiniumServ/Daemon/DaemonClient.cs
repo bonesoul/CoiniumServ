@@ -55,7 +55,7 @@ namespace CoiniumServ.Daemon
     /// </summary>
     public class DaemonClient : DaemonBase, IDaemonClient
     {
-        public static readonly object[] EmptyString = {}; // used as empty parameter.
+        public static readonly object[] EmptyString = { }; // used as empty parameter.
 
         public DaemonClient(IDaemonConfig daemonConfig, ICoinConfig coinConfig, IRpcExceptionFactory rpcExceptionFactory)
             : base(daemonConfig, coinConfig, rpcExceptionFactory)
@@ -260,7 +260,7 @@ namespace CoiniumServ.Daemon
             if (!modeRequired)
             {
                 // bitcoin variants can accept capabilities: https://github.com/bitcoin/bitcoin/blob/7388b74cd2c5e3b71e991d26953c89c059ba6f2f/src/rpcmining.cpp#L298            
-                data.Add("capabilities", new List<string> {"coinbasetxn", "workid", "coinbase/append"});
+                data.Add("capabilities", new List<string> { "coinbasetxn", "workid", "coinbase/append" });
             }
             else
             {
@@ -344,6 +344,33 @@ namespace CoiniumServ.Daemon
         public void GetMemoryPool()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns an object containing various state info(blocks, difficulty, chain) for bitcoin wallet v0.16.0.
+        /// </summary>
+        /// <returns>An object containing some general information.</returns>
+        public Info GetBlockChainInfo()
+        {
+            return MakeRequest<Info>("getblockchaininfo", null);
+        }
+
+        /// <summary>
+        /// Returns an object containing various state info (version, protocolversion, timeoffset, connections, proxy, relayfee, warnings) for bitcoin wallet v0.16.0.
+        /// </summary>
+        /// <returns>An object containing some general information.</returns>
+        public Info GetNetworkInfo()
+        {
+            return MakeRequest<Info>("getnetworkinfo", null);
+        }
+
+        /// <summary>
+        /// Returns an object containing various state info(balance, keypoololdest, keypoolsize, paytxfee, unlocked_until, walletversion) for bitcoin wallet v0.16.0.
+        /// </summary>
+        /// <returns>An object containing wallet information.</returns>
+        public Info GetWalletInfo()
+        {
+            return MakeRequest<Info>("getwalletinfo", null);
         }
 
         /// <summary>
@@ -491,7 +518,7 @@ namespace CoiniumServ.Daemon
         /// </summary>
         public Getwork Getwork()
         {
-            return MakeRequest<Getwork>("getwork", null);   
+            return MakeRequest<Getwork>("getwork", null);
         }
 
         /// <summary>
@@ -758,7 +785,7 @@ namespace CoiniumServ.Daemon
         {
             return MakeRequest<string>("stop", null);
         }
-       
+
 
         /// <summary>
         /// Return information about the bitcoin address. 
@@ -768,6 +795,16 @@ namespace CoiniumServ.Daemon
         public ValidateAddress ValidateAddress(string walletAddress)
         {
             return MakeRequest<ValidateAddress>("validateaddress", walletAddress);
+        }
+        
+        /// <summary>
+        /// Return information about the bitcoin address. 
+        /// </summary>
+        /// <param name="walletAddress">The bitcoin address.</param>
+        /// <returns></returns>
+        public GetAddressInfo GetAddressInfo(string walletAddress)
+        {
+            return MakeRequest<GetAddressInfo>("getaddressinfo", walletAddress);
         }
 
         /// <summary>
