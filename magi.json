@@ -1,0 +1,11 @@
+{
+    "name": "Magi",
+    "symbol": "XMG",
+    "algorithm": "M7M",
+    "site": "https://www.m-core.org/",
+    "blockExplorer": {
+        "block": "https://chainz.cryptoid.info/xmg/#!overview",
+        "tx": "https://chainz.cryptoid.info/xmg/",
+        "address": "https://chainz.cryptoid.info/xmg/#!rich"
+    }
+}
