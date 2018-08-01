@@ -1,0 +1,15 @@
+{
+    "name": "LanaCoin",
+    "symbol": "LANA",
+    "algorithm": "sha256",
+    "site": "https://lanacoin.com",
+    "blockExplorer": {
+        "block": "http://chainz.cryptoid.info/explorer/api.dws?q=getblockheight:",
+        "tx": "http://chainz.cryptoid.info/explorer/api.dws?q=txinfo",
+        "address": "http://chainz.cryptoid.info/explorer/api.dws?q=addresses"
+    },
+    "node": {
+        "magic": "a5f790fd",
+        "testnetMagic": "cccbd27f"
+    }
+}
