@@ -96,7 +96,7 @@ namespace CoiniumServ.Algorithms
             _applicationContext.Container.Register<IHashAlgorithm, C11>(C11).AsMultiInstance();
 
             // misc ones
-            _applicationContext.Container.Register<IHashAlgorithm, Blake>(Blake).AsMultiInstance();
+            _applicationContext.Container.Register<IHashAlgorithm, Blake2s>(Blake).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, Fresh>(Fresh).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, Fugue>(Fugue).AsMultiInstance();
             _applicationContext.Container.Register<IHashAlgorithm, Groestl>(Groestl).AsMultiInstance();
