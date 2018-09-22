@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // 
 //     MIT License
 //
@@ -174,6 +174,20 @@ namespace CoiniumServ.Transactions
                 blockReward -= amount;
 
                 Outputs.AddRecipient(pair.Key, amount);
+            }
+            
+            if(BlockTemplate.Treasury.Count != 0)
+            {
+                blockReward -= BlockTemplate.Treasury.amount;
+
+                Outputs.AddRecipient(BlockTemplate.Treasury.address, BlockTemplate.Treasury.amount);
+            }
+            
+            if(BlockTemplate.Masternode.Count != 0)
+            {
+                blockReward -= BlockTemplate.Masternode.amount;
+
+                Outputs.AddRecipient(BlockTemplate.Masternode.payee, BlockTemplate.Masternode.amount);
             }
 
             // send the remaining coins to pool's central wallet.
