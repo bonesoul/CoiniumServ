@@ -36,14 +36,6 @@ Start by reading our [FAQ](https://github.com/bonesoul/CoiniumServ/wiki/FAQ) and
 
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
 
-### Support the project
-
-You can support the development of the project with different methods;
-
-[![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1) [![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)  [![Gratipay](http://img.shields.io/badge/gratipay-donate-brightgreen.svg)](https://gratipay.com/on/github/CoiniumServ)
-
-If you would like to automatically donate a percentage of your pool's earning to support the project, check the [donation setup](https://github.com/bonesoul/CoiniumServ/wiki/Donation) guide.
-
 ### Features
 * __Platform Agnostic__; unlike other pool-servers, CoiniumServ doesn't dictate platforms and can run on anything including Windows, Linux or MacOS.
 * __High Performance__; Designed to be fast & efficient, CoiniumServ can handle dozens of pools together.
