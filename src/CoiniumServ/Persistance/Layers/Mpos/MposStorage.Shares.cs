@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // 
 //     MIT License
 //
@@ -70,7 +70,7 @@ namespace CoiniumServ.Persistance.Layers.Mpos
                             our_result = ourResult,
                             upstream_result = upstreamResult,
                             reason = errorReason,
-                            solution = share.BlockHash.ToHexString(),
+                            solution = share.IsBlockCandidate ? share.BlockHash.ToHexString() : "",
                             difficulty = share.Difficulty, // should we consider mpos difficulty multiplier here?
                             time = DateTime.Now
                         });
