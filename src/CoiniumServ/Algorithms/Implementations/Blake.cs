@@ -32,13 +32,13 @@ using HashLib;
 
 namespace CoiniumServ.Algorithms.Implementations
 {
-    public sealed class Blake : IHashAlgorithm
+    public sealed class Blake2s : IHashAlgorithm
     {
         public uint Multiplier { get; private set; }
 
         private readonly IHash _hasher;
 
-        public Blake()
+        public Blake2s()
         {
             _hasher = HashFactory.Crypto.SHA3.CreateBlake256();
 

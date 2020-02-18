@@ -44,10 +44,10 @@ namespace CoiniumServ.Mining
             {
                 // load the config data.
                 MOTD = string.IsNullOrEmpty(config.motd)
-                    ? "Welcome to CoiniumServ pool, enjoy your stay! - http://www.coinumserv.com"
+                    ? "Welcome to CoiniumServ pool, enjoy your stay! - https://github.com/bonesoul/CoiniumServ"
                     : config.motd;
 
-                TxMessage = string.IsNullOrEmpty(config.txMessage) ? "http://www.coiniumserv.com/" : config.txMessage;
+                TxMessage = string.IsNullOrEmpty(config.txMessage) ? "https://github.com/bonesoul/CoiniumServ" : config.txMessage;
 
                 Valid = true;
             }

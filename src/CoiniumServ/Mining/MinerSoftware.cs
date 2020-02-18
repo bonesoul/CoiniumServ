@@ -33,6 +33,7 @@ namespace CoiniumServ.Mining
     {
         Unknown,
         BfgMiner,
+        BMminer,
         CCMiner,
         CGMiner,
         CudaMiner
