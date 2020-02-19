@@ -684,7 +684,7 @@ namespace CoiniumServ.Daemon
         }
 
         /// <summary>
-        /// Send bitcoins to multiple addresses in one transaction. 
+        /// Send bitcoins to multiple addresses in one transaction and the recipients pay the transaction fee.
         /// Amounts are double-precision floating point numbers.
         /// </summary>
         /// <param name="fromAccount">The account to send the bitcoins from.</param>
@@ -694,7 +694,7 @@ namespace CoiniumServ.Daemon
         /// <returns>The transaction ID if succesful.</returns>
         public string SendMany(string fromAccount, Dictionary<string, decimal> toBitcoinAddress, int minConf = 1, string comment = "")
         {
-            return MakeRequest<string>("sendmany", fromAccount, toBitcoinAddress, minConf, comment);
+            return MakeRequest<string>("sendmany", fromAccount, toBitcoinAddress, minConf, comment, toBitcoinAddress.Keys);
         }
 
         /// <summary>
