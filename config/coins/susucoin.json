@@ -1,0 +1,12 @@
+{
+    "name": "Susucoin",
+    "symbol": "SUSU",
+    "algorithm": "sha256",
+    "rpcupdate" : true, 
+    "site": "https://susukino.com/",
+    "blockExplorer": {
+        "block": "https://explore.susukino.com/block/",
+        "tx": "https://explore.susukino.com/tx/",
+        "address": "https://explore.susukino.com/address/"
+    }
+}
