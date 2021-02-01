@@ -4,26 +4,6 @@
 
 CoiniumServ was created to be used for Coinium.org mining pool network at first hand. You can check [some of pools](https://github.com/bonesoul/CoiniumServ/wiki/Pools) of the pools running CoiniumServ.
 
-### Buy package
-You can buy a compiled version of [CoiniumServ here](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi) if you are having difficulties doing so yourself. You can then just configure & run it.
-
-[![Buy with Bitcoin](http://satoshibox.com/img/button-bitcoin.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
-[![Buy with Litecoin](http://satoshibox.com/img/button-litecoin.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
-[![Buy with Ethereum](http://satoshibox.com/img/button-ethereum.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
-[![Buy with Dash](http://satoshibox.com/img/button-dash.svg)](https://satoshibox.com/33m3tyy6rd4m44anr3rbkqbi)
-
-**VirusTotal scan results**: [0/58 clean](https://www.virustotal.com/en/file/f03dd7753d6d209d99f6b5095d28f0f6d7b8a50067a3ce709009b87c727b980d/analysis/1510948542/)
-
-##### Donations
-
-CoiniumServ is an open-source project. Your donations will be a great help & motivation for the development of the project.
-
-* BTC: `1HTEVaWg8jp7HehfujrqupduLvZvX16Jih`
-* ETH: `0x61aa3e0709e20bcb4aedc2607d4070f1db72e69b`
-* DASH: `XwnjnCoTb7v3FgDNrHvXufiLmfr5P5ZpEo`
-* DOGE: `DE1JdC2wTeQERjnM25veQzd8CzB6vjm1JF`
-* LTC: `LV4tiNmt2UuWphzBJSb1XABzufEWQHJfhJ`
-
 ### Screenshots
 
 ##### Console
@@ -55,14 +35,6 @@ Start by reading our [FAQ](https://github.com/bonesoul/CoiniumServ/wiki/FAQ) and
 ##### Discussions
 
 * [Bitcointalk.org](https://bitcointalk.org/index.php?topic=604476.0)
-
-### Support the project
-
-You can support the development of the project with different methods;
-
-[![Bountysource](https://api.bountysource.com/badge/team?team_id=760&style=bounties_received)](https://www.bountysource.com/teams/coinium/issues?utm_source=Coinium&utm_medium=shield&utm_campaign=TEAM_BADGE_1) [![tip for next commit](http://tip4commit.com/projects/760.svg)](http://tip4commit.com/projects/760)  [![Gratipay](http://img.shields.io/badge/gratipay-donate-brightgreen.svg)](https://gratipay.com/on/github/CoiniumServ)
-
-If you would like to automatically donate a percentage of your pool's earning to support the project, check the [donation setup](https://github.com/bonesoul/CoiniumServ/wiki/Donation) guide.
 
 ### Features
 * __Platform Agnostic__; unlike other pool-servers, CoiniumServ doesn't dictate platforms and can run on anything including Windows, Linux or MacOS.
