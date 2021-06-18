@@ -1,0 +1,17 @@
+{
+    "name": "NewBull",
+    "symbol": "NB",
+    "algorithm": "sha256",
+    "site": "https://newbull.org/",
+    "blockExplorer": {
+        "block": "https://explorer.newbull.org/blockhash/",
+        "tx": "https://explorer.newbull.org/tx/",
+        "address": "https://explorer.newbull.org/address/"
+    },
+	"options": {
+		"isProofOfStakeHybrid": false,
+		"blockTemplateModeRequired": false,
+		"useDefaultAccount": true,
+		"txMessageSupported": false			
+    }
+}
