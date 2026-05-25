@@ -127,7 +127,6 @@ namespace CoiniumServ.Blocks
             // make sure our calculated and reported generation tx hashes match.
             if (expectedTxHash != genTxHash)
             {
-                block.Status = BlockStatus.Orphaned;
                 return;
             }
 
@@ -143,7 +142,6 @@ namespace CoiniumServ.Blocks
             // make sure we have a valid reference to poolOutput
             if (poolOutput == null)
             {
-                block.Status = BlockStatus.Orphaned;
                 return;
             }
 
